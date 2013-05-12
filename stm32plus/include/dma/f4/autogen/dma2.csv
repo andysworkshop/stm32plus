@@ -1,0 +1,8 @@
+Adc1,,Timer8Channel1+Timer8Channel2+Timer8Channel3,,Adc1,,Timer1Channel1+Timer1Channel2+Timer1Channel3,
+,Dcmi,Adc2,Adc2,,,,Dcmi
+Adc3,Adc3,,,,CrypOut,CrypIn,HashIn
+Spi1Rx,,Spi1Rx,Spi1Tx,,Spi1Tx,,
+,,Usart1Rx,Sdio,,Usart1Rx,Sdio,Usart1Tx
+,Usart6Rx,Usart6Rx,,,,Usart6Tx,Usart6Tx
+Timer1Trigger,Timer1Channel1,Timer1Channel2,Timer1Channel1,Timer1Channel4+Timer1Trigger+Timer1Com,Timer1Update,Timer1Channel3,
+,Timer8Update,Timer8Channel1,Timer8Channel2,Timer8Channel3,,,Timer8Channel4+Timer8Trigger+Timer8Com

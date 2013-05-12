@@ -1,0 +1,8 @@
+Spi3Rx,,Spi3Rx,Spi2Rx,Spi2Tx,Spi3Tx,,Spi3Tx
+I2C1Rx,,Timer7Update,,Timer7Update,I2C1Rx,I2C1Tx,I2C1Tx
+Timer4Channel1,,I2S2ExtRx,Timer4Channel2,I2S2ExtTx,I2S3ExtTx,Timer4Update,Timer4Channel3
+I2S3ExtRx,Timer2Update+Timer2Channel3,I2C3Rx,I2S2ExtRx,I2C3Tx,Timer2Channel1,Timer2Channel2+Timer2Channel4,Timer2Update+Timer2Channel4
+Uart5Rx,Usart3Rx,Uart4Rx,Usart3Tx,Uart4Tx,Usart2Rx,Usart2Tx,Uart5Tx
+,,Timer3Channel4+Timer3Update,,Timer3Channel1+Timer3Trigger,Timer3Channel2,,Timer3Channel3
+Timer5Channel3+Timer5Update,Timer5Channel4+Timer5Trigger,Timer5Channel1,Timer5Channel4+Timer5Trigger,Timer5Channel2,,Timer5Update,
+,Timer6Update,I2C2Rx,I2C2Rx,Usart3Tx,Dac1,Dac2,I2C2Tx

@@ -1,0 +1,10 @@
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\bin\Release\LzgFontConv.exe.config
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\bin\Release\LzgFontConv.exe
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\bin\Release\LzgFontConv.pdb
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.csprojResolveAssemblyReference.cache
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.FormMain.resources
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.FormProgress.resources
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.Properties.Resources.resources
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.csproj.GenerateResource.Cache
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.exe
+P:\docs\source\stm32plus\utils\fonts\LzgFontConv\obj\x86\Release\LzgFontConv.pdb
