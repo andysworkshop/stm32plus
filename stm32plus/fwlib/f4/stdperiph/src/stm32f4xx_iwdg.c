@@ -86,7 +86,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f4/stdperiph/inc/stm32f4xx_iwdg.h"
+#include "stm32f4xx_iwdg.h"
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

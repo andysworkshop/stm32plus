@@ -31,6 +31,8 @@
 #elif defined (STM32PLUS_F1_CL)
   #define STM32PLUS_F1
   #define STM32F10X_CL
+#elif defined(STM32PLUS_F3)
+  // no additional defines
 #elif defined(STM32PLUS_F4)
   // no additional defines
 #else

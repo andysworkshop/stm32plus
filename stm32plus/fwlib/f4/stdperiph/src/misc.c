@@ -74,7 +74,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f4/stdperiph/inc/misc.h"
+#include "misc.h"
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

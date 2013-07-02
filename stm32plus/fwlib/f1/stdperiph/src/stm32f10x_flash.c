@@ -21,7 +21,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f1/stdperiph/inc/stm32f10x_flash.h"
+#include "stm32f10x_flash.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Driver
   * @{

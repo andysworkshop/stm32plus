@@ -30,7 +30,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f1/cmsis/CM3/DeviceSupport/ST/STM32F10x/stm32f10x.h"
+#include "stm32f10x.h"
 
 /** @addtogroup STM32F10x_StdPeriph_Driver
   * @{

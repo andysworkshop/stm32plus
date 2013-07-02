@@ -70,7 +70,7 @@ class DmaFillTest {
         DmaMemoryFillFeature<>        // memory fill with default transfer size (bytes)
       > dma;
 
-#elif defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
 
       Dma2Channel3Stream4<
         DmaMemoryFillFeature<>        // memory fill with default transfer size (bytes)

@@ -6,7 +6,7 @@
 #   debug/fast/small. Debug = -O0, Fast = -O3, Small = -Os
 #
 # mcu:
-#   f1hd/f4. f1hd = STM32F103HD series. f4 = STM32F4xx series.
+#   f1hd/f3/f4. f1hd = STM32F103HD series. f3=STM32F3xx series, f4 = STM32F4xx series.
 #
 # hse:
 #   Your external oscillator speed in Hz. Some of the ST standard peripheral library
@@ -43,16 +43,16 @@ mcu = ARGUMENTS.get('mcu')
 hse = ARGUMENTS.get('hse')
 
 if not (mode in ['debug', 'fast', 'small']):
-	print "ERROR: mode must be debug/fast/small"
-	Exit(1)
+  print "ERROR: mode must be debug/fast/small"
+  Exit(1)
 
-if not (mcu in ['f1hd', 'f4']):
-	print "ERROR: mcu must be f1hd/f4"
-	Exit(1)
+if not (mcu in ['f1hd', 'f3', 'f4']):
+  print "ERROR: mcu must be f1hd/f3/f4"
+  Exit(1)
 
 if not hse or not hse.isdigit():
-	print "ERROR: hse must be an integer oscillator speed in Hz"
-	Exit(1)
+  print "ERROR: hse must be an integer oscillator speed in Hz"
+  Exit(1)
 
 # set up build environment and pull in OS environment variables
 
@@ -66,10 +66,6 @@ env.Replace(AS="arm-none-eabi-as")
 env.Replace(AR="arm-none-eabi-ar")
 env.Replace(RANLIB="arm-none-eabi-ranlib")
 
-# set the include directories
-
-env.Append(CPPPATH=["#stm32plus/include","#stm32plus/include/stl","#stm32plus"])
-
 # create the C and C++ flags that are needed. We can't use the extra or pedantic errors on the ST library code.
 
 env.Replace(CCFLAGS=["-Wall","-Werror","-ffunction-sections","-fdata-sections","-fno-exceptions","-mthumb","-gdwarf-2"])
@@ -80,31 +76,51 @@ env.Append(LINKFLAGS=["-Xlinker","--gc-sections","-mthumb","-g3","-gdwarf-2"])
 # add on the MCU-specific definitions
 
 if mcu=="f1hd":
-	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_HD"])
-	env.Append(ASFLAGS="-mcpu=cortex-m3")
-	env.Append(LINKFLAGS="-mcpu=cortex-m3")
+  env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_HD"])
+  env.Append(ASFLAGS="-mcpu=cortex-m3")
+  env.Append(LINKFLAGS="-mcpu=cortex-m3")
+  cmsis_inc = "#stm32plus/fwlib/f1/cmsis/inc"
+  stdperiph_inc = "#stm32plus/fwlib/f1/stdperiph/inc"
+  device_inc = "#stm32plus/fwlib/f1/cmsis/CM3/DeviceSupport/ST/STM32F10x"
+elif mcu=="f3":
+  env.Append(CCFLAGS=["-mcpu=cortex-m4","-DSTM32PLUS_F3"])
+  env.Append(ASFLAGS="-mcpu=cortex-m4")
+  env.Append(LINKFLAGS="-mcpu=cortex-m4")
+  cmsis_inc = "#stm32plus/fwlib/f3/cmsis/inc"
+  stdperiph_inc = "#stm32plus/fwlib/f3/stdperiph/inc"
+  device_inc = "#stm32plus/fwlib/f3/cmsis/Device/ST/STM32F30x/Include"
+  #-mthumb -march=armv7e-m
+  #-mfpu=fpv4-sp-d16 -mfloat-abi=hard
+  #-ffreestanding -nostdlib
 elif mcu=="f4":
-	env.Append(CCFLAGS=["-mcpu=cortex-m4","-DSTM32PLUS_F4"])
-	env.Append(ASFLAGS="-mcpu=cortex-m4")
-	env.Append(LINKFLAGS="-mcpu=cortex-m4")
+  env.Append(CCFLAGS=["-mcpu=cortex-m4","-DSTM32PLUS_F4"])
+  env.Append(ASFLAGS="-mcpu=cortex-m4")
+  env.Append(LINKFLAGS="-mcpu=cortex-m4")
+  cmsis_inc = "#stm32plus/fwlib/f4/cmsis/inc"
+  stdperiph_inc = "#stm32plus/fwlib/f4/stdperiph/inc"
+  device_inc = "#stm32plus/fwlib/f4/cmsis/Device/ST/STM32F4xx/Include"
+
+# set the include directories
+
+env.Append(CPPPATH=["#stm32plus/include","#stm32plus/include/stl","#stm32plus",cmsis_inc,stdperiph_inc,device_inc])
 
 # add on the mode=specific optimisation definitions
 
 if mode=="debug":
-	env.Append(CCFLAGS=["-O0","-g3"])
+  env.Append(CCFLAGS=["-O0","-g3"])
 elif mode=="fast":
-	env.Append(CCFLAGS=["-O3"])
+  env.Append(CCFLAGS=["-O3"])
 elif mode=="small":
-	env.Append(CCFLAGS=["-Os"])
+  env.Append(CCFLAGS=["-Os"])
 
 systemprefix=mode+"-"+mcu+"-"+hse
-	
+  
 # launch SConscript for the main library
 
 libstm32plus=SConscript("stm32plus/SConscript",
-												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"],
-												variant_dir="stm32plus/build/"+systemprefix,
-												duplicate=0)
+                        exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"],
+                        variant_dir="stm32plus/build/"+systemprefix,
+                        duplicate=0)
 
 env.Append(LIBS=[libstm32plus])
 

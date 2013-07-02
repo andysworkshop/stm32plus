@@ -102,8 +102,8 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f4/stdperiph/inc/stm32f4xx_adc.h"
-#include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
+#include "stm32f4xx_adc.h"
+#include "stm32f4xx_rcc.h"
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

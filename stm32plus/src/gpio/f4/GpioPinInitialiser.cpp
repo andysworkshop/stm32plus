@@ -7,7 +7,7 @@
 #include "config/stm32plus.h"
 #include "config/gpio.h"
 
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
 
 namespace stm32plus {
 

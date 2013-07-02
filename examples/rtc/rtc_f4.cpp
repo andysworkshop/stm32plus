@@ -9,7 +9,7 @@
 #include "config/gpio.h"
 #include "config/timing.h"
 
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
 
 using namespace stm32plus;
 

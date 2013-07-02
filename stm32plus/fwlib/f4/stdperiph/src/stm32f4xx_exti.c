@@ -65,7 +65,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f4/stdperiph/inc/stm32f4xx_exti.h"
+#include "stm32f4xx_exti.h"
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

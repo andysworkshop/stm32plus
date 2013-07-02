@@ -78,7 +78,7 @@ class DmaCopyTest : public Observer  {
 
       dma.enableInterrupts(Dma2Channel1InterruptFeature::COMPLETE);
 
-#elif defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
 
       Dma2Channel1Stream0<
         Dma2Stream0InterruptFeature,    // interrupts on DMA2, stream 0

@@ -166,7 +166,7 @@ class SSD1289Test {
 
 #if defined(STM32PLUS_F1)
       Dma1Channel6<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
-#elif defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
       Dma2Channel1Stream2<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
 #endif
 

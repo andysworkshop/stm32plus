@@ -45,7 +45,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "fwlib/f4/stdperiph/inc/stm32f4xx_hash.h"
+#include "stm32f4xx_hash.h"
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

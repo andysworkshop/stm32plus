@@ -21,15 +21,9 @@ matches.append(Glob("*.c"))
 matches.append(Glob("*.s"))
 matches.append("system/LibraryHacks.cpp")
 
-if mcu=="f4":
-  matches.append("system/f4/Startup.s")
-  matches.append("system/f4/System.c")
-  linkerscript="examples/"+example+"/system/f4/Linker.ld"
-
-elif mcu=="f1hd":
-  matches.append("system/f1/Startup.s")
-  matches.append("system/f1/System.c")
-  linkerscript="examples/"+example+"/system/f1/Linker.ld"
+matches.append("system/"+mcu+"/Startup.s")
+matches.append("system/"+mcu+"/System.c")
+linkerscript="examples/"+example+"/system/"+mcu+"/Linker.ld"
 
 buildoutdir="examples/"+example+"/build/"+systemprefix
   

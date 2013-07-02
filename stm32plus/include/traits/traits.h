@@ -43,6 +43,7 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_GPIO> GpioPeripheralTraits;
 
+#if defined(GPIO_AF_FSMC)
   template<>
   struct PeripheralTraits<PERIPHERAL_FSMC> {
     enum {
@@ -51,7 +52,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_FSMC> FsmcPeripheralTraits;
+#endif
 
+#if defined(GPIO_AF_SDIO)
   template<>
   struct PeripheralTraits<PERIPHERAL_SDIO> {
     enum {
@@ -60,6 +63,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_SDIO> SdioPeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_I2C1> {
@@ -186,6 +190,7 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER4> Timer4PeripheralTraits;
 
+#if defined(TIM5_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER5> {
     enum {
@@ -195,6 +200,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER5> Timer5PeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER6> {
@@ -226,6 +232,7 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER8> Timer8PeripheralTraits;
 
+#if defined(TIM9_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER9> {
     enum {
@@ -235,7 +242,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER9> Timer9PeripheralTraits;
+#endif
 
+#if defined(TIM10_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER10> {
     enum {
@@ -245,7 +254,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER10> Timer10PeripheralTraits;
+#endif
 
+#if defined(TIM11_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER11> {
     enum {
@@ -255,7 +266,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER11> Timer11PeripheralTraits;
+#endif
 
+#if defined(TIM12_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER12> {
     enum {
@@ -265,7 +278,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER12> Timer12PeripheralTraits;
+#endif
 
+#if defined(TIM13_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER13> {
     enum {
@@ -275,7 +290,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER13> Timer13PeripheralTraits;
+#endif
 
+#if defined(TIM14_BASE)
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER14> {
     enum {
@@ -285,6 +302,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER14> Timer14PeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_USART1> {
@@ -316,6 +334,7 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_USART3> Usart3PeripheralTraits;
 
+#if defined(GPIO_AF_UART4)
   template<>
   struct PeripheralTraits<PERIPHERAL_UART4> {
     enum {
@@ -325,7 +344,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_UART4> Uart4PeripheralTraits;
+#endif
 
+#if defined(GPIO_AF_UART5)
   template<>
   struct PeripheralTraits<PERIPHERAL_UART5> {
     enum {
@@ -335,6 +356,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_UART5> Uart5PeripheralTraits;
+#endif
 
 #if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL)
 

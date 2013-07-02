@@ -79,7 +79,7 @@ class HX8347ATest {
 
 #if defined(STM32PLUS_F1)
       Fsmc8080LcdTiming fsmcTiming(0,2);
-#elif defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
       Fsmc8080LcdTiming fsmcTiming(1,15);
 #else
 #error Unsupported MCU
@@ -175,7 +175,7 @@ class HX8347ATest {
 
 #if defined(STM32PLUS_F1)
       Dma1Channel6<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
-#elif defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
       Dma2Channel1Stream2<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
 #endif
 

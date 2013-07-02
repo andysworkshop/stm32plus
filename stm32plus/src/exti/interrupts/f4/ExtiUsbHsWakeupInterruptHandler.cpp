@@ -4,7 +4,7 @@
  * Please see website for licensing terms.
  */
 
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F4) || defined(STM32PLUS_F3)
 
 #include "config/stm32plus.h"
 #include "config/exti.h"

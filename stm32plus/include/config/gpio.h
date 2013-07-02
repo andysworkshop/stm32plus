@@ -18,6 +18,8 @@
 
 #if defined(STM32PLUS_F1)
   #include "gpio/f1/Gpio.h"
+#elif defined(STM32PLUS_F3)
+  #include "gpio/f3/Gpio.h"
 #elif defined(STM32PLUS_F4)
   #include "gpio/f4/Gpio.h"
 #endif
