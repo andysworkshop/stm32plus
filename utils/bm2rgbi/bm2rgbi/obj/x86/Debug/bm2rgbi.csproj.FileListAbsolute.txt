@@ -1,0 +1,9 @@
+C:\Users\Andy\source\stm32plus\utils\bm2rgbi\bm2rgbi\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Andy\source\stm32plus\utils\bm2rgbi\bm2rgbi\bin\Debug\bm2rgbi.exe
+C:\Users\Andy\source\stm32plus\utils\bm2rgbi\bm2rgbi\bin\Debug\bm2rgbi.pdb
+C:\Users\Andy\source\stm32plus\utils\bm2rgbi\bm2rgbi\obj\x86\Debug\bm2rgbi.exe
+C:\Users\Andy\source\stm32plus\utils\bm2rgbi\bm2rgbi\obj\x86\Debug\bm2rgbi.pdb
+P:\docs\source\stm32plus\utils\bm2rgbi\bm2rgbi\obj\x86\Debug\bm2rgbi.exe
+P:\docs\source\stm32plus\utils\bm2rgbi\bm2rgbi\obj\x86\Debug\bm2rgbi.pdb
+P:\docs\source\stm32plus\utils\bm2rgbi\bm2rgbi\bin\Debug\bm2rgbi.exe
+P:\docs\source\stm32plus\utils\bm2rgbi\bm2rgbi\bin\Debug\bm2rgbi.pdb

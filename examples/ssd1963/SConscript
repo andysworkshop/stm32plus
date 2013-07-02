@@ -1,0 +1,53 @@
+#
+# SConscript build file for an stm32plus example. Called automatically by the SConstruct
+# in the parent directory
+#
+
+import os
+
+# import everything exported in SConstruct
+
+Import('*')
+
+# get a copy of the environment
+
+env=env.Clone()
+
+# get all the sources
+
+matches=[]
+matches.append(Glob("*.cpp"))
+matches.append(Glob("*.c"))
+matches.append(Glob("*.s"))
+matches.append("system/LibraryHacks.cpp")
+
+matches.append("system/"+mcu+"/Startup.s")
+matches.append("system/"+mcu+"/System.c")
+linkerscript="examples/"+example+"/system/"+mcu+"/Linker.ld"
+
+buildoutdir="examples/"+example+"/build/"+systemprefix
+  
+# set the additional linker flags
+
+env.Append(LINKFLAGS=["-T"+linkerscript,"-Wl,-wrap,__aeabi_unwind_cpp_pr0","-Wl,-wrap,__aeabi_unwind_cpp_pr1","-Wl,-wrap,__aeabi_unwind_cpp_pr2"])
+
+# additional include directory for the graphics
+
+env.Append(ASFLAGS="-Iexamples/"+example)
+
+# unique additions for this example
+
+env.Append(CPPPATH="#examples/"+example)
+
+# trigger a build with the correct library name
+
+elf=env.Program(example+".elf",matches)
+hex=env.Command(example+".hex",elf,"arm-none-eabi-objcopy -O ihex "+buildoutdir+"/"+example+".elf "+buildoutdir+"/"+example+".hex")
+bin=env.Command(example+".bin",elf,"arm-none-eabi-objcopy -O binary "+buildoutdir+"/"+example+".elf "+buildoutdir+"/"+example+".bin")
+lst=env.Command(example+".lst",elf,"arm-none-eabi-objdump -h -S "+buildoutdir+"/"+example+".elf > "+buildoutdir+"/"+example+".lst")
+size=env.Command(example+".size",elf,"arm-none-eabi-size --format=berkeley "+buildoutdir+"/"+example+".elf | tee "+buildoutdir+"/"+example+".size")
+
+# install the library if the user gave the install option
+
+EXAMPLEINSTALLDIR=INSTALLDIR+"/examples/"+example+"/"+systemprefix
+env.Alias("install",env.Install(EXAMPLEINSTALLDIR,[elf,hex,bin,lst,size]))

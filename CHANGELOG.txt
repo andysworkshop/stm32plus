@@ -1,0 +1,230 @@
+2.1.0 31st March 2013
+
+  **                                                **
+  ** THE MINIMUM REQUIRED VERSION OF G++ IS NOW 4.7 **
+  **                                                **
+
+  Added "TypeB" Nokia N95 8Gb driver (LDS285 controller). stm32plus
+  now supports both types of this cellphone display that I've found so
+  far.
+
+  Accepted LGDP453x TFT driver and demo contributed by Andy Franz. 
+  Thanks Andy!
+
+  Added drivers for SSD1289, SSD1963 and ST7783 LCD interfaces. Demos
+  are include.
+
+  Change compile flags to C++0x with GNU extensions. This will
+  facilitate a migration to variadic templates for the feature
+  classes. The motivation for the migration is cleaner and smaller
+  code generation.
+
+  Ported all peripheral classes that allowed template features to
+  variadic templates.
+
+  Ported all LCD interface declarations from subclasses to template
+  typedef aliases. Removed the colour depth suffix from graphic
+  terminal class names, i.e. remove _64K, _262K suffixes. This is
+  because there's no difference between the colour depths making the
+  suffix irrelevant.
+
+  Replaced SmartArray.h with scoped_array.h and scoped_ptr.h lifted
+  from the open source Chromium project with appropriate credits.
+
+  Added reset() method to MillisecondTimer to bring the clock back
+  down to zero.
+
+  Fixed STL slist for modern, stricter compilers.
+
+  Increased reliability of ADS7843 touch screen by preventing the pen
+  interrupt from occurring while sampling is taking place.
+
+  Replaced the 3 GraphicTerminal* classes with a single
+  GraphicTerminal template. The terminal declarations for each LCD
+  interface have been updated accordingly. Graphics terminal
+  declarations have now lost the colour depth suffix. So for example:
+
+    ILI9325_Terminal_Portrait_262K<LcdAccess> 
+
+  would now be:
+  
+     ILI9325_Terminal_Portrait<LcdAccess>
+
+  Also, the terminal class constructor is now a reference and not a
+  pointer.
+
+  Implemented AT24C32/64 serial EEPROM classes with I2C interface. An
+  example program is provided. Include "config/eeprom.h" to get access
+  to the class.
+
+  Created StreamBase base class for InputStream and OutputStream and
+  lifted up the error codes into the base as well as the common
+  close() interface method.
+
+2.0.0 9th February 2013
+
+  Release 2.0.0 marks a major milestone in the development of
+  stm32plus. There are many, many changes and improvements. Please see
+  my article at http://www.andybrown.me.uk for the details of which
+  there are far too many to list here.
+
+1.2.0
+
+  Major internal rewrite for the TFT display drivers. The old class
+  hierarchies have been replaced by more specialised template
+  classes. This allows the code to be much more specialised to
+  the actual task in hand which results in higher
+  performance. There are API and class name differences, but the
+  overall approach is the same. All the demo code and blog
+  articles have been updated to the new APIs.
+
+  Added support for an LZG decoder stream. Good for compressed
+  PNG-style bitmaps that are efficient in their use of
+  memory. Also could be used to efficiently stream bitmaps over
+  USART where bandwidth is relatively low.
+
+  Added the picoJPEG decoder for decoding and displaying JPEG
+  images. All the TFT driver demos now feature a JPEG being
+  decoded. See each demo for sample code.
+
+  STL support is here! The SGI implementation of the STL is
+  ported and included with stm32plus. To use, ensure that
+  [stm32plus]/include/stl is in your include path.
+
+  Complete rewrite of the Makefile structure for rebuilding the
+  project and the examples. Previously the Makefiles were set up
+  to do a clean build each time they were ran. Now they will
+  build only what's required (just like a real Makefile!) and
+  they place object code in an obj/ subdirectory to reduce
+  clutter.
+
+  Added missing virtual destructors to some classes where
+  virtual funcs were present.
+
+1.1.4 July 18th 2012
+
+  Significant internal changes to the Font api to simplify
+  it. Examples have been updated to the new API.
+
+  Included Windows C# GUI to convert TTF to bitmap font suitable
+  for direct use with stm32plus. Only works properly with bitmap
+  fonts, not outline vector fonts. See util/FontConv for the
+  utility.
+
+  Add setScrollPosition(0) to mc2pa8201 startup (needed by N93).
+
+  Added a demo for the ILI9327 WQVGA panel driver.
+
+  Fix bug in USART interrupt handler code.
+
+  Optimisation for drawing straight lines: use fillRectangle
+  instead.
+
+1.1.3 April 9 2012
+  
+  Added support for external SRAM connected through the FSMC and
+  exposed either as a direct pointer to the external memory or
+  as a block device for use as a SRAM disk.
+
+  Added a demo for the ILI9481 HVGA panel driver.
+
+  Added various smart pointers in ptr/*.h
+
+  Fix bug in startup sequence for MC2PA8201 - need to wait at
+  least 5ms after SLEEP_OUT before next command.
+
+1.1.2 March 12 2012
+
+  Added driver for MC2PA8201 and demo for the Nokia 2730 LCD project.
+
+1.1.1
+  
+  ADS7843 fix: disable vref during conversion for better
+  accuracy and compatibility.
+
+  Added findMultipleSequential() method to
+  LinearFreeClusterFinder as a way to get access to a raw set of
+  unused blocks on a device that the file system has not
+  allocated for use.
+
+  Added LinearBufferInputOutputStream class to support raw
+  access to memory blocks.
+
+  Fixed problems in GraphicLcdTerminal that came from
+  incompatible code from an earlier release.
+
+  Removed millisPerStep option for scrolling - apps should take
+  care of their own animation requirements.
+
+  Added getScrollPosition() to DisplayDevice interface.
+
+  Removed SD_DETECT optional signal from low-level SDIO driver -
+  not all boards implement this.
+
+  Moved MBR detection into filesystem internal code. No need for
+  this complication to be seen by users.
+
+  Added InterruptTimer as a simple class for generating timed
+  interrupts at regular events. Supports up to 60kHz.
+
+  Much modification to the Timer base class to support
+  interrupts.
+
+  Remove Timer1 from the available timers. The advanced timers 1
+  and 8 will be dealt with properly in a future release.
+
+  Added Timeline for animation.
+
+  Fix memory leak in FatDirectoryIterator.
+  Fix memory leak in FilenameHandler.
+
+  Added setScrollPosition() to display device and graphics
+  library.  Fix bug in graphics lcd terminal where lcd scroll
+  position was not reset to zero on clear.
+
+1.1.0
+  
+  Minor restructuring of an internal #include that was in the
+  wrong place.
+
+  Delete ParallelDisplayDeviceHelper and push up the
+  functionality into DisplayDeviceGraphics. This allows reuse
+  from the serial implementations.
+
+  Added SSD1306 128x64 monochrome OLED support. Typically these
+  are the 0.96" wristwatch sized devices.
+
+  Changes to the scrolling API: Devices no longer need to
+  support timed-interval smooth scrolling, this is passed up to
+  the graphics library.  setScrollArea added as an API call to
+  allow for devices that can have a scroll window.
+
+  Display devices now have a sleep(bool) call to put them to
+  sleep/wake them up. Implemented so far on HX8347A, SSD1306 and
+  ILI9325.
+
+  Substantial changes to the GraphicsLibrary API to use the
+  graphical types (Rectangle, Point, Size) instead of raw
+  co-ordinates.
+
+  Added DMA writer for SPI peripherals, also added buffered SPI
+  writer for linking to the DMA writer via the new
+  ByteArrayOutputStream.
+
+1.0.1   30 December 2011
+
+  Fixed bug in RGBEtoRGBI for 262K colour mode of ILI9325. 1.0.0
+  assumed that the colour transfer format was the same as for
+  the ILI9327 and ILI9481, which it is not. RGBEtoRGBI is now
+  pushed down from the colour mode helper classes into the
+  driver class.
+
+  Fixed hx8347a example where #include directory path was
+  HX8347A when it should be hx8347a. This slipped through on
+  Windows where case doesn't matter but will throw an error on
+  Linux.
+
+  Added ili9325 driver demo. For kicks this one sets the device
+  mode to 262K colour (18-bit, 2 transfers per pixel) instead of
+  the faster 64K mode (16 bit, 1 transfer per pixel). Speed is
+  still subjectively very high.
