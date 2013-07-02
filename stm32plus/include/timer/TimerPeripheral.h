@@ -10,19 +10,19 @@
 namespace stm32plus {
 
  /**
-	* The level of remapping required (none, partial1, partial2, full)
-	* Not all remap levels are available for each timer. check the ST reference manual for details
-	*/
+  * The level of remapping required (none, partial1, partial2, full)
+  * Not all remap levels are available for each timer. check the ST reference manual for details
+  */
 
-	enum TimerGpioRemapLevel {
-		TIMER_REMAP_NONE     = 0,
-		TIMER_REMAP_PARTIAL1 = 1,
-		TIMER_REMAP_PARTIAL2 = 2,
-		TIMER_REMAP_FULL     = 3
-	};
+  enum TimerGpioRemapLevel {
+    TIMER_REMAP_NONE     = 0,
+    TIMER_REMAP_PARTIAL1 = 1,
+    TIMER_REMAP_PARTIAL2 = 2,
+    TIMER_REMAP_FULL     = 3
+  };
 
 
-	/**
+  /**
    * Generic timer functionality
    * @tparam TTimer The timer class type (Timer1, Timer2...)
    */
@@ -30,12 +30,12 @@ namespace stm32plus {
   template<class TTimer>
   class TimerPeripheral : public Timer {
 
-  	protected:
-  		TimerPeripheral(TIM_TypeDef *peripheralAddress);
+    protected:
+      TimerPeripheral(TIM_TypeDef *peripheralAddress);
 
-  	public:
-  		void setPrescalerImmediately(uint16_t value);
-  		void setPrescalerAtUpdate(uint16_t value);
+    public:
+      void setPrescalerImmediately(uint16_t value);
+      void setPrescalerAtUpdate(uint16_t value);
   };
 
 
@@ -45,7 +45,7 @@ namespace stm32plus {
 
   template<class TTimer>
   inline TimerPeripheral<TTimer>::TimerPeripheral(TIM_TypeDef *peripheralAddress)
-  	: Timer(peripheralAddress) {
+    : Timer(peripheralAddress) {
   }
 
 

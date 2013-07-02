@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PanelInterfaceControl5
-		{
-			enum
-			{
-				Opcode = 0x97
-			};
-		}
-	}
+  namespace ili9325
+  {
+    namespace PanelInterfaceControl5
+    {
+      enum
+      {
+        Opcode = 0x97
+      };
+    }
+  }
 }
 
 

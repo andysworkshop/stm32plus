@@ -9,66 +9,66 @@
 
 namespace stm32plus {
 
-	/**
-	 * DAC peripheral class
-	 */
+  /**
+   * DAC peripheral class
+   */
 
-	template<class TPinPackage,PeripheralName TPeripheralName>
-	class DacPeripheral : public Dac {
+  template<class TPinPackage,PeripheralName TPeripheralName>
+  class DacPeripheral : public Dac {
 
-		public:
+    public:
 
-			struct Parameters {
-				uint32_t dac_trigger;
-			  uint32_t dac_waveGeneration;
-			  uint32_t dac_lfsrMaskOrTriangleAmplitude;
-			  uint32_t dac_outputBuffer;
+      struct Parameters {
+        uint32_t dac_trigger;
+        uint32_t dac_waveGeneration;
+        uint32_t dac_lfsrMaskOrTriangleAmplitude;
+        uint32_t dac_outputBuffer;
 
-			  /**
-			   * Default parameters:
-			   * 	are no trigger (conversion triggered by loading data to the register)
-			   * 	no wave generation
-			   * 	bit0-11 LFSR unmask/triangle amplitude 1
-			   * 	output buffer enabled
-			   */
+        /**
+         * Default parameters:
+         *  are no trigger (conversion triggered by loading data to the register)
+         *  no wave generation
+         *  bit0-11 LFSR unmask/triangle amplitude 1
+         *  output buffer enabled
+         */
 
-			  Parameters(uint32_t trigger=DAC_Trigger_None) {
-			  	dac_trigger=trigger;
-			  	dac_waveGeneration=DAC_WaveGeneration_None;
-	        dac_lfsrMaskOrTriangleAmplitude=DAC_LFSRUnmask_Bits11_0;
-	        dac_outputBuffer=DAC_OutputBuffer_Enable;
-			  }
-			};
+        Parameters(uint32_t trigger=DAC_Trigger_None) {
+          dac_trigger=trigger;
+          dac_waveGeneration=DAC_WaveGeneration_None;
+          dac_lfsrMaskOrTriangleAmplitude=DAC_LFSRUnmask_Bits11_0;
+          dac_outputBuffer=DAC_OutputBuffer_Enable;
+        }
+      };
 
-		protected:
+    protected:
 
-			DacPeripheral(const Parameters& params)
-				: Dac(PeripheralTraits<TPeripheralName>::CHANNEL_NUMBER) {
+      DacPeripheral(const Parameters& params)
+        : Dac(PeripheralTraits<TPeripheralName>::CHANNEL_NUMBER) {
 
-				DAC_InitTypeDef init;
+        DAC_InitTypeDef init;
 
-				// clocks on first before any features get initialised
+        // clocks on first before any features get initialised
 
-				ClockControl<TPeripheralName>::On();
+        ClockControl<TPeripheralName>::On();
 
-				// and next the GPIO pins, also before any features get initialised
+        // and next the GPIO pins, also before any features get initialised
 
-				DacPinInitialiser<TPinPackage>::initialise();
+        DacPinInitialiser<TPinPackage>::initialise();
 
-				// initialise the peripheral
+        // initialise the peripheral
 
-				DAC_StructInit(&init);
+        DAC_StructInit(&init);
 
-				init.DAC_Trigger=params.dac_trigger;
-				init.DAC_WaveGeneration=params.dac_waveGeneration;
-				init.DAC_LFSRUnmask_TriangleAmplitude=params.dac_lfsrMaskOrTriangleAmplitude;
-				init.DAC_OutputBuffer=params.dac_outputBuffer;
+        init.DAC_Trigger=params.dac_trigger;
+        init.DAC_WaveGeneration=params.dac_waveGeneration;
+        init.DAC_LFSRUnmask_TriangleAmplitude=params.dac_lfsrMaskOrTriangleAmplitude;
+        init.DAC_OutputBuffer=params.dac_outputBuffer;
 
-				DAC_Init(PeripheralTraits<TPeripheralName>::CHANNEL_NUMBER,&init);
+        DAC_Init(PeripheralTraits<TPeripheralName>::CHANNEL_NUMBER,&init);
 
-				// enable this channel
+        // enable this channel
 
-				enablePeripheral();
-			}
-	};
+        enablePeripheral();
+      }
+  };
 }

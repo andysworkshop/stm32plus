@@ -2110,7 +2110,7 @@ void RTC_TamperTriggerConfig(uint32_t RTC_Tamper, uint32_t RTC_TamperTrigger)
   if (RTC_TamperTrigger == RTC_TamperTrigger_RisingEdge)
   {  
     /* Configure the RTC_TAFCR register */
-    RTC->TAFCR &= (uint32_t)((uint32_t)~(RTC_Tamper << 1));	
+    RTC->TAFCR &= (uint32_t)((uint32_t)~(RTC_Tamper << 1)); 
   }
   else
   { 

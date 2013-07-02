@@ -10,80 +10,80 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor. Set up the internal references.
-	 * @param[in] base
-	 *   The Observable that holds the start of this chain
-	 * @param[in] observer
-	 *   The observer to store in this link
-	 */
+  /**
+   * Constructor. Set up the internal references.
+   * @param[in] base
+   *   The Observable that holds the start of this chain
+   * @param[in] observer
+   *   The observer to store in this link
+   */
 
-	ObserverLink::ObserverLink(Observable& base,Observer& observer) :
-		_base(base), _observer(observer) {
+  ObserverLink::ObserverLink(Observable& base,Observer& observer) :
+    _base(base), _observer(observer) {
 
-		_next=_previous=nullptr;
-	}
+    _next=_previous=nullptr;
+  }
 
-	/**
-	 * Self-destruct, call forwards in the chain then self-destruct ourselves.
-	 */
+  /**
+   * Self-destruct, call forwards in the chain then self-destruct ourselves.
+   */
 
-	void ObserverLink::destroy() {
-		if(_next)
-			_next->destroy();
+  void ObserverLink::destroy() {
+    if(_next)
+      _next->destroy();
 
-		_observer.onSubjectDestroyed();
-		delete this;
-	}
+    _observer.onSubjectDestroyed();
+    delete this;
+  }
 
-	/**
-	 * Remove this link from the chain and self-destruct
-	 */
+  /**
+   * Remove this link from the chain and self-destruct
+   */
 
-	void ObserverLink::remove() {
+  void ObserverLink::remove() {
 
-		if(_previous == nullptr)
-			_base.setFirstObserverLink(_next);
-		else
-			_previous->setNext(_next);
+    if(_previous == nullptr)
+      _base.setFirstObserverLink(_next);
+    else
+      _previous->setNext(_next);
 
-		delete this;
-	}
+    delete this;
+  }
 
-	/**
-	 * Set the next link in the chain to be the value.
-	 * @param[in] newNext The new value for the next.
-	 */
+  /**
+   * Set the next link in the chain to be the value.
+   * @param[in] newNext The new value for the next.
+   */
 
-	void ObserverLink::setNext(ObserverLink* newNext) {
-		_next=newNext;
-	}
+  void ObserverLink::setNext(ObserverLink* newNext) {
+    _next=newNext;
+  }
 
-	/**
-	 * Set the previous link in the chain to be the value.
-	 * @param[in] newPrevious The new value for the previous.
-	 */
+  /**
+   * Set the previous link in the chain to be the value.
+   * @param[in] newPrevious The new value for the previous.
+   */
 
-	void ObserverLink::setPrevious(ObserverLink* newPrevious) {
-		_previous=newPrevious;
-	}
+  void ObserverLink::setPrevious(ObserverLink* newPrevious) {
+    _previous=newPrevious;
+  }
 
-	/**
-	 * Get the next link in the chain
-	 * @return the next link
-	 */
+  /**
+   * Get the next link in the chain
+   * @return the next link
+   */
 
-	ObserverLink* ObserverLink::getNext() {
-		return _next;
-	}
+  ObserverLink* ObserverLink::getNext() {
+    return _next;
+  }
 
-	/**
-	 * Get the observer from this link
-	 * @return The observer.
-	 */
+  /**
+   * Get the observer from this link
+   * @return The observer.
+   */
 
-	Observer& ObserverLink::getObserver() {
-		return _observer;
-	}
+  Observer& ObserverLink::getObserver() {
+    return _observer;
+  }
 
 }

@@ -10,56 +10,56 @@
 namespace stm32plus {
 
 
-	/**
-	 * Base class for DMA features
-	 */
+  /**
+   * Base class for DMA features
+   */
 
-	class DmaFeatureBase {
+  class DmaFeatureBase {
 
-	  public:
+    public:
 
-	    enum TransferType {
-	      TRANSFER_ONESHOT,
-	      TRANSFER_CIRCULAR
-	    };
+      enum TransferType {
+        TRANSFER_ONESHOT,
+        TRANSFER_CIRCULAR
+      };
 
-	  protected:
-	    Dma& _dma;
+    protected:
+      Dma& _dma;
       DMA_InitTypeDef _init;
 
-		public:
-			DmaFeatureBase(Dma& dma);
+    public:
+      DmaFeatureBase(Dma& dma);
 
-			operator Dma&();
-			operator DMA_InitTypeDef&();
-	};
-
-
-	/**
-	 * Constructor
-	 * @param dma
-	 */
-
-	inline DmaFeatureBase::DmaFeatureBase(Dma& dma)
-		: _dma(dma) {
-	}
+      operator Dma&();
+      operator DMA_InitTypeDef&();
+  };
 
 
-	/**
-	 * Cast to Dma reference
-	 */
+  /**
+   * Constructor
+   * @param dma
+   */
 
-	inline DmaFeatureBase::operator Dma&() {
-		return _dma;
-	}
+  inline DmaFeatureBase::DmaFeatureBase(Dma& dma)
+    : _dma(dma) {
+  }
 
 
-	/**
-	 * Cast to DMA_InitTypedef to allow modifications
-	 * before the transfer is started
-	 */
+  /**
+   * Cast to Dma reference
+   */
 
-	inline DmaFeatureBase::operator DMA_InitTypeDef&() {
-	  return _init;
-	}
+  inline DmaFeatureBase::operator Dma&() {
+    return _dma;
+  }
+
+
+  /**
+   * Cast to DMA_InitTypedef to allow modifications
+   * before the transfer is started
+   */
+
+  inline DmaFeatureBase::operator DMA_InitTypeDef&() {
+    return _init;
+  }
 }

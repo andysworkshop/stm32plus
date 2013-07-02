@@ -23,13 +23,13 @@ template<> Observable *ExtiPeripheral<EXTI_Line19>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) ETH_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) ETH_WKUP_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line19)!=RESET) {
-				ExtiEthernetWakeup::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)19);
-				EXTI_ClearITPendingBit(EXTI_Line19);
-		}
-	}
+    if(EXTI_GetITStatus(EXTI_Line19)!=RESET) {
+        ExtiEthernetWakeup::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)19);
+        EXTI_ClearITPendingBit(EXTI_Line19);
+    }
+  }
 }
 
 #endif

@@ -7,11 +7,11 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace ColumnAddressStartCmd {
-			enum {
-				OpcodeHigh=0x2, OpcodeLow=0x3
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace ColumnAddressStartCmd {
+      enum {
+        OpcodeHigh=0x2, OpcodeLow=0x3
+      };
+    }
+  }
 }

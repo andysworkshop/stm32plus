@@ -14,49 +14,49 @@ namespace stm32plus {
  * @brief Pushbutton with debouncing
  */
 
-	class PushButton {
+  class PushButton {
 
-		private:
+    private:
 
-			/// configuration
-			static const uint32_t DEBOUNCE_DELAY_MILLIS=50;
+      /// configuration
+      static const uint32_t DEBOUNCE_DELAY_MILLIS=50;
 
-			/// Internal button state
-			enum InternalState {
-				Idle,                         // nothing happening
-				DebounceDelay                	// delaying...
-			};
+      /// Internal button state
+      enum InternalState {
+        Idle,                         // nothing happening
+        DebounceDelay                 // delaying...
+      };
 
-			/// The digital pin where the button is connected
-			uint8_t _digitalPin;
+      /// The digital pin where the button is connected
+      uint8_t _digitalPin;
 
-			/// The pressed state (true=HIGH/falas=LOW)
-			bool _pressedState;
+      /// The pressed state (true=HIGH/falas=LOW)
+      bool _pressedState;
 
-			/// Internal state of the class
-			InternalState _internalState;
+      /// Internal state of the class
+      InternalState _internalState;
 
-			/// The last time we sampled our button
-			uint32_t _lastTime;
+      /// The last time we sampled our button
+      uint32_t _lastTime;
 
-			/// The pin
-			GpioPinRef _pin;
+      /// The pin
+      GpioPinRef _pin;
 
-		public:
+    public:
 
-			/**
-			 * Possible button states
-			 */
+      /**
+       * Possible button states
+       */
 
-			enum ButtonState {
-				/// button is up
-				NotPressed,
+      enum ButtonState {
+        /// button is up
+        NotPressed,
 
-				/// button is down
-				Pressed
-			};
+        /// button is down
+        Pressed
+      };
 
-			PushButton(const GpioPinRef& pin,bool pressedState);
-			ButtonState getState();
-	};
+      PushButton(const GpioPinRef& pin,bool pressedState);
+      ButtonState getState();
+  };
 }

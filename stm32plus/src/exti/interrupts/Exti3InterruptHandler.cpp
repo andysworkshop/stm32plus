@@ -21,13 +21,13 @@ template<> Observable *ExtiPeripheral<EXTI_Line3>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) EXTI3_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) EXTI3_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line3)!=RESET) {
-				Exti3::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)3);
-				EXTI_ClearITPendingBit(EXTI_Line3);
-		}
-	}
+    if(EXTI_GetITStatus(EXTI_Line3)!=RESET) {
+        Exti3::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)3);
+        EXTI_ClearITPendingBit(EXTI_Line3);
+    }
+  }
 }
 
 #endif

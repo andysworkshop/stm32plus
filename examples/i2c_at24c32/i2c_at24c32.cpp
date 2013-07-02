@@ -32,8 +32,8 @@ using namespace stm32plus;
  * change the LED pin to PD13 to use the onboard LED.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -42,138 +42,138 @@ using namespace stm32plus;
 
 class AT24C32Test {
 
-	protected:
+  protected:
 
-		enum {
-			LED_PIN = 6
-		};
+    enum {
+      LED_PIN = 6
+    };
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Define a type for the EEPROM
-			 */
+      /*
+       * Define a type for the EEPROM
+       */
 
-			typedef AT24C32<
-				I2C2_Default<I2CTwoByteMasterPollingFeature>		// the EEPROM has 2-byte addresses
-			> MyEeprom;
+      typedef AT24C32<
+        I2C2_Default<I2CTwoByteMasterPollingFeature>    // the EEPROM has 2-byte addresses
+      > MyEeprom;
 
-			uint16_t address;
-			uint32_t actuallyRead;
-			uint8_t i,c,buffer[237];
+      uint16_t address;
+      uint32_t actuallyRead;
+      uint8_t i,c,buffer[237];
 
-			/*
-			 * initialise the LED and switch if off (this LED is
-			 * active LOW
-			 */
+      /*
+       * initialise the LED and switch if off (this LED is
+       * active LOW
+       */
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
-			pf[LED_PIN].set();
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      pf[LED_PIN].set();
 
-			/*
-			 * Initialise the AT24C32 on I2C #2. We will be the bus master
-			 * and we will poll it
-			 */
+      /*
+       * Initialise the AT24C32 on I2C #2. We will be the bus master
+       * and we will poll it
+       */
 
-			I2C::Parameters params;
-			MyEeprom eeprom(params);
+      I2C::Parameters params;
+      MyEeprom eeprom(params);
 
-			/*
-			 * Fill a buffer with a simple test pattern
-			 */
+      /*
+       * Fill a buffer with a simple test pattern
+       */
 
-			for(i=0;i<sizeof(buffer);i++)
-				buffer[i]=i;
+      for(i=0;i<sizeof(buffer);i++)
+        buffer[i]=i;
 
-			/*
-			 * Test forever
-			 */
+      /*
+       * Test forever
+       */
 
-			for(;;) {
+      for(;;) {
 
-				/*
-				 * Reset to position zero and write a byte. Note that the SerialEeprom
-				 * base class inherits from InputStream and OutputStream so you can use
-				 * the overloaded << and >> operators to write to and read from the EEPROM
-				 */
+        /*
+         * Reset to position zero and write a byte. Note that the SerialEeprom
+         * base class inherits from InputStream and OutputStream so you can use
+         * the overloaded << and >> operators to write to and read from the EEPROM
+         */
 
-				eeprom.seek(0);
+        eeprom.seek(0);
 
-				if(!eeprom.writeByte(0xaa))
-					error(pf[LED_PIN]);
+        if(!eeprom.writeByte(0xaa))
+          error(pf[LED_PIN]);
 
-				/*
-				 * Let the device settle after write (10ms max, see datasheet)
-				 */
+        /*
+         * Let the device settle after write (10ms max, see datasheet)
+         */
 
-				MillisecondTimer::delay(10);
+        MillisecondTimer::delay(10);
 
-				/*
-				 * Read back the byte and check it
-				 */
+        /*
+         * Read back the byte and check it
+         */
 
-				eeprom.seek(0);
-				c=0;
+        eeprom.seek(0);
+        c=0;
 
-				if(!eeprom.readByte(c) || c!=0xaa)
-					error(pf[LED_PIN]);
+        if(!eeprom.readByte(c) || c!=0xaa)
+          error(pf[LED_PIN]);
 
-				/*
-				 * Write the 237 byte sequence at a random position
-				 */
+        /*
+         * Write the 237 byte sequence at a random position
+         */
 
-				address=rand() % (MyEeprom::SIZE_IN_BYTES-sizeof(buffer));
+        address=rand() % (MyEeprom::SIZE_IN_BYTES-sizeof(buffer));
 
-				eeprom.seek(address);
-				if(!eeprom.write(buffer,sizeof(buffer)))
-					error(pf[LED_PIN]);
+        eeprom.seek(address);
+        if(!eeprom.write(buffer,sizeof(buffer)))
+          error(pf[LED_PIN]);
 
-				/*
-				 * Let the device settle after write (10ms max, see datasheet)
-				 */
+        /*
+         * Let the device settle after write (10ms max, see datasheet)
+         */
 
-				MillisecondTimer::delay(10);
+        MillisecondTimer::delay(10);
 
-				/*
-				 * Clear the buffer and read back the data
-				 */
+        /*
+         * Clear the buffer and read back the data
+         */
 
-				memset(buffer,0,sizeof(buffer));
+        memset(buffer,0,sizeof(buffer));
 
-				eeprom.seek(address);
-				if(!eeprom.read(buffer,sizeof(buffer),actuallyRead))
-					error(pf[LED_PIN]);
+        eeprom.seek(address);
+        if(!eeprom.read(buffer,sizeof(buffer),actuallyRead))
+          error(pf[LED_PIN]);
 
-				for(i=0;i<sizeof(buffer);i++)
-					if(buffer[i]!=i)
-						error(pf[LED_PIN]);
+        for(i=0;i<sizeof(buffer);i++)
+          if(buffer[i]!=i)
+            error(pf[LED_PIN]);
 
-				/*
-				 * Success, flash for a second
-				 */
+        /*
+         * Success, flash for a second
+         */
 
-				pf[LED_PIN].reset();
-				MillisecondTimer::delay(1000);
-				pf[LED_PIN].set();
-				MillisecondTimer::delay(1000);
-			}
-		}
+        pf[LED_PIN].reset();
+        MillisecondTimer::delay(1000);
+        pf[LED_PIN].set();
+        MillisecondTimer::delay(1000);
+      }
+    }
 
 
-		/*
-		 * Error, flash rapidly on and off
-		 */
+    /*
+     * Error, flash rapidly on and off
+     */
 
-		void error(const GpioPinRef& gpio) {
-			for(;;) {
-				gpio.reset();
-				MillisecondTimer::delay(100);
-				gpio.set();
-				MillisecondTimer::delay(100);
-			}
-		}
+    void error(const GpioPinRef& gpio) {
+      for(;;) {
+        gpio.reset();
+        MillisecondTimer::delay(100);
+        gpio.set();
+        MillisecondTimer::delay(100);
+      }
+    }
 };
 
 
@@ -183,12 +183,12 @@ class AT24C32Test {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	AT24C32Test test;
-	test.run();
+  AT24C32Test test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

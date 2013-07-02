@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace GammaSettingCmd
-		{
-			enum
-			{
-				Opcode = 0xc8
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace GammaSettingCmd
+    {
+      enum
+      {
+        Opcode = 0xc8
+      };
+    }
+  }
 }
 
 

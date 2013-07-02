@@ -10,20 +10,20 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace DrivingWaveControlCmd
-		{
-			enum
-			{
-				Opcode = 2,
+  namespace lgdp453x
+  {
+    namespace DrivingWaveControlCmd
+    {
+      enum
+      {
+        Opcode = 2,
 
-				EOR = 1<<8,
-				BC0 = 1<<9
-			};
-			inline uint16_t NW(uint16_t n){return n ;}
-		}
-	}
+        EOR = 1<<8,
+        BC0 = 1<<9
+      };
+      inline uint16_t NW(uint16_t n){return n ;}
+    }
+  }
 }
 
 

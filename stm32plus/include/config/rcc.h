@@ -22,13 +22,13 @@
 
 #if defined(STM32PLUS_F1)
 
-	#include "include/rcc/f1/ClockControl.h"
-	#include "include/rcc/f1/PeripheralBusSpeed.h"
+  #include "include/rcc/f1/ClockControl.h"
+  #include "include/rcc/f1/PeripheralBusSpeed.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#include "include/rcc/f4/ClockControl.h"
-	#include "include/rcc/f4/PeripheralBusSpeed.h"
+  #include "include/rcc/f4/ClockControl.h"
+  #include "include/rcc/f4/PeripheralBusSpeed.h"
 
 #endif
 

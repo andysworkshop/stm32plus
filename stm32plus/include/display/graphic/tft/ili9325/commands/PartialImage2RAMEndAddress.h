@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PartialImage2RAMEndAddress
-		{
-			enum
-			{
-				Opcode = 0x85
-			};
+  namespace ili9325
+  {
+    namespace PartialImage2RAMEndAddress
+    {
+      enum
+      {
+        Opcode = 0x85
+      };
 
-			inline uint16_t ENDADDRESS(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t ENDADDRESS(uint16_t n) { return n; }
+    }
+  }
 }
 
 

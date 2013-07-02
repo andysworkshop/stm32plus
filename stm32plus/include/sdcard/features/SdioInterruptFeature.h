@@ -23,7 +23,7 @@ namespace stm32plus {
    */
 
   class SdioInterruptFeature : public Observable,
-  														 public SdCardFeatureBase {
+                               public SdCardFeatureBase {
 
     protected:
       typedef void (*FPTR)();         // this trick will force the linker to include the ISR
@@ -52,7 +52,7 @@ namespace stm32plus {
    */
 
   inline SdioInterruptFeature::SdioInterruptFeature(SdCardBase& sdcard)
-  	: SdCardFeatureBase(sdcard) {
+    : SdCardFeatureBase(sdcard) {
     _interruptMask=0;
     _nvicPriority=_nvicSubPriority=0;
     _sdioInstance=this;
@@ -78,8 +78,8 @@ namespace stm32plus {
    */
 
   inline void SdioInterruptFeature::setNvicPriorities(uint8_t priority,uint8_t subPriority) {
-  	_nvicPriority=priority;
-  	_nvicSubPriority=subPriority;
+    _nvicPriority=priority;
+    _nvicSubPriority=subPriority;
   }
 
 

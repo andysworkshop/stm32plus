@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PartialImage1DisplayPosition
-		{
-			enum
-			{
-				Opcode = 0x80
-			};
+  namespace lgdp453x
+  {
+    namespace PartialImage1DisplayPosition
+    {
+      enum
+      {
+        Opcode = 0x80
+      };
 
-			inline uint16_t POSITION(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t POSITION(uint16_t n) { return n; }
+    }
+  }
 }
 
 

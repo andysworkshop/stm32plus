@@ -10,68 +10,68 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor with file
-	 * @param[in] file_ The file to read the data from. Caller supplied, must not go out of scope.
-	 */
+  /**
+   * Constructor with file
+   * @param[in] file_ The file to read the data from. Caller supplied, must not go out of scope.
+   */
 
-	FileInputStream::FileInputStream(File& file_) :
-		_file(file_) {
-	}
+  FileInputStream::FileInputStream(File& file_) :
+    _file(file_) {
+  }
 
-	/*
-	 * Read data from the file
-	 */
+  /*
+   * Read data from the file
+   */
 
-	bool FileInputStream::read(void *buffer,uint32_t size_,uint32_t& actuallyRead_) {
-		return _file.read(buffer,size_,actuallyRead_);
-	}
+  bool FileInputStream::read(void *buffer,uint32_t size_,uint32_t& actuallyRead_) {
+    return _file.read(buffer,size_,actuallyRead_);
+  }
 
-	/*
-	 * no-op close
-	 */
+  /*
+   * no-op close
+   */
 
-	bool FileInputStream::close() {
-		return true;
-	}
+  bool FileInputStream::close() {
+    return true;
+  }
 
-	/*
-	 * Skip some distance. Seeking past the end is an error.
-	 */
+  /*
+   * Skip some distance. Seeking past the end is an error.
+   */
 
-	bool FileInputStream::skip(uint32_t howMuch_) {
-		return _file.seek(howMuch_,File::SeekCurrent);
-	}
+  bool FileInputStream::skip(uint32_t howMuch_) {
+    return _file.seek(howMuch_,File::SeekCurrent);
+  }
 
-	/*
-	 * Check if anything available
-	 */
+  /*
+   * Check if anything available
+   */
 
-	bool FileInputStream::available() {
-		return _file.getOffset() < _file.getLength();
-	}
+  bool FileInputStream::available() {
+    return _file.getOffset() < _file.getLength();
+  }
 
-	/*
-	 * Read the next byte from the stream (0..255, or -1 for EOF, or -2 for error)
-	 */
+  /*
+   * Read the next byte from the stream (0..255, or -1 for EOF, or -2 for error)
+   */
 
-	int16_t FileInputStream::read() {
+  int16_t FileInputStream::read() {
 
-		uint8_t value;
-		uint32_t actuallyRead;
+    uint8_t value;
+    uint32_t actuallyRead;
 
-		if(!_file.read(&value,1,actuallyRead))
-			return E_STREAM_ERROR;
+    if(!_file.read(&value,1,actuallyRead))
+      return E_STREAM_ERROR;
 
-		return actuallyRead == 0 ? static_cast<int16_t>(E_END_OF_STREAM) : value;
-	}
+    return actuallyRead == 0 ? static_cast<int16_t>(E_END_OF_STREAM) : value;
+  }
 
 
-	/*
-	 * Reset to start of stream
-	 */
+  /*
+   * Reset to start of stream
+   */
 
-	bool FileInputStream::reset() {
-		return _file.seek(0,File::SeekStart);
-	}
+  bool FileInputStream::reset() {
+    return _file.seek(0,File::SeekStart);
+  }
 }

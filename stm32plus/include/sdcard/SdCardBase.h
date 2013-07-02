@@ -10,24 +10,24 @@
 namespace stm32plus {
 
 
-	/**
-	 * Base class for SD card classes
-	 */
+  /**
+   * Base class for SD card classes
+   */
 
-	class SdCardBase {
+  class SdCardBase {
 
-		public:
-			SdCardBase();
-	};
+    public:
+      SdCardBase();
+  };
 
 
-	/**
-	 * Constructor
-	 */
+  /**
+   * Constructor
+   */
 
-	inline SdCardBase::SdCardBase() {
+  inline SdCardBase::SdCardBase() {
 
-		// this constructor is called before the features
-	}
+    // this constructor is called before the features
+  }
 }
 

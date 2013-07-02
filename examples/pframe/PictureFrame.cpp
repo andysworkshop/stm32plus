@@ -14,10 +14,10 @@
 
 void PictureFrame::run() {
 
-	if(!initialise())
-		return;
+  if(!initialise())
+    return;
 
-	processEvents();
+  processEvents();
 }
 
 
@@ -27,60 +27,60 @@ void PictureFrame::run() {
 
 bool PictureFrame::initialise() {
 
-	// initialise Nvic priority group configuration
+  // initialise Nvic priority group configuration
 
-	Nvic::initialise();
+  Nvic::initialise();
 
-	// initialise the millisecond timer
+  // initialise the millisecond timer
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	// default to 20 seconds
+  // default to 20 seconds
 
-	_autoScrollMillis=20000;
-	_autoScrollEnabled=true;
+  _autoScrollMillis=20000;
+  _autoScrollEnabled=true;
 
-	// create and init the LCD manager
+  // create and init the LCD manager
 
-	_lcdManager=new LcdManager;
-	if(!_lcdManager->initialise())
-		return false;
+  _lcdManager=new LcdManager;
+  if(!_lcdManager->initialise())
+    return false;
 
-	// create and init the FS manager
+  // create and init the FS manager
 
-	_fsManager=new FileSystemManager(*_lcdManager);
-	if(!_fsManager->initialise())
-		return false;
+  _fsManager=new FileSystemManager(*_lcdManager);
+  if(!_fsManager->initialise())
+    return false;
 
-	// create and init the touch manager
+  // create and init the touch manager
 
-	_touchManager=new TouchManager(*_lcdManager,*_fsManager);
-	if(!_touchManager->initialise())
-		return false;
+  _touchManager=new TouchManager(*_lcdManager,*_fsManager);
+  if(!_touchManager->initialise())
+    return false;
 
-	// create and init the bitmap manager
+  // create and init the bitmap manager
 
-	_bitmapManager=new BitmapManager(*_lcdManager,*_fsManager);
-	if(!_bitmapManager->initialise())
-		return false;
+  _bitmapManager=new BitmapManager(*_lcdManager,*_fsManager);
+  if(!_bitmapManager->initialise())
+    return false;
 
-	// create the thumb manager
+  // create the thumb manager
 
-	_thumbManager=new ThumbManager(_lcdManager->getLcd(),*_fsManager,*_touchManager,_bitmapManager->getImageCount());
+  _thumbManager=new ThumbManager(_lcdManager->getLcd(),*_fsManager,*_touchManager,_bitmapManager->getImageCount());
 
-	// if the touch screen needs calibration, do it
+  // if the touch screen needs calibration, do it
 
-	if(_touchManager->needsCalibration() && !_touchManager->calibrate())
-		return false;
+  if(_touchManager->needsCalibration() && !_touchManager->calibrate())
+    return false;
 
-	// clear the screen
+  // clear the screen
 
-	_lcdManager->getLcd().clearScreen();
+  _lcdManager->getLcd().clearScreen();
 
-	// create the image manager
+  // create the image manager
 
-	_imageManager=new ImageManager(*_lcdManager,*_bitmapManager,_fsManager->getSdCard());
-	return _imageManager->initialise();
+  _imageManager=new ImageManager(*_lcdManager,*_bitmapManager,_fsManager->getSdCard());
+  return _imageManager->initialise();
 }
 
 
@@ -90,34 +90,34 @@ bool PictureFrame::initialise() {
 
 void PictureFrame::processEvents() {
 
-	Point p;
-	uint32_t last,now;
+  Point p;
+  uint32_t last,now;
 
-	last=MillisecondTimer::millis();
+  last=MillisecondTimer::millis();
 
-	for(;;) {
+  for(;;) {
 
-		now=MillisecondTimer::millis();
+    now=MillisecondTimer::millis();
 
-		// test for a wrap on the timer
+    // test for a wrap on the timer
 
-		if(last>now) {
-			last=now;
-			continue;
-		}
+    if(last>now) {
+      last=now;
+      continue;
+    }
 
-		// time to scroll?
+    // time to scroll?
 
-		if(_autoScrollEnabled && now-last>_autoScrollMillis) {
-			_imageManager->nextImage();
-			last=now;
-		}
+    if(_autoScrollEnabled && now-last>_autoScrollMillis) {
+      _imageManager->nextImage();
+      last=now;
+    }
 
-		// process clicks
+    // process clicks
 
-		if(processClick())
-			last=MillisecondTimer::millis();
-	}
+    if(processClick())
+      last=MillisecondTimer::millis();
+  }
 }
 
 
@@ -127,26 +127,26 @@ void PictureFrame::processEvents() {
 
 bool PictureFrame::processClick() {
 
-	uint32_t nextImage;
+  uint32_t nextImage;
 
-	// check for click
+  // check for click
 
-	if(!_touchManager->clicked())
-		return false;
+  if(!_touchManager->clicked())
+    return false;
 
-	// last touch must come up
+  // last touch must come up
 
-	_touchManager->waitForPenUp();
+  _touchManager->waitForPenUp();
 
-	// display UI and get the next image from it
+  // display UI and get the next image from it
 
-	if(_thumbManager->run(nextImage,_autoScrollMillis,_autoScrollEnabled))
-		_imageManager->setCurrentImage(nextImage);
+  if(_thumbManager->run(nextImage,_autoScrollMillis,_autoScrollEnabled))
+    _imageManager->setCurrentImage(nextImage);
 
-	_touchManager->waitForPenUp();
+  _touchManager->waitForPenUp();
 
-	// show the image
+  // show the image
 
-	_imageManager->showImage();
-	return true;
+  _imageManager->showImage();
+  return true;
 }

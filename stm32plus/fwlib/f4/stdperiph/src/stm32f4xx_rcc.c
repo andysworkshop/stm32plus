@@ -24,7 +24,7 @@
   *          SRAM, Flash and JTAG.
   *           - There is no prescaler on High speed (AHB) and Low speed (APB) busses;
   *             all peripherals mapped on these busses are running at HSI speed.
-  *       	  - The clock for all peripherals is switched off, except the SRAM and FLASH.
+  *           - The clock for all peripherals is switched off, except the SRAM and FLASH.
   *           - All GPIOs are in input floating state, except the JTAG pins which
   *             are assigned to be used for debug purpose.
   *        

@@ -10,19 +10,19 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace DriverOutputControlCmd
-		{
-			enum
-			{
-				Opcode = 1,
+  namespace ili9325
+  {
+    namespace DriverOutputControlCmd
+    {
+      enum
+      {
+        Opcode = 1,
 
-				SS = 1<<8,
-				SM = 1<<10
-			};
-		}
-	}
+        SS = 1<<8,
+        SM = 1<<10
+      };
+    }
+  }
 }
 
 

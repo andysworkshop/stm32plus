@@ -12,19 +12,19 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PanelInterfaceControl1
-		{
-			enum
-			{
-				Opcode = 0x90
-			};
+  namespace ili9325
+  {
+    namespace PanelInterfaceControl1
+    {
+      enum
+      {
+        Opcode = 0x90
+      };
 
-			inline uint16_t RTNI(uint16_t n) { return n; }
-			inline uint16_t DIVI(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t RTNI(uint16_t n) { return n; }
+      inline uint16_t DIVI(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

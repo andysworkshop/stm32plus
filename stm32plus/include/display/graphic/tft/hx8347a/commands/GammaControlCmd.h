@@ -7,12 +7,12 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace GammaControlCmd {
-			enum {
-				FirstOpcode=0x46
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace GammaControlCmd {
+      enum {
+        FirstOpcode=0x46
+      };
+    }
+  }
 }
 

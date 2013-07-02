@@ -13,35 +13,35 @@
 
 namespace stm32plus {
 
-	/**
-	 * MBR definition
-	 */
+  /**
+   * MBR definition
+   */
 
-	struct Mbr {
+  struct Mbr {
 
-			/// Code area for boot loader.
-			uint8_t code[440];
+      /// Code area for boot loader.
+      uint8_t code[440];
 
-			/// Disk signature (optional).
-			uint32_t diskSignature;
+      /// Disk signature (optional).
+      uint32_t diskSignature;
 
-			/// reserved word
-			uint16_t reserved1;
+      /// reserved word
+      uint16_t reserved1;
 
-			/// table of primary partitions
-			MbrPartition partitions[4];
+      /// table of primary partitions
+      MbrPartition partitions[4];
 
-			/// 0x55AA alternating bit pattern signature
-			uint16_t signature;
+      /// 0x55AA alternating bit pattern signature
+      uint16_t signature;
 #ifdef WIN32
-		};
+    };
 #else
-	}__attribute__ ((packed));
+  }__attribute__ ((packed));
 #endif
 
-	// MBR signature value
+  // MBR signature value
 
-	static const uint16_t MBR_SIGNATURE=0xAA55;
+  static const uint16_t MBR_SIGNATURE=0xAA55;
 }
 
 #ifdef WIN32

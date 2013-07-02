@@ -8,24 +8,24 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Touch screen postprocessor that passes values through without doing anything
-		 */
+    /**
+     * Touch screen postprocessor that passes values through without doing anything
+     */
 
-		class PassThroughTouchScreenPostProcessor : public TouchScreenPostProcessor {
-			public:
-				virtual ~PassThroughTouchScreenPostProcessor() {}
+    class PassThroughTouchScreenPostProcessor : public TouchScreenPostProcessor {
+      public:
+        virtual ~PassThroughTouchScreenPostProcessor() {}
 
-				/**
-				 * Pass through post processor, does nothing and always returns Completed.
-				 * @return Completed.
-				 */
+        /**
+         * Pass through post processor, does nothing and always returns Completed.
+         * @return Completed.
+         */
 
-				virtual PostProcessAction postProcess(Point& /* point */,int /* sequenceNumber */) override {
-					return Completed;
-				}
-		};
-	}
+        virtual PostProcessAction postProcess(Point& /* point */,int /* sequenceNumber */) override {
+          return Completed;
+        }
+    };
+  }
 }

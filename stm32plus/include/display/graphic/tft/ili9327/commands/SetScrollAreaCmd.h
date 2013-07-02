@@ -7,11 +7,11 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace SetScrollAreaCmd {
-			enum {
-				Opcode=0x33
-			};
-		}
-	}
+  namespace ili9327 {
+    namespace SetScrollAreaCmd {
+      enum {
+        Opcode=0x33
+      };
+    }
+  }
 }

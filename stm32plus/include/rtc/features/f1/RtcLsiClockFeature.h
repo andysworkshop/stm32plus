@@ -20,7 +20,7 @@ namespace stm32plus {
    * in their examples so we optionally provide that functionality as well.
    */
 
-	template<class TLsiFrequencyProvider>
+  template<class TLsiFrequencyProvider>
   class RtcLsiClockFeature : public RtcFeatureBase {
 
     public:

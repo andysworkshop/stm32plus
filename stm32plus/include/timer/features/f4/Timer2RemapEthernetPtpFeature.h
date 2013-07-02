@@ -14,25 +14,25 @@
 
 namespace stm32plus {
 
-	/**
-	 * Remap ethernet PTP to timer 2 ITR1
-	 */
+  /**
+   * Remap ethernet PTP to timer 2 ITR1
+   */
 
-	class Timer2RemapEthernetPtpFeature : public TimerFeatureBase {
+  class Timer2RemapEthernetPtpFeature : public TimerFeatureBase {
 
-		public:
-			Timer2RemapEthernetPtpFeature(Timer& timer);
-	};
+    public:
+      Timer2RemapEthernetPtpFeature(Timer& timer);
+  };
 
 
-	/**
-	 * Constructor
-	 * @param timer
-	 */
+  /**
+   * Constructor
+   * @param timer
+   */
 
-	inline Timer2RemapEthernetPtpFeature::Timer2RemapEthernetPtpFeature(Timer& timer)
-		: TimerFeatureBase(timer) {
+  inline Timer2RemapEthernetPtpFeature::Timer2RemapEthernetPtpFeature(Timer& timer)
+    : TimerFeatureBase(timer) {
 
-		TIM_RemapConfig(TIM2,TIM2_ETH_PTP);
-	}
+    TIM_RemapConfig(TIM2,TIM2_ETH_PTP);
+  }
 }

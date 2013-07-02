@@ -12,35 +12,35 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PowerCtrl1Cmd
-		{
-			enum
-			{
-				Opcode = 0x10,
+  namespace ili9325
+  {
+    namespace PowerCtrl1Cmd
+    {
+      enum
+      {
+        Opcode = 0x10,
 
-				STANDBY = 1,
-				SLEEP = 1<<1,
-				DEEP_STANDBY = 1<<2,
+        STANDBY = 1,
+        SLEEP = 1<<1,
+        DEEP_STANDBY = 1<<2,
 
-				AP_HALT = 0,
-				AP_1_1 = 1<<4,
-				AP_1_075 = 2<<4,
-				AP_1_050 = 3<<4,
-				AP_075_1 = 4<<4,
-				AP_075_075 = 5<<4,
-				AP_075_050 = 6<<4,
-				AP_050_050 = 7<<4,
+        AP_HALT = 0,
+        AP_1_1 = 1<<4,
+        AP_1_075 = 2<<4,
+        AP_1_050 = 3<<4,
+        AP_075_1 = 4<<4,
+        AP_075_075 = 5<<4,
+        AP_075_050 = 6<<4,
+        AP_050_050 = 7<<4,
 
-				APE = 1<<7,
+        APE = 1<<7,
 
-				SOURCE_DRIVER_ENABLE = 1<<12
-			};
+        SOURCE_DRIVER_ENABLE = 1<<12
+      };
 
-			inline uint16_t STEP_UP_FACTOR(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t STEP_UP_FACTOR(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

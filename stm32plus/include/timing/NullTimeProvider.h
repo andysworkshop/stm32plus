@@ -9,26 +9,26 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief null time provider, always returns zero
-	 */
+  /**
+   * @brief null time provider, always returns zero
+   */
 
-	class NullTimeProvider : public TimeProvider {
+  class NullTimeProvider : public TimeProvider {
 
-		public:
-			/**
-			 * Virtual destructor
-			 */
+    public:
+      /**
+       * Virtual destructor
+       */
 
-			virtual ~NullTimeProvider() {}
+      virtual ~NullTimeProvider() {}
 
-			/**
-			 * Get the current time. For this Null provider it is always zero.
-			 * @return zero.
-			 */
+      /**
+       * Get the current time. For this Null provider it is always zero.
+       * @return zero.
+       */
 
-			virtual time_t getTime() const override {
-				return static_cast<time_t> (0);
-			}
-	};
+      virtual time_t getTime() const override {
+        return static_cast<time_t> (0);
+      }
+  };
 }

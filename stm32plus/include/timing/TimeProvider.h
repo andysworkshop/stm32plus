@@ -9,22 +9,22 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Base class for classes that are able to provide a time.
-	 * The time is required for file system operations that need to create or write to files.
-	 */
+  /**
+   * @brief Base class for classes that are able to provide a time.
+   * The time is required for file system operations that need to create or write to files.
+   */
 
-	class TimeProvider {
+  class TimeProvider {
 
-		public:
+    public:
 
-			virtual ~TimeProvider() {}
+      virtual ~TimeProvider() {}
 
-			/**
-			 * Return the time as a Unix time_t
-			 * @return The current time.
-			 */
+      /**
+       * Return the time as a Unix time_t
+       * @return The current time.
+       */
 
-			virtual time_t getTime() const=0;
-	};
+      virtual time_t getTime() const=0;
+  };
 }

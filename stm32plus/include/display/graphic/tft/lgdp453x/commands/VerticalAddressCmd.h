@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace VerticalAddressCmd
-		{
-			enum
-			{
-				Opcode = 0x21
-			};
+  namespace lgdp453x
+  {
+    namespace VerticalAddressCmd
+    {
+      enum
+      {
+        Opcode = 0x21
+      };
 
-			inline uint16_t ADDR(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t ADDR(uint16_t n) { return n; }
+    }
+  }
 }
 
 

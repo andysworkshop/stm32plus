@@ -12,19 +12,19 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PowerCtrl3Cmd
-		{
-			enum
-			{
-				Opcode = 0x12,
+  namespace lgdp453x
+  {
+    namespace PowerCtrl3Cmd
+    {
+      enum
+      {
+        Opcode = 0x12,
 
-				PON = 1<<4
-			};
-			inline uint16_t VRH(uint16_t n) { return n; }
-		}
-	}
+        PON = 1<<4
+      };
+      inline uint16_t VRH(uint16_t n) { return n; }
+    }
+  }
 }
 
 

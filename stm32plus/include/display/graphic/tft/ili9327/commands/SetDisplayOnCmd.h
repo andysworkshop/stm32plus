@@ -7,12 +7,12 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace SetDisplayOnCmd {
-			enum {
-				Opcode=0x29
-			};
-		}
-	}
+  namespace ili9327 {
+    namespace SetDisplayOnCmd {
+      enum {
+        Opcode=0x29
+      };
+    }
+  }
 }
 

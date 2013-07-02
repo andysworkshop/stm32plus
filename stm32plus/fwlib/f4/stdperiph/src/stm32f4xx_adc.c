@@ -452,7 +452,7 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   *            @arg ADC_AnalogWatchdog_AllInjecEnable: Analog watchdog on all injected channel
   *            @arg ADC_AnalogWatchdog_AllRegAllInjecEnable: Analog watchdog on all regular and injected channels
   *            @arg ADC_AnalogWatchdog_None: No channel guarded by the analog watchdog
-  * @retval None	  
+  * @retval None    
   */
 void ADC_AnalogWatchdogCmd(ADC_TypeDef* ADCx, uint32_t ADC_AnalogWatchdog)
 {
@@ -705,11 +705,11 @@ void ADC_VBATCmd(FunctionalState NewState)
   *            @arg ADC_SampleTime_3Cycles: Sample time equal to 3 cycles
   *            @arg ADC_SampleTime_15Cycles: Sample time equal to 15 cycles
   *            @arg ADC_SampleTime_28Cycles: Sample time equal to 28 cycles
-  *            @arg ADC_SampleTime_56Cycles: Sample time equal to 56 cycles	
-  *            @arg ADC_SampleTime_84Cycles: Sample time equal to 84 cycles	
-  *            @arg ADC_SampleTime_112Cycles: Sample time equal to 112 cycles	
-  *            @arg ADC_SampleTime_144Cycles: Sample time equal to 144 cycles	
-  *            @arg ADC_SampleTime_480Cycles: Sample time equal to 480 cycles	
+  *            @arg ADC_SampleTime_56Cycles: Sample time equal to 56 cycles 
+  *            @arg ADC_SampleTime_84Cycles: Sample time equal to 84 cycles 
+  *            @arg ADC_SampleTime_112Cycles: Sample time equal to 112 cycles 
+  *            @arg ADC_SampleTime_144Cycles: Sample time equal to 144 cycles 
+  *            @arg ADC_SampleTime_480Cycles: Sample time equal to 480 cycles 
   * @retval None
   */
 void ADC_RegularChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime)
@@ -1183,11 +1183,11 @@ void ADC_MultiModeDMARequestAfterLastTransferCmd(FunctionalState NewState)
   *            @arg ADC_SampleTime_3Cycles: Sample time equal to 3 cycles
   *            @arg ADC_SampleTime_15Cycles: Sample time equal to 15 cycles
   *            @arg ADC_SampleTime_28Cycles: Sample time equal to 28 cycles
-  *            @arg ADC_SampleTime_56Cycles: Sample time equal to 56 cycles	
-  *            @arg ADC_SampleTime_84Cycles: Sample time equal to 84 cycles	
-  *            @arg ADC_SampleTime_112Cycles: Sample time equal to 112 cycles	
-  *            @arg ADC_SampleTime_144Cycles: Sample time equal to 144 cycles	
-  *            @arg ADC_SampleTime_480Cycles: Sample time equal to 480 cycles	
+  *            @arg ADC_SampleTime_56Cycles: Sample time equal to 56 cycles 
+  *            @arg ADC_SampleTime_84Cycles: Sample time equal to 84 cycles 
+  *            @arg ADC_SampleTime_112Cycles: Sample time equal to 112 cycles 
+  *            @arg ADC_SampleTime_144Cycles: Sample time equal to 144 cycles 
+  *            @arg ADC_SampleTime_480Cycles: Sample time equal to 480 cycles 
   * @retval None
   */
 void ADC_InjectedChannelConfig(ADC_TypeDef* ADCx, uint8_t ADC_Channel, uint8_t Rank, uint8_t ADC_SampleTime)

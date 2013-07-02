@@ -9,39 +9,39 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/*
-		 * Ease in
-		 */
+    /*
+     * Ease in
+     */
 
-		double QuinticEase::easeIn(double time_) const {
-			time_/=_duration;
-			return _change * time_ * time_ * time_ * time_ * time_;
-		}
+    double QuinticEase::easeIn(double time_) const {
+      time_/=_duration;
+      return _change * time_ * time_ * time_ * time_ * time_;
+    }
 
-		/*
-		 * Ease out
-		 */
+    /*
+     * Ease out
+     */
 
-		double QuinticEase::easeOut(double time_) const {
-			time_=time_ / _duration - 1;
-			return _change * (time_ * time_ * time_ * time_ * time_ + 1);
+    double QuinticEase::easeOut(double time_) const {
+      time_=time_ / _duration - 1;
+      return _change * (time_ * time_ * time_ * time_ * time_ + 1);
 
-		}
+    }
 
-		/*
-		 * Ease in and out
-		 */
+    /*
+     * Ease in and out
+     */
 
-		double QuinticEase::easeInOut(double time_) const {
-			time_/=_duration / 2;
+    double QuinticEase::easeInOut(double time_) const {
+      time_/=_duration / 2;
 
-			if(time_ < 1)
-				return _change / 2 * time_ * time_ * time_ * time_ * time_;
+      if(time_ < 1)
+        return _change / 2 * time_ * time_ * time_ * time_ * time_;
 
-			time_-=2;
-			return _change / 2 * (time_ * time_ * time_ * time_ * time_ + 2);
-		}
-	}
+      time_-=2;
+      return _change / 2 * (time_ * time_ * time_ * time_ * time_ + 2);
+    }
+  }
 }

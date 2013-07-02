@@ -12,19 +12,19 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace DisplayCtrl2Cmd
-		{
-			enum
-			{
-				Opcode = 0x08
-			};
+  namespace lgdp453x
+  {
+    namespace DisplayCtrl2Cmd
+    {
+      enum
+      {
+        Opcode = 0x08
+      };
 
-			inline uint16_t BP(uint16_t n) { return n; }
-			inline uint16_t FP(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t BP(uint16_t n) { return n; }
+      inline uint16_t FP(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

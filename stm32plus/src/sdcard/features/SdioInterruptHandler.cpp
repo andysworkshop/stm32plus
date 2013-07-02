@@ -26,36 +26,36 @@ extern "C" {
 
     void __attribute__ ((interrupt("IRQ"))) SDIO_IRQHandler(void) {
 
-		if(SDIO_GetITStatus(SDIO_IT_DATAEND) != RESET) {
+    if(SDIO_GetITStatus(SDIO_IT_DATAEND) != RESET) {
 
-			SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_DataEnd,nullptr);
-			SDIO_ClearITPendingBit(SDIO_IT_DATAEND);
+      SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_DataEnd,nullptr);
+      SDIO_ClearITPendingBit(SDIO_IT_DATAEND);
 
-		} else if(SDIO_GetITStatus(SDIO_IT_DCRCFAIL) != RESET) {
+    } else if(SDIO_GetITStatus(SDIO_IT_DCRCFAIL) != RESET) {
 
-			SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_CrcFail,nullptr);
-			SDIO_ClearITPendingBit(SDIO_IT_DCRCFAIL);
+      SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_CrcFail,nullptr);
+      SDIO_ClearITPendingBit(SDIO_IT_DCRCFAIL);
 
-		} else if(SDIO_GetITStatus(SDIO_IT_DTIMEOUT) != RESET) {
+    } else if(SDIO_GetITStatus(SDIO_IT_DTIMEOUT) != RESET) {
 
-			SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_Timeout,nullptr);
-			SDIO_ClearITPendingBit(SDIO_IT_DTIMEOUT);
+      SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_Timeout,nullptr);
+      SDIO_ClearITPendingBit(SDIO_IT_DTIMEOUT);
 
-		} else if(SDIO_GetITStatus(SDIO_IT_RXOVERR) != RESET) {
+    } else if(SDIO_GetITStatus(SDIO_IT_RXOVERR) != RESET) {
 
-			SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_RxOverrun,nullptr);
-			SDIO_ClearITPendingBit(SDIO_IT_RXOVERR);
+      SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_RxOverrun,nullptr);
+      SDIO_ClearITPendingBit(SDIO_IT_RXOVERR);
 
-		} else if(SDIO_GetITStatus(SDIO_IT_TXUNDERR) != RESET) {
+    } else if(SDIO_GetITStatus(SDIO_IT_TXUNDERR) != RESET) {
 
-			SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_TxOverrun,nullptr);
-			SDIO_ClearITPendingBit(SDIO_IT_TXUNDERR);
+      SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_TxOverrun,nullptr);
+      SDIO_ClearITPendingBit(SDIO_IT_TXUNDERR);
 
-		} else if(SDIO_GetITStatus(SDIO_IT_STBITERR) != RESET) {
+    } else if(SDIO_GetITStatus(SDIO_IT_STBITERR) != RESET) {
 
-			SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_StartBitError,nullptr);
-			SDIO_ClearITPendingBit(SDIO_IT_STBITERR);
-		}
+      SdioInterruptFeature::_sdioInstance->notifyObservers(ObservableEvent::SDIO_StartBitError,nullptr);
+      SDIO_ClearITPendingBit(SDIO_IT_STBITERR);
+    }
   }
 }
 

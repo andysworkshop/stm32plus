@@ -626,11 +626,11 @@ FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data)
    - void FLASH_OB_RDPConfig(uint8_t OB_RDP)
    - void FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY)
    - void FLASH_OB_BORConfig(uint8_t OB_BOR)
-   - FLASH_Status FLASH_ProgramOTP(uint32_t Address, uint32_t Data)							
+   - FLASH_Status FLASH_ProgramOTP(uint32_t Address, uint32_t Data)             
    - FLASH_Status FLASH_OB_Launch(void)
-   - uint32_t FLASH_OB_GetUser(void)						
-   - uint8_t FLASH_OB_GetWRP(void)						
-   - uint8_t FLASH_OB_GetRDP(void)							
+   - uint32_t FLASH_OB_GetUser(void)            
+   - uint8_t FLASH_OB_GetWRP(void)            
+   - uint8_t FLASH_OB_GetRDP(void)              
    - uint8_t FLASH_OB_GetBOR(void)
    
    Any operation of erase or program should follow these steps:
@@ -642,7 +642,7 @@ FLASH_Status FLASH_ProgramByte(uint32_t Address, uint8_t Data)
       - void FLASH_OB_RDPConfig(uint8_t OB_RDP) => to set the desired read Protection Level
       - void FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY) => to configure 
         the user Option Bytes.
-      - void FLASH_OB_BORConfig(uint8_t OB_BOR) => to set the BOR Level 			 
+      - void FLASH_OB_BORConfig(uint8_t OB_BOR) => to set the BOR Level        
 
    3. Once all needed Option Bytes to be programmed are correctly written, call the
       FLASH_OB_Launch() function to launch the Option Bytes programming process.

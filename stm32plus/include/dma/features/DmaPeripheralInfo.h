@@ -9,27 +9,27 @@
 
 namespace stm32plus {
 
-	/**
-	 * DMA peripheral info types serve to hold basic information about a peripheral that could be used
-	 * as a source or target for DMA operations. e.g. the register address and memory transfer size
-	 */
+  /**
+   * DMA peripheral info types serve to hold basic information about a peripheral that could be used
+   * as a source or target for DMA operations. e.g. the register address and memory transfer size
+   */
 
-	struct TimerDmaPeripheralInfo {
-			enum {
-				MEMORY_WORD_SIZE = DMA_MemoryDataSize_HalfWord,
-				PERIPHERAL_WORD_SIZE = DMA_PeripheralDataSize_HalfWord
-	  };
-	};
+  struct TimerDmaPeripheralInfo {
+      enum {
+        MEMORY_WORD_SIZE = DMA_MemoryDataSize_HalfWord,
+        PERIPHERAL_WORD_SIZE = DMA_PeripheralDataSize_HalfWord
+    };
+  };
 
-	struct Timer1CntDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CNT) }; };
-	struct Timer1ArrDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,ARR) }; };
-	struct Timer1RcrDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,RCR) }; };
-	struct Timer1Ccr1DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR1) }; };
-	struct Timer1Ccr2DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR2) }; };
-	struct Timer1Ccr3DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR3) }; };
-	struct Timer1Ccr4DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR4) }; };
+  struct Timer1CntDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CNT) }; };
+  struct Timer1ArrDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,ARR) }; };
+  struct Timer1RcrDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,RCR) }; };
+  struct Timer1Ccr1DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR1) }; };
+  struct Timer1Ccr2DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR2) }; };
+  struct Timer1Ccr3DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR3) }; };
+  struct Timer1Ccr4DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM1_BASE + __builtin_offsetof(TIM_TypeDef,CCR4) }; };
 
-	struct Timer2CntDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM2_BASE + __builtin_offsetof(TIM_TypeDef,CNT) }; };
+  struct Timer2CntDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM2_BASE + __builtin_offsetof(TIM_TypeDef,CNT) }; };
   struct Timer2ArrDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM2_BASE + __builtin_offsetof(TIM_TypeDef,ARR) }; };
   struct Timer2RcrDmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM2_BASE + __builtin_offsetof(TIM_TypeDef,RCR) }; };
   struct Timer2Ccr1DmaPeripheralInfo : TimerDmaPeripheralInfo { enum { REGISTER_ADDRESS = TIM2_BASE + __builtin_offsetof(TIM_TypeDef,CCR1) }; };

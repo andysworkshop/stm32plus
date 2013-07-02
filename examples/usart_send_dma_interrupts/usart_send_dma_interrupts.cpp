@@ -35,8 +35,8 @@ using namespace stm32plus;
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -51,95 +51,95 @@ static const char *_loremIpsum[]={
 
 class UsartSendInterruptsTest : public Observer {
 
-	protected:
+  protected:
 
-		/*
-		 * The index of the string that we are sending
-		 */
+    /*
+     * The index of the string that we are sending
+     */
 
-		uint8_t _currentlySending;
+    uint8_t _currentlySending;
 
 
     /*
      * The DMA peripheral appropriate for this USART, configured for transmitting
      */
 
-		typedef Usart1TxDmaChannel<              					// use the correct channel
+    typedef Usart1TxDmaChannel<                       // use the correct channel
       UsartDmaWriterFeature<Usart1PeripheralTraits>,   // we will be writing to it
-      Usart1TxDmaChannelInterruptFeature     					// we want its interrupts to fire
+      Usart1TxDmaChannelInterruptFeature              // we want its interrupts to fire
     > MyUsartTxDmaChannel;
 
-		MyUsartTxDmaChannel *_dma;
+    MyUsartTxDmaChannel *_dma;
 
-	public:
+  public:
 
-		/*
-		 * Run the test
-		 */
+    /*
+     * Run the test
+     */
 
-		void run()  {
+    void run()  {
 
-			/*
-			 * We're using interrupts, set up the NVIC
-			 */
+      /*
+       * We're using interrupts, set up the NVIC
+       */
 
-			Nvic::initialise();
+      Nvic::initialise();
 
-			/*
-			 * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
-			 * if your application demands that you use the alternate pins for USART1. Include the
-			 * feature class for writing to the USART over DMA.
-			 */
+      /*
+       * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
+       * if your application demands that you use the alternate pins for USART1. Include the
+       * feature class for writing to the USART over DMA.
+       */
 
-			Usart1<> usart(57600);
+      Usart1<> usart(57600);
 
-			// declare the DMA channel for the USART. Must come after the USART peripheral is set up.
+      // declare the DMA channel for the USART. Must come after the USART peripheral is set up.
 
-			_dma=new MyUsartTxDmaChannel();
+      _dma=new MyUsartTxDmaChannel();
 
-			// enable interrupts and set ourselves up to observe them
+      // enable interrupts and set ourselves up to observe them
 
-			_dma->enableInterrupts(Usart1TxDmaChannelInterruptFeature::COMPLETE);
-			_dma->insertObserver(*this);
+      _dma->enableInterrupts(Usart1TxDmaChannelInterruptFeature::COMPLETE);
+      _dma->insertObserver(*this);
 
-			// start the first transfer
+      // start the first transfer
 
-			_currentlySending=0;
+      _currentlySending=0;
 
-			_dma->beginWrite(_loremIpsum[0],strlen(_loremIpsum[0]));
+      _dma->beginWrite(_loremIpsum[0],strlen(_loremIpsum[0]));
 
-			// it's in the background from now on
+      // it's in the background from now on
 
-			for(;;);
-		}
+      for(;;);
+    }
 
 
-		/*
-		 * Observer callback function. This is called when the completion
-		 * interrupt that we've enabled is fired.
-		 */
+    /*
+     * Observer callback function. This is called when the completion
+     * interrupt that we've enabled is fired.
+     */
 
-		virtual void onNotify(Observable& sender,ObservableEvent::E event,void *) {
+    virtual void onNotify(Observable& sender,ObservableEvent::E event,void *) {
 
-			(void)sender;
+      (void)sender;
 
-			if(event==ObservableEvent::DMA_TransferComplete) {
+      if(event==ObservableEvent::DMA_TransferComplete) {
 
-			  // update to the next word
+        // update to the next word
 
-			  _currentlySending++;
+        _currentlySending++;
 
-			  // only start another if there is more to go
+        // only start another if there is more to go
 
-			  if(_currentlySending<sizeof(_loremIpsum)/sizeof(_loremIpsum[0])) {
+        if(_currentlySending<sizeof(_loremIpsum)/sizeof(_loremIpsum[0])) {
 
-			    // clear the completion flag and send the next word
+          // clear the completion flag and send the next word
 
-			  	_dma->clearCompleteFlag();
-			    _dma->beginWrite(_loremIpsum[_currentlySending],strlen(_loremIpsum[_currentlySending]));
-			  }
-			}
-		}
+          _dma->clearCompleteFlag();
+          _dma->beginWrite(_loremIpsum[_currentlySending],strlen(_loremIpsum[_currentlySending]));
+        }
+      }
+    }
 };
 
 
@@ -149,9 +149,9 @@ class UsartSendInterruptsTest : public Observer {
 
 int main() {
 
-	UsartSendInterruptsTest test;
-	test.run();
+  UsartSendInterruptsTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

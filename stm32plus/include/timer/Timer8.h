@@ -20,11 +20,11 @@ namespace stm32plus {
 
     public:
 
-  		/**
-			 * Helper typedef to get at this type
-			 */
+      /**
+       * Helper typedef to get at this type
+       */
 
-  		typedef Timer8<Features...> TimerType;
+      typedef Timer8<Features...> TimerType;
 
       /**
        * Constructor. Start the clocks

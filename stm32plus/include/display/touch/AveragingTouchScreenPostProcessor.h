@@ -8,26 +8,26 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Post-processor for touch screen co-ordinates that averages a
-		 * number of samples to smooth out noise.
-		 */
+    /**
+     * Post-processor for touch screen co-ordinates that averages a
+     * number of samples to smooth out noise.
+     */
 
-		class AveragingTouchScreenPostProcessor : public TouchScreenPostProcessor {
+    class AveragingTouchScreenPostProcessor : public TouchScreenPostProcessor {
 
-			protected:
-				int16_t _samplesRequired;
-				int32_t _xTotal,_yTotal;
+      protected:
+        int16_t _samplesRequired;
+        int32_t _xTotal,_yTotal;
 
-			public:
-				AveragingTouchScreenPostProcessor(int16_t samplesRequired);
-				virtual ~AveragingTouchScreenPostProcessor() {}
+      public:
+        AveragingTouchScreenPostProcessor(int16_t samplesRequired);
+        virtual ~AveragingTouchScreenPostProcessor() {}
 
-				// overrides from TouchScreenPostProcessor
+        // overrides from TouchScreenPostProcessor
 
-				virtual PostProcessAction postProcess(Point& point,int sequenceNumber) override;
-		};
-	}
+        virtual PostProcessAction postProcess(Point& point,int sequenceNumber) override;
+    };
+  }
 }

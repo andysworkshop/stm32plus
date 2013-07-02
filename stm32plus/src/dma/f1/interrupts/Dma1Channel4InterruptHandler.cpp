@@ -27,7 +27,7 @@ extern "C" {
  */
 
 #if defined(USE_DMA1_4_INTERRUPT)
-	void __attribute__ ((interrupt("IRQ"))) DMA1_Channel4_IRQHandler() {
+  void __attribute__ ((interrupt("IRQ"))) DMA1_Channel4_IRQHandler() {
 
     if(DMA_GetITStatus(DMA1_IT_TC4)!=RESET) {
       DmaInterruptFeature<1,4>::_dmaInstance->notifyObservers(ObservableEvent::DMA_TransferComplete,(void *)0x00010004);

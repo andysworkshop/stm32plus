@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace EpromControlRegister1
-		{
-			enum
-			{
-				Opcode = 0x40
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace EpromControlRegister1
+    {
+      enum
+      {
+        Opcode = 0x40
+      };
+    }
+  }
 }
 
 

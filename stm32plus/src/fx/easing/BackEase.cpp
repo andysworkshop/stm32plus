@@ -9,58 +9,58 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/*
-		 * Constructor
-		 */
+    /*
+     * Constructor
+     */
 
-		BackEase::BackEase() {
-			// set a sensible default value for the overshoot
-			_overshoot=1.70158;
-		}
+    BackEase::BackEase() {
+      // set a sensible default value for the overshoot
+      _overshoot=1.70158;
+    }
 
-		/*
-		 * Set the overshoot value
-		 */
+    /*
+     * Set the overshoot value
+     */
 
-		void BackEase::setOvershoot(double overshoot_) {
-			_overshoot=overshoot_;
-		}
+    void BackEase::setOvershoot(double overshoot_) {
+      _overshoot=overshoot_;
+    }
 
-		/*
-		 * Ease in
-		 */
+    /*
+     * Ease in
+     */
 
-		double BackEase::easeIn(double time_) const {
-			time_/=_duration;
-			return _change * time_ * time_ * ((_overshoot + 1) * time_ - _overshoot);
-		}
+    double BackEase::easeIn(double time_) const {
+      time_/=_duration;
+      return _change * time_ * time_ * ((_overshoot + 1) * time_ - _overshoot);
+    }
 
-		/*
-		 * Ease out
-		 */
+    /*
+     * Ease out
+     */
 
-		double BackEase::easeOut(double time_) const {
-			time_=time_ / _duration - 1;
-			return _change * (time_ * time_ * ((_overshoot + 1) * time_ + _overshoot) + 1);
-		}
+    double BackEase::easeOut(double time_) const {
+      time_=time_ / _duration - 1;
+      return _change * (time_ * time_ * ((_overshoot + 1) * time_ + _overshoot) + 1);
+    }
 
-		/*
-		 * Ease in and out
-		 */
+    /*
+     * Ease in and out
+     */
 
-		double BackEase::easeInOut(double time_) const {
-			double overshoot;
+    double BackEase::easeInOut(double time_) const {
+      double overshoot;
 
-			overshoot=_overshoot * 1.525;
-			time_/=_duration / 2;
+      overshoot=_overshoot * 1.525;
+      time_/=_duration / 2;
 
-			if(time_ < 1)
-				return _change / 2 * (time_ * time_ * ((overshoot + 1) * time_ - overshoot));
+      if(time_ < 1)
+        return _change / 2 * (time_ * time_ * ((overshoot + 1) * time_ - overshoot));
 
-			time_-=2;
-			return _change / 2 * (time_ * time_ * ((overshoot + 1) * time_ + overshoot) + 2);
-		}
-	}
+      time_-=2;
+      return _change / 2 * (time_ * time_ * ((overshoot + 1) * time_ + overshoot) + 2);
+    }
+  }
 }

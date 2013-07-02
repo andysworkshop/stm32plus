@@ -9,16 +9,16 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Timing class for devices that just need address and data setup times
-	 *
-	 * Inherits from FSMC_NORSRAMTimingInitTypeDef to allow
-	 * the user to customise it.
-	 */
+  /**
+   * @brief Timing class for devices that just need address and data setup times
+   *
+   * Inherits from FSMC_NORSRAMTimingInitTypeDef to allow
+   * the user to customise it.
+   */
 
-	class FsmcAddressDataSetupTiming : public FSMC_NORSRAMTimingInitTypeDef {
-		public:
-			FsmcAddressDataSetupTiming();
-			FsmcAddressDataSetupTiming(uint32_t addressSetup,uint32_t dataSetup);
-	};
+  class FsmcAddressDataSetupTiming : public FSMC_NORSRAMTimingInitTypeDef {
+    public:
+      FsmcAddressDataSetupTiming();
+      FsmcAddressDataSetupTiming(uint32_t addressSetup,uint32_t dataSetup);
+  };
 }

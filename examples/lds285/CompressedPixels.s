@@ -4,37 +4,37 @@
  * Please see website for licensing terms.
  */
 
-	.global BulbPixels
-	.global BulbPixelsSize
+  .global BulbPixels
+  .global BulbPixelsSize
 
-	.global AudioPixels
-	.global AudioPixelsSize
+  .global AudioPixels
+  .global AudioPixelsSize
 
-	.global FlagPixels
-	.global FlagPixelsSize
+  .global FlagPixels
+  .global FlagPixelsSize
 
-	.global DocPixels
-	.global DocPixelsSize
+  .global DocPixels
+  .global DocPixelsSize
 
-	.global GlobePixels
-	.global GlobePixelsSize
+  .global GlobePixels
+  .global GlobePixelsSize
 
 BulbPixels:
-	.incbin "lzg/lds285/bulb.lds285.16M.lzg"
-	BulbPixelsSize=.-BulbPixels
+  .incbin "lzg/lds285/bulb.lds285.16M.lzg"
+  BulbPixelsSize=.-BulbPixels
 
 AudioPixels:
-	.incbin "lzg/lds285/audio.lds285.16M.lzg"
-	AudioPixelsSize=.-AudioPixels
+  .incbin "lzg/lds285/audio.lds285.16M.lzg"
+  AudioPixelsSize=.-AudioPixels
 
 FlagPixels:
-	.incbin "lzg/lds285/flag.lds285.16M.lzg"
-	FlagPixelsSize=.-FlagPixels
+  .incbin "lzg/lds285/flag.lds285.16M.lzg"
+  FlagPixelsSize=.-FlagPixels
 
 DocPixels:
-	.incbin "lzg/lds285/doc.lds285.16M.lzg"
-	DocPixelsSize=.-DocPixels
+  .incbin "lzg/lds285/doc.lds285.16M.lzg"
+  DocPixelsSize=.-DocPixels
 
 GlobePixels:
-	.incbin "lzg/lds285/globe.lds285.16M.lzg"
-	GlobePixelsSize=.-GlobePixels
+  .incbin "lzg/lds285/globe.lds285.16M.lzg"
+  GlobePixelsSize=.-GlobePixels

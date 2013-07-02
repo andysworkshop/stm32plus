@@ -8,67 +8,67 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief Base class for touch screen calibration algorithms.
-		 *
-		 * All touch screen calibration algorithms must be serialisable so that they can
-		 * save and restore their state between sessions.
-		 */
+    /**
+     * @brief Base class for touch screen calibration algorithms.
+     *
+     * All touch screen calibration algorithms must be serialisable so that they can
+     * save and restore their state between sessions.
+     */
 
-		class TouchScreenCalibration {
+    class TouchScreenCalibration {
 
-			public:
-				enum {
-					E_SERIALISATION_NOT_SUPPORTED=1
-				};
+      public:
+        enum {
+          E_SERIALISATION_NOT_SUPPORTED=1
+        };
 
-			public:
+      public:
 
-				/**
-				 * Default constructor, does nothing
-				 */
+        /**
+         * Default constructor, does nothing
+         */
 
-				TouchScreenCalibration() {
-				}
+        TouchScreenCalibration() {
+        }
 
-				/**
-				 * Virtual destructor, does nothing
-				 */
+        /**
+         * Virtual destructor, does nothing
+         */
 
-				virtual ~TouchScreenCalibration() {
-				}
-
-
-				/**
-				 * Translate a raw point from the touch screen co-ordinate space into the
-				 * co-ordinate space of the panel that it's attached to.
-				 *
-				 * @param[in] rawPoint The raw touch screen point.
-				 * @return The point translated to the display panel space.
-				 */
-
-				virtual Point translate(const Point& rawPoint)=0;
+        virtual ~TouchScreenCalibration() {
+        }
 
 
-				/**
-				 * Serialise the calibration parameters to an output stream
-				 * @param[in] ostream The output stream to write to.
-				 * @return false if it fails.
-				 */
+        /**
+         * Translate a raw point from the touch screen co-ordinate space into the
+         * co-ordinate space of the panel that it's attached to.
+         *
+         * @param[in] rawPoint The raw touch screen point.
+         * @return The point translated to the display panel space.
+         */
 
-				virtual bool serialise(OutputStream& ostream)=0;
+        virtual Point translate(const Point& rawPoint)=0;
 
 
-				/**
-				 * Deserialise the calibration parameters from an input stream.
-				 * @param[in] istream The input stream to read the parameters from.
-				 * @return false if it fails.
-				 */
+        /**
+         * Serialise the calibration parameters to an output stream
+         * @param[in] ostream The output stream to write to.
+         * @return false if it fails.
+         */
 
-				virtual bool deserialise(InputStream& istream)=0;
-		};
+        virtual bool serialise(OutputStream& ostream)=0;
 
-	}
+
+        /**
+         * Deserialise the calibration parameters from an input stream.
+         * @param[in] istream The input stream to read the parameters from.
+         * @return false if it fails.
+         */
+
+        virtual bool deserialise(InputStream& istream)=0;
+    };
+
+  }
 }

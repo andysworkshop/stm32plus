@@ -12,19 +12,19 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PanelInterfaceControl1
-		{
-			enum
-			{
-				Opcode = 0x90
-			};
+  namespace lgdp453x
+  {
+    namespace PanelInterfaceControl1
+    {
+      enum
+      {
+        Opcode = 0x90
+      };
 
-			inline uint16_t RTNI(uint16_t n) { return n<<1; }
-			inline uint16_t DIVI(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t RTNI(uint16_t n) { return n<<1; }
+      inline uint16_t DIVI(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

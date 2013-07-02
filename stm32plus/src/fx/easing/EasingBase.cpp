@@ -9,32 +9,32 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/**
-		 * Default constructor
-		 */
+    /**
+     * Default constructor
+     */
 
-		EasingBase::EasingBase() {
-			_change=0;
-		}
+    EasingBase::EasingBase() {
+      _change=0;
+    }
 
-		/**
-		 * Set the duration
-		 * @param[in] duration_ The duration
-		 */
+    /**
+     * Set the duration
+     * @param[in] duration_ The duration
+     */
 
-		void EasingBase::setDuration(double duration_) {
-			_duration=duration_;
-		}
+    void EasingBase::setDuration(double duration_) {
+      _duration=duration_;
+    }
 
-		/**
-		 * Set the total change in position
-		 * @param[in] totalChangeInPosition_ The total change in position.
-		 */
+    /**
+     * Set the total change in position
+     * @param[in] totalChangeInPosition_ The total change in position.
+     */
 
-		void EasingBase::setTotalChangeInPosition(double totalChangeInPosition_) {
-			_change=totalChangeInPosition_;
-		}
-	}
+    void EasingBase::setTotalChangeInPosition(double totalChangeInPosition_) {
+      _change=totalChangeInPosition_;
+    }
+  }
 }

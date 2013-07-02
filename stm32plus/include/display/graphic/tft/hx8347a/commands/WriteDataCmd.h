@@ -8,12 +8,12 @@
 
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace WriteDataCmd {
-			enum {
-				Opcode=0x22
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace WriteDataCmd {
+      enum {
+        Opcode=0x22
+      };
+    }
+  }
 }
 

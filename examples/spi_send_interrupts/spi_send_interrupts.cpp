@@ -37,8 +37,8 @@ using namespace stm32plus;
  * SCLK:        PA5 <=> PB13
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -53,7 +53,7 @@ class SpiSendInterruptsTest : public Observer {
 
   protected:
 
-		enum { LED_PIN = 6 };
+    enum { LED_PIN = 6 };
 
     /*
      * These instance variables will be used by the Observer to
@@ -70,70 +70,70 @@ class SpiSendInterruptsTest : public Observer {
      * Declare the SPI sender/receiver.
      */
 
-		typedef Spi1<Spi1InterruptFeature> MySender;
-		typedef Spi2<Spi2InterruptFeature> MyReceiver;
+    typedef Spi1<Spi1InterruptFeature> MySender;
+    typedef Spi2<Spi2InterruptFeature> MyReceiver;
 
     MySender *_sender;
     MyReceiver *_receiver;
 
   public:
 
-		void run() {
+    void run() {
 
-			// initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
+      // initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
-			pf[LED_PIN].set();
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      pf[LED_PIN].set();
 
-			/*
-			 * We're using interrupts, set up the NVIC
-			 */
+      /*
+       * We're using interrupts, set up the NVIC
+       */
 
-			Nvic::initialise();
+      Nvic::initialise();
 
-			/**
-			 * Create the sender and receiver objects with default parameters
-			 */
+      /**
+       * Create the sender and receiver objects with default parameters
+       */
 
-			MySender::Parameters senderParams;
-			MyReceiver::Parameters receiverParams;
+      MySender::Parameters senderParams;
+      MyReceiver::Parameters receiverParams;
 
-			senderParams.spi_mode=SPI_Mode_Master;
-			receiverParams.spi_mode=SPI_Mode_Slave;
+      senderParams.spi_mode=SPI_Mode_Master;
+      receiverParams.spi_mode=SPI_Mode_Slave;
 
-			_sender=new MySender(senderParams);
-			_receiver=new MyReceiver(receiverParams);
+      _sender=new MySender(senderParams);
+      _receiver=new MyReceiver(receiverParams);
 
-			/*
-			 * We need to adjust the priority of the interrupts so that the receiver is higher (lower number)
-			 * than the sender. If this is not done then the TXE interrupt (sender) will always pre-empt the
-			 * receiver with the undesirable result that all the bytes will be transmitted but only the first
-			 * will be received because the receiver IRQ will fire on the first byte transmission and then get
-			 * queued until transmission of all bytes finish by which time all but the queued receiver interrupt
-			 * have been missed.
-			 */
+      /*
+       * We need to adjust the priority of the interrupts so that the receiver is higher (lower number)
+       * than the sender. If this is not done then the TXE interrupt (sender) will always pre-empt the
+       * receiver with the undesirable result that all the bytes will be transmitted but only the first
+       * will be received because the receiver IRQ will fire on the first byte transmission and then get
+       * queued until transmission of all bytes finish by which time all but the queued receiver interrupt
+       * have been missed.
+       */
 
-			_sender->setNvicPriorities(1);
-			_receiver->setNvicPriorities(0);
+      _sender->setNvicPriorities(1);
+      _receiver->setNvicPriorities(0);
 
-			/*
-			 * register ourselves as an observer of the SPI interrupts
-			 */
+      /*
+       * register ourselves as an observer of the SPI interrupts
+       */
 
-			_sender->insertObserver(*this);
-			_receiver->insertObserver(*this);
+      _sender->insertObserver(*this);
+      _receiver->insertObserver(*this);
 
-			for(;;) {
+      for(;;) {
 
-			  /*
-			   * Reset the instance variables
-			   */
+        /*
+         * Reset the instance variables
+         */
 
-			  _sendIndex=0;
-			  _receiveIndex=0;
-			  _completed=false;
+        _sendIndex=0;
+        _receiveIndex=0;
+        _completed=false;
 
-			  memset(_receiveBuffer,0,sizeof(_receiveBuffer));
+        memset(_receiveBuffer,0,sizeof(_receiveBuffer));
 
         /*
          * NSS (slave select) is active LOW. ST made such a mess of the hardware implementation of NSS
@@ -161,26 +161,26 @@ class SpiSendInterruptsTest : public Observer {
 
         _sender->setNss(true);
 
-				/*
-				 * Test the received buffer. If the data is incorrect then lock up
-				 */
+        /*
+         * Test the received buffer. If the data is incorrect then lock up
+         */
 
-				if(memcmp(_receiveBuffer,dataToSend,sizeof(_receiveBuffer))!=0)
-					for(;;);
+        if(memcmp(_receiveBuffer,dataToSend,sizeof(_receiveBuffer))!=0)
+          for(;;);
 
-				/*
-				 * The data is correct, flash the LED on PF6 for one second
-				 */
+        /*
+         * The data is correct, flash the LED on PF6 for one second
+         */
 
-				pf[LED_PIN].reset();
-				MillisecondTimer::delay(1000);
-				pf[LED_PIN].set();
-				MillisecondTimer::delay(1000);
-			}
-		}
+        pf[LED_PIN].reset();
+        MillisecondTimer::delay(1000);
+        pf[LED_PIN].set();
+        MillisecondTimer::delay(1000);
+      }
+    }
 
 
-		/*
+    /*
      * Observer callback function. This is called when the TXE interrupt that we've
      * enabled is fired.
      */
@@ -223,11 +223,11 @@ class SpiSendInterruptsTest : public Observer {
 
 int main() {
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	SpiSendInterruptsTest test;
-	test.run();
+  SpiSendInterruptsTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

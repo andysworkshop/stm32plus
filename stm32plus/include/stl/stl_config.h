@@ -151,7 +151,7 @@
 #define __STL_NO_BAD_ALLOC
 #define __STL_PARTIAL_SPECIALIZATION_SYNTAX
 #define __STL_CLASS_PARTIAL_SPECIALIZATION
-#define __STL_USE_NEW_IOSTREAMS				// not really :-/
+#define __STL_USE_NEW_IOSTREAMS       // not really :-/
 #define __STL_FUNCTION_TMPL_PARTIAL_ORDER
 #define __STL_EXPLICIT_FUNCTION_TMPL_ARGS
 #define __STL_MEMBER_TEMPLATES
@@ -577,7 +577,7 @@
 # include <stdio.h>
 # define __stl_assert(expr) \
     if (!(expr)) { fprintf(stderr, "%s:%d STL assertion failure: %s\n", \
-			  __FILE__, __LINE__, # expr); abort(); }
+        __FILE__, __LINE__, # expr); abort(); }
 #else
 # define __stl_assert(expr)
 #endif

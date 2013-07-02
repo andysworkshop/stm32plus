@@ -8,18 +8,18 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for SSD1963 orientation-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for SSD1963 orientation-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
-		class SSD1963Orientation {
-		};
-	}
+    template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
+    class SSD1963Orientation {
+    };
+  }
 }
 
 

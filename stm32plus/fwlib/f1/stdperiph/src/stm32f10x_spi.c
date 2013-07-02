@@ -195,7 +195,7 @@ void SPI_Init(SPI_TypeDef* SPIx, SPI_InitTypeDef* SPI_InitStruct)
   SPIx->CR1 = tmpreg;
   
   /* Activate the SPI mode (Reset I2SMOD bit in I2SCFGR register) */
-  SPIx->I2SCFGR &= SPI_Mode_Select;		
+  SPIx->I2SCFGR &= SPI_Mode_Select;   
 
 /*---------------------------- SPIx CRCPOLY Configuration --------------------*/
   /* Write to SPIx CRCPOLY */

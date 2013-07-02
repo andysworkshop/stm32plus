@@ -7,12 +7,12 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace InternalUseCmd {
-			enum {
-				Opcode1=0x55, Opcode2=0x56, Opcode3=0x57
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace InternalUseCmd {
+      enum {
+        Opcode1=0x55, Opcode2=0x56, Opcode3=0x57
+      };
+    }
+  }
 }
 

@@ -33,8 +33,8 @@ using namespace stm32plus;
  * board using Usart2.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -43,70 +43,70 @@ using namespace stm32plus;
 
 class TimerDmaUsartTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			const char *dataToSend="Hello World";
+      const char *dataToSend="Hello World";
 
-			/*
-			 * We're using USART1 (APB2), unremapped. Configure it to run at 4800 baud, 8 bits
-			 * no flow control and 1 stop bit. (4800-8-N-1).
-			 */
+      /*
+       * We're using USART1 (APB2), unremapped. Configure it to run at 4800 baud, 8 bits
+       * no flow control and 1 stop bit. (4800-8-N-1).
+       */
 
-			Usart1<> usart1(4800);
+      Usart1<> usart1(4800);
 
-			/*
-			 * Configure Timer1 (APB2) with the internal clock source. No further features
-			 * are required.
-			 */
+      /*
+       * Configure Timer1 (APB2) with the internal clock source. No further features
+       * are required.
+       */
 
-			Timer1<
-				Timer1InternalClockFeature				// the timer bus is APB2
-			> timer;
+      Timer1<
+        Timer1InternalClockFeature        // the timer bus is APB2
+      > timer;
 
-			/*
-			 * Create an instance of the DMA channel that is connected to
-			 * Timer1's update event. Add a feature that connects the timer's update
-			 * event to the USART1 TX peripheral register.
-			 *
-			 * This will be a circular DMA configuration, i.e. it will automatically
-			 * run itself over and over again until we stop it.
-			 */
+      /*
+       * Create an instance of the DMA channel that is connected to
+       * Timer1's update event. Add a feature that connects the timer's update
+       * event to the USART1 TX peripheral register.
+       *
+       * This will be a circular DMA configuration, i.e. it will automatically
+       * run itself over and over again until we stop it.
+       */
 
-			Timer1UpdateDmaChannel<
-				TimerUpdateDmaFeature<Usart1TxDmaPeripheralInfo,DMA_Priority_High,DMA_Mode_Circular>
-			> dma;
+      Timer1UpdateDmaChannel<
+        TimerUpdateDmaFeature<Usart1TxDmaPeripheralInfo,DMA_Priority_High,DMA_Mode_Circular>
+      > dma;
 
-			/*
-			 * Set the frequency of Timer1 to 50KHz with a reload value
-			 * of 50000. It will take 1 second to get from zero to 50000
-			 * so the attached DMA channel will get 1 update event per second.
-			 */
+      /*
+       * Set the frequency of Timer1 to 50KHz with a reload value
+       * of 50000. It will take 1 second to get from zero to 50000
+       * so the attached DMA channel will get 1 update event per second.
+       */
 
-			timer.setTimeBaseByFrequency(50000,49999);
+      timer.setTimeBaseByFrequency(50000,49999);
 
-			/*
-			 * Start the timer
-			 */
+      /*
+       * Start the timer
+       */
 
-			timer.enablePeripheral();
+      timer.enablePeripheral();
 
-			/*
-			 * Attach the DMA channel to the timer and start it. The DMA
-			 * channel will automatically load the next character to transmit
-			 * into the USART register.
-			 */
+      /*
+       * Attach the DMA channel to the timer and start it. The DMA
+       * channel will automatically load the next character to transmit
+       * into the USART register.
+       */
 
-			dma.beginWriteByTimer(timer,dataToSend,strlen(dataToSend));
+      dma.beginWriteByTimer(timer,dataToSend,strlen(dataToSend));
 
-			/*
-			 * It's all running in hardware now, the CPU is ours to do what we want with. I've run
-			 * out of bright ideas so I'll just do nothing.
-			 */
+      /*
+       * It's all running in hardware now, the CPU is ours to do what we want with. I've run
+       * out of bright ideas so I'll just do nothing.
+       */
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -116,9 +116,9 @@ class TimerDmaUsartTest {
 
 int main() {
 
-	TimerDmaUsartTest test;
-	test.run();
+  TimerDmaUsartTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -23,16 +23,16 @@ namespace stm32plus {
 // If this advice pertains to you, then uncomment the first line and comment out the second.
 // The default here on the stm32 is to assume that memory is scarce.
 
-//	template<typename T> size_t Stm32VectorAllocAhead(size_t oldSize_) { return 2*oldSize_; }
-	template<typename T> size_t Stm32VectorAllocAhead(size_t oldSize_) { return 20+oldSize_; }
-//	template<> size_t Stm32VectorAllocAhead<char>(size_t oldSize_) { return 20+oldSize_; }     // sample specialization for char
+//  template<typename T> size_t Stm32VectorAllocAhead(size_t oldSize_) { return 2*oldSize_; }
+  template<typename T> size_t Stm32VectorAllocAhead(size_t oldSize_) { return 20+oldSize_; }
+//  template<> size_t Stm32VectorAllocAhead<char>(size_t oldSize_) { return 20+oldSize_; }     // sample specialization for char
 
 // minimum buffer size allocated ahead by a deque
 
-	inline size_t Stm32DequeBufferSize() { return 20; }
+  inline size_t Stm32DequeBufferSize() { return 20; }
 
 // alloc-ahead additional memory increment for strings. The default SGI implementation will add
 // the old size, doubling memory each time. We don't have memory to burn, so add 20 types each time
 
-	template<typename T> size_t Stm32StringAllocAheadIncrement(size_t) { return 20; }
+  template<typename T> size_t Stm32StringAllocAheadIncrement(size_t) { return 20; }
 }

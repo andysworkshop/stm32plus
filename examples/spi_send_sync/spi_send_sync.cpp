@@ -33,8 +33,8 @@ using namespace stm32plus;
  * SCLK:        PA5 <=> PB13
  * *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -43,97 +43,97 @@ using namespace stm32plus;
 
 class SpiSendSyncTest {
 
-	protected:
+  protected:
 
-		enum { LED_PIN = 6 };
+    enum { LED_PIN = 6 };
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			const uint8_t *dataToSend=(const uint8_t *)"Hello World";
-			uint8_t receiveBuffer[12];
-			uint8_t i;
+      const uint8_t *dataToSend=(const uint8_t *)"Hello World";
+      uint8_t receiveBuffer[12];
+      uint8_t i;
 
-			// initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
+      // initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
-			pf[LED_PIN].set();
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      pf[LED_PIN].set();
 
-			/*
-			 * Declare our SPI objects with no extra features beyond the ability to send and
-			 * receive data bytes. SPI1 is going to be the master and SPI2 the slave. All the SPI
-			 * remap configurations are available with names such as Spi1_Remap if you need to use the
-			 * remapped pins.
-			 */
+      /*
+       * Declare our SPI objects with no extra features beyond the ability to send and
+       * receive data bytes. SPI1 is going to be the master and SPI2 the slave. All the SPI
+       * remap configurations are available with names such as Spi1_Remap if you need to use the
+       * remapped pins.
+       */
 
-			typedef Spi1<> MySender;
-			typedef Spi2<> MyReceiver;
+      typedef Spi1<> MySender;
+      typedef Spi2<> MyReceiver;
 
-			MySender::Parameters senderParams;
-			MyReceiver::Parameters receiverParams;
+      MySender::Parameters senderParams;
+      MyReceiver::Parameters receiverParams;
 
-			senderParams.spi_mode=SPI_Mode_Master;
-			receiverParams.spi_mode=SPI_Mode_Slave;
+      senderParams.spi_mode=SPI_Mode_Master;
+      receiverParams.spi_mode=SPI_Mode_Slave;
 
-			MySender sender(senderParams);
-			MyReceiver receiver(receiverParams);
+      MySender sender(senderParams);
+      MyReceiver receiver(receiverParams);
 
-			for(;;) {
+      for(;;) {
 
-				/*
-				 * Clear out the receive buffer for this session
-				 */
+        /*
+         * Clear out the receive buffer for this session
+         */
 
-				memset(receiveBuffer,0,12);
+        memset(receiveBuffer,0,12);
 
-				/*
-				 * NSS (slave select) is active LOW. ST made such a mess of the hardware implementation of NSS
-				 * that we always control it through software. Here it's pulled LOW ready for transmission.
-				 */
+        /*
+         * NSS (slave select) is active LOW. ST made such a mess of the hardware implementation of NSS
+         * that we always control it through software. Here it's pulled LOW ready for transmission.
+         */
 
-				sender.setNss(false);
+        sender.setNss(false);
 
-				for(i=0;i<12;i++) {
+        for(i=0;i<12;i++) {
 
-					/*
-					 * Wait for the sender to signal it's ready and then send a byte
-					 */
+          /*
+           * Wait for the sender to signal it's ready and then send a byte
+           */
 
-					while(!sender.readyToSend());
-					sender.send(&dataToSend[i],1);
+          while(!sender.readyToSend());
+          sender.send(&dataToSend[i],1);
 
-					/*
-					 * Wait for the receiver to signal it's ready to receive and then receive the byte
-					 */
+          /*
+           * Wait for the receiver to signal it's ready to receive and then receive the byte
+           */
 
-					while(!receiver.readyToReceive());
-					receiver.receive(receiveBuffer[i]);
-				}
+          while(!receiver.readyToReceive());
+          receiver.receive(receiveBuffer[i]);
+        }
 
-				/*
-				 * The session is complete, deactivate NSS.
-				 */
+        /*
+         * The session is complete, deactivate NSS.
+         */
 
-				sender.setNss(true);
+        sender.setNss(true);
 
-				/*
-				 * Test the received buffer. If the data is incorrect then lock up
-				 */
+        /*
+         * Test the received buffer. If the data is incorrect then lock up
+         */
 
-				if(memcmp(receiveBuffer,dataToSend,12)!=0)
-					for(;;);
+        if(memcmp(receiveBuffer,dataToSend,12)!=0)
+          for(;;);
 
-				/*
-				 * The data is correct, flash the LED on PF6 for one second
-				 */
+        /*
+         * The data is correct, flash the LED on PF6 for one second
+         */
 
-				pf[LED_PIN].reset();
-				MillisecondTimer::delay(1000);
-				pf[LED_PIN].set();
-				MillisecondTimer::delay(1000);
-			}
-		}
+        pf[LED_PIN].reset();
+        MillisecondTimer::delay(1000);
+        pf[LED_PIN].set();
+        MillisecondTimer::delay(1000);
+      }
+    }
 };
 
 
@@ -143,11 +143,11 @@ class SpiSendSyncTest {
 
 int main() {
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	SpiSendSyncTest test;
-	test.run();
+  SpiSendSyncTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

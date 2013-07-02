@@ -20,19 +20,19 @@ namespace stm32plus {
 
     public:
 
-  		/**
-			 * Helper typedef to get at this type
-			 */
+      /**
+       * Helper typedef to get at this type
+       */
 
-			typedef Timer1<Features...> TimerType;
+      typedef Timer1<Features...> TimerType;
 
-			/**
-			 * Constructor. Start the clocks
-			 */
+      /**
+       * Constructor. Start the clocks
+       */
 
-			Timer1()
-				: AdvancedControlTimer<TimerType,PERIPHERAL_TIMER1>(TIM1),
-				  Features((Timer&)*this)... {
-			}
+      Timer1()
+        : AdvancedControlTimer<TimerType,PERIPHERAL_TIMER1>(TIM1),
+          Features((Timer&)*this)... {
+      }
   };
 }

@@ -14,140 +14,140 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Generic SSD1289 template. The user can specialise based on the desired colour
-		 * depth, orientation and access mode.
-		 */
+    /**
+     * Generic SSD1289 template. The user can specialise based on the desired colour
+     * depth, orientation and access mode.
+     */
 
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		class SSD1289 : public SSD1289Colour<TColourDepth,TAccessMode>,
-										public SSD1289Orientation<TOrientation,TAccessMode> {
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    class SSD1289 : public SSD1289Colour<TColourDepth,TAccessMode>,
+                    public SSD1289Orientation<TOrientation,TAccessMode> {
 
-			public:
-				enum {
-					SHORT_SIDE = 240,
-					LONG_SIDE = 320
-				};
+      public:
+        enum {
+          SHORT_SIDE = 240,
+          LONG_SIDE = 320
+        };
 
-			protected:
-				TAccessMode& _accessMode;
+      protected:
+        TAccessMode& _accessMode;
 
-			public:
-				SSD1289(TAccessMode& accessMode);
+      public:
+        SSD1289(TAccessMode& accessMode);
 
-				void initialise() const;
+        void initialise() const;
 
-				void applyGamma(SSD1289Gamma& gamma) const;
-				void sleep() const;
-				void wake() const;
-				void beginWriting() const;
-		};
-
-
-		/**
-		 * Constructor. Pass the access mode reference up the hierarchy where it'll get stored in the
-		 * common base class for use by all.
-		 */
-
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		inline SSD1289<TOrientation,TColourDepth,TAccessMode>::SSD1289(TAccessMode& accessMode)
-			: SSD1289Colour<TColourDepth,TAccessMode>(accessMode),
-			  SSD1289Orientation<TOrientation,TAccessMode>(accessMode),
-			  _accessMode(accessMode) {
-		}
+        void applyGamma(SSD1289Gamma& gamma) const;
+        void sleep() const;
+        void wake() const;
+        void beginWriting() const;
+    };
 
 
-		/**
-		 * Initialise the LCD. Do the reset sequence.
-		 */
+    /**
+     * Constructor. Pass the access mode reference up the hierarchy where it'll get stored in the
+     * common base class for use by all.
+     */
 
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::initialise() const {
-
-			// reset the device
-
-			this->_accessMode.reset();
-
-			// init sequence: datashee 15.5 "Display ON Sequence"
-
-			// GON = 1, DTE = 0, D[1:0] = 01
-			this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x21);
-
-			// oscillator ON
-			this->_accessMode.writeCommand(ssd1289::OSCILLATOR,0x01);
-
-			// GON = 1, DTE = 0, D[1:0] = 11
-			this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x23);
-
-			// Exit sleep mode
-			this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
-
-			MillisecondTimer::delay(35);
-
-			// GON = 1, DTE = 1, D[1:0] = 11
-			this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x33);
-
-			// BGR etc.
-			this->_accessMode.writeCommand(ssd1289::DRIVER_OUTPUT_CONTROL,0x13f | 0x2000 | 0x800 | 0x200);
-
-			// entry mode: colour and orientation
-			this->_accessMode.writeCommand(ssd1289::ENTRY_MODE,this->getColourEntryMode() | this->getOrientationEntryMode());
-
-			// driving waveform control
-			this->_accessMode.writeCommand(ssd1289::DRIVING_WAVEFORM_CONTROL,0x600);
-		}
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline SSD1289<TOrientation,TColourDepth,TAccessMode>::SSD1289(TAccessMode& accessMode)
+      : SSD1289Colour<TColourDepth,TAccessMode>(accessMode),
+        SSD1289Orientation<TOrientation,TAccessMode>(accessMode),
+        _accessMode(accessMode) {
+    }
 
 
-		/**
-		 * Apply the 10 panel gamma settings
-		 * @param gamma The collection of gamma values
-		 */
+    /**
+     * Initialise the LCD. Do the reset sequence.
+     */
 
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::applyGamma(SSD1289Gamma& gamma) const {
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::initialise() const {
 
-			this->_accessMode.writeCommand(ssd1289::GAMMA_0,gamma[0]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_1,gamma[1]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_2,gamma[2]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_3,gamma[3]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_4,gamma[4]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_5,gamma[5]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_6,gamma[6]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_7,gamma[7]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_8,gamma[8]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_9,gamma[9]);
-		}
+      // reset the device
+
+      this->_accessMode.reset();
+
+      // init sequence: datashee 15.5 "Display ON Sequence"
+
+      // GON = 1, DTE = 0, D[1:0] = 01
+      this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x21);
+
+      // oscillator ON
+      this->_accessMode.writeCommand(ssd1289::OSCILLATOR,0x01);
+
+      // GON = 1, DTE = 0, D[1:0] = 11
+      this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x23);
+
+      // Exit sleep mode
+      this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
+
+      MillisecondTimer::delay(35);
+
+      // GON = 1, DTE = 1, D[1:0] = 11
+      this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x33);
+
+      // BGR etc.
+      this->_accessMode.writeCommand(ssd1289::DRIVER_OUTPUT_CONTROL,0x13f | 0x2000 | 0x800 | 0x200);
+
+      // entry mode: colour and orientation
+      this->_accessMode.writeCommand(ssd1289::ENTRY_MODE,this->getColourEntryMode() | this->getOrientationEntryMode());
+
+      // driving waveform control
+      this->_accessMode.writeCommand(ssd1289::DRIVING_WAVEFORM_CONTROL,0x600);
+    }
 
 
-		/**
-		 * Send the panel to sleep
-		 */
+    /**
+     * Apply the 10 panel gamma settings
+     * @param gamma The collection of gamma values
+     */
 
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::sleep() const {
-		  this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x01);
-		}
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::applyGamma(SSD1289Gamma& gamma) const {
+
+      this->_accessMode.writeCommand(ssd1289::GAMMA_0,gamma[0]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_1,gamma[1]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_2,gamma[2]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_3,gamma[3]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_4,gamma[4]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_5,gamma[5]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_6,gamma[6]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_7,gamma[7]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_8,gamma[8]);
+      this->_accessMode.writeCommand(ssd1289::GAMMA_9,gamma[9]);
+    }
 
 
-		/**
-		 * Wake the panel up
-		 */
+    /**
+     * Send the panel to sleep
+     */
 
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::wake() const {
-		  this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
-		}
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::sleep() const {
+      this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x01);
+    }
 
 
-		/**
-		 * Issue the command that allows graphics ram writing to commence
-		 */
+    /**
+     * Wake the panel up
+     */
 
-		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::beginWriting() const {
-		  this->_accessMode.writeCommand(ssd1289::GRAM_WRITE_DATA);
-		}
-	}
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::wake() const {
+      this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
+    }
+
+
+    /**
+     * Issue the command that allows graphics ram writing to commence
+     */
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::beginWriting() const {
+      this->_accessMode.writeCommand(ssd1289::GRAM_WRITE_DATA);
+    }
+  }
 }

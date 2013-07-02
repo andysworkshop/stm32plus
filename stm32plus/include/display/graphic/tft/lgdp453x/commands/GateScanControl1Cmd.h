@@ -12,21 +12,21 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace GateScanControl1Cmd
-		{
-			enum
-			{
-				Opcode = 0x60,
+  namespace lgdp453x
+  {
+    namespace GateScanControl1Cmd
+    {
+      enum
+      {
+        Opcode = 0x60,
 
-				GS = 1<<15
-			};
+        GS = 1<<15
+      };
 
-			inline uint16_t SCN(uint16_t n) { return n; }
-			inline uint16_t NL(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t SCN(uint16_t n) { return n; }
+      inline uint16_t NL(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

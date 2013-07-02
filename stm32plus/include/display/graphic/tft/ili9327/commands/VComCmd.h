@@ -7,20 +7,20 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace VComCmd {
-			enum {
-				Opcode=0xD1,
+  namespace ili9327 {
+    namespace VComCmd {
+      enum {
+        Opcode=0xD1,
 
-				SELVCM=1
-			};
+        SELVCM=1
+      };
 
-			inline uint16_t VCM(uint16_t n) {
-				return n;
-			}
-			inline uint16_t VDV(uint16_t n) {
-				return n;
-			}
-		}
-	}
+      inline uint16_t VCM(uint16_t n) {
+        return n;
+      }
+      inline uint16_t VDV(uint16_t n) {
+        return n;
+      }
+    }
+  }
 }

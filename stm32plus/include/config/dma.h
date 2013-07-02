@@ -26,35 +26,35 @@
 
 #if defined(STM32PLUS_F1)
 
-	#define USE_DMA1_1_INTERRUPT
-	#define USE_DMA1_2_INTERRUPT
-	#define USE_DMA1_3_INTERRUPT
-	#define USE_DMA1_4_INTERRUPT
-	#define USE_DMA1_5_INTERRUPT
-	#define USE_DMA1_6_INTERRUPT
-	#define USE_DMA1_7_INTERRUPT
-	#define USE_DMA2_1_INTERRUPT
-	#define USE_DMA2_2_INTERRUPT
-	#define USE_DMA2_3_INTERRUPT
-	#define USE_DMA2_4_5_INTERRUPT
+  #define USE_DMA1_1_INTERRUPT
+  #define USE_DMA1_2_INTERRUPT
+  #define USE_DMA1_3_INTERRUPT
+  #define USE_DMA1_4_INTERRUPT
+  #define USE_DMA1_5_INTERRUPT
+  #define USE_DMA1_6_INTERRUPT
+  #define USE_DMA1_7_INTERRUPT
+  #define USE_DMA2_1_INTERRUPT
+  #define USE_DMA2_2_INTERRUPT
+  #define USE_DMA2_3_INTERRUPT
+  #define USE_DMA2_4_5_INTERRUPT
 
   #include "dma/f1/Dma.h"
-	#include "dma/features/DmaFeatureBase.h"
+  #include "dma/features/DmaFeatureBase.h"
 
-	#include "dma/f1/Dma1Channel1.h"
-	#include "dma/f1/Dma1Channel2.h"
-	#include "dma/f1/Dma1Channel3.h"
-	#include "dma/f1/Dma1Channel4.h"
-	#include "dma/f1/Dma1Channel5.h"
-	#include "dma/f1/Dma1Channel6.h"
-	#include "dma/f1/Dma1Channel7.h"
-	#include "dma/f1/Dma2Channel1.h"
-	#include "dma/f1/Dma2Channel2.h"
-	#include "dma/f1/Dma2Channel3.h"
-	#include "dma/f1/Dma2Channel4.h"
-	#include "dma/f1/Dma2Channel5.h"
+  #include "dma/f1/Dma1Channel1.h"
+  #include "dma/f1/Dma1Channel2.h"
+  #include "dma/f1/Dma1Channel3.h"
+  #include "dma/f1/Dma1Channel4.h"
+  #include "dma/f1/Dma1Channel5.h"
+  #include "dma/f1/Dma1Channel6.h"
+  #include "dma/f1/Dma1Channel7.h"
+  #include "dma/f1/Dma2Channel1.h"
+  #include "dma/f1/Dma2Channel2.h"
+  #include "dma/f1/Dma2Channel3.h"
+  #include "dma/f1/Dma2Channel4.h"
+  #include "dma/f1/Dma2Channel5.h"
 
-	#include "dma/features/f1/DmaInterruptFeature.h"
+  #include "dma/features/f1/DmaInterruptFeature.h"
   #include "dma/features/f1/Dma1Channel1InterruptFeature.h"
   #include "dma/features/f1/Dma1Channel2InterruptFeature.h"
   #include "dma/features/f1/Dma1Channel3InterruptFeature.h"
@@ -68,76 +68,76 @@
   #include "dma/features/f1/Dma2Channel4InterruptFeature.h"
   #include "dma/features/f1/Dma2Channel5InterruptFeature.h"
 
-	#include "dma/features/f1/DmaMemoryCopyBaseFeature.h"
-	#include "dma/features/f1/TimerDmaFeature.h"
-	#include "dma/features/f1/UsartDmaReaderFeature.h"
-	#include "dma/features/f1/UsartDmaWriterFeature.h"
-	#include "dma/features/f1/SpiDmaReaderFeature.h"
-	#include "dma/features/f1/SpiDmaWriterFeature.h"
-	#include "dma/features/f1/I2CDmaReaderFeature.h"
-	#include "dma/features/f1/I2CDmaWriterFeature.h"
-	#include "dma/features/f1/I2SDmaReaderFeature.h"
-	#include "dma/features/f1/I2SDmaWriterFeature.h"
-	#include "dma/features/f1/SdioDmaReaderFeature.h"
-	#include "dma/features/f1/SdioDmaWriterFeature.h"
-	#include "dma/features/f1/DmaFsmcLcdMemoryCopyFeature.h"
+  #include "dma/features/f1/DmaMemoryCopyBaseFeature.h"
+  #include "dma/features/f1/TimerDmaFeature.h"
+  #include "dma/features/f1/UsartDmaReaderFeature.h"
+  #include "dma/features/f1/UsartDmaWriterFeature.h"
+  #include "dma/features/f1/SpiDmaReaderFeature.h"
+  #include "dma/features/f1/SpiDmaWriterFeature.h"
+  #include "dma/features/f1/I2CDmaReaderFeature.h"
+  #include "dma/features/f1/I2CDmaWriterFeature.h"
+  #include "dma/features/f1/I2SDmaReaderFeature.h"
+  #include "dma/features/f1/I2SDmaWriterFeature.h"
+  #include "dma/features/f1/SdioDmaReaderFeature.h"
+  #include "dma/features/f1/SdioDmaWriterFeature.h"
+  #include "dma/features/f1/DmaFsmcLcdMemoryCopyFeature.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#define USE_DMA1_0_INTERRUPT
-	#define USE_DMA1_1_INTERRUPT
-	#define USE_DMA1_2_INTERRUPT
-	#define USE_DMA1_3_INTERRUPT
-	#define USE_DMA1_4_INTERRUPT
-	#define USE_DMA1_5_INTERRUPT
-	#define USE_DMA1_6_INTERRUPT
-	#define USE_DMA1_7_INTERRUPT
-	#define USE_DMA2_0_INTERRUPT
-	#define USE_DMA2_1_INTERRUPT
-	#define USE_DMA2_2_INTERRUPT
-	#define USE_DMA2_3_INTERRUPT
-	#define USE_DMA2_4_INTERRUPT
-	#define USE_DMA2_5_INTERRUPT
-	#define USE_DMA2_6_INTERRUPT
-	#define USE_DMA2_7_INTERRUPT
+  #define USE_DMA1_0_INTERRUPT
+  #define USE_DMA1_1_INTERRUPT
+  #define USE_DMA1_2_INTERRUPT
+  #define USE_DMA1_3_INTERRUPT
+  #define USE_DMA1_4_INTERRUPT
+  #define USE_DMA1_5_INTERRUPT
+  #define USE_DMA1_6_INTERRUPT
+  #define USE_DMA1_7_INTERRUPT
+  #define USE_DMA2_0_INTERRUPT
+  #define USE_DMA2_1_INTERRUPT
+  #define USE_DMA2_2_INTERRUPT
+  #define USE_DMA2_3_INTERRUPT
+  #define USE_DMA2_4_INTERRUPT
+  #define USE_DMA2_5_INTERRUPT
+  #define USE_DMA2_6_INTERRUPT
+  #define USE_DMA2_7_INTERRUPT
 
   #include "dma/f4/Dma.h"
-	#include "dma/features/DmaFeatureBase.h"
+  #include "dma/features/DmaFeatureBase.h"
 
-	#include "dma/f4/DmaIncludes.h"
+  #include "dma/f4/DmaIncludes.h"
 
-	#include "dma/features/f4/DmaInterruptFeature.h"
+  #include "dma/features/f4/DmaInterruptFeature.h"
   #include "dma/features/f4/Dma1Stream0InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream1InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream2InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream3InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream4InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream5InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream6InterruptFeature.h"
-	#include "dma/features/f4/Dma1Stream7InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream0InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream1InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream2InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream3InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream4InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream5InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream6InterruptFeature.h"
-	#include "dma/features/f4/Dma2Stream7InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream1InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream2InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream3InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream4InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream5InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream6InterruptFeature.h"
+  #include "dma/features/f4/Dma1Stream7InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream0InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream1InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream2InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream3InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream4InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream5InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream6InterruptFeature.h"
+  #include "dma/features/f4/Dma2Stream7InterruptFeature.h"
 
-	#include "dma/features/f4/DmaMemoryCopyBaseFeature.h"
-	#include "dma/features/f4/TimerDmaFeature.h"
-	#include "dma/features/f4/UsartDmaReaderFeature.h"
-	#include "dma/features/f4/UsartDmaWriterFeature.h"
-	#include "dma/features/f4/SpiDmaReaderFeature.h"
-	#include "dma/features/f4/SpiDmaWriterFeature.h"
-	#include "dma/features/f4/I2CDmaReaderFeature.h"
-	#include "dma/features/f4/I2CDmaWriterFeature.h"
-	#include "dma/features/f4/I2SDmaReaderFeature.h"
-	#include "dma/features/f4/I2SDmaWriterFeature.h"
-	#include "dma/features/f4/SdioDmaReaderFeature.h"
-	#include "dma/features/f4/SdioDmaWriterFeature.h"
-	#include "dma/features/f4/DmaFsmcLcdMemoryCopyFeature.h"
-	#include "dma/features/f4/DacDmaWriterFeature.h"
+  #include "dma/features/f4/DmaMemoryCopyBaseFeature.h"
+  #include "dma/features/f4/TimerDmaFeature.h"
+  #include "dma/features/f4/UsartDmaReaderFeature.h"
+  #include "dma/features/f4/UsartDmaWriterFeature.h"
+  #include "dma/features/f4/SpiDmaReaderFeature.h"
+  #include "dma/features/f4/SpiDmaWriterFeature.h"
+  #include "dma/features/f4/I2CDmaReaderFeature.h"
+  #include "dma/features/f4/I2CDmaWriterFeature.h"
+  #include "dma/features/f4/I2SDmaReaderFeature.h"
+  #include "dma/features/f4/I2SDmaWriterFeature.h"
+  #include "dma/features/f4/SdioDmaReaderFeature.h"
+  #include "dma/features/f4/SdioDmaWriterFeature.h"
+  #include "dma/features/f4/DmaFsmcLcdMemoryCopyFeature.h"
+  #include "dma/features/f4/DacDmaWriterFeature.h"
 
 #endif
 

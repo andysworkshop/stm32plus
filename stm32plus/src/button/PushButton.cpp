@@ -10,70 +10,70 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor
-	 *
-	 * @param[in] pin The pin to use. If the pressed state is HIGH then this should be input pull down, otherwise input pull up
-	 * @param[in] pressedState true if the pressed state is HIGH, false if it is LOW
-	 */
+  /**
+   * Constructor
+   *
+   * @param[in] pin The pin to use. If the pressed state is HIGH then this should be input pull down, otherwise input pull up
+   * @param[in] pressedState true if the pressed state is HIGH, false if it is LOW
+   */
 
-	PushButton::PushButton(const GpioPinRef& pin,bool pressedState)
-		: _pin(pin) {
+  PushButton::PushButton(const GpioPinRef& pin,bool pressedState)
+    : _pin(pin) {
 
-		// setup GPIO for the pin
+    // setup GPIO for the pin
 
-		_pressedState=pressedState;
-		_internalState=Idle;
-	}
+    _pressedState=pressedState;
+    _internalState=Idle;
+  }
 
 
-	/**
-	 * Get the current state
-	 * @return The current state
-	 */
+  /**
+   * Get the current state
+   * @return The current state
+   */
 
-	PushButton::ButtonState PushButton::getState() {
-		uint32_t newTime;
-		uint8_t state;
+  PushButton::ButtonState PushButton::getState() {
+    uint32_t newTime;
+    uint8_t state;
 
-		// read the pin and flip it if this switch reads high when open
+    // read the pin and flip it if this switch reads high when open
 
-		state=_pin.read();
+    state=_pin.read();
 
-		if(_pressedState)
-			state^=true;
+    if(_pressedState)
+      state^=true;
 
-		// if state is low then wherever we were then
-		// we are now back at not pressed
+    // if state is low then wherever we were then
+    // we are now back at not pressed
 
-		if(!state) {
-			_internalState=Idle;
-			return NotPressed;
-		}
+    if(!state) {
+      _internalState=Idle;
+      return NotPressed;
+    }
 
-		// sample the counter
+    // sample the counter
 
-		newTime=MillisecondTimer::millis();
+    newTime=MillisecondTimer::millis();
 
-		// act on the internal state machine
+    // act on the internal state machine
 
-		switch(_internalState) {
-			case Idle:
-				_internalState=DebounceDelay;
-				_lastTime=newTime;
-				break;
+    switch(_internalState) {
+      case Idle:
+        _internalState=DebounceDelay;
+        _lastTime=newTime;
+        break;
 
-			case DebounceDelay:
-				if(newTime - _lastTime >= DEBOUNCE_DELAY_MILLIS) {
-					// been high for at least the debounce time
+      case DebounceDelay:
+        if(newTime - _lastTime >= DEBOUNCE_DELAY_MILLIS) {
+          // been high for at least the debounce time
 
-					return Pressed;
-				}
-				break;
-		}
+          return Pressed;
+        }
+        break;
+    }
 
-		// nothing happened at this time
+    // nothing happened at this time
 
-		return NotPressed;
-	}
+    return NotPressed;
+  }
 }

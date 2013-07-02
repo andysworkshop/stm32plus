@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace ExitInvertModeCmd
-		{
-			enum
-			{
-				Opcode = 0x20
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace ExitInvertModeCmd
+    {
+      enum
+      {
+        Opcode = 0x20
+      };
+    }
+  }
 }
 
 

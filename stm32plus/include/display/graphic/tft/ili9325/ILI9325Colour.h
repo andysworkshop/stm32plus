@@ -8,16 +8,16 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Empty generic class definition for ILI9325 colour-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for ILI9325 colour-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<ColourDepth TColour,class TAccessMode>
-		class ILI9325Colour;
-	}
+    template<ColourDepth TColour,class TAccessMode>
+    class ILI9325Colour;
+  }
 }
 
 

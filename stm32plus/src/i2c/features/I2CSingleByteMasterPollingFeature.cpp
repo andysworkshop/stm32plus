@@ -12,83 +12,83 @@
 namespace stm32plus {
 
 
-	/**
-	 * Reset one or more bits
-	 * @param address The register address
-	 * @param mask The bitmask to clear
-	 * @return true if it worked
-	 */
+  /**
+   * Reset one or more bits
+   * @param address The register address
+   * @param mask The bitmask to clear
+   * @return true if it worked
+   */
 
-	bool I2CSingleByteMasterPollingFeature::resetBits(uint8_t address,uint8_t mask) const {
+  bool I2CSingleByteMasterPollingFeature::resetBits(uint8_t address,uint8_t mask) const {
 
-		uint8_t value;
+    uint8_t value;
 
-		// read current register value
+    // read current register value
 
-		if(!readByte(address,value))
-			return false;
+    if(!readByte(address,value))
+      return false;
 
-		// clear the bits
+    // clear the bits
 
-		value&=~mask;
+    value&=~mask;
 
-		// write back to the register
+    // write back to the register
 
-		return writeByte(address,value);
-	}
-
-
-	/**
-	 * Set one or more bits
-	 * @param address The register address
-	 * @param mask The bitmask to set
-	 * @return true if it worked
-	 */
-
-	bool I2CSingleByteMasterPollingFeature::setBits(uint8_t address,uint8_t mask) const {
-
-		uint8_t value;
-
-		// read current register value
-
-		if(!readByte(address,value))
-			return false;
-
-		// set the bits
-
-		value|=mask;
-
-		// write back to the register
-
-		return writeByte(address,value);
-	}
+    return writeByte(address,value);
+  }
 
 
-	/**
-	 * Set a value by merging into the current value. The bits defined by the mask are the
-	 * ones that get set by this call. The bits that are zero in the mask are preserved.
-	 * @param address The register address
-	 * @param value The value to mask in
-	 * @param mask The mask that defines the values to set
-	 * @return true if it worked
-	 */
+  /**
+   * Set one or more bits
+   * @param address The register address
+   * @param mask The bitmask to set
+   * @return true if it worked
+   */
 
-	bool I2CSingleByteMasterPollingFeature::setMask(uint8_t address,uint8_t newbits,uint8_t mask) const {
+  bool I2CSingleByteMasterPollingFeature::setBits(uint8_t address,uint8_t mask) const {
 
-		uint8_t value;
+    uint8_t value;
 
-		// read current register value
+    // read current register value
 
-		if(!readByte(address,value))
-			return false;
+    if(!readByte(address,value))
+      return false;
 
-		// set the bits
+    // set the bits
 
-		value&=~mask;
-		value|=newbits;
+    value|=mask;
 
-		// write back to the register
+    // write back to the register
 
-		return writeByte(address,value);
-	}
+    return writeByte(address,value);
+  }
+
+
+  /**
+   * Set a value by merging into the current value. The bits defined by the mask are the
+   * ones that get set by this call. The bits that are zero in the mask are preserved.
+   * @param address The register address
+   * @param value The value to mask in
+   * @param mask The mask that defines the values to set
+   * @return true if it worked
+   */
+
+  bool I2CSingleByteMasterPollingFeature::setMask(uint8_t address,uint8_t newbits,uint8_t mask) const {
+
+    uint8_t value;
+
+    // read current register value
+
+    if(!readByte(address,value))
+      return false;
+
+    // set the bits
+
+    value&=~mask;
+    value|=newbits;
+
+    // write back to the register
+
+    return writeByte(address,value);
+  }
 }

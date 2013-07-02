@@ -11,98 +11,98 @@
 
 namespace stm32plus {
 
-	namespace GpioPinInitialiser {
+  namespace GpioPinInitialiser {
 
-		/**
-		 * Simple initialiser for input pins that includes AFIO selection and no output type
-		 * The AFIO selection is ignored on the F1
-		 */
+    /**
+     * Simple initialiser for input pins that includes AFIO selection and no output type
+     * The AFIO selection is ignored on the F1
+     */
 
-		void initialise(GPIO_TypeDef *port,
-										uint16_t pins,
-										Gpio::GpioModeType mode,
-										GPIOSpeed_TypeDef speed,
-										Gpio::GpioPullUpDownType pupdType,
-										uint8_t afSelection) {
+    void initialise(GPIO_TypeDef *port,
+                    uint16_t pins,
+                    Gpio::GpioModeType mode,
+                    GPIOSpeed_TypeDef speed,
+                    Gpio::GpioPullUpDownType pupdType,
+                    uint8_t afSelection) {
 
-			initialise(port,pins,mode,speed,pupdType,Gpio::PUSH_PULL,afSelection);
-		}
-
-
-		/**
-		 * Simple initialiser that includes AFIO selection that is ignored on the F1
-		 */
-
-		void initialise(GPIO_TypeDef *port,
-										uint16_t pins,
-										Gpio::GpioModeType mode,
-										GPIOSpeed_TypeDef speed,
-										Gpio::GpioPullUpDownType pupdType,
-										Gpio::GpioOutputType outputType,
-										uint8_t /* afSelection */) {
-
-			initialise(port,pins,mode,speed,pupdType,outputType);
-		}
+      initialise(port,pins,mode,speed,pupdType,Gpio::PUSH_PULL,afSelection);
+    }
 
 
-		/**
-		 * Simple pin initialiser when you don't need or want the template support offered by GpioPort
-		 * and its features.
-		 * @param port
-		 * @param pins
-		 * @param mode
-		 * @param speed
-		 * @param pupdType
-		 * @param outputType
-		 */
+    /**
+     * Simple initialiser that includes AFIO selection that is ignored on the F1
+     */
 
-		void initialise(GPIO_TypeDef *port,
-		                uint16_t pins,
-		                Gpio::GpioModeType mode,
-		                GPIOSpeed_TypeDef speed,
-		                Gpio::GpioPullUpDownType pupdType,
-		                Gpio::GpioOutputType outputType) {
+    void initialise(GPIO_TypeDef *port,
+                    uint16_t pins,
+                    Gpio::GpioModeType mode,
+                    GPIOSpeed_TypeDef speed,
+                    Gpio::GpioPullUpDownType pupdType,
+                    Gpio::GpioOutputType outputType,
+                    uint8_t /* afSelection */) {
 
-			GPIO_InitTypeDef init;
+      initialise(port,pins,mode,speed,pupdType,outputType);
+    }
 
-			// clock on
 
-			RCC_APB2PeriphClockCmd(port==GPIOA ? RCC_APB2Periph_GPIOA :
-														 port==GPIOB ? RCC_APB2Periph_GPIOB :
-														 port==GPIOC ? RCC_APB2Periph_GPIOC :
-														 port==GPIOD ? RCC_APB2Periph_GPIOD :
-														 port==GPIOE ? RCC_APB2Periph_GPIOE :
-														 port==GPIOF ? RCC_APB2Periph_GPIOF :
-														 RCC_APB2Periph_GPIOG
-														 ,ENABLE);
+    /**
+     * Simple pin initialiser when you don't need or want the template support offered by GpioPort
+     * and its features.
+     * @param port
+     * @param pins
+     * @param mode
+     * @param speed
+     * @param pupdType
+     * @param outputType
+     */
 
-			// initialise
+    void initialise(GPIO_TypeDef *port,
+                    uint16_t pins,
+                    Gpio::GpioModeType mode,
+                    GPIOSpeed_TypeDef speed,
+                    Gpio::GpioPullUpDownType pupdType,
+                    Gpio::GpioOutputType outputType) {
 
-			init.GPIO_Pin=pins;
-			init.GPIO_Speed=speed;
+      GPIO_InitTypeDef init;
 
-			switch(mode) {
+      // clock on
 
-				case Gpio::OUTPUT:
-					init.GPIO_Mode=outputType==Gpio::OPEN_DRAIN ? GPIO_Mode_Out_OD : GPIO_Mode_Out_PP;
-					break;
+      RCC_APB2PeriphClockCmd(port==GPIOA ? RCC_APB2Periph_GPIOA :
+                             port==GPIOB ? RCC_APB2Periph_GPIOB :
+                             port==GPIOC ? RCC_APB2Periph_GPIOC :
+                             port==GPIOD ? RCC_APB2Periph_GPIOD :
+                             port==GPIOE ? RCC_APB2Periph_GPIOE :
+                             port==GPIOF ? RCC_APB2Periph_GPIOF :
+                             RCC_APB2Periph_GPIOG
+                             ,ENABLE);
 
-				case Gpio::INPUT:
-					init.GPIO_Mode=pupdType==Gpio::PUPD_NONE ? GPIO_Mode_IN_FLOATING : pupdType==Gpio::PUPD_UP ? GPIO_Mode_IPD : GPIO_Mode_IPU;
-					break;
+      // initialise
 
-				case Gpio::ANALOG:
-					init.GPIO_Mode=GPIO_Mode_AIN;
-					break;
+      init.GPIO_Pin=pins;
+      init.GPIO_Speed=speed;
 
-				case Gpio::ALTERNATE_FUNCTION:
-					init.GPIO_Mode=outputType==Gpio::PUSH_PULL ? GPIO_Mode_AF_PP : GPIO_Mode_AF_OD;
-					break;
-			}
+      switch(mode) {
 
-			GPIO_Init(port,&init);
-		}
-	}
+        case Gpio::OUTPUT:
+          init.GPIO_Mode=outputType==Gpio::OPEN_DRAIN ? GPIO_Mode_Out_OD : GPIO_Mode_Out_PP;
+          break;
+
+        case Gpio::INPUT:
+          init.GPIO_Mode=pupdType==Gpio::PUPD_NONE ? GPIO_Mode_IN_FLOATING : pupdType==Gpio::PUPD_UP ? GPIO_Mode_IPD : GPIO_Mode_IPU;
+          break;
+
+        case Gpio::ANALOG:
+          init.GPIO_Mode=GPIO_Mode_AIN;
+          break;
+
+        case Gpio::ALTERNATE_FUNCTION:
+          init.GPIO_Mode=outputType==Gpio::PUSH_PULL ? GPIO_Mode_AF_PP : GPIO_Mode_AF_OD;
+          break;
+      }
+
+      GPIO_Init(port,&init);
+    }
+  }
 }
 
 #endif

@@ -18,40 +18,40 @@ template<> TimerInterruptFeatureEnabler<2>::FPTR TimerInterruptFeatureEnabler<2>
 
 extern "C" {
 
-	/**
-	 * TIM2 interrupt handler
-	 * TIM2 can have CC1..4, Update, Trigger
+  /**
+   * TIM2 interrupt handler
+   * TIM2 can have CC1..4, Update, Trigger
    */
 
 #if defined(USE_TIM2_INTERRUPT)
 
-	void __attribute__ ((interrupt("IRQ"))) TIM2_IRQHandler() {
+  void __attribute__ ((interrupt("IRQ"))) TIM2_IRQHandler() {
 
-		if(TIM_GetITStatus(TIM2,TIM_IT_CC1)!=RESET) {
-			TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
-			TIM_ClearITPendingBit(TIM2,TIM_IT_CC1);
-		}
-		else if(TIM_GetITStatus(TIM2,TIM_IT_CC2)!=RESET) {
-			TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare2);
-			TIM_ClearITPendingBit(TIM2,TIM_IT_CC2);
-		}
-		else if(TIM_GetITStatus(TIM2,TIM_IT_CC3)!=RESET) {
-			TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare3);
-			TIM_ClearITPendingBit(TIM2,TIM_IT_CC3);
-		}
-		else if(TIM_GetITStatus(TIM2,TIM_IT_CC4)!=RESET) {
-			TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare4);
-			TIM_ClearITPendingBit(TIM2,TIM_IT_CC4);
-		}
-		else if(TIM_GetITStatus(TIM2,TIM_IT_Update)!=RESET) {
-			TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
-			TIM_ClearITPendingBit(TIM2,TIM_IT_Update);
-		}
-		else if(TIM_GetITStatus(TIM2,TIM_IT_Trigger)!=RESET) {
-			TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Trigger);
-			TIM_ClearITPendingBit(TIM2,TIM_IT_Trigger);
-		}
-	}
+    if(TIM_GetITStatus(TIM2,TIM_IT_CC1)!=RESET) {
+      TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
+      TIM_ClearITPendingBit(TIM2,TIM_IT_CC1);
+    }
+    else if(TIM_GetITStatus(TIM2,TIM_IT_CC2)!=RESET) {
+      TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare2);
+      TIM_ClearITPendingBit(TIM2,TIM_IT_CC2);
+    }
+    else if(TIM_GetITStatus(TIM2,TIM_IT_CC3)!=RESET) {
+      TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare3);
+      TIM_ClearITPendingBit(TIM2,TIM_IT_CC3);
+    }
+    else if(TIM_GetITStatus(TIM2,TIM_IT_CC4)!=RESET) {
+      TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare4);
+      TIM_ClearITPendingBit(TIM2,TIM_IT_CC4);
+    }
+    else if(TIM_GetITStatus(TIM2,TIM_IT_Update)!=RESET) {
+      TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
+      TIM_ClearITPendingBit(TIM2,TIM_IT_Update);
+    }
+    else if(TIM_GetITStatus(TIM2,TIM_IT_Trigger)!=RESET) {
+      TimerInterruptFeature<2>::_timerInstance->notifyObservers(ObservableEvent::Timer_Trigger);
+      TIM_ClearITPendingBit(TIM2,TIM_IT_Trigger);
+    }
+  }
 
 #endif
 

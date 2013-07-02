@@ -5,37 +5,37 @@
  */
 
 
-	.global BulbPixels
-	.global BulbPixelsSize
+  .global BulbPixels
+  .global BulbPixelsSize
 
-	.global AudioPixels
-	.global AudioPixelsSize
+  .global AudioPixels
+  .global AudioPixelsSize
 
-	.global FlagPixels
-	.global FlagPixelsSize
+  .global FlagPixels
+  .global FlagPixelsSize
 
-	.global DocPixels
-	.global DocPixelsSize
+  .global DocPixels
+  .global DocPixelsSize
 
-	.global GlobePixels
-	.global GlobePixelsSize
+  .global GlobePixels
+  .global GlobePixelsSize
 
 BulbPixels:
-	.incbin "lzg/st7783/bulb.st7783.64.lzg"
-	BulbPixelsSize=.-BulbPixels
+  .incbin "lzg/st7783/bulb.st7783.64.lzg"
+  BulbPixelsSize=.-BulbPixels
 
 AudioPixels:
-	.incbin "lzg/st7783/audio.st7783.64.lzg"
-	AudioPixelsSize=.-AudioPixels
+  .incbin "lzg/st7783/audio.st7783.64.lzg"
+  AudioPixelsSize=.-AudioPixels
 
 FlagPixels:
-	.incbin "lzg/st7783/flag.st7783.64.lzg"
-	FlagPixelsSize=.-FlagPixels
+  .incbin "lzg/st7783/flag.st7783.64.lzg"
+  FlagPixelsSize=.-FlagPixels
 
 DocPixels:
-	.incbin "lzg/st7783/doc.st7783.64.lzg"
-	DocPixelsSize=.-DocPixels
+  .incbin "lzg/st7783/doc.st7783.64.lzg"
+  DocPixelsSize=.-DocPixels
 
 GlobePixels:
-	.incbin "lzg/st7783/globe.st7783.64.lzg"
-	GlobePixelsSize=.-GlobePixels
+  .incbin "lzg/st7783/globe.st7783.64.lzg"
+  GlobePixelsSize=.-GlobePixels

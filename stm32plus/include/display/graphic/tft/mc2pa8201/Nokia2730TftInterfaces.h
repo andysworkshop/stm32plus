@@ -17,40 +17,40 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		template<class TAccessMode> using Nokia2730_Portrait_64K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_64K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_64K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_64K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_262K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_262K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_262K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_262K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_16M_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_16M_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_16M_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_16M_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,Nokia2730_TypeA>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_64K_TypeB  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_64K_TypeB = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_64K_TypeB  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_64K_TypeB = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_262K_TypeB  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_262K_TypeB = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_262K_TypeB  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_262K_TypeB = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_16M_TypeB  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_16M_TypeB = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_16M_TypeB  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_16M_TypeB = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,Nokia2730_TypeB>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_64K_TypeC  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_64K_TypeC = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_64K_TypeC  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_64K_TypeC = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_262K_TypeC  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_262K_TypeC = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_262K_TypeC  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_262K_TypeC = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
 
-		template<class TAccessMode> using Nokia2730_Portrait_16M_TypeC  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
-		template<class TAccessMode> using Nokia2730_Landscape_16M_TypeC = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Portrait_16M_TypeC  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
+    template<class TAccessMode> using Nokia2730_Landscape_16M_TypeC = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,Nokia2730_TypeC>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the Nokia 2730
-		 */
+    /**
+     * Graphic terminal modes for the Nokia 2730
+     */
 
-		template<class TDevice> using Nokia2730_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using Nokia2730_Terminal_Landscape = GraphicTerminal<TDevice,false>;
-	}
+    template<class TDevice> using Nokia2730_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using Nokia2730_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+  }
 }

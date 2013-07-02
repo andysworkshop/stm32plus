@@ -9,32 +9,32 @@
 
 namespace stm32plus {
 
-	class ObserverLink;
-	class Observer;
+  class ObserverLink;
+  class Observer;
 
-	/**
-	 * @brief base class for classes that raise events
-	 *
-	 * Observable base class. Classes that raise events derive from this and use the notify method to
-	 * tell the observers that something interesting has happened.
-	 */
+  /**
+   * @brief base class for classes that raise events
+   *
+   * Observable base class. Classes that raise events derive from this and use the notify method to
+   * tell the observers that something interesting has happened.
+   */
 
-	class Observable {
+  class Observable {
 
-		protected:
-			ObserverLink *_first;
+    protected:
+      ObserverLink *_first;
 
-		protected:
-			~Observable();
+    protected:
+      ~Observable();
 
-		public:
-			Observable();
+    public:
+      Observable();
 
-			ObserverLink *insertObserver(Observer& newObserver);
+      ObserverLink *insertObserver(Observer& newObserver);
 
-			ObserverLink *getFirstObserverLink();
-			void setFirstObserverLink(ObserverLink* newFirst);
-			void notifyObservers(ObservableEvent::E event,void *context=nullptr);
-	};
+      ObserverLink *getFirstObserverLink();
+      void setFirstObserverLink(ObserverLink* newFirst);
+      void notifyObservers(ObservableEvent::E event,void *context=nullptr);
+  };
 
 }

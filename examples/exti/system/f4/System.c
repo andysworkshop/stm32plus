@@ -146,7 +146,7 @@
 
 /************************* PLL Parameters *************************************/
 /* PLL_VCO = (HSE_VALUE or HSI_VALUE / PLL_M) * PLL_N */
-#define PLL_M      8			// XXX: changed by Andy to match 8Mhz discovery board
+#define PLL_M      8      // XXX: changed by Andy to match 8Mhz discovery board
 #define PLL_N      336
 
 /* SYSCLK = PLL_VCO / PLL_P */

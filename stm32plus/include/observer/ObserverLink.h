@@ -9,31 +9,31 @@
 
 namespace stm32plus {
 
-	class Observer;
+  class Observer;
 
-	/**
-	 * @brief The linked list node that holds an observer.
-	 *
-	 * The observers are held in a linked list. This class manages the link and the observer held in this link.
-	 */
+  /**
+   * @brief The linked list node that holds an observer.
+   *
+   * The observers are held in a linked list. This class manages the link and the observer held in this link.
+   */
 
-	class ObserverLink {
+  class ObserverLink {
 
-		protected:
-			Observable& _base;
-			Observer& _observer;
+    protected:
+      Observable& _base;
+      Observer& _observer;
 
-			ObserverLink* _next;
-			ObserverLink* _previous;
+      ObserverLink* _next;
+      ObserverLink* _previous;
 
-		public:
-			ObserverLink(Observable& base_,Observer& observer);
+    public:
+      ObserverLink(Observable& base_,Observer& observer);
 
-			void destroy();
-			void remove();
-			void setNext(ObserverLink* newNext);
-			void setPrevious(ObserverLink* newPrevious);
-			ObserverLink* getNext();
-			Observer& getObserver();
-	};
+      void destroy();
+      void remove();
+      void setNext(ObserverLink* newNext);
+      void setPrevious(ObserverLink* newPrevious);
+      ObserverLink* getNext();
+      Observer& getObserver();
+  };
 }

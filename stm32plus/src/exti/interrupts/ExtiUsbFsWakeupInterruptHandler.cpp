@@ -21,13 +21,13 @@ template<> Observable *ExtiPeripheral<EXTI_Line18>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) USBWakeUp_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) USBWakeUp_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line18)!=RESET) {
-				ExtiUsbFsWakeup::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)18);
-				EXTI_ClearITPendingBit(EXTI_Line18);
-		}
-	}
+    if(EXTI_GetITStatus(EXTI_Line18)!=RESET) {
+        ExtiUsbFsWakeup::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)18);
+        EXTI_ClearITPendingBit(EXTI_Line18);
+    }
+  }
 }
 
 #endif

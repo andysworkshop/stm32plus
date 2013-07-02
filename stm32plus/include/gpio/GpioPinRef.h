@@ -11,68 +11,68 @@
 namespace stm32plus {
 
 
-	/**
-	 * Simple wrapper class for a port and a pin. Useful for when a class would need to store a reference
-	 * to a Gpio object but cannot because the Gpio references returned by Gpio.operator[] are generally
-	 * not safe to hold on to.
-	 *
-	 * It's always safe to do a bitwise copy of this class
-	 */
+  /**
+   * Simple wrapper class for a port and a pin. Useful for when a class would need to store a reference
+   * to a Gpio object but cannot because the Gpio references returned by Gpio.operator[] are generally
+   * not safe to hold on to.
+   *
+   * It's always safe to do a bitwise copy of this class
+   */
 
-	class GpioPinRef {
+  class GpioPinRef {
 
-		protected:
-			GPIO_TypeDef *_peripheralAddress;
-			uint16_t _pin;
+    protected:
+      GPIO_TypeDef *_peripheralAddress;
+      uint16_t _pin;
 
-		public:
-			GpioPinRef() {}
-			GpioPinRef(const Gpio& gpio);
+    public:
+      GpioPinRef() {}
+      GpioPinRef(const Gpio& gpio);
 
-			void set() const;
+      void set() const;
       void reset() const;
       void setState(bool state) const;
       bool read() const;
 
       GPIO_TypeDef *getPeripheralAddress() const;
       uint16_t getPin() const;
-	};
+  };
 
 
-	/**
-	 * Constructor
-	 * @param gpio The Gpio class
-	 */
+  /**
+   * Constructor
+   * @param gpio The Gpio class
+   */
 
-	inline GpioPinRef::GpioPinRef(const Gpio& gpio) {
-		_peripheralAddress=gpio.getPeripheralAddress();
-		_pin=gpio.getSelectedPin();
-	}
-
-
-	/**
-	 * Return the port
-	 */
-
-	inline GPIO_TypeDef* GpioPinRef::getPeripheralAddress() const {
-		return _peripheralAddress;
-	}
+  inline GpioPinRef::GpioPinRef(const Gpio& gpio) {
+    _peripheralAddress=gpio.getPeripheralAddress();
+    _pin=gpio.getSelectedPin();
+  }
 
 
-	/**
-	 * Return the pin
-	 */
+  /**
+   * Return the port
+   */
 
-	inline uint16_t GpioPinRef::getPin() const {
-		return _pin;
-	}
+  inline GPIO_TypeDef* GpioPinRef::getPeripheralAddress() const {
+    return _peripheralAddress;
+  }
 
 
-	/**
-	 * Set the pin
-	 */
+  /**
+   * Return the pin
+   */
 
-	inline void GpioPinRef::set() const {
+  inline uint16_t GpioPinRef::getPin() const {
+    return _pin;
+  }
+
+
+  /**
+   * Set the pin
+   */
+
+  inline void GpioPinRef::set() const {
     GPIO_WriteBit(_peripheralAddress,_pin,Bit_SET);
   }
 
@@ -86,11 +86,11 @@ namespace stm32plus {
   }
 
 
-	/**
-	 * Set the pin state
-	 */
+  /**
+   * Set the pin state
+   */
 
-	inline void GpioPinRef::setState(bool state) const {
+  inline void GpioPinRef::setState(bool state) const {
     GPIO_WriteBit(_peripheralAddress,_pin,state ? Bit_SET : Bit_RESET);
   }
 

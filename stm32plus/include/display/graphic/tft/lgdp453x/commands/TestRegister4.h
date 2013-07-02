@@ -10,18 +10,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace TestRegister4
-		{
-			enum
-			{
-				Opcode = 0xA3
-			};
-			inline uint16_t WRPW(uint16_t n){return n;}
-			inline uint16_t RDSM(uint16_t n){return n<<4;}
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace TestRegister4
+    {
+      enum
+      {
+        Opcode = 0xA3
+      };
+      inline uint16_t WRPW(uint16_t n){return n;}
+      inline uint16_t RDSM(uint16_t n){return n<<4;}
+    }
+  }
 }
 
 

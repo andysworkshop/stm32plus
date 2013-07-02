@@ -21,13 +21,13 @@ template<> Observable *ExtiPeripheral<EXTI_Line16>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) PVD_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) PVD_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line16)!=RESET) {
-				ExtiPvd::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)16);
-				EXTI_ClearITPendingBit(EXTI_Line16);
-		}
-	}
+    if(EXTI_GetITStatus(EXTI_Line16)!=RESET) {
+        ExtiPvd::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)16);
+        EXTI_ClearITPendingBit(EXTI_Line16);
+    }
+  }
 }
 
 #endif

@@ -8,5 +8,5 @@
 
 namespace stm32plus {
 
-	ErrorProvider errorProvider;
+  ErrorProvider errorProvider;
 }

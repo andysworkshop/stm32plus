@@ -56,8 +56,8 @@ using namespace stm32plus::display;
  * the F1 and F4.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -65,447 +65,447 @@ using namespace stm32plus::display;
 
 class SSD1963Test {
 
-	protected:
-		typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-		typedef SSD1963_480x272_Landscape_16M<LcdAccessMode> LcdPanel;
+  protected:
+    typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
+    typedef SSD1963_480x272_Landscape_16M<LcdAccessMode> LcdPanel;
 
-		LcdAccessMode *_accessMode;
-		LcdPanel *_gl;
-		Font *_font;
+    LcdAccessMode *_accessMode;
+    LcdPanel *_gl;
+    Font *_font;
 
-	public:
-		void run() {
+  public:
+    void run() {
 
-			// reset is on PE1 and RS (D/CX) is on PD11
+      // reset is on PE1 and RS (D/CX) is on PD11
 
-			GpioE<DefaultDigitalOutputFeature<1> > pe;
-			GpioD<DefaultAlternateFunctionFeature<GPIO_AF_FSMC,11> > pd;
+      GpioE<DefaultDigitalOutputFeature<1> > pe;
+      GpioD<DefaultAlternateFunctionFeature<GPIO_AF_FSMC,11> > pd;
 
-			// set up the FSMC with RS=A16 (PD11)
+      // set up the FSMC with RS=A16 (PD11)
 
-			Fsmc8080LcdTiming fsmcTiming(0,2);
-			_accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
+      Fsmc8080LcdTiming fsmcTiming(0,2);
+      _accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
 
-			// declare a panel
+      // declare a panel
 
-			_gl=new LcdPanel(*_accessMode);
+      _gl=new LcdPanel(*_accessMode);
 
-			// the reset sequence is complete but the SSD1963 is special in that the reset sequence is
-			// done at a slow speed so now we have to speed up the FSMC to get optimum performance
+      // the reset sequence is complete but the SSD1963 is special in that the reset sequence is
+      // done at a slow speed so now we have to speed up the FSMC to get optimum performance
 
-			_accessMode->initialiseTiming(fsmcTiming);
+      _accessMode->initialiseTiming(fsmcTiming);
 
-			// apply gamma settings (zero = no curve selected)
+      // apply gamma settings (zero = no curve selected)
 
-			SSD1963Gamma gamma(0);
-			_gl->applyGamma(gamma);
+      SSD1963Gamma gamma(0);
+      _gl->applyGamma(gamma);
 
-			// clear to black while the lights are out
+      // clear to black while the lights are out
 
-			_gl->setBackground(0);
-			_gl->clearScreen();
+      _gl->setBackground(0);
+      _gl->clearScreen();
 
-			// create the backlight on timer4, channel2 (PD13)
+      // create the backlight on timer4, channel2 (PD13)
 
-			DefaultBacklight backlight;
+      DefaultBacklight backlight;
 
-			// fade up to 100% in 4ms steps
+      // fade up to 100% in 4ms steps
 
-			backlight.fadeTo(100,4);
+      backlight.fadeTo(100,4);
 
-			// create a font
+      // create a font
 
-			_font=new Font_VOLTER__28GOLDFISH_299;
-			*_gl << *_font;
+      _font=new Font_VOLTER__28GOLDFISH_299;
+      *_gl << *_font;
 
-			for(;;) {
-				jpegTest();
-				lzgTest();
-				basicColoursTest();
-				rectTest();
-				textTest();
-				scrollTest();
-				ellipseTest();
-				gradientTest();
-				lineTest();
-				clearTest();
-				sleepTest();
-			}
-		}
+      for(;;) {
+        jpegTest();
+        lzgTest();
+        basicColoursTest();
+        rectTest();
+        textTest();
+        scrollTest();
+        ellipseTest();
+        gradientTest();
+        lineTest();
+        clearTest();
+        sleepTest();
+      }
+    }
 
-		void sleepTest() {
+    void sleepTest() {
 
-			prompt("Sleep test");
+      prompt("Sleep test");
 
-			// go to sleep
+      // go to sleep
 
-			*_gl << Point::Origin << "Sleeping now...";
-			MillisecondTimer::delay(1000);
-			_gl->sleep();
-			MillisecondTimer::delay(3000);
+      *_gl << Point::Origin << "Sleeping now...";
+      MillisecondTimer::delay(1000);
+      _gl->sleep();
+      MillisecondTimer::delay(3000);
 
-			// wake up
+      // wake up
 
-			_gl->wake();
-			_gl->clearScreen();
-			*_gl << Point::Origin << "Woken up again...";
-			MillisecondTimer::delay(3000);
-		}
+      _gl->wake();
+      _gl->clearScreen();
+      *_gl << Point::Origin << "Woken up again...";
+      MillisecondTimer::delay(3000);
+    }
 
-		void jpegTest() {
+    void jpegTest() {
 
-			// only draw if it can fit on screen (it's 480x272)
+      // only draw if it can fit on screen (it's 480x272)
 
-			if(_gl->getHeight()>=272 && _gl->getWidth()>=480) {
+      if(_gl->getHeight()>=272 && _gl->getWidth()>=480) {
 
-				prompt("JPEG bitmap test");
+        prompt("JPEG bitmap test");
 
-				// draw it centered
+        // draw it centered
 
-				LinearBufferInputOutputStream compressedData((uint8_t *)&JpegTest0Pixels,(uint32_t)&JpegTest0PixelsSize);
-				_gl->drawJpeg(Rectangle((_gl->getWidth()-480)/2,(_gl->getHeight()-272)/2,480,272),compressedData);
+        LinearBufferInputOutputStream compressedData((uint8_t *)&JpegTest0Pixels,(uint32_t)&JpegTest0PixelsSize);
+        _gl->drawJpeg(Rectangle((_gl->getWidth()-480)/2,(_gl->getHeight()-272)/2,480,272),compressedData);
 
-				MillisecondTimer::delay(5000);
-			}
-		}
+        MillisecondTimer::delay(5000);
+      }
+    }
 
-		void lzgTest() {
+    void lzgTest() {
 
-			prompt("LZG bitmap test");
+      prompt("LZG bitmap test");
 
-			// declare a DMA instance with a copy-to-fsmc feature
+      // declare a DMA instance with a copy-to-fsmc feature
 
 #if defined(STM32PLUS_F1)
-			Dma1Channel6<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
+      Dma1Channel6<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
 #elif defined(STM32PLUS_F4)
-			Dma2Channel1Stream2<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
+      Dma2Channel1Stream2<DmaFsmcLcdMemoryCopyFeature<LcdAccessMode> > dma;
 #endif
 
-			drawCompressedBitmap((uint8_t *)&BulbPixels,(uint32_t)&BulbPixelsSize,89,148,false,dma);
-			drawCompressedBitmap((uint8_t *)&AudioPixels,(uint32_t)&AudioPixelsSize,150,161,true,dma);
-			drawCompressedBitmap((uint8_t *)&FlagPixels,(uint32_t)&FlagPixelsSize,144,220,false,dma);
-			drawCompressedBitmap((uint8_t *)&DocPixels,(uint32_t)&DocPixelsSize,200,240,true,dma);
-			drawCompressedBitmap((uint8_t *)&GlobePixels,(uint32_t)&GlobePixelsSize,193,219,false,dma);
-		}
+      drawCompressedBitmap((uint8_t *)&BulbPixels,(uint32_t)&BulbPixelsSize,89,148,false,dma);
+      drawCompressedBitmap((uint8_t *)&AudioPixels,(uint32_t)&AudioPixelsSize,150,161,true,dma);
+      drawCompressedBitmap((uint8_t *)&FlagPixels,(uint32_t)&FlagPixelsSize,144,220,false,dma);
+      drawCompressedBitmap((uint8_t *)&DocPixels,(uint32_t)&DocPixelsSize,200,240,true,dma);
+      drawCompressedBitmap((uint8_t *)&GlobePixels,(uint32_t)&GlobePixelsSize,193,219,false,dma);
+    }
 
 
-		void drawCompressedBitmap(uint8_t *pixels,uint32_t size,uint16_t width,uint16_t height,bool useDma,DmaFsmcLcdMemoryCopyFeature<LcdAccessMode>& dma) {
+    void drawCompressedBitmap(uint8_t *pixels,uint32_t size,uint16_t width,uint16_t height,bool useDma,DmaFsmcLcdMemoryCopyFeature<LcdAccessMode>& dma) {
 
-			_gl->setBackground(ColourNames::WHITE);
-			_gl->clearScreen();
+      _gl->setBackground(ColourNames::WHITE);
+      _gl->clearScreen();
 
-			LinearBufferInputOutputStream compressedData(pixels,size);
-			LzgDecompressionStream decompressor(compressedData,size);
+      LinearBufferInputOutputStream compressedData(pixels,size);
+      LzgDecompressionStream decompressor(compressedData,size);
 
-			if(useDma) {
-				_gl->drawBitmap(
-						Rectangle(((_gl->getXmax()+1)-width)/2,
-								((_gl->getYmax()+1)-height)/2,
-								width,height),
-								decompressor,
-								dma);
-			}
-			else {
-				_gl->drawBitmap(
-						Rectangle(((_gl->getXmax()+1)-width)/2,
-								((_gl->getYmax()+1)-height)/2,
-								width,height),
-								decompressor);
-			}
+      if(useDma) {
+        _gl->drawBitmap(
+            Rectangle(((_gl->getXmax()+1)-width)/2,
+                ((_gl->getYmax()+1)-height)/2,
+                width,height),
+                decompressor,
+                dma);
+      }
+      else {
+        _gl->drawBitmap(
+            Rectangle(((_gl->getXmax()+1)-width)/2,
+                ((_gl->getYmax()+1)-height)/2,
+                width,height),
+                decompressor);
+      }
 
-			MillisecondTimer::delay(3000);
-		}
+      MillisecondTimer::delay(3000);
+    }
 
 
-		void textTest() {
+    void textTest() {
 
-			int i;
-			const char *str="The quick brown fox";
-			Size size;
-			Point p;
-			uint32_t start,before,elapsed,chars;
+      int i;
+      const char *str="The quick brown fox";
+      Size size;
+      Point p;
+      uint32_t start,before,elapsed,chars;
 
-			prompt("Stream operators test");
+      prompt("Stream operators test");
 
-			*_gl << Point::Origin << "Let's see PI:";
+      *_gl << Point::Origin << "Let's see PI:";
 
-			for(i=0;i<=7;i++)
-				*_gl << Point(0,(1+i)*_font->getHeight()) << DoublePrecision(3.1415926535,i);
+      for(i=0;i<=7;i++)
+        *_gl << Point(0,(1+i)*_font->getHeight()) << DoublePrecision(3.1415926535,i);
 
-			MillisecondTimer::delay(5000);
+      MillisecondTimer::delay(5000);
 
-			prompt("Opaque text test");
+      prompt("Opaque text test");
 
-			size=_gl->measureString(*_font,str);
+      size=_gl->measureString(*_font,str);
 
-			before=MillisecondTimer::millis();
-			chars=0;
+      before=MillisecondTimer::millis();
+      chars=0;
 
-			for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
+      for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
 
-				p.X=rand() % (_gl->getXmax()-size.Width);
-				p.Y=rand() % (_gl->getYmax()-size.Height);
+        p.X=rand() % (_gl->getXmax()-size.Width);
+        p.Y=rand() % (_gl->getYmax()-size.Height);
 
-				_gl->setForeground(rand());
-				_gl->writeString(p,*_font,str);
+        _gl->setForeground(rand());
+        _gl->writeString(p,*_font,str);
 
-				chars+=19;
-			}
+        chars+=19;
+      }
 
-			elapsed=MillisecondTimer::millis()-before;
+      elapsed=MillisecondTimer::millis()-before;
 
-			_gl->clearScreen();
-			_gl->setForeground(ColourNames::WHITE);
-			*_gl << Point::Origin << (chars*1000/elapsed)  << " characters/sec";
+      _gl->clearScreen();
+      _gl->setForeground(ColourNames::WHITE);
+      *_gl << Point::Origin << (chars*1000/elapsed)  << " characters/sec";
 
-			MillisecondTimer::delay(3000);
-		}
+      MillisecondTimer::delay(3000);
+    }
 
 
-		void scrollTest() {
+    void scrollTest() {
 
-			int32_t i,j,numRows;
-			Point p;
+      int32_t i,j,numRows;
+      Point p;
 
-			prompt("Hardware scrolling test");
+      prompt("Hardware scrolling test");
 
-			_gl->setForeground(0xffffff);
-			_gl->setBackground(0);
-			_gl->clearScreen();
+      _gl->setForeground(0xffffff);
+      _gl->setBackground(0);
+      _gl->clearScreen();
 
-			numRows=((_gl->getYmax()+1)/_font->getHeight())/3;
+      numRows=((_gl->getYmax()+1)/_font->getHeight())/3;
 
-			p.X=0;
+      p.X=0;
 
-			for(i=0;i<numRows;i++) {
+      for(i=0;i<numRows;i++) {
 
-				p.Y=(numRows+i)*_font->getHeight();
-				*_gl << p << "Test row " << i;
-			}
+        p.Y=(numRows+i)*_font->getHeight();
+        *_gl << p << "Test row " << i;
+      }
 
-			for(j=0;j<15;j++) {
+      for(j=0;j<15;j++) {
 
-				numRows=(_gl->getYmax()+1)/4;
+        numRows=(_gl->getYmax()+1)/4;
 
-				for(i=0;i<numRows;i++) {
-					_gl->setScrollPosition(i);
-					MillisecondTimer::delay(5);
-				}
+        for(i=0;i<numRows;i++) {
+          _gl->setScrollPosition(i);
+          MillisecondTimer::delay(5);
+        }
 
-				for(i=0;i<numRows;i++) {
-					_gl->setScrollPosition(numRows-i);
-					MillisecondTimer::delay(5);
-				}
-			}
+        for(i=0;i<numRows;i++) {
+          _gl->setScrollPosition(numRows-i);
+          MillisecondTimer::delay(5);
+        }
+      }
 
-			_gl->setScrollPosition(0);
-		}
+      _gl->setScrollPosition(0);
+    }
 
 
-		void clearTest() {
+    void clearTest() {
 
-			uint32_t start;
+      uint32_t start;
 
-			prompt("Clear screen test");
+      prompt("Clear screen test");
 
-			for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
-				_gl->setBackground(rand());
-				_gl->clearScreen();
-			}
-		}
+      for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
+        _gl->setBackground(rand());
+        _gl->clearScreen();
+      }
+    }
 
 
-		void basicColoursTest() {
+    void basicColoursTest() {
 
-			uint16_t i;
+      uint16_t i;
 
-			static const uint32_t colours[7]={
-			  ColourNames::RED,
-			  ColourNames::GREEN,
-			  ColourNames::BLUE,
-			  ColourNames::CYAN,
-			  ColourNames::MAGENTA,
-			  ColourNames::YELLOW,
-			  ColourNames::BLACK,
-			};
+      static const uint32_t colours[7]={
+        ColourNames::RED,
+        ColourNames::GREEN,
+        ColourNames::BLUE,
+        ColourNames::CYAN,
+        ColourNames::MAGENTA,
+        ColourNames::YELLOW,
+        ColourNames::BLACK,
+      };
 
-			prompt("Basic colours test");
+      prompt("Basic colours test");
 
-			for(i=0;i<sizeof(colours)/sizeof(colours[0]);i++) {
-				_gl->setBackground(colours[i]);
-				_gl->clearScreen();
+      for(i=0;i<sizeof(colours)/sizeof(colours[0]);i++) {
+        _gl->setBackground(colours[i]);
+        _gl->clearScreen();
 
-				MillisecondTimer::delay(500);
-			}
-		}
+        MillisecondTimer::delay(500);
+      }
+    }
 
 
-		void lineTest() {
+    void lineTest() {
 
-			Point p1,p2;
-			uint32_t start;
+      Point p1,p2;
+      uint32_t start;
 
-			prompt("Line test");
+      prompt("Line test");
 
-			for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
-				p1.X=rand() % _gl->getXmax();
-				p1.Y=rand() % _gl->getYmax();
-				p2.X=rand() % _gl->getXmax();
-				p2.Y=rand() % _gl->getYmax();
+      for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
+        p1.X=rand() % _gl->getXmax();
+        p1.Y=rand() % _gl->getYmax();
+        p2.X=rand() % _gl->getXmax();
+        p2.Y=rand() % _gl->getYmax();
 
-				_gl->setForeground(rand());
-				_gl->drawLine(p1,p2);
-			}
-		}
+        _gl->setForeground(rand());
+        _gl->drawLine(p1,p2);
+      }
+    }
 
-		void rectTest() {
+    void rectTest() {
 
-			Rectangle rc;
-			uint32_t start;
+      Rectangle rc;
+      uint32_t start;
 
-			prompt("Rectangle test");
+      prompt("Rectangle test");
 
-			for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
+      for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
 
-				rc.X=(rand() % _gl->getXmax()/2);
-				rc.Y=(rand() % _gl->getXmax()/2);
-				rc.Width=rand() % (_gl->getXmax()-rc.X);
-				rc.Height=rand() % (_gl->getYmax()-rc.Y);
+        rc.X=(rand() % _gl->getXmax()/2);
+        rc.Y=(rand() % _gl->getXmax()/2);
+        rc.Width=rand() % (_gl->getXmax()-rc.X);
+        rc.Height=rand() % (_gl->getYmax()-rc.Y);
 
-				if(rc.Width>0 && rc.Height>0) {
-					_gl->setForeground(rand());
-					_gl->fillRectangle(rc);
-				}
-			}
+        if(rc.Width>0 && rc.Height>0) {
+          _gl->setForeground(rand());
+          _gl->fillRectangle(rc);
+        }
+      }
 
-			_gl->clearScreen();
+      _gl->clearScreen();
 
-			for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
+      for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
 
-				rc.X=(rand() % _gl->getXmax()/2);
-				rc.Y=(rand() % _gl->getXmax()/2);
-				rc.Width=rand() % (_gl->getXmax()-rc.X);
-				rc.Height=rand() % (_gl->getYmax()-rc.Y);
+        rc.X=(rand() % _gl->getXmax()/2);
+        rc.Y=(rand() % _gl->getXmax()/2);
+        rc.Width=rand() % (_gl->getXmax()-rc.X);
+        rc.Height=rand() % (_gl->getYmax()-rc.Y);
 
-				_gl->setForeground(rand());
-				_gl->drawRectangle(rc);
-			}
-		}
+        _gl->setForeground(rand());
+        _gl->drawRectangle(rc);
+      }
+    }
 
 
-		void ellipseTest() {
+    void ellipseTest() {
 
-			int16_t i;
-			Point p;
-			Size s;
-			uint32_t start;
+      int16_t i;
+      Point p;
+      Size s;
+      uint32_t start;
 
-			prompt("Ellipse test");
-			_gl->setBackground(0);
+      prompt("Ellipse test");
+      _gl->setBackground(0);
 
-			for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
+      for(start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;) {
 
-				p.X=_gl->getXmax()/4+(rand() % (_gl->getXmax()/2));
-				p.Y=_gl->getYmax()/4+(rand() % (_gl->getYmax()/2));
+        p.X=_gl->getXmax()/4+(rand() % (_gl->getXmax()/2));
+        p.Y=_gl->getYmax()/4+(rand() % (_gl->getYmax()/2));
 
-				if(p.X<_gl->getXmax()/2)
-					s.Width=rand() % p.X;
-				else
-					s.Width=rand() % (_gl->getXmax()-p.X);
+        if(p.X<_gl->getXmax()/2)
+          s.Width=rand() % p.X;
+        else
+          s.Width=rand() % (_gl->getXmax()-p.X);
 
-				if(p.Y<_gl->getYmax()/2)
-					s.Height=rand() % p.Y;
-				else
-					s.Height=rand() % (_gl->getYmax()-p.Y);
+        if(p.Y<_gl->getYmax()/2)
+          s.Height=rand() % p.Y;
+        else
+          s.Height=rand() % (_gl->getYmax()-p.Y);
 
-				_gl->setForeground(rand());
-				_gl->fillEllipse(p,s);
-			}
+        _gl->setForeground(rand());
+        _gl->fillEllipse(p,s);
+      }
 
-			_gl->clearScreen();
+      _gl->clearScreen();
 
-			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
+      for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
 
-				p.X=_gl->getXmax()/4+(rand() % (_gl->getXmax()/2));
-				p.Y=_gl->getYmax()/4+(rand() % (_gl->getYmax()/2));
+        p.X=_gl->getXmax()/4+(rand() % (_gl->getXmax()/2));
+        p.Y=_gl->getYmax()/4+(rand() % (_gl->getYmax()/2));
 
-				if(p.X<_gl->getXmax()/2)
-					s.Width=rand() % p.X;
-				else
-					s.Width=rand() % (_gl->getXmax()-p.X);
+        if(p.X<_gl->getXmax()/2)
+          s.Width=rand() % p.X;
+        else
+          s.Width=rand() % (_gl->getXmax()-p.X);
 
-				if(p.Y<_gl->getYmax()/2)
-					s.Height=rand() % p.Y;
-				else
-					s.Height=rand() % (_gl->getYmax()-p.Y);
+        if(p.Y<_gl->getYmax()/2)
+          s.Height=rand() % p.Y;
+        else
+          s.Height=rand() % (_gl->getYmax()-p.Y);
 
-				if(s.Height>0 && s.Width>0 && p.X+s.Width<_gl->getXmax() && p.Y+s.Height<_gl->getYmax()) {
-					_gl->setForeground(rand());
-					_gl->drawEllipse(p,s);
-				}
+        if(s.Height>0 && s.Width>0 && p.X+s.Width<_gl->getXmax() && p.Y+s.Height<_gl->getYmax()) {
+          _gl->setForeground(rand());
+          _gl->drawEllipse(p,s);
+        }
 
-				if(i % 1000==0)
-					_gl->clearScreen();
-			}
-		}
+        if(i % 1000==0)
+          _gl->clearScreen();
+      }
+    }
 
-		void doGradientFills(Direction dir) {
+    void doGradientFills(Direction dir) {
 
-			Rectangle rc;
-			uint16_t i;
-			static uint32_t colours[7]={
-				ColourNames::RED,
-				ColourNames::GREEN,
-				ColourNames::BLUE,
-				ColourNames::CYAN,
-				ColourNames::MAGENTA,
-				ColourNames::YELLOW,
-				ColourNames::WHITE,
-			};
+      Rectangle rc;
+      uint16_t i;
+      static uint32_t colours[7]={
+        ColourNames::RED,
+        ColourNames::GREEN,
+        ColourNames::BLUE,
+        ColourNames::CYAN,
+        ColourNames::MAGENTA,
+        ColourNames::YELLOW,
+        ColourNames::WHITE,
+      };
 
 
-			rc.Width=_gl->getXmax()+1;
-			rc.Height=(_gl->getYmax()+1)/2;
+      rc.Width=_gl->getXmax()+1;
+      rc.Height=(_gl->getYmax()+1)/2;
 
-			for(i=0;i<sizeof(colours)/sizeof(colours[0]);i++) {
+      for(i=0;i<sizeof(colours)/sizeof(colours[0]);i++) {
 
-				rc.X=0;
-				rc.Y=0;
+        rc.X=0;
+        rc.Y=0;
 
-				_gl->gradientFillRectangle(rc,dir,ColourNames::BLACK,colours[i]);
-				rc.Y=rc.Height;
-				_gl->gradientFillRectangle(rc,dir,colours[i],ColourNames::BLACK);
+        _gl->gradientFillRectangle(rc,dir,ColourNames::BLACK,colours[i]);
+        rc.Y=rc.Height;
+        _gl->gradientFillRectangle(rc,dir,colours[i],ColourNames::BLACK);
 
-				MillisecondTimer::delay(1000);
-			}
-		}
+        MillisecondTimer::delay(1000);
+      }
+    }
 
-		void gradientTest() {
+    void gradientTest() {
 
-			prompt("Gradient test");
+      prompt("Gradient test");
 
-			doGradientFills(HORIZONTAL);
-			doGradientFills(VERTICAL);
-		}
+      doGradientFills(HORIZONTAL);
+      doGradientFills(VERTICAL);
+    }
 
-		void prompt(const char *prompt) {
+    void prompt(const char *prompt) {
 
-			_gl->setBackground(ColourNames::BLACK);
-			_gl->clearScreen();
+      _gl->setBackground(ColourNames::BLACK);
+      _gl->clearScreen();
 
-			_gl->setForeground(ColourNames::WHITE);
-			*_gl << Point(0,0) << prompt;
+      _gl->setForeground(ColourNames::WHITE);
+      *_gl << Point(0,0) << prompt;
 
-			MillisecondTimer::delay(2000);
-			_gl->clearScreen();
-		}
+      MillisecondTimer::delay(2000);
+      _gl->clearScreen();
+    }
 
 
-		void stopTimer(const char *prompt,uint32_t elapsed) {
+    void stopTimer(const char *prompt,uint32_t elapsed) {
 
-			_gl->setForeground(0xffffff);
-			*_gl << Point(0,0) << (int32_t)elapsed << "ms " << prompt;
-		}
+      _gl->setForeground(0xffffff);
+      *_gl << Point(0,0) << (int32_t)elapsed << "ms " << prompt;
+    }
 };
 
 
@@ -515,12 +515,12 @@ class SSD1963Test {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	SSD1963Test test;
-	test.run();
+  SSD1963Test test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

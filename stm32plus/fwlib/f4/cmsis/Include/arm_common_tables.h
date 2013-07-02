@@ -3,12 +3,12 @@
 * Copyright (C) 2010 ARM Limited. All rights reserved. 
 * 
 * $Date:        11. November 2010  
-* $Revision: 	V1.0.2  
+* $Revision:  V1.0.2  
 * 
-* Project: 	    CMSIS DSP Library 
-* Title:	    arm_common_tables.h 
+* Project:      CMSIS DSP Library 
+* Title:      arm_common_tables.h 
 * 
-* Description:	This file has extern declaration for common tables like Bitreverse, reciprocal etc which are used across different functions 
+* Description:  This file has extern declaration for common tables like Bitreverse, reciprocal etc which are used across different functions 
 * 
 * Target Processor: Cortex-M4/Cortex-M3
 *  

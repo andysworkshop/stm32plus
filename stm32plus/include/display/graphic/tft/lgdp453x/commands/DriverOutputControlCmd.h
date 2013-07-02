@@ -10,19 +10,19 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace DriverOutputControlCmd
-		{
-			enum
-			{
-				Opcode = 1,
+  namespace lgdp453x
+  {
+    namespace DriverOutputControlCmd
+    {
+      enum
+      {
+        Opcode = 1,
 
-				SS = 1<<8,
-				SM = 1<<10
-			};
-		}
-	}
+        SS = 1<<8,
+        SM = 1<<10
+      };
+    }
+  }
 }
 
 

@@ -23,8 +23,8 @@ using namespace stm32plus;
  * how it looks on the STM32F103ZET6.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -33,67 +33,67 @@ using namespace stm32plus;
 
 class DacTriangleTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Set up Timer6 with an internal clock source and configured to be
-			 * in master mode with update as the trigger
-			 */
+      /*
+       * Set up Timer6 with an internal clock source and configured to be
+       * in master mode with update as the trigger
+       */
 
-			Timer6<Timer6InternalClockFeature,TimerUpdateMasterFeature> timer;
+      Timer6<Timer6InternalClockFeature,TimerUpdateMasterFeature> timer;
 
-			/*
-			 * Configure the timer with a reload value of 255 and no prescaler.
-			 */
+      /*
+       * Configure the timer with a reload value of 255 and no prescaler.
+       */
 
-			timer.initialiseTimeBase(255,0,TIM_CKD_DIV1,TIM_CounterMode_Up);
+      timer.initialiseTimeBase(255,0,TIM_CKD_DIV1,TIM_CounterMode_Up);
 
-			/*
-			 * Declare a DAC type with 12 bit right-aligned data.
-			 */
+      /*
+       * Declare a DAC type with 12 bit right-aligned data.
+       */
 
-			typedef Dac1<DacChannel112BitRightAlignmentFeature> MyDac;
+      typedef Dac1<DacChannel112BitRightAlignmentFeature> MyDac;
 
-			/*
-			 * Create the DAC parameters. The trigger for conversion will be timer 6's
-			 * trigger output and the wave generation mode is triangular.
-			 */
+      /*
+       * Create the DAC parameters. The trigger for conversion will be timer 6's
+       * trigger output and the wave generation mode is triangular.
+       */
 
-			MyDac::Parameters params;
-			params.dac_trigger=DAC_Trigger_T6_TRGO;
-			params.dac_waveGeneration=DAC_WaveGeneration_Triangle;
-			params.dac_lfsrMaskOrTriangleAmplitude=DAC_TriangleAmplitude_1023;
+      MyDac::Parameters params;
+      params.dac_trigger=DAC_Trigger_T6_TRGO;
+      params.dac_waveGeneration=DAC_WaveGeneration_Triangle;
+      params.dac_lfsrMaskOrTriangleAmplitude=DAC_TriangleAmplitude_1023;
 
-			/*
-			 * Declare the DAC object
-			 */
+      /*
+       * Declare the DAC object
+       */
 
-			MyDac dac(params);
+      MyDac dac(params);
 
-			/*
-			 * Set a base level of Vref/16. 4096 is the full 12 bit conversion value and that equals
-			 * an output of Vref. Therefore 4096/16 = 256 for a base level of Vref/16. The triangle
-			 * wave is added to this base value.
-			 */
+      /*
+       * Set a base level of Vref/16. 4096 is the full 12 bit conversion value and that equals
+       * an output of Vref. Therefore 4096/16 = 256 for a base level of Vref/16. The triangle
+       * wave is added to this base value.
+       */
 
-			dac.write(256);
+      dac.write(256);
 
-			/*
-			 * Enable the trigger output and then Start the timer. Each time the update event is
-			 * generated a DAC conversion is triggered.
-			 */
+      /*
+       * Enable the trigger output and then Start the timer. Each time the update event is
+       * generated a DAC conversion is triggered.
+       */
 
-			timer.enableMasterFeature();
-			timer.enablePeripheral();
+      timer.enableMasterFeature();
+      timer.enablePeripheral();
 
-			/*
-			 * Finished. It's all running in the background now.
-			 */
+      /*
+       * Finished. It's all running in the background now.
+       */
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -103,9 +103,9 @@ class DacTriangleTest {
 
 int main() {
 
-	DacTriangleTest test;
-	test.run();
+  DacTriangleTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

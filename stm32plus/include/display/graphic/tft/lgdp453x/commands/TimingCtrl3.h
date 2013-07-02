@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace TimingCtrl3
-		{
-			enum
-			{
-				Opcode = 0xef
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace TimingCtrl3
+    {
+      enum
+      {
+        Opcode = 0xef
+      };
+    }
+  }
 }
 
 

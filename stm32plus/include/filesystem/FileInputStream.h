@@ -9,27 +9,27 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Implementation of an input stream for files
-	 */
+  /**
+   * @brief Implementation of an input stream for files
+   */
 
-	class FileInputStream : public InputStream {
-		protected:
-			File& _file;
+  class FileInputStream : public InputStream {
+    protected:
+      File& _file;
 
-		public:
-			FileInputStream(File& f_);
-			virtual ~FileInputStream() {}
+    public:
+      FileInputStream(File& f_);
+      virtual ~FileInputStream() {}
 
-		public:
+    public:
 
-			// overrides from InputStream
+      // overrides from InputStream
 
-			virtual int16_t read() override;
-			virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
-			virtual bool close() override;
-			virtual bool skip(uint32_t howMuch) override;
-			virtual bool available() override;
-			virtual bool reset() override;
-	};
+      virtual int16_t read() override;
+      virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
+      virtual bool close() override;
+      virtual bool skip(uint32_t howMuch) override;
+      virtual bool available() override;
+      virtual bool reset() override;
+  };
 }

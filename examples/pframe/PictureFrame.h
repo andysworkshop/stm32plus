@@ -14,22 +14,22 @@
 
 class PictureFrame {
 
-	protected:
-		LcdManager *_lcdManager;
-		FileSystemManager *_fsManager;
-		TouchManager *_touchManager;
-		BitmapManager *_bitmapManager;
-		ImageManager *_imageManager;
-		ThumbManager *_thumbManager;
-		uint32_t _autoScrollMillis;
-		bool _autoScrollEnabled;
+  protected:
+    LcdManager *_lcdManager;
+    FileSystemManager *_fsManager;
+    TouchManager *_touchManager;
+    BitmapManager *_bitmapManager;
+    ImageManager *_imageManager;
+    ThumbManager *_thumbManager;
+    uint32_t _autoScrollMillis;
+    bool _autoScrollEnabled;
 
-	protected:
-		bool initialise();
-		void processEvents();
-		bool processClick();
+  protected:
+    bool initialise();
+    void processEvents();
+    bool processClick();
 
-	public:
-		void run();
+  public:
+    void run();
 };
 

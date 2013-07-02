@@ -39,8 +39,8 @@ using namespace stm32plus;
  * output in this demo code.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -49,99 +49,99 @@ using namespace stm32plus;
 
 class TimerMasterSlaveTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Enable PF6 for output so we can see the output on the LED that's connected there.
-			 */
+      /*
+       * Enable PF6 for output so we can see the output on the LED that's connected there.
+       */
 
-			GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioF<DefaultDigitalOutputFeature<6> > pf;
 
-			/*
-			 * Create an instance of Timer2 (master) running off the internal clock with
-			 * channel 1 and master features.
-			 */
+      /*
+       * Create an instance of Timer2 (master) running off the internal clock with
+       * channel 1 and master features.
+       */
 
-			Timer2<
-				Timer2InternalClockFeature,					// the timer bus is APB1
-				TimerChannel1Feature,								// we're going to use channel 1
-				TimerOutputCompare1MasterFeature		// we're the master timer using OC1 as the trigger
-			> masterTimer;
+      Timer2<
+        Timer2InternalClockFeature,         // the timer bus is APB1
+        TimerChannel1Feature,               // we're going to use channel 1
+        TimerOutputCompare1MasterFeature    // we're the master timer using OC1 as the trigger
+      > masterTimer;
 
-			/*
-			 * Set the frequency of Timer2 to 2000Hz with a reload value
-			 * of 8000.
-			 */
+      /*
+       * Set the frequency of Timer2 to 2000Hz with a reload value
+       * of 8000.
+       */
 
-			masterTimer.setTimeBaseByFrequency(2000,7999);
+      masterTimer.setTimeBaseByFrequency(2000,7999);
 
-			/*
-			 * Initialise channel 1's comparator for use as a PWM output with an
-			 * initial duty cycle of 25%
-			 */
+      /*
+       * Initialise channel 1's comparator for use as a PWM output with an
+       * initial duty cycle of 25%
+       */
 
-			masterTimer.initCompareForPwmOutput(25);
+      masterTimer.initCompareForPwmOutput(25);
 
-			/*
-			 * Create an instance of Timer3 (slave) running off the internal clock
-			 * with channel 1 and unremapped GPIO output features.
-			 */
+      /*
+       * Create an instance of Timer3 (slave) running off the internal clock
+       * with channel 1 and unremapped GPIO output features.
+       */
 
-			Timer3<
-				Timer3InternalClockFeature,				// the timer bus is APB1
-				TimerChannel1Feature,							// we're going to use channel 1
-				Timer2MasterTimer3SlaveFeature<		// timer3 is a slave to timer2 (ITR1)
-					TIM_SlaveMode_Gated							// gated mode - the slave counter goes on and off with the trigger
-				>,
-				Timer3GpioFeature<								// we want to output something to GPIO
-					TIMER_REMAP_NONE,								// the GPIO output will not be remapped
-					TIM3_CH1_OUT										// we will output channel 1 to GPIO
-				>
-			> slaveTimer;
+      Timer3<
+        Timer3InternalClockFeature,       // the timer bus is APB1
+        TimerChannel1Feature,             // we're going to use channel 1
+        Timer2MasterTimer3SlaveFeature<   // timer3 is a slave to timer2 (ITR1)
+          TIM_SlaveMode_Gated             // gated mode - the slave counter goes on and off with the trigger
+        >,
+        Timer3GpioFeature<                // we want to output something to GPIO
+          TIMER_REMAP_NONE,               // the GPIO output will not be remapped
+          TIM3_CH1_OUT                    // we will output channel 1 to GPIO
+        >
+      > slaveTimer;
 
-			/*
-			 * Set an up-timer up to tick at 2000Hz with an auto-reload value of 200
-			 * The timer will count from 0 to 199 inclusive then reset back to 0.
-			 * It will do this 10 times per second
-			 *
-			 * Note that the lowest frequency you can set is 1098 for a 72Mhz timer clock source.
-			 * This is because the maximum prescaler value is 65536 (72Mhz/65536 = 1098Hz).
-			 */
+      /*
+       * Set an up-timer up to tick at 2000Hz with an auto-reload value of 200
+       * The timer will count from 0 to 199 inclusive then reset back to 0.
+       * It will do this 10 times per second
+       *
+       * Note that the lowest frequency you can set is 1098 for a 72Mhz timer clock source.
+       * This is because the maximum prescaler value is 65536 (72Mhz/65536 = 1098Hz).
+       */
 
-			slaveTimer.setTimeBaseByFrequency(2000,199);
+      slaveTimer.setTimeBaseByFrequency(2000,199);
 
-			/*
-			 * Initialise the channel 1 output compare value to 2000 with the default
-			 * action of toggle.
-			 */
+      /*
+       * Initialise the channel 1 output compare value to 2000 with the default
+       * action of toggle.
+       */
 
-			slaveTimer.initCompare(199);
+      slaveTimer.initCompare(199);
 
-			/*
-			 * Enable master feature and switch the timer on. Enabling of master feature must happen
-			 * after the rest of the timer has been set up (above)
-			 */
+      /*
+       * Enable master feature and switch the timer on. Enabling of master feature must happen
+       * after the rest of the timer has been set up (above)
+       */
 
-			masterTimer.enableMasterFeature();
-			masterTimer.enablePeripheral();
+      masterTimer.enableMasterFeature();
+      masterTimer.enablePeripheral();
 
-			/*
-			 * Enable slave feature and switch the timer on. Enabling of slave feature must happen
-			 * after the rest of the timer has been set up (above)
-			 */
+      /*
+       * Enable slave feature and switch the timer on. Enabling of slave feature must happen
+       * after the rest of the timer has been set up (above)
+       */
 
-			slaveTimer.enableSlaveFeature();
-			slaveTimer.enablePeripheral();
+      slaveTimer.enableSlaveFeature();
+      slaveTimer.enablePeripheral();
 
-			/*
-			 * It's all running automatically now. The on/off duration of the flashing can be controlled
-			 * using the duty cycle of timer2.
-			 */
+      /*
+       * It's all running automatically now. The on/off duration of the flashing can be controlled
+       * using the duty cycle of timer2.
+       */
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -151,9 +151,9 @@ class TimerMasterSlaveTest {
 
 int main() {
 
-	TimerMasterSlaveTest test;
-	test.run();
+  TimerMasterSlaveTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -14,10 +14,10 @@
  */
 
 namespace stm32plus {
-	namespace StringUtil {
+  namespace StringUtil {
 
-		char* itoa(int value,char* result,int base);
-		uint32_t modp_uitoa10(uint32_t value,char *str);
-		uint16_t modp_dtoa(double value,int8_t prec,char *str);
-	}
+    char* itoa(int value,char* result,int base);
+    uint32_t modp_uitoa10(uint32_t value,char *str);
+    uint16_t modp_dtoa(double value,int8_t prec,char *str);
+  }
 }

@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace ReadMemoryStartCmd
-		{
-			enum
-			{
-				Opcode = 0x2E
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace ReadMemoryStartCmd
+    {
+      enum
+      {
+        Opcode = 0x2E
+      };
+    }
+  }
 }
 
 

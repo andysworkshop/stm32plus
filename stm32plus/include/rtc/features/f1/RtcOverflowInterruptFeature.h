@@ -31,8 +31,8 @@ namespace stm32plus {
                                       public Observable {
 
     public:
-  		static Observable *_observableInstance;
-  		void (*_irqRef)();
+      static Observable *_observableInstance;
+      void (*_irqRef)();
 
     public:
       RtcOverflowInterruptFeature(RtcBase& rtc);
@@ -50,8 +50,8 @@ namespace stm32plus {
   inline RtcOverflowInterruptFeature::RtcOverflowInterruptFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
-  	_observableInstance=this;
-  	_irqRef=RTC_IRQHandler;
+    _observableInstance=this;
+    _irqRef=RTC_IRQHandler;
 
     Nvic::configureIrq(RTC_IRQn);
   }

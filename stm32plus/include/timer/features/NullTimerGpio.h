@@ -8,11 +8,11 @@
 
 namespace stm32plus {
 
-	/**
-	 * Do-nothing class used as dummy template parameter
-	 */
+  /**
+   * Do-nothing class used as dummy template parameter
+   */
 
-	struct NullTimerGpio {
+  struct NullTimerGpio {
     static void initialise(TimerGpioRemapLevel) {}
   };
 }

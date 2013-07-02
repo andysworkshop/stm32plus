@@ -20,9 +20,9 @@ namespace stm32plus {
 
     public:
 
-  		/**
-			 * Helper typedef to get at this type
-			 */
+      /**
+       * Helper typedef to get at this type
+       */
 
       typedef Timer7<Features...> TimerType;
 

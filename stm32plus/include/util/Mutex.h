@@ -10,19 +10,19 @@
 namespace stm32plus {
 
 
-	/**
-	 * Mutex class using the ARM primitive instructions
-	 */
+  /**
+   * Mutex class using the ARM primitive instructions
+   */
 
-	class Mutex {
+  class Mutex {
 
-		protected:
-			volatile uint8_t _flag;
+    protected:
+      volatile uint8_t _flag;
 
-		public:
-			Mutex();
+    public:
+      Mutex();
 
-			bool claim(uint32_t millisToWait);
-			void release();
-	};
+      bool claim(uint32_t millisToWait);
+      void release();
+  };
 }

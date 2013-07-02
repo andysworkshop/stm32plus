@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PartialImage1RAMStartAddress
-		{
-			enum
-			{
-				Opcode = 0x81
-			};
+  namespace ili9325
+  {
+    namespace PartialImage1RAMStartAddress
+    {
+      enum
+      {
+        Opcode = 0x81
+      };
 
-			inline uint16_t STARTADDRESS(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t STARTADDRESS(uint16_t n) { return n; }
+    }
+  }
 }
 
 

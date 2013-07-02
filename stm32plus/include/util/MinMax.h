@@ -11,38 +11,38 @@ namespace stm32plus {
 
 
 
-	/**
-	 * Max implementation with templates
-	 * @param a
-	 * @param b
-	 * @return The greater of a,b
-	 */
+  /**
+   * Max implementation with templates
+   * @param a
+   * @param b
+   * @return The greater of a,b
+   */
 
-	template<typename T>
-	inline const T& Max(const T& a,const T& b) {
-		return (a>b) ? a : b;
-	}
+  template<typename T>
+  inline const T& Max(const T& a,const T& b) {
+    return (a>b) ? a : b;
+  }
 
-	/**
-	 * Min implementation with templates
-	 * @param a
-	 * @param b
-	 * @return The lesser of a,b
-	 */
+  /**
+   * Min implementation with templates
+   * @param a
+   * @param b
+   * @return The lesser of a,b
+   */
 
-	template<typename T>
-	inline const T& Min(const T& a,const T& b) {
-		return (a<b) ? a : b;
-	}
+  template<typename T>
+  inline const T& Min(const T& a,const T& b) {
+    return (a<b) ? a : b;
+  }
 
-	/**
-	 * Abs implementation with templates
-	 * @param a negative or positive value
-	 * @return A positive version of the parameter
-	 */
+  /**
+   * Abs implementation with templates
+   * @param a negative or positive value
+   * @return A positive version of the parameter
+   */
 
-	template<typename T>
-	inline const T Abs(const T a) {
-		return a<0 ? -a : a;
-	}
+  template<typename T>
+  inline const T Abs(const T a) {
+    return a<0 ? -a : a;
+  }
 }

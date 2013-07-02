@@ -7,11 +7,11 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace SetScrollStartCmd {
-			enum {
-				OpcodeHigh=0x14, OpcodeLow=0x15
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace SetScrollStartCmd {
+      enum {
+        OpcodeHigh=0x14, OpcodeLow=0x15
+      };
+    }
+  }
 }

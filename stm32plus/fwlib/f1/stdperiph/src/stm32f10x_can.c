@@ -1216,60 +1216,60 @@ ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT)
     {
       case CAN_IT_TME:
                /* Check CAN_TSR_RQCPx bits */
-	             itstatus = CheckITStatus(CANx->TSR, CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2);  
-	      break;
+               itstatus = CheckITStatus(CANx->TSR, CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2);  
+        break;
       case CAN_IT_FMP0:
                /* Check CAN_RF0R_FMP0 bit */
-	             itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FMP0);  
-	      break;
+               itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FMP0);  
+        break;
       case CAN_IT_FF0:
                /* Check CAN_RF0R_FULL0 bit */
                itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FULL0);  
-	      break;
+        break;
       case CAN_IT_FOV0:
                /* Check CAN_RF0R_FOVR0 bit */
                itstatus = CheckITStatus(CANx->RF0R, CAN_RF0R_FOVR0);  
-	      break;
+        break;
       case CAN_IT_FMP1:
                /* Check CAN_RF1R_FMP1 bit */
                itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FMP1);  
-	      break;
+        break;
       case CAN_IT_FF1:
                /* Check CAN_RF1R_FULL1 bit */
-	             itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FULL1);  
-	      break;
+               itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FULL1);  
+        break;
       case CAN_IT_FOV1:
                /* Check CAN_RF1R_FOVR1 bit */
-	             itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FOVR1);  
-	      break;
+               itstatus = CheckITStatus(CANx->RF1R, CAN_RF1R_FOVR1);  
+        break;
       case CAN_IT_WKU:
                /* Check CAN_MSR_WKUI bit */
                itstatus = CheckITStatus(CANx->MSR, CAN_MSR_WKUI);  
-	      break;
+        break;
       case CAN_IT_SLK:
                /* Check CAN_MSR_SLAKI bit */
-	             itstatus = CheckITStatus(CANx->MSR, CAN_MSR_SLAKI);  
-	      break;
+               itstatus = CheckITStatus(CANx->MSR, CAN_MSR_SLAKI);  
+        break;
       case CAN_IT_EWG:
                /* Check CAN_ESR_EWGF bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EWGF);  
-	      break;
+               itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EWGF);  
+        break;
       case CAN_IT_EPV:
                /* Check CAN_ESR_EPVF bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EPVF);  
-	      break;
+               itstatus = CheckITStatus(CANx->ESR, CAN_ESR_EPVF);  
+        break;
       case CAN_IT_BOF:
                /* Check CAN_ESR_BOFF bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_BOFF);  
-	      break;
+               itstatus = CheckITStatus(CANx->ESR, CAN_ESR_BOFF);  
+        break;
       case CAN_IT_LEC:
                /* Check CAN_ESR_LEC bit */
-	             itstatus = CheckITStatus(CANx->ESR, CAN_ESR_LEC);  
-	      break;
+               itstatus = CheckITStatus(CANx->ESR, CAN_ESR_LEC);  
+        break;
       case CAN_IT_ERR:
                /* Check CAN_MSR_ERRI bit */ 
                itstatus = CheckITStatus(CANx->MSR, CAN_MSR_ERRI); 
-	      break;
+        break;
       default :
                /* in case of error, return RESET */
               itstatus = RESET;
@@ -1314,66 +1314,66 @@ void CAN_ClearITPendingBit(CAN_TypeDef* CANx, uint32_t CAN_IT)
   {
       case CAN_IT_TME:
               /* Clear CAN_TSR_RQCPx (rc_w1)*/
-	      CANx->TSR = CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2;  
-	      break;
+        CANx->TSR = CAN_TSR_RQCP0|CAN_TSR_RQCP1|CAN_TSR_RQCP2;  
+        break;
       case CAN_IT_FF0:
               /* Clear CAN_RF0R_FULL0 (rc_w1)*/
-	      CANx->RF0R = CAN_RF0R_FULL0; 
-	      break;
+        CANx->RF0R = CAN_RF0R_FULL0; 
+        break;
       case CAN_IT_FOV0:
               /* Clear CAN_RF0R_FOVR0 (rc_w1)*/
-	      CANx->RF0R = CAN_RF0R_FOVR0; 
-	      break;
+        CANx->RF0R = CAN_RF0R_FOVR0; 
+        break;
       case CAN_IT_FF1:
               /* Clear CAN_RF1R_FULL1 (rc_w1)*/
-	      CANx->RF1R = CAN_RF1R_FULL1;  
-	      break;
+        CANx->RF1R = CAN_RF1R_FULL1;  
+        break;
       case CAN_IT_FOV1:
               /* Clear CAN_RF1R_FOVR1 (rc_w1)*/
-	      CANx->RF1R = CAN_RF1R_FOVR1; 
-	      break;
+        CANx->RF1R = CAN_RF1R_FOVR1; 
+        break;
       case CAN_IT_WKU:
               /* Clear CAN_MSR_WKUI (rc_w1)*/
-	      CANx->MSR = CAN_MSR_WKUI;  
-	      break;
+        CANx->MSR = CAN_MSR_WKUI;  
+        break;
       case CAN_IT_SLK:
               /* Clear CAN_MSR_SLAKI (rc_w1)*/ 
-	      CANx->MSR = CAN_MSR_SLAKI;   
-	      break;
+        CANx->MSR = CAN_MSR_SLAKI;   
+        break;
       case CAN_IT_EWG:
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI;
+        CANx->MSR = CAN_MSR_ERRI;
               /* Note : the corresponding Flag is cleared by hardware depending 
                         of the CAN Bus status*/ 
-	      break;
+        break;
       case CAN_IT_EPV:
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI; 
+        CANx->MSR = CAN_MSR_ERRI; 
               /* Note : the corresponding Flag is cleared by hardware depending 
                         of the CAN Bus status*/
-	      break;
+        break;
       case CAN_IT_BOF:
               /* Clear CAN_MSR_ERRI (rc_w1) */ 
-	      CANx->MSR = CAN_MSR_ERRI; 
+        CANx->MSR = CAN_MSR_ERRI; 
               /* Note : the corresponding Flag is cleared by hardware depending 
                         of the CAN Bus status*/
-	      break;
+        break;
       case CAN_IT_LEC:
               /*  Clear LEC bits */
-	      CANx->ESR = RESET; 
+        CANx->ESR = RESET; 
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI; 
-	      break;
+        CANx->MSR = CAN_MSR_ERRI; 
+        break;
       case CAN_IT_ERR:
               /*Clear LEC bits */
-	      CANx->ESR = RESET; 
+        CANx->ESR = RESET; 
               /* Clear CAN_MSR_ERRI (rc_w1) */
-	      CANx->MSR = CAN_MSR_ERRI; 
-	      /* Note : BOFF, EPVF and EWGF Flags are cleared by hardware depending 
+        CANx->MSR = CAN_MSR_ERRI; 
+        /* Note : BOFF, EPVF and EWGF Flags are cleared by hardware depending 
                   of the CAN Bus status*/
-	      break;
+        break;
       default :
-	      break;
+        break;
    }
 }
 

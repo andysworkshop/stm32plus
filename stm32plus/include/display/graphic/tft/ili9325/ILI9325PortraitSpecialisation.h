@@ -10,105 +10,105 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Specialisation of ILI9325Orientation for the panel in PORTRAIT mode.
-		 * @tparam TAccessMode the access mode implementation, e.g. FSMC
-		 */
+    /**
+     * Specialisation of ILI9325Orientation for the panel in PORTRAIT mode.
+     * @tparam TAccessMode the access mode implementation, e.g. FSMC
+     */
 
-		template<class TAccessMode>
-		class ILI9325Orientation<PORTRAIT,TAccessMode> {
+    template<class TAccessMode>
+    class ILI9325Orientation<PORTRAIT,TAccessMode> {
 
-			private:
-				TAccessMode& _accessMode;
+      private:
+        TAccessMode& _accessMode;
 
-			protected:
-				ILI9325Orientation(TAccessMode& accessMode);
+      protected:
+        ILI9325Orientation(TAccessMode& accessMode);
 
-				constexpr uint16_t getOrientationEntryMode() const;
+        constexpr uint16_t getOrientationEntryMode() const;
 
-		  public:
-				constexpr int16_t getWidth() const;
-				constexpr int16_t getHeight() const;
-				void moveTo(const Rectangle& rc) const;
+      public:
+        constexpr int16_t getWidth() const;
+        constexpr int16_t getHeight() const;
+        void moveTo(const Rectangle& rc) const;
 
-				void setScrollPosition(int16_t scrollPosition);
-		};
-
-
-		/**
-		 * Constructor
-		 */
-
-		template<class TAccessMode>
-		inline ILI9325Orientation<PORTRAIT,TAccessMode>::ILI9325Orientation(TAccessMode& accessMode)
-			: _accessMode(accessMode) {
-		}
+        void setScrollPosition(int16_t scrollPosition);
+    };
 
 
-		/**
-		 * Get the register setting for portrait mode
-		 * @return The entry mode register setting for portrait
-		 */
+    /**
+     * Constructor
+     */
 
-		template<class TAccessMode>
-		constexpr inline uint16_t ILI9325Orientation<PORTRAIT,TAccessMode>::getOrientationEntryMode() const {
-			return ili9325::EntryModeCmd::AM_HORIZONTAL | ili9325::EntryModeCmd::ID_HINC_VINC;
-		}
-
-
-		/**
-		 * Get the width in pixels
-		 * @return 240px
-		 */
-
-		template<class TAccessMode>
-		constexpr inline int16_t ILI9325Orientation<PORTRAIT,TAccessMode>::getWidth() const {
-		  return 240;
-		}
+    template<class TAccessMode>
+    inline ILI9325Orientation<PORTRAIT,TAccessMode>::ILI9325Orientation(TAccessMode& accessMode)
+      : _accessMode(accessMode) {
+    }
 
 
-		/**
-		 * Get the height in pixels
-		 * @return 320px
-		 */
+    /**
+     * Get the register setting for portrait mode
+     * @return The entry mode register setting for portrait
+     */
 
-		template<class TAccessMode>
-		constexpr inline int16_t ILI9325Orientation<PORTRAIT,TAccessMode>::getHeight() const {
-		  return 320;
-		}
-
-
-		/**
-		 * Move the display output rectangle
-		 * @param rc The display output rectangle
-		 */
-
-		template<class TAccessMode>
-		inline void ILI9325Orientation<PORTRAIT,TAccessMode>::moveTo(const Rectangle& rc) const {
-
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,rc.X);
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,rc.X+rc.Width-1);
-
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,rc.Y);
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,rc.Y+rc.Height-1);
-
-			this->_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,rc.X);
-			this->_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,rc.Y);
-		}
+    template<class TAccessMode>
+    constexpr inline uint16_t ILI9325Orientation<PORTRAIT,TAccessMode>::getOrientationEntryMode() const {
+      return ili9325::EntryModeCmd::AM_HORIZONTAL | ili9325::EntryModeCmd::ID_HINC_VINC;
+    }
 
 
-		/**
-		 * Set a vertical scroll position
-		 * @param scrollPosition The new scroll position
-		 */
+    /**
+     * Get the width in pixels
+     * @return 240px
+     */
 
-		template<class TAccessMode>
-		inline void ILI9325Orientation<PORTRAIT,TAccessMode>::setScrollPosition(int16_t scrollPosition) {
+    template<class TAccessMode>
+    constexpr inline int16_t ILI9325Orientation<PORTRAIT,TAccessMode>::getWidth() const {
+      return 240;
+    }
 
-			if(scrollPosition<0)
+
+    /**
+     * Get the height in pixels
+     * @return 320px
+     */
+
+    template<class TAccessMode>
+    constexpr inline int16_t ILI9325Orientation<PORTRAIT,TAccessMode>::getHeight() const {
+      return 320;
+    }
+
+
+    /**
+     * Move the display output rectangle
+     * @param rc The display output rectangle
+     */
+
+    template<class TAccessMode>
+    inline void ILI9325Orientation<PORTRAIT,TAccessMode>::moveTo(const Rectangle& rc) const {
+
+      this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,rc.X);
+      this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,rc.X+rc.Width-1);
+
+      this->_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,rc.Y);
+      this->_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,rc.Y+rc.Height-1);
+
+      this->_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,rc.X);
+      this->_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,rc.Y);
+    }
+
+
+    /**
+     * Set a vertical scroll position
+     * @param scrollPosition The new scroll position
+     */
+
+    template<class TAccessMode>
+    inline void ILI9325Orientation<PORTRAIT,TAccessMode>::setScrollPosition(int16_t scrollPosition) {
+
+      if(scrollPosition<0)
         scrollPosition+=320;
       else if(scrollPosition>319)
         scrollPosition-=320;
@@ -116,7 +116,7 @@ namespace stm32plus {
       // write to the register
 
       this->_accessMode.writeCommand(ili9325::GateScanControlScrollCmd::Opcode,scrollPosition);
-		}
-	}
+    }
+  }
 }
 

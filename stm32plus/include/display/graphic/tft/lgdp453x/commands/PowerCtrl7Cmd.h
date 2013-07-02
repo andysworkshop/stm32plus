@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PowerCtrl7Cmd
-		{
-			enum
-			{
-				Opcode = 0x29
-			};
+  namespace lgdp453x
+  {
+    namespace PowerCtrl7Cmd
+    {
+      enum
+      {
+        Opcode = 0x29
+      };
 
-			inline uint16_t VCOMH(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t VCOMH(uint16_t n) { return n; }
+    }
+  }
 }
 
 

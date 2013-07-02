@@ -8,43 +8,43 @@
 
 
 namespace stm32plus  {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Carrier class for a double and it's desired output
-		 * precision
-		 */
+    /**
+     * Carrier class for a double and it's desired output
+     * precision
+     */
 
-		struct DoublePrecision {
+    struct DoublePrecision {
 
-			enum {
-				MAX_DOUBLE_FRACTION_DIGITS = 5
-			};
+      enum {
+        MAX_DOUBLE_FRACTION_DIGITS = 5
+      };
 
-			/**
-			 * The encapsulated value
-			 */
+      /**
+       * The encapsulated value
+       */
 
-			double Value;
+      double Value;
 
-			/**
-			 * The number of fractional digits
-			 */
+      /**
+       * The number of fractional digits
+       */
 
-			uint8_t Precision;
+      uint8_t Precision;
 
 
-			/**
-			 * Constructor
-			 * @param d The value to encapsulate
-			 * @param precision The number of fractional digits
-			 */
+      /**
+       * Constructor
+       * @param d The value to encapsulate
+       * @param precision The number of fractional digits
+       */
 
-			DoublePrecision(double d,uint8_t precision) {
-				Value=d;
-				Precision=precision;
-			}
-		};
-	}
+      DoublePrecision(double d,uint8_t precision) {
+        Value=d;
+        Precision=precision;
+      }
+    };
+  }
 }
 

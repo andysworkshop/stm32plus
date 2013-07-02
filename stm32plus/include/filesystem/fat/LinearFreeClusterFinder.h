@@ -8,33 +8,33 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Free cluster finder suitable for rotating disks.
-		 *
-		 * Find a free cluster by linearly looking in the FAT from cluster zero until a free entry is found.
-		 * Devices that do not have an MTBF for each block should probably use this as it will tend to keep
-		 * clusters together.
-		 */
+    /**
+     * @brief Free cluster finder suitable for rotating disks.
+     *
+     * Find a free cluster by linearly looking in the FAT from cluster zero until a free entry is found.
+     * Devices that do not have an MTBF for each block should probably use this as it will tend to keep
+     * clusters together.
+     */
 
-		class LinearFreeClusterFinder : public IteratingFreeClusterFinder {
-			public:
-				LinearFreeClusterFinder(FatFileSystem& fs);
+    class LinearFreeClusterFinder : public IteratingFreeClusterFinder {
+      public:
+        LinearFreeClusterFinder(FatFileSystem& fs);
 
-				/**
-				 * Virtual destructor. Does nothing.
-				 */
+        /**
+         * Virtual destructor. Does nothing.
+         */
 
-				virtual ~LinearFreeClusterFinder() {
-				}
+        virtual ~LinearFreeClusterFinder() {
+        }
 
 
-				/**
-				 * Find a sequence of at least the given number of clusters that are all free
-				 */
+        /**
+         * Find a sequence of at least the given number of clusters that are all free
+         */
 
-				bool findMultipleSequential(uint32_t clustersRequired,uint32_t& firstCluster);
-		};
-	}
+        bool findMultipleSequential(uint32_t clustersRequired,uint32_t& firstCluster);
+    };
+  }
 }

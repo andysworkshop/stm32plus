@@ -9,36 +9,36 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Delay for a number of microseconds.
-	 * We use an STM32 timer to provide a microsecond delay. We're agnostic as to which timer you use
-	 * and this template is parameterised by that timer class. A concrete type 'MicrosecondDelay' is typedef'd
-	 * that uses TIM6 as the timer.
-	 * @tparam TTimer The timer type to use for this functionality.
-	 */
+  /**
+   * @brief Delay for a number of microseconds.
+   * We use an STM32 timer to provide a microsecond delay. We're agnostic as to which timer you use
+   * and this template is parameterised by that timer class. A concrete type 'MicrosecondDelay' is typedef'd
+   * that uses TIM6 as the timer.
+   * @tparam TTimer The timer type to use for this functionality.
+   */
 
   template<class TTimer>
-	class MicrosecondDelayTemplate {
+  class MicrosecondDelayTemplate {
 
-	  protected:
+    protected:
       static TTimer *_timer;
       static volatile uint16_t *_counterRegister;
 
-	  public:
+    public:
 
-			/**
-			 * Initialise the timer.
-			 */
+      /**
+       * Initialise the timer.
+       */
 
-			static void initialise();
+      static void initialise();
 
-			/**
-			 * Delay synchronously to the caller for the given number of microseconds.
-			 * @param[in] us The number of microseconds to delay for.
-			 */
+      /**
+       * Delay synchronously to the caller for the given number of microseconds.
+       * @param[in] us The number of microseconds to delay for.
+       */
 
-			static void delay(uint16_t us);
-	};
+      static void delay(uint16_t us);
+  };
 
 
   /**
@@ -53,49 +53,49 @@ namespace stm32plus {
    */
 
   template<class TTimer> TTimer * MicrosecondDelayTemplate<TTimer>::_timer;
-	template<class TTimer> volatile uint16_t *MicrosecondDelayTemplate<TTimer>::_counterRegister;
+  template<class TTimer> volatile uint16_t *MicrosecondDelayTemplate<TTimer>::_counterRegister;
 
 
   /**
    * Initialise the timer by setting it up to tick at 1Mhz
    */
 
-	template<class TTimer>
-	inline void MicrosecondDelayTemplate<TTimer>::initialise() {
+  template<class TTimer>
+  inline void MicrosecondDelayTemplate<TTimer>::initialise() {
 
-	  uint32_t regbase;
+    uint32_t regbase;
 
-	  // create the timer object and configure the timebase
+    // create the timer object and configure the timebase
 
-	  _timer=new TTimer;
-	  _timer->setTimeBaseByFrequency(1000000,UINT16_MAX);
+    _timer=new TTimer;
+    _timer->setTimeBaseByFrequency(1000000,UINT16_MAX);
 
-	  // enable the timer
+    // enable the timer
 
-	  _timer->enableTimer(true);
+    _timer->enableTimer(true);
 
-	  // remember the counter register
+    // remember the counter register
 
-	  regbase=(uint32_t)((TIM_TypeDef *)*_timer);
-	  _counterRegister=(volatile uint16_t *)(regbase+__builtin_offsetof(TIM_TypeDef,CNT));
-	}
+    regbase=(uint32_t)((TIM_TypeDef *)*_timer);
+    _counterRegister=(volatile uint16_t *)(regbase+__builtin_offsetof(TIM_TypeDef,CNT));
+  }
 
 
-	/**
-	 * Delay for the given microseconds. The total delay is approximate. There is a clock-speed
-	 * dependent constant overhead to calling into, and returning from, this function. Attempting to take
-	 * this call delay into account without coding the whole thing in asm is folly - the optimiser and
-	 * the CPU instruction pipeline will all conspire to ensure you get it wrong.
-	 * @param microseconds the number of microseconds to delay for.
-	 */
+  /**
+   * Delay for the given microseconds. The total delay is approximate. There is a clock-speed
+   * dependent constant overhead to calling into, and returning from, this function. Attempting to take
+   * this call delay into account without coding the whole thing in asm is folly - the optimiser and
+   * the CPU instruction pipeline will all conspire to ensure you get it wrong.
+   * @param microseconds the number of microseconds to delay for.
+   */
 
-	template<class TTimer>
-	inline void MicrosecondDelayTemplate<TTimer>::delay(uint16_t microseconds) {
+  template<class TTimer>
+  inline void MicrosecondDelayTemplate<TTimer>::delay(uint16_t microseconds) {
 
-	  // reset the counter register to zero then wait for it to
-	  // tick up by the required number of microseconds
+    // reset the counter register to zero then wait for it to
+    // tick up by the required number of microseconds
 
-	  *_counterRegister=0;
-	  while(*_counterRegister<=microseconds);
-	}
+    *_counterRegister=0;
+    while(*_counterRegister<=microseconds);
+  }
 }

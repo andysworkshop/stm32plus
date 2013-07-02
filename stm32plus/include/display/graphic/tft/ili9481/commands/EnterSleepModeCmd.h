@@ -8,11 +8,11 @@
 
 
 namespace stm32plus {
-	namespace ili9481 {
-		namespace EnterSleepModeCmd {
-			enum {
-				Opcode = 0x10
-			};
-		}
-	}
+  namespace ili9481 {
+    namespace EnterSleepModeCmd {
+      enum {
+        Opcode = 0x10
+      };
+    }
+  }
 }

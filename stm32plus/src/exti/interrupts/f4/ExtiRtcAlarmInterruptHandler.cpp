@@ -24,23 +24,23 @@ template<> Observable *ExtiPeripheral<EXTI_Line17>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) RTC_Alarm_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_Alarm_IRQHandler(void) {
 
-		if(RTC_GetITStatus(RTC_IT_ALRA)!=RESET) {
-			ExtiRtcAlarm::_extiInstance->notifyObservers(ObservableEvent::RTC_AlarmA,(void *)17);
-			RTC_ClearITPendingBit(RTC_IT_ALRA);
-			EXTI_ClearITPendingBit(EXTI_Line17);
-		}
-		else if(RTC_GetITStatus(RTC_IT_ALRB)!=RESET) {
-			ExtiRtcAlarm::_extiInstance->notifyObservers(ObservableEvent::RTC_AlarmB,(void *)17);
-			RTC_ClearITPendingBit(RTC_IT_ALRB);
-			EXTI_ClearITPendingBit(EXTI_Line17);
-		}
-	}
+    if(RTC_GetITStatus(RTC_IT_ALRA)!=RESET) {
+      ExtiRtcAlarm::_extiInstance->notifyObservers(ObservableEvent::RTC_AlarmA,(void *)17);
+      RTC_ClearITPendingBit(RTC_IT_ALRA);
+      EXTI_ClearITPendingBit(EXTI_Line17);
+    }
+    else if(RTC_GetITStatus(RTC_IT_ALRB)!=RESET) {
+      ExtiRtcAlarm::_extiInstance->notifyObservers(ObservableEvent::RTC_AlarmB,(void *)17);
+      RTC_ClearITPendingBit(RTC_IT_ALRB);
+      EXTI_ClearITPendingBit(EXTI_Line17);
+    }
+  }
 
-	void RTCAlarm_IRQHandler(void) {
-		RTC_Alarm_IRQHandler();
-	}
+  void RTCAlarm_IRQHandler(void) {
+    RTC_Alarm_IRQHandler();
+  }
 
 }
 

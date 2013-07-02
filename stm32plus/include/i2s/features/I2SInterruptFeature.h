@@ -17,22 +17,22 @@ extern "C" void SPI3_IRQHandler();
 
 namespace stm32plus {
 
-	/**
-	 * Helper class to enable only the desired interrupts in the NVIC. This will
-	 * be fully specialised for each I2S peripheral
+  /**
+   * Helper class to enable only the desired interrupts in the NVIC. This will
+   * be fully specialised for each I2S peripheral
    * @tparam TI2SNumber The number of the I2S peripheral (1..3)
-	 */
+   */
 
-	template<uint8_t TI2SNumber>
-	class I2SInterruptFeatureEnabler {
+  template<uint8_t TI2SNumber>
+  class I2SInterruptFeatureEnabler {
 
-	  private:
+    private:
       typedef void (*FPTR)();         // this trick will force the linker to include the ISR
       static FPTR _forceLinkage;
 
     public:
       static void enable(uint8_t priority,uint8_t subPriority);
-	};
+  };
 
 
   /**
@@ -43,7 +43,7 @@ namespace stm32plus {
 
   template<uint8_t TI2SNumber>
   class I2SInterruptFeature : public Observable,
-  														public I2SFeatureBase {
+                              public I2SFeatureBase {
 
     protected:
       uint16_t _interruptMask;
@@ -75,7 +75,7 @@ namespace stm32plus {
 
   template<uint8_t TI2SNumber>
   inline I2SInterruptFeature<TI2SNumber>::I2SInterruptFeature(I2S& i2s)
-  	: I2SFeatureBase(i2s) {
+    : I2SFeatureBase(i2s) {
     _interruptMask=0;
     _nvicPriority=_nvicSubPriority=0;
     SpiInterruptFeature<TI2SNumber>::_spiInstance=this;
@@ -103,8 +103,8 @@ namespace stm32plus {
 
   template<uint8_t TI2SNumber>
   inline void I2SInterruptFeature<TI2SNumber>::setNvicPriorities(uint8_t priority,uint8_t subPriority) {
-  	_nvicPriority=priority;
-  	_nvicSubPriority=subPriority;
+    _nvicPriority=priority;
+    _nvicSubPriority=subPriority;
   }
 
 
@@ -140,7 +140,7 @@ namespace stm32plus {
   template<>
   inline void I2SInterruptFeatureEnabler<2>::enable(uint8_t priority,uint8_t subPriority) {
     _forceLinkage=&SPI2_IRQHandler;
-  	Nvic::configureIrq(SPI2_IRQn,ENABLE,priority,subPriority);
+    Nvic::configureIrq(SPI2_IRQn,ENABLE,priority,subPriority);
   }
 
   /**

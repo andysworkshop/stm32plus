@@ -9,14 +9,14 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace HorizontalRAMPositionEndCmd
-		{
-			enum
-			{
-				Opcode = 0x51
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace HorizontalRAMPositionEndCmd
+    {
+      enum
+      {
+        Opcode = 0x51
+      };
+    }
+  }
 }

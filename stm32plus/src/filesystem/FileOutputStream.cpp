@@ -10,36 +10,36 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor with file.
-	 * @param[in] file_ The file to write to. Caller supplied parameter, must not go out of scope.
-	 */
+  /**
+   * Constructor with file.
+   * @param[in] file_ The file to write to. Caller supplied parameter, must not go out of scope.
+   */
 
-	FileOutputStream::FileOutputStream(File& file_) :
-		_file(file_) {
-	}
+  FileOutputStream::FileOutputStream(File& file_) :
+    _file(file_) {
+  }
 
-	/*
-	 * Write data to the file
-	 */
+  /*
+   * Write data to the file
+   */
 
-	bool FileOutputStream::write(const void *buffer,uint32_t size_) {
-		return _file.write(buffer,size_);
-	}
+  bool FileOutputStream::write(const void *buffer,uint32_t size_) {
+    return _file.write(buffer,size_);
+  }
 
-	/*
-	 * no-op close
-	 */
+  /*
+   * no-op close
+   */
 
-	bool FileOutputStream::close() {
-		return true;
-	}
+  bool FileOutputStream::close() {
+    return true;
+  }
 
-	/*
-	 * Write byte to file
-	 */
+  /*
+   * Write byte to file
+   */
 
-	bool FileOutputStream::write(uint8_t c_) {
-		return _file.write(&c_,sizeof(c_));
-	}
+  bool FileOutputStream::write(uint8_t c_) {
+    return _file.write(&c_,sizeof(c_));
+  }
 }

@@ -10,72 +10,72 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor
-	 */
+  /**
+   * Constructor
+   */
 
-	Observable::Observable() {
-		_first=nullptr;
-	}
+  Observable::Observable() {
+    _first=nullptr;
+  }
 
-	/**
-	 * Destructor. Destroy the links
-	 */
+  /**
+   * Destructor. Destroy the links
+   */
 
-	Observable::~Observable() {
-		if(_first)
-			_first->destroy();
-	}
+  Observable::~Observable() {
+    if(_first)
+      _first->destroy();
+  }
 
-	/**
-	 * Get the first link in the chain
-	 * @return The first link.
-	 */
+  /**
+   * Get the first link in the chain
+   * @return The first link.
+   */
 
-	ObserverLink *Observable::getFirstObserverLink() {
-		return _first;
-	}
+  ObserverLink *Observable::getFirstObserverLink() {
+    return _first;
+  }
 
-	/**
-	 * Set the first link in the chain.
-	 * @param[in] newFirst The new first link in the chain
-	 */
+  /**
+   * Set the first link in the chain.
+   * @param[in] newFirst The new first link in the chain
+   */
 
-	void Observable::setFirstObserverLink(ObserverLink* newFirst) {
-		_first=newFirst;
-	}
+  void Observable::setFirstObserverLink(ObserverLink* newFirst) {
+    _first=newFirst;
+  }
 
-	/**
-	 * Insert a new observer at the head of the list. A new link will be created to hold this observer.
-	 * @param[in] newObserver The new observer to become the first in the list.
-	 * @return The new observer link.
-	 */
+  /**
+   * Insert a new observer at the head of the list. A new link will be created to hold this observer.
+   * @param[in] newObserver The new observer to become the first in the list.
+   * @return The new observer link.
+   */
 
-	ObserverLink *Observable::insertObserver(Observer& newObserver) {
+  ObserverLink *Observable::insertObserver(Observer& newObserver) {
 
-		ObserverLink *newLink;
+    ObserverLink *newLink;
 
-		newLink=new ObserverLink(*this,newObserver);
-		newLink->setNext(_first);
+    newLink=new ObserverLink(*this,newObserver);
+    newLink->setNext(_first);
 
-		if(_first)
-			_first->setPrevious(newLink);
+    if(_first)
+      _first->setPrevious(newLink);
 
-		_first=newLink;
-		return newLink;
-	}
+    _first=newLink;
+    return newLink;
+  }
 
-	/**
-	 * Notify the observers of an event.
-	 * @param[in] event The event being notified
-	 * @param[in] context Some context to the event, the type of which will depend on the event_ parameter.
-	 */
+  /**
+   * Notify the observers of an event.
+   * @param[in] event The event being notified
+   * @param[in] context Some context to the event, the type of which will depend on the event_ parameter.
+   */
 
-	void Observable::notifyObservers(ObservableEvent::E event,void *context) {
+  void Observable::notifyObservers(ObservableEvent::E event,void *context) {
 
-		ObserverLink *link;
+    ObserverLink *link;
 
-		for(link=_first;link;link=link->getNext())
-			link->getObserver().onNotify(*this,event,context);
-	}
+    for(link=_first;link;link=link->getNext())
+      link->getObserver().onNotify(*this,event,context);
+  }
 }

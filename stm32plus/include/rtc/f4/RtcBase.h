@@ -20,8 +20,8 @@ namespace stm32plus {
 
   class RtcBase {
 
-  	protected:
-  		uint32_t _hourFormat;
+    protected:
+      uint32_t _hourFormat;
 
     public:
       RtcBase(uint32_t hourFormat=RTC_HourFormat_24);
@@ -65,14 +65,14 @@ namespace stm32plus {
 
   inline void RtcBase::setTime(uint8_t hours,uint8_t minutes,uint8_t seconds,uint8_t am_pm) const {
 
-  	RTC_TimeTypeDef tset;
+    RTC_TimeTypeDef tset;
 
-  	tset.RTC_H12=am_pm;
-  	tset.RTC_Hours=hours;
-  	tset.RTC_Minutes=minutes;
-  	tset.RTC_Seconds=seconds;
+    tset.RTC_H12=am_pm;
+    tset.RTC_Hours=hours;
+    tset.RTC_Minutes=minutes;
+    tset.RTC_Seconds=seconds;
 
-  	RTC_SetTime(RTC_Format_BIN,&tset);
+    RTC_SetTime(RTC_Format_BIN,&tset);
   }
 
 
@@ -87,14 +87,14 @@ namespace stm32plus {
 
   inline void RtcBase::getTime(uint8_t& hours,uint8_t& minutes,uint8_t& seconds,uint8_t& am_pm) const {
 
-  	RTC_TimeTypeDef tget;
+    RTC_TimeTypeDef tget;
 
-  	RTC_GetTime(RTC_Format_BIN,&tget);
+    RTC_GetTime(RTC_Format_BIN,&tget);
 
-  	am_pm=tget.RTC_H12;
-  	hours=tget.RTC_Hours;
-  	minutes=tget.RTC_Minutes;
-  	seconds=tget.RTC_Seconds;
+    am_pm=tget.RTC_H12;
+    hours=tget.RTC_Hours;
+    minutes=tget.RTC_Minutes;
+    seconds=tget.RTC_Seconds;
   }
 
 
@@ -108,14 +108,14 @@ namespace stm32plus {
 
   inline void RtcBase::setDate(uint8_t year,uint8_t month,uint8_t dayOfMonth,uint8_t dayOfWeek) const {
 
-  	RTC_DateTypeDef sdate;
+    RTC_DateTypeDef sdate;
 
-  	sdate.RTC_Year=year;
-  	sdate.RTC_Month=month;
-  	sdate.RTC_Date=dayOfMonth;
-  	sdate.RTC_WeekDay=dayOfWeek;
+    sdate.RTC_Year=year;
+    sdate.RTC_Month=month;
+    sdate.RTC_Date=dayOfMonth;
+    sdate.RTC_WeekDay=dayOfWeek;
 
-  	RTC_SetDate(RTC_Format_BIN,&sdate);
+    RTC_SetDate(RTC_Format_BIN,&sdate);
   }
 
 
@@ -129,14 +129,14 @@ namespace stm32plus {
 
   inline void RtcBase::getDate(uint8_t& year,uint8_t& month,uint8_t& dayOfMonth,uint8_t& dayOfWeek) const {
 
-  	RTC_DateTypeDef sdate;
+    RTC_DateTypeDef sdate;
 
-  	RTC_GetDate(RTC_Format_BIN,&sdate);
+    RTC_GetDate(RTC_Format_BIN,&sdate);
 
-  	year=sdate.RTC_Year;
-  	month=sdate.RTC_Month;
-  	dayOfMonth=sdate.RTC_Date;
-  	dayOfWeek=sdate.RTC_WeekDay;
+    year=sdate.RTC_Year;
+    month=sdate.RTC_Month;
+    dayOfMonth=sdate.RTC_Date;
+    dayOfWeek=sdate.RTC_WeekDay;
   }
 
 
@@ -146,7 +146,7 @@ namespace stm32plus {
    */
 
   inline uint32_t RtcBase::getHourFormat() const {
-  	return _hourFormat;
+    return _hourFormat;
   }
 
 
@@ -157,30 +157,30 @@ namespace stm32plus {
 
   inline uint32_t RtcBase::getTick() const {
 
-  	RTC_DateTypeDef rdate;
-  	RTC_TimeTypeDef rtime;
-  	struct tm tstruct;
+    RTC_DateTypeDef rdate;
+    RTC_TimeTypeDef rtime;
+    struct tm tstruct;
 
-  	// get time and date
+    // get time and date
 
-  	RTC_GetTime(RTC_Format_BIN,&rtime);
-  	RTC_GetDate(RTC_Format_BIN,&rdate);
+    RTC_GetTime(RTC_Format_BIN,&rtime);
+    RTC_GetDate(RTC_Format_BIN,&rdate);
 
-  	// if in 24 hour clock or hour is less than 12 then believe the hours
+    // if in 24 hour clock or hour is less than 12 then believe the hours
 
-  	if(_hourFormat==RTC_HourFormat_24 || rtime.RTC_H12==RTC_H12_AM)
-  		tstruct.tm_hour=rtime.RTC_Hours;
-  	else
-  		tstruct.tm_hour=12+rtime.RTC_Hours;			// adjust hours + 12 for PM
+    if(_hourFormat==RTC_HourFormat_24 || rtime.RTC_H12==RTC_H12_AM)
+      tstruct.tm_hour=rtime.RTC_Hours;
+    else
+      tstruct.tm_hour=12+rtime.RTC_Hours;     // adjust hours + 12 for PM
 
-  	tstruct.tm_min=rtime.RTC_Minutes;
-  	tstruct.tm_sec=rtime.RTC_Seconds;
+    tstruct.tm_min=rtime.RTC_Minutes;
+    tstruct.tm_sec=rtime.RTC_Seconds;
 
-  	tstruct.tm_year=rdate.RTC_Year+100;			// years since 1900. 00+100=2000
-  	tstruct.tm_mon=rdate.RTC_Month-1;
-  	tstruct.tm_mday=rdate.RTC_Date;
+    tstruct.tm_year=rdate.RTC_Year+100;     // years since 1900. 00+100=2000
+    tstruct.tm_mon=rdate.RTC_Month-1;
+    tstruct.tm_mday=rdate.RTC_Date;
 
-  	return mktime(&tstruct);
+    return mktime(&tstruct);
   }
 
 
@@ -191,19 +191,19 @@ namespace stm32plus {
 
   inline void RtcBase::setTick(uint32_t tick) const {
 
-  	struct tm *tstruct;
+    struct tm *tstruct;
 
-  	tstruct=gmtime(reinterpret_cast<time_t *>(&tick));
+    tstruct=gmtime(reinterpret_cast<time_t *>(&tick));
 
-  	// date is straightforward
+    // date is straightforward
 
-  	setDate(tstruct->tm_year-100,tstruct->tm_mon+1,tstruct->tm_mday,tstruct->tm_wday==0 ? 7 : tstruct->tm_wday);
+    setDate(tstruct->tm_year-100,tstruct->tm_mon+1,tstruct->tm_mday,tstruct->tm_wday==0 ? 7 : tstruct->tm_wday);
 
-  	// if in 24 hours then easy else the hour must be mod 12 and am/pm set
+    // if in 24 hours then easy else the hour must be mod 12 and am/pm set
 
-  	if(_hourFormat==RTC_HourFormat_24)
-  		setTime(tstruct->tm_hour,tstruct->tm_min,tstruct->tm_sec,0);
-  	else
-  		setTime(tstruct->tm_hour % 12,tstruct->tm_min,tstruct->tm_sec,tstruct->tm_hour>=12 ? RTC_H12_PM : RTC_H12_AM);
+    if(_hourFormat==RTC_HourFormat_24)
+      setTime(tstruct->tm_hour,tstruct->tm_min,tstruct->tm_sec,0);
+    else
+      setTime(tstruct->tm_hour % 12,tstruct->tm_min,tstruct->tm_sec,tstruct->tm_hour>=12 ? RTC_H12_PM : RTC_H12_AM);
   }
 }

@@ -35,7 +35,7 @@ extern "C" void TIM8_CC_IRQHandler();
 namespace stm32plus {
 
 
-	/**
+  /**
    * Timer feature to handle interrupts. This class is the only
    * Observable in the Timer class suite.
    * @tparam TTimerNumber The number of the timer 1..14
@@ -95,7 +95,7 @@ namespace stm32plus {
 
   template<uint8_t TTimerNumber>
   inline TimerInterruptFeature<TTimerNumber>::TimerInterruptFeature(Timer& timer)
-  	: TimerFeatureBase(timer) {
+    : TimerFeatureBase(timer) {
     _interruptMask=0;
     _timerInstance=this;
   }
@@ -122,8 +122,8 @@ namespace stm32plus {
 
   template<uint8_t TTimerNumber>
   inline void TimerInterruptFeature<TTimerNumber>::setNvicPriorities(uint8_t priority,uint8_t subPriority) {
-  	_nvicPriority=priority;
-  	_nvicSubPriority=subPriority;
+    _nvicPriority=priority;
+    _nvicSubPriority=subPriority;
   }
 
 
@@ -161,25 +161,25 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<1>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
 
-  	if((interruptMask & TIM_IT_Update)!=0) {
-			_forceLinkage=&TIM1_UP_IRQHandler;
-			Nvic::configureIrq(TIM1_UP_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & TIM_IT_Update)!=0) {
+      _forceLinkage=&TIM1_UP_IRQHandler;
+      Nvic::configureIrq(TIM1_UP_IRQn,ENABLE,priority,subPriority);
+    }
 
-		if((interruptMask & TIM_IT_Break)!=0) {
-			_forceLinkage=&TIM1_UP_IRQHandler;
-			Nvic::configureIrq(TIM1_BRK_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & TIM_IT_Break)!=0) {
+      _forceLinkage=&TIM1_UP_IRQHandler;
+      Nvic::configureIrq(TIM1_BRK_IRQn,ENABLE,priority,subPriority);
+    }
 
-		if((interruptMask & (TIM_IT_COM | TIM_IT_Trigger))!=0) {
-			_forceLinkage=&TIM1_TRG_COM_IRQHandler;
-			Nvic::configureIrq(TIM1_TRG_COM_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & (TIM_IT_COM | TIM_IT_Trigger))!=0) {
+      _forceLinkage=&TIM1_TRG_COM_IRQHandler;
+      Nvic::configureIrq(TIM1_TRG_COM_IRQn,ENABLE,priority,subPriority);
+    }
 
-		if((interruptMask & (TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
-			_forceLinkage=&TIM1_CC_IRQHandler;
-			Nvic::configureIrq(TIM1_CC_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & (TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
+      _forceLinkage=&TIM1_CC_IRQHandler;
+      Nvic::configureIrq(TIM1_CC_IRQn,ENABLE,priority,subPriority);
+    }
   }
 
 
@@ -192,7 +192,7 @@ namespace stm32plus {
   inline void TimerInterruptFeatureEnabler<2>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
       _forceLinkage=&TIM2_IRQHandler;
-    	Nvic::configureIrq(TIM2_IRQn,ENABLE,priority,subPriority);
+      Nvic::configureIrq(TIM2_IRQn,ENABLE,priority,subPriority);
     }
   }
 
@@ -205,7 +205,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<3>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
-    	 _forceLinkage=&TIM3_IRQHandler;
+       _forceLinkage=&TIM3_IRQHandler;
       Nvic::configureIrq(TIM3_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -218,10 +218,10 @@ namespace stm32plus {
 
   template<>
   inline void TimerInterruptFeatureEnabler<4>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
-		if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
-			_forceLinkage=&TIM4_IRQHandler;
-			Nvic::configureIrq(TIM4_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
+      _forceLinkage=&TIM4_IRQHandler;
+      Nvic::configureIrq(TIM4_IRQn,ENABLE,priority,subPriority);
+    }
   }
 
 
@@ -233,7 +233,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<5>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
-    	_forceLinkage=&TIM5_IRQHandler;
+      _forceLinkage=&TIM5_IRQHandler;
       Nvic::configureIrq(TIM5_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -247,7 +247,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<6>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & TIM_IT_Update)!=0) {
-    	_forceLinkage=&TIM6_IRQHandler;
+      _forceLinkage=&TIM6_IRQHandler;
       Nvic::configureIrq(TIM6_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -261,7 +261,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<7>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & TIM_IT_Update)!=0) {
-    	_forceLinkage=&TIM7_IRQHandler;
+      _forceLinkage=&TIM7_IRQHandler;
       Nvic::configureIrq(TIM7_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -275,25 +275,25 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<8>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
 
-  	if((interruptMask & TIM_IT_Update)!=0) {
-			_forceLinkage=&TIM8_UP_IRQHandler;
-			Nvic::configureIrq(TIM8_UP_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & TIM_IT_Update)!=0) {
+      _forceLinkage=&TIM8_UP_IRQHandler;
+      Nvic::configureIrq(TIM8_UP_IRQn,ENABLE,priority,subPriority);
+    }
 
-		if((interruptMask & TIM_IT_Break)!=0) {
-			_forceLinkage=&TIM8_BRK_IRQHandler;
-			Nvic::configureIrq(TIM8_BRK_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & TIM_IT_Break)!=0) {
+      _forceLinkage=&TIM8_BRK_IRQHandler;
+      Nvic::configureIrq(TIM8_BRK_IRQn,ENABLE,priority,subPriority);
+    }
 
-		if((interruptMask & (TIM_IT_COM | TIM_IT_Trigger))!=0) {
-			_forceLinkage=&TIM8_TRG_COM_IRQHandler;
-			Nvic::configureIrq(TIM8_TRG_COM_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & (TIM_IT_COM | TIM_IT_Trigger))!=0) {
+      _forceLinkage=&TIM8_TRG_COM_IRQHandler;
+      Nvic::configureIrq(TIM8_TRG_COM_IRQn,ENABLE,priority,subPriority);
+    }
 
-		if((interruptMask & (TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
-			_forceLinkage=&TIM8_CC_IRQHandler;
-			Nvic::configureIrq(TIM8_CC_IRQn,ENABLE,priority,subPriority);
-		}
+    if((interruptMask & (TIM_IT_CC1 | TIM_IT_CC2 | TIM_IT_CC3 | TIM_IT_CC4))!=0) {
+      _forceLinkage=&TIM8_CC_IRQHandler;
+      Nvic::configureIrq(TIM8_CC_IRQn,ENABLE,priority,subPriority);
+    }
   }
 
 
@@ -307,7 +307,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<9>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2))!=0) {
-			_forceLinkage=&TIM1_BRK_IRQHandler;
+      _forceLinkage=&TIM1_BRK_IRQHandler;
       Nvic::configureIrq(TIM1_BRK_TIM9_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -321,7 +321,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<10>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2))!=0) {
-			_forceLinkage=&TIM1_UP_IRQHandler;
+      _forceLinkage=&TIM1_UP_IRQHandler;
       Nvic::configureIrq(TIM1_UP_TIM10_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -335,7 +335,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<11>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2))!=0) {
-			_forceLinkage=&TIM1_TRG_COM_IRQHandler;
+      _forceLinkage=&TIM1_TRG_COM_IRQHandler;
       Nvic::configureIrq(TIM1_TRG_COM_TIM11_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -349,7 +349,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<12>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2))!=0) {
-			_forceLinkage=&TIM8_BRK_IRQHandler;
+      _forceLinkage=&TIM8_BRK_IRQHandler;
       Nvic::configureIrq(TIM8_BRK_TIM12_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -363,7 +363,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<13>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2))!=0) {
-			_forceLinkage=&TIM8_UP_IRQHandler;
+      _forceLinkage=&TIM8_UP_IRQHandler;
       Nvic::configureIrq(TIM8_UP_TIM13_IRQn,ENABLE,priority,subPriority);
     }
   }
@@ -377,7 +377,7 @@ namespace stm32plus {
   template<>
   inline void TimerInterruptFeatureEnabler<14>::enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority) {
     if((interruptMask & (TIM_IT_Update | TIM_IT_Trigger | TIM_IT_CC1 | TIM_IT_CC2))!=0) {
-			_forceLinkage=&TIM8_TRG_COM_IRQHandler;
+      _forceLinkage=&TIM8_TRG_COM_IRQHandler;
       Nvic::configureIrq(TIM8_TRG_COM_TIM14_IRQn,ENABLE,priority,subPriority);
     }
   }

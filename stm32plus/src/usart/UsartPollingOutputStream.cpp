@@ -10,37 +10,37 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor for using the output stream in polling mode.
-	 * @param[in] usart The USART peripheral for transmitting data.
-	 */
+  /**
+   * Constructor for using the output stream in polling mode.
+   * @param[in] usart The USART peripheral for transmitting data.
+   */
 
-	UsartPollingOutputStream::UsartPollingOutputStream(Usart& usart) :
-		_usart(usart) {
-	}
+  UsartPollingOutputStream::UsartPollingOutputStream(Usart& usart) :
+    _usart(usart) {
+  }
 
-	/*
-	 * Write one byte
-	 */
+  /*
+   * Write one byte
+   */
 
-	bool UsartPollingOutputStream::write(uint8_t c) {
-		_usart.send(c);
-		return true;
-	}
+  bool UsartPollingOutputStream::write(uint8_t c) {
+    _usart.send(c);
+    return true;
+  }
 
-	/*
-	 * Write many bytes
-	 */
+  /*
+   * Write many bytes
+   */
 
-	bool UsartPollingOutputStream::write(const void *buffer,uint32_t size) {
+  bool UsartPollingOutputStream::write(const void *buffer,uint32_t size) {
 
-		const uint8_t *ptr;
+    const uint8_t *ptr;
 
-		ptr=static_cast<const uint8_t *>(buffer);
+    ptr=static_cast<const uint8_t *>(buffer);
 
-		while(size--)
-			_usart.send(*ptr++);
+    while(size--)
+      _usart.send(*ptr++);
 
-		return true;
-	}
+    return true;
+  }
 }

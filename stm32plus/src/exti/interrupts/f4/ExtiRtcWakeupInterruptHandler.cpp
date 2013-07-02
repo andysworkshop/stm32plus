@@ -23,14 +23,14 @@ template<> Observable *ExtiPeripheral<EXTI_Line22>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) RTC_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_WKUP_IRQHandler(void) {
 
-		if(RTC_GetITStatus(RTC_IT_WUT)!=RESET) {
-			ExtiRtcWakeup::_extiInstance->notifyObservers(ObservableEvent::RTC_Wakeup,(void *)22);
-			EXTI_ClearITPendingBit(EXTI_Line22);
-			RTC_ClearITPendingBit(RTC_IT_WUT);
-		}
-	}
+    if(RTC_GetITStatus(RTC_IT_WUT)!=RESET) {
+      ExtiRtcWakeup::_extiInstance->notifyObservers(ObservableEvent::RTC_Wakeup,(void *)22);
+      EXTI_ClearITPendingBit(EXTI_Line22);
+      RTC_ClearITPendingBit(RTC_IT_WUT);
+    }
+  }
 }
 
 #endif

@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace SetPageAddressCmd
-		{
-			enum
-			{
-				Opcode = 0x2B
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace SetPageAddressCmd
+    {
+      enum
+      {
+        Opcode = 0x2B
+      };
+    }
+  }
 }
 
 

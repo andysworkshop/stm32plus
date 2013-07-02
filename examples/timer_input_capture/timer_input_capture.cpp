@@ -36,8 +36,8 @@ using namespace stm32plus;
  * You will need to wire PA3 to PB0 to test this demo.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -48,15 +48,15 @@ class TimerInputCaptureTest : public Observer {
 
   protected:
 
-		/**
-		 * Declare a type for our input timer.
-		 */
+    /**
+     * Declare a type for our input timer.
+     */
 
     typedef Timer3<
-    		Timer3InternalClockFeature,				// we'll need this for the frequency calculation
+        Timer3InternalClockFeature,       // we'll need this for the frequency calculation
         TimerChannel3Feature,             // we're going to use channel 3
-        Timer3InterruptFeature,						// we want to use interrupts
-        Timer3GpioFeature<          			// we want to read something from GPIO
+        Timer3InterruptFeature,           // we want to use interrupts
+        Timer3GpioFeature<                // we want to read something from GPIO
           TIMER_REMAP_NONE,               // the GPIO input will not be remapped
           TIM3_CH3_IN                     // we will read channel 3 from GPIO PB0
         >
@@ -77,9 +77,9 @@ class TimerInputCaptureTest : public Observer {
     volatile uint32_t _capturedFrequency;
     volatile bool _capturingNextFrequency;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
       /*
        * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
@@ -101,9 +101,9 @@ class TimerInputCaptureTest : public Observer {
        */
 
       Timer5<
-      	Timer5InternalClockFeature,			// clocked from the internal clock
-      	TimerChannel4Feature,      			// we're going to use channel 4
-        Timer5GpioFeature<        			// we want to output something to GPIO
+        Timer5InternalClockFeature,     // clocked from the internal clock
+        TimerChannel4Feature,           // we're going to use channel 4
+        Timer5GpioFeature<              // we want to output something to GPIO
           TIMER_REMAP_NONE,             // the GPIO output will not (cannot for this timer) be remapped
           TIM5_CH4_OUT                  // we will output channel 4 to GPIO (PA3)
         >
@@ -124,7 +124,7 @@ class TimerInputCaptureTest : public Observer {
 
       /*
        * Declare a new instance of the input capture timer.
-			 */
+       */
 
       _myInputTimer=new MyInputTimer;
 
@@ -134,42 +134,42 @@ class TimerInputCaptureTest : public Observer {
 
       _myInputTimer->insertObserver(*this);
 
-			/*
-			 * Initialise the channel (this will be channel 2) for capturing the signal
-			 */
+      /*
+       * Initialise the channel (this will be channel 2) for capturing the signal
+       */
 
-			_myInputTimer->initCapture(
-			    TIM_ICPolarity_Rising,			// capture rising edges
-			    TIM_ICSelection_DirectTI,		// direct connection to timer input trigger
-			    TIM_ICPSC_DIV1,							// sample every transition
-			    0,													// no oversampling filter
-			    0);													// prescaler of 0
+      _myInputTimer->initCapture(
+          TIM_ICPolarity_Rising,      // capture rising edges
+          TIM_ICSelection_DirectTI,   // direct connection to timer input trigger
+          TIM_ICPSC_DIV1,             // sample every transition
+          0,                          // no oversampling filter
+          0);                         // prescaler of 0
 
-			/*
-			 * Reset the variables used to hold the state
-			 */
+      /*
+       * Reset the variables used to hold the state
+       */
 
-			_captureIndex=0;
-			_capturingNextFrequency=true;
+      _captureIndex=0;
+      _capturingNextFrequency=true;
 
-			/*
-			 * Enable channel 3 interrupts on Timer 3.
-			 */
+      /*
+       * Enable channel 3 interrupts on Timer 3.
+       */
 
-			_myInputTimer->enableInterrupts(TIM_IT_CC3);
+      _myInputTimer->enableInterrupts(TIM_IT_CC3);
 
-			/*
-			 * Enable both timers to start the action
-			 */
+      /*
+       * Enable both timers to start the action
+       */
 
       outputTimer.enablePeripheral();
-			_myInputTimer->enablePeripheral();
+      _myInputTimer->enablePeripheral();
 
-			/*
-			 * Loop until the next frequency has been captured
-			 */
+      /*
+       * Loop until the next frequency has been captured
+       */
 
-			for(;;) {
+      for(;;) {
 
         while(_capturingNextFrequency);
 
@@ -178,8 +178,8 @@ class TimerInputCaptureTest : public Observer {
          */
 
         char buf[15];
-				StringUtil::modp_uitoa10(_capturedFrequency,buf);
-				outputStream << buf << "Hz\r\n";
+        StringUtil::modp_uitoa10(_capturedFrequency,buf);
+        outputStream << buf << "Hz\r\n";
 
         /*
          * Pause for 3 seconds
@@ -192,8 +192,8 @@ class TimerInputCaptureTest : public Observer {
          */
 
         _capturingNextFrequency=true;
-			}
-		}
+      }
+    }
 
 
     /*
@@ -212,12 +212,12 @@ class TimerInputCaptureTest : public Observer {
         if(_captureIndex++==1) {
 
           // if the main loop is ready then calc the frequency and signal the main loop
-        	// note the scaling divisor because our timer clocks are scaled by a factor of
-        	// the APB1 prescaler.
+          // note the scaling divisor because our timer clocks are scaled by a factor of
+          // the APB1 prescaler.
 
           if(_capturingNextFrequency) {
-          	_capturedFrequency=_myInputTimer->calculateFrequency(_captures[0],_captures[1]);
-          	_capturingNextFrequency=false;
+            _capturedFrequency=_myInputTimer->calculateFrequency(_captures[0],_captures[1]);
+            _capturingNextFrequency=false;
           }
 
           // back to storing at position zero
@@ -235,17 +235,17 @@ class TimerInputCaptureTest : public Observer {
 
 int main() {
 
-	// we're using interrupts, initialise NVIC
+  // we're using interrupts, initialise NVIC
 
-	Nvic::initialise();
+  Nvic::initialise();
 
-	// initialise the SysTick timer
+  // initialise the SysTick timer
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
   TimerInputCaptureTest test;
-	test.run();
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -7,11 +7,11 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace GammaSettingCmd {
-			enum {
-				Opcode=0xc8
-			};
-		}
-	}
+  namespace ili9327 {
+    namespace GammaSettingCmd {
+      enum {
+        Opcode=0xc8
+      };
+    }
+  }
 }

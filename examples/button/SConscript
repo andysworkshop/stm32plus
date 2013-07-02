@@ -22,17 +22,17 @@ matches.append(Glob("*.s"))
 matches.append("system/LibraryHacks.cpp")
 
 if mcu=="f4":
-	matches.append("system/f4/Startup.s")
-	matches.append("system/f4/System.c")
-	linkerscript="examples/"+example+"/system/f4/Linker.ld"
+  matches.append("system/f4/Startup.s")
+  matches.append("system/f4/System.c")
+  linkerscript="examples/"+example+"/system/f4/Linker.ld"
 
 elif mcu=="f1hd":
-	matches.append("system/f1/Startup.s")
-	matches.append("system/f1/System.c")
-	linkerscript="examples/"+example+"/system/f1/Linker.ld"
+  matches.append("system/f1/Startup.s")
+  matches.append("system/f1/System.c")
+  linkerscript="examples/"+example+"/system/f1/Linker.ld"
 
 buildoutdir="examples/"+example+"/build/"+systemprefix
-	
+  
 # set the additional linker flags
 
 env.Append(LINKFLAGS=["-T"+linkerscript,"-Wl,-wrap,__aeabi_unwind_cpp_pr0","-Wl,-wrap,__aeabi_unwind_cpp_pr1","-Wl,-wrap,__aeabi_unwind_cpp_pr2"])

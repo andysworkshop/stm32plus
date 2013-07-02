@@ -8,19 +8,19 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace DrivingWaveControlCmd
-		{
-			enum
-			{
-				Opcode = 2,
-				FixedBits = 1<<10,
+  namespace ili9325
+  {
+    namespace DrivingWaveControlCmd
+    {
+      enum
+      {
+        Opcode = 2,
+        FixedBits = 1<<10,
 
-				EOR = 1<<8,
-				BC = 1<<9
-			};
-		}
-	}
+        EOR = 1<<8,
+        BC = 1<<9
+      };
+    }
+  }
 }
 

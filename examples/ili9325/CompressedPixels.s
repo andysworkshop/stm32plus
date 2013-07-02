@@ -5,37 +5,37 @@
  */
 
 
-	.global BulbPixels
-	.global BulbPixelsSize
+  .global BulbPixels
+  .global BulbPixelsSize
 
-	.global AudioPixels
-	.global AudioPixelsSize
+  .global AudioPixels
+  .global AudioPixelsSize
 
-	.global FlagPixels
-	.global FlagPixelsSize
+  .global FlagPixels
+  .global FlagPixelsSize
 
-	.global DocPixels
-	.global DocPixelsSize
+  .global DocPixels
+  .global DocPixelsSize
 
-	.global GlobePixels
-	.global GlobePixelsSize
+  .global GlobePixels
+  .global GlobePixelsSize
 
 BulbPixels:
-	.incbin "lzg/ili9325/bulb.ili9325.262.lzg"
-	BulbPixelsSize=.-BulbPixels
+  .incbin "lzg/ili9325/bulb.ili9325.262.lzg"
+  BulbPixelsSize=.-BulbPixels
 
 AudioPixels:
-	.incbin "lzg/ili9325/audio.ili9325.262.lzg"
-	AudioPixelsSize=.-AudioPixels
+  .incbin "lzg/ili9325/audio.ili9325.262.lzg"
+  AudioPixelsSize=.-AudioPixels
 
 FlagPixels:
-	.incbin "lzg/ili9325/flag.ili9325.262.lzg"
-	FlagPixelsSize=.-FlagPixels
+  .incbin "lzg/ili9325/flag.ili9325.262.lzg"
+  FlagPixelsSize=.-FlagPixels
 
 DocPixels:
-	.incbin "lzg/ili9325/doc.ili9325.262.lzg"
-	DocPixelsSize=.-DocPixels
+  .incbin "lzg/ili9325/doc.ili9325.262.lzg"
+  DocPixelsSize=.-DocPixels
 
 GlobePixels:
-	.incbin "lzg/ili9325/globe.ili9325.262.lzg"
-	GlobePixelsSize=.-GlobePixels
+  .incbin "lzg/ili9325/globe.ili9325.262.lzg"
+  GlobePixelsSize=.-GlobePixels

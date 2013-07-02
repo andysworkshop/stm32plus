@@ -1,9 +1,9 @@
 ENTRY(Reset_Handler)
 
-_estack = 0x2000FFFF;    	/* end of $(RAM_LENGTH) RAM */
+_estack = 0x2000FFFF;     /* end of $(RAM_LENGTH) RAM */
 
-_Min_Heap_Size = 0;      	/* required amount of heap  */
-_Min_Stack_Size = 4K; 		/* required amount of stack */
+_Min_Heap_Size = 0;       /* required amount of heap  */
+_Min_Stack_Size = 4K;     /* required amount of stack */
 
 MEMORY
 {
@@ -31,7 +31,7 @@ SECTIONS
     *(.rodata*)        /* .rodata* sections (constants, strings, etc.) */
     *(.glue_7)         /* glue arm to thumb code */
     *(.glue_7t)        /* glue thumb to arm code */
-	*(.eh_frame)
+  *(.eh_frame)
 
     KEEP (*(.init))
     KEEP (*(.fini))

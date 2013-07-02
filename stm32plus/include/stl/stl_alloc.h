@@ -39,7 +39,7 @@
 // not larger arenas as with the original STL allocators.
 
 #ifdef STM32PLUS_BUILD
-#define __THROW_BAD_ALLOC { for(;;); }		// this will intentionally hang the MCU
+#define __THROW_BAD_ALLOC { for(;;); }    // this will intentionally hang the MCU
 #else
 #ifndef __THROW_BAD_ALLOC
 #  if defined(__STL_NO_BAD_ALLOC) || !defined(__STL_USE_EXCEPTIONS)
@@ -72,9 +72,9 @@
     extern "C" {
       extern int __us_rsthread_malloc;
     }
-	// The above is copied from malloc.h.  Including <malloc.h>
-	// would be cleaner but fails with certain levels of standard
-	// conformance.
+  // The above is copied from malloc.h.  Including <malloc.h>
+  // would be cleaner but fails with certain levels of standard
+  // conformance.
 #   define __NODE_ALLOCATOR_LOCK if (threads && __us_rsthread_malloc) \
                 { _S_node_allocator_lock._M_acquire_lock(); }
 #   define __NODE_ALLOCATOR_UNLOCK if (threads && __us_rsthread_malloc) \
@@ -457,7 +457,7 @@ __default_alloc_template<__threads, __inst>::_S_chunk_alloc(size_t __size,
         return(__result);
     } else {
         size_t __bytes_to_get = 
-	  2 * __total_bytes + _S_round_up(_S_heap_size >> 4);
+    2 * __total_bytes + _S_round_up(_S_heap_size >> 4);
         // Try to make use of the left-over piece.
         if (__bytes_left > 0) {
             _Obj* __STL_VOLATILE* __my_free_list =
@@ -470,7 +470,7 @@ __default_alloc_template<__threads, __inst>::_S_chunk_alloc(size_t __size,
         if (0 == _S_start_free) {
             size_t __i;
             _Obj* __STL_VOLATILE* __my_free_list;
-	    _Obj* __p;
+      _Obj* __p;
             // Try to make do with what we have.  That can't
             // hurt.  We do not try smaller requests, since that tends
             // to result in disaster on multi-process machines.
@@ -488,7 +488,7 @@ __default_alloc_template<__threads, __inst>::_S_chunk_alloc(size_t __size,
                     // right free list.
                 }
             }
-	    _S_end_free = 0;	// In case of exception.
+      _S_end_free = 0;  // In case of exception.
             _S_start_free = (char*)malloc_alloc::allocate(__bytes_to_get);
             // This should either throw an
             // exception or remedy the situation.  Thus we assume it

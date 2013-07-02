@@ -8,24 +8,24 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/**
-		 * @brief The motion is defined by an exponentially decaying sine wave
-		 */
+    /**
+     * @brief The motion is defined by an exponentially decaying sine wave
+     */
 
-		class ExponentialEase : public EasingBase {
+    class ExponentialEase : public EasingBase {
 
-			public:
-				/// starts motion slowly, and then accelerates motion as it executes
-				virtual double easeIn(double time) const override;
+      public:
+        /// starts motion slowly, and then accelerates motion as it executes
+        virtual double easeIn(double time) const override;
 
-				/// starts motion fast, and then decelerates motion as it executes
-				virtual double easeOut(double time) const override;
+        /// starts motion fast, and then decelerates motion as it executes
+        virtual double easeOut(double time) const override;
 
-				/// combines the motion of the easeIn and easeOut methods to start the
-				/// motion slowly, accelerate motion, then decelerate
-				virtual double easeInOut(double time) const override;
-		};
-	}
+        /// combines the motion of the easeIn and easeOut methods to start the
+        /// motion slowly, accelerate motion, then decelerate
+        virtual double easeInOut(double time) const override;
+    };
+  }
 }

@@ -10,14 +10,14 @@
 
 namespace stm32plus {
 
-	/**
-	 * Get the bus speed for SDIO
-	 */
+  /**
+   * Get the bus speed for SDIO
+   */
 
-	template<>
-	struct PeripheralBusSpeed<PERIPHERAL_SDIO> {
-		static uint32_t getBusSpeed() {
-			return SystemCoreClock/RccBusInformation::getAHBPrescaler();
-		}
-	};
+  template<>
+  struct PeripheralBusSpeed<PERIPHERAL_SDIO> {
+    static uint32_t getBusSpeed() {
+      return SystemCoreClock/RccBusInformation::getAHBPrescaler();
+    }
+  };
 }

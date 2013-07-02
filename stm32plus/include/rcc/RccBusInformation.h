@@ -9,33 +9,33 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Utility class to get the prescaler values for buses
-	 */
+  /**
+   * @brief Utility class to get the prescaler values for buses
+   */
 
-	class RccBusInformation {
+  class RccBusInformation {
 
-		public:
+    public:
 
-			/**
-			 * Get the value of the APB2 prescaler
-			 * @return
-			 */
+      /**
+       * Get the value of the APB2 prescaler
+       * @return
+       */
 
-			static uint16_t getAPB2Prescaler();
+      static uint16_t getAPB2Prescaler();
 
-			/**
-			 * Get the value of the APB1 prescaler
-			 * @return
-			 */
+      /**
+       * Get the value of the APB1 prescaler
+       * @return
+       */
 
-			static uint16_t getAPB1Prescaler();
+      static uint16_t getAPB1Prescaler();
 
-			/**
-			 * Get the value of the AHB prescaler
-			 * @return
-			 */
+      /**
+       * Get the value of the AHB prescaler
+       * @return
+       */
 
-			static uint16_t getAHBPrescaler();
-	};
+      static uint16_t getAHBPrescaler();
+  };
 }

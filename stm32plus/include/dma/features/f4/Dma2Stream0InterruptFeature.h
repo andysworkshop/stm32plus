@@ -18,7 +18,7 @@ namespace stm32plus {
    * Dma 2, stream 0 interrupt feature
    */
 
-	typedef DmaInterruptFeature<2,0> Dma2Stream0InterruptFeature;
+  typedef DmaInterruptFeature<2,0> Dma2Stream0InterruptFeature;
 
   /**
    * Types for the peripherals mapped to this channel

@@ -28,8 +28,8 @@ using namespace stm32plus;
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -38,38 +38,38 @@ using namespace stm32plus;
 
 class UsartSendSyncTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			const char *dataToSend="Hello World";
+      const char *dataToSend="Hello World";
 
-			/*
-			 * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
-			 * if your application demands that you use the alternate pins for USART1
-			 */
+      /*
+       * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
+       * if your application demands that you use the alternate pins for USART1
+       */
 
-			Usart1<> usart(57600);
+      Usart1<> usart(57600);
 
-			/*
-			 * For kicks we'll use an output stream for sending to the port instead of using the
-			 * send(uint8_t) method on the usart object
-			 */
+      /*
+       * For kicks we'll use an output stream for sending to the port instead of using the
+       * send(uint8_t) method on the usart object
+       */
 
-			UsartPollingOutputStream outputStream(usart);
+      UsartPollingOutputStream outputStream(usart);
 
-			/*
-			 * Send the data
-			 */
+      /*
+       * Send the data
+       */
 
-			if(!outputStream.write(dataToSend,strlen(dataToSend))) {
-				// error handling would go here
-			}
+      if(!outputStream.write(dataToSend,strlen(dataToSend))) {
+        // error handling would go here
+      }
 
-			// finished
+      // finished
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -79,9 +79,9 @@ class UsartSendSyncTest {
 
 int main() {
 
-	UsartSendSyncTest test;
-	test.run();
+  UsartSendSyncTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

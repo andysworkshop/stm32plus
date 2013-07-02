@@ -9,31 +9,31 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief A string broken down into components.
-	 *
-	 * Access to the components should always start at zero and
-	 * stop at getNumTokens(). Internally a range of tokens is managed through setRange();
-	 */
+  /**
+   * @brief A string broken down into components.
+   *
+   * Access to the components should always start at zero and
+   * stop at getNumTokens(). Internally a range of tokens is managed through setRange();
+   */
 
-	class TokenisedString {
+  class TokenisedString {
 
-		protected:
-			char **_tokens;
-			int _numTokens;
-			int _first;
-			int _last;
+    protected:
+      char **_tokens;
+      int _numTokens;
+      int _first;
+      int _last;
 
-		public:
-			TokenisedString(const char *original_,const char *separators_);
-			virtual ~TokenisedString();
+    public:
+      TokenisedString(const char *original_,const char *separators_);
+      virtual ~TokenisedString();
 
-			int getNumTokens() const;
+      int getNumTokens() const;
 
-			const char *operator[](int pos_) const;
-			const char *last() const;
+      const char *operator[](int pos_) const;
+      const char *last() const;
 
-			void setRange(int first_,int last_);
-			void resetRange();
-	};
+      void setRange(int first_,int last_);
+      void resetRange();
+  };
 }

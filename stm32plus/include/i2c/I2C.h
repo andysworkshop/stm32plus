@@ -9,49 +9,49 @@
 
 namespace stm32plus {
 
-	/**
-	 * Base class for I2C peripherals. Takes care of the common operations
-	 * that each peripheral can have
-	 */
+  /**
+   * Base class for I2C peripherals. Takes care of the common operations
+   * that each peripheral can have
+   */
 
-	class I2C {
+  class I2C {
 
-	  public:
+    public:
 
-			/**
-			 * I2C parameters class
-			 */
+      /**
+       * I2C parameters class
+       */
 
-			struct Parameters {
-				uint32_t i2c_clockSpeed;
-				uint16_t i2c_ack;
-				uint16_t i2c_dutyCycle;
-				uint16_t i2c_ackAddress;
-				uint16_t i2c_ownAddress;
-				uint8_t i2c_addressSize;				// byte-size of the 'address' or 'register' index on the peripheral
+      struct Parameters {
+        uint32_t i2c_clockSpeed;
+        uint16_t i2c_ack;
+        uint16_t i2c_dutyCycle;
+        uint16_t i2c_ackAddress;
+        uint16_t i2c_ownAddress;
+        uint8_t i2c_addressSize;        // byte-size of the 'address' or 'register' index on the peripheral
 
-				Parameters(uint32_t clockSpeed=100000) {
-					i2c_clockSpeed=clockSpeed;
-					i2c_ack=I2C_Ack_Enable;
-					i2c_dutyCycle=I2C_DutyCycle_2;
-					i2c_ackAddress=I2C_AcknowledgedAddress_7bit;
-					i2c_ownAddress=0xFE;
-					i2c_addressSize=1;
-				}
-			};
-
-	    enum {
-        E_I2C_TIMEOUT=1					/// timed out waiting for a response
+        Parameters(uint32_t clockSpeed=100000) {
+          i2c_clockSpeed=clockSpeed;
+          i2c_ack=I2C_Ack_Enable;
+          i2c_dutyCycle=I2C_DutyCycle_2;
+          i2c_ackAddress=I2C_AcknowledgedAddress_7bit;
+          i2c_ownAddress=0xFE;
+          i2c_addressSize=1;
+        }
       };
 
-	  protected:
-	    I2C_TypeDef *_peripheralAddress;
-	    uint8_t _addressSize;
+      enum {
+        E_I2C_TIMEOUT=1         /// timed out waiting for a response
+      };
 
-	  protected:
-	    I2C(const Parameters& params,I2C_TypeDef *peripheralAddress);
+    protected:
+      I2C_TypeDef *_peripheralAddress;
+      uint8_t _addressSize;
 
-	  public:
+    protected:
+      I2C(const Parameters& params,I2C_TypeDef *peripheralAddress);
+
+    public:
       void enablePeripheral() const;
       void disablePeripheral() const;
 
@@ -59,64 +59,64 @@ namespace stm32plus {
       void setAddressSize(uint8_t addressSize);
 
       operator I2C_TypeDef *();
-	};
+  };
 
 
-	/**
-	 * Constructor
-	 */
+  /**
+   * Constructor
+   */
 
-	inline I2C::I2C(const Parameters& params,I2C_TypeDef *peripheralAddress)
-		: _peripheralAddress(peripheralAddress),
-		  _addressSize(params.i2c_addressSize) {
-	}
-
-
-	/**
-	 * Enable the peripheral
-	 */
-
-	inline void I2C::enablePeripheral() const {
-		I2C_Cmd(_peripheralAddress,ENABLE);
-	}
+  inline I2C::I2C(const Parameters& params,I2C_TypeDef *peripheralAddress)
+    : _peripheralAddress(peripheralAddress),
+      _addressSize(params.i2c_addressSize) {
+  }
 
 
-	/**
-	 * Disable the peripheral
-	 */
+  /**
+   * Enable the peripheral
+   */
 
-	inline void I2C::disablePeripheral() const {
-		I2C_Cmd(_peripheralAddress,DISABLE);
-	}
-
-
-	/**
-	 * Cast to a I2C peripheral structure
-	 */
-
-	inline I2C::operator I2C_TypeDef *() {
-		return _peripheralAddress;
-	}
+  inline void I2C::enablePeripheral() const {
+    I2C_Cmd(_peripheralAddress,ENABLE);
+  }
 
 
-	/**
-	 * Get the address or register size in bytes. Often this is just one byte where the IC has
-	 * less than 255 registers but in EEPROMs etc. could be multiple bytes to fit in an 'address'
-	 * to read or write from/to.
-	 * @return The byte width
-	 */
+  /**
+   * Disable the peripheral
+   */
 
-	inline uint8_t I2C::getAddressSize() const {
-		return _addressSize;
-	}
+  inline void I2C::disablePeripheral() const {
+    I2C_Cmd(_peripheralAddress,DISABLE);
+  }
 
 
-	/**
-	 * Set the address size
-	 * @param addressSize The new address size
-	 */
+  /**
+   * Cast to a I2C peripheral structure
+   */
 
-	inline void I2C::setAddressSize(uint8_t addressSize) {
-		_addressSize=addressSize;
-	}
+  inline I2C::operator I2C_TypeDef *() {
+    return _peripheralAddress;
+  }
+
+
+  /**
+   * Get the address or register size in bytes. Often this is just one byte where the IC has
+   * less than 255 registers but in EEPROMs etc. could be multiple bytes to fit in an 'address'
+   * to read or write from/to.
+   * @return The byte width
+   */
+
+  inline uint8_t I2C::getAddressSize() const {
+    return _addressSize;
+  }
+
+
+  /**
+   * Set the address size
+   * @param addressSize The new address size
+   */
+
+  inline void I2C::setAddressSize(uint8_t addressSize) {
+    _addressSize=addressSize;
+  }
 }

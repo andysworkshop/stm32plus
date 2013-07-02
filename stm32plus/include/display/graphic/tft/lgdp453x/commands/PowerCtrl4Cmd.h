@@ -12,20 +12,20 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PowerCtrl4Cmd
-		{
-			enum
-			{
-				Opcode = 0x13,
+  namespace lgdp453x
+  {
+    namespace PowerCtrl4Cmd
+    {
+      enum
+      {
+        Opcode = 0x13,
 
-				VCOMG  = 1<<13
-			};
-			inline uint16_t VCM(uint16_t n) { return n; }
-			inline uint16_t VDV(uint16_t n) { return n<<8; }
-		}
-	}
+        VCOMG  = 1<<13
+      };
+      inline uint16_t VCM(uint16_t n) { return n; }
+      inline uint16_t VDV(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

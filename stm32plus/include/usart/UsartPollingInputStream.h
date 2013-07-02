@@ -9,43 +9,43 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Implementation of an input stream for the serial USART.
-	 * The stream methods can be used to read data from the USART in polling mode
-	 */
+  /**
+   * @brief Implementation of an input stream for the serial USART.
+   * The stream methods can be used to read data from the USART in polling mode
+   */
 
-	class UsartPollingInputStream : public InputStream {
+  class UsartPollingInputStream : public InputStream {
 
-		protected:
-			Usart& _usart;
+    protected:
+      Usart& _usart;
 
-		public:
-			UsartPollingInputStream(Usart& usart);
-			virtual ~UsartPollingInputStream() {}
+    public:
+      UsartPollingInputStream(Usart& usart);
+      virtual ~UsartPollingInputStream() {}
 
-			// overrides from InputStream
+      // overrides from InputStream
 
-			virtual int16_t read() override;
-			virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
-			virtual bool skip(uint32_t howMuch) override;
-			virtual bool available() override;
+      virtual int16_t read() override;
+      virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
+      virtual bool skip(uint32_t howMuch) override;
+      virtual bool available() override;
 
-			/**
-			 * Doesn't do anything.
-			 * @return always true
-			 */
+      /**
+       * Doesn't do anything.
+       * @return always true
+       */
 
-			virtual bool close() override {
-				return true;
-			}
+      virtual bool close() override {
+        return true;
+      }
 
-			/**
-			 * Not supported.
-			 * @return always false and E_OPERATION_NOT_SUPPORTED
-			 */
+      /**
+       * Not supported.
+       * @return always false and E_OPERATION_NOT_SUPPORTED
+       */
 
-			virtual bool reset() override {
-				return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USART_INPUT_STREAM,E_OPERATION_NOT_SUPPORTED);
-			}
-	};
+      virtual bool reset() override {
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USART_INPUT_STREAM,E_OPERATION_NOT_SUPPORTED);
+      }
+  };
 }

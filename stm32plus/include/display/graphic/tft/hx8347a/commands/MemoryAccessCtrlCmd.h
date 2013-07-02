@@ -7,17 +7,17 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace MemoryAccessCtrlCmd {
-			enum {
-				Opcode=0x16
-			};
+  namespace hx8347 {
+    namespace MemoryAccessCtrlCmd {
+      enum {
+        Opcode=0x16
+      };
 
-			static const uint16_t MY=1 << 7;
-			static const uint16_t MX=1 << 6;
-			static const uint16_t MV=1 << 5;
-			static const uint16_t ML=1 << 4;
-			static const uint16_t BGR=1 << 3;
-		}
-	}
+      static const uint16_t MY=1 << 7;
+      static const uint16_t MX=1 << 6;
+      static const uint16_t MV=1 << 5;
+      static const uint16_t ML=1 << 4;
+      static const uint16_t BGR=1 << 3;
+    }
+  }
 }

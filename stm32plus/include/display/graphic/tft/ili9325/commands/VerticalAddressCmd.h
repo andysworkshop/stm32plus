@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace VerticalAddressCmd
-		{
-			enum
-			{
-				Opcode = 0x21
-			};
+  namespace ili9325
+  {
+    namespace VerticalAddressCmd
+    {
+      enum
+      {
+        Opcode = 0x21
+      };
 
-			inline uint16_t ADDR(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t ADDR(uint16_t n) { return n; }
+    }
+  }
 }
 
 

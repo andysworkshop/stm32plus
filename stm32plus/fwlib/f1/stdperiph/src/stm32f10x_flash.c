@@ -739,7 +739,7 @@ FLASH_Status FLASH_ProgramWord(uint32_t Address, uint32_t Data)
       /* Wait for last operation to be completed */
       status = FLASH_WaitForLastBank1Operation(ProgramTimeout);
       
-	  /* Disable the PG Bit */
+    /* Disable the PG Bit */
       FLASH->CR &= CR_PG_Reset;
     }
     else

@@ -19,14 +19,14 @@ using namespace stm32plus;
  * If the STM32F4DISCOVERY board is your target then
  * change the GPIO declation to...
  *
- * 	GpioD<DefaultDigitalOutputFeature<13> > pd
+ *  GpioD<DefaultDigitalOutputFeature<13> > pd
  *
  * ... and change 2 of "pf[6]" to "pd[13]" to blink the
  * orange led on the discovery board.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -36,26 +36,26 @@ using namespace stm32plus;
 
 class Blink {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			// initialise the pin for output
+      // initialise the pin for output
 
-			GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioF<DefaultDigitalOutputFeature<6> > pf;
 
-			// loop forever switching it on and off with a 1 second
-			// delay in between each cycle
+      // loop forever switching it on and off with a 1 second
+      // delay in between each cycle
 
-			for(;;) {
+      for(;;) {
 
-				pf[6].set();
-				MillisecondTimer::delay(1000);
+        pf[6].set();
+        MillisecondTimer::delay(1000);
 
-				pf[6].reset();
-				MillisecondTimer::delay(1000);
-			}
-		}
+        pf[6].reset();
+        MillisecondTimer::delay(1000);
+      }
+    }
 };
 
 
@@ -65,12 +65,12 @@ class Blink {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	Blink blink;
-	blink.run();
+  Blink blink;
+  blink.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -24,118 +24,118 @@ template<> TimerInterruptFeatureEnabler<14>::FPTR TimerInterruptFeatureEnabler<1
 
 extern "C" {
 
-	/**
-	 * TIM8_BRK and TIM12 (XL-density only) share the same vector.
+  /**
+   * TIM8_BRK and TIM12 (XL-density only) share the same vector.
    * TIM12 can have CC1, CC2, Update, Trigger
    */
 
 #if defined(USE_TIM8_BRK_INTERRUPT) || defined(USE_TIM12_INTERRUPT)
 
-	void __attribute__ ((interrupt("IRQ"))) TIM8_BRK_IRQHandler() {
+  void __attribute__ ((interrupt("IRQ"))) TIM8_BRK_IRQHandler() {
 
-		if(TIM_GetITStatus(TIM8,TIM_IT_Break)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Break);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_Break);
-		}
-		else if(TIM_GetITStatus(TIM12,TIM_IT_CC1)!=RESET) {
-			TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
-			TIM_ClearITPendingBit(TIM12,TIM_IT_CC1);
-		}
-		else if(TIM_GetITStatus(TIM12,TIM_IT_CC2)!=RESET) {
-			TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare2);
-			TIM_ClearITPendingBit(TIM12,TIM_IT_CC2);
-		}
-		else if(TIM_GetITStatus(TIM12,TIM_IT_Update)!=RESET) {
-			TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
-			TIM_ClearITPendingBit(TIM12,TIM_IT_Update);
-		}
-		else if(TIM_GetITStatus(TIM12,TIM_IT_Trigger)!=RESET) {
-			TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Trigger);
-			TIM_ClearITPendingBit(TIM12,TIM_IT_Trigger);
-		}
-	}
+    if(TIM_GetITStatus(TIM8,TIM_IT_Break)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Break);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_Break);
+    }
+    else if(TIM_GetITStatus(TIM12,TIM_IT_CC1)!=RESET) {
+      TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
+      TIM_ClearITPendingBit(TIM12,TIM_IT_CC1);
+    }
+    else if(TIM_GetITStatus(TIM12,TIM_IT_CC2)!=RESET) {
+      TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare2);
+      TIM_ClearITPendingBit(TIM12,TIM_IT_CC2);
+    }
+    else if(TIM_GetITStatus(TIM12,TIM_IT_Update)!=RESET) {
+      TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
+      TIM_ClearITPendingBit(TIM12,TIM_IT_Update);
+    }
+    else if(TIM_GetITStatus(TIM12,TIM_IT_Trigger)!=RESET) {
+      TimerInterruptFeature<12>::_timerInstance->notifyObservers(ObservableEvent::Timer_Trigger);
+      TIM_ClearITPendingBit(TIM12,TIM_IT_Trigger);
+    }
+  }
 
 #endif
 
-	/**
-	 * TIM8_UP and TIM13 (XL-density only) share the same vector.
+  /**
+   * TIM8_UP and TIM13 (XL-density only) share the same vector.
    * TIM13 can have CC1, Update
    */
 
 #if defined(USE_TIM8_UP_INTERRUPT) || defined(USE_TIM13_INTERRUPT)
 
-	void __attribute__ ((interrupt)) TIM8_UP_IRQHandler() {
+  void __attribute__ ((interrupt)) TIM8_UP_IRQHandler() {
 
-		if(TIM_GetITStatus(TIM8,TIM_IT_Update)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_Update);
-		}
-		else if(TIM_GetITStatus(TIM13,TIM_IT_CC1)!=RESET) {
-			TimerInterruptFeature<13>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
-			TIM_ClearITPendingBit(TIM13,TIM_IT_CC1);
-		}
-		else if(TIM_GetITStatus(TIM13,TIM_IT_Update)!=RESET) {
-			TimerInterruptFeature<13>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
-			TIM_ClearITPendingBit(TIM13,TIM_IT_Update);
-		}
-	}
+    if(TIM_GetITStatus(TIM8,TIM_IT_Update)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_Update);
+    }
+    else if(TIM_GetITStatus(TIM13,TIM_IT_CC1)!=RESET) {
+      TimerInterruptFeature<13>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
+      TIM_ClearITPendingBit(TIM13,TIM_IT_CC1);
+    }
+    else if(TIM_GetITStatus(TIM13,TIM_IT_Update)!=RESET) {
+      TimerInterruptFeature<13>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
+      TIM_ClearITPendingBit(TIM13,TIM_IT_Update);
+    }
+  }
 
 #endif
 
-	/**
-	 * TIM8_TRG_COM and TIM14 (XL-density only) share the same vector.
+  /**
+   * TIM8_TRG_COM and TIM14 (XL-density only) share the same vector.
    * TIM14 can have CC1, Update
    */
 
 #if defined(USE_TIM8_TRG_COM_INTERRUPT) || defined(USE_TIM14_INTERRUPT)
 
-	void __attribute__ ((interrupt)) TIM8_TRG_COM_IRQHandler() {
+  void __attribute__ ((interrupt)) TIM8_TRG_COM_IRQHandler() {
 
-		if(TIM_GetITStatus(TIM8,TIM_IT_Trigger)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Trigger);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_Trigger);
-		}
-		else if(TIM_GetITStatus(TIM8,TIM_IT_COM)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Com);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_COM);
-		}
-		else if(TIM_GetITStatus(TIM14,TIM_IT_CC1)!=RESET) {
-			TimerInterruptFeature<14>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
-			TIM_ClearITPendingBit(TIM14,TIM_IT_CC1);
-		}
-		else if(TIM_GetITStatus(TIM14,TIM_IT_Update)!=RESET) {
-			TimerInterruptFeature<14>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
-			TIM_ClearITPendingBit(TIM14,TIM_IT_Update);
-		}
-	}
+    if(TIM_GetITStatus(TIM8,TIM_IT_Trigger)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Trigger);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_Trigger);
+    }
+    else if(TIM_GetITStatus(TIM8,TIM_IT_COM)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Com);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_COM);
+    }
+    else if(TIM_GetITStatus(TIM14,TIM_IT_CC1)!=RESET) {
+      TimerInterruptFeature<14>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
+      TIM_ClearITPendingBit(TIM14,TIM_IT_CC1);
+    }
+    else if(TIM_GetITStatus(TIM14,TIM_IT_Update)!=RESET) {
+      TimerInterruptFeature<14>::_timerInstance->notifyObservers(ObservableEvent::Timer_Update);
+      TIM_ClearITPendingBit(TIM14,TIM_IT_Update);
+    }
+  }
 
 #endif
 
-	/**
-	 * TIM8_CC interrupt handler
+  /**
+   * TIM8_CC interrupt handler
    */
 
 #if defined(USE_TIM8_CC_INTERRUPT)
 
-	void __attribute__ ((interrupt)) TIM8_CC_IRQHandler() {
+  void __attribute__ ((interrupt)) TIM8_CC_IRQHandler() {
 
-		if(TIM_GetITStatus(TIM8,TIM_IT_CC1)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_CC1);
-		}
-		else if(TIM_GetITStatus(TIM8,TIM_IT_CC2)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare2);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_CC2);
-		}
-		else if(TIM_GetITStatus(TIM8,TIM_IT_CC3)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare3);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_CC3);
-		}
-		else if(TIM_GetITStatus(TIM8,TIM_IT_CC3)!=RESET) {
-			TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare3);
-			TIM_ClearITPendingBit(TIM8,TIM_IT_CC3);
-		}
-	}
+    if(TIM_GetITStatus(TIM8,TIM_IT_CC1)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare1);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_CC1);
+    }
+    else if(TIM_GetITStatus(TIM8,TIM_IT_CC2)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare2);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_CC2);
+    }
+    else if(TIM_GetITStatus(TIM8,TIM_IT_CC3)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare3);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_CC3);
+    }
+    else if(TIM_GetITStatus(TIM8,TIM_IT_CC3)!=RESET) {
+      TimerInterruptFeature<8>::_timerInstance->notifyObservers(ObservableEvent::Timer_Compare3);
+      TIM_ClearITPendingBit(TIM8,TIM_IT_CC3);
+    }
+  }
 
 #endif
 } // extern "C"

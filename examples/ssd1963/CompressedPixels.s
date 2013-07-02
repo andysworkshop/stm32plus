@@ -5,37 +5,37 @@
  */
 
 
-	.global BulbPixels
-	.global BulbPixelsSize
+  .global BulbPixels
+  .global BulbPixelsSize
 
-	.global AudioPixels
-	.global AudioPixelsSize
+  .global AudioPixels
+  .global AudioPixelsSize
 
-	.global FlagPixels
-	.global FlagPixelsSize
+  .global FlagPixels
+  .global FlagPixelsSize
 
-	.global DocPixels
-	.global DocPixelsSize
+  .global DocPixels
+  .global DocPixelsSize
 
-	.global GlobePixels
-	.global GlobePixelsSize
+  .global GlobePixels
+  .global GlobePixelsSize
 
 BulbPixels:
-	.incbin "lzg/ssd1963/bulb.ssd1963.16.lzg"
-	BulbPixelsSize=.-BulbPixels
+  .incbin "lzg/ssd1963/bulb.ssd1963.16.lzg"
+  BulbPixelsSize=.-BulbPixels
 
 AudioPixels:
-	.incbin "lzg/ssd1963/audio.ssd1963.16.lzg"
-	AudioPixelsSize=.-AudioPixels
+  .incbin "lzg/ssd1963/audio.ssd1963.16.lzg"
+  AudioPixelsSize=.-AudioPixels
 
 FlagPixels:
-	.incbin "lzg/ssd1963/flag.ssd1963.16.lzg"
-	FlagPixelsSize=.-FlagPixels
+  .incbin "lzg/ssd1963/flag.ssd1963.16.lzg"
+  FlagPixelsSize=.-FlagPixels
 
 DocPixels:
-	.incbin "lzg/ssd1963/doc.ssd1963.16.lzg"
-	DocPixelsSize=.-DocPixels
+  .incbin "lzg/ssd1963/doc.ssd1963.16.lzg"
+  DocPixelsSize=.-DocPixels
 
 GlobePixels:
-	.incbin "lzg/ssd1963/globe.ssd1963.16.lzg"
-	GlobePixelsSize=.-GlobePixels
+  .incbin "lzg/ssd1963/globe.ssd1963.16.lzg"
+  GlobePixelsSize=.-GlobePixels

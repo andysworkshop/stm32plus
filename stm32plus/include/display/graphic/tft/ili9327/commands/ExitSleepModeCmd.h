@@ -7,12 +7,12 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace ExitSleepModeCmd {
-			enum {
-				Opcode=0x11
-			};
-		}
-	}
+  namespace ili9327 {
+    namespace ExitSleepModeCmd {
+      enum {
+        Opcode=0x11
+      };
+    }
+  }
 }
 

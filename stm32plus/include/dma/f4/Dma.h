@@ -86,12 +86,12 @@ namespace stm32plus {
 
   inline bool Dma::isComplete() const {
 
-  	if(DMA_GetFlagStatus(_peripheralAddress,_completeFlag)) {
-  		clearCompleteFlag();
-  		return true;
-  	}
+    if(DMA_GetFlagStatus(_peripheralAddress,_completeFlag)) {
+      clearCompleteFlag();
+      return true;
+    }
 
-  	return false;
+    return false;
   }
 
 
@@ -102,12 +102,12 @@ namespace stm32plus {
 
   inline bool Dma::isHalfComplete() const {
 
-  	if(DMA_GetFlagStatus(_peripheralAddress,_halfCompleteFlag)) {
-  		clearHalfCompleteFlag();
-  		return true;
-  	}
+    if(DMA_GetFlagStatus(_peripheralAddress,_halfCompleteFlag)) {
+      clearHalfCompleteFlag();
+      return true;
+    }
 
-  	return false;
+    return false;
   }
 
 
@@ -118,13 +118,13 @@ namespace stm32plus {
 
   inline bool Dma::isError() const {
 
-  	if(DMA_GetFlagStatus(_peripheralAddress,_errorFlag)) {
-  		clearErrorFlag();
-  		errorProvider.set(ErrorProvider::ERROR_PROVIDER_DMA,E_TRANSFER_ERROR);
-  		return true;
-  	}
+    if(DMA_GetFlagStatus(_peripheralAddress,_errorFlag)) {
+      clearErrorFlag();
+      errorProvider.set(ErrorProvider::ERROR_PROVIDER_DMA,E_TRANSFER_ERROR);
+      return true;
+    }
 
-  	return false;
+    return false;
   }
 
 
@@ -193,6 +193,6 @@ namespace stm32plus {
    */
 
   inline uint32_t Dma::getChannelNumber() const {
-  	return _channelNumber;
+    return _channelNumber;
   }
 }

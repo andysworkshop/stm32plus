@@ -8,35 +8,35 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Free cluster finder that uses a FAT iterator to find free clusters.
-		 *
-		 * This is a base class
-		 */
+    /**
+     * @brief Free cluster finder that uses a FAT iterator to find free clusters.
+     *
+     * This is a base class
+     */
 
-		class IteratingFreeClusterFinder : public FreeClusterFinder {
+    class IteratingFreeClusterFinder : public FreeClusterFinder {
 
-			protected:
-				FatIterator _iterator;
+      protected:
+        FatIterator _iterator;
 
-			protected:
-				IteratingFreeClusterFinder(FatFileSystem& fs,uint32_t firstFatEntry);
+      protected:
+        IteratingFreeClusterFinder(FatFileSystem& fs,uint32_t firstFatEntry);
 
-			public:
+      public:
 
-			/**
-			 * Virtual destructor, does nothing
-			 */
+      /**
+       * Virtual destructor, does nothing
+       */
 
-				virtual ~IteratingFreeClusterFinder() {
-				}
+        virtual ~IteratingFreeClusterFinder() {
+        }
 
-				// overrides from FreeClusterFinder
+        // overrides from FreeClusterFinder
 
-				virtual bool find(uint32_t& freeCluster) override;
-		};
+        virtual bool find(uint32_t& freeCluster) override;
+    };
 
-	}
+  }
 }

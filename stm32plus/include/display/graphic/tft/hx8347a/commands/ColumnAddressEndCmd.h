@@ -8,12 +8,12 @@
 
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace ColumnAddressEndCmd {
-			enum {
-				OpcodeHigh=0x4,
-				OpcodeLow=0x5
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace ColumnAddressEndCmd {
+      enum {
+        OpcodeHigh=0x4,
+        OpcodeLow=0x5
+      };
+    }
+  }
 }

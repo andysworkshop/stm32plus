@@ -8,34 +8,34 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Iterate over the entries in the FAT sequentially.
-		 */
+    /**
+     * @brief Iterate over the entries in the FAT sequentially.
+     */
 
-		class FatIterator : public Iterator<uint32_t> {
+    class FatIterator : public Iterator<uint32_t> {
 
-			private:
-				FatFileSystem& _fs;
-				uint32_t _firstIndex;
-				uint32_t _currentIndex;
-				uint32_t _entriesPerFat;
-				uint32_t _lastSectorIndex;
-				bool _wrap;
-				bool _first;
-				ByteMemblock _sectorBuffer;
+      private:
+        FatFileSystem& _fs;
+        uint32_t _firstIndex;
+        uint32_t _currentIndex;
+        uint32_t _entriesPerFat;
+        uint32_t _lastSectorIndex;
+        bool _wrap;
+        bool _first;
+        ByteMemblock _sectorBuffer;
 
-			public:
-				FatIterator(FatFileSystem& fs_,uint32_t firstIndex_,bool wrap_);
+      public:
+        FatIterator(FatFileSystem& fs_,uint32_t firstIndex_,bool wrap_);
 
-				uint32_t currentContent(); // get the content of the current index
+        uint32_t currentContent(); // get the content of the current index
 
-				// overrides from Iterator
+        // overrides from Iterator
 
-				virtual bool next() override;
-				virtual uint32_t current() override; // get the current index
-		};
+        virtual bool next() override;
+        virtual uint32_t current() override; // get the current index
+    };
 
-	}
+  }
 }

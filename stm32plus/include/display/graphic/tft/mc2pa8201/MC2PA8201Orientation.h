@@ -8,18 +8,18 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for MC2PA8201 orientation-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for MC2PA8201 orientation-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
-		class MC2PA8201Orientation {
-		};
-	}
+    template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
+    class MC2PA8201Orientation {
+    };
+  }
 }
 
 

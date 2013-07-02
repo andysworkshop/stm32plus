@@ -9,7 +9,7 @@
 
 extern "C" {
 
-	void MEM_DataCopy(void *,const void *,size_t);
+  void MEM_DataCopy(void *,const void *,size_t);
 }
 
 
@@ -19,6 +19,6 @@ extern "C" {
  */
 
 #if defined(USE_MEMDATACOPY)
-#undef memcpy			 							// just in case
+#undef memcpy                   // just in case
 #define memcpy(a,b,c) MEM_DataCopy(a,b,c)
 #endif

@@ -424,9 +424,9 @@ protected:
       ++_M_finish;
     }
     else {
-    	size_type __len = size() ? 2 * size() : __WORD_BIT;
+      size_type __len = size() ? 2 * size() : __WORD_BIT;
 
-    	unsigned int* __q = _M_bit_alloc(__len);
+      unsigned int* __q = _M_bit_alloc(__len);
       iterator __i = copy(begin(), __position, iterator(__q, 0));
       *__i++ = __x;
       _M_finish = copy(__position, end(), __i);

@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace WriteMemoryStartCmd
-		{
-			enum
-			{
-				Opcode = 0x2C
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace WriteMemoryStartCmd
+    {
+      enum
+      {
+        Opcode = 0x2C
+      };
+    }
+  }
 }
 
 

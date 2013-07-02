@@ -10,29 +10,29 @@
 namespace stm32plus {
 
 
-	/*
-	 * Default pin package: (OUT = PA4)
-	 */
+  /*
+   * Default pin package: (OUT = PA4)
+   */
 
-	struct Dac1DefaultPinPackage {
-		enum {
-			Port_OUT = GPIOA_BASE,
-			Pin_OUT  = GPIO_Pin_4
-		};
-	};
+  struct Dac1DefaultPinPackage {
+    enum {
+      Port_OUT = GPIOA_BASE,
+      Pin_OUT  = GPIO_Pin_4
+    };
+  };
 
 
-	/**
-	 * Main DAC class
-	 */
+  /**
+   * Main DAC class
+   */
 
-	template<class... Features>
-	struct Dac1 : DacPeripheral<Dac1DefaultPinPackage,PERIPHERAL_DAC1>,
-             	 	Features... {
+  template<class... Features>
+  struct Dac1 : DacPeripheral<Dac1DefaultPinPackage,PERIPHERAL_DAC1>,
+                Features... {
 
-	  Dac1(const Parameters& params)
-	  	: DacPeripheral<Dac1DefaultPinPackage,PERIPHERAL_DAC1>(params),
-	  	  Features((Dac&)*this)... {
-	  }
-	};
+    Dac1(const Parameters& params)
+      : DacPeripheral<Dac1DefaultPinPackage,PERIPHERAL_DAC1>(params),
+        Features((Dac&)*this)... {
+    }
+  };
 }

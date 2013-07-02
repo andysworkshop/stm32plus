@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace GateScanControlScrollCmd
-		{
-			enum
-			{
-				Opcode = 0x6A
-			};
+  namespace lgdp453x
+  {
+    namespace GateScanControlScrollCmd
+    {
+      enum
+      {
+        Opcode = 0x6A
+      };
 
-			inline uint16_t SCROLL(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t SCROLL(uint16_t n) { return n; }
+    }
+  }
 }
 
 

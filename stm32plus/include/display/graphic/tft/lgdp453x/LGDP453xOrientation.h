@@ -8,18 +8,18 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for LGDP453x orientation-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for LGDP453x orientation-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<Orientation TOrientation,class TAccessMode>
-		class LGDP453xOrientation {
-		};
-	}
+    template<Orientation TOrientation,class TAccessMode>
+    class LGDP453xOrientation {
+    };
+  }
 }
 
 

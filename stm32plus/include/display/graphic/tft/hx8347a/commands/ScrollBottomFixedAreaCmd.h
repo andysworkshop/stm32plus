@@ -8,12 +8,12 @@
 
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace ScrollBottomFixedAreaCmd {
-			enum {
-				OpcodeHigh=0x12,
-				OpcodeLow=0x13
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace ScrollBottomFixedAreaCmd {
+      enum {
+        OpcodeHigh=0x12,
+        OpcodeLow=0x13
+      };
+    }
+  }
 }

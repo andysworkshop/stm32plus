@@ -12,66 +12,66 @@
  */
 
 class TouchManager : public Initialiser,
-										 public ThreePointTouchScreenCalibrator::GuiCallback,
-										 public Observer {
+                     public ThreePointTouchScreenCalibrator::GuiCallback,
+                     public Observer {
 
-	protected:
-		FileSystemManager& _fsManager;
+  protected:
+    FileSystemManager& _fsManager;
 
-		TouchScreen *_touchScreen;
-		Spi *_spi;
-		ExtiPeripheralBase *_exti;
-		GpioPinRef _penIrqPin;
-		PassThroughTouchScreenPostProcessor _passThroughPostProcessor;
-		PassThroughTouchScreenCalibration _passThroughCalibration;
-		TouchScreenCalibration *_calibration;
-		bool _needsCalibration;
+    TouchScreen *_touchScreen;
+    Spi *_spi;
+    ExtiPeripheralBase *_exti;
+    GpioPinRef _penIrqPin;
+    PassThroughTouchScreenPostProcessor _passThroughPostProcessor;
+    PassThroughTouchScreenCalibration _passThroughCalibration;
+    TouchScreenCalibration *_calibration;
+    bool _needsCalibration;
 
-		volatile bool _clicked;
+    volatile bool _clicked;
 
-	protected:
-		bool loadCalibration();
-		bool saveCalibration();
+  protected:
+    bool loadCalibration();
+    bool saveCalibration();
 
-	public:
-		TouchManager(LcdManager& lcdManager,FileSystemManager& fsManager);
-		virtual ~TouchManager() {}
+  public:
+    TouchManager(LcdManager& lcdManager,FileSystemManager& fsManager);
+    virtual ~TouchManager() {}
 
-		TouchScreen& getTouchScreen() const {
-			return *_touchScreen;
-		}
+    TouchScreen& getTouchScreen() const {
+      return *_touchScreen;
+    }
 
-		bool needsCalibration() const {
-			return _needsCalibration;
-		}
+    bool needsCalibration() const {
+      return _needsCalibration;
+    }
 
-		void waitForPenUp() {
-			while(isPenDown());
-			MillisecondTimer::delay(100);
-			_clicked=false;
-		}
+    void waitForPenUp() {
+      while(isPenDown());
+      MillisecondTimer::delay(100);
+      _clicked=false;
+    }
 
-		bool isPenDown() const {
-			return !_penIrqPin.read();
-		}
+    bool isPenDown() const {
+      return !_penIrqPin.read();
+    }
 
-		bool clicked() const {
-			return _clicked;
-		}
+    bool clicked() const {
+      return _clicked;
+    }
 
-		bool calibrate();
+    bool calibrate();
 
-		// overrides from Initialiser
+    // overrides from Initialiser
 
-		virtual bool initialise();
+    virtual bool initialise();
 
-		// overrides from ThreePointTouchScreenCalibrator::GuiCallback
+    // overrides from ThreePointTouchScreenCalibrator::GuiCallback
 
-		virtual void displayPrompt(const char *text);
-		virtual void displayHitPoint(const Point& pt);
-		virtual Size getPanelSize();
+    virtual void displayPrompt(const char *text);
+    virtual void displayHitPoint(const Point& pt);
+    virtual Size getPanelSize();
 
-		// overrides from Observer
+    // overrides from Observer
 
-		virtual void onNotify(Observable& sender,ObservableEvent::E event,void *context);
+    virtual void onNotify(Observable& sender,ObservableEvent::E event,void *context);
 };

@@ -15,25 +15,25 @@
 namespace stm32plus {
 
 
-	/**
-	 * Remap RTC output to TIM5 channel 4 input
-	 */
+  /**
+   * Remap RTC output to TIM5 channel 4 input
+   */
 
-	class Timer5RemapRtcFeature : public TimerFeatureBase {
+  class Timer5RemapRtcFeature : public TimerFeatureBase {
 
-		public:
-			Timer5RemapRtcFeature(Timer& timer);
-	};
+    public:
+      Timer5RemapRtcFeature(Timer& timer);
+  };
 
 
-	/**
-	 * Constructor
-	 * @param timer
-	 */
+  /**
+   * Constructor
+   * @param timer
+   */
 
-	inline Timer5RemapRtcFeature::Timer5RemapRtcFeature(Timer& timer)
-		: TimerFeatureBase(timer) {
+  inline Timer5RemapRtcFeature::Timer5RemapRtcFeature(Timer& timer)
+    : TimerFeatureBase(timer) {
 
-		TIM_RemapConfig(TIM5,TIM5_RTC);
-	}
+    TIM_RemapConfig(TIM5,TIM5_RTC);
+  }
 }

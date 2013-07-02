@@ -8,33 +8,33 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * @brief Pass-through touch-screen calibration.
-		 *
-		 * This class gives access to the raw co-ordinates from the touch screen by passing them through
-		 * unmodified. This is typically used by a calibration routine to avoid the chicken-and-egg situation
-		 * of the TouchScreen class requiring a calibration class even before it's calibrated.
-		 */
+    /**
+     * @brief Pass-through touch-screen calibration.
+     *
+     * This class gives access to the raw co-ordinates from the touch screen by passing them through
+     * unmodified. This is typically used by a calibration routine to avoid the chicken-and-egg situation
+     * of the TouchScreen class requiring a calibration class even before it's calibrated.
+     */
 
-		class PassThroughTouchScreenCalibration : public TouchScreenCalibration {
+    class PassThroughTouchScreenCalibration : public TouchScreenCalibration {
 
-			protected:
-				double _ax,_bx,_dx;
-				double _ay,_by,_dy;
+      protected:
+        double _ax,_bx,_dx;
+        double _ay,_by,_dy;
 
-			public:
+      public:
 
-				virtual ~PassThroughTouchScreenCalibration() {
-				}
+        virtual ~PassThroughTouchScreenCalibration() {
+        }
 
-				// overrides from TouchScreenCalibration
+        // overrides from TouchScreenCalibration
 
-				virtual Point translate(const Point& rawPoint) override;
-				virtual bool serialise(OutputStream& ostream) override;
-				virtual bool deserialise(InputStream& istream) override;
-		};
-	}
+        virtual Point translate(const Point& rawPoint) override;
+        virtual bool serialise(OutputStream& ostream) override;
+        virtual bool deserialise(InputStream& istream) override;
+    };
+  }
 }

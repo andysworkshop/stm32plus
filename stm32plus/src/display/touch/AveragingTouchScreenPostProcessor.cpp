@@ -10,46 +10,46 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Constructor. Takes the number of samples required to do the average.
-		 * @param[in] samplesRequired The number of samples that will be averaged.
-		 */
+    /**
+     * Constructor. Takes the number of samples required to do the average.
+     * @param[in] samplesRequired The number of samples that will be averaged.
+     */
 
 
-		AveragingTouchScreenPostProcessor::AveragingTouchScreenPostProcessor(int16_t samplesRequired)
-			: _samplesRequired(samplesRequired) {
+    AveragingTouchScreenPostProcessor::AveragingTouchScreenPostProcessor(int16_t samplesRequired)
+      : _samplesRequired(samplesRequired) {
 
-		}
+    }
 
 
-		/**
-		 * Post-process a point. Keep accepting samples until we've reached the number that
-		 * we're going to average then return Completed.
-		 */
+    /**
+     * Post-process a point. Keep accepting samples until we've reached the number that
+     * we're going to average then return Completed.
+     */
 
-		TouchScreenPostProcessor::PostProcessAction AveragingTouchScreenPostProcessor::postProcess(Point& point,int sequenceNumber) {
+    TouchScreenPostProcessor::PostProcessAction AveragingTouchScreenPostProcessor::postProcess(Point& point,int sequenceNumber) {
 
-			if(sequenceNumber==0) {
-				_xTotal=point.X;
-				_yTotal=point.Y;
-			}
-			else {
-				_xTotal+=point.X;
-				_yTotal+=point.Y;
-			}
+      if(sequenceNumber==0) {
+        _xTotal=point.X;
+        _yTotal=point.Y;
+      }
+      else {
+        _xTotal+=point.X;
+        _yTotal+=point.Y;
+      }
 
-			if(sequenceNumber==_samplesRequired-1) {
+      if(sequenceNumber==_samplesRequired-1) {
 
-				point.X=_xTotal/_samplesRequired;
-				point.Y=_yTotal/_samplesRequired;
+        point.X=_xTotal/_samplesRequired;
+        point.Y=_yTotal/_samplesRequired;
 
-				return Completed;
-			}
+        return Completed;
+      }
 
-			return MoreSamplesRequired;
-		}
-	}
+      return MoreSamplesRequired;
+    }
+  }
 }

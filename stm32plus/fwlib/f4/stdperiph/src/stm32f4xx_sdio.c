@@ -583,7 +583,7 @@ void SDIO_WriteData(uint32_t Data)
 }
 
 /**
-  * @brief  Returns the number of words left to be written to or read from FIFO.	
+  * @brief  Returns the number of words left to be written to or read from FIFO.  
   * @param  None
   * @retval Remaining number of words.
   */
@@ -611,7 +611,7 @@ uint32_t SDIO_GetFIFOCount(void)
   */
 
 /**
-  * @brief  Starts the SD I/O Read Wait operation.	
+  * @brief  Starts the SD I/O Read Wait operation.  
   * @param  NewState: new state of the Start SDIO Read Wait operation. 
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None
@@ -625,7 +625,7 @@ void SDIO_StartSDIOReadWait(FunctionalState NewState)
 }
 
 /**
-  * @brief  Stops the SD I/O Read Wait operation.	
+  * @brief  Stops the SD I/O Read Wait operation. 
   * @param  NewState: new state of the Stop SDIO Read Wait operation. 
   *         This parameter can be: ENABLE or DISABLE.
   * @retval None

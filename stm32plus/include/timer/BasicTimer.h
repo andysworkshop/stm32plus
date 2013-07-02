@@ -30,8 +30,8 @@ namespace stm32plus {
   inline BasicTimer<TTimer,TPeripheralName>::BasicTimer(TIM_TypeDef *peripheralAddress)
     : TimerPeripheral<TTimer>(peripheralAddress) {
 
-  	// enable the clock before the feature constructors are called
+    // enable the clock before the feature constructors are called
 
-  	ClockControl<TPeripheralName>::On();
+    ClockControl<TPeripheralName>::On();
   }
 }

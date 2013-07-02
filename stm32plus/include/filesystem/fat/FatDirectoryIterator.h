@@ -8,58 +8,58 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
 
-	/**
-	 * @brief Base class for iterating over the entries in a FAT directory.
-	 *
-	 * This class provides the static factory method used for returning an appropriate
-	 * derived class.
-	 */
+  /**
+   * @brief Base class for iterating over the entries in a FAT directory.
+   *
+   * This class provides the static factory method used for returning an appropriate
+   * derived class.
+   */
 
-		class FatDirectoryIterator : public DirectoryIterator, public FatFileInformation {
+    class FatDirectoryIterator : public DirectoryIterator, public FatFileInformation {
 
-			protected:
-				FatFileSystem& _fs;
-				DirectoryEntryIterator *_entryIterator;
+      protected:
+        FatFileSystem& _fs;
+        DirectoryEntryIterator *_entryIterator;
 
-			protected:
-				FatDirectoryIterator(FatFileSystem& fs,DirectoryEntryWithLocation& dirent);
-				FatDirectoryIterator(FatFileSystem& fs);
+      protected:
+        FatDirectoryIterator(FatFileSystem& fs,DirectoryEntryWithLocation& dirent);
+        FatDirectoryIterator(FatFileSystem& fs);
 
-			public:
-				static bool getInstance(FatFileSystem& fs,const TokenisedPathname& tp,FatDirectoryIterator *& newIterator);
+      public:
+        static bool getInstance(FatFileSystem& fs,const TokenisedPathname& tp,FatDirectoryIterator *& newIterator);
 
-				virtual ~FatDirectoryIterator();
+        virtual ~FatDirectoryIterator();
 
         DirectoryEntryIterator& getDirectoryEntryIterator();
 
-			// overrides from Iterator<FileInformation>
+      // overrides from Iterator<FileInformation>
 
-				virtual bool next() override;
-				virtual const FileInformation& current() override;
+        virtual bool next() override;
+        virtual const FileInformation& current() override;
 
-			// overrides from DirectoryIterator
+      // overrides from DirectoryIterator
 
-				virtual bool getSubdirectoryIterator(DirectoryIterator *& newIterator) override;
-				virtual bool isCurrentDirectory() override;
-				virtual bool isParentDirectory() override;
-				virtual bool moveTo(const char *filename) override;
-				virtual bool openFile(File*& newFile) override;
+        virtual bool getSubdirectoryIterator(DirectoryIterator *& newIterator) override;
+        virtual bool isCurrentDirectory() override;
+        virtual bool isParentDirectory() override;
+        virtual bool moveTo(const char *filename) override;
+        virtual bool openFile(File*& newFile) override;
 
-			// overrides from FileInformation
+      // overrides from FileInformation
 
-				virtual const char *getFilename() const override;
-				virtual uint32_t getAttributes() const override;
-				virtual time_t getCreationDateTime() const override;
-				virtual time_t getLastWriteDateTime() const override;
-				virtual time_t getLastAccessDateTime() const override;
-				virtual uint32_t getLength() const override;
+        virtual const char *getFilename() const override;
+        virtual uint32_t getAttributes() const override;
+        virtual time_t getCreationDateTime() const override;
+        virtual time_t getLastWriteDateTime() const override;
+        virtual time_t getLastAccessDateTime() const override;
+        virtual uint32_t getLength() const override;
 
-			// overrides from FatFileInformation
+      // overrides from FatFileInformation
 
-				DirectoryEntryWithLocation& getDirectoryEntryWithLocation();
-		};
-	}
+        DirectoryEntryWithLocation& getDirectoryEntryWithLocation();
+    };
+  }
 }

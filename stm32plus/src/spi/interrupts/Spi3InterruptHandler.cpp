@@ -24,7 +24,7 @@ extern "C" {
 
   void __attribute__ ((interrupt("IRQ"))) SPI3_IRQHandler(void) {
     if(SPI_I2S_GetITStatus(SPI3,SPI_I2S_IT_RXNE)!=RESET) {
-    	SpiInterruptFeature<3>::_spiInstance->notifyObservers(ObservableEvent::SPI_Receive,(void *)3);
+      SpiInterruptFeature<3>::_spiInstance->notifyObservers(ObservableEvent::SPI_Receive,(void *)3);
       SPI_I2S_ClearITPendingBit(SPI3,SPI_I2S_IT_RXNE);
     }
     else if(SPI_I2S_GetITStatus(SPI3,SPI_I2S_IT_TXE)!=RESET) {

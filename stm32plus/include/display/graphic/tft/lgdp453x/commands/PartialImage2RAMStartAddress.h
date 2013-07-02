@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PartialImage2RAMStartAddress
-		{
-			enum
-			{
-				Opcode = 0x84
-			};
+  namespace lgdp453x
+  {
+    namespace PartialImage2RAMStartAddress
+    {
+      enum
+      {
+        Opcode = 0x84
+      };
 
-			inline uint16_t STARTADDRESS(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t STARTADDRESS(uint16_t n) { return n; }
+    }
+  }
 }
 
 

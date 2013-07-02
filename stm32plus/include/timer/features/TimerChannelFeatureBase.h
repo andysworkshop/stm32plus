@@ -9,18 +9,18 @@
 
 namespace stm32plus {
 
-	/**
-	 * Common functionality for all timers
-	 * @param frequency
-	 */
+  /**
+   * Common functionality for all timers
+   * @param frequency
+   */
 
-	class TimerChannelFeatureBase : public TimerFeatureBase {
+  class TimerChannelFeatureBase : public TimerFeatureBase {
 
-		public:
-		  TimerChannelFeatureBase(Timer& timer);
+    public:
+      TimerChannelFeatureBase(Timer& timer);
 
-		  uint32_t calculateFrequency(uint16_t capture1,uint16_t capture2) const;
-	};
+      uint32_t calculateFrequency(uint16_t capture1,uint16_t capture2) const;
+  };
 
 
   /**
@@ -42,13 +42,13 @@ namespace stm32plus {
 
   inline uint32_t TimerChannelFeatureBase::calculateFrequency(uint16_t capture1,uint16_t capture2) const {
 
-  	uint32_t frequency;
+    uint32_t frequency;
 
-  	if(capture2>capture1)
-  		frequency=_timer.getClock()/(capture2-capture1);
+    if(capture2>capture1)
+      frequency=_timer.getClock()/(capture2-capture1);
     else
-    	frequency=_timer.getClock()/(65535-capture1+capture2);
+      frequency=_timer.getClock()/(65535-capture1+capture2);
 
-  	return frequency;
+    return frequency;
   }
 }

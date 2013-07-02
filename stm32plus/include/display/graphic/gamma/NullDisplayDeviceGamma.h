@@ -8,20 +8,20 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * @brief gamma class that does nothing.
-		 *
-		 * Used for displays that don't support gamma correction
-		 */
+    /**
+     * @brief gamma class that does nothing.
+     *
+     * Used for displays that don't support gamma correction
+     */
 
-		class NullDisplayDeviceGamma : public DisplayDeviceGamma {
+    class NullDisplayDeviceGamma : public DisplayDeviceGamma {
 
-			public:
-				NullDisplayDeviceGamma() : DisplayDeviceGamma(1) {}
-				virtual ~NullDisplayDeviceGamma() {}
-		};
-	}
+      public:
+        NullDisplayDeviceGamma() : DisplayDeviceGamma(1) {}
+        virtual ~NullDisplayDeviceGamma() {}
+    };
+  }
 }

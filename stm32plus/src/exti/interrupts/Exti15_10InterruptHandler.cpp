@@ -26,33 +26,33 @@ template<> Observable *ExtiPeripheral<EXTI_Line15>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) EXTI15_10_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) EXTI15_10_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line10)!=RESET) {
-			Exti10::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)10);
-			EXTI_ClearITPendingBit(EXTI_Line10);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line11)!=RESET) {
-			Exti11::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)11);
-			EXTI_ClearITPendingBit(EXTI_Line11);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line12)!=RESET) {
-			Exti12::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)12);
-			EXTI_ClearITPendingBit(EXTI_Line12);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line13)!=RESET) {
-			Exti13::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)13);
-			EXTI_ClearITPendingBit(EXTI_Line13);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line14)!=RESET) {
-			Exti14::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)14);
-			EXTI_ClearITPendingBit(EXTI_Line14);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line15)!=RESET) {
-			Exti15::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)15);
-			EXTI_ClearITPendingBit(EXTI_Line15);
-		}
-	}
+    if(EXTI_GetITStatus(EXTI_Line10)!=RESET) {
+      Exti10::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)10);
+      EXTI_ClearITPendingBit(EXTI_Line10);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line11)!=RESET) {
+      Exti11::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)11);
+      EXTI_ClearITPendingBit(EXTI_Line11);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line12)!=RESET) {
+      Exti12::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)12);
+      EXTI_ClearITPendingBit(EXTI_Line12);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line13)!=RESET) {
+      Exti13::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)13);
+      EXTI_ClearITPendingBit(EXTI_Line13);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line14)!=RESET) {
+      Exti14::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)14);
+      EXTI_ClearITPendingBit(EXTI_Line14);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line15)!=RESET) {
+      Exti15::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)15);
+      EXTI_ClearITPendingBit(EXTI_Line15);
+    }
+  }
 }
 
 #endif

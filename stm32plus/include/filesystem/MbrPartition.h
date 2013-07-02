@@ -13,33 +13,33 @@
 
 namespace stm32plus {
 
-	/**
-	 * MBR partition definition
-	 */
+  /**
+   * MBR partition definition
+   */
 
-	struct MbrPartition {
+  struct MbrPartition {
 
-			/// status (0x80 = bootable (active), 0x00 = non-bootable, other = invalid )
-			uint8_t status;
+      /// status (0x80 = bootable (active), 0x00 = non-bootable, other = invalid )
+      uint8_t status;
 
-			/// CHS address of first absolute sector in partition. The format is described by 3 bytes
-			uint8_t chsFirstSector[3];
+      /// CHS address of first absolute sector in partition. The format is described by 3 bytes
+      uint8_t chsFirstSector[3];
 
-			/// Partition type (see documentation on web)
-			uint8_t partitionType;
+      /// Partition type (see documentation on web)
+      uint8_t partitionType;
 
-			/// CHS address of last sector in partition.
-			uint8_t chsLastSector[3];
+      /// CHS address of last sector in partition.
+      uint8_t chsLastSector[3];
 
-			/// LBA of first absolute sector in the partition.
-			uint32_t lbaFirstSector;
+      /// LBA of first absolute sector in the partition.
+      uint32_t lbaFirstSector;
 
-			/// Number of sectors in partition, in little-endian format
-			uint32_t numSectors;
+      /// Number of sectors in partition, in little-endian format
+      uint32_t numSectors;
 #ifdef WIN32
-		};
+    };
 #else
-	}__attribute__ ((packed));
+  }__attribute__ ((packed));
 #endif
 }
 

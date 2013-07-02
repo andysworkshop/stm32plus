@@ -23,13 +23,13 @@ template<> Observable *ExtiPeripheral<EXTI_Line20>::_extiInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) OTG_HS_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) OTG_HS_WKUP_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line20)!=RESET) {
-				ExtiUsbHsWakeup::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)20);
-				EXTI_ClearITPendingBit(EXTI_Line20);
-		}
-	}
+    if(EXTI_GetITStatus(EXTI_Line20)!=RESET) {
+        ExtiUsbHsWakeup::_extiInstance->notifyObservers(ObservableEvent::EXTI_Triggered,(void *)20);
+        EXTI_ClearITPendingBit(EXTI_Line20);
+    }
+  }
 }
 
 #endif

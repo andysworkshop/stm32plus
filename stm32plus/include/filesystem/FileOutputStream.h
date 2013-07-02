@@ -9,27 +9,27 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Implementation of an output stream for files
-	 */
+  /**
+   * @brief Implementation of an output stream for files
+   */
 
-	class FileOutputStream : public OutputStream {
-		protected:
-			File& _file;
+  class FileOutputStream : public OutputStream {
+    protected:
+      File& _file;
 
-		public:
-			FileOutputStream(File& f);
+    public:
+      FileOutputStream(File& f);
 
-		public:
+    public:
 
-			// overrides from OutputStream
+      // overrides from OutputStream
 
-			virtual bool write(uint8_t c) override;
-			virtual bool write(const void *buffer,uint32_t size) override;
-			virtual bool close() override;
+      virtual bool write(uint8_t c) override;
+      virtual bool write(const void *buffer,uint32_t size) override;
+      virtual bool close() override;
 
-			virtual bool flush() override {
-				return true;
-			}
-	};
+      virtual bool flush() override {
+        return true;
+      }
+  };
 }

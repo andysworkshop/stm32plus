@@ -137,7 +137,7 @@
 #define SMCR_ETR_MASK      ((uint16_t)0x00FF) 
 #define CCMR_OFFSET        ((uint16_t)0x0018)
 #define CCER_CCE_SET       ((uint16_t)0x0001)  
-#define	CCER_CCNE_SET      ((uint16_t)0x0004) 
+#define CCER_CCNE_SET      ((uint16_t)0x0004) 
 #define CCMR_OC13M_MASK    ((uint16_t)0xFF8F)
 #define CCMR_OC24M_MASK    ((uint16_t)0x8FFF) 
 
@@ -2389,7 +2389,7 @@ void TIM_ITConfig(TIM_TypeDef* TIMx, uint16_t TIM_IT, FunctionalState NewState)
   * @brief  Configures the TIMx event to be generate by software.
   * @param  TIMx: where x can be 1 to 14 to select the TIM peripheral.
   * @param  TIM_EventSource: specifies the event source.
-  *          This parameter can be one or more of the following values:	   
+  *          This parameter can be one or more of the following values:    
   *            @arg TIM_EventSource_Update: Timer update Event source
   *            @arg TIM_EventSource_CC1: Timer Capture Compare 1 Event source
   *            @arg TIM_EventSource_CC2: Timer Capture Compare 2 Event source

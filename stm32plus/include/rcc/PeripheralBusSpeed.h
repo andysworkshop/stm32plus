@@ -10,6 +10,6 @@
 
 namespace stm32plus {
 
-	template<PeripheralName TPeripheral>
-	struct PeripheralBusSpeed;
+  template<PeripheralName TPeripheral>
+  struct PeripheralBusSpeed;
 }

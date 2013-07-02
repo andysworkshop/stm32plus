@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace TestRegister1
-		{
-			enum
-			{
-				Opcode = 0xA0
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace TestRegister1
+    {
+      enum
+      {
+        Opcode = 0xA0
+      };
+    }
+  }
 }
 
 

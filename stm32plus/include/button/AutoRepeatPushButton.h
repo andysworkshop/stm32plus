@@ -9,45 +9,45 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief A debounced pushbutton with autorepeat
-	 *
-	 * This class includes customised delay before the auto-repeat as well as
-	 * the delay between repeats.
-	 */
+  /**
+   * @brief A debounced pushbutton with autorepeat
+   *
+   * This class includes customised delay before the auto-repeat as well as
+   * the delay between repeats.
+   */
 
-	class AutoRepeatPushButton : public PushButton {
+  class AutoRepeatPushButton : public PushButton {
 
-		private:
+    private:
 
-			/**
-			 * our internal state
-			 */
+      /**
+       * our internal state
+       */
 
-			enum InternalState {
+      enum InternalState {
 
-				/// waiting for action
-				Idle,
+        /// waiting for action
+        Idle,
 
-				/// pressed, waiting to start repeating
-				WaitingForInitial,
+        /// pressed, waiting to start repeating
+        WaitingForInitial,
 
-				/// repeating, waiting for next repeat
-				WaitingForRepeat
-			} _internalState;
+        /// repeating, waiting for next repeat
+        WaitingForRepeat
+      } _internalState;
 
-			/// the time before repeating starts
-			uint32_t _initialDelayMillis;
+      /// the time before repeating starts
+      uint32_t _initialDelayMillis;
 
-			/// the time between each repeat
-			uint32_t _repeatDelayMillis;
+      /// the time between each repeat
+      uint32_t _repeatDelayMillis;
 
-			/// the last time something happened
-			uint32_t _lastEventTime;
+      /// the last time something happened
+      uint32_t _lastEventTime;
 
-		public:
-			AutoRepeatPushButton(const GpioPinRef& pin,bool pressedState,uint32_t initialDelayMillis,uint32_t repeatDelayMillis);
+    public:
+      AutoRepeatPushButton(const GpioPinRef& pin,bool pressedState,uint32_t initialDelayMillis,uint32_t repeatDelayMillis);
 
-			ButtonState getState();
-	};
+      ButtonState getState();
+  };
 }

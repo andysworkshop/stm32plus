@@ -21,7 +21,7 @@ namespace stm32plus {
    * that can be configured to trigger on any or all of the time components and optionally the date/weekday.
    */
 
-	template<uint32_t TAlarmIndex>
+  template<uint32_t TAlarmIndex>
   class RtcAlarmInterruptFeature : public RtcFeatureBase,
                                    public ExtiRtcAlarm {
 
@@ -46,7 +46,7 @@ namespace stm32plus {
    * @param rtc The base RTC class
    */
 
-	template<uint32_t TAlarmIndex>
+  template<uint32_t TAlarmIndex>
   inline RtcAlarmInterruptFeature<TAlarmIndex>::RtcAlarmInterruptFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc),
       ExtiRtcAlarm(EXTI_Mode_Interrupt,EXTI_Trigger_Rising) {
@@ -63,37 +63,37 @@ namespace stm32plus {
    * @param dateOrWeekDayValue The date (1..31) or day (1..7) where Monday = 1, if not masked off.
    */
 
-	template<uint32_t TAlarmIndex>
+  template<uint32_t TAlarmIndex>
   inline void RtcAlarmInterruptFeature<TAlarmIndex>::setAlarm(uint32_t mask,
-  																														uint32_t dateOrWeekdaySelector,
-  																														uint8_t dateOrWeekDayValue,
-  																														uint8_t hour,
-  																														uint8_t minute,
-  																														uint8_t second,
-  																														uint8_t am_pm) const {
+                                                              uint32_t dateOrWeekdaySelector,
+                                                              uint8_t dateOrWeekDayValue,
+                                                              uint8_t hour,
+                                                              uint8_t minute,
+                                                              uint8_t second,
+                                                              uint8_t am_pm) const {
 
-  	RTC_AlarmTypeDef alarm;
+    RTC_AlarmTypeDef alarm;
 
-  	// alarm register is RO while enabled
+    // alarm register is RO while enabled
 
-  	RTC_AlarmCmd(TAlarmIndex,DISABLE);
+    RTC_AlarmCmd(TAlarmIndex,DISABLE);
 
-  	// set up the time component
+    // set up the time component
 
-  	alarm.RTC_AlarmTime.RTC_Hours=hour;
-  	alarm.RTC_AlarmTime.RTC_Minutes=minute;
-  	alarm.RTC_AlarmTime.RTC_Seconds=second;
-  	alarm.RTC_AlarmTime.RTC_H12=am_pm;
+    alarm.RTC_AlarmTime.RTC_Hours=hour;
+    alarm.RTC_AlarmTime.RTC_Minutes=minute;
+    alarm.RTC_AlarmTime.RTC_Seconds=second;
+    alarm.RTC_AlarmTime.RTC_H12=am_pm;
 
-  	// set up the alarm configuration component
+    // set up the alarm configuration component
 
-  	alarm.RTC_AlarmMask=mask;
-  	alarm.RTC_AlarmDateWeekDaySel=dateOrWeekdaySelector;
-  	alarm.RTC_AlarmDateWeekDay=dateOrWeekDayValue;
+    alarm.RTC_AlarmMask=mask;
+    alarm.RTC_AlarmDateWeekDaySel=dateOrWeekdaySelector;
+    alarm.RTC_AlarmDateWeekDay=dateOrWeekDayValue;
 
-  	// set the alarm and enable the interrupt
+    // set the alarm and enable the interrupt
 
-  	RTC_SetAlarm(RTC_Format_BIN,TAlarmIndex,&alarm);
+    RTC_SetAlarm(RTC_Format_BIN,TAlarmIndex,&alarm);
     RTC_ITConfig(TAlarmIndex==RTC_Alarm_A ? RTC_IT_ALRA : RTC_IT_ALRB,ENABLE);
 
     // enable the alarm
@@ -106,7 +106,7 @@ namespace stm32plus {
    * Cancel the alarm interupts
    */
 
-	template<uint32_t TAlarmIndex>
+  template<uint32_t TAlarmIndex>
   inline void RtcAlarmInterruptFeature<TAlarmIndex>::cancelAlarm() const {
     RTC_AlarmCmd(TAlarmIndex,DISABLE);
     RTC_ITConfig(TAlarmIndex==RTC_Alarm_A ? RTC_IT_ALRA : RTC_IT_ALRB,DISABLE);

@@ -10,15 +10,15 @@
 
 namespace stm32plus {
 
-	/**
-	 * Get the bus speed for SDIO
-	 */
+  /**
+   * Get the bus speed for SDIO
+   */
 
-	template<>
-	struct PeripheralBusSpeed<PERIPHERAL_SDIO> {
-		static uint32_t getBusSpeed() {
-			// it's hardcoded on the F4 (See RM0090: 26.3 SDIO functional description)
-			return 48000000;
-		}
-	};
+  template<>
+  struct PeripheralBusSpeed<PERIPHERAL_SDIO> {
+    static uint32_t getBusSpeed() {
+      // it's hardcoded on the F4 (See RM0090: 26.3 SDIO functional description)
+      return 48000000;
+    }
+  };
 }

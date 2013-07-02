@@ -19,8 +19,8 @@ using namespace stm32plus;
  * to see how it looks on the STM32F103ZET6.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F407VGT6
@@ -29,27 +29,27 @@ using namespace stm32plus;
 
 class DacNoiseTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Set up the DAC with a software trigger and noise generation. No alignment feature
-			 * is necessary because we'll never be writing data - it's generated for us courtesy
-			 * of the mask setting in the parameters class.
-			 */
+      /*
+       * Set up the DAC with a software trigger and noise generation. No alignment feature
+       * is necessary because we'll never be writing data - it's generated for us courtesy
+       * of the mask setting in the parameters class.
+       */
 
-			Dac1<>::Parameters params;
-			params.dac_trigger=DAC_Trigger_Software;
-			params.dac_waveGeneration=DAC_WaveGeneration_Noise;
+      Dac1<>::Parameters params;
+      params.dac_trigger=DAC_Trigger_Software;
+      params.dac_waveGeneration=DAC_WaveGeneration_Noise;
 
-			Dac1<> dac(params);
+      Dac1<> dac(params);
 
-			// continually trigger the noise conversion as fast as possible
+      // continually trigger the noise conversion as fast as possible
 
-			for(;;)
-				dac.triggerOn();
-		}
+      for(;;)
+        dac.triggerOn();
+    }
 };
 
 
@@ -59,9 +59,9 @@ class DacNoiseTest {
 
 int main() {
 
-	DacNoiseTest test;
-	test.run();
+  DacNoiseTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

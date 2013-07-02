@@ -10,35 +10,35 @@
 namespace stm32plus {
 
 
-	/**
-	 * Base class for DAC features
-	 */
+  /**
+   * Base class for DAC features
+   */
 
-	class DacFeatureBase {
-		protected:
-			Dac& _dac;
+  class DacFeatureBase {
+    protected:
+      Dac& _dac;
 
-		public:
-			DacFeatureBase(Dac& dac);
-			operator Dac&();
-	};
-
-
-	/**
-	 * Constructor
-	 * @param dac
-	 */
-
-	inline DacFeatureBase::DacFeatureBase(Dac& dac)
-		: _dac(dac) {
-	}
+    public:
+      DacFeatureBase(Dac& dac);
+      operator Dac&();
+  };
 
 
-	/**
-	 * Cast to Dac reference
-	 */
+  /**
+   * Constructor
+   * @param dac
+   */
 
-	inline DacFeatureBase::operator Dac&() {
-		return _dac;
-	}
+  inline DacFeatureBase::DacFeatureBase(Dac& dac)
+    : _dac(dac) {
+  }
+
+
+  /**
+   * Cast to Dac reference
+   */
+
+  inline DacFeatureBase::operator Dac&() {
+    return _dac;
+  }
 }

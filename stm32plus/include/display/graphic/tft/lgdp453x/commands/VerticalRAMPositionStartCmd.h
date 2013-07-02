@@ -9,14 +9,14 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace VerticalRAMPositionStartCmd
-		{
-			enum
-			{
-				Opcode = 0x52
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace VerticalRAMPositionStartCmd
+    {
+      enum
+      {
+        Opcode = 0x52
+      };
+    }
+  }
 }

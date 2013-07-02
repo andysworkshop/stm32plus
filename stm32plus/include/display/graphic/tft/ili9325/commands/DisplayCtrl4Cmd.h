@@ -10,20 +10,20 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace DisplayCtrl4Cmd
-		{
-			enum
-			{
-				Opcode = 0xa,
+  namespace ili9325
+  {
+    namespace DisplayCtrl4Cmd
+    {
+      enum
+      {
+        Opcode = 0xa,
 
-				FMARK_OUTPUT_ENABLE = 1<<3
-			};
+        FMARK_OUTPUT_ENABLE = 1<<3
+      };
 
-			inline int FMARK_OUTPUT_INTERVAL(uint16_t n) { return n; }
-		}
-	}
+      inline int FMARK_OUTPUT_INTERVAL(uint16_t n) { return n; }
+    }
+  }
 }
 
 

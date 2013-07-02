@@ -17,8 +17,8 @@ namespace stm32plus {
   template<class TTimer,PeripheralName TPeripheralName>
   class GeneralPurposeTimer : public TimerPeripheral<TTimer> {
 
-  	protected:
-  		GeneralPurposeTimer(TIM_TypeDef *peripheralAddress);
+    protected:
+      GeneralPurposeTimer(TIM_TypeDef *peripheralAddress);
  };
 
 
@@ -28,10 +28,10 @@ namespace stm32plus {
 
   template<class TTimer,PeripheralName TPeripheralName>
   inline GeneralPurposeTimer<TTimer,TPeripheralName>::GeneralPurposeTimer(TIM_TypeDef *peripheralAddress)
-  	: TimerPeripheral<TTimer>(peripheralAddress) {
+    : TimerPeripheral<TTimer>(peripheralAddress) {
 
-  	// enable the clock before the feature constructors are called
+    // enable the clock before the feature constructors are called
 
-  	ClockControl<TPeripheralName>::On();
+    ClockControl<TPeripheralName>::On();
   }
 }

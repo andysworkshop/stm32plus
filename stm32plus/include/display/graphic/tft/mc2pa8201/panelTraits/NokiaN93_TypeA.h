@@ -8,57 +8,57 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Panel traits for a Type A Nokia N93 panel
-		 *
-		 * 1. Positive scroll offsets scroll downwards
-		 * 3. RGB is the only transfer order supported
-		 */
+    /**
+     * Panel traits for a Type A Nokia N93 panel
+     *
+     * 1. Positive scroll offsets scroll downwards
+     * 3. RGB is the only transfer order supported
+     */
 
-		class NokiaN93_TypeA {
-			public:
-				static int16_t normaliseScrollPosition(int16_t scrollPosition);
+    class NokiaN93_TypeA {
+      public:
+        static int16_t normaliseScrollPosition(int16_t scrollPosition);
 
-				template<Orientation TOrientation>
-				constexpr static uint8_t getColumnAddressCommand();
+        template<Orientation TOrientation>
+        constexpr static uint8_t getColumnAddressCommand();
 
-				template<Orientation TOrientation>
-				constexpr static uint8_t getPageAddressCommand();
-		};
-
-
-		/**
-		 * Normalise the scroll position for the setScrollPosition() call
-		 * @param scrollPosition the raw scroll position (0..320)
-		 * @return the normalised position - adjusted if necessary
-		 */
-
-		inline int16_t NokiaN93_TypeA::normaliseScrollPosition(int16_t scrollPosition) {
-			return scrollPosition ? 320-scrollPosition : 0;
-		}
+        template<Orientation TOrientation>
+        constexpr static uint8_t getPageAddressCommand();
+    };
 
 
-		/**
-		 * Get the command used to set column address in landscape mode
-		 * @return mc2pa8201::PAGE_ADDRESS_SET
-		 */
+    /**
+     * Normalise the scroll position for the setScrollPosition() call
+     * @param scrollPosition the raw scroll position (0..320)
+     * @return the normalised position - adjusted if necessary
+     */
 
-		template<>
-		constexpr inline uint8_t NokiaN93_TypeA::getColumnAddressCommand<LANDSCAPE>() {
-			return mc2pa8201::COLUMN_ADDRESS_SET;
-		}
+    inline int16_t NokiaN93_TypeA::normaliseScrollPosition(int16_t scrollPosition) {
+      return scrollPosition ? 320-scrollPosition : 0;
+    }
 
 
-		/**
-		 * Get the command used to set column address in landscape mode
-		 * @return mc2pa8201::COLUMN_ADDRESS_SET
-		 */
+    /**
+     * Get the command used to set column address in landscape mode
+     * @return mc2pa8201::PAGE_ADDRESS_SET
+     */
 
-		template<>
-		constexpr inline uint8_t NokiaN93_TypeA::getPageAddressCommand<LANDSCAPE>() {
-			return mc2pa8201::PAGE_ADDRESS_SET;
-		}
-	}
+    template<>
+    constexpr inline uint8_t NokiaN93_TypeA::getColumnAddressCommand<LANDSCAPE>() {
+      return mc2pa8201::COLUMN_ADDRESS_SET;
+    }
+
+
+    /**
+     * Get the command used to set column address in landscape mode
+     * @return mc2pa8201::COLUMN_ADDRESS_SET
+     */
+
+    template<>
+    constexpr inline uint8_t NokiaN93_TypeA::getPageAddressCommand<LANDSCAPE>() {
+      return mc2pa8201::PAGE_ADDRESS_SET;
+    }
+  }
 }

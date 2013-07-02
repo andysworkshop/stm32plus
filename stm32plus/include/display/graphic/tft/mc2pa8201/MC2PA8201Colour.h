@@ -8,17 +8,17 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for MC2PA8201 colour-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for MC2PA8201 colour-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<ColourDepth TColour,class TAccessMode,class TPanelTraits>
-		class MC2PA8201Colour;
-	}
+    template<ColourDepth TColour,class TAccessMode,class TPanelTraits>
+    class MC2PA8201Colour;
+  }
 }
 
 

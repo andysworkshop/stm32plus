@@ -10,18 +10,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PanelInterfaceControl3
-		{
-			enum
-			{
-				Opcode = 0x93
-			};
-			inline uint16_t MCPI(uint16_t n){return n;}
-			inline uint16_t SEQI(uint16_t n){return n<<8;}
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace PanelInterfaceControl3
+    {
+      enum
+      {
+        Opcode = 0x93
+      };
+      inline uint16_t MCPI(uint16_t n){return n;}
+      inline uint16_t SEQI(uint16_t n){return n<<8;}
+    }
+  }
 }
 
 

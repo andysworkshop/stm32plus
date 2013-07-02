@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/**
-		 * @brief Linear ease. Really a dummy as it doesn't ease at all.
-		 */
+    /**
+     * @brief Linear ease. Really a dummy as it doesn't ease at all.
+     */
 
-		class LinearEase : public EasingBase {
+    class LinearEase : public EasingBase {
 
-			public:
-				/// no acceleration
-				virtual double easeIn(double time) const override;
+      public:
+        /// no acceleration
+        virtual double easeIn(double time) const override;
 
-				/// no acceleration
-				virtual double easeOut(double time) const override;
+        /// no acceleration
+        virtual double easeOut(double time) const override;
 
-				/// no acceleration
-				virtual double easeInOut(double time) const override;
-		};
-	}
+        /// no acceleration
+        virtual double easeInOut(double time) const override;
+    };
+  }
 }

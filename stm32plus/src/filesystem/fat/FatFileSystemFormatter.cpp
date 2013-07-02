@@ -9,161 +9,161 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
 
-		/*
-		 * Constructor
-		 */
+    /*
+     * Constructor
+     */
 
-		FatFileSystemFormatter::FatFileSystemFormatter(BlockDevice& blockDevice_,uint32_t firstSectorIndex_,uint32_t numSectors_,const char *volumeLabel_)
-			: _blockDevice(blockDevice_) {
+    FatFileSystemFormatter::FatFileSystemFormatter(BlockDevice& blockDevice_,uint32_t firstSectorIndex_,uint32_t numSectors_,const char *volumeLabel_)
+      : _blockDevice(blockDevice_) {
 
-			int i;
+      int i;
 
-			errorProvider.clear();
+      errorProvider.clear();
 
-			// copy up to 11 characters from the volume label
+      // copy up to 11 characters from the volume label
 
-			memset(_volumeLabel,' ',sizeof(_volumeLabel));
-			for(i=0;i<11 && volumeLabel_[i];i++)
-				_volumeLabel[i]=volumeLabel_[i];
+      memset(_volumeLabel,' ',sizeof(_volumeLabel));
+      for(i=0;i<11 && volumeLabel_[i];i++)
+        _volumeLabel[i]=volumeLabel_[i];
 
-			_numSectors=numSectors_;
-			_firstSectorIndex=firstSectorIndex_;
-		}
-
-
-		/*
-		 * Prepare the parts of the bootsector that are FAT independent
-		 */
-
-		bool FatFileSystemFormatter::createNewBootSector() {
-
-			_bootSector.BS_jmpBoot[0]=0xeb;
-			_bootSector.BS_jmpBoot[1]=0x58;
-			_bootSector.BS_jmpBoot[2]=0x90;
-
-			memcpy(_bootSector.BS_OEMName,"MSDOS5.0",8);
-
-			_bootSector.BPB_BytsPerSec=512;
-
-			_bootSector.BPB_NumFATs=2;
-			_bootSector.BPB_Media=MEDIA_TYPE; // media type
-			_bootSector.BPB_SecPerTrk=63;
-			_bootSector.BPB_NumHeads=255;
-			_bootSector.BPB_HiddSec=_firstSectorIndex;
-
-			return true;
-		}
-
-		/*
-		 * Format a boot sector and write it to disk
-		 */
-
-		bool FatFileSystemFormatter::writeBootSector(uint32_t bootSectorIndex_) {
-
-			ByteMemblock sector(512);
-
-		// create a new boot sector at the start of the block
-
-			if(!createNewBootSector())
-				return false;
-
-			memcpy(sector.getData(),&_bootSector,sizeof(_bootSector));
-
-		// write signature to sector
-
-			setReservedSectorSignature(sector);
-
-		// write to the device
-
-			return _blockDevice.writeBlock(sector,bootSectorIndex_);
-		}
+      _numSectors=numSectors_;
+      _firstSectorIndex=firstSectorIndex_;
+    }
 
 
-		/*
-		 * Add the signature 0x55,0xAA
-		 */
+    /*
+     * Prepare the parts of the bootsector that are FAT independent
+     */
 
-		void FatFileSystemFormatter::setReservedSectorSignature(uint8_t *sector_) const {
+    bool FatFileSystemFormatter::createNewBootSector() {
 
-			sector_[0x1fe]=0x55;
-			sector_[0x1ff]=0xaa;
-		}
+      _bootSector.BS_jmpBoot[0]=0xeb;
+      _bootSector.BS_jmpBoot[1]=0x58;
+      _bootSector.BS_jmpBoot[2]=0x90;
 
+      memcpy(_bootSector.BS_OEMName,"MSDOS5.0",8);
 
-		/*
-		 * Format the FAT structures
-		 */
+      _bootSector.BPB_BytsPerSec=512;
 
-		bool FatFileSystemFormatter::writeFats(uint32_t firstFatFirstSector_,uint32_t sectorsPerFat_) const {
+      _bootSector.BPB_NumFATs=2;
+      _bootSector.BPB_Media=MEDIA_TYPE; // media type
+      _bootSector.BPB_SecPerTrk=63;
+      _bootSector.BPB_NumHeads=255;
+      _bootSector.BPB_HiddSec=_firstSectorIndex;
 
-			ByteMemblock sector(512);
-			uint32_t i,j,sectorIndex;
+      return true;
+    }
 
-			// two copies of the FAT, back to back
+    /*
+     * Format a boot sector and write it to disk
+     */
 
-			sectorIndex=firstFatFirstSector_;
+    bool FatFileSystemFormatter::writeBootSector(uint32_t bootSectorIndex_) {
 
-			for(i=0;i<2;i++) {
+      ByteMemblock sector(512);
 
-				// initialise the two reserved clusters
+    // create a new boot sector at the start of the block
 
-				memset(sector,0,512);
-				initReservedClusters(sector);
+      if(!createNewBootSector())
+        return false;
 
-				// write this sector
-				if(!_blockDevice.writeBlock(sector,sectorIndex++))
-					return false;
+      memcpy(sector.getData(),&_bootSector,sizeof(_bootSector));
 
-				// write the remaining sectors
+    // write signature to sector
 
-				memset(sector,0,512);
+      setReservedSectorSignature(sector);
 
-				for(j=0;j<sectorsPerFat_;j++)
-					if(!_blockDevice.writeBlock(sector,sectorIndex++))
-						return false;
-			}
+    // write to the device
 
-			// done
-
-			return true;
-		}
+      return _blockDevice.writeBlock(sector,bootSectorIndex_);
+    }
 
 
-		/*
-		 * Initialise the volume label
-		 */
+    /*
+     * Add the signature 0x55,0xAA
+     */
 
-		void FatFileSystemFormatter::initVolumeLabelDirent(uint8_t *rootDirSector_) const {
+    void FatFileSystemFormatter::setReservedSectorSignature(uint8_t *sector_) const {
 
-			ShortDirectoryEntry *dirent;
-
-			dirent=reinterpret_cast<ShortDirectoryEntry *>(rootDirSector_);
-
-			memset(dirent,0,32);
-			memcpy(dirent->DIR_Name,_volumeLabel,11);
-			dirent->DIR_Attr=DirectoryEntry::ATTR_VOLUME_ID;
-		}
+      sector_[0x1fe]=0x55;
+      sector_[0x1ff]=0xaa;
+    }
 
 
-		/*
-		 * Initialise and write the root directory entries
-		 */
+    /*
+     * Format the FAT structures
+     */
 
-		bool FatFileSystemFormatter::writeRootDirectoryEntries(uint32_t sectorIndex_) const {
+    bool FatFileSystemFormatter::writeFats(uint32_t firstFatFirstSector_,uint32_t sectorsPerFat_) const {
 
-			ByteMemblock sector(512);
+      ByteMemblock sector(512);
+      uint32_t i,j,sectorIndex;
 
-			// zero the sector and then write the volume label into it
+      // two copies of the FAT, back to back
 
-			memset(sector.getData(),0,512);
-			initVolumeLabelDirent(sector);
+      sectorIndex=firstFatFirstSector_;
 
-			// write to the device
+      for(i=0;i<2;i++) {
 
-			return _blockDevice.writeBlock(sector,sectorIndex_);
-		}
-	}
+        // initialise the two reserved clusters
+
+        memset(sector,0,512);
+        initReservedClusters(sector);
+
+        // write this sector
+        if(!_blockDevice.writeBlock(sector,sectorIndex++))
+          return false;
+
+        // write the remaining sectors
+
+        memset(sector,0,512);
+
+        for(j=0;j<sectorsPerFat_;j++)
+          if(!_blockDevice.writeBlock(sector,sectorIndex++))
+            return false;
+      }
+
+      // done
+
+      return true;
+    }
+
+
+    /*
+     * Initialise the volume label
+     */
+
+    void FatFileSystemFormatter::initVolumeLabelDirent(uint8_t *rootDirSector_) const {
+
+      ShortDirectoryEntry *dirent;
+
+      dirent=reinterpret_cast<ShortDirectoryEntry *>(rootDirSector_);
+
+      memset(dirent,0,32);
+      memcpy(dirent->DIR_Name,_volumeLabel,11);
+      dirent->DIR_Attr=DirectoryEntry::ATTR_VOLUME_ID;
+    }
+
+
+    /*
+     * Initialise and write the root directory entries
+     */
+
+    bool FatFileSystemFormatter::writeRootDirectoryEntries(uint32_t sectorIndex_) const {
+
+      ByteMemblock sector(512);
+
+      // zero the sector and then write the volume label into it
+
+      memset(sector.getData(),0,512);
+      initVolumeLabelDirent(sector);
+
+      // write to the device
+
+      return _blockDevice.writeBlock(sector,sectorIndex_);
+    }
+  }
 }

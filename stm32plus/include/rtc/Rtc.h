@@ -15,11 +15,11 @@ namespace stm32plus {
 
   template<class... Features>
   class Rtc : public RtcBase,
-  						public Features... {
+              public Features... {
 
     public:
       Rtc() :
-      	Features((RtcBase&)*this)... {
+        Features((RtcBase&)*this)... {
       }
     };
 }

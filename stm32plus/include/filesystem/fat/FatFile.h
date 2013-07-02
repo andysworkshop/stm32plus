@@ -8,45 +8,45 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		class FatFileSystem;
+    class FatFileSystem;
 
-		/**
-		 * @brief Fat file extends the basic File class.
-		 *
-		 * FAT implementation of the File base class.
-		 */
+    /**
+     * @brief Fat file extends the basic File class.
+     *
+     * FAT implementation of the File base class.
+     */
 
-		class FatFile : public File {
-			protected:
-				FatFileSystem& _fs;
-				DirectoryEntryWithLocation _dirent;
-				ByteMemblock _sectorBuffer;
-				FileSectorIterator _iterator;
+    class FatFile : public File {
+      protected:
+        FatFileSystem& _fs;
+        DirectoryEntryWithLocation _dirent;
+        ByteMemblock _sectorBuffer;
+        FileSectorIterator _iterator;
 
-			protected:
-				void calcIndexes();
+      protected:
+        void calcIndexes();
 
-			public:
-				FatFile(FatFileSystem& fs_,DirectoryEntryWithLocation& dirent_);
+      public:
+        FatFile(FatFileSystem& fs_,DirectoryEntryWithLocation& dirent_);
 
-				/**
-				 * Virtual destructor, does nothing.
-				 */
+        /**
+         * Virtual destructor, does nothing.
+         */
 
-				virtual ~FatFile() {}
+        virtual ~FatFile() {}
 
       // get the dirent
 
         const DirectoryEntryWithLocation& getDirectoryEntryWithLocation();
 
-			// overrides from File
+      // overrides from File
 
-				virtual bool read(void *ptr_,uint32_t size_,uint32_t& actuallyRead) override;
-				virtual bool write(const void *ptr,uint32_t size) override;
-				virtual bool seek(int32_t offset,SeekFrom origin) override;
-				virtual uint32_t getLength() override;
-		};
-	}
+        virtual bool read(void *ptr_,uint32_t size_,uint32_t& actuallyRead) override;
+        virtual bool write(const void *ptr,uint32_t size) override;
+        virtual bool seek(int32_t offset,SeekFrom origin) override;
+        virtual uint32_t getLength() override;
+    };
+  }
 }

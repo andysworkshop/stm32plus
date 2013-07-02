@@ -13,45 +13,45 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-	/**
-	 * @brief Long name FAT directory entry.
-	 *
-	 * This packed structure holds part of a long name FAT structure. Search the net for more details.
-	 */
+  /**
+   * @brief Long name FAT directory entry.
+   *
+   * This packed structure holds part of a long name FAT structure. Search the net for more details.
+   */
 
-		struct LongDirectoryEntry {
+    struct LongDirectoryEntry {
 
-			/// ordinal number of this entry
-			uint8_t  LDIR_Ord;
+      /// ordinal number of this entry
+      uint8_t  LDIR_Ord;
 
-			/// first part of the name
-			uint16_t LDIR_Name1[5];
+      /// first part of the name
+      uint16_t LDIR_Name1[5];
 
-			/// attributes
-			uint8_t  LDIR_Attr;
+      /// attributes
+      uint8_t  LDIR_Attr;
 
-			/// type
-			uint8_t  LDIR_Type;
+      /// type
+      uint8_t  LDIR_Type;
 
-			/// checksum
-			uint8_t  LDIR_Chksum;
+      /// checksum
+      uint8_t  LDIR_Chksum;
 
-			/// second part of the name
-			uint16_t LDIR_Name2[6];
+      /// second part of the name
+      uint16_t LDIR_Name2[6];
 
-			/// first cluster low 16-bits
-			uint16_t LDIR_FstClusLO;
+      /// first cluster low 16-bits
+      uint16_t LDIR_FstClusLO;
 
-			/// third part of the name
-			uint16_t LDIR_Name3[2];
+      /// third part of the name
+      uint16_t LDIR_Name3[2];
 #ifdef WIN32
     };
 #else
   } __attribute__ ((packed));
 #endif
-	}
+  }
 }
 
 #ifdef WIN32

@@ -14,25 +14,25 @@
 
 namespace stm32plus {
 
-	/**
-	 * Remap USB FS SOF to timer 2 ITR1
-	 */
+  /**
+   * Remap USB FS SOF to timer 2 ITR1
+   */
 
-	class Timer2RemapUsbFullSpeedSofFeature : public TimerFeatureBase {
+  class Timer2RemapUsbFullSpeedSofFeature : public TimerFeatureBase {
 
-		public:
-			Timer2RemapUsbFullSpeedSofFeature(Timer& timer);
-	};
+    public:
+      Timer2RemapUsbFullSpeedSofFeature(Timer& timer);
+  };
 
 
-	/**
-	 * Constructor
-	 * @param timer
-	 */
+  /**
+   * Constructor
+   * @param timer
+   */
 
-	inline Timer2RemapUsbFullSpeedSofFeature::Timer2RemapUsbFullSpeedSofFeature(Timer& timer)
-		: TimerFeatureBase(timer) {
+  inline Timer2RemapUsbFullSpeedSofFeature::Timer2RemapUsbFullSpeedSofFeature(Timer& timer)
+    : TimerFeatureBase(timer) {
 
-		TIM_RemapConfig(TIM2,TIM2_USBFS_SOF);
-	}
+    TIM_RemapConfig(TIM2,TIM2_USBFS_SOF);
+  }
 }

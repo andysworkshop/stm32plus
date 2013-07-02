@@ -34,8 +34,8 @@ using namespace stm32plus;
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -44,79 +44,79 @@ using namespace stm32plus;
 
 class UsartSendInterruptsTest : public Observer {
 
-	protected:
+  protected:
 
-		/*
-		 * The string we are going to send
-		 */
+    /*
+     * The string we are going to send
+     */
 
-		const char *_dataToSend;
+    const char *_dataToSend;
 
-		/*
-		 * The USART1 peripheral configured with the interrupt feature
-		 */
+    /*
+     * The USART1 peripheral configured with the interrupt feature
+     */
 
-		typedef Usart1InterruptFeature MyUsartInterrupt;
-		Usart1<MyUsartInterrupt> _usart;
+    typedef Usart1InterruptFeature MyUsartInterrupt;
+    Usart1<MyUsartInterrupt> _usart;
 
-	public:
+  public:
 
-		/*
-		 * Use the constructor base initialiser to set up the USART at 57600
-		 */
+    /*
+     * Use the constructor base initialiser to set up the USART at 57600
+     */
 
-		UsartSendInterruptsTest()
-			: _usart(57600) {
-		}
+    UsartSendInterruptsTest()
+      : _usart(57600) {
+    }
 
-		/*
-		 * Run the test
-		 */
+    /*
+     * Run the test
+     */
 
-		void run()  {
+    void run()  {
 
-			// we're using interrupts, set up the NVIC
+      // we're using interrupts, set up the NVIC
 
-			Nvic::initialise();
+      Nvic::initialise();
 
-			// set the initial string pointer
+      // set the initial string pointer
 
-			_dataToSend="Hello World";
+      _dataToSend="Hello World";
 
-			// register ourselves as an observer of the USART interrupts
+      // register ourselves as an observer of the USART interrupts
 
-			_usart.insertObserver(*this);
+      _usart.insertObserver(*this);
 
-			// enable interrupts. this will cause an immediate ready-to-send interrupt
+      // enable interrupts. this will cause an immediate ready-to-send interrupt
 
-			_usart.enableInterrupts(MyUsartInterrupt::TRANSMIT);
+      _usart.enableInterrupts(MyUsartInterrupt::TRANSMIT);
 
-			// finished
+      // finished
 
-			for(;;);
-		}
+      for(;;);
+    }
 
 
-		/*
-		 * Observer callback function. This is called when the TXE interrupt that we've
-		 * enabled is fired.
-		 */
+    /*
+     * Observer callback function. This is called when the TXE interrupt that we've
+     * enabled is fired.
+     */
 
-		virtual void onNotify(Observable&,ObservableEvent::E event,void *) {
+    virtual void onNotify(Observable&,ObservableEvent::E event,void *) {
 
-			if(event==ObservableEvent::USART_ReadyToTransmit && *_dataToSend) {
+      if(event==ObservableEvent::USART_ReadyToTransmit && *_dataToSend) {
 
-				// send the next character and increment the pointer
+        // send the next character and increment the pointer
 
-				_usart.send(*_dataToSend++);
+        _usart.send(*_dataToSend++);
 
-				// if we are now at the end of the string then disable further interrupts
-				// because we are done
+        // if we are now at the end of the string then disable further interrupts
+        // because we are done
 
-				if(*_dataToSend=='\0')
-					_usart.disableInterrupts(MyUsartInterrupt::TRANSMIT);
-			}
-		}
+        if(*_dataToSend=='\0')
+          _usart.disableInterrupts(MyUsartInterrupt::TRANSMIT);
+      }
+    }
 };
 
 
@@ -126,9 +126,9 @@ class UsartSendInterruptsTest : public Observer {
 
 int main() {
 
-	UsartSendInterruptsTest test;
-	test.run();
+  UsartSendInterruptsTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -8,18 +8,18 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for ILI9327 orientation-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for ILI9327 orientation-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
-		class ILI9327Orientation {
-		};
-	}
+    template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
+    class ILI9327Orientation {
+    };
+  }
 }
 
 

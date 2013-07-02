@@ -24,29 +24,29 @@ Observable *RtcOverflowInterruptFeature::_observableInstance=nullptr;
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) RTC_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_IRQHandler(void) {
 
-		// check the ticker
+    // check the ticker
 
-		if(RTC_GetITStatus(RTC_IT_SEC)!=RESET) {
-			RtcSecondInterruptFeature::_observableInstance->notifyObservers(ObservableEvent::RTC_Tick);
-			RTC_ClearITPendingBit(RTC_FLAG_SEC);
-		}
+    if(RTC_GetITStatus(RTC_IT_SEC)!=RESET) {
+      RtcSecondInterruptFeature::_observableInstance->notifyObservers(ObservableEvent::RTC_Tick);
+      RTC_ClearITPendingBit(RTC_FLAG_SEC);
+    }
 
-		// check the alarm
+    // check the alarm
 
-		else if(RTC_GetITStatus(RTC_IT_ALR)!=RESET) {
-			RtcAlarmInterruptFeature::_observableInstance->notifyObservers(ObservableEvent::RTC_Alarm);
-			RTC_ClearITPendingBit(RTC_FLAG_ALR);
-		}
+    else if(RTC_GetITStatus(RTC_IT_ALR)!=RESET) {
+      RtcAlarmInterruptFeature::_observableInstance->notifyObservers(ObservableEvent::RTC_Alarm);
+      RTC_ClearITPendingBit(RTC_FLAG_ALR);
+    }
 
-		// check the overflow
+    // check the overflow
 
-		else if(::RTC_GetITStatus(RTC_IT_OW)!=RESET) {
-			RtcOverflowInterruptFeature::_observableInstance->notifyObservers(ObservableEvent::RTC_Overflow);
-			RTC_ClearITPendingBit(RTC_FLAG_OW);
-		}
-	}
+    else if(::RTC_GetITStatus(RTC_IT_OW)!=RESET) {
+      RtcOverflowInterruptFeature::_observableInstance->notifyObservers(ObservableEvent::RTC_Overflow);
+      RTC_ClearITPendingBit(RTC_FLAG_OW);
+    }
+  }
 }
 
 #endif  // USE_RTC_INTERRUPT

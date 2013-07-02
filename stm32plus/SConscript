@@ -13,19 +13,19 @@ Import('*')
 
 def RecursiveGlob(directory):
 
-	node = Dir(directory)
-	build_dir = node.abspath
+  node = Dir(directory)
+  build_dir = node.abspath
 
-	while node != node.srcnode():
-		node = node.srcnode()
+  while node != node.srcnode():
+    node = node.srcnode()
 
-	result = []
-	for root, dirs, files in os.walk(node.abspath):
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.cpp"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.c"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.s"))
+  result = []
+  for root, dirs, files in os.walk(node.abspath):
+    result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.cpp"))
+    result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.c"))
+    result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.s"))
 
-	return result
+  return result
 
 # get all the sources
 
