@@ -1,25 +1,36 @@
 Introduction
 ============
-Firstly, welcome to STM32PLUS, the C++ library that eases the burden of programming the STM32F103 and STM32F4 devices.
+Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F103 and STM32F4 devices.
 
 The main introduction and getting started guide can be found at [my website](http://www.andybrown.me.uk).
 
-How To Compile The Library
+How to compile the library
 ==========================
 
-Before you can use the library you need to build it because, although much of the library is provided 'header-only' there is a substantial amount of compiled code that you must link to.
+Before you can use the library you need to build it because, although much of the library is provided _header-only_ there is a substantial amount of compiled code that you must link to.
 
 Please see the INSTALL.md file for detailed compilation instructions.
 
-Where Are The Examples?
+Releases
+========
+
+After cloning this repo you are going to have a choice of what to build based on the branches and tags that have been created. Your options are:
+
+* Checkout a numbered tag and build from that.This is the safe option. Every now and then I will create a tag from the current master branch that represents a release. You can be sure that a release will be fully tested against all the supported MCUs.
+
+* Checkout the `master` branch (the default) and build from that. This is the quite-safe option. The `master` branch is guaranteed to build on all MCUs but the examples may not have been fully regression tested.
+
+* Checkout a named feature or bug-fix branch and build from that. This is the hardcore option. Feature branches  that have not been merged back into `master` represent work in progress and should build but may be incomplete and have bugs.     
+
+Where are the examples?
 =======================
 
-In the 'examples' subdirectory you will find dozens of examples nearly all of which will work without modification on the F1 and F4 devices. The examples are heavily commented to help you understand what's going on.
+In the _examples_ subdirectory you will find dozens of examples nearly all of which will work without modification on the F1 and F4 devices. The examples are heavily commented to help you understand what's going on.
 
 The examples are designed to work on the F1 devices at 72MHz with an
 8MHz HSE and on the F4 at 168MHz with either an 8MHz or a 25MHz
 HSE. If your board has a different oscillator or core clock speed
-then you may need to adjust 'System.c' in the 'system' subdirectory
+then you may need to adjust `System.c` in the 'system' subdirectory
 of the example that you are looking at. 
 
 Documentation
@@ -29,12 +40,27 @@ HTML documentation can be found in the doc/html subdirectory. This documentation
 
 I freely admit that the documentation lags in both quantity and quality behind the code itself and it's a future task for me to improve it. In the meantime I hope that the heavily commented examples are enough to get you started.
 
-How Do I Report A Bug?
+Contributing
+============
+
+Contributions to stm32plus are welcome. Please follow these steps to ensure a smooth workflow:
+
+* Clone the main stm32plus repo into your personal account and create a branch off `master` for your work. Give it a short meaningful name that allows people to get a good idea 'at-a-glance' of what you've done.
+
+* When you're happy with your code, first do a merge back from the current master to ensure you're still compatible and then send me a pull request. I will code-review the pull-request and when we're all happy I will accept it and do the merge back into `master`.
+
+Working in Eclipse
+------------------
+I do all my day-to-day development in Eclipse using the CDT and the GNU ARM Eclipse plugin. The `.project` and `.cproject` files for the main library and all the examples are included. You can use Eclipse's import option on the root checkout directory to bring them all into your workspace in one go. I recommend that you create a _working set_ to contain all the stm32plus projects because there's a lot of them.
+
+How do I report a bug?
 ======================
 
 If you think that you've found a bug then please enter a bug report at [my bugzilla installation](http://www.andybrown.me.uk/bugs). It really helps if you can give me enough information to reproduce the bug myself.
 
-A Short Walk Around The Directories
+Alternatively you can fix it yourself and send me a pull-request.
+
+A short walk around the directories
 ===================================
 
 `/INSTALL.md`: The installation guide. This file explains how to build the library. If you read nothing else, read this!
@@ -43,13 +69,13 @@ A Short Walk Around The Directories
 
 `lib/`: The root directory containing the library source code.
 
-`lib/include`: The include files for the library. This directory and the parent stm32plus directory must be on the include path of any programs that you write. As of 2.0.0 the only include files that you need to know about are those in the 'config' subdirectory. It should only ever be necessary to include 'config/stm32plus.h' and one each for the peripherals that you want to use, for example 'config/usart.h' or 'config/spi.h'. These high level files take care of including everything else that they need.
+`lib/include`: The include files for the library. This directory and the parent stm32plus directory must be on the include path of any programs that you write. As of 2.0.0 the only include files that you need to know about are those in the `config` subdirectory. It should only ever be necessary to include `config/stm32plus.h` and one each for the peripherals that you want to use, for example `config/usart.h` or `config/spi.h`. These high level files take care of including everything else that they need.
 
 `lib/src`: The C++ source files that make up the library. Everything in here is considered internal.
 
 `lib/fwlib`: Source code to the ST Microelectronics standard peripheral libraries for the F1 and F4 processors.
 
-`examples/`: The examples that demonstrate the features of the library. There is one subdirectory for each example. All the examples follow the same general format. There is the main example source code and a 'system' subdirectory. The 'system' subdirectory is the same for every example and contains the startup and initialisation code required for the F1 and F4 MCU. The SConscript file takes care of selecting the appropriate code for your target MCU. To build modified example, run scons again from the root directory. scons is smart enough to only build changed files and their dependents. When I develop the examples in Eclipse I have a build configuration for each MCU, e.g. "Debug\_hd\_72" and "Debug\_f4\_168" and I use the "Resource Configurations -> Exclude from build" option to exclude the system files for the other MCU.
+`examples/`: The examples that demonstrate the features of the library. There is one subdirectory for each example. All the examples follow the same general format. There is the main example source code and a `system` subdirectory. The `system` subdirectory is the same for every example and contains the startup and initialisation code required for the F1 and F4 MCU. The `SConscript` file takes care of selecting the appropriate code for your target MCU. To build modified example, run `scons` again from the root directory. scons is smart enough to only build changed files and their dependents.
 
 `utils/bm2rgbi`: This PC utility is for converting graphics files (jpeg, png, gif etc.) into an internal format suitable for efficient transfer to a TFT. It also supports compression using the LZG format that results in files roughly the same size as a PNG. You'll need this utility if you decide to use the bitmap functions in the graphics library.
 
@@ -57,16 +83,15 @@ A Short Walk Around The Directories
 
 `utils/LzgFontConv`: This PC utility is for converting TrueType vector anti-aliased fonts into compressed graphical representations suitable for compiling and using with the stm32plus bitmap text output graphics library functions.
 
-A Quick Guide To Flashing Using Openocd
+A quick guide to flashing using OpenOCD
 =======================================
 
 At the time of writing the lastest version of openocd is 0.6.1 and it contains full support for the STM32 connected via JTAG and also via ST-Link (e.g. the STM32F4DISCOVERY board). The following guide assumes that you are using either Linux or Windows with a Unix-like shell (cygwin or mingw) and that you have built the binaries.
 
-Flashing The Stm32f4discovery Board
+Flashing the stm32f4discovery board
 -----------------------------------
 
-'cd' into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
-
+`cd` into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
 
 	$ bin-x64/openocd-x64-0.6.1.exe -f scripts/board/stm32f4discovery.cfg
 	Open On-Chip Debugger 0.6.1 (2012-10-07-10:39)
@@ -117,7 +142,7 @@ Reset the device to run the program:
 
 	> reset
 
-Flashing An F1 Board Using Jtag
+Flashing an F1 board using JTAG
 -------------------------------
 
 The procedure is much the same as the F4. We will start openocd and then use a telnet connection to flash the image. First start openocd. I can't give you the exact startup command for openocd because it will vary according to the JTAG dongle that you have purchased. I use the Olimex ARM-USB-TINY-H device that has an OpenOCD configuration file dedicated to it. Here's what openocd reports when I start it up:
