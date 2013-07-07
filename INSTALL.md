@@ -36,7 +36,7 @@ How to build
 
 * Change directory to the top-level directory containing the `SConstruct` file.
 
-* stm32plus supports the STM32F103 HD and STM32F4 series MCUs. Decide which one you want to build for. You also need to know your external oscillator (HSE) speed and you need to decide on whether you want to build a debug (-O0), small (-Os) or fast (-O3) library.
+* stm32plus supports the STM32F103 HD, STM32F107 CL and STM32F4 series MCUs. Decide which one you want to build for. You also need to know your external oscillator (HSE) speed and you need to decide on whether you want to build a debug (-O0), small (-Os) or fast (-O3) library.
 
 You can build all of the above combinations side-by-side if you so wish by executing `scons` multiple times.
 
@@ -45,7 +45,7 @@ You can build all of the above combinations side-by-side if you so wish by execu
 		mode
 			debug/fast/small. Debug = -O0, Fast = -O3, Small = -Os
 	    mcu
-			f1hd/f4. f1hd = STM32F103HD series. f4 = STM32F4xx series.
+			f1hd/f1cle/f4. f1hd = STM32F103HD. f1cle = STM32F107. f4 = STM32F4xx.
 		hse: 
 			Your external oscillator speed in Hz. Some of the ST standard peripheral library code uses the HSE_VALUE #define
 			that we set here.
@@ -53,16 +53,18 @@ You can build all of the above combinations side-by-side if you so wish by execu
 ### Examples ###
 	scons mode=debug mcu=f1hd hse=8000000
 	scons mode=fast mcu=f1hd hse=8000000 install
+	scons mode=debug mcu=f1cle hse=25000000
 	scons mode=small mcu=f4 hse=8000000 install
 	scons mode=debug mcu=f4 hse=8000000 -j4 install
 
-The -j<N> option can be passed to scons to do a parallel build. On a multicore CPU this can greatly accelerate the
-build. Set <N> to approximately the number of cores that you have.
+The `-j<N>` option can be passed to scons to do a parallel build. On a multicore CPU this can greatly accelerate the build. Set <N> to approximately the number of cores that you have.
 
 The `install` option will install the library and the examples into subdirectories of `/usr/lib/stm32plus/VERSION`. This location can be customised by editing the `SConstruct` file.
 
 #### A note on the example projects ####
 
-The example projects are designed to run on either the 512/64Kb/72MHz STM32F103 or the 1024Kb/128Kb/168Mhz STM32F4.
+The example projects are designed to run on either the 512/64Kb/72MHz STM32F103, the 256/64Kb/72Mhz STM32F107 and the 1024Kb/128Kb/168Mhz STM32F4.
 
-It is the linker script (Linker.ld) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent.
+It is the linker script (`Linker.ld`) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent.
+
+Some examples are not suitable for all MCUs. For example, the STM32F107 does not come with SDIO or FSMC peripherals, and the STM32F103 does not have an ethernet MAC. If an example is not suitable for the MCU that you are targetting then the scons script will skip over it and the Eclipse project will not contain a configuration for it.
