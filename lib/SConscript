@@ -1,0 +1,45 @@
+#
+# SConscript build file for stm32plus. Called automatically by the SConstruct
+# in the parent directory
+#
+
+import os
+
+# import everything exported in SConstruct
+
+Import('*')
+
+# we'll need this to find source files in a variant_dir environment
+
+def RecursiveGlob(directory):
+
+	node = Dir(directory)
+	build_dir = node.abspath
+
+	while node != node.srcnode():
+		node = node.srcnode()
+
+	result = []
+	for root, dirs, files in os.walk(node.abspath):
+		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.cpp"))
+		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.c"))
+		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.s"))
+
+	return result
+
+# get all the sources
+
+matches=[]
+matches.append(RecursiveGlob("src"))
+matches.append(RecursiveGlob("fwlib"))
+
+# trigger a build with the correct library name
+
+libstm32plus=env.Library("stm32plus-"+VERSION+"-"+mcu+"-"+mode+".a",matches)
+
+# install the library if the user gave the install option
+
+env.Install(INSTALLDIR,libstm32plus)
+env.Alias("install",INSTALLDIR)
+
+Return("libstm32plus")

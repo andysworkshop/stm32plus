@@ -1,0 +1,277 @@
+#!/usr/bin/perl
+
+use strict;
+use warnings;
+use Getopt::Long;
+use File::Copy::Recursive qw(rcopy fcopy);
+use File::Copy qw(move);
+use File::Path qw(mkpath rmtree);
+use File::Basename qw(dirname);
+use File::Find;
+use Cwd;
+
+local $File::Copy::Recursive::CPRFComp=1;
+
+my ($release,$releaseDir,$installDir,$section,$force);
+
+&getArgs;
+&checkState;
+&doRelease;
+&copyExamples;
+&postProcessFiles;
+&doDocs;
+&zipit;
+&createLock;
+
+exit 0;
+
+
+#
+# zip it
+#
+
+sub zipit {
+		my $currentDir;
+
+		$currentDir=cwd;
+		chdir("${releaseDir}") or die("Failed to cwd to ${releaseDir}: $!");
+		system("tar cfz stm32plus-${release}.tar.gz stm32plus-${release}");
+		chdir($currentDir) or die("Failed to restore current directory: $!");	 
+}
+
+
+#
+# create the lock file
+#
+
+sub createLock {
+		system("touch ${releaseDir}/lock");
+}
+
+
+#
+# create documentation
+#
+
+sub doDocs {
+
+		my $currentDir;
+
+		fcopy("Doxyfile","${installDir}/stm32plus") or die("Failed to install Doxyfile: $!");
+
+		$currentDir=cwd;
+		chdir("${installDir}/stm32plus") or die("Failed to cwd to ${installDir}/stm32plus: $!");
+		system("/usr/bin/doxygen");
+		chdir($currentDir) or die("Failed to restore current directory: $!");
+
+		unlink("${installDir}/stm32plus/Doxyfile") or die("Failed to remove Doyxfile: $!");
+}
+
+
+#
+# do the file copies for the release
+#
+
+sub doRelease {
+
+		open FHANDLE,"<${releaseDir}/files.txt" or die("Failed to open ${releaseDir}/files.txt: $!");
+
+		rmtree("${installDir}");
+
+		`echo ${release} > VERSION.txt`;
+		`date >> VERSION.txt`;
+
+		while(<FHANDLE>) {
+
+				chomp;
+
+				if($_ =~ m/^\[(.*)\]$/) {
+						&processSection($1);
+				}
+				elsif(length($_)>0) {
+						&processValue($_);
+				}
+		}
+
+		close(FHANDLE);
+}
+
+
+#
+# process a section
+#
+
+sub processSection {
+		$section=$_[0];
+
+		mkpath("${installDir}/${section}") unless
+				-d "${installDir}/${section}";
+}
+
+
+#
+# process a value
+#
+
+sub processValue {
+		my $value=$_[0];
+
+		# special syntax for a single file with rename
+
+		if($value =~ /(.*?)\s*=>\s*(.*)/) {
+				fcopy($1,"${installDir}/${section}/$2");
+		}
+		elsif(-d $value) {
+				my $count=rcopy($value,"${installDir}/${section}");
+				printf("D [%3d] : ${value}\n",$count);
+		} 
+		elsif(-f $value) {
+				fcopy($value,"${installDir}/${section}");
+				printf("F [  1] : ${value}\n");
+		}
+		else {
+				print("WARNING: ${value} does not exist.\n");
+		}
+}
+
+
+#
+# Rename all .S to .s for the build
+# Remove Thumbs.db
+#
+
+sub postProcessFiles {
+
+		File::Find::find(
+				sub {
+						my $file = $_;
+
+						return if -d $file;
+
+						if( $file =~ /\.S$/) {
+								my $newfile=substr($file,0,length($file)-2) . ".s";
+								print "Renaming assembly file $file";
+								rename $file => $newfile or die $!;
+						}
+						elsif( $file =~ /Thumbs.db$/) {
+								print "Removing $file\n";
+								unlink($file);
+						}
+				}, $installDir);
+}
+
+
+#
+# copy over the examples
+#
+
+sub copyExamples {
+
+		mkdir "${installDir}/examples";
+
+		foreach (<../stm32plus-examples/stm32plus-examples-*>) {
+
+				# get the base example name
+
+				$_ =~ /stm32plus-examples-(.*)/;
+
+				if( -f "$_/EXCLUDE_FROM_BUILD" ) {
+						print "Excluding $1 example from build\n";
+				}
+				else {
+						
+						print "Installing example: $1" . "\n";
+
+						# install all files
+
+						rcopy($_,"${installDir}/examples") or die("Failed to install example $1");
+						rename("${installDir}/examples/stm32plus-examples-$1","${installDir}/examples/$1") or die("Failed to rename example $1: $!");
+
+						# remove the files/directories beginning with "."
+
+						foreach(<${installDir}/examples/$1/.*>) {
+								
+								if(!/\/.$/ && !/\/..$/) {
+										rmtree($_);
+								}
+						}
+
+						# remove precis.html
+
+						unlink("${installDir}/examples/$1/precis.html");
+
+						# remove object code
+						
+						foreach(<${installDir}/examples/$1/*.o>) {
+								unlink($_);
+						}						
+
+						# remove compilation output (directories with F1/F4 ending the name)
+						
+						foreach(<${installDir}/examples/$1/*F1>) {
+								if(-d $_) {
+										rmtree($_);
+								}
+						}
+						
+						foreach(<${installDir}/examples/$1/*F4>) {
+								if(-d $_) {
+										rmtree($_);
+								}
+						}
+
+						foreach(<${installDir}/examples/$1/*Debug*>) {
+								if(-d $_) {
+										rmtree($_);
+								}
+						}
+
+						foreach(<${installDir}/examples/$1/*Release*>) {
+								if(-d $_) {
+										rmtree($_);
+								}
+						}
+				}
+		}
+}
+
+
+#
+# check the state
+#
+
+sub checkState {
+
+		die("${releaseDir} does not exist") unless -d "${releaseDir}";
+		die("${releaseDir}/files.txt does not exist") unless -e "${releaseDir}/files.txt";
+
+		if(-f "${releaseDir}/lock" && !defined($force)) {
+				die("release is locked and --force is not specified");
+		}
+}
+
+
+#
+# process the arguments
+#
+
+sub getArgs {
+
+		GetOptions("force"	=> \$force);
+
+		usage() unless ($#ARGV==0);
+
+		$release=shift @ARGV;
+		$releaseDir="dist/${release}";
+		$installDir="${releaseDir}/stm32plus-${release}";
+}
+
+
+#
+# display usage
+#
+
+sub usage {
+		print "usage: mkrelease <version> [--force]\n";
+		exit 1;
+}

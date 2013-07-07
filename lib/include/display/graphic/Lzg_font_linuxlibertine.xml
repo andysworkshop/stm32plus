@@ -1,0 +1,15 @@
+<LzgFontConv>
+  <Family>Linux Libertine</Family>
+  <Size>22</Size>
+  <Characters> 0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz</Characters>
+  <Background>FFFFFF</Background>
+  <Foreground>000040</Foreground>
+  <TextRenderingHint>3</TextRenderingHint>
+  <Style>0</Style>
+  <TftResolution width="320" height="240" />
+  <Spacing>0</Spacing>
+  <ExtraSpacing width="0" height="0" />
+  <PreviewText>TrueType Fonts on stm32plus</PreviewText>
+  <PreviewPosition x="0" y="0" />
+  <CompressionOptions>mc2pa8201 262</CompressionOptions>
+</LzgFontConv>
