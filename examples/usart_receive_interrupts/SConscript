@@ -18,16 +18,16 @@ env=env.Clone()
 matches=[]
 matches.append(Glob("*.cpp"))
 matches.append(Glob("*.c"))
-matches.append(Glob("*.s"))
+matches.append(Glob("*.asm"))
 matches.append("system/LibraryHacks.cpp")
 
 if mcu=="f4":
-	matches.append("system/f4/Startup.s")
+	matches.append("system/f4/Startup.asm")
 	matches.append("system/f4/System.c")
 	linkerscript="examples/"+example+"/system/f4/Linker.ld"
 
 elif mcu=="f1hd":
-	matches.append("system/f1/Startup.s")
+	matches.append("system/f1/Startup.asm")
 	matches.append("system/f1/System.c")
 	linkerscript="examples/"+example+"/system/f1/Linker.ld"
 

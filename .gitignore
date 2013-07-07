@@ -1,3 +1,8 @@
+# scons
+
+.sconsign.dblite
+lib/build/
+
 # compiler output
 
 *.o

@@ -41,7 +41,7 @@ using namespace stm32plus::net;
  *              +-----------------------------
  */
 
-class NetPingClientTest : public Observer {
+class NetPingClientTest {
 
 	public:
 
@@ -99,16 +99,13 @@ class NetPingClientTest : public Observer {
 			// and such like so it does not have to be calibrated for accuracy. A few seconds here or there
 			// over a 24 hour period isn't going to make any difference.
 
-			Rtc<RtcLsiClockFeature<Rtc32kHzLsiFrequencyProvider>> rtc;
+			Rtc<RtcLsiClockFeature<Rtc32kHzLsiFrequencyProvider>,RtcSecondInterruptFeature> rtc;
+			rtc.setTick(0);
 
 			// declare an instance of the network stack
 
 			MyNetworkStack::Parameters params;
 			_net=new MyNetworkStack;
-			// the stack needs an RTC with a per-second interrupt
-
-			Rtc<RtcLsiClockFeature<Rtc32kHzLsiFrequencyProvider>,RtcSecondInterruptFeature> rtc;
-			rtc.setTick(0);
 
 			params.base_rtc=&rtc;
 
@@ -131,7 +128,10 @@ class NetPingClientTest : public Observer {
 
 			GpioB<DefaultDigitalInputFeature<14> > pb;
 			Exti14 exti(EXTI_Mode_Interrupt,EXTI_Trigger_Falling,pb[14]);
-			exti.insertObserver(*this);
+
+			exti.ExtiInterruptEventSender.insertSubscriber(
+					ExtiInterruptEventSourceSlot::bind(this,&NetPingClientTest::onLinkStatusChange)
+				);
 
 			if(!_net->phyEnableInterrupts(DP83848C::INTERRUPT_LINK_STATUS_CHANGE))
 				error();
@@ -195,14 +195,10 @@ class NetPingClientTest : public Observer {
 
 
 		/**
-		 * Observable callback from the EXTI interrupt. Set the flag that main loop
-		 * will act upon.
-		 * @param sender
-		 * @param event
-		 * @param context
+		 * Interrupt callback from the EXTI interrupt. Set the flag that main loop will act on.
 		 */
 
-		void onNotify(Observable&,ObservableEvent::E,void *) {
+		void onLinkStatusChange(uint8_t /* extiLine */) {
 			_linkStatusChanged=true;
 			_net->phyClearPendingInterrupts();
 		}

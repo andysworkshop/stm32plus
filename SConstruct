@@ -33,7 +33,7 @@ import os
 
 # set the installation root. you can customise this
 
-VERSION="2.0.0"
+VERSION="master"
 INSTALLDIR="/usr/lib/stm32plus/"+VERSION
 
 # get the required args and validate
@@ -47,7 +47,7 @@ if not (mode in ['debug', 'fast', 'small']):
 	Exit(1)
 
 if not (mcu in ['f1hd', 'f4']):
-	print "ERROR: mcu must be f1hd/f4"
+	print "ERROR: mcu must be f1hd/f1cle/f4"
 	Exit(1)
 
 if not hse or not hse.isdigit():
@@ -68,7 +68,7 @@ env.Replace(RANLIB="arm-none-eabi-ranlib")
 
 # set the include directories
 
-env.Append(CPPPATH=["#stm32plus/include","#stm32plus/include/stl","#stm32plus"])
+env.Append(CPPPATH=["#lib/include","#lib/include/stl","#lib"])
 
 # create the C and C++ flags that are needed. We can't use the extra or pedantic errors on the ST library code.
 
@@ -81,6 +81,10 @@ env.Append(LINKFLAGS=["-Xlinker","--gc-sections","-mthumb","-g3","-gdwarf-2"])
 
 if mcu=="f1hd":
 	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_HD"])
+	env.Append(ASFLAGS="-mcpu=cortex-m3")
+	env.Append(LINKFLAGS="-mcpu=cortex-m3")
+elif mcu=="f1cle":
+	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_CL_E"])
 	env.Append(ASFLAGS="-mcpu=cortex-m3")
 	env.Append(LINKFLAGS="-mcpu=cortex-m3")
 elif mcu=="f4":
@@ -101,13 +105,13 @@ systemprefix=mode+"-"+mcu+"-"+hse
 	
 # launch SConscript for the main library
 
-libstm32plus=SConscript("stm32plus/SConscript",
+libstm32plus=SConscript("lib/SConscript",
 												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"],
-												variant_dir="stm32plus/build/"+systemprefix,
+												variant_dir="lib/build/"+systemprefix,
 												duplicate=0)
 
 env.Append(LIBS=[libstm32plus])
 
-# Launch SConscript for the examples
+# launch SConscript for the examples
 
 SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"])
