@@ -73,7 +73,7 @@ class ILI9327Test {
 			// reset is on PE1 and RS (D/CX) is on PD11
 
 			GpioE<DefaultDigitalOutputFeature<1> > pe;
-			GpioD<DefaultAlternateFunctionFeature<GPIO_AF_FSMC,11> > pd;
+			GpioD<DefaultFsmcAlternateFunctionFeature<11>> pd;
 
 			// set up the FSMC with RS=A16 (PD11)
 

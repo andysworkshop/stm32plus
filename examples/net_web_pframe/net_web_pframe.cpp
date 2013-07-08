@@ -139,7 +139,7 @@ class NetWebPictureFrame {
 			// reset is on PE1 and RS (D/CX) is on PE3
 
 			GpioE<DefaultDigitalOutputFeature<1>,
-						DefaultAlternateFunctionFeature<GPIO_AF_FSMC,3> > pe;
+						DefaultFsmcAlternateFunctionFeature<3>> pe;
 
 			// set up the FSMC timing. these numbers (particularly the data setup time) are dependent on
 			// both the FSMC bus speed and the panel timing parameters.

@@ -17,7 +17,7 @@ bool LcdManager::initialise() {
 	// reset is on PE1 and RS (D/CX) is on PD11
 
 	GpioE<DefaultDigitalOutputFeature<1> > pe;
-	GpioD<DefaultAlternateFunctionFeature<GPIO_AF_FSMC,11> > pd;
+	GpioD<DefaultFsmcAlternateFunctionFeature<11> > pd;
 
 	// set up the FSMC on bank 0 with A16 as the RS line
 

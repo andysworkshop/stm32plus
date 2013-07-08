@@ -2,6 +2,7 @@
 
 .sconsign.dblite
 lib/build/
+examples/*/build/
 
 # compiler output
 

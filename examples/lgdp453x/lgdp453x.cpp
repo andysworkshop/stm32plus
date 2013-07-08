@@ -73,7 +73,7 @@ class LGDP453xTest {
 			// reset is on PE1 and RS (D/CX) is on PD11
 
 			GpioE<DefaultDigitalOutputFeature<1> > pe;
-			GpioD<DefaultAlternateFunctionFeature<GPIO_AF_FSMC,11> > pd;
+			GpioD<DefaultFsmcAlternateFunctionFeature<11> > pd;
 
 			// set up the FSMC timing. these numbers (particularly the data setup time) are dependent on
 			// both the FSMC bus speed and the panel timing parameters.
