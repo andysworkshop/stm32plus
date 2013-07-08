@@ -17,19 +17,18 @@
 namespace stm32plus {
 
 
+#define FULL_PARAMETER_PACK uint8_t p1=16,uint8_t p2=16,uint8_t p3=16,uint8_t p4=16,uint8_t p5=16,uint8_t p6=16,uint8_t p7=16,uint8_t p8=16,uint8_t p9=16,uint8_t p10=16,uint8_t p11=16,uint8_t p12=16,uint8_t p13=16,uint8_t p14=16,uint8_t p15=16,uint8_t p16=16
+#define SLIM_PARAMETER_PACK p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16
+
+
 	/**
 	 * Template feature class to support initialisation of alternate function pins on the F1.
 	 * Multiple pins can be initialised in one instantiation
 	 */
 
-	template<uint8_t TAfSelection,
-					 GPIOSpeed_TypeDef TSpeed=GPIO_Speed_50MHz,
+	template<GPIOSpeed_TypeDef TSpeed=GPIO_Speed_50MHz,
 					 Gpio::GpioOutputType TOutputType=Gpio::PUSH_PULL,
-					 Gpio::GpioPullUpDownType TPullUpDownType=Gpio::PUPD_NONE,							// not applicable to the F1
-					 uint8_t p1=16,uint8_t p2=16,uint8_t p3=16,uint8_t p4=16,
-					 uint8_t p5=16,uint8_t p6=16,uint8_t p7=16,uint8_t p8=16,
-					 uint8_t p9=16,uint8_t p10=16,uint8_t p11=16,uint8_t p12=16,
-					 uint8_t p13=16,uint8_t p14=16,uint8_t p15=16,uint8_t p16=16>
+					 FULL_PARAMETER_PACK>
 	class AlternateFunctionFeature : public Gpio {
 
 		public:
@@ -100,7 +99,7 @@ namespace stm32plus {
 
 				// do the initialisation
 
-				initialise(pins,TAfSelection,TSpeed,TOutputType,TPullUpDownType);
+				initialise(pins,TSpeed,TOutputType);
 			}
 
 
@@ -110,19 +109,13 @@ namespace stm32plus {
 			 * @param TOutputType
 			 * @param TPullUpDownType
 			 * @param pinIds
-			 * @param afSelection
 			 */
 
 			void initialise(uint16_t pinIds,
-			                uint8_t afSelection,
 			                GPIOSpeed_TypeDef speed=GPIO_Speed_50MHz,
-			                Gpio::GpioOutputType outputType=Gpio::PUSH_PULL,
-			                Gpio::GpioPullUpDownType pullUpDownType=Gpio::PUPD_NONE) {
+			                Gpio::GpioOutputType outputType=Gpio::PUSH_PULL) {
 				uint8_t i;
 				GPIO_InitTypeDef init;
-
-				(void)pullUpDownType;
-				(void)afSelection;
 
 				this->_pinIds=pinIds;
 
@@ -142,16 +135,52 @@ namespace stm32plus {
 
 
 	/**
-	 * Default AFIO helper
+	 * Default AFIO helper. This type provides default port speed settings and is only compatible
+	 * with the F1.
 	 */
 
-	template<uint8_t TAfSelection,
-					 uint8_t p1=16,uint8_t p2=16,uint8_t p3=16,uint8_t p4=16,
-					 uint8_t p5=16,uint8_t p6=16,uint8_t p7=16,uint8_t p8=16,
-					 uint8_t p9=16,uint8_t p10=16,uint8_t p11=16,uint8_t p12=16,
-					 uint8_t p13=16,uint8_t p14=16,uint8_t p15=16,uint8_t p16=16>
-	struct DefaultAlternateFunctionFeature : AlternateFunctionFeature<TAfSelection,GPIO_Speed_50MHz,Gpio::PUSH_PULL,Gpio::PUPD_NONE,
-																																		p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16> {
-		DefaultAlternateFunctionFeature(GpioPortBase& port) : AlternateFunctionFeature<TAfSelection,GPIO_Speed_50MHz,Gpio::PUSH_PULL,Gpio::PUPD_NONE,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16>(port) {}
-	};
+	template<FULL_PARAMETER_PACK>
+	using DefaultAlternateFunctionFeature=AlternateFunctionFeature<GPIO_Speed_50MHz,Gpio::PUSH_PULL,SLIM_PARAMETER_PACK>;
+
+
+	/**
+	 * Types for each of the peripherals supporting AFIO. These are the compatibility types and will work
+	 * on any MCU. Some of the examples use these to guarantee compatibility.
+	 */
+
+	template<FULL_PARAMETER_PACK> using DefaultTim1AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim2AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim3AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim4AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim5AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim8AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim9AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim10AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim11AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim12AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim13AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultTim14AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+
+	template<FULL_PARAMETER_PACK> using DefaultI2C1AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultI2C2AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultI2C3AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+
+	template<FULL_PARAMETER_PACK> using DefaultSpi1AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultSpi2AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultSpi3AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+
+	template<FULL_PARAMETER_PACK> using DefaultUsart1AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultUsart2AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultUsart3AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultUart4AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultUart5AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+	template<FULL_PARAMETER_PACK> using DefaultUsart6AlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+
+	template<FULL_PARAMETER_PACK> using DefaultFsmcAlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+
+	template<FULL_PARAMETER_PACK> using DefaultSdioAlternateFunctionFeature=DefaultAlternateFunctionFeature<SLIM_PARAMETER_PACK>;
+
+
+#undef FULL_PARAMETER_PACK				// don't let this escape into the global namespace
+#undef SLIM_PARAMETER_PACK				// don't let this escape into the global namespace
 }

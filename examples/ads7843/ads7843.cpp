@@ -112,8 +112,8 @@ class ADS7843Test : public ThreePointTouchScreenCalibrator::GuiCallback {
 
 			// we've got RESET on PE1, backlight on PD13 and RS (D/CX) on PD11
 
-			GpioE<DefaultDigitalOutputFeature<1> > pe;
-			GpioD<DefaultDigitalOutputFeature<13>,DefaultAlternateFunctionFeature<GPIO_AF_FSMC,11> > pd;
+			GpioE<DefaultDigitalOutputFeature<1>> pe;
+			GpioD<DefaultDigitalOutputFeature<13>,DefaultFsmcAlternateFunctionFeature<11>> pd;
 
 			// set up the FSMC timing for this panel
 			Fsmc8080LcdTiming fsmcTiming(2,5);
