@@ -14,6 +14,7 @@
 #
 # Examples:
 #   scons mode=debug mcu=f1hd hse=8000000              // debug / f1hd / 8MHz
+#   scons mode=debug mcu=f1cle hse=25000000            // debug / f1cle / 25MHz
 #   scons mode=fast mcu=f1hd hse=8000000 install       // fast / f1hd / 8MHz
 #   scons mode=small mcu=f4 hse=8000000 install        // small / f4 / 8Mhz
 #   scons mode=debug mcu=f4 hse=8000000 -j4 install    // debug / f4 / 8Mhz
@@ -46,7 +47,7 @@ if not (mode in ['debug', 'fast', 'small']):
 	print "ERROR: mode must be debug/fast/small"
 	Exit(1)
 
-if not (mcu in ['f1hd', 'f4']):
+if not (mcu in ['f1hd', 'f1cle', 'f4']):
 	print "ERROR: mcu must be f1hd/f1cle/f4"
 	Exit(1)
 
@@ -72,8 +73,8 @@ env.Append(CPPPATH=["#lib/include","#lib/include/stl","#lib"])
 
 # create the C and C++ flags that are needed. We can't use the extra or pedantic errors on the ST library code.
 
-env.Replace(CCFLAGS=["-Wall","-Werror","-ffunction-sections","-fdata-sections","-fno-exceptions","-mthumb","-gdwarf-2"])
-env.Replace(CXXFLAGS=["-Wextra","-Werror","-pedantic-errors","-fno-rtti","-std=gnu++0x","-fno-threadsafe-statics"])
+env.Replace(CCFLAGS=["-Wall","-Werror","-ffunction-sections","-fdata-sections","-fno-exceptions","-mthumb","-gdwarf-2","-pipe"])
+env.Replace(CXXFLAGS=["-Wextra","-Werror","-pedantic-errors","-fno-rtti","-std=gnu++0x","-fno-threadsafe-statics","-pipe"])
 env.Append(CCFLAGS="-DHSE_VALUE="+hse)
 env.Append(LINKFLAGS=["-Xlinker","--gc-sections","-mthumb","-g3","-gdwarf-2"])
 
