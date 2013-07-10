@@ -192,7 +192,7 @@ namespace stm32plus {
 			pin.enableExti();
 
 			if(mode==EXTI_Mode_Interrupt)
-				ExtiInterruptEnabler<10>::enable();
+				ExtiInterruptEnabler<10>::enable();			// shared interrupt 10..15
 		}
 	};
 
@@ -203,7 +203,7 @@ namespace stm32plus {
 			pin.enableExti();
 
 			if(mode==EXTI_Mode_Interrupt)
-				ExtiInterruptEnabler<10>::enable();
+				ExtiInterruptEnabler<10>::enable();			// shared interrupt 10..15
 		}
 	};
 
@@ -214,7 +214,7 @@ namespace stm32plus {
 			pin.enableExti();
 
 			if(mode==EXTI_Mode_Interrupt)
-				ExtiInterruptEnabler<10>::enable();
+				ExtiInterruptEnabler<10>::enable();			// shared interrupt 10..15
 		}
 	};
 
@@ -225,7 +225,7 @@ namespace stm32plus {
 			pin.enableExti();
 
 			if(mode==EXTI_Mode_Interrupt)
-				ExtiInterruptEnabler<10>::enable();
+				ExtiInterruptEnabler<10>::enable();			// shared interrupt 10..15
 		}
 	};
 
@@ -236,7 +236,7 @@ namespace stm32plus {
 			pin.enableExti();
 
 			if(mode==EXTI_Mode_Interrupt)
-				ExtiInterruptEnabler<10>::enable();
+				ExtiInterruptEnabler<10>::enable();			// shared interrupt 10..15
 		}
 	};
 
@@ -247,7 +247,7 @@ namespace stm32plus {
 			pin.enableExti();
 
 			if(mode==EXTI_Mode_Interrupt)
-				ExtiInterruptEnabler<15>::enable();
+				ExtiInterruptEnabler<10>::enable();			// shared interrupt 10..15
 		}
 	};
 

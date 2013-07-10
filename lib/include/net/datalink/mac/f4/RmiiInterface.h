@@ -39,6 +39,9 @@ namespace stm32plus {
 		template<class TPhysicalLayer>
 		using DefaultRmiiInterface=RmiiInterface<TPhysicalLayer,MacDefaultPinPackage>;
 
+		template<class TPhysicalLayer>
+		using RemapRmiiInterface=RmiiInterface<TPhysicalLayer,MacRemapPinPackage>;
+
 
 		/**
 		 * Initialise the class
@@ -52,9 +55,9 @@ namespace stm32plus {
 
 			ClockControl<PERIPHERAL_SYSCFG>::On();
 
-			ClockControl<PERIPHERAL_MAC>::Off();
+			ClockControl<static_cast<PeripheralName>(TPinPackage::Mac_Peripheral)>::Off();
 			SYSCFG_ETH_MediaInterfaceConfig(SYSCFG_ETH_MediaInterface_RMII);
-			ClockControl<PERIPHERAL_MAC>::On();
+			ClockControl<static_cast<PeripheralName>(TPinPackage::Mac_Peripheral)>::On();
 
 			// initialise the pins
 

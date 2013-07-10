@@ -24,9 +24,11 @@
 
 #pragma once
 
-// we are supporting this
+// we are supporting this on the F4
 
+#if defined(STM32PLUS_F4)
 #define USE_ENHANCED_DMA_DESCRIPTORS
+#endif
 
 
 /** @addtogroup STM32F4x7_ETH_Driver

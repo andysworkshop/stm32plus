@@ -376,9 +376,10 @@ namespace stm32plus {
 	template<>
 	struct ClockControl<PERIPHERAL_MAC> {
 
-		// configure Tx, Rx. PTP is not enabled here.
+		// configure Tx, Rx
 
 		static void On() {
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
 			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
 		}
 
@@ -386,6 +387,22 @@ namespace stm32plus {
 			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,DISABLE);
 		}
 	};
+
+	template<>
+	struct ClockControl<PERIPHERAL_MAC_REMAP> {
+
+		// configure Tx, Rx
+
+		static void On() {
+			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
+			GPIO_PinRemapConfig(GPIO_Remap_ETH, ENABLE);
+		}
+
+		static void Off() {
+			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,DISABLE);
+		}
+	};
+
 #endif
 
 }

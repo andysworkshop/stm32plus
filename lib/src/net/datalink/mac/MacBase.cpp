@@ -181,6 +181,8 @@ namespace stm32plus {
 			}
 			else {
 
+#if defined(USE_ENHANCED_DMA_DESCRIPTORS)
+
 				if((frame.descriptor->Status & (ETH_DMARxDesc_LS | ETH_DMARxDesc_MAMPCE))==(ETH_DMARxDesc_LS | ETH_DMARxDesc_MAMPCE)) {
 
 					// extended info is available, check for errors in RDES4
@@ -227,6 +229,12 @@ namespace stm32plus {
 					if(setupEthernetFrame(frame,ef))
 						NetworkReceiveEventSender.raiseEvent(DatalinkFrameEvent(ef));
 				}
+#else
+				// basic frame with no extended info received OK
+
+				if(setupEthernetFrame(frame,ef))
+					NetworkReceiveEventSender.raiseEvent(DatalinkFrameEvent(ef));
+#endif
 			}
 
 			// release descriptors to DMA

@@ -14,7 +14,7 @@ namespace stm32plus {
 		 * Class for use of the MAC in RMII mode on the F107. The only available pin package is MacDefaultPinPackage.
 		 */
 
-		template<class TPhysicalLayer>
+		template<class TPhysicalLayer,class TPinPackage>
 		class RmiiInterface : public virtual TPhysicalLayer {
 
 			public:
@@ -36,7 +36,10 @@ namespace stm32plus {
 		 */
 
 		template<class TPhysicalLayer>
-		using DefaultRmiiInterface=RmiiInterface<TPhysicalLayer>;
+		using DefaultRmiiInterface=RmiiInterface<TPhysicalLayer,MacDefaultPinPackage>;
+
+		template<class TPhysicalLayer>
+		using RemapRmiiInterface=RmiiInterface<TPhysicalLayer,MacRemapPinPackage>;
 
 
 		/**
@@ -44,14 +47,13 @@ namespace stm32plus {
 		 * @return always true
 		 */
 
-		template<class TPhysicalLayer>
-		inline bool RmiiInterface<TPhysicalLayer>::initialise(const Parameters&) const {
+		template<class TPhysicalLayer,class TPinPackage>
+		inline bool RmiiInterface<TPhysicalLayer,TPinPackage>::initialise(const Parameters&) const {
 
-			// configure in RMII mode
+			// configure in RMII mode and enable remap if defined by Mac_Peripheral
 
-			ClockControl<PERIPHERAL_MAC>::On();
+			ClockControl<static_cast<PeripheralName>(TPinPackage::Mac_Peripheral)>::On();
 
-			GPIO_PinRemapConfig(GPIO_Remap_ETH,ENABLE);
 			GPIO_ETH_MediaInterfaceConfig(GPIO_ETH_MediaInterface_RMII);
 
 			// initialise the pins
@@ -66,8 +68,8 @@ namespace stm32plus {
 		 * @return always true
 		 */
 
-		template<class TPhysicalLayer>
-		inline bool RmiiInterface<TPhysicalLayer>::startup() {
+		template<class TPhysicalLayer,class TPinPackage>
+		inline bool RmiiInterface<TPhysicalLayer,TPinPackage>::startup() {
 			return true;
 		}
 
@@ -77,8 +79,8 @@ namespace stm32plus {
 		 * STM32 is being clocked from a 25Mhz HSE
 		 */
 
-		template<class TPhysicalLayer>
-		void RmiiInterface<TPhysicalLayer>::outputClockOnMCO() const {
+		template<class TPhysicalLayer,class TPinPackage>
+		void RmiiInterface<TPhysicalLayer,TPinPackage>::outputClockOnMCO() const {
 
 		  // set PLL3 clock output to 50MHz (25MHz /5 *10 =50MHz)
 
@@ -102,23 +104,23 @@ namespace stm32plus {
 		 * Initialise the RMII pins
 		 */
 
-		template<class TPhysicalLayer>
-		inline void RmiiInterface<TPhysicalLayer>::initPins() const {
+		template<class TPhysicalLayer,class TPinPackage>
+		inline void RmiiInterface<TPhysicalLayer,TPinPackage>::initPins() const {
 
 			// RMII pins
 
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_TXD0,MacDefaultPinPackage::Pin_RMII_TXD0,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_TXD1,MacDefaultPinPackage::Pin_RMII_TXD1,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_TXEN,MacDefaultPinPackage::Pin_RMII_TXEN,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_RXD0,MacDefaultPinPackage::Pin_RMII_RXD0,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_RXD1,MacDefaultPinPackage::Pin_RMII_RXD1,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_CRSDV,MacDefaultPinPackage::Pin_RMII_CRSDV,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_RMII_REFCLK,MacDefaultPinPackage::Pin_RMII_REFCLK,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_TXD0,TPinPackage::Pin_RMII_TXD0,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_TXD1,TPinPackage::Pin_RMII_TXD1,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_TXEN,TPinPackage::Pin_RMII_TXEN,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_RXD0,TPinPackage::Pin_RMII_RXD0,Gpio::INPUT,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_RXD1,TPinPackage::Pin_RMII_RXD1,Gpio::INPUT,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_CRSDV,TPinPackage::Pin_RMII_CRSDV,Gpio::INPUT,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_RMII_REFCLK,TPinPackage::Pin_RMII_REFCLK,Gpio::INPUT,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,0);
 
 			// PHY pins
 
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_MDC,MacDefaultPinPackage::Pin_MDC,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)MacDefaultPinPackage::Port_MDIO,MacDefaultPinPackage::Pin_MDIO,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_MDC,TPinPackage::Pin_MDC,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_MDIO,TPinPackage::Pin_MDIO,Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)MacPeripheralTraits::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,0);
 		}
 	}
 }

@@ -73,12 +73,15 @@ namespace stm32plus {
 
 				bool phyEnableInterrupts(uint8_t interruptMask) const;
 				bool phyDisableInterrupts(uint8_t interruptMask) const;
+				bool phyClearPendingInterrupts() const;
 
 				bool phyIs100M(bool& is100) const;
 				bool phyIsFullDuplex(bool& isFull) const;
 
 				bool initialise(Parameters& params,NetworkUtilityObjects& netutils);
 				bool startup();
+
+				void hardReset(GpioPinRef& pin) const;
 		};
 
 
@@ -160,6 +163,31 @@ namespace stm32plus {
 
 		inline bool KSZ8051MLL::phyDisableInterrupts(uint8_t interruptMask) const {
 			return phyClearRegisterBits(PHY_CONTROL_1,static_cast<uint16_t>(interruptMask) << 8);
+		}
+
+
+		/**
+		 * Clear pending interrupt flags. On the KSZ8051MLL reading the INTERRUPT_CONTROL_STATUS register
+		 * clears the pending interrupt flags
+		 * @return true if it worked
+		 */
+
+		inline bool KSZ8051MLL::phyClearPendingInterrupts() const {
+			uint16_t value;
+			return phyReadRegister(INTERRUPT_CONTROL_STATUS,value);
+		}
+
+
+		/**
+		 * Hard-rest the KSZ8051MLL by pulling the RESET pin low for 5ms
+		 * @param pin
+		 */
+
+		inline void KSZ8051MLL::hardReset(GpioPinRef& pin) const {
+			pin.set();
+			pin.reset();
+			MillisecondTimer::delay(5);
+			pin.set();
 		}
 	}
 }

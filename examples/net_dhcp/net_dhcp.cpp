@@ -39,6 +39,10 @@ using namespace stm32plus::net;
  *              +----------------------+-----+
  * PHYSICAL:    | DP83848C                   |
  *              +-----------------------------
+ *
+ * This example is also tested using the KSZ8051MLL in MII mode
+ * instead of the DP83848C/RMII. The KSZ8051MLL test was performed
+ * on the STM32F107. The DP83848C was tested on the STM32F407.
  */
 
 class NetDhcpClientTest {
@@ -72,6 +76,7 @@ class NetDhcpClientTest {
 		typedef Usart3_Remap2<> MyUsart;
 		MyUsart *_usart;
 		UsartPollingOutputStream *_outputStream;
+
 
 		/*
 		 * Run the test

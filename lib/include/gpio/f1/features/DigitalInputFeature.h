@@ -141,8 +141,6 @@ namespace stm32plus {
 					 uint8_t p5=16,uint8_t p6=16,uint8_t p7=16,uint8_t p8=16,
 					 uint8_t p9=16,uint8_t p10=16,uint8_t p11=16,uint8_t p12=16,
 					 uint8_t p13=16,uint8_t p14=16,uint8_t p15=16,uint8_t p16=16>
-	struct DefaultDigitalInputFeature : DigitalInputFeature<GPIO_Speed_50MHz,Gpio::PUPD_NONE,
-																		 	 	 	  							p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16> {
-		DefaultDigitalInputFeature(GpioPortBase& port) : DigitalInputFeature<GPIO_Speed_50MHz,Gpio::PUPD_NONE,p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16>(port) {}
-	};
+	using DefaultDigitalInputFeature=DigitalInputFeature<GPIO_Speed_50MHz,Gpio::PUPD_NONE,
+																		 	 	 	  							p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16>;
 }

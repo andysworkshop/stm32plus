@@ -81,6 +81,20 @@ namespace stm32plus {
 		}
 	};
 
+	template<>
+	struct ClockControl<PERIPHERAL_MAC_REMAP> {
+
+		// configure Tx, Rx. PTP is not enabled here.
+
+		static void On() {
+			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_ETH_MAC | RCC_AHB1Periph_ETH_MAC_Tx | RCC_AHB1Periph_ETH_MAC_Rx,ENABLE);
+		}
+
+		static void Off() {
+			RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_ETH_MAC | RCC_AHB1Periph_ETH_MAC_Tx | RCC_AHB1Periph_ETH_MAC_Rx,DISABLE);
+		}
+	};
+
 
 	/**
 	 * FSMC

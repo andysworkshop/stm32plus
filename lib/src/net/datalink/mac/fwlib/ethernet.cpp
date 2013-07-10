@@ -23,7 +23,7 @@
 /* Includes ------------------------------------------------------------------*/
 #include "config/stm32plus.h"
 
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL_E)
 
 #include "config/net.h"
 #include "config/timing.h"
@@ -140,8 +140,15 @@ __IO uint32_t Frame_Rx_index;
   */
 void ETH_DeInit(void)
 {
+#if defined(STM32PLUS_F4)
   RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_ETH_MAC, ENABLE);
   RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_ETH_MAC, DISABLE);
+#elif defined(STM32PLUS_F1_CL_E)
+  RCC_AHBPeriphResetCmd(RCC_AHBPeriph_ETH_MAC, ENABLE);
+  RCC_AHBPeriphResetCmd(RCC_AHBPeriph_ETH_MAC, DISABLE);
+#else
+	#error Unsupported MCU
+#endif
 }
 
 
@@ -1349,7 +1356,7 @@ uint32_t ETH_GetRxPktSize(ETH_DMADESCTypeDef *DMARxDesc)
   return frameLength;
 }
 
-#ifdef USE_ENHANCED_DMA_DESCRIPTORS
+#ifdef USE_ENHANCED_DMA_DESCRIPTORS			// not available on the F107
 /**
   * @brief  Enables or disables the Enhanced descriptor structure.
   * @param  NewState: new state of the Enhanced descriptor structure.
@@ -1810,6 +1817,7 @@ void ETH_ResumeDMAReception(void)
   ETH->DMARPDR = 0;
 }
 
+#if defined(STM32PLUS_F4)
 /**
   * @brief  Set the DMA Receive status watchdog timer register value
   * @param  Value: DMA Receive status watchdog timer register value   
@@ -1820,6 +1828,7 @@ void ETH_SetReceiveWatchdogTimer(uint8_t Value)
   /* Set the DMA Receive status watchdog timer register */
   ETH->DMARSWTR = Value;
 }
+#endif
 
 
 /******************************************************************************/                             
@@ -1973,6 +1982,8 @@ void ETH_PowerDownCmd(FunctionalState NewState)
   }
 } 
 
+#if defined(STM32PLUS_F4)
+
 /******************************************************************************/                             
 /*                              MMC functions                                 */
 /******************************************************************************/                            
@@ -1999,6 +2010,8 @@ void ETH_MMCCounterHalfPreset(void)
   /* Initialize the MMC counters to almost-half value */
   ETH->MMCCR |= ETH_MMCCR_MCP;
 }
+#endif
+
 
  /**
   * @brief  Enables or disables the MMC Counter Freeze.

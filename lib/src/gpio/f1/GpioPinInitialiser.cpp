@@ -67,6 +67,8 @@ namespace stm32plus {
 
 			// clock on
 
+			RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+
 			RCC_APB2PeriphClockCmd(port==GPIOA ? RCC_APB2Periph_GPIOA :
 														 port==GPIOB ? RCC_APB2Periph_GPIOB :
 														 port==GPIOC ? RCC_APB2Periph_GPIOC :

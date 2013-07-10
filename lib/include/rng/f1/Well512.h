@@ -82,6 +82,8 @@ namespace stm32plus {
 		srand(MillisecondTimer::millis());
 		for(i=0;i<STATE_WORDS;i++)
 			STATE[i]=rand();
+
+		state_i=0;
 	}
 
 

@@ -85,6 +85,7 @@
 #include "net/datalink/EthernetFrame.h"
 #include "net/datalink/mac/MacAddressFilter.h"
 #include "net/datalink/mac/MacDefaultPinPackage.h"
+#include "net/datalink/mac/MacRemapPinPackage.h"
 #include "net/datalink/mac/MacBase.h"
 #include "net/datalink/mac/Mac.h"
 #include "net/datalink/mac/WakeOnLan.h"
