@@ -16,10 +16,9 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates the network stack acting as a ping server. Once
- * up and running you should be able to ping it from another host on the network.
- * Echo replies are handled entirely by the network stack with no action required
- * by you.
+ * This example demonstrates the ICMP transport by sending periodic
+ * echo requests (pings) to a hardcoded IP address (change it to suit your
+ * network).
  *
  * This network stack is about as simple as it gets. We don't even
  * use DHCP for client configuration so you'll need to be connected to a
@@ -39,6 +38,15 @@ using namespace stm32plus::net;
  *              +----------------------+-----+
  * PHYSICAL:    | DP83848C                   |
  *              +-----------------------------
+ *
+ * This example is also tested using the KSZ8051MLL in MII mode
+ * instead of the DP83848C/RMII. The KSZ8051MLL test was performed
+ * on the STM32F107. The DP83848C was tested on the STM32F407. To
+ * reconfigure this demo for the F107 using remapped MAC pins connected
+ * to the KSZ8051MLL change the physical and datalink layers thus:
+ *
+ * typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
+ * typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
  */
 
 class NetPingClientTest {
@@ -148,11 +156,12 @@ class NetPingClientTest {
 			for(;;) {
 
 				char buf[20];
+				uint32_t elapsed;
 
 				// send a ping every 2 seconds
 
-				if(_net->ping("192.168.0.100")) {
-					StringUtil::modp_uitoa10(_net->pingGetElapsed(),buf);
+				if(_net->ping("192.168.1.2",elapsed)) {
+					StringUtil::modp_uitoa10(elapsed,buf);
 					*_outputStream << "Reply received in " << buf << "ms.\r\n";
 				}
 				else

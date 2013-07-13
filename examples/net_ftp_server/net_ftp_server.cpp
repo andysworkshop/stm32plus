@@ -23,6 +23,18 @@ using namespace stm32plus::net;
  * the network stack, the RTC, the SD card and the FAT16/32 filesystem
  * to build a simple ftp server that listens on port 21.
  *
+ * The server supports authenticated and (optionally) anonymous connections.
+ * It requires you to create a top-level directory on your SD card called
+ * "ftp" and that "ftp" directory must contain a text file called "server.ini".
+ * An example "server.ini" file is included in the same directory as this
+ * example. Every option is explained in detail in the example server.ini,
+ * please do read it.
+ *
+ * Only passive mode is supported by this server. I have tested this server
+ * against cygwin/linux command line clients as well as IE10, Firefox 13 and
+ * Chrome 28. The Windows 7 command line ftp client is not supported due to
+ * its lack of passive mode support.
+ *
  *              +----------------------------+
  * APPLICATION: | DhcpClient                 |
  *              +------+---------------------+

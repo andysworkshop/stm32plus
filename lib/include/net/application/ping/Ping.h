@@ -47,7 +47,6 @@ namespace stm32plus {
 				uint16_t _nextId;									///< the next identifier to put into a ping packet
 
 				volatile bool _waiting;						///< reset by the onReceive IRQ when we get a reply or error
-				uint32_t _elapsed;								///< if a response was received, this is how long it took
 				IcmpType _icmpType;							///< taken from the ICMP reply/error packet header
 				IcmpCode _icmpCode;							///< taken from the ICMP reply/error packet header
 
@@ -67,7 +66,7 @@ namespace stm32plus {
 				bool initialise(const Parameters& params);
 				bool startup();
 
-				bool ping(const IpAddress& host);
+				bool ping(const IpAddress& host,uint32_t& elapsed);
 
 				uint32_t pingGetElapsed() const;
 				IcmpType pingGetIcmpType() const;
@@ -119,12 +118,15 @@ namespace stm32plus {
 
 		/**
 		 * Ping the host and wait for a reply - once only
+		 * @param host The IP address of the host to ping.
+		 * @param elapsed The elapsed time in ms. for a successful ping.
+		 * @return true if a reply was received, false otherwise.
 		 */
 
 		template<class TTransportLayer>
-		inline bool Ping<TTransportLayer>::ping(const IpAddress& host) {
+		inline bool Ping<TTransportLayer>::ping(const IpAddress& host,uint32_t& elapsed) {
 
-			uint32_t sent,elapsed;
+			uint32_t sent;
 
 			// send the echo request
 
@@ -150,7 +152,6 @@ namespace stm32plus {
 
 			// got a response
 
-			_elapsed=elapsed;
 			_nextId++;
 
 			// echo reply is a good response
@@ -206,17 +207,6 @@ namespace stm32plus {
 			_icmpCode=rxevent.icmpPacket.icmp_code;
 
 			_waiting=false;
-		}
-
-
-		/**
-		 * Get the elapsed time in ms for a successful ping
-		 * @return The elapsed time
-		 */
-
-		template<class TTransportLayer>
-		inline uint32_t Ping<TTransportLayer>::pingGetElapsed() const {
-			return _elapsed;
 		}
 
 
