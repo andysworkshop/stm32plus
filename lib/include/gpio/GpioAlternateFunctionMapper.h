@@ -4,6 +4,8 @@
  * Please see website for licensing terms.
  */
 
+#pragma once
+
 
 namespace stm32plus {
 
