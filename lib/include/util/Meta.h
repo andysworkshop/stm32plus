@@ -21,7 +21,7 @@ namespace stm32plus {
 	 * Here's the forward definition
 	 */
 
-	template<typename F,typename... T>
+	template<class F,class... T>
 	struct RecursiveBoolInitWithParams;
 
 	/**
@@ -58,7 +58,7 @@ namespace stm32plus {
 	 * Here's the forward definition
 	 */
 
-	template<typename F,typename... T>
+	template<class F,class... T>
 	struct RecursiveBoolStartup;
 
 	/**

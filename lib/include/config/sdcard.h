@@ -41,7 +41,6 @@
 
 // feature includes
 
-#include "sdcard/features/NullSdCardFeature.h"
 #include "sdcard/features/SdCardFeatureBase.h"
 #include "sdcard/features/SdCardIoFeature.h"
 #include "sdcard/features/SdCardSdioFeature.h"
