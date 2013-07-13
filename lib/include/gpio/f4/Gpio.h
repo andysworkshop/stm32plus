@@ -95,6 +95,36 @@ namespace stm32plus {
 
 
 	/**
+	 * These two functions are for the variadic parameter pack expansion. When called they will
+	 * do compile-time recursion to compute the 32-bit pin bit mask from a variadic pack of
+	 * pin numbers (0..15)
+	 */
+
+	namespace  {
+
+		/**
+		 * Recursion termination condition
+		 */
+
+		template<uint8_t TPin>
+		void GpioPinMerge(uint32_t& pins) {
+			pins|=1 << TPin;
+		}
+
+
+		/**
+		 * General recursive caller
+		 */
+
+		template<uint8_t First,uint8_t Next,uint8_t... Rest>
+		void GpioPinMerge(uint32_t& pins) {
+			pins|=1 << First;
+			GpioPinMerge<Next,Rest...>(pins);
+		}
+	}
+
+
+	/**
 	 * Constructor
 	 * @param port
 	 */

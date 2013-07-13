@@ -402,19 +402,6 @@
 				<parser enabled="true"/>
 			</scannerInfoProvider>
 		</profile>
-		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1800167081;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1800167081.src;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.cpp.compiler.debug.1593926639;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.cpp.compiler.base.input.1084847442">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileCPP"/>
-			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="makefileGenerator">
-					<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697.src;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.cpp.compiler.debug.616617459;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.cpp.compiler.base.input.637925999">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileCPP"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
@@ -428,8 +415,8 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697.src;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.c.compiler.debug.952437727;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.611999212">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1800167081;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1800167081.src;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.cpp.compiler.debug.1593926639;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.cpp.compiler.base.input.1084847442">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileCPP"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
 				<buildOutputProvider>
 					<openAction enabled="true" filePath=""/>
@@ -442,6 +429,19 @@
 			</profile>
 		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1959774430;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1959774430.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.c.compiler.debug.1544422864;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.2146126991">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="makefileGenerator">
+					<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697.src;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.c.compiler.debug.952437727;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.611999212">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
 				<buildOutputProvider>
@@ -737,19 +737,6 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.c.compiler.debug.1510147197;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.1630229494">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
-			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="makefileGenerator">
-					<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.cpp.compiler.debug.1725228133;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.cpp.compiler.base.input.1467680122">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileCPP"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
@@ -769,6 +756,19 @@
 				</buildOutputProvider>
 				<scannerInfoProvider id="specsFile">
 					<runAction arguments="-E -P -v -dD &quot;${plugin_state_location}/specs.cpp&quot; -std=gnu++0x" command="arm-none-eabi-g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.c.compiler.debug.1510147197;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.c.compiler.base.input.1630229494">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="makefileGenerator">
+					<runAction arguments="-f ${project_name}_scd.mk" command="make" useDefault="true"/>
 					<parser enabled="true"/>
 				</scannerInfoProvider>
 			</profile>
@@ -799,7 +799,7 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697.include;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.assembler.debug.1857890909;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1928489392">
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1959774430;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1959774430.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.assembler.debug.867786858;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1023823939">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
 				<buildOutputProvider>
@@ -812,7 +812,7 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1959774430;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1959774430.;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.assembler.debug.867786858;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1023823939">
+		<scannerConfigBuildInfo instanceId="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.debug.1142727245.1739934697.include;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.lib.assembler.debug.1857890909;org.eclipse.cdt.cross.arm.gnu.sourcery.windows.assembler.base.input.1928489392">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="org.eclipse.cdt.cross.arm.gnu.ARM_CS_GCCWinManagedMakePerProjectProfileC"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerFileProfile">
 				<buildOutputProvider>
