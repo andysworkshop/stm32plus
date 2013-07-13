@@ -19,7 +19,7 @@ namespace stm32plus {
 
     public:
       Rtc() :
-      	Features((RtcBase&)*this)... {
+      	Features(static_cast<RtcBase&>(*this))... {
       }
     };
 }

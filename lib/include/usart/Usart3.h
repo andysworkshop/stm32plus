@@ -19,7 +19,7 @@ namespace stm32plus {
 
 	  Usart3_Custom(const typename UsartPeripheral<TPinPackage,PERIPHERAL_USART3>::Parameters& params)
 	  	: UsartPeripheral<TPinPackage,PERIPHERAL_USART3>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 
@@ -61,7 +61,7 @@ namespace stm32plus {
 
 	  Usart3(const Parameters& params)
 	  	: UsartPeripheral<Usart3DefaultPinPackage,PERIPHERAL_USART3>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 
@@ -103,7 +103,7 @@ namespace stm32plus {
 
 	  Usart3_Remap1(const Parameters& params)
 	  	: UsartPeripheral<Usart3Remap1PinPackage,PERIPHERAL_USART3>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 
@@ -145,7 +145,7 @@ namespace stm32plus {
 
 		Usart3_Remap2(const Parameters& params)
 	  	: UsartPeripheral<Usart3Remap2PinPackage,PERIPHERAL_USART3>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 }

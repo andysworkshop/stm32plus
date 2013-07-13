@@ -42,7 +42,7 @@ namespace stm32plus {
 
 	  I2C2_Remap1(const Parameters& params)
 	  	: I2CPeripheral<I2C2Remap1PinPackage,PERIPHERAL_I2C2>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 
@@ -73,7 +73,7 @@ namespace stm32plus {
 
 	  I2C2_Remap2(const Parameters& params)
 	  	: I2CPeripheral<I2C2Remap2PinPackage,PERIPHERAL_I2C2>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 }

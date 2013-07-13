@@ -24,7 +24,7 @@ namespace stm32plus {
 
 		Uart4_Custom(const typename UsartPeripheral<TPinPackage,PERIPHERAL_UART4>::Parameters& params)
 	  	: UsartPeripheral<TPinPackage,PERIPHERAL_UART4>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 
@@ -66,7 +66,7 @@ namespace stm32plus {
 
 		Uart4(const Parameters& params)
 	  : UsartPeripheral<Uart4DefaultPinPackage,PERIPHERAL_UART4>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 }

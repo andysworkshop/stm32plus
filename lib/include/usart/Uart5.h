@@ -24,7 +24,7 @@ namespace stm32plus {
 
 		Uart5_Custom(const typename UsartPeripheral<TPinPackage,PERIPHERAL_UART5>::Parameters& params)
 	  	: UsartPeripheral<TPinPackage,PERIPHERAL_UART5>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 
@@ -66,7 +66,7 @@ namespace stm32plus {
 
 		Uart5(const Parameters& params)
 	  : UsartPeripheral<Uart5DefaultPinPackage,PERIPHERAL_UART5>(params),
-	  	  Features((Usart&)*this)... {
+	  	  Features(static_cast<Usart&>(*this))... {
 	  }
 	};
 }

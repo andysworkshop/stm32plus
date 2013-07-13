@@ -19,7 +19,7 @@ namespace stm32plus {
 
 	  I2S3_Custom(const typename I2SPeripheral<TPinPackage,PERIPHERAL_I2S3>::Parameters& params)
 	  	: I2SPeripheral<TPinPackage,PERIPHERAL_I2S3>(params),
-	  	  Features((I2S&)*this)... {
+	  	  Features(static_cast<I2S&>(*this))... {
 	  }
 	};
 
@@ -53,7 +53,7 @@ namespace stm32plus {
 
 	  I2S3(const Parameters& params)
 	  	: I2SPeripheral<I2S3DefaultPinPackage,PERIPHERAL_I2S3>(params),
-	  	  Features((I2S&)*this)... {
+	  	  Features(static_cast<I2S&>(*this))... {
 	  }
 	};
 }

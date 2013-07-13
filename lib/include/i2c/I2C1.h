@@ -19,7 +19,7 @@ namespace stm32plus {
 
 	  I2C1_Custom(const typename I2CPeripheral<TPinPackage,PERIPHERAL_I2C1>::Parameters& params)
 	  	: I2CPeripheral<TPinPackage,PERIPHERAL_I2C1>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 
@@ -51,7 +51,7 @@ namespace stm32plus {
 
 	  I2C1_Default(const Parameters& params)
 	  	: I2CPeripheral<I2C1DefaultPinPackage,PERIPHERAL_I2C1>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 
@@ -82,7 +82,7 @@ namespace stm32plus {
 
 	  I2C1_Remap(const Parameters& params)
 	  	: I2CPeripheral<I2C1RemapPinPackage,PERIPHERAL_I2C1>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 }

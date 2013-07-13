@@ -19,7 +19,7 @@ namespace stm32plus {
 
 	  Spi1_Custom(const typename SpiPeripheral<TPinPackage,PERIPHERAL_SPI1>::Parameters& params)
 	  	: SpiPeripheral<TPinPackage,PERIPHERAL_SPI1>(params),
-	  	  Features((Spi&)*this)... {
+	  	  Features(static_cast<Spi&>(*this))... {
 	  }
 	};
 
@@ -53,7 +53,7 @@ namespace stm32plus {
 
 	  Spi1(const Parameters& params)
 	  	: SpiPeripheral<Spi1DefaultPinPackage,PERIPHERAL_SPI1>(params),
-	  	  Features((Spi&)*this)... {
+	  	  Features(static_cast<Spi&>(*this))... {
 	  }
 	};
 
@@ -87,7 +87,7 @@ namespace stm32plus {
 
 	  Spi1_Remap1(const Parameters& params)
 	  	: SpiPeripheral<Spi1Remap1PinPackage,PERIPHERAL_SPI1>(params),
-	  	  Features((Spi&)*this)... {
+	  	  Features(static_cast<Spi&>(*this))... {
 	  }
 	};
 }

@@ -17,10 +17,6 @@
 namespace stm32plus {
 
 
-#define FULL_PARAMETER_PACK uint8_t p1=16,uint8_t p2=16,uint8_t p3=16,uint8_t p4=16,uint8_t p5=16,uint8_t p6=16,uint8_t p7=16,uint8_t p8=16,uint8_t p9=16,uint8_t p10=16,uint8_t p11=16,uint8_t p12=16,uint8_t p13=16,uint8_t p14=16,uint8_t p15=16,uint8_t p16=16
-#define SLIM_PARAMETER_PACK p1,p2,p3,p4,p5,p6,p7,p8,p9,p10,p11,p12,p13,p14,p15,p16
-
-
 	/**
 	 * Template feature class to support initialisation of alternate function pins on the F4.
 	 * Multiple pins can be initialised in one instantiation
@@ -30,7 +26,7 @@ namespace stm32plus {
 					 GPIOSpeed_TypeDef TSpeed=GPIO_Speed_50MHz,
 					 Gpio::GpioOutputType TOutputType=Gpio::PUSH_PULL,
 					 Gpio::GpioPullUpDownType TPullUpDownType=Gpio::PUPD_NONE,
-					 FULL_PARAMETER_PACK>
+					 uint8_t... TPins>
 	class AlternateFunctionFeature : public Gpio {
 
 		public:
@@ -45,59 +41,10 @@ namespace stm32plus {
 
 				uint32_t pins;
 
-				// p1..16 are constants. the compiler will eliminate the impossible branches
-				// so the code generated here is minimal. In an optimised build all the 16 conditionals below
-				// are eliminated and the compiler generates a single load instruction with a constant.
+				// recurse to get the pin mask
 
 				pins=0;
-
-				if(p1!=16)
-					pins|=1 << p1;
-
-				if(p2!=16)
-					pins|=1 << p2;
-
-				if(p3!=16)
-					pins|=1 << p3;
-
-				if(p4!=16)
-					pins|=1 << p4;
-
-				if(p5!=16)
-					pins|=1 << p5;
-
-				if(p6!=16)
-					pins|=1 << p6;
-
-				if(p7!=16)
-					pins|=1 << p7;
-
-				if(p8!=16)
-					pins|=1 << p8;
-
-				if(p9!=16)
-					pins|=1 << p9;
-
-				if(p10!=16)
-					pins|=1 << p10;
-
-				if(p11!=16)
-					pins|=1 << p11;
-
-				if(p12!=16)
-					pins|=1 << p12;
-
-				if(p13!=16)
-					pins|=1 << p13;
-
-				if(p14!=16)
-					pins|=1 << p14;
-
-				if(p15!=16)
-					pins|=1 << p15;
-
-				if(p16!=16)
-					pins|=1 << p16;
+				GpioPinMerge<TPins...>(pins);
 
 				// do the initialisation in the non-template base
 
@@ -111,8 +58,8 @@ namespace stm32plus {
 	 * compatible with the F4.
 	 */
 
-	template<uint8_t TAfSelection,FULL_PARAMETER_PACK>
-	using DefaultAlternateFunctionFeature=AlternateFunctionFeature<TAfSelection,GPIO_Speed_50MHz,Gpio::PUSH_PULL,Gpio::PUPD_NONE,SLIM_PARAMETER_PACK>;
+	template<uint8_t TAfSelection,uint8_t... TPins>
+	using DefaultAlternateFunctionFeature=AlternateFunctionFeature<TAfSelection,GPIO_Speed_50MHz,Gpio::PUSH_PULL,Gpio::PUPD_NONE,TPins...>;
 
 
 	/**
@@ -120,38 +67,35 @@ namespace stm32plus {
 	 * on any MCU. Some of the examples use these to guarantee compatibility.
 	 */
 
-	template<FULL_PARAMETER_PACK> using DefaultTim1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM1,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM2,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM3,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim4AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM4,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim5AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM5,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim8AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM8,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim9AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM9,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim10AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM10,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim11AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM11,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim12AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM12,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim13AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM13,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultTim14AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM14,SLIM_PARAMETER_PACK>;
+	template<uint8_t... TPins> using DefaultTim1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM1,TPins...>;
+	template<uint8_t... TPins> using DefaultTim2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM2,TPins...>;
+	template<uint8_t... TPins> using DefaultTim3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM3,TPins...>;
+	template<uint8_t... TPins> using DefaultTim4AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM4,TPins...>;
+	template<uint8_t... TPins> using DefaultTim5AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM5,TPins...>;
+	template<uint8_t... TPins> using DefaultTim8AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM8,TPins...>;
+	template<uint8_t... TPins> using DefaultTim9AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM9,TPins...>;
+	template<uint8_t... TPins> using DefaultTim10AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM10,TPins...>;
+	template<uint8_t... TPins> using DefaultTim11AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM11,TPins...>;
+	template<uint8_t... TPins> using DefaultTim12AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM12,TPins...>;
+	template<uint8_t... TPins> using DefaultTim13AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM13,TPins...>;
+	template<uint8_t... TPins> using DefaultTim14AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_TIM14,TPins...>;
 
-	template<FULL_PARAMETER_PACK> using DefaultI2C1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_I2C1,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultI2C2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_I2C2,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultI2C3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_I2C3,SLIM_PARAMETER_PACK>;
+	template<uint8_t... TPins> using DefaultI2C1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_I2C1,TPins...>;
+	template<uint8_t... TPins> using DefaultI2C2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_I2C2,TPins...>;
+	template<uint8_t... TPins> using DefaultI2C3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_I2C3,TPins...>;
 
-	template<FULL_PARAMETER_PACK> using DefaultSpi1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI1,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultSpi2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI2,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultSpi3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI3,SLIM_PARAMETER_PACK>;
+	template<uint8_t... TPins> using DefaultSpi1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI1,TPins...>;
+	template<uint8_t... TPins> using DefaultSpi2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI2,TPins...>;
+	template<uint8_t... TPins> using DefaultSpi3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI3,TPins...>;
 
-	template<FULL_PARAMETER_PACK> using DefaultUsart1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART1,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultUsart2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART1,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultUsart3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART3,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultUart4AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART4,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultUart5AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART5,SLIM_PARAMETER_PACK>;
-	template<FULL_PARAMETER_PACK> using DefaultUsart6AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART6,SLIM_PARAMETER_PACK>;
+	template<uint8_t... TPins> using DefaultUsart1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART1,TPins...>;
+	template<uint8_t... TPins> using DefaultUsart2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART1,TPins...>;
+	template<uint8_t... TPins> using DefaultUsart3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART3,TPins...>;
+	template<uint8_t... TPins> using DefaultUart4AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART4,TPins...>;
+	template<uint8_t... TPins> using DefaultUart5AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART5,TPins...>;
+	template<uint8_t... TPins> using DefaultUsart6AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART6,TPins...>;
 
-	template<FULL_PARAMETER_PACK> using DefaultFsmcAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_FSMC,SLIM_PARAMETER_PACK>;
+	template<uint8_t... TPins> using DefaultFsmcAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_FSMC,TPins...>;
 
-	template<FULL_PARAMETER_PACK> using DefaultSdioAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SDIO,SLIM_PARAMETER_PACK>;
-
-#undef FULL_PARAMETER_PACK				// don't let this escape into the global namespace
-#undef SLIM_PARAMETER_PACK				// don't let this escape into the global namespace
+	template<uint8_t... TPins> using DefaultSdioAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SDIO,TPins...>;
 }

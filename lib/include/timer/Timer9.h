@@ -32,7 +32,7 @@ namespace stm32plus {
 
       Timer9()
         : GeneralPurposeTimer<TimerType,PERIPHERAL_TIMER9>(TIM9),
-          Features((Timer&)*this)... {
+          Features(static_cast<Timer&>(*this))... {
       }
   };
 }

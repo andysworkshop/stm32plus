@@ -25,7 +25,7 @@ namespace stm32plus {
 
 	  I2C3_Custom(const typename I2CPeripheral<TPinPackage,PERIPHERAL_I2C3>::Parameters& params)
 	  	: I2CPeripheral<TPinPackage,PERIPHERAL_I2C3>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 
@@ -56,7 +56,7 @@ namespace stm32plus {
 
 	  I2C3_Default(const Parameters& params)
 	  	: I2CPeripheral<I2C3DefaultPinPackage,PERIPHERAL_I2C3>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 
@@ -87,7 +87,7 @@ namespace stm32plus {
 
 	  I2C3_Remap(const Parameters& params)
 	  	: I2CPeripheral<I2C3RemapPinPackage,PERIPHERAL_I2C3>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 }

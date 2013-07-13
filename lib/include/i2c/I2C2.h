@@ -19,7 +19,7 @@ namespace stm32plus {
 
 	  I2C2_Custom(const typename I2CPeripheral<TPinPackage,PERIPHERAL_I2C2>::Parameters& params)
 	  	: I2CPeripheral<TPinPackage,PERIPHERAL_I2C2>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 
@@ -51,7 +51,7 @@ namespace stm32plus {
 
 	  I2C2_Default(const Parameters& params)
 	  	: I2CPeripheral<I2C2DefaultPinPackage,PERIPHERAL_I2C2>(params),
-	  	  Features((I2C&)*this)... {
+	  	  Features(static_cast<I2C&>(*this))... {
 	  }
 	};
 }

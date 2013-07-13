@@ -32,7 +32,7 @@ namespace stm32plus {
 
       Timer8()
         : AdvancedControlTimer<TimerType,PERIPHERAL_TIMER8>(TIM8),
-          Features((Timer&)*this)... {
+          Features(static_cast<Timer&>(*this))... {
       }
   };
 }

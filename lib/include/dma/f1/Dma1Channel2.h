@@ -32,7 +32,7 @@ namespace stm32plus {
 
 			Dma1Channel2()
 				: Dma(DMA1_Channel2,DMA1_FLAG_TC2,DMA1_FLAG_HT2,DMA1_FLAG_TE2),
-				  Features((Dma&)*this)... {
+				  Features(static_cast<Dma&>(*this))... {
 
 				ClockControl<PERIPHERAL_DMA1>::On();
 			}
