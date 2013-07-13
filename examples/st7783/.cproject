@@ -35,7 +35,6 @@
 								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.preprocessor.def.1562967624" name="Defined symbols (-D)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="HSE_VALUE=8000000"/>
 									<listOptionValue builtIn="false" value="STM32PLUS_F1_HD"/>
-									<listOptionValue builtIn="false" value="SYSCLK_FREQ_72MHz=72000000"/>
 								</option>
 								<option id="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths.79005429" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arm.gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
@@ -50,7 +49,6 @@
 								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.preprocessor.def.2119547656" name="Defined symbols (-D)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.preprocessor.def" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="HSE_VALUE=8000000"/>
 									<listOptionValue builtIn="false" value="STM32PLUS_F1_HD"/>
-									<listOptionValue builtIn="false" value="SYSCLK_FREQ_72MHz=72000000"/>
 								</option>
 								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.include.paths.1469175799" name="Include paths (-I)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
@@ -151,10 +149,10 @@
 								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.functionsections.1029326322" name="Function sections (-ffunction-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.functionsections" value="true" valueType="boolean"/>
 								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.datasections.1817566089" name="Data sections (-fdata-sections)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.optimization.datasections" value="true" valueType="boolean"/>
 								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.misc.std.1600557303" name="Language Standard" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.misc.std" value="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.misc.std.gnucpp0x" valueType="enumerated"/>
-								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic.1502270028" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
-								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic.error.2068782036" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
-								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.extrawarn.1809736470" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
-								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.toerrors.789932439" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic.1502270028" name="Pedantic (-pedantic)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic.error.2068782036" name="Pedantic warnings as errors (-pedantic-errors)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.pedantic.error" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.extrawarn.1809736470" name="Extra warnings (-Wextra)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.extrawarn" value="true" valueType="boolean"/>
+								<option id="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.toerrors.789932439" name="Warnings as errors (-Werror)" superClass="org.eclipse.cdt.cross.arm.gnu.cpp.compiler.option.warnings.toerrors" value="true" valueType="boolean"/>
 								<inputType id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.cpp.compiler.base.input.1880119757" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.cpp.compiler.base.input"/>
 							</tool>
 							<tool id="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug.1449406243" name="ARM Sourcery Windows GCC C Linker" superClass="org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.c.linker.debug"/>
@@ -179,7 +177,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="system/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="system/f1hd|system/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

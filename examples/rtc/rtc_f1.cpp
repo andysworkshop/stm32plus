@@ -5,11 +5,13 @@
  */
 
 #include "config/stm32plus.h"
+
+#if defined(STM32PLUS_F1)
+
 #include "config/rtc.h"
 #include "config/gpio.h"
 #include "config/timing.h"
 
-#if defined(STM32PLUS_F1)
 
 using namespace stm32plus;
 
