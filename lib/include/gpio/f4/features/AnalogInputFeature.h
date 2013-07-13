@@ -22,10 +22,7 @@ namespace stm32plus {
 	 * Multiple pins can be initialised in one instantiation
 	 */
 
-	template<uint8_t p1=16,uint8_t p2=16,uint8_t p3=16,uint8_t p4=16,
-					 uint8_t p5=16,uint8_t p6=16,uint8_t p7=16,uint8_t p8=16,
-					 uint8_t p9=16,uint8_t p10=16,uint8_t p11=16,uint8_t p12=16,
-					 uint8_t p13=16,uint8_t p14=16,uint8_t p15=16,uint8_t p16=16>
+	template<uint8_t... TPins>
 	class AnalogInputFeature : public Gpio {
 
 		public:
@@ -40,59 +37,10 @@ namespace stm32plus {
 
 				uint32_t pins;
 
-				// p1..16 are constants. the compiler will eliminate the impossible branches
-				// so the code generated here is minimal. In an optimised build all the 16 conditionals below
-				// are eliminated and the compiler generates a single load instruction with a constant.
+				// recurse to get the pin mask
 
 				pins=0;
-
-				if(p1!=16)
-					pins|=1 << p1;
-
-				if(p2!=16)
-					pins|=1 << p2;
-
-				if(p3!=16)
-					pins|=1 << p3;
-
-				if(p4!=16)
-					pins|=1 << p4;
-
-				if(p5!=16)
-					pins|=1 << p5;
-
-				if(p6!=16)
-					pins|=1 << p6;
-
-				if(p7!=16)
-					pins|=1 << p7;
-
-				if(p8!=16)
-					pins|=1 << p8;
-
-				if(p9!=16)
-					pins|=1 << p9;
-
-				if(p10!=16)
-					pins|=1 << p10;
-
-				if(p11!=16)
-					pins|=1 << p11;
-
-				if(p12!=16)
-					pins|=1 << p12;
-
-				if(p13!=16)
-					pins|=1 << p13;
-
-				if(p14!=16)
-					pins|=1 << p14;
-
-				if(p15!=16)
-					pins|=1 << p15;
-
-				if(p16!=16)
-					pins|=1 << p16;
+				GpioPinMerge<TPins...>(pins);
 
 				// do the initialisation
 
