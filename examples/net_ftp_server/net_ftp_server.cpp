@@ -34,6 +34,9 @@ using namespace stm32plus::net;
  *              +----------------------+-----+
  * PHYSICAL:    | DP83848C                   |
  *              +----------------------------+
+ *
+ * This example is only compatible with the F4 because it requires the SDIO
+ * peripheral to communicate with the SD card.
  */
 
 class NetFtpServerTest {

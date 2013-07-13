@@ -31,7 +31,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/stm32plus-examples-ili9481/Debug_F1}</value>
+					<value>${workspace_loc:/stm32plus-examples-ili9481/Debug_hd_72}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
