@@ -228,6 +228,8 @@ namespace stm32plus {
 
 			if(timeoutMillis)
 				now=MillisecondTimer::millis();
+			else
+				now=0;
 
 			// read the response line
 

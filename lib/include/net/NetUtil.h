@@ -18,9 +18,12 @@ namespace stm32plus {
 			 * @return The parameter, with bits reversed
 			 */
 
-			inline static uint16_t ntohs(register uint16_t data) {
-				asm volatile( "rev16 %0, %0" :: "g" (data) );
-				return data;
+			__attribute__((always_inline)) inline static uint16_t ntohs(uint16_t data) {
+
+				uint16_t result;
+
+				asm volatile( "rev16 %0, %1" : "=&r" (result) : "r" (data) );
+				return result;
 			}
 
 
@@ -30,9 +33,12 @@ namespace stm32plus {
 			 * @return The parameter, with bits reversed
 			 */
 
-			inline static uint32_t ntohl(register uint32_t data) {
-				asm volatile( "rev %0, %0" :: "g" (data) );
-				return data;
+			__attribute__((always_inline)) inline static uint32_t ntohl(uint32_t data) {
+
+				uint32_t result;
+
+				asm volatile( "rev %0, %1" : "=&r" (result) : "r" (data) );
+				return result;
 			}
 
 
@@ -42,9 +48,12 @@ namespace stm32plus {
 			 * @return The parameter, with bits reversed
 			 */
 
-			inline static uint16_t htons(register uint16_t data) {
-				asm volatile( "rev16 %0, %0" :: "g" (data) );
-				return data;
+			__attribute__((always_inline)) inline static uint16_t htons(uint16_t data) {
+
+				uint16_t result;
+
+				asm volatile( "rev16 %0, %1" : "=&r" (result) : "r" (data) );
+				return result;
 			}
 
 
@@ -54,9 +63,12 @@ namespace stm32plus {
 			 * @return The parameter, with bits reversed
 			 */
 
-			inline static uint32_t htonl(register uint32_t data) {
-				asm volatile( "rev %0, %0" :: "g" (data) );
-				return data;
+			__attribute__((always_inline)) inline static uint32_t htonl(uint32_t data) {
+
+				uint32_t result;
+
+				asm volatile( "rev %0, %1" : "=&r" (result) : "r" (data) );
+				return result;
 			}
 		}
 	}

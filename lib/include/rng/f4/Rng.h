@@ -73,6 +73,7 @@ namespace stm32plus {
 		template<class... Features>
 		inline bool Rng<Features...>::nextRandom(uint32_t& nextRandom) {
 
+			nextRandom=0;
 			while(RNG_GetFlagStatus(RNG_FLAG_DRDY)==RESET) {
 
 				if(RNG_GetFlagStatus(RNG_FLAG_CECS)==SET)

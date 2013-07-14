@@ -131,6 +131,7 @@ namespace stm32plus {
 			// send the echo request
 
 			_waiting=true;
+			elapsed=0;
 
 			sent=MillisecondTimer::millis();
 			this->icmpSendEchoRequest(host,_nextId,_params.ping_data,_params.ping_dataLength,_params.ping_ttl);

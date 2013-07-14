@@ -315,5 +315,46 @@ namespace stm32plus {
 		inline bool TcpConnection::receiveWindowCanBeOpened() const {
 			return _state.rxWindow.receiveWindow>=Min(_params.tcp_receiveBufferSize/2,(int)_segmentSizeLimit);
 		}
+
+
+		/**
+		 * Handle a RST coming from the other side.
+		 * Change the state to CLOSED
+		 */
+
+		inline void TcpConnection::handleIncomingRst() {
+
+			// the connection has gone bad
+
+			_state.state=TcpState::CLOSED;
+
+			// notify
+
+			TcpConnectionClosedEventSender.raiseEvent(TcpConnectionClosedEvent(*this));
+		}
+
+
+		/**
+		 * Return an appropriate window size for an ACK based on Clarke's simple algorithm
+		 * for avoiding silly window syndrome.
+		 *
+		 * If the current real window is less than the lesser of half the buffer size and 1 segment
+		 * then we close the window, otherwise we advertise a real window size
+		 *
+		 * This is IRQ code.
+		 *
+		 * @return The window size.
+		 */
+
+		inline uint16_t TcpConnection::sillyWindowAvoidance() {
+
+			if(receiveWindowCanBeOpened()) {
+				_receiveWindowIsClosed=false;
+				return _state.rxWindow.receiveWindow;
+			}
+
+			_receiveWindowIsClosed=true;
+			return 0;
+		}
 	}
 }

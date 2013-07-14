@@ -245,23 +245,6 @@ namespace stm32plus {
 
 
 		/**
-		 * Handle a RST coming from the other side.
-		 * Change the state to CLOSED
-		 */
-
-		void TcpConnection::handleIncomingRst() {
-
-			// the connection has gone bad
-
-			_state.state=TcpState::CLOSED;
-
-			// notify
-
-			TcpConnectionClosedEventSender.raiseEvent(TcpConnectionClosedEvent(*this));
-		}
-
-
-		/**
 		 * Handle a FIN (remote close) coming from the other side.
 		 * Change the state to CLOSE_WAIT and send a notification.
 		 *
@@ -755,6 +738,8 @@ namespace stm32plus {
 
 			if(timeoutMillis)
 				now=MillisecondTimer::millis();
+			else
+				now=0;			// keep the compiler quiet
 
 			// continue until finished
 
@@ -827,30 +812,6 @@ namespace stm32plus {
 			// finished
 
 			return true;
-		}
-
-
-		/**
-		 * Return an appropriate window size for an ACK based on Clarke's simple algorithm
-		 * for avoiding silly window syndrome.
-		 *
-		 * If the current real window is less than the lesser of half the buffer size and 1 segment
-		 * then we close the window, otherwise we advertise a real window size
-		 *
-		 * This is IRQ code.
-		 *
-		 * @return The window size.
-		 */
-
-		uint16_t TcpConnection::sillyWindowAvoidance() {
-
-			if(receiveWindowCanBeOpened()) {
-				_receiveWindowIsClosed=false;
-				return _state.rxWindow.receiveWindow;
-			}
-
-			_receiveWindowIsClosed=true;
-			return 0;
 		}
 	}
 }

@@ -353,6 +353,8 @@ namespace stm32plus {
 
 			if(timeout)
 				now=MillisecondTimer::millis();
+			else
+				now=0;
 
 			// loop while something happens
 

@@ -46,9 +46,11 @@ namespace stm32plus {
 						 	 	 	 	 	 	 	 	 	 	uint16_t /* mtu */,
 						 	 	 	 	 	 	 	 	 	 	uint16_t /* linkHeaderSize */,
 						 	 	 	 	 	 	 	 	 	 	NetBuffer * /* inputBuffer */,
-						 	 	 	 	 	 	 	 	 	 	NetBuffer **& /* outputBuffers */,
-						 	 	 	 	 	 	 	 	 	 	uint16_t& /* outputBufferCount */) {
+						 	 	 	 	 	 	 	 	 	 	NetBuffer **& outputBuffers,
+						 	 	 	 	 	 	 	 	 	 	uint16_t& outputBufferCount) {
 
+				outputBuffers=nullptr;
+				outputBufferCount=0;
 				return _networkUtilityObjects->setError(ErrorProvider::ERROR_PROVIDER_NET_IP_DISABLED_PACKET_FRAGMENT_FEATURE,E_FEATURE_DISABLED);
 			}
 		};

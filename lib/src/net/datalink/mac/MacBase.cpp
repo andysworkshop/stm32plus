@@ -597,6 +597,8 @@ namespace stm32plus {
 				context=E_RECEIVE_WATCHDOG_TIMEOUT;
 			else if((dmaStatus & ETH_DMA_FLAG_FBE)!=0)
 				context=E_FATAL_BUS_ERROR;
+			else
+				context=E_UNSPECIFIED;
 
 			this->setError(ErrorProvider::ERROR_PROVIDER_NET_MAC,context);
 		}

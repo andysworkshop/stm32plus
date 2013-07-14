@@ -39,7 +39,8 @@ namespace stm32plus {
 					return true;
 				}
 
-				bool ip_handleFragment(const IpPacket& /* packet */,IpFragmentedPacket*& /* fp */) {
+				bool ip_handleFragment(const IpPacket& /* packet */,IpFragmentedPacket*& fp) {
+					fp=nullptr;
 					return _networkUtilityObjects->setError(ErrorProvider::ERROR_PROVIDER_NET_IP_DISABLED_PACKET_REASSEMBLER_FEATURE,E_FEATURE_DISABLED);
 				}
 

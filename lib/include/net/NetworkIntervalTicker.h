@@ -165,6 +165,8 @@ namespace stm32plus {
 
 			if(interval)
 				si.nextCall=interval+_rtc->getTick();
+			else
+				si.nextCall=0;
 
 			_subscribers.push_front(si);
 		}
