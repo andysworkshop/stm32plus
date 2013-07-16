@@ -24,10 +24,11 @@ namespace stm32plus {
 		 * @tparam TUser optional type of a pointer that the user would like to be passed to the connection constructor.
 		 */
 
-		template<class TConnection,class TUser=void>
+		template<class TTcp,class TConnection,class TUser=void>
 		class TcpServer : public TcpServerBase {
 
 			protected:
+				TTcp& _tcp;
 				TUser *_userptr;																						// connection constructor may take optional typed user parameter
 				const typename TConnection::Parameters _connectionParams;		// connection parameters are shared between instances
 
@@ -36,11 +37,8 @@ namespace stm32plus {
 
 			public:
 				TcpServer(uint16_t listeningPort,
-									NetworkUtilityObjects& networkUtilityObjects,
-									TcpEvents& tcpEvents,
+									TTcp& tcp,
 									const Parameters& params,
-									uint16_t segmentSizeLimit,
-									uint16_t additionalHeaderSize,
 									TUser *userptr);
 
 				~TcpServer();
@@ -80,25 +78,24 @@ namespace stm32plus {
 			};
 		}
 
+
 		/**
 		 * Constructor
 		 * @param listeningPort the port number to listen on
 		 */
 
-		template<class TConnection,class TUser>
-		inline TcpServer<TConnection,TUser>::TcpServer(uint16_t listeningPort,
-																						 NetworkUtilityObjects& networkUtilityObjects,
-																						 TcpEvents& tcpEvents,
-																						 const Parameters& params,
-																						 uint16_t segmentSizeLimit,
-																						 uint16_t additionalHeaderSize,
-																						 TUser *userptr)
+		template<class TTcp,class TConnection,class TUser>
+		inline TcpServer<TTcp,TConnection,TUser>::TcpServer(uint16_t listeningPort,
+																												TTcp& tcp,
+																												const Parameters& params,
+																												TUser *userptr)
 			: TcpServerBase(listeningPort,
-											networkUtilityObjects,
-											tcpEvents,
+											static_cast<NetworkUtilityObjects&>(tcp),
+											static_cast<TcpEvents&>(tcp),
 											params,
-											segmentSizeLimit,
-											additionalHeaderSize),
+											tcp.getDatalinkMtuSize()-IpPacketHeader::getNoOptionsHeaderSize()-TcpHeader::getNoOptionsHeaderSize(),
+											tcp.getDatalinkTransmitHeaderSize()+tcp.getIpTransmitHeaderSize()),
+				_tcp(tcp),
 			  _userptr(userptr) {
 
 			// subscribe to receive events
@@ -111,8 +108,8 @@ namespace stm32plus {
 		 * Send a notification that this server is being released
 		 */
 
-		template<class TConnection,class TUser>
-		inline TcpServer<TConnection,TUser>::~TcpServer() {
+		template<class TTcp,class TConnection,class TUser>
+		inline TcpServer<TTcp,TConnection,TUser>::~TcpServer() {
 
 			// unsubscribe from receive events
 
@@ -129,8 +126,8 @@ namespace stm32plus {
 		 * @param ned The event descriptor
 		 */
 
-		template<class TConnection,class TUser>
-		__attribute__((noinline)) inline void TcpServer<TConnection,TUser>::onReceive(TcpSegmentEvent& event) {
+		template<class TTcp,class TConnection,class TUser>
+		__attribute__((noinline)) inline void TcpServer<TTcp,TConnection,TUser>::onReceive(TcpSegmentEvent& event) {
 
 			// we are only interested in segments sent to our port
 
@@ -165,6 +162,12 @@ namespace stm32plus {
 			// if we've hit the maximum number of connections then we have to ignore it
 
 			if(_connectionCount==_params.tcp_maxConnectionsPerServer)
+				return;
+
+			// if the number of closing connections has hit the limit then we cannot
+			// create a new one until the system has quiesced
+
+			if(_tcp.hasHitMaxClosingConnectionsLimit())
 				return;
 
 			// new connection to record

@@ -22,12 +22,14 @@ namespace stm32plus {
 								public TcpEvents {
 
 		  public:
+
 				/**
 				 * Error codes
 				 */
 
 				enum {
 					E_TOO_MANY_SERVERS = 1,				///< tcp_maxServers limit hit
+					E_TOO_MANY_CLOSING,						///< tcp_maxClosingConnections limit hit
 					E_PORT_IN_USE,								///< trying to bind to a port that's already claimed
 					E_TIMEOUT,										///< timed out while waiting to connect
 					E_CONNECT_FAILED							///< connection failed
@@ -44,6 +46,7 @@ namespace stm32plus {
 					uint16_t tcp_msl;												///< maximum segment lifetime, in seconds. default is 30
 					uint16_t tcp_connectRetryInterval;			///< the time, in millis to wait for a SYN-ACK before sending another. Default is 4000.
 					uint16_t tcp_connectMaxRetries;					///< number of times to retry a connect if SYN-ACK not received. Default is 5.
+					uint16_t tcp_maxClosingConnections;			///< do not accept/create connections if limit hit. 0=no limit. default is 0.
 
 					/**
 					 * Constructor
@@ -51,6 +54,7 @@ namespace stm32plus {
 
 					Parameters() {
 						tcp_maxServers=5;
+						tcp_maxClosingConnections=0;
 						tcp_msl=30;
 						tcp_connectRetryInterval=4000;
 						tcp_connectMaxRetries=5;
@@ -89,6 +93,8 @@ namespace stm32plus {
 
 				bool initialise(const Parameters& params);
 				bool startup();
+
+				bool hasHitMaxClosingConnectionsLimit() const;
 		};
 
 
@@ -540,10 +546,7 @@ namespace stm32plus {
 			server=new TcpServer<TConnection,TUser>(
 					port,
 					*this,
-					*this,
 					_params,
-					this->getDatalinkMtuSize()-IpPacketHeader::getNoOptionsHeaderSize()-TcpHeader::getNoOptionsHeaderSize(),
-					this->getDatalinkTransmitHeaderSize()+this->getIpTransmitHeaderSize(),
 					userptr);
 
 			_serverCount++;
@@ -611,6 +614,11 @@ namespace stm32plus {
 																				TConnection *&connection) {
 			uint16_t retry;
 
+			// check that the closing connections limit has not been hit
+
+			if(!hasHitMaxClosingConnectionsLimit())
+				return this->setError(ErrorProvider::ERROR_PROVIDER_NET_TCP,E_TOO_MANY_CLOSING);
+
 			// create and initialise the new connection. this will send the first SYN
 
 			connection=nullptr;
@@ -659,6 +667,22 @@ namespace stm32plus {
 			// retries exhausted
 
 			return this->setError(ErrorProvider::ERROR_PROVIDER_NET_TCP,E_TIMEOUT);
+		}
+
+
+		/**
+		 * Check if the maximum closing connections limit has been configured and hit
+		 * @return true if the max limit has been hit
+		 */
+
+		template<class TNetworkLayer>
+		inline bool Tcp<TNetworkLayer>::hasHitMaxClosingConnectionsLimit() const {
+
+			if(_params.tcp_maxClosingConnections==0)
+				return false;
+
+			IrqSuspend suspender;
+			return _closingConnections.size()>=_params.tcp_maxClosingConnections;
 		}
 	}
 }
