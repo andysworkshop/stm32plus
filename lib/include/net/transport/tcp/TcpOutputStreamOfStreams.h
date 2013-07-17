@@ -46,7 +46,7 @@ namespace stm32plus {
 				bool completed() const;
 				void addStream(InputStream *stream,bool takeOwnership);
 				bool canWriteToConnection() const;
-				bool writeDataToConnection();
+				bool writeDataToConnection(uint32_t& actuallySent);
 		};
 
 
@@ -104,12 +104,11 @@ namespace stm32plus {
 		 * Write out some data to the connection. Will never block. Will return false
 		 * if the underlying connection write attempt or a stream read attempt returned
 		 * false. If this method returns true then zero or more bytes have been transmitted.
+		 * @param actuallySent The number of bytes sent.
 		 * @return true if it worked.
 		 */
 
-		inline bool TcpOutputStreamOfStreams::writeDataToConnection() {
-
-			uint32_t actuallySent;
+		inline bool TcpOutputStreamOfStreams::writeDataToConnection(uint32_t& actuallySent) {
 
 			// if the local buffer is empty, get some data
 

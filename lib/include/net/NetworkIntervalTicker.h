@@ -84,6 +84,7 @@ namespace stm32plus {
 				void updateIntervalTickSubscription(uint32_t interval,const TickIntervalSlotType& delegate);
 
 				const RtcBase& getRtc() const;
+				RtcSecondInterruptFeature& getRtcSecondInterruptFeature() const;
 		};
 
 
@@ -142,6 +143,16 @@ namespace stm32plus {
 
 		inline const RtcBase& NetworkIntervalTicker::getRtc() const {
 			return *_rtc;
+		}
+
+
+		/**
+		 * Get the RTC second interrupt feature class
+		 * @return The feature class
+		 */
+
+		inline RtcSecondInterruptFeature& NetworkIntervalTicker::getRtcSecondInterruptFeature() const {
+			return *_rtcInterruptFeature;
 		}
 
 

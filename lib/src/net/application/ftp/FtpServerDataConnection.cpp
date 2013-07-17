@@ -51,6 +51,8 @@ namespace stm32plus {
 
 		bool FtpServerDataConnection::handleWrite() {
 
+			uint32_t actuallySent;
+
 			// cannot write if either end is closed
 
 			if(isLocalEndClosed() || isRemoteEndClosed())
@@ -60,8 +62,11 @@ namespace stm32plus {
 
 			if(_outputStreams.canWriteToConnection()) {
 
-				if(!_outputStreams.writeDataToConnection())
+				if(!_outputStreams.writeDataToConnection(actuallySent))
 					return false;
+
+				if(actuallySent)
+					_commandConnection->updateLastActiveTime();
 			}
 
 			return true;
@@ -78,11 +83,12 @@ namespace stm32plus {
 
 		bool FtpServerDataConnection::handleRead() {
 
-			uint32_t actuallyRead;
+			uint32_t actuallyRead,totalRead;
 			uint8_t transferBuffer[UPLOAD_TRANSFER_BUFFER_SIZE];			// default is 512 bytes
 
 			// transfer out all data
 
+			totalRead=0;
 			while(getDataAvailable()>0) {
 
 				// receive any data available
@@ -94,7 +100,12 @@ namespace stm32plus {
 
 				if(actuallyRead>0 && !_uploadStream->write(transferBuffer,actuallyRead))
 					return false;
+
+				totalRead+=actuallyRead;
 			}
+
+			if(totalRead)
+				_commandConnection->updateLastActiveTime();
 
 			return true;
 		}

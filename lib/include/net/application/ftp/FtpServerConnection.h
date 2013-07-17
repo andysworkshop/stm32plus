@@ -76,7 +76,9 @@ namespace stm32plus {
 			: FtpServerConnectionBase(params),
 			  _tcpImpl(tcpImpl) {
 
-			_lastActiveTime=MillisecondTimer::millis();
+			// start the last active timer
+
+			updateLastActiveTime();
 		}
 
 
@@ -104,7 +106,7 @@ namespace stm32plus {
 
 			// update the last active time
 
-			_lastActiveTime=MillisecondTimer::millis();
+			updateLastActiveTime();
 
 			// run the command and disconnect if it fails badly
 
@@ -133,6 +135,8 @@ namespace stm32plus {
 		template<class TImpl,class TTcp>
 		inline bool FtpServerConnection<TImpl,TTcp>::handleWrite() {
 
+			uint32_t actuallySent;
+
 			// if we've just started, write the greeting
 
 			if(_authenticationState==FtpServerAuthenticationState::STARTING) {
@@ -150,8 +154,11 @@ namespace stm32plus {
 
 			// write pending data to this connection
 
-			if(!_outputStreams.writeDataToConnection())
+			if(!_outputStreams.writeDataToConnection(actuallySent))
 				delete this;
+
+			if(actuallySent)
+				updateLastActiveTime();
 
 			return true;
 		}
@@ -235,10 +242,12 @@ namespace stm32plus {
 		template<class TImpl,class TTcp>
 		inline bool FtpServerConnection<TImpl,TTcp>::flushCommandStreams() {
 
+			uint32_t actuallySent;
+
 			// flush the streams
 
 			while(!_outputStreams.completed()) {
-				if(_outputStreams.canWriteToConnection() && !_outputStreams.writeDataToConnection())
+				if(_outputStreams.canWriteToConnection() && !_outputStreams.writeDataToConnection(actuallySent))
 					return false;
 			}
 

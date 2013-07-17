@@ -64,6 +64,7 @@ namespace stm32plus {
 
 				void clearDataConnection();				///< this is a callback for the data connection server to clear itself
 				uint16_t getDataConnectionSendBufferSize() const;
+				void updateLastActiveTime();
 		};
 
 
@@ -139,6 +140,15 @@ namespace stm32plus {
 
 		inline uint16_t FtpServerConnectionBase::getDataConnectionSendBufferSize() const {
 			return _params.ftp_dataConnectionSendBufferSize;
+		}
+
+
+		/**
+		 * Update the last active time
+		 */
+
+		inline void FtpServerConnectionBase::updateLastActiveTime() {
+			_lastActiveTime=MillisecondTimer::millis();
 		}
 	}
 }
