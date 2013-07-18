@@ -174,16 +174,41 @@ namespace stm32plus {
 
 			// check the pointer
 
-			if(_dataConnection==nullptr)
-				return true;
+			if(_dataConnection) {
 
-			if(_dataConnection->getDirection()==FtpServerDataConnection::Direction::DOWNLOAD) {
+				if(_dataConnection->getDirection()==FtpServerDataConnection::Direction::DOWNLOAD) {
 
-				// writing data to the data connection
+					// writing data to the data connection
 
-				if(_dataConnection->getConnectionState().state==TcpState::ESTABLISHED) {
+					if(_dataConnection->getConnectionState().state==TcpState::ESTABLISHED) {
 
-					if(_dataConnection->handleWrite()) {
+						if(_dataConnection->handleWrite()) {
+
+							// has it finished?
+
+							if(_dataConnection->finished()) {
+
+								// it has finished, close the port, reset the send counter and send a message
+
+								freeDataConnection();
+								_sendStartPosition=0;
+								addResponseString("226 Closing data connection.");
+							}
+						}
+					}
+					else {
+
+						// write failed, send a message and close the data connection
+
+						addResponseString("426 Connection closed; transfer aborted.");
+						freeDataConnection();
+					}
+				}
+				else if(_dataConnection->getDirection()==FtpServerDataConnection::Direction::UPLOAD) {
+
+					// reading data from the data connection
+
+					if(_dataConnection->handleRead()) {
 
 						// has it finished?
 
@@ -192,43 +217,23 @@ namespace stm32plus {
 							// it has finished, close the port, reset the send counter and send a message
 
 							freeDataConnection();
-							_sendStartPosition=0;
 							addResponseString("226 Closing data connection.");
 						}
 					}
-				}
-				else {
+					else {
 
-					// write failed, send a message and close the data connection
+						// read failed, send a message and close the data connection
 
-					addResponseString("426 Connection closed; transfer aborted.");
-					freeDataConnection();
-				}
-			}
-			else if(_dataConnection->getDirection()==FtpServerDataConnection::Direction::UPLOAD) {
-
-				// reading data from the data connection
-
-				if(_dataConnection->handleRead()) {
-
-					// has it finished?
-
-					if(_dataConnection->finished()) {
-
-						// it has finished, close the port, reset the send counter and send a message
-
+						addResponseString("426 Connection closed; transfer aborted.");
 						freeDataConnection();
-						addResponseString("226 Closing data connection.");
 					}
 				}
-				else {
-
-					// read failed, send a message and close the data connection
-
-					addResponseString("426 Connection closed; transfer aborted.");
-					freeDataConnection();
-				}
 			}
+
+			// finally check for an idle timeout
+
+			if(static_cast<TImpl *>(this)->hasTimedOut(MillisecondTimer::millis()-_lastActiveTime))
+				delete this;
 
 			return true;
 		}

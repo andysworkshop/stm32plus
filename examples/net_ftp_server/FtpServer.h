@@ -58,7 +58,7 @@ struct FtpParameters {
 	std::string serverGoodbye;				/// no default: you have to set one
 	std::string rootDirectory;				/// the root directory for this server: default is ""
 	bool anonymousPermitted;					/// default is false
-	uint32_t idleTimeout;							/// default is 120 seconds
+	uint32_t idleTimeout;							/// default is 120 seconds, 0=never time out
 	std::vector<FtpUser> users;				/// user specifications, no defaults. anonymous always gets entry zero if enabled.
 
 	// internal references created during server startup

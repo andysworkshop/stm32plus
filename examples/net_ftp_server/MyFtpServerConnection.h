@@ -80,6 +80,7 @@ class MyFtpServerConnection : public FtpServerConnection<MyFtpServerConnection,T
 		bool removeFile(const char *filename);
 		bool upload(const char *param,bool append,OutputStream*& stream);
 		bool fileSize(const char *filename,uint32_t& fileSize);
+		bool hasTimedOut(uint32_t idleMillis) const;
 };
 
 
@@ -650,3 +651,15 @@ inline bool MyFtpServerConnection::getPaths(const char *dir,std::string& subdir,
 	fullpath=_ftpParameters->rootDirectory+'/'+subdir;
 	return true;
 }
+
+
+/**
+ * Check if the connection has timed out
+ * @param idleMillis Current idle time
+ * @return true if timed out
+ */
+
+inline bool MyFtpServerConnection::hasTimedOut(uint32_t idleMillis) const {
+	return _ftpParameters->idleTimeout && (idleMillis/1000>_ftpParameters->idleTimeout);
+}
+

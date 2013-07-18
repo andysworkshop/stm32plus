@@ -110,6 +110,10 @@ namespace stm32plus {
 
 		inline bool TcpOutputStreamOfStreams::writeDataToConnection(uint32_t& actuallySent) {
 
+			// reset this
+
+			actuallySent=0;
+
 			// if the local buffer is empty, get some data
 
 			if(_localBufferPos==_localBufferSize)
