@@ -43,11 +43,11 @@ namespace stm32plus {
 
 				struct Parameters {
 
-					bool arp_startupBroadcast;				///< true if we broadcast our own address on startup
-					uint16_t arp_cacheSize;						///< number of entries to include in the ARP cache
-					uint32_t arp_cacheExpirySeconds;	///< The max seconds to keep an ARP cache entry
-					uint32_t arp_replyTimeout;				///< how long in ms to wait for an ARP reply
-					uint8_t arp_retries;							///< number of times to retry (default is 5)
+					bool arp_startupBroadcast;				///< true if we broadcast our own address on startup, default is true
+					uint16_t arp_cacheSize;						///< number of entries to include in the ARP cache, default is 10
+					uint32_t arp_cacheExpirySeconds;	///< The max seconds to keep an ARP cache entry, default is 600
+					uint32_t arp_replyTimeout;				///< how long in ms to wait for an ARP reply, default is 5000
+					uint8_t arp_retries;							///< number of times to retry, default is 5
 
 					Parameters() {
 						arp_startupBroadcast=true;

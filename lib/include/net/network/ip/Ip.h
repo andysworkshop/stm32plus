@@ -76,9 +76,9 @@ namespace stm32plus {
 			public:
 				bool initialise(Parameters&);
 				bool startup();
-				const IpAddress& getIpAddress() const;
 
-				uint32_t getIpTransmitHeaderSize() const;
+				const IpAddress& getIpAddress() const;
+				constexpr uint32_t getIpTransmitHeaderSize() const;
 		};
 
 
@@ -159,7 +159,7 @@ namespace stm32plus {
 		 */
 
 		template<class TDatalinkLayer,class... Features>
-		inline uint32_t Ip<TDatalinkLayer,Features...>::getIpTransmitHeaderSize() const {
+		inline constexpr uint32_t Ip<TDatalinkLayer,Features...>::getIpTransmitHeaderSize() const {
 			return IpPacketHeader::getNoOptionsHeaderSize();
 		}
 

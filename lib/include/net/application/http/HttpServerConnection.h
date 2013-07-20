@@ -280,7 +280,9 @@ namespace stm32plus {
 			}
 			else if(_state==State::WRITING_RESPONSE) {
 
-			  if(!_output.writeDataToConnection()) {				// try to write data and kill the connection if it fails
+				uint32_t actuallySent;
+
+			  if(!_output.writeDataToConnection(actuallySent)) {				// try to write data and kill the connection if it fails
 
 			  	delete this;
 					return true;
