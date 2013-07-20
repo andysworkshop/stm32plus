@@ -131,9 +131,9 @@ class NetTcpClientTest {
 
 			for(;;) {
 
-				// connect to the remote end and give it 10 seconds to complete
+				// connect to the remote end using a random local ephemeral port
 
-				if(_net->tcpConnect<TcpClientConnection>("192.168.1.9",12345,10000,ptr)) {
+				if(_net->tcpConnect<TcpClientConnection>("192.168.1.9",12345,ptr)) {
 
 					// manage the connection pointer in a scoped_ptr so it's automatically deleted (and closed)
 					// when it goes out of scope
