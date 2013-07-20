@@ -34,6 +34,10 @@ using namespace stm32plus::net;
  *              +----------------------+-----+
  * PHYSICAL:    | DP83848C                   |
  *              +----------------------------+
+ *
+ * Tested on devices:
+ *   STM32F107VCT6
+ *   STM32F407VGT6
  */
 
 class NetTcpClientTest {

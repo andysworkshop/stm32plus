@@ -45,6 +45,9 @@ extern uint32_t ErrorPixels,ErrorPixelsSize;
  *
  * This is example is only compatible with the F4 because it
  * requires the FSMC peripheral to drive the LCD.
+ *
+ * Tested on devices:
+ *   STM32F407VGT6
  */
 
 class NetWebPictureFrame {

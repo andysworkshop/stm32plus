@@ -42,6 +42,9 @@ using namespace stm32plus::net;
  *
  * This example is only compatible with the F4 because it requires the SDIO
  * peripheral to be able to talk to the SD card.
+ *
+ * Tested on devices:
+ *   STM32F407VGT6
  */
 
 class NetHttpServerTest {

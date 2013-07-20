@@ -48,6 +48,10 @@ using namespace stm32plus::net;
  *
  * typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
  * typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
+ *
+ * Tested on devices:
+ *   STM32F107VCT6
+ *   STM32F407VGT6
  */
 
 class NetDhcpClientTest {

@@ -24,6 +24,7 @@ using namespace stm32plus;
  *
  * Tested on devices:
  *   STM32F103ZET6
+ *   STM32F107VCT6
  *   STM32F407VGT6
  */
 
