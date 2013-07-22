@@ -26,7 +26,7 @@ namespace stm32plus {
 				 */
 
 				struct Parameters {
-					bool icmp_enableEchoReply;							///< true to respond to ping requests
+					bool icmp_enableEchoReply;			///< true to respond to ping requests, default is true
 
 					/**
 					 * Constructor: create default settings
