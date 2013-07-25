@@ -31,6 +31,7 @@ namespace stm32plus {
 
 		public:
 			CrcBase(uint8_t padding=0);
+			~CrcBase();
 
 			void reset();
 			uint32_t finish() const;
@@ -50,6 +51,15 @@ namespace stm32plus {
 
 		_padding=padding | padding << 8 | padding << 16 | padding << 24;
 		reset();
+	}
+
+
+	/*
+	 * Destructor
+	 */
+
+	inline CrcBase::~CrcBase() {
+		ClockControl<PERIPHERAL_CRC>::Off();
 	}
 
 

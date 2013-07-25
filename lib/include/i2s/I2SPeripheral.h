@@ -42,34 +42,57 @@ namespace stm32plus {
 
 		protected:
 
-			I2SPeripheral(const struct Parameters& params)
-				: I2S((SPI_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE) {
-
-				I2S_InitTypeDef init;
-
-				// clocks on first before any features get initialised
-
-				ClockControl<TPeripheralName>::On();
-
-				// and next the GPIO pins, also before any features get initialised
-
-				I2SPinInitialiser<TPinPackage,TPeripheralName>::initialise(params.i2s_mode,params.i2s_mclkOutput);
-
-				// initialise the peripheral
-
-				I2S_StructInit(&init);
-
-				init.I2S_Mode=params.i2s_mode;
-				init.I2S_Standard=params.i2s_standard;
-				init.I2S_DataFormat=params.i2s_dataFormat;
-				init.I2S_MCLKOutput=params.i2s_mclkOutput;
-				init.I2S_AudioFreq=params.i2s_audioFrequency;
-				init.I2S_CPOL=params.i2s_cpol;
-
-				// initialise the peripheral
-
-				I2S_Init(_peripheralAddress,&init);
-				enablePeripheral();
-			}
+			I2SPeripheral(const struct Parameters& params);
+			~I2SSPeripheral();
 	};
+
+
+	/**
+	 * Constructor
+	 */
+
+	template<class TPinPackage,PeripheralName TPeripheralName>
+	inline I2SPeripheral<TPinPackage,TPeripheralName>::I2SPeripheral(const struct Parameters& params)
+		: I2S((SPI_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE) {
+
+		I2S_InitTypeDef init;
+
+		// clocks on first before any features get initialised
+
+		ClockControl<TPeripheralName>::On();
+
+		// and next the GPIO pins, also before any features get initialised
+
+		I2SPinInitialiser<TPinPackage,TPeripheralName>::initialise(params.i2s_mode,params.i2s_mclkOutput);
+
+		// initialise the peripheral
+
+		I2S_StructInit(&init);
+
+		init.I2S_Mode=params.i2s_mode;
+		init.I2S_Standard=params.i2s_standard;
+		init.I2S_DataFormat=params.i2s_dataFormat;
+		init.I2S_MCLKOutput=params.i2s_mclkOutput;
+		init.I2S_AudioFreq=params.i2s_audioFrequency;
+		init.I2S_CPOL=params.i2s_cpol;
+
+		// initialise the peripheral
+
+		I2S_Init(_peripheralAddress,&init);
+		enablePeripheral();
+	}
+
+
+	/**
+	 * Destructor
+	 */
+
+	template<class TPinPackage,PeripheralName TPeripheralName>
+	inline I2SPeripheral<TPinPackage,TPeripheralName>::~I2SPeripheral() {
+
+		// disable and clocks off
+
+		disablePeripheral();
+		ClockControl<TPeripheralName>::Off();
+	}
 }

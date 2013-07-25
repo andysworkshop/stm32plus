@@ -53,6 +53,7 @@ namespace stm32plus {
 
 		public:
 			UsartPeripheral(const Parameters& params);
+			~UsartPeripheral();
 	};
 
 
@@ -96,5 +97,22 @@ namespace stm32plus {
 		// enable
 
 		enablePeripheral();
+	}
+
+
+	/**
+	 * Destructor, disable peripheral and disable clocks
+	 */
+
+	template<class TPinPackage,PeripheralName TPeripheralName>
+	inline UsartPeripheral<TPinPackage,TPeripheralName>::~UsartPeripheral() {
+
+		// disable the peripheral
+
+		disablePeripheral();
+
+		// clocks off
+
+		ClockControl<TPeripheralName>::Off();
 	}
 }

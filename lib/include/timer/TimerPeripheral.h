@@ -25,13 +25,15 @@ namespace stm32plus {
 	/**
    * Generic timer functionality
    * @tparam TTimer The timer class type (Timer1, Timer2...)
+   * @tparam TPeripheralName the peripheral class for the clocks
    */
 
-  template<class TTimer>
+  template<class TTimer,PeripheralName TPeripheralName>
   class TimerPeripheral : public Timer {
 
   	protected:
   		TimerPeripheral(TIM_TypeDef *peripheralAddress);
+  		~TimerPeripheral();
 
   	public:
   		void setPrescalerImmediately(uint16_t value);
@@ -43,9 +45,26 @@ namespace stm32plus {
    * Constructor
    */
 
-  template<class TTimer>
-  inline TimerPeripheral<TTimer>::TimerPeripheral(TIM_TypeDef *peripheralAddress)
+  template<class TTimer,PeripheralName TPeripheralName>
+  inline TimerPeripheral<TTimer,TPeripheralName>::TimerPeripheral(TIM_TypeDef *peripheralAddress)
   	: Timer(peripheralAddress) {
+
+  	// enable the clock before the feature constructors are called
+
+  	ClockControl<TPeripheralName>::On();
+  }
+
+
+  /**
+   * Destructor
+   */
+
+  template<class TTimer,PeripheralName TPeripheralName>
+  inline TimerPeripheral<TTimer,TPeripheralName>::~TimerPeripheral() {
+
+  	// disable the clock
+
+  	ClockControl<TPeripheralName>::Off();
   }
 
 
@@ -54,8 +73,8 @@ namespace stm32plus {
    * @param value the prescaler
    */
 
-  template<class TTimer>
-  inline void TimerPeripheral<TTimer>::setPrescalerImmediately(uint16_t value) {
+  template<class TTimer,PeripheralName TPeripheralName>
+  inline void TimerPeripheral<TTimer,TPeripheralName>::setPrescalerImmediately(uint16_t value) {
     TIM_PrescalerConfig(*this,0,TIM_PSCReloadMode_Immediate);
   }
 
@@ -65,8 +84,8 @@ namespace stm32plus {
    * @param value the prescaler
    */
 
-  template<class TTimer>
-  inline void TimerPeripheral<TTimer>::setPrescalerAtUpdate(uint16_t value) {
+  template<class TTimer,PeripheralName TPeripheralName>
+  inline void TimerPeripheral<TTimer,TPeripheralName>::setPrescalerAtUpdate(uint16_t value) {
     TIM_PrescalerConfig(*this,0,TIM_PSCReloadMode_Update);
   }
 }

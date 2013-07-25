@@ -12,6 +12,7 @@ namespace stm32plus {
   /**
    * Advanced control timers are TIM1, TIM8
    * @tparam TTimer The timer class type (Timer1, Timer2...)
+   * @tparam TPeripheralName the peripheral class for the clocks
    */
 
   template<class TTimer,PeripheralName TPeripheralName>
@@ -32,11 +33,7 @@ namespace stm32plus {
 
   template<class TTimer,PeripheralName TPeripheralName>
   inline AdvancedControlTimer<TTimer,TPeripheralName>::AdvancedControlTimer(TIM_TypeDef *peripheralAddress)
-  	: TimerPeripheral<TTimer>(peripheralAddress) {
-
-  	// enable the clock before the feature constructors are called
-
-  	ClockControl<TPeripheralName>::On();
+  	: TimerPeripheral<TTimer,TPeripheralName>(peripheralAddress) {
   }
 
 

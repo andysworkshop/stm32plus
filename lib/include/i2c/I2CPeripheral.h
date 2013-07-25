@@ -19,6 +19,7 @@ namespace stm32plus {
 
 		protected:
 			I2CPeripheral(const Parameters& params);
+			~I2CPeripheral();
 	};
 
 
@@ -50,5 +51,23 @@ namespace stm32plus {
 		init.I2C_AcknowledgedAddress=params.i2c_ackAddress;
 
 		I2C_Init(_peripheralAddress,&init);
+
+		// enable peripheral
+
+		enablePeripheral();
+	}
+
+
+	/**
+	 * Destructor
+	 */
+
+	template<class TPinPackage,PeripheralName TPeripheralName>
+	inline I2CPeripheral<TPinPackage,TPeripheralName>::~I2CPeripheral() {
+
+		// disable and clock off
+
+		disablePeripheral();
+		ClockControl<TPeripheralName>::Off();
 	}
 }

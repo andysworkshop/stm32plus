@@ -37,6 +37,7 @@ namespace stm32plus {
 
 			public:
 				Rng();
+				~Rng();
 
 				bool nextRandom(uint32_t& nextRandom);
 		};
@@ -61,6 +62,18 @@ namespace stm32plus {
 			// FIPS-PUB 140-2: the first generated number is to be saved for comparison
 
 			nextRandom(_last);
+		}
+
+
+		/**
+		 * Destructor
+		 */
+
+		template<class... Features>
+		inline Rng<Features...>::~Rng() {
+
+			RNG_Cmd(DISABLE);
+			ClockControl<PERIPHERAL_RNG>::Off();
 		}
 
 

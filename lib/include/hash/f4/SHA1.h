@@ -61,8 +61,9 @@ namespace stm32plus {
 
 	inline SHA1::~SHA1() {
 
-		// clock off
+		// de-init and clock off
 
+		HASH_DeInit();
 		ClockControl<PERIPHERAL_HASH>::Off();
 	}
 
