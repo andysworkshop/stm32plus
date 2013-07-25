@@ -43,7 +43,7 @@ namespace stm32plus {
 		protected:
 
 			I2SPeripheral(const struct Parameters& params);
-			~I2SSPeripheral();
+			~I2SPeripheral();
 	};
 
 

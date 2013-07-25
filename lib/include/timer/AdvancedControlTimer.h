@@ -16,7 +16,7 @@ namespace stm32plus {
    */
 
   template<class TTimer,PeripheralName TPeripheralName>
-  class AdvancedControlTimer : public TimerPeripheral<TTimer> {
+  class AdvancedControlTimer : public TimerPeripheral<TTimer,TPeripheralName> {
 
   	protected:
   		AdvancedControlTimer(TIM_TypeDef *peripheralAddress);
