@@ -26,7 +26,8 @@ namespace stm32plus {
 
 			/**
 			 * Constructor
-			 * @param The connection smart pointer
+			 * @param s The server that's accepting this connection
+			 * @param c The connection to potentially accept
 			 */
 
 			TcpAcceptEvent(TcpServerBase&s,TcpConnection *c)
