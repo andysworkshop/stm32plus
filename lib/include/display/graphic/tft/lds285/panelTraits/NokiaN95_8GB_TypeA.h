@@ -7,10 +7,6 @@
 #pragma once
 
 
-/*
- * Useful typedefs to ease the pain of typing out template parameters
- */
-
 namespace stm32plus {
 	namespace display {
 
