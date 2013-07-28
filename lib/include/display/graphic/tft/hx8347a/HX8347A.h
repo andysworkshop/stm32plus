@@ -177,7 +177,7 @@ namespace stm32plus {
 
 
 		/**
-		 * Apply the 10 panel gamma settings
+		 * Apply the 12 panel gamma settings
 		 * @param gamma The collection of gamma values
 		 */
 
@@ -194,6 +194,8 @@ namespace stm32plus {
       this->_accessMode.writeCommand(hx8347::GammaControlCmd::FirstOpcode+7,gamma[7]);
       this->_accessMode.writeCommand(hx8347::GammaControlCmd::FirstOpcode+8,gamma[8]);
       this->_accessMode.writeCommand(hx8347::GammaControlCmd::FirstOpcode+9,gamma[9]);
+      this->_accessMode.writeCommand(hx8347::GammaControlCmd::FirstOpcode+10,gamma[10]);
+      this->_accessMode.writeCommand(hx8347::GammaControlCmd::FirstOpcode+11,gamma[11]);
 		}
 
 
