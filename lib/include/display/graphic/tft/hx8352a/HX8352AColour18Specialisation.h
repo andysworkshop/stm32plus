@@ -30,7 +30,7 @@ namespace stm32plus {
 				typedef uint32_t tCOLOUR;
 
 				struct UnpackedColour {
-				  uint8_t r,g,b;
+				  uint16_t first,second;
 				};
 
 		  public:
@@ -56,21 +56,22 @@ namespace stm32plus {
 
 
 		/**
-		 * Unpack the colour from rrggbb to the interal 6-6-6 format
+		 * Unpack the colour from #rrggbb to the internal 6-6-6 format
 
-     * 00000000RRRRRRRRGGGGGGGGBBBBBBBB ->
-     * 00000000RRRRRR00GGGGGG00BBBBBB00
-
+     * 00000000RRRRRRRR GGGGGGGGBBBBBBBB =>
+     * RRRRRRGGGGGGBBBB 00000000000000BB
+     *
 		 * @param src rrggbb
 		 * @param dest The unpacked colour structure
 		 */
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_18BIT,TAccessMode,TPanelTraits>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
-			dest.r=(src >> 16) & 0xfc;
-			dest.g=(src >> 8) & 0xfc;
-			dest.b=src & 0xfc;
+
+			dest.first=((src & 0xfc0000) >> 8) | ((src & 0x00fc00) >> 6) | ((src & 0xfc) >> 4);
+			dest.second=(src & 0xc) >> 2;
 		}
+
 
 		/**
 		 * Unpack the colour from components to the internal format
@@ -82,10 +83,14 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_18BIT,TAccessMode,TPanelTraits>::unpackColour(uint8_t red,uint8_t green,uint8_t blue,UnpackedColour& dest) const {
-			dest.r=red & 0xfc;
-			dest.g=green & 0xfc;
-			dest.b=blue & 0xfc;
+
+			dest.first=((((uint16_t)red) & 0xfc) << 8) |
+								 ((((uint16_t)green) & 0xfc) << 2) |
+								 ((((uint16_t)blue) & 0xfc) >> 4);
+
+			dest.second=(blue & 0xc) >> 2;
 		}
+
 
 		/**
 		 * Write a single pixel to the current output position.
@@ -95,9 +100,8 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_18BIT,TAccessMode,TPanelTraits>::writePixel(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.r);
-			this->_accessMode.writeData(cr.g);
-			this->_accessMode.writeData(cr.b);
+			this->_accessMode.writeData(cr.first);
+			this->_accessMode.writeData(cr.second);
 		}
 
 
@@ -111,18 +115,16 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_18BIT,TAccessMode,TPanelTraits>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
 
-			uint8_t b,g,r;
+			uint16_t first,second;
 
 			this->_accessMode.writeCommand(hx8352a::MEMORY_WRITE);
 
-			r=cr.r;
-			g=cr.g;
-			b=cr.b;
+			first=cr.first;
+			second=cr.second;
 
 			while(numPixels--) {
-				this->_accessMode.writeData(r);
-				this->_accessMode.writeData(g);
-				this->_accessMode.writeData(b);
+				this->_accessMode.writeData(first);
+				this->_accessMode.writeData(second);
 			}
 		}
 
@@ -138,8 +140,8 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_18BIT,TAccessMode,TPanelTraits>::allocatePixelBuffer(uint32_t numPixels,uint8_t*& buffer,uint32_t& bytesPerPixel) const {
-		  buffer=new uint8_t[numPixels*3];
-		  bytesPerPixel=3;
+		  buffer=new uint8_t[numPixels*4];
+		  bytesPerPixel=4;
 		}
 
 
@@ -152,7 +154,7 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_18BIT,TAccessMode,TPanelTraits>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-			this->_accessMode.rawTransfer(buffer,numPixels*3);
+			this->_accessMode.rawTransfer(buffer,numPixels*2);
 		}
 	}
 }

@@ -114,6 +114,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void HX8352A<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::beginWriting() const {
+		  this->_accessMode.writeCommand(hx8352a::MEMORY_WRITE);
 		}
 
 
@@ -125,6 +126,19 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void HX8352A<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::setScrollArea(uint16_t y,uint16_t height) const {
+
+			uint16_t bfa;
+
+			bfa=PanelTraits::LONG_SIDE-height-y;
+
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_TOP_FIXED_AREA_H,y >> 8);
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_TOP_FIXED_AREA_L,y & 0xff);
+
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_HEIGHT_H,height >> 8);
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_HEIGHT_L,height & 0xff);
+
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_BOTTOM_FIXED_AREA_H,bfa >> 8);
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_BOTTOM_FIXED_AREA_L,bfa & 0xff);
 		}
 	}
 }

@@ -88,6 +88,16 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AOrientation<PORTRAIT,TAccessMode,TPanelTraits>::moveTo(const Rectangle& rc) const {
+
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,rc.X >> 8);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,rc.X & 0xff);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,(rc.X+rc.Width-1) >> 8);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,(rc.X+rc.Width-1) & 0xff);
+
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,rc.Y >> 8);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,rc.Y & 0xff);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,(rc.Y+rc.Height-1) >> 8);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,(rc.Y+rc.Height-1) & 0xff);
 		}
 
 
@@ -98,6 +108,16 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AOrientation<PORTRAIT,TAccessMode,TPanelTraits>::setScrollPosition(int16_t scrollPosition) {
+
+			if(scrollPosition<0)
+        scrollPosition+=TPanelTraits::LONG_SIDE;
+      else if(scrollPosition>TPanelTraits::LONG_SIDE-1)
+        scrollPosition-=TPanelTraits::LONG_SIDE;
+
+      // write to the register
+
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_START_ADDRESS_H,(scrollPosition >> 8));
+			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_START_ADDRESS_L,scrollPosition & 0xff);
 		}
 	}
 }

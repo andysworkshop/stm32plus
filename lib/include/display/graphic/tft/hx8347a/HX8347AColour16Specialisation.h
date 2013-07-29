@@ -56,7 +56,7 @@ namespace stm32plus {
 
 
 		/**
-		 * Unpack the colour from rrggbb to the interal 5-6-5 format
+		 * Unpack the colour from rrggbb to the internal 5-6-5 format
 
      * 00000000RRRRRRRRGGGGGGGGBBBBBBBB ->
      * 0000000000000000RRRRRGGGGGGBBBBB
@@ -69,6 +69,7 @@ namespace stm32plus {
 		inline void HX8347AColour<COLOURS_16BIT,TAccessMode>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
 			dest.packed565=(src & 0xf80000) >> 8 | (src & 0xfc00) >> 5 | (src & 0xf8) >> 3;
 		}
+
 
 		/**
 		 * Unpack the colour from components to the internal format

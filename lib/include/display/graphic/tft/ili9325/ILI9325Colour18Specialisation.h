@@ -70,7 +70,7 @@ namespace stm32plus {
 
 
 		/**
-		 * Unpack the colour from #rrggbb to the interal 6-6-6 format
+		 * Unpack the colour from #rrggbb to the internal 6-6-6 format
 
      * 00000000RRRRRRRR GGGGGGGGBBBBBBBB =>
      * 00000000000000RR RRRRGGGGGGBBBBBB

@@ -30,7 +30,7 @@ namespace stm32plus {
 				typedef uint32_t tCOLOUR;
 
 				struct UnpackedColour {
-				  uint8_t first,second;
+				  uint16_t packed565;
 				};
 
 		  public:
@@ -67,19 +67,9 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_16BIT,TAccessMode,TPanelTraits>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
-			uint8_t r,g,b;
-
-			r=src >> 16;
-			g=src >> 8;
-			b=src;
-
-			r &= 0xf8;
-			g &= 0xfc;
-			b &= 0xf8;
-
-			dest.first=r | (g>>5);
-			dest.second=(g << 3) | (b >> 3);
+			dest.packed565=(src & 0xf80000) >> 8 | (src & 0xfc00) >> 5 | (src & 0xf8) >> 3;
 		}
+
 
 		/**
 		 * Unpack the colour from components to the internal format
@@ -92,12 +82,11 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_16BIT,TAccessMode,TPanelTraits>::unpackColour(uint8_t red,uint8_t green,uint8_t blue,UnpackedColour& dest) const {
 
-			red &= 0xf8;
-			green &= 0xfc;
-			blue &= 0xf8;
+			red&=0xf8;
+			green&=0xfc;
+			blue&=0xf8;
 
-			dest.first=red | (green>>5);
-			dest.second=(green << 3) | (blue >> 3);
+			dest.packed565=(((uint16_t)red) << 8) | (((uint16_t)green) << 3) | (blue >> 3);
 		}
 
 
@@ -109,8 +98,7 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_16BIT,TAccessMode,TPanelTraits>::writePixel(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.first);
-			this->_accessMode.writeData(cr.second);
+			this->_accessMode.writeData(cr.packed565);
 		}
 
 
@@ -124,17 +112,10 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_16BIT,TAccessMode,TPanelTraits>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
 
-			uint8_t first,second;
-
 			this->_accessMode.writeCommand(hx8352a::MEMORY_WRITE);
 
-			first=cr.first;
-			second=cr.second;
-
-			while(numPixels--) {
-				this->_accessMode.writeData(first);
-				this->_accessMode.writeData(second);
-			}
+			while(numPixels--)
+				this->_accessMode.writeData(cr.packed565);
 		}
 
 
@@ -163,7 +144,7 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AColour<COLOURS_16BIT,TAccessMode,TPanelTraits>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-			this->_accessMode.rawTransfer(buffer,numPixels*2);
+			this->_accessMode.rawTransfer(buffer,numPixels);
 		}
 	}
 }
