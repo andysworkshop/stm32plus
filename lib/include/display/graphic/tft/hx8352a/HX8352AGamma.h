@@ -22,8 +22,8 @@ namespace stm32plus {
 			public:
 
 			/**
-			 * Constructor. The HX8352A takes 1 gamma value index. The constructor must be supplied with that value
-			 * that can range between 0..3
+			 * Constructor. The HX8352A takes 12 gamma values. The constructor must be supplied with those values.
+			 * Example: 0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03
 			 */
 
 				HX8352AGamma(

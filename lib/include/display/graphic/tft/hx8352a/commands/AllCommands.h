@@ -41,6 +41,7 @@ namespace stm32plus {
 				POWER_CONTROL_2 										= 0x1A,
 				POWER_CONTROL_3 										= 0x1B,
 				POWER_CONTROL_4 										= 0x1C,
+				POWER_CONTROL_5 										= 0x1D,
 				POWER_CONTROL_6 										= 0x1E,
 				VCOM_CONTROL 												= 0x1F,
 				DISPLAY_CONTROL_1 									= 0x23,
