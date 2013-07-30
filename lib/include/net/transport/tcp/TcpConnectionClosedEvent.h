@@ -14,8 +14,8 @@ namespace stm32plus {
 		/**
 		 * TCP connection closed event. This event signifies that the remote end has closed and will
 		 * not be sending any more data. It is legal to send data to the remote end in this state but
-		 * most likely you'll want to allow your TcpConnectionPtr object to go out of scope, thereby
-		 * closing your end and cleaning up.
+		 * most likely you'll want to delete your TcpConnection object, thereby closing your end and
+		 * cleaning up.
 		 */
 
 		class TcpConnection;
