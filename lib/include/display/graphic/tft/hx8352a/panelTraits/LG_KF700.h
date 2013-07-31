@@ -43,17 +43,17 @@ namespace stm32plus {
 			// do the startup sequence
 
 			MillisecondTimer::delay(160);
-			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x02);        // TESTM=1
-			accessMode.writeCommand(hx8352a::VDDD_CONTROL,0x02);        // VDC_SEL=010.
-			accessMode.writeCommand(hx8352a::SOURCE_GAMMA_RESISTOR_1,0x00);        // STBA[15:8]=0x00
-			accessMode.writeCommand(hx8352a::SOURCE_GAMMA_RESISTOR_2,0xB3);        // STBA[7]=1, STBA[5:4]=11, STBA[1:0]=11
-			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x00);        // TESTM=0
+			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x02);        	// TESTM=1
+			accessMode.writeCommand(hx8352a::VDDD_CONTROL,0x02);        			// VDC_SEL=010.
+			accessMode.writeCommand(hx8352a::SOURCE_GAMMA_RESISTOR_1,0x00);   // STBA[15:8]=0x00
+			accessMode.writeCommand(hx8352a::SOURCE_GAMMA_RESISTOR_2,0xB3);   // STBA[7]=1, STBA[5:4]=11, STBA[1:0]=11
+			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x00);        	// TESTM=0
 
 			// Power Supply Setting
 
-			accessMode.writeCommand(hx8352a::OSC_CONTROL_1,0x1);         // RADJ=0, OSC_EN=1 (145%)
-			accessMode.writeCommand(hx8352a::DISPLAY_CONTROL_1,0x01);        // TE 0n
-			accessMode.writeCommand(hx8352a::CYCLE_CONTROL_1,0x14);        // N_DCDC=0x14
+			accessMode.writeCommand(hx8352a::OSC_CONTROL_1,0x91);         	// RADJ=0, OSC_EN=1 (100%)
+			accessMode.writeCommand(hx8352a::DISPLAY_CONTROL_1,0x01);       // TE ON
+			accessMode.writeCommand(hx8352a::CYCLE_CONTROL_1,0x14);        	// N_DCDC=0x14
 
 			MillisecondTimer::delay(20);
 
@@ -75,11 +75,11 @@ namespace stm32plus {
 			// VLCD=2XVCI by 2 CAPs
 
 			MillisecondTimer::delay(50);
-			accessMode.writeCommand(hx8352a::POWER_CONTROL_6,0x2E);        // VCOMG=1, VDV=0_1110
+			accessMode.writeCommand(hx8352a::POWER_CONTROL_6,0x2E);       // VCOMG=1, VDV=0_1110
 
 			//VCOMG NEW LOCATION
-			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x02);        // TESTM=1
-			accessMode.writeCommand(0x93,0x10);        // R93[4]=1, VCOMG=1 ...undocumented!!!
+			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x02);     // TESTM=1
+			accessMode.writeCommand(0x93,0x10);        										// R93[4]=1, VCOMG=1 ...undocumented!!!
 			accessMode.writeCommand(hx8352a::TEST_MODE_CONTROL,0x00);
 
 			// DGC Function disabled

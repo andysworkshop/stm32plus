@@ -106,11 +106,11 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
-				scrollTest();
 				jpegTest();
 				lzgTest();
 				basicColoursTest();
 				textTest();
+				scrollTest();
 				ellipseTest();
 				gradientTest();
 				rectTest();
