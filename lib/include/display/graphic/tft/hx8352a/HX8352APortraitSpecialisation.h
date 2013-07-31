@@ -55,7 +55,7 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		constexpr inline uint16_t HX8352AOrientation<PORTRAIT,TAccessMode,TPanelTraits>::getMemoryAccessControl() const {
-			return 0x8;		// BGR
+			return 0xA;		// BGR | SCROLL
 		}
 
 
