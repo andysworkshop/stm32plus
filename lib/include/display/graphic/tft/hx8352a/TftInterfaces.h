@@ -22,6 +22,13 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits> using HX8352A_Landscape_64K = GraphicsLibrary<HX8352A<LANDSCAPE,COLOURS_16BIT,TAccessMode,TPanelTraits>,TAccessMode>;
 
 		/**
+		 * HX8352A interface: 262K colours, portrait and landscape
+		 */
+
+		template<class TAccessMode,class TPanelTraits> using HX8352A_Portrait_262K  = GraphicsLibrary<HX8352A<PORTRAIT,COLOURS_18BIT,TAccessMode,TPanelTraits>,TAccessMode>;
+		template<class TAccessMode,class TPanelTraits> using HX8352A_Landscape_262K = GraphicsLibrary<HX8352A<LANDSCAPE,COLOURS_18BIT,TAccessMode,TPanelTraits>,TAccessMode>;
+
+		/**
 		 * Graphic terminal modes for the HX8352A
 		 */
 
@@ -35,6 +42,9 @@ namespace stm32plus {
 
 		template<class TAccessMode> using LG_KF700_Portrait_64K =  HX8352A_Portrait_64K<TAccessMode,LG_KF700>;
 		template<class TAccessMode> using LG_KF700_Landscape_64K =  HX8352A_Landscape_64K<TAccessMode,LG_KF700>;
+
+		template<class TAccessMode> using LG_KF700_Portrait_262K =  HX8352A_Portrait_262K<TAccessMode,LG_KF700>;
+		template<class TAccessMode> using LG_KF700_Landscape_262K =  HX8352A_Landscape_262K<TAccessMode,LG_KF700>;
 
 		template<class TDevice> using LG_KF700_Terminal_Portrait = GraphicTerminal<TDevice,true>;
 		template<class TDevice> using LG_KF700_Terminal_Landscape = GraphicTerminal<TDevice,false>;
