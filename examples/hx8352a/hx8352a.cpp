@@ -55,7 +55,7 @@ class HX8352ATest {
 
 	protected:
 		typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-		typedef LG_KF700_Portrait_262K<LcdAccessMode> LcdPanel;
+		typedef LG_KF700_Landscape_64K<LcdAccessMode> LcdPanel;
 
 		LcdAccessMode *_accessMode;
 		LcdPanel *_gl;

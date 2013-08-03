@@ -32,7 +32,11 @@ namespace stm32plus {
 		  public:
 				constexpr int16_t getWidth() const;
 				constexpr int16_t getHeight() const;
+
+				void moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const;
 				void moveTo(const Rectangle& rc) const;
+				void moveX(int16_t xstart,int16_t xend) const;
+				void moveY(int16_t ystart,int16_t yend) const;
 
 				void setScrollPosition(int16_t scrollPosition);
 		};
@@ -55,7 +59,7 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		constexpr inline uint16_t HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::getMemoryAccessControl() const {
-			return 0x6A;		// MV | MX | BGR | SCROLL
+			return 0xAA;		// MY | MV | BGR | SCROLL
 		}
 
 
@@ -89,15 +93,62 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveTo(const Rectangle& rc) const {
 
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,rc.X >> 8);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,rc.X & 0xff);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,(rc.X+rc.Width-1) >> 8);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,(rc.X+rc.Width-1) & 0xff);
+			moveTo(rc.X,rc.Y,rc.X+rc.Width-1,rc.Y+rc.Height-1);
+		}
 
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,rc.Y >> 8);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,rc.Y & 0xff);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,(rc.Y+rc.Height-1) >> 8);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,(rc.Y+rc.Height-1) & 0xff);
+
+		/**
+		 * Move the display rectangle to the rectangle described by the co-ordinates
+		 * @param xstart starting X position
+		 * @param ystart starting Y position
+		 * @param xend ending X position
+		 * @param yend ending Y position
+		 */
+
+		template<class TAccessMode,class TPanelTraits>
+		inline void HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
+
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,xstart >> 8);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,xstart & 0xff);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,xend >> 8);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,xend & 0xff);
+
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,ystart >> 8);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,ystart & 0xff);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,yend >> 8);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,yend & 0xff);
+		}
+
+
+		/**
+		 * Move the X position
+		 * @param xstart The new X start position
+		 * @param xend The new X end position
+		 */
+
+		template<class TAccessMode,class TPanelTraits>
+		inline void HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
+
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,xstart >> 8);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,xstart & 0xff);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,xend >> 8);
+			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,xend & 0xff);
+		}
+
+
+		/**
+		 * Move the Y position
+		 * @param ystart The new Y start position
+		 * @param yend The new Y end position
+		 */
+
+		template<class TAccessMode,class TPanelTraits>
+		inline void HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveY(int16_t ystart,int16_t yend) const {
+
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,ystart >> 8);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,ystart & 0xff);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,yend >> 8);
+			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,yend & 0xff);
 		}
 
 

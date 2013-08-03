@@ -32,6 +32,7 @@ namespace stm32plus {
 		  public:
 				constexpr int16_t getWidth() const;
 				constexpr int16_t getHeight() const;
+
 				void moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const;
 				void moveTo(const Rectangle& rc) const;
 				void moveX(int16_t xstart,int16_t xend) const;
