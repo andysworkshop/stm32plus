@@ -30,6 +30,9 @@ namespace stm32plus {
 			public:
 				template<class TAccessMode>
 				static void initialise(TAccessMode& accessMode);
+
+				template<class TAccessMode>
+				static void wake(TAccessMode& accessMode);
 		};
 
 
@@ -95,6 +98,18 @@ namespace stm32plus {
 			MillisecondTimer::delay(50);
 			accessMode.writeCommand(hx8352a::DISPLAY_CONTROL_2,0x3C);     		// GON=1, DTE=1, D=11
 			accessMode.writeCommand(hx8352a::DISPLAY_MODE_CONTROL,0x02);      // INVON=0, NORNO=1
+		}
+
+
+		/**
+		 * Wake the panel up from standby mode. Only a subset of the initialisation sequence is actually
+		 * required but we'll save some code and just call initialise() again to bring it back to life.
+		 * @param accessMode The access mode
+		 */
+
+		template<class TAccessMode>
+		inline void LG_KF700::wake(TAccessMode& accessMode) {
+			initialise(accessMode);
 		}
 	}
 }

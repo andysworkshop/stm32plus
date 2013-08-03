@@ -101,20 +101,56 @@ namespace stm32plus {
 
 
 		/**
-		 * Send the panel to sleep
+		 * Send the panel to sleep. This procedure follows the specification
+		 * in the Himax application note.
 		 */
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void HX8352A<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::sleep() const {
+
+			// display Off
+			_accessMode.writeCommand(hx8352a::DISPLAY_CONTROL_2,0x38); 			//GON=1, DTE=1, D=10
+			MillisecondTimer::delay (40);
+
+			_accessMode.writeCommand(hx8352a::DISPLAY_CONTROL_2,0x28); 			//GON=1, DTE=0, D=10
+			MillisecondTimer::delay (40);
+
+			_accessMode.writeCommand(hx8352a::DISPLAY_CONTROL_2,0x00); 			//GON=0, DTE=0, D=00
+
+			// power Off
+			_accessMode.writeCommand(hx8352a::POWER_CONTROL_6,0x14); 			// VCOMG=0, VDV=1_0100
+			MillisecondTimer::delay(10);
+
+			_accessMode.writeCommand(hx8352a::POWER_CONTROL_1,0x02); 		// GASENB=0, PON=0, DK=0, XDK=0, VLCD_TRI=1, STB=0
+			MillisecondTimer::delay(10);
+
+			_accessMode.writeCommand(hx8352a::POWER_CONTROL_1,0x0A); 		// GASENB=0, PON=0, DK=1, XDK=0, VLCD_TRI=1, STB=0
+			MillisecondTimer::delay(10);
+
+			_accessMode.writeCommand(hx8352a::POWER_CONTROL_3,0x40); 		// AP=000
+			MillisecondTimer::delay(10);
+
+			_accessMode.writeCommand(hx8352a::SOURCE_CONTROL_1,0x00); 	// N_SAP=1100 0000
+			MillisecondTimer::delay(10);
+
+			// into STB mode
+			_accessMode.writeCommand(hx8352a::POWER_CONTROL_1,0x0B); 		// GASENB=0, PON=0, DK=0, XDK=0, VLCD_TRI=1, STB=1
+			MillisecondTimer::delay(10);
+
+			// stop oscillation
+			_accessMode.writeCommand(hx8352a::OSC_CONTROL_1,0x90); 			// RADJ=1001, OSC_EN=0
 		}
 
 
 		/**
-		 * Wake the panel up
+		 * Wake the panel up. The wakeup sequence needs to set the power and
+		 * oscillation parameters which are panel-specific. Hence we defer to
+		 * the panel traits for the implementation.
 		 */
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void HX8352A<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::wake() const {
+			TPanelTraits::wake(_accessMode);
 		}
 
 
