@@ -53,49 +53,94 @@ namespace stm32plus {
 			else if(p1.Y==p2.Y)
 				fillRectangle(Rectangle(Min<int16_t>(p1.X,p2.X),p1.Y,Abs<int16_t>(p2.X-p1.X)+1,1));
 			else {
-				// can't optimise, use the algorithm
+				int16_t x0,x1,y0,y1;
 
-				bool yLonger=false;
-				int32_t incrementVal,endVal;
-				int32_t shortLen=p2.Y - p1.Y;
-				int32_t longLen=p2.X - p1.X;
+				x0=p1.X;
+				y0=p1.Y;
+				x1=p2.X;
+				y1=p2.Y;
 
-				if(abs(shortLen)>abs(longLen)) {
-					int swap=shortLen;
-					shortLen=longLen;
-					longLen=swap;
-					yLonger=true;
+				if(x0>x1) {
+
+					// the optimiser does this swap method faster than
+					// the xor-trick
+
+					int16_t t;
+
+					t=x0;
+					x0=x1;
+					x1=t;
+
+					t=y0;
+					y0=y1;
+					y1=t;
 				}
 
-				endVal=longLen;
+				// calculate constants up-front
 
-				if(longLen < 0) {
-					incrementVal=-1;
-					longLen=-longLen;
-					endVal--;
-				} else {
-					incrementVal=1;
-					endVal++;
-				}
+				int16_t dx=x1-x0;
+				int16_t dy=Abs(y1-y0);
+				int16_t sy=y0<y1 ? 1 : -1;
+				int16_t mdy=-dy;
+				int16_t err=dx-dy;
+				bool xinc;
 
-				int decInc;
+				// set the drawing rectangle that we need and plot the first point
 
-				if(longLen == 0)
-					decInc=0;
-				else
-					decInc=(shortLen << 16) / longLen;
+				this->moveTo(x0,y0,this->getXmax(),this->getYmax());
+				this->beginWriting();
+				this->writePixel(_foreground);
 
-				int32_t j=0;
+				while(x0!=x1 || y0!=y1) {
 
-				if(yLonger) {
-					for(int i=0;i != endVal;i+=incrementVal) {
-						plotPoint(Point(p1.X + (j >> 16),p1.Y + i));
-						j+=decInc;
+					int16_t e2=2*err;
+
+					if(e2>mdy) {
+
+						err-=dy;
+						x0++;
+
+						// make a note that X has incremented
+
+						xinc=true;
 					}
-				} else {
-					for(int i=0;i != endVal;i+=incrementVal) {
-						plotPoint(Point(p1.X + i,p1.Y + (j >> 16)));
-						j+=decInc;
+					else
+						xinc=false;				// nothing happened to X
+
+					if(x0==x1 && y0==y1) {
+
+						if(xinc) {
+
+							// plot the pending X increment before returning
+
+							this->writePixelAgain(_foreground);
+							break;
+						}
+					}
+
+					if(e2<dx) {
+						err+=dx;
+						y0+=sy;
+
+						// Y has changed. We're going to have to do a complete
+						// pixel write after we've moved the bare minimum of
+						// window pointers
+
+						if(xinc)
+							this->moveX(x0,this->getXmax());
+
+						this->moveY(y0,this->getYmax());
+
+						this->beginWriting();
+						this->writePixel(_foreground);
+					}
+					else {
+
+						// Y has not changed, if X has changed then all we need
+						// to do is push out another pixel
+
+						if(xinc)
+							this->writePixelAgain(_foreground);
 					}
 				}
 			}

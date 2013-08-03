@@ -55,7 +55,7 @@ class HX8352ATest {
 
 	protected:
 		typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-		typedef LG_KF700_Portrait_64K<LcdAccessMode> LcdPanel;
+		typedef LG_KF700_Portrait_262K<LcdAccessMode> LcdPanel;
 
 		LcdAccessMode *_accessMode;
 		LcdPanel *_gl;
@@ -106,6 +106,7 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
+				lineTest();
 				jpegTest();
 				lzgTest();
 				basicColoursTest();
@@ -114,7 +115,6 @@ class HX8352ATest {
 				ellipseTest();
 				gradientTest();
 				rectTest();
-				lineTest();
 				clearTest();
 				sleepTest();
 			}
@@ -331,11 +331,12 @@ class HX8352ATest {
 		void lineTest() {
 
 			Point p1,p2;
-			int i;
+			uint32_t i,start;
 
 			prompt("Line test");
 
-			for(i=0;i<5000;i++) {
+			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
+
 				p1.X=rand() % _gl->getXmax();
 				p1.Y=rand() % _gl->getYmax();
 				p2.X=rand() % _gl->getXmax();
@@ -344,6 +345,11 @@ class HX8352ATest {
 				_gl->setForeground(rand());
 				_gl->drawLine(p1,p2);
 			}
+
+			_gl->setForeground(ColourNames::WHITE);
+			_gl->clearScreen();
+			*_gl << Point::Origin << i << " lines in 5 seconds";
+			MillisecondTimer::delay(3000);
 		}
 
 		void rectTest() {
