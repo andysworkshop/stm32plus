@@ -50,8 +50,8 @@ namespace stm32plus {
 				void setMethod(HttpMethod method);
 				void setUri(const std::string& uri);
 				void setHost(const std::string& host);
-				void setPostRequestContentType(const std::string& contentType);
-				void setPostRequestContentLength(uint32_t contentLength);
+				void setRequestContentType(const std::string& contentType);
+				void setRequestContentLength(uint32_t contentLength);
 
 				uint16_t getResponseCode() const;
 				int32_t getResponseContentLength() const;
@@ -75,21 +75,21 @@ namespace stm32plus {
 
 
 		/**
-		 * Convenience method to set the Content-Type header for POST requests
+		 * Convenience method to set the Content-Type header for POST-type requests
 		 * @param contentType The content type string
 		 */
 
-		inline void HttpClient::setPostRequestContentType(const std::string& contentType) {
+		inline void HttpClient::setRequestContentType(const std::string& contentType) {
 			_requestHeaders.push_front("Content-Type: "+contentType);
 		}
 
 
 		/**
-		 * Set the Content-Length header for post requests
+		 * Set the Content-Length header for POST-type requests
 		 * @param contentLength The content length, in bytes.
 		 */
 
-		inline void HttpClient::setPostRequestContentLength(uint32_t contentLength) {
+		inline void HttpClient::setRequestContentLength(uint32_t contentLength) {
 
 			char buffer[30];
 
@@ -147,8 +147,9 @@ namespace stm32plus {
 		 * available to read and then the methods of the TcpConnection and TcpInputStream parents
 		 * are available to read the response body.
 		 *
-		 * If this is a POST request then the methods of TcpConnection and TcpOutputStream can be used
-		 * to send the post content. When the content has been sent you must manually call readResponse().
+		 * If this is a request that requires a body (e.g. POST) then the methods of TcpConnection
+		 * and TcpOutputStream can be used to send the post content. When the content has been sent
+		 * you must manually call readResponse().
 		 * You can then use the methods of TcpConnection and TcpInputStream to read the response body.
 		 *
 		 * @param timeoutMillis how long to wait for a send or receive to complete (0=blocking), default is zero.
@@ -164,12 +165,22 @@ namespace stm32plus {
 				std::string request;
 				uint32_t actuallySent;
 
-				// we only support POST and GET
+				// all the methods are supported
 
 				if(_httpMethod==HttpMethod::POST)
 					request="POST ";
 				else if(_httpMethod==HttpMethod::GET)
 					request="GET ";
+				else if(_httpMethod==HttpMethod::HEAD)
+					request="HEAD ";
+				else if(_httpMethod==HttpMethod::PUT)
+					request="PUT ";
+				else if(_httpMethod==HttpMethod::DELETE)
+					request="DELETE ";
+				else if(_httpMethod==HttpMethod::TRACE)
+					request="TRACE ";
+				else if(_httpMethod==HttpMethod::CONNECT)
+					request="CONNECT ";
 				else
 					return errorProvider.set(ErrorProvider::ERROR_PROVIDER_NET_HTTP_CLIENT,E_INVALID_METHOD);
 
@@ -210,6 +221,7 @@ namespace stm32plus {
 
 			return true;
 		}
+
 
 		/**
 		 * Read the response from the server up to and including the headers. The response code is made available
