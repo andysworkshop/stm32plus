@@ -32,7 +32,11 @@ namespace stm32plus {
 		  public:
 				constexpr int16_t getWidth() const;
 				constexpr int16_t getHeight() const;
+
+				void moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const;
 				void moveTo(const Rectangle& rc) const;
+				void moveX(int16_t xstart,int16_t xend) const;
+				void moveY(int16_t ystart,int16_t yend) const;
 
 				void setScrollPosition(int16_t scrollPosition);
 		};
@@ -89,16 +93,62 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void HX8347AOrientation<PORTRAIT,TAccessMode>::moveTo(const Rectangle& rc) const {
+			moveTo(rc.X,rc.Y,rc.X+rc.Width-1,rc.Y+rc.Height-1);
+		}
 
-			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,rc.X >> 8);
-			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,rc.X & 0xff);
-			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,(rc.X+rc.Width-1) >> 8);
-			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,(rc.X+rc.Width-1) & 0xff);
 
-			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,rc.Y >> 8);
-			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,rc.Y & 0xff);
-			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,(rc.Y+rc.Height-1) >> 8);
-			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,(rc.Y+rc.Height-1) & 0xff);
+		/**
+		 * Move the display rectangle to the rectangle described by the co-ordinates
+		 * @param xstart starting X position
+		 * @param ystart starting Y position
+		 * @param xend ending X position
+		 * @param yend ending Y position
+		 */
+
+		template<class TAccessMode>
+		inline void HX8347AOrientation<PORTRAIT,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
+
+			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
+			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
+			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,xend >> 8);
+			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,xend & 0xff);
+
+			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
+			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);
+			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,yend >> 8);
+			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,yend & 0xff);
+		}
+
+
+		/**
+		 * Move the X position
+		 * @param xstart The new X start position
+		 * @param xend The new X end position
+		 */
+
+		template<class TAccessMode>
+		inline void HX8347AOrientation<PORTRAIT,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
+
+			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
+			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
+			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,xend >> 8);
+			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,xend & 0xff);
+		}
+
+
+		/**
+		 * Move the Y position
+		 * @param ystart The new Y start position
+		 * @param yend The new Y end position
+		 */
+
+		template<class TAccessMode>
+		inline void HX8347AOrientation<PORTRAIT,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
+
+			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
+			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);
+			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,yend >> 8);
+			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,yend & 0xff);
 		}
 
 
