@@ -88,7 +88,6 @@
 #include "net/datalink/mac/MacRemapPinPackage.h"
 #include "net/datalink/mac/MacBase.h"
 #include "net/datalink/mac/Mac.h"
-#include "net/datalink/mac/WakeOnLan.h"
 
 #if defined(STM32PLUS_F4)
 
