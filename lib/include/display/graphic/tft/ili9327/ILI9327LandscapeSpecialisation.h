@@ -32,8 +32,12 @@ namespace stm32plus {
 		  public:
 				constexpr int16_t getWidth() const;
 				constexpr int16_t getHeight() const;
-				void moveTo(const Rectangle& rc) const;
 				constexpr uint16_t getOrientationAddressMode() const;
+
+				void moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const;
+				void moveTo(const Rectangle& rc) const;
+				void moveX(int16_t xstart,int16_t xend) const;
+				void moveY(int16_t ystart,int16_t yend) const;
 
 				void setScrollPosition(int16_t scrollPosition);
 		};
@@ -88,6 +92,20 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void ILI9327Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveTo(const Rectangle& rc) const {
+			moveTo(rc.X,rc.Y,rc.X+rc.Width-1,rc.Y+rc.Height-1);
+		}
+
+
+		/**
+		 * Move the display rectangle to the rectangle described by the co-ordinates
+		 * @param xstart starting X position
+		 * @param ystart starting Y position
+		 * @param xend ending X position
+		 * @param yend ending Y position
+		 */
+
+		template<class TAccessMode,class TPanelTraits>
+		inline void ILI9327Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
 			uint16_t xoffset;
 
@@ -96,16 +114,56 @@ namespace stm32plus {
 			xoffset=432-TPanelTraits::LONG_SIDE;
 
 			this->_accessMode.writeCommand(ili9327::SetColumnAddressCmd::Opcode);
-			this->_accessMode.writeData((rc.X+xoffset) >> 8);
-			this->_accessMode.writeData((rc.X+xoffset) & 0xff);
-			this->_accessMode.writeData((rc.X+xoffset+rc.Width-1) >>8);
-			this->_accessMode.writeData((rc.X+xoffset+rc.Width-1) & 0xff);
+			this->_accessMode.writeData((xstart+xoffset) >> 8);
+			this->_accessMode.writeData((xstart+xoffset) & 0xff);
+			this->_accessMode.writeData((xend+xoffset) >>8);
+			this->_accessMode.writeData((xend+xoffset) & 0xff);
 
 			this->_accessMode.writeCommand(ili9327::SetPageAddressCmd::Opcode);
-			this->_accessMode.writeData(rc.Y >> 8);
-			this->_accessMode.writeData(rc.Y & 0xff);
-			this->_accessMode.writeData((rc.Y+rc.Height-1) >>8);
-			this->_accessMode.writeData((rc.Y+rc.Height-1) & 0xff);
+			this->_accessMode.writeData(ystart >> 8);
+			this->_accessMode.writeData(ystart & 0xff);
+			this->_accessMode.writeData(yend >>8);
+			this->_accessMode.writeData(yend & 0xff);
+		}
+
+
+		/**
+		 * Move the X position
+		 * @param xstart The new X start position
+		 * @param xend The new X end position
+		 */
+
+		template<class TAccessMode,class TPanelTraits>
+		inline void ILI9327Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
+
+			uint16_t xoffset;
+
+			// bump past any hidden pixels
+
+			xoffset=432-TPanelTraits::LONG_SIDE;
+
+			this->_accessMode.writeCommand(ili9327::SetColumnAddressCmd::Opcode);
+			this->_accessMode.writeData((xstart+xoffset) >> 8);
+			this->_accessMode.writeData((xstart+xoffset) & 0xff);
+			this->_accessMode.writeData((xend+xoffset) >>8);
+			this->_accessMode.writeData((xend+xoffset) & 0xff);
+		}
+
+
+		/**
+		 * Move the Y position
+		 * @param ystart The new Y start position
+		 * @param yend The new Y end position
+		 */
+
+		template<class TAccessMode,class TPanelTraits>
+		inline void ILI9327Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveY(int16_t ystart,int16_t yend) const {
+
+			this->_accessMode.writeCommand(ili9327::SetPageAddressCmd::Opcode);
+			this->_accessMode.writeData(ystart >> 8);
+			this->_accessMode.writeData(ystart & 0xff);
+			this->_accessMode.writeData(yend >>8);
+			this->_accessMode.writeData(yend & 0xff);
 		}
 
 
