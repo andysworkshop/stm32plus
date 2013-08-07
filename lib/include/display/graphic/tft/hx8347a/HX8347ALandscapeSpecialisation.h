@@ -127,8 +127,8 @@ namespace stm32plus {
 		 * @param xend The new X end position
 		 */
 
-		template<class TAccessMode,class TPanelTraits>
-		inline void HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
+		template<class TAccessMode>
+		inline void HX8347AOrientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
 
 			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
 			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
@@ -143,8 +143,8 @@ namespace stm32plus {
 		 * @param yend The new Y end position
 		 */
 
-		template<class TAccessMode,class TPanelTraits>
-		inline void HX8352AOrientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveY(int16_t ystart,int16_t yend) const {
+		template<class TAccessMode>
+		inline void HX8347AOrientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
 
 			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
 			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);

@@ -105,7 +105,7 @@ namespace stm32plus {
 		 */
 
 		template<class TAccessMode>
-		inline void ILI9325Orientation<LANDSCAPE,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
+		inline void ILI9481Orientation<PORTRAIT,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
 			this->_accessMode.writeCommand(ili9481::SetColumnAddressCmd::Opcode,xstart >> 8);
 			this->_accessMode.writeData(xstart & 0xff);
@@ -126,7 +126,7 @@ namespace stm32plus {
 		 */
 
 		template<class TAccessMode>
-		inline void ILI9325Orientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
+		inline void ILI9481Orientation<PORTRAIT,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
 			this->_accessMode.writeCommand(ili9481::SetColumnAddressCmd::Opcode,xstart >> 8);
 			this->_accessMode.writeData(xstart & 0xff);
 			this->_accessMode.writeData(xend >> 8);
@@ -141,7 +141,7 @@ namespace stm32plus {
 		 */
 
 		template<class TAccessMode>
-		inline void ILI9325Orientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
+		inline void ILI9481Orientation<PORTRAIT,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
 			this->_accessMode.writeCommand(ili9481::SetPageAddressCmd::Opcode,ystart >> 8);
 			this->_accessMode.writeData(ystart & 0xff);
 			this->_accessMode.writeData(yend >> 8);
