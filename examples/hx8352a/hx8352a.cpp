@@ -106,6 +106,7 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
+				rectTest();
 				jpegTest();
 				lzgTest();
 				basicColoursTest();
@@ -114,7 +115,6 @@ class HX8352ATest {
 				scrollTest();
 				ellipseTest();
 				gradientTest();
-				rectTest();
 				clearTest();
 				sleepTest();
 			}
@@ -362,7 +362,7 @@ class HX8352ATest {
 			for(i=0;i<1500;i++) {
 
 				rc.X=(rand() % _gl->getXmax()/2);
-				rc.Y=(rand() % _gl->getXmax()/2);
+				rc.Y=(rand() % _gl->getYmax()/2);
 				rc.Width=rand() % (_gl->getXmax()-rc.X);
 				rc.Height=rand() % (_gl->getYmax()-rc.Y);
 
@@ -375,7 +375,7 @@ class HX8352ATest {
 			for(i=0;i<10000;i++) {
 
 				rc.X=(rand() % _gl->getXmax()/2);
-				rc.Y=(rand() % _gl->getXmax()/2);
+				rc.Y=(rand() % _gl->getYmax()/2);
 				rc.Width=rand() % (_gl->getXmax()-rc.X);
 				rc.Height=rand() % (_gl->getYmax()-rc.Y);
 
