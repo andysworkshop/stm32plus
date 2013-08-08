@@ -39,6 +39,7 @@ namespace stm32plus {
 				void writeCommand(uint16_t command) const;
 				void writeCommand(uint16_t command,uint16_t parameter) const;
 				void writeData(uint16_t value) const;
+				void writeDataAgain(uint16_t value) const;
 				uint16_t readData() const;
 
 				volatile uint16_t *getDataAddress() const;
@@ -208,6 +209,17 @@ namespace stm32plus {
 
 		template<class TFsmc>
 		inline void Fsmc16BitAccessMode<TFsmc>::writeData(uint16_t value) const {
+			*_dataAddress=value;
+		}
+
+
+		/**
+		 * Write the same data again to the panel - no optimisation possible
+		 * @param value The data value to write
+		 */
+
+		template<class TFsmc>
+		inline void Fsmc16BitAccessMode<TFsmc>::writeDataAgain(uint16_t value) const {
 			*_dataAddress=value;
 		}
 

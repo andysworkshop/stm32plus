@@ -107,12 +107,12 @@ namespace stm32plus {
 		 * Write the same colour pixel that we last wrote. This gives the access mode a chance to
 		 * optimise sequential pixel writes. The colour is provided for drivers that cannot optimise
 		 * and must fall back to a full write.
-		 * @param cr The pixel to write
+		 * @param cr The same pixel to write again
 		 */
 
 		template<class TAccessMode>
 		inline void HX8347AColour<COLOURS_16BIT,TAccessMode>::writePixelAgain(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.packed565);
+			this->_accessMode.writeDataAgain(cr.packed565);
 		}
 
 

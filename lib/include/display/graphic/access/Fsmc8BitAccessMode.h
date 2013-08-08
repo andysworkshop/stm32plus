@@ -38,6 +38,7 @@ namespace stm32plus {
 				void writeCommand(uint8_t command) const;
 				void writeCommand(uint8_t command,uint8_t parameter) const;
 				void writeData(uint8_t value) const;
+				void writeDataAgain(uint8_t value) const;
 				uint8_t readData() const;
 
 				volatile uint8_t *getDataAddress() const;
@@ -77,6 +78,17 @@ namespace stm32plus {
 
 		template<class TFsmc>
 		inline void Fsmc8BitAccessMode<TFsmc>::writeData(uint8_t value) const {
+			*_dataAddress=value;
+		}
+
+
+		/**
+		 * Write same data value again to the panel - no optimisation possible here
+		 * @param value The data value to write
+		 */
+
+		template<class TFsmc>
+		inline void Fsmc8BitAccessMode<TFsmc>::writeDataAgain(uint8_t value) const {
 			*_dataAddress=value;
 		}
 
