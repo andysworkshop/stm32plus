@@ -46,8 +46,8 @@
 #include "display/graphic/gamma/NullDisplayDeviceGamma.h"
 
 #if !defined(STM32PLUS_F1_CL)
-	#include "display/graphic/Fsmc16BitAccessMode.h"
-	#include "display/graphic/FSMC8BitAccessMode.h"
+	#include "display/graphic/access/Fsmc16BitAccessMode.h"
+	#include "display/graphic/access/FSMC8BitAccessMode.h"
 #endif
 
 #include "display/graphic/ColourNames.h"

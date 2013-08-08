@@ -32,7 +32,11 @@ namespace stm32plus {
 		  public:
 				constexpr int16_t getWidth() const;
 				constexpr int16_t getHeight() const;
+
+				void moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const;
 				void moveTo(const Rectangle& rc) const;
+				void moveX(int16_t xstart,int16_t xend) const;
+				void moveY(int16_t ystart,int16_t yend) const;
 
 				void setScrollPosition(int16_t scrollPosition);
 		};
@@ -88,13 +92,54 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveTo(const Rectangle& rc) const {
+			moveTo(rc.X,rc.Y,rc.X+rc.Width-1,rc.Y+rc.Height-1);
+		}
 
-			this->_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,((rc.Y+rc.Height-1) << 8) | rc.Y);
-			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,rc.Y);
 
-			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,rc.X);
-			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,rc.X+rc.Width-1);
-			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,rc.X);
+		/**
+		 * Move the display rectangle to the rectangle described by the co-ordinates
+		 * @param xstart starting X position
+		 * @param ystart starting Y position
+		 * @param xend ending X position
+		 * @param yend ending Y position
+		 */
+
+		template<class TAccessMode>
+		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
+
+			this->_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,(yend << 8) | ystart);
+			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,ystart);
+
+			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,xstart);
+			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,xend);
+			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,xstart);
+		}
+
+
+		/**
+		 * Move the X position
+		 * @param xstart The new X start position
+		 * @param xend The new X end position
+		 */
+
+		template<class TAccessMode>
+		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
+			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,xstart);
+			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,xend);
+			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,xstart);
+		}
+
+
+		/**
+		 * Move the Y position
+		 * @param ystart The new Y start position
+		 * @param yend The new Y end position
+		 */
+
+		template<class TAccessMode>
+		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
+			this->_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,(yend << 8) | ystart);
+			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,ystart);
 		}
 
 
