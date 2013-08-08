@@ -50,6 +50,8 @@
 	#include "display/graphic/access/FSMC8BitAccessMode.h"
 #endif
 
+#include "display/graphic/access/Gpio16AccessMode.h"
+
 #include "display/graphic/ColourNames.h"
 #include "display/graphic/Backlight.h"
 #include "display/graphic/GraphicTerminal.h"
