@@ -12,51 +12,6 @@ namespace stm32plus {
 
 
 		/**
-		 * Base class for the optimised 16-bit access mode
-		 */
-
-		class Gpio16AccessModeBase {
-
-			protected:
-				const GpioPinRef& _resetPin;
-
-			public:
-				Gpio16AccessModeBase(const GpioPinRef& resetPin);
-				void reset() const;
-		};
-
-
-		/**
-		 * Constructor
-		 */
-
-		inline Gpio16AccessModeBase::Gpio16AccessModeBase(const GpioPinRef& resetPin)
-			: _resetPin(resetPin) {
-		}
-
-
-		/**
-		 * Hard-reset the panel
-		 */
-
-		inline void Gpio16AccessModeBase::reset() const {
-
-			// let the power stabilise
-
-			MillisecondTimer::delay(10);
-
-			// reset sequence
-
-			_resetPin.set();
-			MillisecondTimer::delay(5);
-			_resetPin.reset();
-			MillisecondTimer::delay(50);
-			_resetPin.set();
-			MillisecondTimer::delay(50);
-		}
-
-
-		/**
 		 * Forward declaration for the template specialisations
 		 */
 
@@ -69,10 +24,12 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		class Gpio16AccessMode<TPinPackage,72,50,50> : public Gpio16AccessModeBase {
+		class Gpio16AccessMode<TPinPackage,72,50,50> {
 
 			public:
-				Gpio16AccessMode(const GpioPinRef& resetPin);
+				Gpio16AccessMode();
+
+				void reset() const;
 
 				void writeCommand(uint16_t command) const;
 				void writeCommand(uint16_t command,uint16_t parameter) const;
@@ -88,8 +45,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline Gpio16AccessMode<TPinPackage,72,50,50>::Gpio16AccessMode(const GpioPinRef& resetPin)
-			: Gpio16AccessModeBase(resetPin) {
+		inline Gpio16AccessMode<TPinPackage,72,50,50>::Gpio16AccessMode() {
 
 			// all 16 port pins to output, 50MHz slew rate
 
@@ -100,8 +56,9 @@ namespace stm32plus {
 			// control pins to output
 
 			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_COMMANDS,
-			                               0xffff,
-			                               ((1 << TPinPackage::Pin_RS) | (1 << TPinPackage::Pin_WR)),
+			                               ((1 << TPinPackage::Pin_RS) |
+			                              	(1 << TPinPackage::Pin_WR) |
+			                              	(1 << TPinPackage::Pin_RESET)),
 			                               Gpio::OUTPUT);
 
 			// WR must start as HIGH
@@ -111,16 +68,44 @@ namespace stm32plus {
 
 
 		/**
+		 * Hard-reset the panel
+		 */
+
+		template<class TPinPackage>
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::reset() const {
+
+			GPIO_TypeDef *port;
+			uint16_t pin;
+
+			// let the power stabilise
+
+			MillisecondTimer::delay(10);
+
+			// reset sequence
+
+			port=(GPIO_TypeDef *)TPinPackage::Port_COMMANDS;
+			pin=1 << TPinPackage::Pin_RESET;
+
+			GPIO_SetBits(port,pin);
+			MillisecondTimer::delay(5);
+			GPIO_ResetBits(port,pin);
+			MillisecondTimer::delay(50);
+			GPIO_SetBits(port,pin);
+			MillisecondTimer::delay(50);
+		}
+
+
+		/**
 		 * write a command
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command) const {
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t /* command */) const {
 		}
 
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command,uint16_t parameter) const {
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t /* command */,uint16_t /* parameter */) const {
 		}
 
 
@@ -131,20 +116,21 @@ namespace stm32plus {
 
 			__asm volatile(
 				" movw r4,       #0              \n\t"     	// r4 = 0
-				" movw r5,       #[%commands]    \n\t"			// r5 = bit band base for command port
-				" movw r6,       #[%data]        \n\t"			// r6 = ordinary port base for data
-				" str  r4,       [r5, #%[wr]]    \n\t"			// [wr] = 0
+				" ldr  r5,       =%[commands]    \n\t"			// r5 = bit band base for command port
+				" ldr  r6,       =%[data]        \n\t"			// r6 = ordinary port base for data
+				" str  r4,       [r5, %[wr]]    \n\t"			// [wr] = 0
 				" movw r4,       #1              \n\t"			// r4 = 1
 				" str  %[value], r6              \n\t"			// port <= value
-				" str  r4,       [r5, #%[rs]]    \n\t"      // [rs] = 1
-				" str  r4,       [r5, #%[wr]]    \n\t"      // [wr] = 1
+				" str  r4,       [r5, %[rs]]    \n\t"      // [rs] = 1
+				" str  r4,       [r5, %[wr]]    \n\t"      // [wr] = 1
 
-				:: [commands] "I" (PERIPH_BB_BASE+((TPinPackage::Port_COMMANDS-PERIPH_BASE+offsetof(GPIO_TypeDef,ODR))*32)),
-				   [data]     "I" (TPinPackage::Port_DATA+offsetof(GPIO_TypeDef,ODR)),
+				:: [commands] "X" (PERIPH_BB_BASE+((TPinPackage::Port_COMMANDS-PERIPH_BASE+offsetof(GPIO_TypeDef,ODR))*32)),
+				   [data]     "X" (TPinPackage::Port_DATA+offsetof(GPIO_TypeDef,ODR)),
 				   [wr]       "I" (TPinPackage::Pin_WR * 4),			// 4 bytes per bit-band bit (base is ODR bit 0)
 				   [rs]       "I" (TPinPackage::Pin_RS * 4),			// ditto
 				   [value]    "r" (value)													// input value
-				  );
+				: "r4","r5","r6"
+			);
 		}
 
 
@@ -155,7 +141,7 @@ namespace stm32plus {
 
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::rawTransfer(const void *buffer,uint32_t numWords) const {
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::rawTransfer(const void * /* buffer */,uint32_t /* numWords */) const {
 		}
 	}
 }

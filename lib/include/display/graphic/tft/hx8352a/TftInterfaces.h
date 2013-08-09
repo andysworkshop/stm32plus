@@ -48,5 +48,20 @@ namespace stm32plus {
 
 		template<class TDevice> using LG_KF700_Terminal_Portrait = GraphicTerminal<TDevice,true>;
 		template<class TDevice> using LG_KF700_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+
+
+#if defined(STM32PLUS_F1)
+
+		/**
+		 * The optimised GPIO access mode is available for the 64K depths at max 72Mhz HCLK
+		 */
+
+		template<class TPinPackage>
+		using Gpio16AccessMode_HX8352A=Gpio16AccessMode<TPinPackage,72,50,50>;
+
+#elif(defined(STM32PLUS_F4))
+#else
+#error unsupported MCU
+#endif
 	}
 }
