@@ -40,6 +40,7 @@ namespace stm32plus {
 				void writeCommand(uint16_t command,uint16_t parameter) const;
 				void writeData(uint16_t value) const;
 				void writeDataAgain(uint16_t value) const;
+				void writeMultiData(uint32_t howMuch,uint16_t value) const;
 				uint16_t readData() const;
 
 				volatile uint16_t *getDataAddress() const;
@@ -210,6 +211,20 @@ namespace stm32plus {
 		template<class TFsmc>
 		inline void Fsmc16BitAccessMode<TFsmc>::writeData(uint16_t value) const {
 			*_dataAddress=value;
+		}
+
+
+		/**
+		 * Write multiple data. A possible optimisation point that we can't take advantage of
+		 * in this access mode
+		 * @param howMuch How many pixels
+		 * @param value The pixel
+		 */
+
+		template<class TFsmc>
+		inline void Fsmc16BitAccessMode<TFsmc>::writeMultiData(uint32_t howMuch,uint16_t value) const {
+			while(howMuch--)
+				writeData(value);
 		}
 
 

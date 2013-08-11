@@ -109,9 +109,9 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void LDS285Colour<COLOURS_18BIT,TAccessMode,TPanelTraits>::writePixel(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.r);
-			this->_accessMode.writeData(cr.g);
-			this->_accessMode.writeData(cr.b);
+			_accessMode.writeData(cr.r);
+			_accessMode.writeData(cr.g);
+			_accessMode.writeData(cr.b);
 		}
 
 
@@ -124,9 +124,9 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void LDS285Colour<COLOURS_18BIT,TAccessMode,TPanelTraits>::writePixelAgain(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.r);
-			this->_accessMode.writeData(cr.g);
-			this->_accessMode.writeData(cr.b);
+			_accessMode.writeData(cr.r);
+			_accessMode.writeData(cr.g);
+			_accessMode.writeData(cr.b);
 		}
 
 
@@ -142,16 +142,16 @@ namespace stm32plus {
 
 			uint8_t b,g,r;
 
-			this->_accessMode.writeCommand(lds285::MEMORY_WRITE);
+			_accessMode.writeCommand(lds285::MEMORY_WRITE);
 
 			r=cr.r;
 			g=cr.g;
 			b=cr.b;
 
 			while(numPixels--) {
-				this->_accessMode.writeData(r);
-				this->_accessMode.writeData(g);
-				this->_accessMode.writeData(b);
+				_accessMode.writeData(r);
+				_accessMode.writeData(g);
+				_accessMode.writeData(b);
 			}
 		}
 
@@ -181,7 +181,7 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void LDS285Colour<COLOURS_18BIT,TAccessMode,TPanelTraits>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-			this->_accessMode.rawTransfer(buffer,numPixels*3);
+			_accessMode.rawTransfer(buffer,numPixels*3);
 		}
 	}
 }

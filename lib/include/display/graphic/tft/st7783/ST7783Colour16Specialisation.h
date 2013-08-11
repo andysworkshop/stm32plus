@@ -112,7 +112,7 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ST7783Colour<COLOURS_16BIT,TAccessMode>::writePixel(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.packed565);
+			_accessMode.writeData(cr.packed565);
 		}
 
 
@@ -125,7 +125,7 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ST7783Colour<COLOURS_16BIT,TAccessMode>::writePixelAgain(const UnpackedColour& cr) const {
-			this->_accessMode.writeDataAgain(cr.packed565);
+			_accessMode.writeDataAgain(cr.packed565);
 		}
 
 
@@ -139,14 +139,8 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void ST7783Colour<COLOURS_16BIT,TAccessMode>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
 
-			uint16_t value;
-
-			this->_accessMode.writeCommand(st7783::MEMORY_WRITE);
-
-			value=cr.packed565;
-
-			while(numPixels--)
-				this->_accessMode.writeData(value);
+			_accessMode.writeCommand(st7783::MEMORY_WRITE);
+			_accessMode.writeMultiData(numPixels,cr.packed565);
 		}
 
 
@@ -175,7 +169,7 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ST7783Colour<COLOURS_16BIT,TAccessMode>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-			this->_accessMode.rawTransfer(buffer,numPixels);
+			_accessMode.rawTransfer(buffer,numPixels);
 		}
 	}
 }

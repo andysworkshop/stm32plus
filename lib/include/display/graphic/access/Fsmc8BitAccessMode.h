@@ -39,6 +39,7 @@ namespace stm32plus {
 				void writeCommand(uint8_t command,uint8_t parameter) const;
 				void writeData(uint8_t value) const;
 				void writeDataAgain(uint8_t value) const;
+				void writeMultiData(uint32_t howMuch,uint8_t value) const;
 				uint8_t readData() const;
 
 				volatile uint8_t *getDataAddress() const;
@@ -79,6 +80,20 @@ namespace stm32plus {
 		template<class TFsmc>
 		inline void Fsmc8BitAccessMode<TFsmc>::writeData(uint8_t value) const {
 			*_dataAddress=value;
+		}
+
+
+		/**
+		 * Write multiple data. A possible optimisation point that we can't take advantage of
+		 * in this access mode
+		 * @param howMuch How many pixels
+		 * @param value The pixel
+		 */
+
+		template<class TFsmc>
+		inline void Fsmc8BitAccessMode<TFsmc>::writeMultiData(uint32_t howMuch,uint8_t value) const {
+			while(howMuch--)
+				writeData(value);
 		}
 
 

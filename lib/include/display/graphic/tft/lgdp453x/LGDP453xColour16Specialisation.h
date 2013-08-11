@@ -113,7 +113,7 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void LGDP453xColour<COLOURS_16BIT,TAccessMode>::writePixel(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.packed565);
+			_accessMode.writeData(cr.packed565);
 		}
 
 
@@ -126,7 +126,7 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void LGDP453xColour<COLOURS_16BIT,TAccessMode>::writePixelAgain(const UnpackedColour& cr) const {
-			this->_accessMode.writeDataAgain(cr.packed565);
+			_accessMode.writeDataAgain(cr.packed565);
 		}
 
 
@@ -140,14 +140,8 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void LGDP453xColour<COLOURS_16BIT,TAccessMode>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
 
-			uint16_t value;
-
-			this->_accessMode.writeCommand(lgdp453x::GRAMStartWritingCmd::Opcode);
-
-			value=cr.packed565;
-
-			while(numPixels--)
-				this->_accessMode.writeData(value);
+			_accessMode.writeCommand(lgdp453x::GRAMStartWritingCmd::Opcode);
+			_accessMode.writeMultiData(numPixels,cr.packed565);
 		}
 
 
@@ -177,7 +171,7 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void LGDP453xColour<COLOURS_16BIT,TAccessMode>::rawTransfer(const void *buffer,uint32_t numPixels) const {
 
-			volatile uint16_t *dataAddress=this->_accessMode.getDataAddress();
+			volatile uint16_t *dataAddress=_accessMode.getDataAddress();
 			const uint16_t *ptr=static_cast<const uint16_t *>(buffer);
 
 			while(numPixels--)

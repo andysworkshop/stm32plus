@@ -115,8 +115,8 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ILI9481Colour<COLOURS_18BIT,TAccessMode>::writePixel(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.first);
-			this->_accessMode.writeData(cr.second);
+			_accessMode.writeData(cr.first);
+			_accessMode.writeData(cr.second);
 		}
 
 
@@ -129,8 +129,8 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ILI9481Colour<COLOURS_18BIT,TAccessMode>::writePixelAgain(const UnpackedColour& cr) const {
-			this->_accessMode.writeData(cr.first);
-			this->_accessMode.writeData(cr.second);
+			_accessMode.writeData(cr.first);
+			_accessMode.writeData(cr.second);
 		}
 
 
@@ -146,14 +146,14 @@ namespace stm32plus {
 
 			uint16_t first,second;
 
-			this->_accessMode.writeCommand(ili9481::WriteMemoryStartCmd::Opcode);
+			_accessMode.writeCommand(ili9481::WriteMemoryStartCmd::Opcode);
 
 			first=cr.first;
 			second=cr.second;
 
 			while(numPixels--) {
-				this->_accessMode.writeData(first);
-				this->_accessMode.writeData(second);
+				_accessMode.writeData(first);
+				_accessMode.writeData(second);
 			}
 		}
 
@@ -183,7 +183,7 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ILI9481Colour<COLOURS_18BIT,TAccessMode>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-			this->_accessMode.rawTransfer(buffer,numPixels*2);
+			_accessMode.rawTransfer(buffer,numPixels*2);
 		}
 	}
 }
