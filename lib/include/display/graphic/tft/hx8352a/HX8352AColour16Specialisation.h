@@ -127,9 +127,7 @@ namespace stm32plus {
 		inline void HX8352AColour<COLOURS_16BIT,TAccessMode,TPanelTraits>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
 
 			this->_accessMode.writeCommand(hx8352a::MEMORY_WRITE);
-
-			while(numPixels--)
-				this->_accessMode.writeData(cr.packed565);
+			_accessMode.writeMultiData(numPixels,cr.packed565);
 		}
 
 

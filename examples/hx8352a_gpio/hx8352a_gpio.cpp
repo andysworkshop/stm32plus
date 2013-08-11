@@ -21,26 +21,6 @@ using namespace stm32plus::display;
 
 
 /**
- * HX8352A LCD test, show a looping graphics demo
- *
- * It's a 16-bit device and we control it in this demo
- * using the FSMC peripheral on bank 1. The wiring
- * that you need to do is as follows:
- *
- * PE1  => RESET
- * PD11 => RS (D/CX)
- * PD7  => CS
- * PD4  => RD
- * PD5  => WR
- * PD14 => D0    PE11 => D8
- * PD15 => D1    PE12 => D9
- * PD0  => D2    PE13 => D10
- * PD1  => D3    PE14 => D11
- * PE7  => D4    PE15 => D12
- * PE8  => D5    PD8  => D13
- * PE9  => D6    PD9  => D14
- * PE10 => D7    PD10 => D15
- * PD13 => Backlight PWM (if variable backlight)
  *
  * Compatible MCU:
  * 	 STM32F1
@@ -61,12 +41,12 @@ class HX8352ATest {
 		 */
 
 		enum {
-			Port_COMMANDS = GPIOE_BASE,				// will use [0..2]
-			Port_DATA     = GPIOD_BASE,				// will use whole port as data bus D0..15
+			Port_CONTROL = GPIOE_BASE,				// will use [0..2]
+			Port_DATA    = GPIOD_BASE,				// will use whole port as data bus D0..15
 
-			Pin_RESET     = 0,
-			Pin_WR        = 1,
-			Pin_RS        = 2
+			Pin_RESET    = 0,
+			Pin_WR       = 1,
+			Pin_RS       = 2
 		};
 
 	protected:
@@ -119,11 +99,11 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
-				rectTest();
-				jpegTest();
 				lzgTest();
 				basicColoursTest();
 				lineTest();
+				rectTest();
+				jpegTest();
 				textTest();
 				scrollTest();
 				ellipseTest();

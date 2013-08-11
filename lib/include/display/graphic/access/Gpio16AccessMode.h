@@ -26,6 +26,13 @@ namespace stm32plus {
 		template<class TPinPackage>
 		class Gpio16AccessMode<TPinPackage,72,50,50> {
 
+			protected:
+				uint32_t _controlBitBandAddress;
+				uint32_t _portOutputRegister;
+				uint32_t _zero;
+				uint32_t _one;
+				uint32_t _jump;
+
 			public:
 				Gpio16AccessMode();
 
@@ -35,6 +42,7 @@ namespace stm32plus {
 				void writeCommand(uint16_t command,uint16_t parameter) const;
 				void writeData(uint16_t value) const;
 				void writeDataAgain(uint16_t value) const;
+				void writeMultiData(uint32_t howMuch,uint16_t value) const;
 
 				void rawTransfer(const void *buffer,uint32_t numWords) const;
 		};
@@ -47,6 +55,22 @@ namespace stm32plus {
 		template<class TPinPackage>
 		inline Gpio16AccessMode<TPinPackage,72,50,50>::Gpio16AccessMode() {
 
+			// These constants are referenced by the assembly parts of this driver. By doing this we can avoid
+			// hardcoding registers and therefore let the optimiser have more latitude to do its job.
+
+			_zero=0;
+			_one=1;
+
+			// this is the address of the ODR (output data) register for the control port in the bitband region.
+			// out here each 32-bit word corresponds to a single bit in the real peripheral register. Therefore
+			// we can address the pins by indexing [0..15] from this address.
+
+			_controlBitBandAddress=PERIPH_BB_BASE+((TPinPackage::Port_CONTROL-PERIPH_BASE+offsetof(GPIO_TypeDef,ODR))*32);
+
+			// this is the address of the data output ODR register in the normal peripheral region.
+
+			_portOutputRegister=TPinPackage::Port_DATA+offsetof(GPIO_TypeDef,ODR);
+
 			// all 16 port pins to output, 50MHz slew rate
 
 			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_DATA,
@@ -55,7 +79,7 @@ namespace stm32plus {
 
 			// control pins to output
 
-			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_COMMANDS,
+			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_CONTROL,
 			                               ((1 << TPinPackage::Pin_RS) |
 			                              	(1 << TPinPackage::Pin_WR) |
 			                              	(1 << TPinPackage::Pin_RESET)),
@@ -63,7 +87,7 @@ namespace stm32plus {
 
 			// WR must start as HIGH
 
-			GPIO_SetBits((GPIO_TypeDef *)TPinPackage::Port_COMMANDS,1 << TPinPackage::Pin_WR);
+			GPIO_SetBits((GPIO_TypeDef *)TPinPackage::Port_CONTROL,1 << TPinPackage::Pin_WR);
 		}
 
 
@@ -83,7 +107,7 @@ namespace stm32plus {
 
 			// reset sequence
 
-			port=(GPIO_TypeDef *)TPinPackage::Port_COMMANDS;
+			port=(GPIO_TypeDef *)TPinPackage::Port_CONTROL;
 			pin=1 << TPinPackage::Pin_RESET;
 
 			GPIO_SetBits(port,pin);
@@ -96,52 +120,305 @@ namespace stm32plus {
 
 
 		/**
-		 * write a command
+		 * Write a command
+		 * @param command The command register
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t /* command */) const {
-		}
-
-
-		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t /* command */,uint16_t /* parameter */) const {
-		}
-
-
-		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeData(uint16_t value) const {
-
-			// all these instructions are single cycle = 13.8ns
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command) const {
 
 			__asm volatile(
-				" movw r4,       #0              \n\t"     	// r4 = 0
-				" ldr  r5,       =%[commands]    \n\t"			// r5 = bit band base for command port
-				" ldr  r6,       =%[data]        \n\t"			// r6 = ordinary port base for data
-				" str  r4,       [r5, %[wr]]    \n\t"			// [wr] = 0
-				" movw r4,       #1              \n\t"			// r4 = 1
-				" str  %[value], r6              \n\t"			// port <= value
-				" str  r4,       [r5, %[rs]]    \n\t"      // [rs] = 1
-				" str  r4,       [r5, %[wr]]    \n\t"      // [wr] = 1
-
-				:: [commands] "X" (PERIPH_BB_BASE+((TPinPackage::Port_COMMANDS-PERIPH_BASE+offsetof(GPIO_TypeDef,ODR))*32)),
-				   [data]     "X" (TPinPackage::Port_DATA+offsetof(GPIO_TypeDef,ODR)),
-				   [wr]       "I" (TPinPackage::Pin_WR * 4),			// 4 bytes per bit-band bit (base is ODR bit 0)
-				   [rs]       "I" (TPinPackage::Pin_RS * 4),			// ditto
-				   [value]    "r" (value)													// input value
-				: "r4","r5","r6"
+				" str  %[value], [%[data]]              	\n\t"			// port <= value
+				" str  %[zero],  [%[commands], %[rs]]    	\n\t"     // [rs] = 0
+				" str  %[zero],  [%[commands], %[wr]]    	\n\t"			// [wr] = 0
+				" str  %[one],   [%[commands], %[wr]]    	\n\t"     // [wr] = 1
+				:: [commands] "r" (_controlBitBandAddress),					// the control address
+				   [data]     "r" (_portOutputRegister),						// the data port
+				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
+				   [rs]       "I" (TPinPackage::Pin_RS * 4),				// ditto
+				   [value]    "r" (command),												// input value
+				   [zero]     "r" (_zero),
+				   [one]      "r" (_one)
 			);
 		}
 
 
+		/**
+		 * Write a command and its parameter (convenience function)
+		 * @param command The command register
+		 * @param parameter The register parameter
+		 */
+
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeDataAgain(uint16_t value) const {
-			writeData(value);
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command,uint16_t parameter) const {
+			writeCommand(command);
+			writeData(parameter);
 		}
 
 
+		/**
+		 * Write a data value
+		 * @param value The data value to write
+		 */
+
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::rawTransfer(const void * /* buffer */,uint32_t /* numWords */) const {
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeData(uint16_t value) const {
+
+			__asm volatile(
+				" str  %[value], [%[data]]              	\n\t"			// port <= value
+				" str  %[one],   [%[commands], %[rs]]    	\n\t"     // [rs] = 1
+				" str  %[zero],  [%[commands], %[wr]]    	\n\t"			// [wr] = 0
+				" str  %[one],   [%[commands], %[wr]]    	\n\t"     // [wr] = 1
+				:: [commands] "r" (_controlBitBandAddress),					// the control address
+				   [data]     "r" (_portOutputRegister),						// the data port
+				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
+				   [rs]       "I" (TPinPackage::Pin_RS * 4),				// ditto
+				   [value]    "r" (value),													// input value
+				   [zero]     "r" (_zero),
+				   [one]      "r" (_one)
+			);
+		}
+
+
+		/**
+		 * Write the same data value that we have recently written out. This is one of our optimisation
+		 * points. We don't have to do the whole 8080 transaction again and can just toggle WR.
+		 * @param value The data value to write
+		 */
+
+		template<class TPinPackage>
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeDataAgain(uint16_t /* value */) const {
+
+			__asm volatile(
+				" str  %[zero],  [%[commands], %[wr]]    	\n\t"			// [wr] = 0
+				" str  %[one],   [%[commands], %[wr]]    	\n\t"     // [wr] = 1
+				:: [commands] "r" (_controlBitBandAddress),					// the control address
+				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
+				   [zero]     "r" (_zero),
+				   [one]      "r" (_one)
+			);
+		}
+
+			/**
+	 * Write a batch of the same data values to the XMEM interface using GPIO. The values are written out in a
+	 * highly optimised loop in bursts of 40 at a time. This value seems a good trade off between flash usage
+	 * and speed. The turnaround time between batches has been measured at around 1 microsecond. Note the use
+	 * of %= labels so that inlining doesn't produce duplicate names.
+	 * @param howMuch The number of 16-bit values to write
+	 * @param lo8 The low 8 bits of the value to write
+	 * @param hi8 The high 8 bits of the value to write. Many parameter values are 8-bits so this parameters defaults to zero.
+	 */
+
+	template<class TPinPackage>
+	inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeMultiData(uint32_t howMuch,uint16_t value) const {
+
+		__asm volatile(
+				"    str  %[value],   [%[data]]             		\n\t"			// port <= value
+				"    str  %[one],     [%[commands], %[rs]]  		\n\t"     // [rs] = 1
+				"    cmp  %[howmuch], #40                       \n\t"
+				"    blo  lastlot%=                             \n\t"
+
+				"batchloop%=:                               		\n\t"
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+
+				"    sub  %[howmuch], #40                       \n\t"     // subtract 40 from howMuch
+				"    cmp  %[howmuch], #40 											\n\t"     // if howMuch >= 40 then go back for another batch
+				"    bhs  batchloop%=                           \n\t"
+
+				"lastlot%=:                                     \n\t"
+
+				"    ldr %[jump],    =finished%=                \n\t"			// load jump with the address of the end
+				"    lsl %[howmuch], #2                         \n\t"			// multiply remaining by 4 and
+				"    sub %[jump],    %[howmuch]                 \n\t"			// subtract from the jump target
+				"    orr %[jump],    #1                         \n\t"			// set thumb mode (bit 0=1)
+				"    bx  %[jump]                                \n\t"			// indirect jump into the last lot
+
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
+				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+
+				"finished%=:           \n\t"
+
+				:: [commands] "r" (_controlBitBandAddress),					// the control address
+				   [data]     "r" (_portOutputRegister),						// the data port
+				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
+				   [rs]       "I" (TPinPackage::Pin_RS * 4),				// ditto
+				   [value]    "r" (value),													// input value
+				   [zero]     "r" (_zero),
+				   [one]      "r" (_one),
+				   [jump]     "r" (_jump),
+				   [howmuch]  "r" (howMuch)
+		);
+	}
+
+
+		/**
+		 * Write out a raw block of data from memory
+		 * @param buffer Where to read from
+		 * @param numWords The number of 16-bit words
+		 */
+
+		template<class TPinPackage>
+		inline void Gpio16AccessMode<TPinPackage,72,50,50>::rawTransfer(const void *buffer,uint32_t numWords) const {
+
+			const uint16_t *ptr=static_cast<const uint16_t *>(buffer);
+
+			while(numWords--)
+				writeData(*ptr++);
 		}
 	}
 }
