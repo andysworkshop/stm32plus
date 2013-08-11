@@ -12,7 +12,10 @@ namespace stm32plus {
 
 
 		/**
-		 * Forward declaration for the template specialisations
+		 * Forward declaration for the template specialisations. These drivers are highly optimised
+		 * assembly language implementations designed to extract the maximum performance from a GPIO
+		 * based design. Each one has been hand-tested and timed with a logic analyser to ensure it
+		 * meets its timing requirements.
 		 */
 
 		template<class TPinPackage,uint16_t TClockFrequency,uint16_t TLow,uint16_t THigh>
@@ -20,17 +23,19 @@ namespace stm32plus {
 
 
 		/**
-		 * Specialisation for 72Mhz MCU clock, 50ns low and 50ns high write cycle periods
+		 * Specialisation for 72Mhz MCU clock, 50ns low and 50ns high write cycle periods. The 13.8ns
+		 * HCLK means that we actually achieve 55.2ns (+/- clock accuracy)
 		 */
 
 		template<class TPinPackage>
 		class Gpio16AccessMode<TPinPackage,72,50,50> {
 
 			protected:
-				uint32_t _controlBitBandAddress;
+				uint32_t _controlSetAddress;
+				uint32_t _controlResetAddress;
 				uint32_t _portOutputRegister;
-				uint32_t _zero;
-				uint32_t _one;
+				uint16_t _wr;
+				uint16_t _rs;
 				uint32_t _jump;
 
 			public:
@@ -55,17 +60,15 @@ namespace stm32plus {
 		template<class TPinPackage>
 		inline Gpio16AccessMode<TPinPackage,72,50,50>::Gpio16AccessMode() {
 
-			// These constants are referenced by the assembly parts of this driver. By doing this we can avoid
-			// hardcoding registers and therefore let the optimiser have more latitude to do its job.
+		  // the assembly code needs these
 
-			_zero=0;
-			_one=1;
+			_rs=TPinPackage::Pin_RS;
+			_wr=TPinPackage::Pin_WR;
 
-			// this is the address of the ODR (output data) register for the control port in the bitband region.
-			// out here each 32-bit word corresponds to a single bit in the real peripheral register. Therefore
-			// we can address the pins by indexing [0..15] from this address.
+			// these are the addresses of the reset/set registers in the normal peripheral region.
 
-			_controlBitBandAddress=PERIPH_BB_BASE+((TPinPackage::Port_CONTROL-PERIPH_BASE+offsetof(GPIO_TypeDef,ODR))*32);
+			_controlResetAddress=TPinPackage::Port_CONTROL+offsetof(GPIO_TypeDef,BRR);
+			_controlSetAddress=TPinPackage::Port_CONTROL+offsetof(GPIO_TypeDef,BSRR);
 
 			// this is the address of the data output ODR register in the normal peripheral region.
 
@@ -80,14 +83,12 @@ namespace stm32plus {
 			// control pins to output
 
 			GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_CONTROL,
-			                               ((1 << TPinPackage::Pin_RS) |
-			                              	(1 << TPinPackage::Pin_WR) |
-			                              	(1 << TPinPackage::Pin_RESET)),
+			                               TPinPackage::Pin_RS | TPinPackage::Pin_WR | TPinPackage::Pin_RESET,
 			                               Gpio::OUTPUT);
 
 			// WR must start as HIGH
 
-			GPIO_SetBits((GPIO_TypeDef *)TPinPackage::Port_CONTROL,1 << TPinPackage::Pin_WR);
+			GPIO_SetBits((GPIO_TypeDef *)TPinPackage::Port_CONTROL,TPinPackage::Pin_WR);
 		}
 
 
@@ -99,7 +100,6 @@ namespace stm32plus {
 		inline void Gpio16AccessMode<TPinPackage,72,50,50>::reset() const {
 
 			GPIO_TypeDef *port;
-			uint16_t pin;
 
 			// let the power stabilise
 
@@ -108,13 +108,12 @@ namespace stm32plus {
 			// reset sequence
 
 			port=(GPIO_TypeDef *)TPinPackage::Port_CONTROL;
-			pin=1 << TPinPackage::Pin_RESET;
 
-			GPIO_SetBits(port,pin);
+			GPIO_SetBits(port,TPinPackage::Pin_RESET);
 			MillisecondTimer::delay(5);
-			GPIO_ResetBits(port,pin);
+			GPIO_ResetBits(port,TPinPackage::Pin_RESET);
 			MillisecondTimer::delay(50);
-			GPIO_SetBits(port,pin);
+			GPIO_SetBits(port,TPinPackage::Pin_RESET);
 			MillisecondTimer::delay(50);
 		}
 
@@ -128,17 +127,18 @@ namespace stm32plus {
 		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command) const {
 
 			__asm volatile(
-				" str  %[value], [%[data]]              	\n\t"			// port <= value
-				" str  %[zero],  [%[commands], %[rs]]    	\n\t"     // [rs] = 0
-				" str  %[zero],  [%[commands], %[wr]]    	\n\t"			// [wr] = 0
-				" str  %[one],   [%[commands], %[wr]]    	\n\t"     // [wr] = 1
-				:: [commands] "r" (_controlBitBandAddress),					// the control address
-				   [data]     "r" (_portOutputRegister),						// the data port
-				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
-				   [rs]       "I" (TPinPackage::Pin_RS * 4),				// ditto
-				   [value]    "r" (command),												// input value
-				   [zero]     "r" (_zero),
-				   [one]      "r" (_one)
+				" str  %[value], [%[data]]          \n\t"			// port <= value
+				" str  %[rs],    [%[creset], #0]    \n\t"     // [rs] = 0
+				" str  %[wr],    [%[creset], #0]    \n\t"			// [wr] = 0
+				" mov  r0,       r0                 \n\t"			// burn 2 cycles so we meet the timing requirements
+				" mov  r0,       r0                 \n\t"
+				" str  %[wr],    [%[cset], #0]  		\n\t"     // [wr] = 1
+				:: [creset]   "r" (_controlResetAddress),			// the control reset address
+				   [cset]   	"r" (_controlSetAddress),				// the control set address
+				   [data]     "r" (_portOutputRegister),			// the data port
+				   [wr]       "r" (_wr),											// WR pin bit
+				   [rs]       "r" (_rs),											// RS pin bit
+				   [value]    "r" (command)									  // input value
 			);
 		}
 
@@ -165,17 +165,18 @@ namespace stm32plus {
 		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeData(uint16_t value) const {
 
 			__asm volatile(
-				" str  %[value], [%[data]]              	\n\t"			// port <= value
-				" str  %[one],   [%[commands], %[rs]]    	\n\t"     // [rs] = 1
-				" str  %[zero],  [%[commands], %[wr]]    	\n\t"			// [wr] = 0
-				" str  %[one],   [%[commands], %[wr]]    	\n\t"     // [wr] = 1
-				:: [commands] "r" (_controlBitBandAddress),					// the control address
-				   [data]     "r" (_portOutputRegister),						// the data port
-				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
-				   [rs]       "I" (TPinPackage::Pin_RS * 4),				// ditto
-				   [value]    "r" (value),													// input value
-				   [zero]     "r" (_zero),
-				   [one]      "r" (_one)
+				" str  %[value], [%[data]]          \n\t"			// port <= value
+				" str  %[rs],    [%[cset], #0]    	\n\t"     // [rs] = 1
+				" str  %[wr],    [%[creset], #0]  	\n\t"			// [wr] = 0
+				" mov  r0,       r0                 \n\t"			// burn 2 cycles so we meet the timing requirements
+				" mov  r0,       r0                 \n\t"
+				" str  %[wr],    [%[cset], #0]    	\n\t"     // [wr] = 1
+				:: [creset]   "r" (_controlResetAddress),			// the control reset address
+				   [cset]   	"r" (_controlSetAddress),				// the control set address
+				   [data]     "r" (_portOutputRegister),			// the data port
+				   [wr]       "r" (TPinPackage::Pin_WR),			// WR pin bit
+				   [rs]       "r" (TPinPackage::Pin_RS),			// RS pin bit
+				   [value]    "r" (value)											// input value
 			);
 		}
 
@@ -190,20 +191,21 @@ namespace stm32plus {
 		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeDataAgain(uint16_t /* value */) const {
 
 			__asm volatile(
-				" str  %[zero],  [%[commands], %[wr]]    	\n\t"			// [wr] = 0
-				" str  %[one],   [%[commands], %[wr]]    	\n\t"     // [wr] = 1
-				:: [commands] "r" (_controlBitBandAddress),					// the control address
-				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
-				   [zero]     "r" (_zero),
-				   [one]      "r" (_one)
+				" str  %[wr], [%[creset], #0]   \n\t"				// [wr] = 0
+				" mov  r0,    r0                \n\t"				// burn 2 cycles so we meet the timing requirements
+				" mov  r0,    r0                \n\t"
+				" str  %[wr], [%[cset], #0]    	\n\t"     	// [wr] = 1
+				:: [creset]   "r" (_controlResetAddress),		// the control reset address
+				   [cset]   	"r" (_controlSetAddress),			// the control set address
+				   [wr]       "r" (TPinPackage::Pin_WR)			// WR pin bit
 			);
 		}
 
-			/**
+
+	/**
 	 * Write a batch of the same data values to the XMEM interface using GPIO. The values are written out in a
 	 * highly optimised loop in bursts of 40 at a time. This value seems a good trade off between flash usage
-	 * and speed. The turnaround time between batches has been measured at around 1 microsecond. Note the use
-	 * of %= labels so that inlining doesn't produce duplicate names.
+	 * and speed. Note the use of %= labels so that inlining doesn't produce duplicate names.
 	 * @param howMuch The number of 16-bit values to write
 	 * @param lo8 The low 8 bits of the value to write
 	 * @param hi8 The high 8 bits of the value to write. Many parameter values are 8-bits so this parameters defaults to zero.
@@ -214,194 +216,356 @@ namespace stm32plus {
 
 		__asm volatile(
 				"    str  %[value],   [%[data]]             		\n\t"			// port <= value
-				"    str  %[one],     [%[commands], %[rs]]  		\n\t"     // [rs] = 1
-				"    cmp  %[howmuch], #40                       \n\t"
-				"    blo  lastlot%=                             \n\t"
+				"    str  %[rs],      [%[cset], #0]  				    \n\t"     // [rs] = 1
+				"    cmp  %[howmuch], #40                       \n\t"			// if less than 40 then go straight
+				"    blo  lastlot%=                             \n\t"     // to the finishing off stage
+
+				// in the following unrolled loop each STR is duplicated for the sole purpose
+				// of burning cycles so that we meet the timing requirements. The target is 50ns
+				// low, 50ns high. We achieve 55ns/55ns which is close enough.
 
 				"batchloop%=:                               		\n\t"
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
 
 				"    sub  %[howmuch], #40                       \n\t"     // subtract 40 from howMuch
 				"    cmp  %[howmuch], #40 											\n\t"     // if howMuch >= 40 then go back for another batch
 				"    bhs  batchloop%=                           \n\t"
 
 				"lastlot%=:                                     \n\t"
-
-				"    ldr %[jump],    =finished%=                \n\t"			// load jump with the address of the end
-				"    lsl %[howmuch], #2                         \n\t"			// multiply remaining by 4 and
-				"    sub %[jump],    %[howmuch]                 \n\t"			// subtract from the jump target
+				"    ldr %[jump],    =finished%=                \n\t"			// load 'jump' with the address of the end
+				"    lsl %[howmuch], #3                         \n\t"			// multiply remaining by 8 and
+				"    sub %[jump],    %[howmuch]                 \n\t"			// subtract from the 'jump' target
 				"    orr %[jump],    #1                         \n\t"			// set thumb mode (bit 0=1)
-				"    bx  %[jump]                                \n\t"			// indirect jump into the last lot
+				"    bx  %[jump]                                \n\t"			// indirect jump forward into the last lot
 
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
-				"    str  %[zero],  [%[commands], %[wr]]  			\n\t"			// [wr] = 0
-				"    str  %[one],   [%[commands], %[wr]]    	  \n\t"     // [wr] = 1
+				// there are 39 writes here
 
-				"finished%=:           \n\t"
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[creset], #0]  			    		\n\t"			// [wr] = 0
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
+				"    str  %[wr], [%[cset], #0]    	        		\n\t"     // [wr] = 1
 
-				:: [commands] "r" (_controlBitBandAddress),					// the control address
-				   [data]     "r" (_portOutputRegister),						// the data port
-				   [wr]       "I" (TPinPackage::Pin_WR * 4),				// 4 bytes per bit-band bit (base is ODR bit 0)
-				   [rs]       "I" (TPinPackage::Pin_RS * 4),				// ditto
-				   [value]    "r" (value),													// input value
-				   [zero]     "r" (_zero),
-				   [one]      "r" (_one),
-				   [jump]     "r" (_jump),
-				   [howmuch]  "r" (howMuch)
+				"finished%=:                                    \n\t"
+
+				:: [creset]   "r" (_controlResetAddress),			// the control reset address
+				   [cset]   	"r" (_controlSetAddress),				// the control set address
+				   [data]     "r" (_portOutputRegister),			// the data port
+				   [wr]       "r" (TPinPackage::Pin_WR),			// WR pin bit
+				   [rs]       "r" (TPinPackage::Pin_RS),			// RS pin bit
+				   [value]    "r" (value),										// input value
+				   [jump]     "r" (_jump),										// holds calculated indirect jump target
+				   [howmuch]  "r" (howMuch)										// number of pixels to write
 		);
 	}
 
