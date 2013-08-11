@@ -21,6 +21,19 @@ using namespace stm32plus::display;
 
 
 /**
+ * This example shows a looping graphics library demo running on an
+ * HX8352A display panel. The panel in this demo is from the LG KF700
+ * cellphone (see my website for writeup). The access mode is the
+ * highly optimised GPIO mode in 64K colours, landscape mode.
+ *
+ * The pinout is changeable to your needs. The demo setup is as follows.
+ *
+ * LCD_D0..15 = PD[0..15]				// a whole port is used for the 16 data lines
+ * LCD RESET  = PE0             // RESET/WR/RS must be on the same port
+ * LCD_WR     = PE1
+ * LCD_RS     = PE2
+ *
+ * Backlight PWM output = PA1
  *
  * Compatible MCU:
  * 	 STM32F1
@@ -44,9 +57,9 @@ class HX8352ATest {
 			Port_CONTROL = GPIOE_BASE,				// will use [0..2]
 			Port_DATA    = GPIOD_BASE,				// will use whole port as data bus D0..15
 
-			Pin_RESET    = 0,
-			Pin_WR       = 1,
-			Pin_RS       = 2
+			Pin_RESET    = GPIO_Pin_0,
+			Pin_WR       = GPIO_Pin_1,
+			Pin_RS       = GPIO_Pin_2
 		};
 
 	protected:
@@ -99,16 +112,16 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
-				lzgTest();
-				basicColoursTest();
-				lineTest();
-				rectTest();
-				jpegTest();
+				clearTest();
 				textTest();
+				basicColoursTest();
+				rectTest();
+				lzgTest();
+				lineTest();
+				jpegTest();
 				scrollTest();
 				ellipseTest();
 				gradientTest();
-				clearTest();
 				sleepTest();
 			}
 		}
@@ -264,17 +277,23 @@ class HX8352ATest {
 		void clearTest() {
 
 			int i;
-			uint32_t start;
+			uint32_t start,duration;
 
 			prompt("Clear screen test");
 
+			start=MillisecondTimer::millis();
 			for(i=0;i<200;i++) {
 				_gl->setBackground(rand());
-
-				start=MillisecondTimer::millis();
 				_gl->clearScreen();
-				stopTimer(" to clear",MillisecondTimer::millis()-start);
 			}
+			duration=(MillisecondTimer::millis()-start)/200;
+
+			_gl->setForeground(ColourNames::WHITE);
+			_gl->setBackground(ColourNames::BLACK);
+			_gl->clearScreen();
+
+			stopTimer("to clear one screen",duration);
+			MillisecondTimer::delay(3000);
 		}
 
 
