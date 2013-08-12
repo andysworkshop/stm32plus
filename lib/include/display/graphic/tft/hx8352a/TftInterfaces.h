@@ -57,7 +57,10 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		using Gpio16AccessMode_HX8352A=Gpio16AccessMode<TPinPackage,72,50,50>;
+		using Gpio16BitAccessMode_HX8352A_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>;
+
+		template<class TPinPackage>
+		using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,72,50,50>;
 
 #elif(defined(STM32PLUS_F4))
 #else

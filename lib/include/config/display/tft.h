@@ -50,7 +50,7 @@
 	#include "display/graphic/access/FSMC8BitAccessMode.h"
 #endif
 
-#include "display/graphic/access/Gpio16AccessMode.h"
+// graphics library includes
 
 #include "display/graphic/ColourNames.h"
 #include "display/graphic/Backlight.h"
@@ -59,6 +59,12 @@
 #include "display/graphic/PicoJpeg.h"
 #include "display/graphic/JpegDecoder.h"
 #include "display/graphic/GraphicsLibrary.h"
+
+// include the optimised GPIO drivers in specialisation order
+
+#include "display/graphic/access/Gpio16BitAccessMode.h"
+#include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"
+#include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"
 
 #include "display/graphic/tft/ili9325/ILI9325.h"
 #include "display/graphic/tft/ili9481/ILI9481.h"

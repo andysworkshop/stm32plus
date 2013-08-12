@@ -63,7 +63,7 @@ class HX8352ATest {
 		};
 
 	protected:
-		typedef Gpio16AccessMode_HX8352A<HX8352ATest> LcdAccessMode;
+		typedef Gpio16BitAccessMode_HX8352A_64K<HX8352ATest> LcdAccessMode;
 		typedef LG_KF700_Landscape_64K<LcdAccessMode> LcdPanel;
 
 		// define the PWM backlight to come from timer5, channel 2 (PA1)

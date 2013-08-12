@@ -12,23 +12,12 @@ namespace stm32plus {
 
 
 		/**
-		 * Forward declaration for the template specialisations. These drivers are highly optimised
-		 * assembly language implementations designed to extract the maximum performance from a GPIO
-		 * based design. Each one has been hand-tested and timed with a logic analyser to ensure it
-		 * meets its timing requirements.
-		 */
-
-		template<class TPinPackage,uint16_t TClockFrequency,uint16_t TLow,uint16_t THigh>
-		class Gpio16AccessMode;
-
-
-		/**
-		 * Specialisation for 72Mhz MCU clock, 50ns low and 50ns high write cycle periods. The 13.8ns
-		 * HCLK means that we actually achieve 55.2ns (+/- clock accuracy)
+		 * Specialisation for 72Mhz HCLK, 64K colour mode, 50ns low and 50ns high write cycle periods.
+		 * The 13.8ns HCLK means that we actually achieve 55.2ns (+/- clock accuracy)
 		 */
 
 		template<class TPinPackage>
-		class Gpio16AccessMode<TPinPackage,72,50,50> {
+		class Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50> {
 
 			protected:
 				uint32_t _controlSetAddress;
@@ -39,7 +28,7 @@ namespace stm32plus {
 				uint32_t _jump;
 
 			public:
-				Gpio16AccessMode();
+				Gpio16BitAccessMode();
 
 				void reset() const;
 
@@ -58,7 +47,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline Gpio16AccessMode<TPinPackage,72,50,50>::Gpio16AccessMode() {
+		inline Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::Gpio16BitAccessMode() {
 
 		  // the assembly code needs these
 
@@ -104,7 +93,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::reset() const {
+		inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::reset() const {
 
 			GPIO_TypeDef *port;
 
@@ -131,7 +120,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command) const {
+		inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeCommand(uint16_t command) const {
 
 			__asm volatile(
 				" str  %[value], [%[data]]          \n\t"			// port <= value
@@ -157,7 +146,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeCommand(uint16_t command,uint16_t parameter) const {
+		inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeCommand(uint16_t command,uint16_t parameter) const {
 			writeCommand(command);
 			writeData(parameter);
 		}
@@ -169,7 +158,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeData(uint16_t value) const {
+		inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeData(uint16_t value) const {
 
 			__asm volatile(
 				" str  %[value], [%[data]]          \n\t"			// port <= value
@@ -195,7 +184,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeDataAgain(uint16_t /* value */) const {
+		inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeDataAgain(uint16_t /* value */) const {
 
 			__asm volatile(
 				" str  %[wr], [%[creset], #0]   \n\t"				// [wr] = 0
@@ -214,12 +203,11 @@ namespace stm32plus {
 	 * highly optimised loop in bursts of 40 at a time. This value seems a good trade off between flash usage
 	 * and speed. Note the use of %= labels so that inlining doesn't produce duplicate names.
 	 * @param howMuch The number of 16-bit values to write
-	 * @param lo8 The low 8 bits of the value to write
-	 * @param hi8 The high 8 bits of the value to write. Many parameter values are 8-bits so this parameters defaults to zero.
+	 * @param value The data value to write
 	 */
 
 	template<class TPinPackage>
-	inline void Gpio16AccessMode<TPinPackage,72,50,50>::writeMultiData(uint32_t howMuch,uint16_t value) const {
+	inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeMultiData(uint32_t howMuch,uint16_t value) const {
 
 		__asm volatile(
 				"    str  %[value],   [%[data]]             		\n\t"			// port <= value
@@ -584,7 +572,7 @@ namespace stm32plus {
 		 */
 
 		template<class TPinPackage>
-		inline void Gpio16AccessMode<TPinPackage,72,50,50>::rawTransfer(const void *buffer,uint32_t numWords) const {
+		inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::rawTransfer(const void *buffer,uint32_t numWords) const {
 
 			const uint16_t *ptr=static_cast<const uint16_t *>(buffer);
 
