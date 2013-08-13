@@ -32,6 +32,7 @@ using namespace stm32plus::display;
  * LCD RESET  = PE0             // RESET/WR/RS must be on the same port
  * LCD_WR     = PE1
  * LCD_RS     = PE2
+ * LCD_VSYNC  = PE3							// input pin for vsync synchronisation
  *
  * Backlight PWM output = PA1
  *
@@ -75,7 +76,9 @@ class HX8352ATest {
 
 		LcdAccessMode *_accessMode;
 		LcdPanel *_gl;
+		Exti3 *_exti;
 		Font *_font;
+		volatile bool _vsync;
 
 	public:
 		void run() {
@@ -97,6 +100,13 @@ class HX8352ATest {
 
 			_gl->setBackground(0);
 			_gl->clearScreen();
+
+			// the LG KF700 used for this demo gives us a vsync signal that we can synchronize
+			// our drawing with. let's connect it to PE3 but don't subscribe to interrupts
+			// until we get to that part of the demo
+
+			GpioE<DefaultDigitalInputFeature<3>> pe;
+			_exti=new Exti3(EXTI_Mode_Interrupt,EXTI_Trigger_Rising,pe[3]);
 
 			// create the backlight on timer5, channel2 (PA1)
 
@@ -279,7 +289,9 @@ class HX8352ATest {
 			int i;
 			uint32_t start,duration;
 
-			prompt("Clear screen test");
+			// first run doesn't synchronise with vsync. tearing will be visible.
+
+			prompt("Clear screen test (no vsync)");
 
 			start=MillisecondTimer::millis();
 			for(i=0;i<200;i++) {
@@ -294,6 +306,51 @@ class HX8352ATest {
 
 			stopTimer("to clear one screen",duration);
 			MillisecondTimer::delay(3000);
+
+			prompt("Clear screen test (vsync synchronisation enabled)");
+
+			// subscribe to the interrupts
+
+			_exti->ExtiInterruptEventSender.insertSubscriber(
+					ExtiInterruptEventSourceSlot::bind(this,&HX8352ATest::onVsyncInterrupt)
+				);
+
+			start=MillisecondTimer::millis();
+			for(i=0;i<200;i++) {
+
+				_gl->setBackground(rand());
+
+				// wait for the next vsync signal
+
+				_vsync=false;
+				while(!_vsync);
+
+				// clear screen and reset the flag
+
+				_gl->clearScreen();
+			}
+			duration=(MillisecondTimer::millis()-start)/200;
+
+			// unsubscribe from the interrupts
+
+			_exti->ExtiInterruptEventSender.removeSubscriber(
+					ExtiInterruptEventSourceSlot::bind(this,&HX8352ATest::onVsyncInterrupt)
+				);
+
+			_gl->setForeground(ColourNames::WHITE);
+			_gl->setBackground(ColourNames::BLACK);
+			_gl->clearScreen();
+
+			stopTimer("to clear one screen",duration);
+			MillisecondTimer::delay(3000);
+		}
+
+		/**
+		 * Interrupt callback from the EXTI interrupt
+		 */
+
+		void onVsyncInterrupt(uint8_t /* extiLine */) {
+			_vsync=true;
 		}
 
 
