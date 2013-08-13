@@ -69,23 +69,23 @@ namespace stm32plus {
 
 			// reset the device
 
-			this->_accessMode.reset();
+			_accessMode.reset();
 
 			// start up the display
 
-			this->_accessMode.writeCommand(mc2pa8201::SLEEP_OUT);
+			_accessMode.writeCommand(mc2pa8201::SLEEP_OUT);
 			MillisecondTimer::delay(10);
-			this->_accessMode.writeCommand(mc2pa8201::DISPLAY_INVERSION_OFF);
-			this->_accessMode.writeCommand(mc2pa8201::IDLE_MODE_OFF);
-			this->_accessMode.writeCommand(mc2pa8201::NORMAL_DISPLAY_MODE_ON);
+			_accessMode.writeCommand(mc2pa8201::DISPLAY_INVERSION_OFF);
+			_accessMode.writeCommand(mc2pa8201::IDLE_MODE_OFF);
+			_accessMode.writeCommand(mc2pa8201::NORMAL_DISPLAY_MODE_ON);
 
 			// interface pixel format comes from the colour specialisation
 
-			this->_accessMode.writeCommand(mc2pa8201::INTERFACE_PIXEL_FORMAT,this->getInterfacePixelFormat());
+			_accessMode.writeCommand(mc2pa8201::INTERFACE_PIXEL_FORMAT,this->getInterfacePixelFormat());
 
 			// memory access control comes from the orientation specialisation
 
-			this->_accessMode.writeCommand(mc2pa8201::MEMORY_ACCESS_CONTROL,this->getMemoryAccessControl());
+			_accessMode.writeCommand(mc2pa8201::MEMORY_ACCESS_CONTROL,this->getMemoryAccessControl());
 
 			// reset the scrolling area
 
@@ -94,7 +94,7 @@ namespace stm32plus {
 			// wait the required number of ms. before we can turn the display on
 
 			MillisecondTimer::delay(125);
-			this->_accessMode.writeCommand(mc2pa8201::DISPLAY_ON);
+			_accessMode.writeCommand(mc2pa8201::DISPLAY_ON);
 		}
 
 
@@ -106,7 +106,7 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::applyGamma(MC2PA8201Gamma& gamma) const {
 
-		  this->_accessMode.writeCommand(mc2pa8201::GAMMA_SET,gamma[0] & 0xf);
+		  _accessMode.writeCommand(mc2pa8201::GAMMA_SET,gamma[0] & 0xf);
 		}
 
 
@@ -117,8 +117,8 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::sleep() const {
 
-			this->_accessMode.writeCommand(mc2pa8201::DISPLAY_OFF);
-			this->_accessMode.writeCommand(mc2pa8201::SLEEP_IN);
+			_accessMode.writeCommand(mc2pa8201::DISPLAY_OFF);
+			_accessMode.writeCommand(mc2pa8201::SLEEP_IN);
 			MillisecondTimer::delay(5);
 		}
 
@@ -130,9 +130,9 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::wake() const {
 
-			this->_accessMode.writeCommand(mc2pa8201::SLEEP_OUT);
+			_accessMode.writeCommand(mc2pa8201::SLEEP_OUT);
 			MillisecondTimer::delay(120);
-			this->_accessMode.writeCommand(mc2pa8201::DISPLAY_ON);
+			_accessMode.writeCommand(mc2pa8201::DISPLAY_ON);
 			MillisecondTimer::delay(5);
 		}
 
@@ -143,7 +143,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::beginWriting() const {
-		  this->_accessMode.writeCommand(mc2pa8201::MEMORY_WRITE);
+		  _accessMode.writeCommand(mc2pa8201::MEMORY_WRITE);
 		}
 
 
@@ -159,13 +159,13 @@ namespace stm32plus {
 
 			bfa=TPanelTraits::getScrollHeight()-height-y;
 
-			this->_accessMode.writeCommand(mc2pa8201::VERTICAL_SCROLLING_DEFINITION);
-			this->_accessMode.writeData(y >> 8);
-			this->_accessMode.writeData(y & 0xff);
-			this->_accessMode.writeData(height >> 8);
-			this->_accessMode.writeData(height & 0xff);
-			this->_accessMode.writeData(bfa >> 8);
-			this->_accessMode.writeData(bfa & 0xff);
+			_accessMode.writeCommand(mc2pa8201::VERTICAL_SCROLLING_DEFINITION);
+			_accessMode.writeData(y >> 8);
+			_accessMode.writeData(y & 0xff);
+			_accessMode.writeData(height >> 8);
+			_accessMode.writeData(height & 0xff);
+			_accessMode.writeData(bfa >> 8);
+			_accessMode.writeData(bfa & 0xff);
 		}
 	}
 }

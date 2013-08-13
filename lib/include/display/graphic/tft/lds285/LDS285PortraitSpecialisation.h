@@ -107,19 +107,19 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void LDS285Orientation<PORTRAIT,TAccessMode,TPanelTraits>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<PORTRAIT>());
+			_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<PORTRAIT>());
 
-			this->_accessMode.writeData(0);	        // x=0..239
-			this->_accessMode.writeData(xstart);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(xend);
+			_accessMode.writeData(0);	        // x=0..239
+			_accessMode.writeData(xstart);
+			_accessMode.writeData(0);
+			_accessMode.writeData(xend);
 
-			this->_accessMode.writeCommand(TPanelTraits::template getRowAddressCommand<PORTRAIT>());
+			_accessMode.writeCommand(TPanelTraits::template getRowAddressCommand<PORTRAIT>());
 
-			this->_accessMode.writeData(ystart >> 8);    // y=0..319
-			this->_accessMode.writeData(ystart & 0xff);
-			this->_accessMode.writeData(yend >> 8);
-			this->_accessMode.writeData(yend & 0xff);
+			_accessMode.writeData(ystart >> 8);    // y=0..319
+			_accessMode.writeData(ystart & 0xff);
+			_accessMode.writeData(yend >> 8);
+			_accessMode.writeData(yend & 0xff);
 		}
 
 
@@ -132,12 +132,12 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void LDS285Orientation<PORTRAIT,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
 
-			this->_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<PORTRAIT>());
+			_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<PORTRAIT>());
 
-			this->_accessMode.writeData(0);	        // x=0..239
-			this->_accessMode.writeData(xstart);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(xend);
+			_accessMode.writeData(0);	        // x=0..239
+			_accessMode.writeData(xstart);
+			_accessMode.writeData(0);
+			_accessMode.writeData(xend);
 		}
 
 
@@ -150,12 +150,12 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void LDS285Orientation<PORTRAIT,TAccessMode,TPanelTraits>::moveY(int16_t ystart,int16_t yend) const {
 
-			this->_accessMode.writeCommand(TPanelTraits::template getRowAddressCommand<PORTRAIT>());
+			_accessMode.writeCommand(TPanelTraits::template getRowAddressCommand<PORTRAIT>());
 
-			this->_accessMode.writeData(ystart >> 8);    // y=0..319
-			this->_accessMode.writeData(ystart & 0xff);
-			this->_accessMode.writeData(yend >> 8);
-			this->_accessMode.writeData(yend & 0xff);
+			_accessMode.writeData(ystart >> 8);    // y=0..319
+			_accessMode.writeData(ystart & 0xff);
+			_accessMode.writeData(yend >> 8);
+			_accessMode.writeData(yend & 0xff);
 		}
 
 
@@ -176,9 +176,9 @@ namespace stm32plus {
 
 			// write to the register
 
-			this->_accessMode.writeCommand(lds285::VERTICAL_SCROLLING_START_ADDRESS);
-			this->_accessMode.writeData(scrollPosition >> 8);
-			this->_accessMode.writeData(scrollPosition & 0xff);
+			_accessMode.writeCommand(lds285::VERTICAL_SCROLLING_START_ADDRESS);
+			_accessMode.writeData(scrollPosition >> 8);
+			_accessMode.writeData(scrollPosition & 0xff);
 		}
 	}
 }

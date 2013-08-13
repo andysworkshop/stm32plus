@@ -107,14 +107,14 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void LGDP453xOrientation<PORTRAIT,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionStartCmd::Opcode,xstart);
-			this->_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionEndCmd::Opcode,xend);
+			_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionStartCmd::Opcode,xstart);
+			_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionEndCmd::Opcode,xend);
 
-			this->_accessMode.writeCommand(lgdp453x::VerticalRAMPositionStartCmd::Opcode,ystart);
-			this->_accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
+			_accessMode.writeCommand(lgdp453x::VerticalRAMPositionStartCmd::Opcode,ystart);
+			_accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
 
-			this->_accessMode.writeCommand(lgdp453x::HorizontalAddressCmd::Opcode,xstart);
-			this->_accessMode.writeCommand(lgdp453x::VerticalAddressCmd::Opcode,ystart);
+			_accessMode.writeCommand(lgdp453x::HorizontalAddressCmd::Opcode,xstart);
+			_accessMode.writeCommand(lgdp453x::VerticalAddressCmd::Opcode,ystart);
 		}
 
 		/**
@@ -125,9 +125,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void LGDP453xOrientation<PORTRAIT,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
-			this->_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionStartCmd::Opcode,xstart);
-			this->_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionEndCmd::Opcode,xend);
-			this->_accessMode.writeCommand(lgdp453x::HorizontalAddressCmd::Opcode,xstart);
+			_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionStartCmd::Opcode,xstart);
+			_accessMode.writeCommand(lgdp453x::HorizontalRAMPositionEndCmd::Opcode,xend);
+			_accessMode.writeCommand(lgdp453x::HorizontalAddressCmd::Opcode,xstart);
 		}
 
 
@@ -139,9 +139,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void LGDP453xOrientation<PORTRAIT,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
-			this->_accessMode.writeCommand(lgdp453x::VerticalRAMPositionStartCmd::Opcode,ystart);
-			this->_accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
-			this->_accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
+			_accessMode.writeCommand(lgdp453x::VerticalRAMPositionStartCmd::Opcode,ystart);
+			_accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
+			_accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
 		}
 
 
@@ -160,7 +160,7 @@ namespace stm32plus {
 
       // write to the register
 
-      this->_accessMode.writeCommand(lgdp453x::GateScanControlScrollCmd::Opcode,scrollPosition);
+      _accessMode.writeCommand(lgdp453x::GateScanControlScrollCmd::Opcode,scrollPosition);
 		}
 	}
 }

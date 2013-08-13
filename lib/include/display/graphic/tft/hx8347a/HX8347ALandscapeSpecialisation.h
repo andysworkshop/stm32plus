@@ -109,15 +109,15 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void HX8347AOrientation<LANDSCAPE,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
-			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
-			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,xend >> 8);
-			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,xend & 0xff);
+			_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
+			_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
+			_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,xend >> 8);
+			_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,xend & 0xff);
 
-			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
-			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);
-			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,yend >> 8);
-			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,yend & 0xff);
+			_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
+			_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);
+			_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,yend >> 8);
+			_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,yend & 0xff);
 		}
 
 
@@ -130,10 +130,10 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void HX8347AOrientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
 
-			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
-			this->_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
-			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,xend >> 8);
-			this->_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,xend & 0xff);
+			_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeHigh,xstart >> 8);
+			_accessMode.writeCommand(ColumnAddressStartCmd::OpcodeLow,xstart & 0xff);
+			_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeHigh,xend >> 8);
+			_accessMode.writeCommand(ColumnAddressEndCmd::OpcodeLow,xend & 0xff);
 		}
 
 
@@ -146,10 +146,10 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void HX8347AOrientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
 
-			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
-			this->_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);
-			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,yend >> 8);
-			this->_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,yend & 0xff);
+			_accessMode.writeCommand(RowAddressStartCmd::OpcodeHigh,ystart >> 8);
+			_accessMode.writeCommand(RowAddressStartCmd::OpcodeLow,ystart & 0xff);
+			_accessMode.writeCommand(RowAddressEndCmd::OpcodeHigh,yend >> 8);
+			_accessMode.writeCommand(RowAddressEndCmd::OpcodeLow,yend & 0xff);
 		}
 
 
@@ -168,8 +168,8 @@ namespace stm32plus {
 
       // write to the register
 
-			this->_accessMode.writeCommand(SetScrollStartCmd::OpcodeHigh,(scrollPosition >> 8));
-			this->_accessMode.writeCommand(SetScrollStartCmd::OpcodeLow,scrollPosition & 0xff);
+			_accessMode.writeCommand(SetScrollStartCmd::OpcodeHigh,(scrollPosition >> 8));
+			_accessMode.writeCommand(SetScrollStartCmd::OpcodeLow,scrollPosition & 0xff);
 		}
 	}
 }

@@ -107,15 +107,15 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AOrientation<PORTRAIT,TAccessMode,TPanelTraits>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,xstart >> 8);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,xstart & 0xff);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,xend >> 8);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,xend & 0xff);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,xstart >> 8);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,xstart & 0xff);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,xend >> 8);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,xend & 0xff);
 
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,ystart >> 8);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,ystart & 0xff);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,yend >> 8);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,yend & 0xff);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,ystart >> 8);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,ystart & 0xff);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,yend >> 8);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,yend & 0xff);
 		}
 
 
@@ -128,10 +128,10 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AOrientation<PORTRAIT,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
 
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,xstart >> 8);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,xstart & 0xff);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,xend >> 8);
-			this->_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,xend & 0xff);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_H,xstart >> 8);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_START_L,xstart & 0xff);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_H,xend >> 8);
+			_accessMode.writeCommand(hx8352a::COLUMN_ADDRESS_END_L,xend & 0xff);
 		}
 
 
@@ -144,10 +144,10 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void HX8352AOrientation<PORTRAIT,TAccessMode,TPanelTraits>::moveY(int16_t ystart,int16_t yend) const {
 
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,ystart >> 8);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,ystart & 0xff);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,yend >> 8);
-			this->_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,yend & 0xff);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_H,ystart >> 8);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_START_L,ystart & 0xff);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_H,yend >> 8);
+			_accessMode.writeCommand(hx8352a::ROW_ADDRESS_END_L,yend & 0xff);
 		}
 
 
@@ -166,8 +166,8 @@ namespace stm32plus {
 
       // write to the register
 
-			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_START_ADDRESS_H,(scrollPosition >> 8));
-			this->_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_START_ADDRESS_L,scrollPosition & 0xff);
+			_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_START_ADDRESS_H,(scrollPosition >> 8));
+			_accessMode.writeCommand(hx8352a::VERTICAL_SCROLL_START_ADDRESS_L,scrollPosition & 0xff);
 		}
 	}
 }

@@ -114,17 +114,17 @@ namespace stm32plus {
 
 			yoffset=432-TPanelTraits::LONG_SIDE;
 
-			this->_accessMode.writeCommand(ili9327::SetColumnAddressCmd::Opcode);
-			this->_accessMode.writeData(xstart >> 8);
-			this->_accessMode.writeData(xstart & 0xff);
-			this->_accessMode.writeData(xend >>8);
-			this->_accessMode.writeData(xend & 0xff);
+			_accessMode.writeCommand(ili9327::SetColumnAddressCmd::Opcode);
+			_accessMode.writeData(xstart >> 8);
+			_accessMode.writeData(xstart & 0xff);
+			_accessMode.writeData(xend >>8);
+			_accessMode.writeData(xend & 0xff);
 
-			this->_accessMode.writeCommand(ili9327::SetPageAddressCmd::Opcode);
-			this->_accessMode.writeData((ystart+yoffset) >> 8);
-			this->_accessMode.writeData((ystart+yoffset) & 0xff);
-			this->_accessMode.writeData((yend+yoffset) >>8);
-			this->_accessMode.writeData((yend+yoffset) & 0xff);
+			_accessMode.writeCommand(ili9327::SetPageAddressCmd::Opcode);
+			_accessMode.writeData((ystart+yoffset) >> 8);
+			_accessMode.writeData((ystart+yoffset) & 0xff);
+			_accessMode.writeData((yend+yoffset) >>8);
+			_accessMode.writeData((yend+yoffset) & 0xff);
 		}
 
 
@@ -136,11 +136,11 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void ILI9327Orientation<PORTRAIT,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
-			this->_accessMode.writeCommand(ili9327::SetColumnAddressCmd::Opcode);
-			this->_accessMode.writeData(xstart >> 8);
-			this->_accessMode.writeData(xstart & 0xff);
-			this->_accessMode.writeData(xend >>8);
-			this->_accessMode.writeData(xend & 0xff);
+			_accessMode.writeCommand(ili9327::SetColumnAddressCmd::Opcode);
+			_accessMode.writeData(xstart >> 8);
+			_accessMode.writeData(xstart & 0xff);
+			_accessMode.writeData(xend >>8);
+			_accessMode.writeData(xend & 0xff);
 		}
 
 
@@ -159,11 +159,11 @@ namespace stm32plus {
 
 			yoffset=432-TPanelTraits::LONG_SIDE;
 
-			this->_accessMode.writeCommand(ili9327::SetPageAddressCmd::Opcode);
-			this->_accessMode.writeData((ystart+yoffset) >> 8);
-			this->_accessMode.writeData((ystart+yoffset) & 0xff);
-			this->_accessMode.writeData((yend+yoffset) >>8);
-			this->_accessMode.writeData((yend+yoffset) & 0xff);
+			_accessMode.writeCommand(ili9327::SetPageAddressCmd::Opcode);
+			_accessMode.writeData((ystart+yoffset) >> 8);
+			_accessMode.writeData((ystart+yoffset) & 0xff);
+			_accessMode.writeData((yend+yoffset) >>8);
+			_accessMode.writeData((yend+yoffset) & 0xff);
 		}
 
 
@@ -186,8 +186,8 @@ namespace stm32plus {
 
       // write to the register
 
-			this->_accessMode.writeCommand(ili9327::SetScrollStartCmd::Opcode,((scrollPosition + yoffset) >> 8) & 1);
-			this->_accessMode.writeData((scrollPosition + yoffset) & 0xff);
+			_accessMode.writeCommand(ili9327::SetScrollStartCmd::Opcode,((scrollPosition + yoffset) >> 8) & 1);
+			_accessMode.writeData((scrollPosition + yoffset) & 0xff);
 		}
 	}
 }

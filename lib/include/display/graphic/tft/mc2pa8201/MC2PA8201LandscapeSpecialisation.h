@@ -107,19 +107,19 @@ namespace stm32plus {
 		template<class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<LANDSCAPE>());
+			_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<LANDSCAPE>());
 
-			this->_accessMode.writeData(xstart >> 8);					// x=0..319
-			this->_accessMode.writeData(xstart & 0xff);
-			this->_accessMode.writeData(xend >> 8);
-			this->_accessMode.writeData(xend & 0xff);
+			_accessMode.writeData(xstart >> 8);					// x=0..319
+			_accessMode.writeData(xstart & 0xff);
+			_accessMode.writeData(xend >> 8);
+			_accessMode.writeData(xend & 0xff);
 
-			this->_accessMode.writeCommand(TPanelTraits::template getPageAddressCommand<LANDSCAPE>());
+			_accessMode.writeCommand(TPanelTraits::template getPageAddressCommand<LANDSCAPE>());
 
-			this->_accessMode.writeData(0);										// y=0..239
-			this->_accessMode.writeData(ystart);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(yend);
+			_accessMode.writeData(0);										// y=0..239
+			_accessMode.writeData(ystart);
+			_accessMode.writeData(0);
+			_accessMode.writeData(yend);
 		}
 
 
@@ -131,12 +131,12 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveX(int16_t xstart,int16_t xend) const {
-			this->_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<LANDSCAPE>());
+			_accessMode.writeCommand(TPanelTraits::template getColumnAddressCommand<LANDSCAPE>());
 
-			this->_accessMode.writeData(xstart >> 8);					// x=0..319
-			this->_accessMode.writeData(xstart & 0xff);
-			this->_accessMode.writeData(xend >> 8);
-			this->_accessMode.writeData(xend & 0xff);
+			_accessMode.writeData(xstart >> 8);					// x=0..319
+			_accessMode.writeData(xstart & 0xff);
+			_accessMode.writeData(xend >> 8);
+			_accessMode.writeData(xend & 0xff);
 		}
 
 
@@ -148,12 +148,12 @@ namespace stm32plus {
 
 		template<class TAccessMode,class TPanelTraits>
 		inline void MC2PA8201Orientation<LANDSCAPE,TAccessMode,TPanelTraits>::moveY(int16_t ystart,int16_t yend) const {
-			this->_accessMode.writeCommand(TPanelTraits::template getPageAddressCommand<LANDSCAPE>());
+			_accessMode.writeCommand(TPanelTraits::template getPageAddressCommand<LANDSCAPE>());
 
-			this->_accessMode.writeData(0);								// y=0..239
-			this->_accessMode.writeData(ystart);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(yend);
+			_accessMode.writeData(0);								// y=0..239
+			_accessMode.writeData(ystart);
+			_accessMode.writeData(0);
+			_accessMode.writeData(yend);
 		}
 
 
@@ -178,9 +178,9 @@ namespace stm32plus {
 
 			// write to the register
 
-			this->_accessMode.writeCommand(mc2pa8201::VERTICAL_SCROLLING_START_ADDRESS);
-			this->_accessMode.writeData(scrollPosition >> 8);
-			this->_accessMode.writeData(scrollPosition & 0xff);
+			_accessMode.writeCommand(mc2pa8201::VERTICAL_SCROLLING_START_ADDRESS);
+			_accessMode.writeData(scrollPosition >> 8);
+			_accessMode.writeData(scrollPosition & 0xff);
 		}
 	}
 }

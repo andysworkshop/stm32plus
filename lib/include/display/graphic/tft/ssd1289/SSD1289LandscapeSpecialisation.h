@@ -107,12 +107,12 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,(yend << 8) | ystart);
-			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,ystart);
+			_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,(yend << 8) | ystart);
+			_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,ystart);
 
-			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,xstart);
-			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,xend);
-			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,xstart);
+			_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,xstart);
+			_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,xend);
+			_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,xstart);
 		}
 
 
@@ -124,9 +124,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
-			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,xstart);
-			this->_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,xend);
-			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,xstart);
+			_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_START,xstart);
+			_accessMode.writeCommand(ssd1289::VERTICAL_POSITION_END,xend);
+			_accessMode.writeCommand(ssd1289::SET_GDDRAM_Y,xstart);
 		}
 
 
@@ -138,8 +138,8 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void SSD1289Orientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
-			this->_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,(yend << 8) | ystart);
-			this->_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,ystart);
+			_accessMode.writeCommand(ssd1289::HORIZONTAL_POSITION,(yend << 8) | ystart);
+			_accessMode.writeCommand(ssd1289::SET_GDDRAM_X,ystart);
 		}
 
 
@@ -158,7 +158,7 @@ namespace stm32plus {
 
       // write to the register
 
-      this->_accessMode.writeCommand(ssd1289::GATE_SCAN_POSITION,scrollPosition);
+      _accessMode.writeCommand(ssd1289::GATE_SCAN_POSITION,scrollPosition);
 		}
 	}
 }

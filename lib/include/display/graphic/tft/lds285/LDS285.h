@@ -80,15 +80,15 @@ namespace stm32plus {
 
 			// reset the device
 
-			this->_accessMode.reset();
+			_accessMode.reset();
 
 			// start up the display
 
-			this->_accessMode.writeCommand(lds285::SLEEP_OUT);
+			_accessMode.writeCommand(lds285::SLEEP_OUT);
 			MillisecondTimer::delay(10);
-			this->_accessMode.writeCommand(lds285::DISPLAY_INVERSION_OFF);
-			this->_accessMode.writeCommand(lds285::IDLE_MODE_OFF);
-			this->_accessMode.writeCommand(lds285::NORMAL_DISPLAY_MODE_ON);
+			_accessMode.writeCommand(lds285::DISPLAY_INVERSION_OFF);
+			_accessMode.writeCommand(lds285::IDLE_MODE_OFF);
+			_accessMode.writeCommand(lds285::NORMAL_DISPLAY_MODE_ON);
 
 			// reset scroll area and position
 
@@ -97,22 +97,22 @@ namespace stm32plus {
 
 			// memory access control comes from the orientation specialisation
 
-			this->_accessMode.writeCommand(lds285::MEMORY_ACCESS_CONTROL,this->getMemoryAccessControl());
+			_accessMode.writeCommand(lds285::MEMORY_ACCESS_CONTROL,this->getMemoryAccessControl());
 
 			// interface pixel format comes from the colour specialisation
 
-			this->_accessMode.writeCommand(lds285::INTERFACE_PIXEL_FORMAT,this->getInterfacePixelFormat());
+			_accessMode.writeCommand(lds285::INTERFACE_PIXEL_FORMAT,this->getInterfacePixelFormat());
 
 			// brightness enabled for GUI and to zero to start with
 
 			setBacklight(0);
-			this->_accessMode.writeCommand(lds285::WRITE_CTRL_DISPLAY,0x24);
+			_accessMode.writeCommand(lds285::WRITE_CTRL_DISPLAY,0x24);
 			setContentAdaptiveImageType(CONTENT_ADAPTIVE_BRIGHTNESS_TYPE_GUI);
 
 			// wait the required number of ms. before we can turn the display on
 
 			MillisecondTimer::delay(125);
-			this->_accessMode.writeCommand(lds285::DISPLAY_ON);
+			_accessMode.writeCommand(lds285::DISPLAY_ON);
 		}
 
 
@@ -151,7 +151,7 @@ namespace stm32plus {
 
 		  value=static_cast<uint8_t>((255*(uint16_t)percentage)/100);
 
-				this->_accessMode.writeCommand(lds285::WRITE_DISPLAY_BRIGHTNESS,value);
+				_accessMode.writeCommand(lds285::WRITE_DISPLAY_BRIGHTNESS,value);
 			_backlightPercentage=percentage;
 		}
 
@@ -163,7 +163,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void LDS285<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::setContentAdaptiveImageType(uint8_t type) const {
-			this->_accessMode.writeCommand(lds285::WRITE_CONTENT_ADAPTIVE_BRIGHTNESS,type);
+			_accessMode.writeCommand(lds285::WRITE_CONTENT_ADAPTIVE_BRIGHTNESS,type);
 		}
 
 
@@ -175,7 +175,7 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void LDS285<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::applyGamma(LDS285Gamma& gamma) const {
 
-		  this->_accessMode.writeCommand(lds285::GAMMA_SET,gamma[0] & 0xf);
+		  _accessMode.writeCommand(lds285::GAMMA_SET,gamma[0] & 0xf);
 		}
 
 
@@ -186,8 +186,8 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void LDS285<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::sleep() const {
 
-			this->_accessMode.writeCommand(lds285::DISPLAY_OFF);
-			this->_accessMode.writeCommand(lds285::SLEEP_IN);
+			_accessMode.writeCommand(lds285::DISPLAY_OFF);
+			_accessMode.writeCommand(lds285::SLEEP_IN);
 			MillisecondTimer::delay(5);
 		}
 
@@ -199,9 +199,9 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void LDS285<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::wake() const {
 
-			this->_accessMode.writeCommand(lds285::SLEEP_OUT);
+			_accessMode.writeCommand(lds285::SLEEP_OUT);
 			MillisecondTimer::delay(120);
-			this->_accessMode.writeCommand(lds285::DISPLAY_ON);
+			_accessMode.writeCommand(lds285::DISPLAY_ON);
 			MillisecondTimer::delay(5);
 		}
 
@@ -212,7 +212,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void LDS285<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::beginWriting() const {
-		  this->_accessMode.writeCommand(lds285::MEMORY_WRITE);
+		  _accessMode.writeCommand(lds285::MEMORY_WRITE);
 		}
 
 
@@ -228,13 +228,13 @@ namespace stm32plus {
 
 			bfa=320-height-y;
 
-			this->_accessMode.writeCommand(lds285::VERTICAL_SCROLLING_DEFINITION);
-			this->_accessMode.writeData(y >> 8);
-			this->_accessMode.writeData(y & 0xff);
-			this->_accessMode.writeData(height >> 8);
-			this->_accessMode.writeData(height & 0xff);
-			this->_accessMode.writeData(bfa >> 8);
-			this->_accessMode.writeData(bfa & 0xff);
+			_accessMode.writeCommand(lds285::VERTICAL_SCROLLING_DEFINITION);
+			_accessMode.writeData(y >> 8);
+			_accessMode.writeData(y & 0xff);
+			_accessMode.writeData(height >> 8);
+			_accessMode.writeData(height & 0xff);
+			_accessMode.writeData(bfa >> 8);
+			_accessMode.writeData(bfa & 0xff);
 		}
 	}
 }

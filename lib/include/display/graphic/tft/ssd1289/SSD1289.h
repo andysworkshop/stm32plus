@@ -68,35 +68,35 @@ namespace stm32plus {
 
 			// reset the device
 
-			this->_accessMode.reset();
+			_accessMode.reset();
 
 			// init sequence: datashee 15.5 "Display ON Sequence"
 
 			// GON = 1, DTE = 0, D[1:0] = 01
-			this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x21);
+			_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x21);
 
 			// oscillator ON
-			this->_accessMode.writeCommand(ssd1289::OSCILLATOR,0x01);
+			_accessMode.writeCommand(ssd1289::OSCILLATOR,0x01);
 
 			// GON = 1, DTE = 0, D[1:0] = 11
-			this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x23);
+			_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x23);
 
 			// Exit sleep mode
-			this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
+			_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
 
 			MillisecondTimer::delay(35);
 
 			// GON = 1, DTE = 1, D[1:0] = 11
-			this->_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x33);
+			_accessMode.writeCommand(ssd1289::DISPLAY_CONTROL,0x33);
 
 			// BGR etc.
-			this->_accessMode.writeCommand(ssd1289::DRIVER_OUTPUT_CONTROL,0x13f | 0x2000 | 0x800 | 0x200);
+			_accessMode.writeCommand(ssd1289::DRIVER_OUTPUT_CONTROL,0x13f | 0x2000 | 0x800 | 0x200);
 
 			// entry mode: colour and orientation
-			this->_accessMode.writeCommand(ssd1289::ENTRY_MODE,this->getColourEntryMode() | this->getOrientationEntryMode());
+			_accessMode.writeCommand(ssd1289::ENTRY_MODE,this->getColourEntryMode() | this->getOrientationEntryMode());
 
 			// driving waveform control
-			this->_accessMode.writeCommand(ssd1289::DRIVING_WAVEFORM_CONTROL,0x600);
+			_accessMode.writeCommand(ssd1289::DRIVING_WAVEFORM_CONTROL,0x600);
 		}
 
 
@@ -108,16 +108,16 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::applyGamma(SSD1289Gamma& gamma) const {
 
-			this->_accessMode.writeCommand(ssd1289::GAMMA_0,gamma[0]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_1,gamma[1]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_2,gamma[2]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_3,gamma[3]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_4,gamma[4]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_5,gamma[5]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_6,gamma[6]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_7,gamma[7]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_8,gamma[8]);
-			this->_accessMode.writeCommand(ssd1289::GAMMA_9,gamma[9]);
+			_accessMode.writeCommand(ssd1289::GAMMA_0,gamma[0]);
+			_accessMode.writeCommand(ssd1289::GAMMA_1,gamma[1]);
+			_accessMode.writeCommand(ssd1289::GAMMA_2,gamma[2]);
+			_accessMode.writeCommand(ssd1289::GAMMA_3,gamma[3]);
+			_accessMode.writeCommand(ssd1289::GAMMA_4,gamma[4]);
+			_accessMode.writeCommand(ssd1289::GAMMA_5,gamma[5]);
+			_accessMode.writeCommand(ssd1289::GAMMA_6,gamma[6]);
+			_accessMode.writeCommand(ssd1289::GAMMA_7,gamma[7]);
+			_accessMode.writeCommand(ssd1289::GAMMA_8,gamma[8]);
+			_accessMode.writeCommand(ssd1289::GAMMA_9,gamma[9]);
 		}
 
 
@@ -127,7 +127,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::sleep() const {
-		  this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x01);
+		  _accessMode.writeCommand(ssd1289::SLEEP_MODE,0x01);
 		}
 
 
@@ -137,7 +137,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::wake() const {
-		  this->_accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
+		  _accessMode.writeCommand(ssd1289::SLEEP_MODE,0x00);
 		}
 
 
@@ -147,7 +147,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::beginWriting() const {
-		  this->_accessMode.writeCommand(ssd1289::GRAM_WRITE_DATA);
+		  _accessMode.writeCommand(ssd1289::GRAM_WRITE_DATA);
 		}
 	}
 }

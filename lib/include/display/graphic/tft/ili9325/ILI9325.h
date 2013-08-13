@@ -68,113 +68,113 @@ namespace stm32plus {
 
 			// reset the device
 
-			this->_accessMode.reset();
+			_accessMode.reset();
 
 			// somewhat large power-on sequence
 
-			this->_accessMode.writeCommand(ili9325::TimingCtrl1::Opcode,0x3008); // Set internal timing
-			this->_accessMode.writeCommand(ili9325::TimingCtrl2::Opcode,0x0012); // Set internal timing
-			this->_accessMode.writeCommand(ili9325::TimingCtrl3::Opcode,0x1231); // Set internal timing
+			_accessMode.writeCommand(ili9325::TimingCtrl1::Opcode,0x3008); // Set internal timing
+			_accessMode.writeCommand(ili9325::TimingCtrl2::Opcode,0x0012); // Set internal timing
+			_accessMode.writeCommand(ili9325::TimingCtrl3::Opcode,0x1231); // Set internal timing
 
-			this->_accessMode.writeCommand(ili9325::StartOscillationCmd::Opcode,ili9325::StartOscillationCmd::Enable);
-			this->_accessMode.writeCommand(ili9325::DriverOutputControlCmd::Opcode,ili9325::DriverOutputControlCmd::SS);
+			_accessMode.writeCommand(ili9325::StartOscillationCmd::Opcode,ili9325::StartOscillationCmd::Enable);
+			_accessMode.writeCommand(ili9325::DriverOutputControlCmd::Opcode,ili9325::DriverOutputControlCmd::SS);
 
 			// set 1 line inversion
-			this->_accessMode.writeCommand(ili9325::DrivingWaveControlCmd::Opcode,ili9325::DrivingWaveControlCmd::FixedBits | ili9325::DrivingWaveControlCmd::EOR | ili9325::DrivingWaveControlCmd::BC);
+			_accessMode.writeCommand(ili9325::DrivingWaveControlCmd::Opcode,ili9325::DrivingWaveControlCmd::FixedBits | ili9325::DrivingWaveControlCmd::EOR | ili9325::DrivingWaveControlCmd::BC);
 
 			// no resizing
-			this->_accessMode.writeCommand(ili9325::ResizingControlCmd::Opcode,ili9325::ResizingControlCmd::NO_RESIZING);
+			_accessMode.writeCommand(ili9325::ResizingControlCmd::Opcode,ili9325::ResizingControlCmd::NO_RESIZING);
 
 			// front and back porch = 2
-			this->_accessMode.writeCommand(ili9325::DisplayCtrl2Cmd::Opcode,ili9325::DisplayCtrl2Cmd::FRONT_PORCH(2) | ili9325::DisplayCtrl2Cmd::BACK_PORCH(2));
+			_accessMode.writeCommand(ili9325::DisplayCtrl2Cmd::Opcode,ili9325::DisplayCtrl2Cmd::FRONT_PORCH(2) | ili9325::DisplayCtrl2Cmd::BACK_PORCH(2));
 
-			this->_accessMode.writeCommand(ili9325::DisplayCtrl3Cmd::Opcode,0);
-			this->_accessMode.writeCommand(ili9325::DisplayCtrl4Cmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::DisplayCtrl3Cmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::DisplayCtrl4Cmd::Opcode,0);
 
-			this->_accessMode.writeCommand(ili9325::RGBDisplayInterfaceCtrl1Cmd::Opcode,ili9325::RGBDisplayInterfaceCtrl1Cmd::RGB18 | ili9325::RGBDisplayInterfaceCtrl1Cmd::MODE_INTERNAL_CLOCK);
+			_accessMode.writeCommand(ili9325::RGBDisplayInterfaceCtrl1Cmd::Opcode,ili9325::RGBDisplayInterfaceCtrl1Cmd::RGB18 | ili9325::RGBDisplayInterfaceCtrl1Cmd::MODE_INTERNAL_CLOCK);
 
-			this->_accessMode.writeCommand(ili9325::FrameMarkerPositionCmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::FrameMarkerPositionCmd::Opcode,0);
 
-			this->_accessMode.writeCommand(ili9325::RGBDisplayInterfaceCtrl2Cmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::RGBDisplayInterfaceCtrl2Cmd::Opcode,0);
 
 			// power On sequence
 
-			this->_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::AP_HALT);
+			_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::AP_HALT);
 
-			this->_accessMode.writeCommand(ili9325::PowerCtrl2Cmd::Opcode,ili9325::PowerCtrl2Cmd::VC_100 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ1_1 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ2_4);
+			_accessMode.writeCommand(ili9325::PowerCtrl2Cmd::Opcode,ili9325::PowerCtrl2Cmd::VC_100 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ1_1 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ2_4);
 
-			this->_accessMode.writeCommand(ili9325::PowerCtrl3Cmd::Opcode,0);
-			this->_accessMode.writeCommand(ili9325::PowerCtrl4Cmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::PowerCtrl3Cmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::PowerCtrl4Cmd::Opcode,0);
 
 			// discharge capacitor power voltage
 			MillisecondTimer::delay(200);
 
-			this->_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::APE | ili9325::PowerCtrl1Cmd::AP_1_1 | ili9325::PowerCtrl1Cmd::STEP_UP_FACTOR(6) | ili9325::PowerCtrl1Cmd::SOURCE_DRIVER_ENABLE);
-			this->_accessMode.writeCommand(ili9325::PowerCtrl2Cmd::Opcode,ili9325::PowerCtrl2Cmd::VC_100 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ1_4 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ2_16);
+			_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::APE | ili9325::PowerCtrl1Cmd::AP_1_1 | ili9325::PowerCtrl1Cmd::STEP_UP_FACTOR(6) | ili9325::PowerCtrl1Cmd::SOURCE_DRIVER_ENABLE);
+			_accessMode.writeCommand(ili9325::PowerCtrl2Cmd::Opcode,ili9325::PowerCtrl2Cmd::VC_100 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ1_4 | ili9325::PowerCtrl2Cmd::STEPUP_FREQ2_16);
 
 			// Delay 50ms
 			MillisecondTimer::delay(50);
 
 			// External reference voltage= Vci;
-			this->_accessMode.writeCommand(ili9325::PowerCtrl3Cmd::Opcode,ili9325::PowerCtrl3Cmd::VRH(12) | ili9325::PowerCtrl3Cmd::PON);
+			_accessMode.writeCommand(ili9325::PowerCtrl3Cmd::Opcode,ili9325::PowerCtrl3Cmd::VRH(12) | ili9325::PowerCtrl3Cmd::PON);
 
 			// Delay 50ms
 			MillisecondTimer::delay(50);
 
-			this->_accessMode.writeCommand(ili9325::PowerCtrl4Cmd::Opcode,ili9325::PowerCtrl4Cmd::VDV(0x18));
+			_accessMode.writeCommand(ili9325::PowerCtrl4Cmd::Opcode,ili9325::PowerCtrl4Cmd::VDV(0x18));
 
 			// R29=000C when R12=009D;VCM[5:0] for VCOMH
-			this->_accessMode.writeCommand(ili9325::PowerCtrl7Cmd::Opcode,0x1C);
+			_accessMode.writeCommand(ili9325::PowerCtrl7Cmd::Opcode,0x1C);
 
 			// Frame Rate = 128Hz
-			this->_accessMode.writeCommand(ili9325::FrameRateAndColorControlCmd::Opcode,ili9325::FrameRateAndColorControlCmd::FR_128);
+			_accessMode.writeCommand(ili9325::FrameRateAndColorControlCmd::Opcode,ili9325::FrameRateAndColorControlCmd::FR_128);
 
 			// Delay 50ms
 			MillisecondTimer::delay(50);
 
 			// move the cursor to (0,0)
-			this->_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,0);
-			this->_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,0);
+			_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,0);
 
 			// Set GRAM area
 
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,0); // Horizontal GRAM Start Address
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,239); // Horizontal GRAM End Address
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,0); // Vertical GRAM Start Address
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,319); // Vertical GRAM Start Address
+			_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,0); // Horizontal GRAM Start Address
+			_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,239); // Horizontal GRAM End Address
+			_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,0); // Vertical GRAM Start Address
+			_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,319); // Vertical GRAM Start Address
 
 			// Gate scan line
-			this->_accessMode.writeCommand(ili9325::GateScanControl1Cmd::Opcode,ili9325::GateScanControl1Cmd::NUM_LINES(39) | ili9325::GateScanControl1Cmd::GS);
-			this->_accessMode.writeCommand(ili9325::GateScanControl2Cmd::Opcode,ili9325::GateScanControl2Cmd::REV | ili9325::GateScanControl2Cmd::VLE);
-			this->_accessMode.writeCommand(ili9325::GateScanControlScrollCmd::Opcode,ili9325::GateScanControlScrollCmd::SCROLL(0));
+			_accessMode.writeCommand(ili9325::GateScanControl1Cmd::Opcode,ili9325::GateScanControl1Cmd::NUM_LINES(39) | ili9325::GateScanControl1Cmd::GS);
+			_accessMode.writeCommand(ili9325::GateScanControl2Cmd::Opcode,ili9325::GateScanControl2Cmd::REV | ili9325::GateScanControl2Cmd::VLE);
+			_accessMode.writeCommand(ili9325::GateScanControlScrollCmd::Opcode,ili9325::GateScanControlScrollCmd::SCROLL(0));
 
 			// Partial Display Control
 
-			this->_accessMode.writeCommand(ili9325::PartialImage1DisplayPosition::Opcode,ili9325::PartialImage1DisplayPosition::POSITION(0));
-			this->_accessMode.writeCommand(ili9325::PartialImage1RAMStartAddress::Opcode,ili9325::PartialImage1RAMStartAddress::STARTADDRESS(0));
-			this->_accessMode.writeCommand(ili9325::PartialImage1RAMEndAddress::Opcode,ili9325::PartialImage1RAMEndAddress::ENDADDRESS(0));
+			_accessMode.writeCommand(ili9325::PartialImage1DisplayPosition::Opcode,ili9325::PartialImage1DisplayPosition::POSITION(0));
+			_accessMode.writeCommand(ili9325::PartialImage1RAMStartAddress::Opcode,ili9325::PartialImage1RAMStartAddress::STARTADDRESS(0));
+			_accessMode.writeCommand(ili9325::PartialImage1RAMEndAddress::Opcode,ili9325::PartialImage1RAMEndAddress::ENDADDRESS(0));
 
-			this->_accessMode.writeCommand(ili9325::PartialImage2DisplayPosition::Opcode,ili9325::PartialImage2DisplayPosition::POSITION(0));
-			this->_accessMode.writeCommand(ili9325::PartialImage2RAMStartAddress::Opcode,ili9325::PartialImage2RAMStartAddress::STARTADDRESS(0));
-			this->_accessMode.writeCommand(ili9325::PartialImage2RAMEndAddress::Opcode,ili9325::PartialImage2RAMEndAddress::ENDADDRESS(0));
+			_accessMode.writeCommand(ili9325::PartialImage2DisplayPosition::Opcode,ili9325::PartialImage2DisplayPosition::POSITION(0));
+			_accessMode.writeCommand(ili9325::PartialImage2RAMStartAddress::Opcode,ili9325::PartialImage2RAMStartAddress::STARTADDRESS(0));
+			_accessMode.writeCommand(ili9325::PartialImage2RAMEndAddress::Opcode,ili9325::PartialImage2RAMEndAddress::ENDADDRESS(0));
 
 			// Panel Control
 
-			this->_accessMode.writeCommand(ili9325::PanelInterfaceControl1::Opcode,ili9325::PanelInterfaceControl1::RTNI(0x10));
-			this->_accessMode.writeCommand(ili9325::PanelInterfaceControl2::Opcode,0);
-			this->_accessMode.writeCommand(ili9325::PanelInterfaceControl3::Opcode,3);
-			this->_accessMode.writeCommand(ili9325::PanelInterfaceControl4::Opcode,ili9325::PanelInterfaceControl4::RTNE(0x10) | ili9325::PanelInterfaceControl4::DIVE(1));
-			this->_accessMode.writeCommand(ili9325::PanelInterfaceControl5::Opcode,0);
-			this->_accessMode.writeCommand(ili9325::PanelInterfaceControl6::Opcode,0);
+			_accessMode.writeCommand(ili9325::PanelInterfaceControl1::Opcode,ili9325::PanelInterfaceControl1::RTNI(0x10));
+			_accessMode.writeCommand(ili9325::PanelInterfaceControl2::Opcode,0);
+			_accessMode.writeCommand(ili9325::PanelInterfaceControl3::Opcode,3);
+			_accessMode.writeCommand(ili9325::PanelInterfaceControl4::Opcode,ili9325::PanelInterfaceControl4::RTNE(0x10) | ili9325::PanelInterfaceControl4::DIVE(1));
+			_accessMode.writeCommand(ili9325::PanelInterfaceControl5::Opcode,0);
+			_accessMode.writeCommand(ili9325::PanelInterfaceControl6::Opcode,0);
 
 			// display ON
 
-			this->_accessMode.writeCommand(ili9325::DisplayCtrl1Cmd::Opcode,ili9325::DisplayCtrl1Cmd::DISPLAY_ON | ili9325::DisplayCtrl1Cmd::GATE_DRIVER_NORMAL | ili9325::DisplayCtrl1Cmd::BASE_IMAGE);
+			_accessMode.writeCommand(ili9325::DisplayCtrl1Cmd::Opcode,ili9325::DisplayCtrl1Cmd::DISPLAY_ON | ili9325::DisplayCtrl1Cmd::GATE_DRIVER_NORMAL | ili9325::DisplayCtrl1Cmd::BASE_IMAGE);
 
 			// apply entry mode by combining the values from the orientation and colour depth
 			// with the common BGR setting
 
-			this->_accessMode.writeCommand(ili9325::EntryModeCmd::Opcode,this->getColourEntryMode() | this->getOrientationEntryMode() | ili9325::EntryModeCmd::BGR);
+			_accessMode.writeCommand(ili9325::EntryModeCmd::Opcode,this->getColourEntryMode() | this->getOrientationEntryMode() | ili9325::EntryModeCmd::BGR);
 		}
 
 
@@ -186,16 +186,16 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void ILI9325<TOrientation,TColourDepth,TAccessMode>::applyGamma(ILI9325Gamma& gamma) const {
 
-			this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+0,gamma[0]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+1,gamma[1]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+2,gamma[2]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+3,gamma[3]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+4,gamma[4]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+5,gamma[5]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+6,gamma[6]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+7,gamma[7]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+8,gamma[8]);
-      this->_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+9,gamma[9]);
+			_accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+0,gamma[0]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+1,gamma[1]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+2,gamma[2]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+3,gamma[3]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+4,gamma[4]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+5,gamma[5]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+6,gamma[6]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+7,gamma[7]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+8,gamma[8]);
+      _accessMode.writeCommand(ili9325::GammaControlCmd::FirstOpcode+9,gamma[9]);
 		}
 
 
@@ -205,8 +205,8 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void ILI9325<TOrientation,TColourDepth,TAccessMode>::sleep() const {
-		  this->_accessMode.writeCommand(ili9325::DisplayCtrl1Cmd::Opcode,ili9325::DisplayCtrl1Cmd::DISPLAY_HALT);
-			this->_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::SLEEP);
+		  _accessMode.writeCommand(ili9325::DisplayCtrl1Cmd::Opcode,ili9325::DisplayCtrl1Cmd::DISPLAY_HALT);
+			_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::SLEEP);
 		}
 
 
@@ -216,8 +216,8 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void ILI9325<TOrientation,TColourDepth,TAccessMode>::wake() const {
-			this->_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::APE | ili9325::PowerCtrl1Cmd::AP_1_1 | ili9325::PowerCtrl1Cmd::STEP_UP_FACTOR(6) | ili9325::PowerCtrl1Cmd::SOURCE_DRIVER_ENABLE);
-			this->_accessMode.writeCommand(ili9325::DisplayCtrl1Cmd::Opcode,ili9325::DisplayCtrl1Cmd::DISPLAY_ON | ili9325::DisplayCtrl1Cmd::GATE_DRIVER_NORMAL | ili9325::DisplayCtrl1Cmd::BASE_IMAGE);
+			_accessMode.writeCommand(ili9325::PowerCtrl1Cmd::Opcode,ili9325::PowerCtrl1Cmd::APE | ili9325::PowerCtrl1Cmd::AP_1_1 | ili9325::PowerCtrl1Cmd::STEP_UP_FACTOR(6) | ili9325::PowerCtrl1Cmd::SOURCE_DRIVER_ENABLE);
+			_accessMode.writeCommand(ili9325::DisplayCtrl1Cmd::Opcode,ili9325::DisplayCtrl1Cmd::DISPLAY_ON | ili9325::DisplayCtrl1Cmd::GATE_DRIVER_NORMAL | ili9325::DisplayCtrl1Cmd::BASE_IMAGE);
 		}
 
 
@@ -227,7 +227,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
 		inline void ILI9325<TOrientation,TColourDepth,TAccessMode>::beginWriting() const {
-		  this->_accessMode.writeCommand(ili9325::GRAMStartWritingCmd::Opcode);
+		  _accessMode.writeCommand(ili9325::GRAMStartWritingCmd::Opcode);
 		}
 	}
 }

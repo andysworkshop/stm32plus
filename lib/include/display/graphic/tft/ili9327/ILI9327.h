@@ -62,76 +62,76 @@ namespace stm32plus {
 
 			// reset the device
 
-			this->_accessMode.reset();
+			_accessMode.reset();
 
 			// power setting: we use the internal ref vci=2.5v
 
-			this->_accessMode.writeCommand(ili9327::PowerSettingCmd::Opcode,ili9327::PowerSettingCmd::VC_100); // vci1=vci*1 (vci=2.5V therefore vci1=2.5V)
-			this->_accessMode.writeData(ili9327::PowerSettingCmd::BT_5_4); // VGH=vci1*5, VGL=vci1*-4
-			this->_accessMode.writeData(ili9327::PowerSettingCmd::VRH(0xc) | ili9327::PowerSettingCmd::VCIRE); // int ref + VREG1OUT = vci1*1.9 = 4.75
+			_accessMode.writeCommand(ili9327::PowerSettingCmd::Opcode,ili9327::PowerSettingCmd::VC_100); // vci1=vci*1 (vci=2.5V therefore vci1=2.5V)
+			_accessMode.writeData(ili9327::PowerSettingCmd::BT_5_4); // VGH=vci1*5, VGL=vci1*-4
+			_accessMode.writeData(ili9327::PowerSettingCmd::VRH(0xc) | ili9327::PowerSettingCmd::VCIRE); // int ref + VREG1OUT = vci1*1.9 = 4.75
 
 			// VCom (more power settings)
 
-			this->_accessMode.writeCommand(ili9327::VComCmd::Opcode,0); // register D1 for setting VCom
-			this->_accessMode.writeData(ili9327::VComCmd::VCM(0x40)); // VCOMH = VREG1OUT * 0.748
-			this->_accessMode.writeData(ili9327::VComCmd::VDV(0xf)); // VCOM amplitude=VREG1OUT*1
+			_accessMode.writeCommand(ili9327::VComCmd::Opcode,0); // register D1 for setting VCom
+			_accessMode.writeData(ili9327::VComCmd::VCM(0x40)); // VCOMH = VREG1OUT * 0.748
+			_accessMode.writeData(ili9327::VComCmd::VDV(0xf)); // VCOM amplitude=VREG1OUT*1
 
 			// power setting for normal mode
 
-			this->_accessMode.writeCommand(ili9327::PowerSettingNormalModeCmd::Opcode,ili9327::PowerSettingNormalModeCmd::AP(1)); // drivers on
-			this->_accessMode.writeData(ili9327::PowerSettingNormalModeCmd::DC(4) | ili9327::PowerSettingNormalModeCmd::DC10(4)); // fosc ratios
+			_accessMode.writeCommand(ili9327::PowerSettingNormalModeCmd::Opcode,ili9327::PowerSettingNormalModeCmd::AP(1)); // drivers on
+			_accessMode.writeData(ili9327::PowerSettingNormalModeCmd::DC(4) | ili9327::PowerSettingNormalModeCmd::DC10(4)); // fosc ratios
 
 			// exit sleep mode
 
-			this->_accessMode.writeCommand(ili9327::ExitSleepModeCmd::Opcode);
+			_accessMode.writeCommand(ili9327::ExitSleepModeCmd::Opcode);
 			MillisecondTimer::delay(50);
 
 			// enter normal mode
 
-			this->_accessMode.writeCommand(ili9327::EnterNormalModeCmd::Opcode);
+			_accessMode.writeCommand(ili9327::EnterNormalModeCmd::Opcode);
 
 			// panel driving setting
 
-			this->_accessMode.writeCommand(ili9327::PanelDrivingCmd::Opcode,0);
-			this->_accessMode.writeData(ili9327::PanelDrivingCmd::NL(0x35));
-			this->_accessMode.writeData(ili9327::PanelDrivingCmd::SCN(0));
-			this->_accessMode.writeData(ili9327::PanelDrivingCmd::PTS(0)); // modify for power reduction in back/front porch
-			this->_accessMode.writeData(ili9327::PanelDrivingCmd::ISC(1) | ili9327::PanelDrivingCmd::PTG);
-			this->_accessMode.writeData(ili9327::PanelDrivingCmd::DIVE(0));
+			_accessMode.writeCommand(ili9327::PanelDrivingCmd::Opcode,0);
+			_accessMode.writeData(ili9327::PanelDrivingCmd::NL(0x35));
+			_accessMode.writeData(ili9327::PanelDrivingCmd::SCN(0));
+			_accessMode.writeData(ili9327::PanelDrivingCmd::PTS(0)); // modify for power reduction in back/front porch
+			_accessMode.writeData(ili9327::PanelDrivingCmd::ISC(1) | ili9327::PanelDrivingCmd::PTG);
+			_accessMode.writeData(ili9327::PanelDrivingCmd::DIVE(0));
 
 			// display timing (c1)
 
-			this->_accessMode.writeCommand(ili9327::DisplayTimingSettingNormalModeCmd::Opcode,ili9327::DisplayTimingSettingNormalModeCmd::BC | ili9327::DisplayTimingSettingNormalModeCmd::DIV0_1); // line inversion, 1:1 internal clock
-			this->_accessMode.writeData(ili9327::DisplayTimingSettingNormalModeCmd::RTN(0x10)); // 1 line = 16 clocks
-			this->_accessMode.writeData(ili9327::DisplayTimingSettingNormalModeCmd::BP(2));
-			this->_accessMode.writeData(ili9327::DisplayTimingSettingNormalModeCmd::FP(4));
+			_accessMode.writeCommand(ili9327::DisplayTimingSettingNormalModeCmd::Opcode,ili9327::DisplayTimingSettingNormalModeCmd::BC | ili9327::DisplayTimingSettingNormalModeCmd::DIV0_1); // line inversion, 1:1 internal clock
+			_accessMode.writeData(ili9327::DisplayTimingSettingNormalModeCmd::RTN(0x10)); // 1 line = 16 clocks
+			_accessMode.writeData(ili9327::DisplayTimingSettingNormalModeCmd::BP(2));
+			_accessMode.writeData(ili9327::DisplayTimingSettingNormalModeCmd::FP(4));
 
 			// display timing idle (c3)
 
-			this->_accessMode.writeCommand(ili9327::DisplayTimingSettingIdleModeCmd::Opcode,ili9327::DisplayTimingSettingIdleModeCmd::BC2);
-			this->_accessMode.writeData(ili9327::DisplayTimingSettingIdleModeCmd::RTN2(0x10));
-			this->_accessMode.writeData(ili9327::DisplayTimingSettingIdleModeCmd::BP2(0x2));
-			this->_accessMode.writeData(ili9327::DisplayTimingSettingIdleModeCmd::FP2(0x4));
+			_accessMode.writeCommand(ili9327::DisplayTimingSettingIdleModeCmd::Opcode,ili9327::DisplayTimingSettingIdleModeCmd::BC2);
+			_accessMode.writeData(ili9327::DisplayTimingSettingIdleModeCmd::RTN2(0x10));
+			_accessMode.writeData(ili9327::DisplayTimingSettingIdleModeCmd::BP2(0x2));
+			_accessMode.writeData(ili9327::DisplayTimingSettingIdleModeCmd::FP2(0x4));
 
 			// frame rate = 96Hz
 
-			this->_accessMode.writeCommand(ili9327::FrameRateAndInversionControlCmd::Opcode,ili9327::FrameRateAndInversionControlCmd::FR_96);
+			_accessMode.writeCommand(ili9327::FrameRateAndInversionControlCmd::Opcode,ili9327::FrameRateAndInversionControlCmd::FR_96);
 
 			// interface control
 
-			this->_accessMode.writeCommand(ili9327::InterfaceControlCmd::Opcode,ili9327::InterfaceControlCmd::DPL | ili9327::InterfaceControlCmd::EPL | ili9327::InterfaceControlCmd::HSPL | ili9327::InterfaceControlCmd::VSPL);
+			_accessMode.writeCommand(ili9327::InterfaceControlCmd::Opcode,ili9327::InterfaceControlCmd::DPL | ili9327::InterfaceControlCmd::EPL | ili9327::InterfaceControlCmd::HSPL | ili9327::InterfaceControlCmd::VSPL);
 
 			// frame memory access (set DFM for 2 transfers/1 pixel in 18-bit mode)
 
-			this->_accessMode.writeCommand(ili9327::FrameMemoryAccessAndInterfaceSettingCmd::Opcode,0);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(ili9327::FrameMemoryAccessAndInterfaceSettingCmd::DFM);
+			_accessMode.writeCommand(ili9327::FrameMemoryAccessAndInterfaceSettingCmd::Opcode,0);
+			_accessMode.writeData(0);
+			_accessMode.writeData(0);
+			_accessMode.writeData(ili9327::FrameMemoryAccessAndInterfaceSettingCmd::DFM);
 
 			// display on - cannot happen <120ms after reset
 
 			MillisecondTimer::delay(100);
-			this->_accessMode.writeCommand(ili9327::SetDisplayOnCmd::Opcode);
+			_accessMode.writeCommand(ili9327::SetDisplayOnCmd::Opcode);
 
 			// set the colour mode (base class specialisation does this)
 
@@ -139,18 +139,18 @@ namespace stm32plus {
 
 			// set the address mode (orientation from specialisation and BGR order)
 
-			this->_accessMode.writeCommand(ili9327::
+			_accessMode.writeCommand(ili9327::
 						SetAddressModeCmd::Opcode,
 						this->getOrientationAddressMode() | ili9327::SetAddressModeCmd::BGR | ili9327::SetAddressModeCmd::VERTICAL_FLIP);
 
 			// set scroll area to omit the missing scan lines if panel is shorter than 432
 
-			this->_accessMode.writeCommand(ili9327::SetScrollAreaCmd::Opcode,(432-TPanelTraits::LONG_SIDE) >> 8);
-			this->_accessMode.writeData((432-TPanelTraits::LONG_SIDE) & 0xff);
-			this->_accessMode.writeData(TPanelTraits::LONG_SIDE >> 8);
-			this->_accessMode.writeData(TPanelTraits::LONG_SIDE & 0xff);
-			this->_accessMode.writeData(0);
-			this->_accessMode.writeData(0);
+			_accessMode.writeCommand(ili9327::SetScrollAreaCmd::Opcode,(432-TPanelTraits::LONG_SIDE) >> 8);
+			_accessMode.writeData((432-TPanelTraits::LONG_SIDE) & 0xff);
+			_accessMode.writeData(TPanelTraits::LONG_SIDE >> 8);
+			_accessMode.writeData(TPanelTraits::LONG_SIDE & 0xff);
+			_accessMode.writeData(0);
+			_accessMode.writeData(0);
 		}
 
 
@@ -162,22 +162,22 @@ namespace stm32plus {
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void ILI9327<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::applyGamma(ILI9327Gamma& gamma) const {
 
-			this->_accessMode.writeCommand(ili9327::GammaSettingCmd::Opcode,gamma[0]);
+			_accessMode.writeCommand(ili9327::GammaSettingCmd::Opcode,gamma[0]);
 
-			this->_accessMode.writeData(gamma[1]);
-			this->_accessMode.writeData(gamma[2]);
-			this->_accessMode.writeData(gamma[3]);
-			this->_accessMode.writeData(gamma[4]);
-			this->_accessMode.writeData(gamma[5]);
-			this->_accessMode.writeData(gamma[6]);
-			this->_accessMode.writeData(gamma[7]);
-			this->_accessMode.writeData(gamma[8]);
-			this->_accessMode.writeData(gamma[9]);
-			this->_accessMode.writeData(gamma[10]);
-			this->_accessMode.writeData(gamma[11]);
-			this->_accessMode.writeData(gamma[12]);
-			this->_accessMode.writeData(gamma[13]);
-			this->_accessMode.writeData(gamma[14]);
+			_accessMode.writeData(gamma[1]);
+			_accessMode.writeData(gamma[2]);
+			_accessMode.writeData(gamma[3]);
+			_accessMode.writeData(gamma[4]);
+			_accessMode.writeData(gamma[5]);
+			_accessMode.writeData(gamma[6]);
+			_accessMode.writeData(gamma[7]);
+			_accessMode.writeData(gamma[8]);
+			_accessMode.writeData(gamma[9]);
+			_accessMode.writeData(gamma[10]);
+			_accessMode.writeData(gamma[11]);
+			_accessMode.writeData(gamma[12]);
+			_accessMode.writeData(gamma[13]);
+			_accessMode.writeData(gamma[14]);
 		}
 
 
@@ -190,7 +190,7 @@ namespace stm32plus {
 
 			// go to sleep and wait at least 5ms
 
-			this->_accessMode.writeCommand(ili9327::EnterSleepModeCmd::Opcode);
+			_accessMode.writeCommand(ili9327::EnterSleepModeCmd::Opcode);
 			MillisecondTimer::delay(6);
 		}
 
@@ -204,7 +204,7 @@ namespace stm32plus {
 
 			// wake up and wait at least 120ms
 
-			this->_accessMode.writeCommand(ili9327::ExitSleepModeCmd::Opcode);
+			_accessMode.writeCommand(ili9327::ExitSleepModeCmd::Opcode);
 			MillisecondTimer::delay(121);
 		}
 
@@ -215,7 +215,7 @@ namespace stm32plus {
 
 		template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode,class TPanelTraits>
 		inline void ILI9327<TOrientation,TColourDepth,TAccessMode,TPanelTraits>::beginWriting() const {
-			this->_accessMode.writeCommand(ili9327::WriteMemoryStartCmd::Opcode);
+			_accessMode.writeCommand(ili9327::WriteMemoryStartCmd::Opcode);
 		}
 	}
 }

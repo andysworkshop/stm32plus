@@ -107,14 +107,14 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void ILI9325Orientation<PORTRAIT,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,xstart);
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,xend);
+			_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,xstart);
+			_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,xend);
 
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,ystart);
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,yend);
+			_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,ystart);
+			_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,yend);
 
-			this->_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,xstart);
-			this->_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,ystart);
+			_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,xstart);
+			_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,ystart);
 		}
 
 
@@ -126,9 +126,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ILI9325Orientation<PORTRAIT,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,xstart);
-			this->_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,xend);
-			this->_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,xstart);
+			_accessMode.writeCommand(ili9325::HorizontalRAMPositionStartCmd::Opcode,xstart);
+			_accessMode.writeCommand(ili9325::HorizontalRAMPositionEndCmd::Opcode,xend);
+			_accessMode.writeCommand(ili9325::HorizontalAddressCmd::Opcode,xstart);
 		}
 
 
@@ -140,9 +140,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ILI9325Orientation<PORTRAIT,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,ystart);
-			this->_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,yend);
-			this->_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,ystart);
+			_accessMode.writeCommand(ili9325::VerticalRAMPositionStartCmd::Opcode,ystart);
+			_accessMode.writeCommand(ili9325::VerticalRAMPositionEndCmd::Opcode,yend);
+			_accessMode.writeCommand(ili9325::VerticalAddressCmd::Opcode,ystart);
 		}
 
 
@@ -161,7 +161,7 @@ namespace stm32plus {
 
       // write to the register
 
-      this->_accessMode.writeCommand(ili9325::GateScanControlScrollCmd::Opcode,scrollPosition);
+      _accessMode.writeCommand(ili9325::GateScanControlScrollCmd::Opcode,scrollPosition);
 		}
 	}
 }

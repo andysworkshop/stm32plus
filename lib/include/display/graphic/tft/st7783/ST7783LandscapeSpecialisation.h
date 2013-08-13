@@ -106,14 +106,14 @@ namespace stm32plus {
 		template<class TAccessMode>
 		inline void ST7783Orientation<LANDSCAPE,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
-			this->_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_START,239-yend);
-			this->_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_END,239-ystart);
+			_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_START,239-yend);
+			_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_END,239-ystart);
 
-			this->_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_START,xstart);
-			this->_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_END,xend);
+			_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_START,xstart);
+			_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_END,xend);
 
-			this->_accessMode.writeCommand(st7783::RAM_HORIZONTAL_ADDRESS,ystart);
-			this->_accessMode.writeCommand(st7783::RAM_VERTICAL_ADDRESS,xstart);
+			_accessMode.writeCommand(st7783::RAM_HORIZONTAL_ADDRESS,ystart);
+			_accessMode.writeCommand(st7783::RAM_VERTICAL_ADDRESS,xstart);
 		}
 
 
@@ -125,9 +125,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ST7783Orientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
-			this->_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_START,xstart);
-			this->_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_END,xend);
-			this->_accessMode.writeCommand(st7783::RAM_VERTICAL_ADDRESS,xstart);
+			_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_START,xstart);
+			_accessMode.writeCommand(st7783::VERTICAL_ADDRESS_END,xend);
+			_accessMode.writeCommand(st7783::RAM_VERTICAL_ADDRESS,xstart);
 		}
 
 
@@ -139,9 +139,9 @@ namespace stm32plus {
 
 		template<class TAccessMode>
 		inline void ST7783Orientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
-			this->_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_START,239-yend);
-			this->_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_END,239-ystart);
-			this->_accessMode.writeCommand(st7783::RAM_HORIZONTAL_ADDRESS,ystart);
+			_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_START,239-yend);
+			_accessMode.writeCommand(st7783::HORIZONTAL_ADDRESS_END,239-ystart);
+			_accessMode.writeCommand(st7783::RAM_HORIZONTAL_ADDRESS,ystart);
 		}
 	}
 }
