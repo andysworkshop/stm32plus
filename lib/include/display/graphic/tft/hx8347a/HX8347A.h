@@ -177,7 +177,7 @@ namespace stm32plus {
 
 
 		/**
-		 * Apply the 10 panel gamma settings
+		 * Apply the 12 panel gamma settings
 		 * @param gamma The collection of gamma values
 		 */
 

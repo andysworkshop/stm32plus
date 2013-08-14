@@ -138,7 +138,16 @@ namespace stm32plus {
 
 
 		/**
-		 * Constructor
+		 * Constructor. This actual instance referenced by 'params' lives either in the TcpServer instance
+		 * for TCP servers or in the TcpClientConnection instance for clients. For servers this saves memory
+		 * because there will be only ever one parameters instance shared between all the connections created
+		 * by the server.
+		 *
+		 * For servers, in your derivation of TcpConnection you can also derive a Parameters class from
+		 * TcpConnection::Parameters and the server will automagically use that and it will be passed to your
+		 * constructor. See the net_web_server example for an example where I use this method to tweak some
+		 * of the TcpConnection parameters.
+		 *
 		 * @param reference to the parameters class that we'll use
 		 */
 

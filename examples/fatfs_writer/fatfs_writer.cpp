@@ -45,7 +45,7 @@ using namespace stm32plus;
  *   STM32F407VGT6
  */
 
-class FatFsReaderTest  {
+class FatFsWriterTest  {
 
 	protected:
 
@@ -284,7 +284,7 @@ int main() {
 	// set up SysTick at 1ms resolution
 	MillisecondTimer::initialise();
 
-	FatFsReaderTest test;
+	FatFsWriterTest test;
 	test.run();
 
 	// not reached
