@@ -44,6 +44,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="HX8352AConverter.cs" />
+    <Compile Include="HX8352AConverter262.cs" />
+    <Compile Include="HX8352AConverter64.cs" />
     <Compile Include="ILI9325AConverter.cs" />
     <Compile Include="ILI9325AConverter262.cs" />
     <Compile Include="ILI9325AConverter64.cs" />

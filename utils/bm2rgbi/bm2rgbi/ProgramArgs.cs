@@ -50,6 +50,10 @@ namespace bm2rgbi {
           this.TargetDevice=HX8347AConverter.createInstance(depth);
           break;
 
+        case "hx8352a":
+          this.TargetDevice=HX8352AConverter.createInstance(depth);
+          break;
+
         case "ili9325":
           this.TargetDevice=ILI9325Converter.createInstance(depth);
           break;
@@ -106,6 +110,8 @@ namespace bm2rgbi {
       Console.WriteLine("  ili9481 64");
       Console.WriteLine("  ili9481 262");
       Console.WriteLine("  hx8347a 64");
+      Console.WriteLine("  hx8352a 64");
+      Console.WriteLine("  hx8352a 262");
       Console.WriteLine("  mc2pa8201 64");
       Console.WriteLine("  mc2pa8201 262");
       Console.WriteLine("  mc2pa8201 16");
