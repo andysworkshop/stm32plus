@@ -21,21 +21,21 @@
 	.global GlobePixelsSize
 
 BulbPixels:
-	.incbin "lzg/hx8347a/bulb.hx8347a.64.lzg"
+	.incbin "lzg/hx8352a/bulb.hx8352a.64.lzg"
 	BulbPixelsSize=.-BulbPixels
 
 AudioPixels:
-	.incbin "lzg/hx8347a/audio.hx8347a.64.lzg"
+	.incbin "lzg/hx8352a/audio.hx8352a.64.lzg"
 	AudioPixelsSize=.-AudioPixels
 
 FlagPixels:
-	.incbin "lzg/hx8347a/flag.hx8347a.64.lzg"
+	.incbin "lzg/hx8352a/flag.hx8352a.64.lzg"
 	FlagPixelsSize=.-FlagPixels
 
 DocPixels:
-	.incbin "lzg/hx8347a/doc.hx8347a.64.lzg"
+	.incbin "lzg/hx8352a/doc.hx8352a.64.lzg"
 	DocPixelsSize=.-DocPixels
 
 GlobePixels:
-	.incbin "lzg/hx8347a/globe.hx8347a.64.lzg"
+	.incbin "lzg/hx8352a/globe.hx8352a.64.lzg"
 	GlobePixelsSize=.-GlobePixels

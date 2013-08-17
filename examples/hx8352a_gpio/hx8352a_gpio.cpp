@@ -122,13 +122,13 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
+				jpegTest();
 				clearTest();
 				textTest();
 				basicColoursTest();
 				rectTest();
 				lzgTest();
 				lineTest();
-				jpegTest();
 				scrollTest();
 				ellipseTest();
 				gradientTest();
@@ -157,18 +157,18 @@ class HX8352ATest {
 
 		void jpegTest() {
 
-			// only draw in portrait mode and if it can fit on screen
+			// only draw if it can fit on screen
 
-			if(_gl->getHeight()>_gl->getWidth() && _gl->getHeight()>=320 && _gl->getWidth()>=240) {
+			if(_gl->getHeight()>=240 && _gl->getWidth()>=480) {
 
 				prompt("JPEG bitmap test");
 
 				// draw it centered
 
 				LinearBufferInputOutputStream compressedData((uint8_t *)&JpegTest0Pixels,(uint32_t)&JpegTest0PixelsSize);
-				_gl->drawJpeg(Rectangle((_gl->getWidth()-240)/2,(_gl->getHeight()-320)/2,240,320),compressedData);
+				_gl->drawJpeg(Rectangle((_gl->getWidth()-480)/2,(_gl->getHeight()-240)/2,480,240),compressedData);
 
-				MillisecondTimer::delay(3000);
+				MillisecondTimer::delay(5000);
 			}
 		}
 
