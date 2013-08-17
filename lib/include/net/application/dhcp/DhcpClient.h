@@ -32,11 +32,11 @@ namespace stm32plus {
 
 					uint32_t dhcp_responseTimeout;						///< number of seconds to wait for the UDP packets to get a response (default is 6)
 					uint8_t dhcp_retries;											///< number of times to retry on failure (default is 5)
-					bool dhcp_expectUnicastResponse;          ///< true if the DHCP server should call back via unicast
-					bool dhcp_requestSubnetMask;							///< ask for the subnet mask
-					bool dhcp_requestDefaultGateway;					///< ask for the default gateway
-					bool dhcp_requestDnsServer;								///< ask for the DNS server
-					bool dhcp_requestDomainName;							///< ask for the domain name
+					bool dhcp_expectUnicastResponse;          ///< true if the DHCP server should call back via unicast (default is false)
+					bool dhcp_requestSubnetMask;							///< ask for the subnet mask (default is true)
+					bool dhcp_requestDefaultGateway;					///< ask for the default gateway (default is true)
+					bool dhcp_requestDnsServer;								///< ask for the DNS server (default is true)
+					bool dhcp_requestDomainName;							///< ask for the domain name (default is true)
 					const char *dhcp_hostname;								///< we'll tell the DHCP server that this is your name
 
 					/**

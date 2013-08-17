@@ -27,6 +27,7 @@ class MyHttpConnection : public HttpServerConnection<MyHttpConnection> {
 		/**
 		 * Customised parameters for this web server
 		 */
+
 		struct Parameters : HttpServerConnection<MyHttpConnection>::Parameters {
 			Parameters() {
 				tcp_receiveBufferSize=512;						// increased receive buffer to get the request in one segment

@@ -43,6 +43,10 @@ using namespace stm32plus::net;
  * This example is only compatible with the F4 because it requires the SDIO
  * peripheral to be able to talk to the SD card.
  *
+ * An example website is included in the 'www' subdirectory of this card. To use,
+ * copy 'www' to the root directory of your SD card, run this example and then
+ * retrieve it from your web browser at "http://<your-dhcp-ip>/www/index.html"
+ *
  * Tested on devices:
  *   STM32F407VGT6
  */
