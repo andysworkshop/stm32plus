@@ -23,7 +23,14 @@
 
 // include the 'standard' commands
 
+#include "flash/spi/commands/WriteStatus.h"
 #include "flash/spi/commands/WriteEnable.h"
+#include "flash/spi/commands/WriteDisable.h"
 #include "flash/spi/commands/PageProgram.h"
+#include "flash/spi/commands/ReadStatusRegister.h"
 #include "flash/spi/commands/Read.h"
+#include "flash/spi/commands/SectorErase.h"
 
+// include the manufacturer devices
+
+#include "flash/spi/devices/W25Q16DW.h"

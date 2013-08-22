@@ -19,7 +19,7 @@ namespace stm32plus {
 		template<class TSpi>
 		class Base {
 			protected:
-				TSpi& _spi;
+				TSpi *_spi;			// not an owned pointer and not a reference to avoid ugly virtual inheritance ctor requirements
 		};
 	}
 }

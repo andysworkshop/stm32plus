@@ -17,7 +17,7 @@ namespace stm32plus {
 		 */
 
 		template<class TSpi>
-		class Command : virtual Base<TSpi> {
+		class Command : public virtual Base<TSpi> {
 
 			public:
 
@@ -26,9 +26,13 @@ namespace stm32plus {
 				 */
 
 				enum {
-					CMD_PAGE_PROGRAM 	= 2,					///< program a page
-					CMD_READ 					= 3,					///< read, 1-bit mode
-					CMD_WRITE_ENABLE 	= 6,					///< enable writing
+					CMD_WRITE_REGISTERS      = 0x01,					///< write status or write status & configuration
+					CMD_PAGE_PROGRAM 				 = 0x02,					///< program a page
+					CMD_READ 								 = 0x03,					///< read, 1-bit mode
+					CMD_WRITE_DISABLE 			 = 0x04,					///< disable writing
+					CMD_READ_STATUS_REGISTER = 0x05,					///< read the status register
+					CMD_WRITE_ENABLE 				 = 0x06,					///< enable writing
+					CMD_SECTOR_ERASE				 = 0x20						///< erase a sector
 				};
 
 			protected:
@@ -111,7 +115,8 @@ namespace stm32plus {
 
 			// write out the data block
 
-			return this->_spi.send(data,dataSize);
+			if(dataSize)
+				return this->_spi.send(data,dataSize);
 		}
 
 

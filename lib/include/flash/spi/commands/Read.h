@@ -15,7 +15,7 @@ namespace stm32plus {
 		 * Read command implementation
 		 */
 
-		template<uint8_t TOpCode=Command::CMD_READ,uint8_t TAddressBytes=3,class TSpi>
+		template<class TSpi,uint8_t TOpCode=Command<TSpi>::CMD_READ,uint8_t TAddressBytes=3>
 		struct Read : Command<TSpi> {
 
 			/**
