@@ -26,6 +26,7 @@
 #include "stream/StreamBase.h"
 #include "stream/InputStream.h"
 #include "stream/OutputStream.h"
+#include "stream/Reader.h"
 #include "stream/BufferedInputOutputStream.h"
 #include "stream/ByteArrayOutputStream.h"
 #include "stream/ByteArrayInputStream.h"
