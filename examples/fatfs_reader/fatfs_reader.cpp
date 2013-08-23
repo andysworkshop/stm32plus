@@ -10,6 +10,7 @@
 #include "config/filesystem.h"
 #include "config/usart.h"
 #include "config/string.h"
+#include "config/smartptr.h"
 
 
 using namespace stm32plus;
@@ -87,33 +88,30 @@ class FatFsReaderTest  {
 
 		void sendFile(const char *filename) {
 
-			File *file;
+			scoped_ptr<File> file;
+			char buffer[256];
 
 			// open the file - we own the file pointer that comes back upon success and
 			// we must remember to delete it when we're finished
 
-			if(!_fs->openFile(filename,file))
+			if(!_fs->openFile(filename,file.address()))
 				error();
 
-			// attach an input stream to the file for easy sequential reading and an output
-			// stream to the usart for writing
+			// declare a file reader to read lines from the file and also a
+			// UsartPollingOutputStream for convenient output to the USART
 
-			FileInputStream input(*file);
+			FileReader reader(*file);
 			UsartPollingOutputStream output(*_usart);
 
-			// the ConnectedInputOutputStream is a piece of plumbing that will copy one
-			// stream to another either as a whole or in chunks
+			while(reader.available()) {
 
-			ConnectedInputOutputStream connector(input,output);
+				// read the next line and send to the USART
 
-			// copy the entire file to the USART
+				if(!reader.readLine(buffer,sizeof(buffer)))
+					error();
 
-			if(!connector.readWrite())
-				error();
-
-			// finished with the file
-
-			delete file;
+				output << buffer << "\r\n";
+			}
 		}
 
 

@@ -27,6 +27,7 @@
 #include "filesystem/DirectoryIterator.h"
 #include "filesystem/FileInputStream.h"
 #include "filesystem/FileOutputStream.h"
+#include "filesystem/FileReader.h"
 #include "filesystem/OwnedFileInputStream.h"
 #include "filesystem/OwnedFileOutputStream.h"
 #include "filesystem/MbrPartition.h"
