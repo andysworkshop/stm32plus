@@ -15,7 +15,7 @@ namespace stm32plus {
 		 * Write enable command implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=Command<TSpi>::CMD_WRITE_ENABLE>
+		template<class TSpi,uint8_t TOpCode=CMD_WRITE_ENABLE>
 		struct WriteEnable : Command<TSpi> {
 
 			/**

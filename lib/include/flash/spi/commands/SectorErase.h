@@ -15,7 +15,7 @@ namespace stm32plus {
 		 * Sector erase command implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=Command<TSpi>::CMD_PAGE_PROGRAM,uint8_t TAddressBytes=3>
+		template<class TSpi,uint8_t TOpCode=CMD_SECTOR_ERASE,uint8_t TAddressBytes=3>
 		struct SectorErase : Command<TSpi> {
 
 			/**

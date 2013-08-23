@@ -12,17 +12,17 @@ namespace stm32plus {
 
 
 		/**
-		 * Write disable command implementation
+		 * Bulk chip erase command implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=CMD_WRITE_DISABLE>
-		struct WriteDisable : Command<TSpi> {
+		template<class TSpi,uint8_t TOpCode=CMD_CHIP_ERASE>
+		struct ChipErase : Command<TSpi> {
 
 			/**
-			 * Provide a writeDisable() function for the derived class
+			 * Provide a chipErase() function for the derived class
 			 */
 
-			bool writeDisable() const {
+			bool chipErase() const {
 				return this->writeCommand(TOpCode);
 			}
 		};

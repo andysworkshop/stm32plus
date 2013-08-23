@@ -15,7 +15,7 @@ namespace stm32plus {
 		 * Page program command implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=Command<TSpi>::CMD_PAGE_PROGRAM,uint8_t TAddressBytes=3>
+		template<class TSpi,uint8_t TOpCode=CMD_PAGE_PROGRAM,uint8_t TAddressBytes=3>
 		struct PageProgram : Command<TSpi> {
 
 			/**

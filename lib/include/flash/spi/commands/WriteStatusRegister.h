@@ -15,23 +15,23 @@ namespace stm32plus {
 		 * Write status and write status/configuration implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=Command<TSpi>::CMD_WRITE_REGISTERS>
-		struct WriteStatus : Command<TSpi> {
+		template<class TSpi,uint8_t TOpCode=CMD_WRITE_REGISTERS>
+		struct WriteStatusRegister : Command<TSpi> {
 
 			/**
-			 * Provide writeStatus()
+			 * Provide writeStatusRegister()
 			 */
 
-			bool writeStatus(uint8_t status) const {
+			bool writeStatusRegister(uint8_t status) const {
 				return this->writeCommand(TOpCode,0,0,0,&status,1);
 			}
 
 
 			/**
-			 * Provide writeStatusAndConfiguration()
+			 * Provide writeStatusAndConfigurationRegisters()
 			 */
 
-			bool writeStatusAndConfiguration(uint8_t status,uint8_t configuration) const {
+			bool writeStatusAndConfigurationRegisters(uint8_t status,uint8_t configuration) const {
 
 				uint8_t data[2];
 

@@ -15,7 +15,7 @@ namespace stm32plus {
 		 * Read status register command implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=Command<TSpi>::CMD_READ_STATUS_REGISTER>
+		template<class TSpi,uint8_t TOpCode=CMD_READ_STATUS_REGISTER>
 		struct ReadStatusRegister : Command<TSpi> {
 
 			/**
@@ -23,7 +23,7 @@ namespace stm32plus {
 			 */
 
 			bool readStatusRegister(uint8_t& sr) const {
-				return this->readCommand(TOpCode,0,0,0,sr,1);
+				return this->readCommand(TOpCode,0,0,0,&sr,1);
 			}
 		};
 	}

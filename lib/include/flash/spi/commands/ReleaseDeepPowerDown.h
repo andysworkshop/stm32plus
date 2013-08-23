@@ -12,17 +12,17 @@ namespace stm32plus {
 
 
 		/**
-		 * Write disable command implementation
+		 * Release deep power down command implementation
 		 */
 
-		template<class TSpi,uint8_t TOpCode=CMD_WRITE_DISABLE>
-		struct WriteDisable : Command<TSpi> {
+		template<class TSpi,uint8_t TOpCode=CMD_RELEASE_DEEP_POWER_DOWN>
+		struct ReleaseDeepPowerDown : Command<TSpi> {
 
 			/**
-			 * Provide a writeDisable() function for the derived class
+			 * Provide a releaseDeepPowerDown() function for the derived class
 			 */
 
-			bool writeDisable() const {
+			bool releaseDeepPowerDown() const {
 				return this->writeCommand(TOpCode);
 			}
 		};
