@@ -44,7 +44,7 @@ namespace stm32plus {
 	 * @param file The file to read from
 	 */
 
-	FileReader::FileReader(File& file)
+	inline FileReader::FileReader(File& file)
 		: _fis(file) {
 	}
 
