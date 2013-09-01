@@ -4,9 +4,7 @@
  * Please see website for licensing terms.
  */
 
-
 #pragma once
-
 
 namespace stm32plus {
 	namespace display {
@@ -57,7 +55,6 @@ namespace stm32plus {
 				void run();
 		};
 
-
 		/**
 		 * Constructor. References taken by this constructor are owned by the caller and must not go
 		 * out of scope for the life of this class.
@@ -68,10 +65,8 @@ namespace stm32plus {
 		 */
 
 		template<class TGraphicsLibrary,class TGamma>
-		InteractiveGamma<TGraphicsLibrary,TGamma>::InteractiveGamma(TGraphicsLibrary& gl,TGamma& gamma,InputStream& is)
-			: _gl(gl),
-			  _gamma(gamma),
-			  _inputStream(is) {
+		InteractiveGamma<TGraphicsLibrary,TGamma>::InteractiveGamma(TGraphicsLibrary& gl,TGamma& gamma,InputStream& is) :
+				_gl(gl), _gamma(gamma), _inputStream(is) {
 
 			_activeIndex=0;
 			_count=_gamma.getGammaCount();
@@ -88,8 +83,8 @@ namespace stm32plus {
 			uint16_t width,height;
 			uint32_t i;
 
-			width=_gl.getWidth()/4;
-			height=(_gl.getHeight()-(_fontHeight * 2)) / 3;
+			width=_gl.getWidth() / 4;
+			height=(_gl.getHeight() - (_fontHeight * 2)) / 3;
 
 			_gl.setBackground(0);
 			_gl.clearScreen();
@@ -102,7 +97,7 @@ namespace stm32plus {
 			drawBox(0,height,ColourNames::CYAN);
 			drawBox(width,height,ColourNames::MAGENTA);
 			drawBox(width * 2,height,ColourNames::YELLOW);
-			drawBox(width * 3,height,0x808080); 			// mid grey
+			drawBox(width * 3,height,0x808080); // mid grey
 
 			for(i=0;i < 255;i++) {
 				_gl.setForeground(i << 16 | i << 8 | i);
@@ -111,6 +106,7 @@ namespace stm32plus {
 
 			drawConsole();
 		}
+
 
 		/*
 		 * Draw one box
@@ -126,6 +122,7 @@ namespace stm32plus {
 			_gl.setForeground(cr);
 			_gl.fillRectangle(Rectangle(x,y,width,height));
 		}
+
 
 		/*
 		 * Draw the lower console
@@ -147,15 +144,12 @@ namespace stm32plus {
 			_gl << Point(0,_gl.getHeight() - (_fontHeight * 2));
 			_gl.setForeground(ColourNames::WHITE);
 
-			for(i=0;i<_count;i++) {
+			for(i=0;i < _count;i++) {
 
-				if(i==_count/2)
-					_gl << Point(0,_gl.getHeight()-_fontHeight);
+				if(i == _count / 2)
+					_gl << Point(0,_gl.getHeight() - _fontHeight);
 
-				_gl << StringUtil::itoa(i + 1,value,10)
-				    << "="
-				    << StringUtil::itoa(_gamma[i],value,16)
-				    << " ";
+				_gl << StringUtil::itoa(i + 1,value,10) << "=" << StringUtil::itoa(_gamma[i],value,16) << " ";
 			}
 		}
 

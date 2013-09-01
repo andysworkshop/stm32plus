@@ -63,6 +63,17 @@ namespace stm32plus {
 		using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,72,50,50>;
 
 #elif(defined(STM32PLUS_F4))
+
+		/**
+		 * The optimised GPIO access mode is available for the 64K depths at max 168Mhz HCLK
+		 */
+
+		template<class TPinPackage>
+		using Gpio16BitAccessMode_HX8352A_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,168,50,50>;
+
+		template<class TPinPackage>
+		using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,168,50,50>;
+
 #else
 #error unsupported MCU
 #endif

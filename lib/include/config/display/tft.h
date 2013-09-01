@@ -66,6 +66,8 @@
 #include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"
 #include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"
 
+// include the device drivers
+
 #include "display/graphic/tft/ili9325/ILI9325.h"
 #include "display/graphic/tft/ili9481/ILI9481.h"
 #include "display/graphic/tft/ili9327/ILI9327.h"
@@ -82,3 +84,7 @@
 #include "display/graphic/tft/hx8352a/panelTraits/LG_KF700.h"
 
 #include "display/graphic/tft/TftInterfaces.h"
+
+// include the interactive gamma class
+
+#include "display/graphic/gamma/InteractiveGamma.h"

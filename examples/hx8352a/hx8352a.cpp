@@ -6,6 +6,7 @@
 
 #include "config/stm32plus.h"
 #include "config/display/tft.h"
+#include "config/usart.h"
 
 
 extern uint32_t BulbPixelsSize,BulbPixels;
@@ -72,7 +73,13 @@ class HX8352ATest {
 			// set up the FSMC timing. these numbers (particularly the data setup time) are dependent on
 			// both the FSMC bus speed and the panel timing parameters.
 
+#if defined(STM32PLUS_F4)
+			Fsmc8080LcdTiming fsmcTiming(3,6);
+#elif defined(STM32PLUS_F1)
 			Fsmc8080LcdTiming fsmcTiming(0,2);
+#else
+#error Invalid MCU
+#endif
 
 			// set up the FSMC with RS=A16 (PD11)
 
@@ -106,9 +113,9 @@ class HX8352ATest {
 			*_gl << *_font;
 
 			for(;;) {
+				lzgTest();
 				rectTest();
 				jpegTest();
-				lzgTest();
 				basicColoursTest();
 				lineTest();
 				textTest();
@@ -206,11 +213,10 @@ class HX8352ATest {
 
 		void textTest() {
 
-			int i;
 			const char *str="The quick brown fox";
 			Size size;
 			Point p;
-			uint32_t before,elapsed;
+			uint32_t i,start;
 
 			prompt("Stream operators test");
 
@@ -225,9 +231,7 @@ class HX8352ATest {
 
 			size=_gl->measureString(*_font,str);
 
-			before=MillisecondTimer::millis();
-
-			for(i=0;i<3000;i++) {
+			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
 
 				p.X=rand() % (_gl->getXmax()-size.Width);
 				p.Y=rand() % (_gl->getYmax()-size.Height);
@@ -235,14 +239,6 @@ class HX8352ATest {
 				_gl->setForeground(rand());
 				_gl->writeString(p,*_font,str);
 			}
-
-			elapsed=MillisecondTimer::millis()-before;
-
-			_gl->clearScreen();
-			_gl->setForeground(ColourNames::WHITE);
-			*_gl << Point::Origin << "Elapsed: " << (int32_t)elapsed << "ms";
-
-			MillisecondTimer::delay(3000);
 		}
 
 
@@ -354,12 +350,12 @@ class HX8352ATest {
 
 		void rectTest() {
 
-			int i;
+			uint32_t i,start;
 			Rectangle rc;
 
 			prompt("Rectangle test");
 
-			for(i=0;i<1500;i++) {
+			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
 
 				rc.X=(rand() % _gl->getXmax()/2);
 				rc.Y=(rand() % _gl->getYmax()/2);
@@ -372,7 +368,7 @@ class HX8352ATest {
 
 			_gl->clearScreen();
 
-			for(i=0;i<10000;i++) {
+			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
 
 				rc.X=(rand() % _gl->getXmax()/2);
 				rc.Y=(rand() % _gl->getYmax()/2);
@@ -390,14 +386,14 @@ class HX8352ATest {
 
 		void ellipseTest() {
 
-			int16_t i;
+			uint32_t i,start;
 			Point p;
 			Size s;
 
 			prompt("Ellipse test");
 			_gl->setBackground(0);
 
-			for(i=0;i<1000;i++) {
+			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
 
 				p.X=_gl->getXmax()/4+(rand() % (_gl->getXmax()/2));
 				p.Y=_gl->getYmax()/4+(rand() % (_gl->getYmax()/2));
@@ -418,7 +414,7 @@ class HX8352ATest {
 
 			_gl->clearScreen();
 
-			for(i=0;i<1500;i++) {
+			for(i=0,start=MillisecondTimer::millis();MillisecondTimer::millis()-start<5000;i++) {
 
 				p.X=_gl->getXmax()/4+(rand() % (_gl->getXmax()/2));
 				p.Y=_gl->getYmax()/4+(rand() % (_gl->getYmax()/2));

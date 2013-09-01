@@ -34,15 +34,13 @@ using namespace stm32plus::display;
  * LCD_RS     = PE2
  * LCD_VSYNC  = PE3							// input pin for vsync synchronisation
  *
- * Backlight PWM output = PA1
+ * Backlight PWM output = PA1 (connect to LCD_EN pin)
  *
  * Compatible MCU:
  * 	 STM32F1
- * 	 STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
- *   STM32F407VGT6
  */
 
 class HX8352ATest {
