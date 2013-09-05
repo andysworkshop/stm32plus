@@ -12,10 +12,11 @@
  * serial flash device and the Samsung K9F1G08Q0C NAND flash device.
  */
 
-// spi flash depends on spi, timing
+// spi flash depends on spi, timing, stream
 
 #include "config/spi.h"
 #include "config/timing.h"
+#include "config/stream.h"
 
 // include the main classes
 
@@ -48,3 +49,7 @@
 #include "flash/spi/devices/w25q16dw/EraseSuspend.h"
 #include "flash/spi/devices/w25q16dw/EraseResume.h"
 #include "flash/spi/devices/w25q16dw/W25Q16DW.h"
+
+// include the stream class
+
+#include "flash/spi/SpiFlashInputStream.h"

@@ -40,8 +40,23 @@ namespace stm32plus {
 				PAGE_SIZE = 256								// 256 byte pages
 			};
 
+
+			/**
+			 * Constructor
+			 */
+
 			StandardSpiFlashDevice(TSpi& spi) {
 				this->_spi=&spi;
+			}
+
+
+			/**
+			 * This is a generic implementation, the size of the device is unknown
+			 * @return 0
+			 */
+
+			constexpr uint32_t getSize() const {
+				return 0;
 			}
 		};
 	}

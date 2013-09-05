@@ -36,11 +36,12 @@ using namespace stm32plus;
  *
  * Whitespace is not permitted anywhere on the text lines. It is important that each address
  * is a multiple of the device page size (usually 256 bytes). If it's not then you will get
- * data corruption.
+ * data corruption. A chip-erase command is used to wipe the device before
+ * programming.
  *
  * An example "spiflash" directory is included with this example that can be copied to
- * the root of your SD card. A chip-erase command is used to wipe the device before
- * programming.
+ * the root of your SD card. See the related 'flash_spi_reader' example for a demo that
+ * reads back the example graphic files and displays them on an LCD.
  *
  * The default peripherals for this demo are SPI1, USART1, Winbond W25Q16DW 16Mbit flash. All
  * of these are customisable by you.

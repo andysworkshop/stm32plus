@@ -52,6 +52,16 @@ namespace stm32plus {
 			W25Q16DW(TSpi& spi) {
 				this->_spi=&spi;
 			}
+
+
+			/**
+			 * Get the size of the device in bytes (2 megabytes)
+			 * @return 2097152
+			 */
+
+			constexpr uint32_t getSize() const {
+				return 1024*1024*2;
+			}
 		};
 	}
 }
