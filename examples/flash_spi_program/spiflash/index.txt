@@ -1,0 +1,3 @@
+/spiflash/1.jpg=0
+/spiflash/2.jpg=58112
+/spiflash/3.jpg=77568

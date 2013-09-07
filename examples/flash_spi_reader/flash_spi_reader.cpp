@@ -15,11 +15,17 @@ using namespace stm32plus::display;
 
 /**
  * This example is closely related to the 'flash_spi_program' example. That example programmed
- * the flash IC with 10 sample graphics files. This example will read back those graphics
+ * the flash IC with 3 sample JPEG graphics files. This example will read back those graphics
  * files and display them on a TFT LCD.
  *
  * In this example the LCD is an LG KF700 cellphone LCD with an HX8352A controller. You can change
- * the graphics driver to a different one if you need to.
+ * the graphics driver to a different one if you need to but be aware that the third JPEG is 480
+ * pixels wide and may not fit on your choice of TFT.
+ *
+ * The SPI flash device is a 'standard' device that is only required to implement the 'fast read'
+ * function. The STM32 SPI peripheral is SPI2, which you can change if you need to. The SPI flash
+ * library includes an input stream implementation that we use to stream out the data required
+ * by the JPEG decoder.
  *
  * Compatible MCU:
  * 	 STM32F1
@@ -35,7 +41,7 @@ class FlashSpiReader {
 	// definitions for the LCD panel
 
 	typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-	typedef ILI9325_Landscape_262K<LcdAccessMode> LcdPanel;
+	typedef LG_KF700_Landscape_64K<LcdAccessMode> LcdPanel;
 
 	LcdAccessMode *_accessMode;
 	LcdPanel *_gl;
@@ -86,7 +92,7 @@ class FlashSpiReader {
 
 			// apply gamma settings
 
-			ILI9325Gamma gamma(0x0006,0x0101,0x0003,0x0106,0x0b02,0x0302,0x0707,0x0007,0x0600,0x020b);
+			HX8352AGamma gamma(0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03);
 			_gl->applyGamma(gamma);
 
 			// clear to black while the lights are out
@@ -107,9 +113,9 @@ class FlashSpiReader {
 
 			for(;;) {
 
-				copyJpegToLcd(0,57961,Rectangle(0,0,320,240));
-				copyJpegToLcd(58112,19272,Rectangle(0,0,320,240));
-				copyJpegToLcd(77568,182190,Rectangle(0,0,320,240));
+				copyJpegToLcd(0,57961,367,240);
+				copyJpegToLcd(58112,19272,240,160);
+				copyJpegToLcd(77568,182190,480,240);
 			}
 		}
 
@@ -118,7 +124,15 @@ class FlashSpiReader {
 		 * Copy a JPEG from flash to the LCD
 		 */
 
-		void copyJpegToLcd(uint32_t offset,uint32_t size,const Rectangle& rc) {
+		void copyJpegToLcd(uint32_t offset,uint32_t size,int width,int height) {
+
+			// draw in the center
+
+			Rectangle rc(
+					(_gl->getWidth()-width)/2,
+					(_gl->getHeight()-height)/2,
+					width,
+					height);
 
 			// clear the display
 

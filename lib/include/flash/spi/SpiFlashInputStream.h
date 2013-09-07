@@ -42,6 +42,8 @@ namespace stm32plus {
 				SpiFlashInputStream(const TSpiFlash& spiFlash,uint32_t initialOffset,uint32_t size);
 				virtual ~SpiFlashInputStream() {}
 
+				uint32_t remaining() const;
+
 				// overrides from InputStream
 
 				virtual int16_t read() override;
@@ -129,7 +131,7 @@ namespace stm32plus {
 
 			// trim the requested size if not enough remains
 
-			actuallyRead=_size-_offset < size ? _size-_offset : size;
+			actuallyRead=remaining() < size ? remaining() : size;
 
 			// return now if we're at the EOF
 
@@ -157,7 +159,7 @@ namespace stm32plus {
 		template<class TSpiFlash>
 		inline bool SpiFlashInputStream<TSpiFlash>::skip(uint32_t howMuch) {
 
-			if(howMuch>_size-_offset)
+			if(howMuch>remaining())
 				return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SPI_FLASH_INPUT_STREAM,E_INVALID_SKIP_POSITION);
 
 			_offset+=howMuch;
@@ -172,7 +174,18 @@ namespace stm32plus {
 
 		template<class TSpiFlash>
 		inline bool SpiFlashInputStream<TSpiFlash>::available() {
-			return _size!=_offset;
+			return remaining()>0;
+		}
+
+
+		/**
+		 * Return the amount of bytes remaining to read
+		 * @return The number of bytes remaining
+		 */
+
+		template<class TSpiFlash>
+		inline uint32_t SpiFlashInputStream<TSpiFlash>::remaining() const {
+			return _size-(_offset-_initialOffset);
 		}
 	}
 }
