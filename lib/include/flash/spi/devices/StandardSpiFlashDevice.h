@@ -30,7 +30,9 @@ namespace stm32plus {
 															 	 	  BlockErase					<TSpi>,
 															 	 	  ChipErase						<TSpi>,
 															 	 	  DeepPowerDown				<TSpi>,
-															 	 	  ReleaseDeepPowerDown<TSpi> {
+															 	 	  ReleaseDeepPowerDown<TSpi>,
+															 	 	  ReadJedecId         <TSpi> {
+
 			/**
 			 * Various constants required by the base class
 			 */

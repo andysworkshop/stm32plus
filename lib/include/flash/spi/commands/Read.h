@@ -22,7 +22,7 @@ namespace stm32plus {
 			 * Provide a read() function for the derived class
 			 */
 
-			bool read(uint32_t address,uint8_t *data,uint32_t dataSize) const {
+			bool read(uint32_t address,void *data,uint32_t dataSize) const {
 				return this->readCommand(TOpCode,address,TAddressBytes,0,data,dataSize);
 			}
 		};

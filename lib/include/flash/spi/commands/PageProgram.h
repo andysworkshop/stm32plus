@@ -22,7 +22,7 @@ namespace stm32plus {
 			 * Provide a pageProgram() function for the derived class
 			 */
 
-			bool pageProgram(uint32_t address,const uint8_t *data,uint32_t dataSize) const {
+			bool pageProgram(uint32_t address,const void *data,uint32_t dataSize) const {
 				return this->writeCommand(TOpCode,address,TAddressBytes,0,data,dataSize);
 			}
 		};

@@ -23,16 +23,16 @@ using namespace stm32plus;
  * commands so it uses the 'StandardSpiFlashDevice' template. Other templates are available
  * that mixin commands specific to those devices.
  *
- * The SD card must contain an "index.txt" file in the root folder. "index.txt" contains
- * one line per file to flash The line is of the form:
+ * The SD card must contain an "index.txt" file in the "/spiflash" folder. "/spiflash/index.txt"
+ * contains one line per file to flash The line is of the form:
  *
  *   <filename>=<start-address-in-flash-in-decimal>
  *
  * For example:
  *
- *   /graphic1.bin=0
- *   /graphic2.bin=16384
- *   /assets/line.bin=24576
+ *   /spiflash/graphic1.bin=0
+ *   /spiflash/graphic2.bin=16384
+ *   /spiflash/assets/line.bin=24576
  *
  * Whitespace is not permitted anywhere on the text lines. It is important that each address
  * is a multiple of the device page size (usually 256 bytes). If it's not then you will get
@@ -43,8 +43,9 @@ using namespace stm32plus;
  * the root of your SD card. See the related 'flash_spi_reader' example for a demo that
  * reads back the example graphic files and displays them on an LCD.
  *
- * The default peripherals for this demo are SPI1, USART1, Winbond W25Q16DW 16Mbit flash. All
- * of these are customisable by you.
+ * The default peripherals for this demo are SPI2, USART1, Winbond W25Q16DW 16Mbit flash. All
+ * of these are customisable by you. The device identification code reported by the W25Q16DW
+ * should be "ef6015".
  *
  * Compatible MCU:
  * 	 STM32F1
@@ -59,7 +60,7 @@ class FlashSpiProgram {
 
 	// these are the peripherals we will use
 
-	typedef Spi1<> MySpi;
+	typedef Spi2<> MySpi;
 	typedef Usart1<> MyUsart;
 	typedef spiflash::StandardSpiFlashDevice<MySpi> MyFlash;
 
@@ -91,6 +92,8 @@ class FlashSpiProgram {
 			_usart=new MyUsart(57600);
 			_usartStream=new UsartPollingOutputStream(*_usart);
 
+			status("Initialising SD card.");
+
 			// initialise the SD card
 
 			_sdcard=new SdioDmaSdCard;
@@ -105,18 +108,24 @@ class FlashSpiProgram {
 			if(!FileSystem::getInstance(*_sdcard,timeProvider,_fs))
 				error("The file system on the SD card could not be initialised");
 
-			// Initialise the SPI peripheral in master mode. The SPI speed is the highest available.
+			// Initialise the SPI peripheral in master mode. The SPI speed is bus/4
 			// Make sure that this is not too fast for your device.
 
 			MySpi::Parameters spiParams;
 			spiParams.spi_mode=SPI_Mode_Master;
-			spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_2;
+			spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_4;
+			spiParams.spi_cpol=SPI_CPOL_Low;
+			spiParams.spi_cpha=SPI_CPHA_1Edge;
 
 			_spi=new MySpi(spiParams);
 
 			// initialise the flash device
 
 			_flash=new MyFlash(*_spi);
+
+			// show the device identifier
+
+			showDeviceIdentifier();
 
 			// read the index file
 
@@ -128,15 +137,37 @@ class FlashSpiProgram {
 
 			// write each file
 
-			for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++) {
+			for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++)
 				writeFile(*it);
+
+			// verify each file
+
+			for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++)
 				verifyFile(*it);
-			}
 
 			// done
 
 			status("Success");
 			for(;;);
+		}
+
+
+		/*
+		 * Show the flash device id
+		 */
+
+		void showDeviceIdentifier() {
+
+			uint8_t id[3];
+			char output[7];
+
+			if(!_flash->readJedecId(id,sizeof(id)))
+				error("Unable to read the flash id code");
+
+			StringUtil::toHex(id,sizeof(id),output);
+			output[sizeof(output)-1]='\0';
+
+			*_usartStream << "Flash id = " << output << "\r\n";
 		}
 
 
@@ -200,6 +231,9 @@ class FlashSpiProgram {
 				if(!_flash->writeEnable())
 					error("Unable to enable write access");
 
+				if(!_flash->waitForIdle())
+					error("Failed to wait for the device to become idle");
+
 				// program the page
 
 				if(!_flash->pageProgram(address,page,actuallyRead))
@@ -243,7 +277,7 @@ class FlashSpiProgram {
 
 				// read the page from the flash device
 
-				if(!_flash->read(address,flashPage,actuallyRead))
+				if(!_flash->fastRead(address,flashPage,actuallyRead))
 					error("Failed to read from the flash device");
 
 				// compare it
@@ -267,9 +301,11 @@ class FlashSpiProgram {
 			scoped_ptr<File> file;
 			char line[200],*ptr;
 
+			status("Reading index file.");
+
 			// open the file
 
-			if(!_fs->openFile("/index.txt",file.address()))
+			if(!_fs->openFile("/spiflash/index.txt",file.address()))
 				error("Cannot open /index.txt");
 
 			// attach a reader and read each line
@@ -294,7 +330,7 @@ class FlashSpiProgram {
 
 				// ensure this file can be opened
 
-				if(!_fs->openFile(ptr,dataFile.address()))
+				if(!_fs->openFile(line,dataFile.address()))
 					error("Cannot open data file");
 
 				FlashEntry fe;
@@ -305,13 +341,13 @@ class FlashSpiProgram {
 				_flashEntries.push_back(fe);
 
 				*_usartStream << "Parsed " << fe.filename
-						          << " offset " << fe.offset
-						          << ", length " << fe.length
+						          << " offset " << StringUtil::Ascii(fe.offset)
+						          << " length " << StringUtil::Ascii(fe.length)
 						          << "\r\n";
 			}
 
 			*_usartStream << "Finished reading index, "
-										<< (uint32_t)_flashEntries.size() << ", entries read\r\n";
+										<< StringUtil::Ascii(_flashEntries.size()) << ", entries read\r\n";
 		}
 
 

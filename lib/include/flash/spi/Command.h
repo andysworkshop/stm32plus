@@ -21,12 +21,12 @@ namespace stm32plus {
 
 			protected:
 				bool writeCommand(uint8_t command) const;
-				bool writeCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,const uint8_t *data,uint32_t dataSize) const;
-				bool readCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,uint8_t *data,uint32_t dataSize) const;
+				bool writeCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,const void *data,uint32_t dataSize) const;
+				bool readCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,void *data,uint32_t dataSize) const;
 
-				bool doWriteCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,const uint8_t *data,uint32_t dataSize) const;
+				bool doWriteCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,const void *data,uint32_t dataSize) const;
 				bool doWriteCommandStart(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes) const;
-				bool doReadCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,uint8_t *data,uint32_t dataSize) const;
+				bool doReadCommand(uint8_t command,uint32_t address,uint8_t addressBytes,uint8_t dummyBytes,void *data,uint32_t dataSize) const;
 		};
 
 
@@ -64,11 +64,11 @@ namespace stm32plus {
 
 		template<class TSpi>
 		inline bool Command<TSpi>::writeCommand(uint8_t command,
-																									uint32_t address,
-																									uint8_t addressBytes,
-																									uint8_t dummyBytes,
-																									const uint8_t *data,
-																									uint32_t dataSize) const {
+																						uint32_t address,
+																						uint8_t addressBytes,
+																						uint8_t dummyBytes,
+																						const void *data,
+																						uint32_t dataSize) const {
 
 			bool retval;
 
@@ -86,11 +86,11 @@ namespace stm32plus {
 
 		template<class TSpi>
 		inline bool Command<TSpi>::doWriteCommand(uint8_t command,
-																										uint32_t address,
-																										uint8_t addressBytes,
-																										uint8_t dummyBytes,
-																										const uint8_t *data,
-																										uint32_t dataSize) const {
+																							uint32_t address,
+																							uint8_t addressBytes,
+																							uint8_t dummyBytes,
+																							const void *data,
+																							uint32_t dataSize) const {
 
 			// write out the common starting sequence
 
@@ -100,7 +100,7 @@ namespace stm32plus {
 			// write out the data block
 
 			if(dataSize)
-				return this->_spi->send(data,dataSize);
+				return this->_spi->send(reinterpret_cast<const uint8_t *>(data),dataSize);
 
 			return true;
 		}
@@ -112,9 +112,9 @@ namespace stm32plus {
 
 		template<class TSpi>
 		inline bool Command<TSpi>::doWriteCommandStart(uint8_t command,
-																												 uint32_t address,
-																												 uint8_t addressBytes,
-																												 uint8_t dummyBytes) const {
+																									 uint32_t address,
+																									 uint8_t addressBytes,
+																									 uint8_t dummyBytes) const {
 
 			int i;
 			uint8_t c;
@@ -128,7 +128,7 @@ namespace stm32plus {
 
 			if(addressBytes) {
 				for(i=addressBytes-1;i>=0;i--) {
-					c=address >> i;
+					c=address >> (8*i);
 					if(!this->_spi->send(&c,1))
 						return false;
 				}
@@ -164,11 +164,11 @@ namespace stm32plus {
 
 		template<class TSpi>
 		inline bool Command<TSpi>::readCommand(uint8_t command,
-																					 	 	 	 uint32_t address,
-																					 	 	 	 uint8_t addressBytes,
-																					 	 	 	 uint8_t dummyBytes,
-																					 	 	 	 uint8_t *data,
-																					 	 	 	 uint32_t dataSize) const {
+																					 uint32_t address,
+																					 uint8_t addressBytes,
+																					 uint8_t dummyBytes,
+																					 void *data,
+																					 uint32_t dataSize) const {
 
 			bool retval;
 
@@ -186,11 +186,11 @@ namespace stm32plus {
 
 		template<class TSpi>
 		inline bool Command<TSpi>::doReadCommand(uint8_t command,
-																						 	 	 	 uint32_t address,
-																						 	 	 	 uint8_t addressBytes,
-																						 	 	 	 uint8_t dummyBytes,
-																						 	 	 	 uint8_t *data,
-																						 	 	 	 uint32_t dataSize) const {
+																						 uint32_t address,
+																						 uint8_t addressBytes,
+																						 uint8_t dummyBytes,
+																						 void *data,
+																						 uint32_t dataSize) const {
 
 			// write out the common starting sequence
 
@@ -199,7 +199,7 @@ namespace stm32plus {
 
 			// read using the dummy write method
 
-			return this->_spi->receive(data,dataSize);
+			return this->_spi->receive(reinterpret_cast<uint8_t *>(data),dataSize);
 		}
 	}
 }

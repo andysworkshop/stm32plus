@@ -65,8 +65,8 @@ class NetUdpSendTest {
 		 * Types that define the network stack
 		 */
 
-		typedef PhysicalLayer<DP83848C> MyPhysicalLayer;
-		typedef DatalinkLayer<MyPhysicalLayer,DefaultRmiiInterface,Mac> MyDatalinkLayer;
+		typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
+		typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
 		typedef NetworkLayer<MyDatalinkLayer,DefaultIp,Arp> MyNetworkLayer;
 		typedef TransportLayer<MyNetworkLayer,Udp> MyTransportLayer;
 		typedef ApplicationLayer<MyTransportLayer,DhcpClient> MyApplicationLayer;
@@ -144,7 +144,7 @@ class NetUdpSendTest {
 			// IP multicast senders are supported so feel free to use the multicast host group
 			// range if that's what you want.
 
-			IpAddress ipAddress("192.168.1.3");
+			IpAddress ipAddress("192.168.1.2");
 
 			// Set up a buffer full of a test pattern. The buffer is 50 bytes in size and as such is
 			// guaranteed to easily fit within the ethernet MTU size.

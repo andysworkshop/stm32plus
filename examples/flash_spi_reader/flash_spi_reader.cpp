@@ -42,7 +42,7 @@ class FlashSpiReader {
 
 	// these are the peripherals we will use for the flash access
 
-	typedef Spi1<> MySpi;
+	typedef Spi2<> MySpi;
 	typedef spiflash::StandardSpiFlashDevice<MySpi> MyFlash;
 
 	// declare the peripheral pointers
@@ -60,6 +60,8 @@ class FlashSpiReader {
 			MySpi::Parameters spiParams;
 			spiParams.spi_mode=SPI_Mode_Master;
 			spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_2;
+			spiParams.spi_cpol=SPI_CPOL_Low;
+			spiParams.spi_cpha=SPI_CPHA_1Edge;
 
 			_spi=new MySpi(spiParams);
 
@@ -100,13 +102,14 @@ class FlashSpiReader {
 
 			backlight.fadeTo(100,4);
 
-			// the 'flash_spi_program' example wrote a sequence of 10 JPEG files to the SPI
+			// the 'flash_spi_program' example wrote a sequence of 3 JPEG files to the SPI
 			// flash device. For convenience this demo hard-codes the size and location.
 
 			for(;;) {
 
-				copyJpegToLcd(0,999,Rectangle(0,0,320,240));
-				///etc...
+				copyJpegToLcd(0,57961,Rectangle(0,0,320,240));
+				copyJpegToLcd(58112,19272,Rectangle(0,0,320,240));
+				copyJpegToLcd(77568,182190,Rectangle(0,0,320,240));
 			}
 		}
 
@@ -117,58 +120,18 @@ class FlashSpiReader {
 
 		void copyJpegToLcd(uint32_t offset,uint32_t size,const Rectangle& rc) {
 
+			// clear the display
 
-		}
+			_gl->clearScreen();
 
+			// declare an input stream to read the JPEG and then do it
 
-		/*
-		 * Verify the file just written to the device
-		 */
+			spiflash::SpiFlashInputStream<MyFlash> is(*_flash,offset,size);
+			_gl->drawJpeg(rc,is);
 
-		void verifyFile(const FlashEntry& fe) {
+			// wait for 5 seconds
 
-			uint8_t filePage[MyFlash::PAGE_SIZE],flashPage[MyFlash::PAGE_SIZE];
-			scoped_ptr<File> file;
-			uint32_t remaining,actuallyRead,address;
-
-			*_usartStream << "Verifying " << fe.filename << "\r\n";
-
-			if(!_fs->openFile(fe.filename,file.address()))
-				error("Failed to open file");
-
-			address=fe.offset;
-
-			for(remaining=fe.length;remaining;remaining-=actuallyRead) {
-
-				// read a page from the file
-
-				if(!file->read(filePage,sizeof(filePage),actuallyRead))
-					error("Failed to read from file");
-
-				// cannot hit EOF here
-
-				if(!actuallyRead)
-					error("Unexpected end of file");
-
-				// read the page from the flash device
-
-				if(!_flash->read(address,flashPage,actuallyRead))
-					error("Failed to read from the flash device");
-
-				// compare it
-
-				if(memcmp(filePage,flashPage,actuallyRead)!=0)
-					error("Verify error: programming failed");
-
-				// update for next
-
-				address+=actuallyRead;
-			}
-		}
-
-
-		void error(const char *text) {
-			for(;;);
+			MillisecondTimer::delay(5000);
 		}
 };
 

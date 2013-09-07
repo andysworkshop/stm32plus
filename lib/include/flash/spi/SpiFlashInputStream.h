@@ -12,20 +12,34 @@ namespace stm32plus {
 
 
 		/**
-		 * @brief Implementation of an input stream for SPI flash devices
-		 * @tparam TSpiFlash An object that implements fastRead() and getSize()
+		 * @brief Implementation of an input stream for SPI flash devices. The SPI flash device is modelled as
+		 * a very large sequence of bytes on to which you can map an input stream of a defined length. This
+		 * class accepts an initial offset and a size parameter which together define the segment of the flash
+		 * device that you want to read from.
+		 * @tparam TSpiFlash An object that implements fastRead()
 		 */
 
 		template<class TSpiFlash>
 		class SpiFlashInputStream : public InputStream {
 
+			public:
+
+				/**
+				 * Error codes
+				 */
+
+				enum {
+					E_INVALID_SKIP_POSITION = 1				//!< attempt to skip() past the end
+				};
+
 			protected:
 				const TSpiFlash& _spiFlash;
 				uint32_t _initialOffset;
 				uint32_t _offset;
+				uint32_t _size;
 
 			public:
-				SpiFlashInputStream(const TSpiFlash& spiFlash,uint32_t initialOffset);
+				SpiFlashInputStream(const TSpiFlash& spiFlash,uint32_t initialOffset,uint32_t size);
 				virtual ~SpiFlashInputStream() {}
 
 				// overrides from InputStream
@@ -44,10 +58,11 @@ namespace stm32plus {
 		 */
 
 		template<class TSpiFlash>
-		inline SpiFlashInputStream<TSpiFlash>::SpiFlashInputStream(const TSpiFlash& spiFlash,uint32_t initialOffset)
+		inline SpiFlashInputStream<TSpiFlash>::SpiFlashInputStream(const TSpiFlash& spiFlash,uint32_t initialOffset,uint32_t size)
 			: _spiFlash(spiFlash),
 			  _initialOffset(initialOffset),
-			  _offset(initialOffset) {
+			  _offset(initialOffset),
+			  _size(size) {
 		}
 
 
@@ -112,18 +127,52 @@ namespace stm32plus {
 		template<class TSpiFlash>
 		inline bool SpiFlashInputStream<TSpiFlash>::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
 
+			// trim the requested size if not enough remains
+
+			actuallyRead=_size-_offset < size ? _size-_offset : size;
+
+			// return now if we're at the EOF
+
+			if(actuallyRead==0)
+				return true;
+
+			// attempt to read the bytes
+
+			if(!_spiFlash.fastRead(_offset,buffer,actuallyRead))
+				return false;
+
+			// update the read pointer
+
+			_offset+=actuallyRead;
+			return true;
 		}
 
+
+		/**
+		 * Skip a number of bytes forward
+		 * @param howMuch Amount to skip - can go to EOF but not beyond
+		 * @return true if OK
+		 */
 
 		template<class TSpiFlash>
 		inline bool SpiFlashInputStream<TSpiFlash>::skip(uint32_t howMuch) {
 
+			if(howMuch>_size-_offset)
+				return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SPI_FLASH_INPUT_STREAM,E_INVALID_SKIP_POSITION);
+
+			_offset+=howMuch;
+			return true;
 		}
 
 
+		/**
+		 * Return true if at least one byte can be read
+		 * @return true if reading is possible
+		 */
+
 		template<class TSpiFlash>
 		inline bool SpiFlashInputStream<TSpiFlash>::available() {
-
+			return _size!=_offset;
 		}
 	}
 }

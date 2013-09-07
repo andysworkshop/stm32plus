@@ -23,7 +23,7 @@ namespace stm32plus {
 			 */
 
 			bool readJedecId(uint8_t *data,uint32_t dataSize) const {
-				return this->readCommand(TOpCode,nullptr,0,0,data,dataSize);
+				return this->readCommand(TOpCode,0,0,0,data,dataSize);
 			}
 		};
 	}
