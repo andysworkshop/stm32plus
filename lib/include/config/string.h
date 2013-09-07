@@ -13,8 +13,9 @@
  * utilities are the sort of thing you will find here.
  */
 
-// string depends on the STL string, vector
+// string depends on scoped array, STL string, vector
 
+#include "memory/scoped_array.h"
 #include <iterator>
 #include <vector>
 #include <string>
@@ -24,3 +25,4 @@
 #include "string/StringUtil.h"
 #include "string/TokenisedString.h"
 #include "string/StdStringUtil.h"
+#include "string/Ascii.h"

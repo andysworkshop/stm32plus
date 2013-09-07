@@ -35,6 +35,7 @@ namespace stm32plus {
 		public:
 			bool readyToReceive() const;
 			bool receive(uint8_t& byte) const;
+			bool receive(uint8_t *data,uint32_t numBytes);
 
 			bool readyToSend() const;
 			bool send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived=nullptr) const;
@@ -136,6 +137,7 @@ namespace stm32plus {
 
 	/**
 	 * Read a byte from the peripheral
+	 * @param byte[out] The byte read out
 	 */
 
 	inline bool Spi::receive(uint8_t& byte) const {
@@ -148,8 +150,47 @@ namespace stm32plus {
 		return true;
 	}
 
+
+	/**
+	 * This overload reads a number of bytes from the peripheral. It transmits dummy zero bytes to
+	 * cause the clock to tick and data to be received.
+	 * @param data The data buffer
+	 * @param numBytes The number of bytes to read
+	 * @return true if it worked
+	 */
+
+	inline bool Spi::receive(uint8_t *data,uint32_t numBytes) {
+
+		static const uint16_t zero=0;
+
+		while(numBytes--) {
+
+			// wait for ready to send
+
+			while(!readyToSend())
+				if(hasError())
+					return false;
+
+			// send the dummy byte, i.e. cause the SPI clock to tick
+
+			SPI_I2S_SendData(_peripheralAddress,zero);
+
+			while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_RXNE)==RESET)
+				if(hasError())
+					return false;
+
+			// read the byte to clear RXNE and save/discard
+
+			*data++=SPI_I2S_ReceiveData(_peripheralAddress);
+		}
+
+		return true;
+	}
+
+
 	/**
 	 * Check for TXE
+	 * @return true if ready to send
 	 */
 
 	inline bool Spi::readyToSend() const {
