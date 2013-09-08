@@ -17,12 +17,12 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/*
-		 * SSD1306 interface landscape only
-		 */
+    /*
+     * SSD1306 interface landscape only
+     */
 
-		typedef GraphicsLibrary<SSD1306<LANDSCAPE,Serial4WireSpiAccessMode>,Serial4WireSpiAccessMode> SSD1306_Landscape_Serial4;
-	}
+    typedef GraphicsLibrary<SSD1306<LANDSCAPE,Serial4WireSpiAccessMode>,Serial4WireSpiAccessMode> SSD1306_Landscape_Serial4;
+  }
 }

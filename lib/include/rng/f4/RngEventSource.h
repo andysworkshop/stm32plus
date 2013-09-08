@@ -14,29 +14,29 @@
 
 namespace stm32plus {
 
-	/**
-	 * RNG event types
-	 */
+  /**
+   * RNG event types
+   */
 
-	enum class RngEventType : uint8_t {
-    EVENT_DATA_READY,				///< next random is ready
-    EVENT_SEED_ERROR,				///< error in random seed
-    EVENT_CLOCK_ERROR				///< error in clock
-	};
-
-
-	/**
-	 * The signature for RNG events: void myHandler(RngEventType ret,uint32_t randomNumber);
-	 */
-
-	DECLARE_EVENT_SIGNATURE(RngInterrupt,void(RngEventType,uint32_t));
+  enum class RngEventType : uint8_t {
+    EVENT_DATA_READY,       ///< next random is ready
+    EVENT_SEED_ERROR,       ///< error in random seed
+    EVENT_CLOCK_ERROR       ///< error in clock
+  };
 
 
-	/**
-	 * Base structure that holds just the event subscriber/publisher for SPI
-	 */
+  /**
+   * The signature for RNG events: void myHandler(RngEventType ret,uint32_t randomNumber);
+   */
 
-	struct RngEventSource {
-		DECLARE_EVENT_SOURCE(RngInterrupt);
-	};
+  DECLARE_EVENT_SIGNATURE(RngInterrupt,void(RngEventType,uint32_t));
+
+
+  /**
+   * Base structure that holds just the event subscriber/publisher for SPI
+   */
+
+  struct RngEventSource {
+    DECLARE_EVENT_SOURCE(RngInterrupt);
+  };
 }

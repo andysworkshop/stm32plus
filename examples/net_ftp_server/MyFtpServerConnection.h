@@ -23,64 +23,64 @@ using namespace stm32plus::net;
 
 class MyFtpServerConnection : public FtpServerConnection<MyFtpServerConnection,Tcp<MyNetworkLayer> > {
 
-	public:
+  public:
 
-		typedef FtpServerConnection<MyFtpServerConnection,Tcp<MyNetworkLayer> > FtpServerConnectionType;
+    typedef FtpServerConnection<MyFtpServerConnection,Tcp<MyNetworkLayer> > FtpServerConnectionType;
 
-		/**
-		 * Customised parameters for this ftp server
-		 */
+    /**
+     * Customised parameters for this ftp server
+     */
 
-		struct Parameters : FtpServerConnectionType::Parameters {
+    struct Parameters : FtpServerConnectionType::Parameters {
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			Parameters() {
+      Parameters() {
 
-				// this is an interactive connection so switch off the nagle avoidance and enable PUSH
+        // this is an interactive connection so switch off the nagle avoidance and enable PUSH
 
-				tcp_nagleAvoidance=false;
-				tcp_push=true;
-			}
-		};
+        tcp_nagleAvoidance=false;
+        tcp_push=true;
+      }
+    };
 
-	protected:
-		FtpParameters *_ftpParameters;
-		uint16_t _userIndex;
-		std::string _cwd;
+  protected:
+    FtpParameters *_ftpParameters;
+    uint16_t _userIndex;
+    std::string _cwd;
 
-	protected:
-		std::string appendPath(const std::string& prefix,const std::string& path) const;
-		bool normalisePath(std::string& path) const;
-		std::string getCurrentDirectory() const;
-		bool directoryListing(void (MyFtpServerConnection::*printFunction)(const FileInformation&));
-		void printFileDetails(const FileInformation& finfo);
-		void printFileName(const FileInformation& finfo);
-		bool getPaths(const char *dir,std::string& subdir,std::string& fullpath);
+  protected:
+    std::string appendPath(const std::string& prefix,const std::string& path) const;
+    bool normalisePath(std::string& path) const;
+    std::string getCurrentDirectory() const;
+    bool directoryListing(void (MyFtpServerConnection::*printFunction)(const FileInformation&));
+    void printFileDetails(const FileInformation& finfo);
+    void printFileName(const FileInformation& finfo);
+    bool getPaths(const char *dir,std::string& subdir,std::string& fullpath);
 
-	public:
-		MyFtpServerConnection(const Parameters& params,FtpParameters *ftpParameters);
+  public:
+    MyFtpServerConnection(const Parameters& params,FtpParameters *ftpParameters);
 
-		// required by the parent
+    // required by the parent
 
-		bool handleClosed();
-		bool writeGreeting();
-		bool writeGoodbye();
-		bool isAnonymousPermitted();
-		bool loginUser(const char *user,const char *password);
-		bool setCwd(const char *cwd);
-		bool download(const char *filename);
-		const char *getCwd();
-		bool simpleListing();
-		bool complexListing();
-		bool createDirectory(const char *dir,std::string& newdir);
-		bool removeDirectory(const char *dir);
-		bool removeFile(const char *filename);
-		bool upload(const char *param,bool append,OutputStream*& stream);
-		bool fileSize(const char *filename,uint32_t& fileSize);
-		bool hasTimedOut(uint32_t idleMillis) const;
+    bool handleClosed();
+    bool writeGreeting();
+    bool writeGoodbye();
+    bool isAnonymousPermitted();
+    bool loginUser(const char *user,const char *password);
+    bool setCwd(const char *cwd);
+    bool download(const char *filename);
+    const char *getCwd();
+    bool simpleListing();
+    bool complexListing();
+    bool createDirectory(const char *dir,std::string& newdir);
+    bool removeDirectory(const char *dir);
+    bool removeFile(const char *filename);
+    bool upload(const char *param,bool append,OutputStream*& stream);
+    bool fileSize(const char *filename,uint32_t& fileSize);
+    bool hasTimedOut(uint32_t idleMillis) const;
 };
 
 
@@ -90,8 +90,8 @@ class MyFtpServerConnection : public FtpServerConnection<MyFtpServerConnection,T
  */
 
 inline MyFtpServerConnection::MyFtpServerConnection(const Parameters& params,FtpParameters *ftpParameters)
-	: FtpServerConnectionType(params,ftpParameters->tcpImpl),
-	  _ftpParameters(ftpParameters) {
+  : FtpServerConnectionType(params,ftpParameters->tcpImpl),
+    _ftpParameters(ftpParameters) {
 }
 
 
@@ -104,8 +104,8 @@ inline MyFtpServerConnection::MyFtpServerConnection(const Parameters& params,Ftp
  */
 
 inline bool MyFtpServerConnection::handleClosed() {
-	delete this;
-	return true;
+  delete this;
+  return true;
 }
 
 
@@ -115,7 +115,7 @@ inline bool MyFtpServerConnection::handleClosed() {
  */
 
 inline bool MyFtpServerConnection::isAnonymousPermitted() {
-	return _ftpParameters->anonymousPermitted;
+  return _ftpParameters->anonymousPermitted;
 }
 
 
@@ -126,10 +126,10 @@ inline bool MyFtpServerConnection::isAnonymousPermitted() {
 
 inline bool MyFtpServerConnection::writeGreeting() {
 
-	// add the greeting to the outputs. the greeting already contains the correct 220 code prefixes
+  // add the greeting to the outputs. the greeting already contains the correct 220 code prefixes
 
-	_outputStreams.addStream(new StlStringInputStream(&_ftpParameters->serverGreeting,false),true);
-	return true;
+  _outputStreams.addStream(new StlStringInputStream(&_ftpParameters->serverGreeting,false),true);
+  return true;
 }
 
 
@@ -140,10 +140,10 @@ inline bool MyFtpServerConnection::writeGreeting() {
 
 inline bool MyFtpServerConnection::writeGoodbye() {
 
-	// add the goodbye to the outputs. the goodbye already contains the correct 221 code prefixes
+  // add the goodbye to the outputs. the goodbye already contains the correct 221 code prefixes
 
-	_outputStreams.addStream(new StlStringInputStream(&_ftpParameters->serverGoodbye,false),true);
-	return true;
+  _outputStreams.addStream(new StlStringInputStream(&_ftpParameters->serverGoodbye,false),true);
+  return true;
 }
 
 
@@ -156,40 +156,40 @@ inline bool MyFtpServerConnection::writeGoodbye() {
 
 inline bool MyFtpServerConnection::loginUser(const char *user,const char *password) {
 
-	// find the user
+  // find the user
 
-	for(auto it=_ftpParameters->users.begin();it!=_ftpParameters->users.end();it++) {
+  for(auto it=_ftpParameters->users.begin();it!=_ftpParameters->users.end();it++) {
 
-		if(it->name==user) {
+    if(it->name==user) {
 
-			SHA1HashPeripheral<> sha1;
-			std::string creds;
-			uint8_t hash[20];
-			char hex[41];
+      SHA1HashPeripheral<> sha1;
+      std::string creds;
+      uint8_t hash[20];
+      char hex[41];
 
-			// hash the salt and password concatenated
+      // hash the salt and password concatenated
 
-			creds=it->passwordSalt+password;
-			sha1.hash(creds.c_str(),creds.length(),hash);
+      creds=it->passwordSalt+password;
+      sha1.hash(creds.c_str(),creds.length(),hash);
 
-			// convert the hash to hex
+      // convert the hash to hex
 
-			StringUtil::toHex(hash,20,hex);
-			hex[40]='\0';
+      StringUtil::toHex(hash,20,hex);
+      hex[40]='\0';
 
-			// must match
+      // must match
 
-			if(it->passwordHash!=hex)
-				return false;
+      if(it->passwordHash!=hex)
+        return false;
 
-			_userIndex=it-_ftpParameters->users.begin();
-			return true;
-		}
-	}
+      _userIndex=it-_ftpParameters->users.begin();
+      return true;
+    }
+  }
 
-	// failed to find the user
+  // failed to find the user
 
-	return false;
+  return false;
 }
 
 
@@ -202,22 +202,22 @@ inline bool MyFtpServerConnection::loginUser(const char *user,const char *passwo
 
 inline bool MyFtpServerConnection::setCwd(const char *pathname) {
 
-	std::string newdir,fullpath;
-	scoped_ptr<FileInformation> finfo;
+  std::string newdir,fullpath;
+  scoped_ptr<FileInformation> finfo;
 
-	if(!getPaths(pathname,newdir,fullpath))
-		return false;
+  if(!getPaths(pathname,newdir,fullpath))
+    return false;
 
-	// get the file/directory information
+  // get the file/directory information
 
-	if(!_ftpParameters->fs->getFileInformation(fullpath.c_str(),finfo.address()))
-		return false;
+  if(!_ftpParameters->fs->getFileInformation(fullpath.c_str(),finfo.address()))
+    return false;
 
-	if((finfo->getAttributes() & FileInformation::ATTR_DIRECTORY)==0)
-		return false;
+  if((finfo->getAttributes() & FileInformation::ATTR_DIRECTORY)==0)
+    return false;
 
-	_cwd=newdir;
-	return true;
+  _cwd=newdir;
+  return true;
 }
 
 
@@ -227,7 +227,7 @@ inline bool MyFtpServerConnection::setCwd(const char *pathname) {
  */
 
 inline const char *MyFtpServerConnection::getCwd() {
-	return _cwd.c_str();
+  return _cwd.c_str();
 }
 
 
@@ -239,44 +239,44 @@ inline const char *MyFtpServerConnection::getCwd() {
 
 inline bool MyFtpServerConnection::normalisePath(std::string& path) const {
 
-	std::vector<std::string> names,normalised;
+  std::vector<std::string> names,normalised;
 
-	// break out the component parts
+  // break out the component parts
 
-	StdStringUtil::tokenise(path,"/\\",names);
+  StdStringUtil::tokenise(path,"/\\",names);
 
-	for(auto it=names.begin();it!=names.end();it++) {
+  for(auto it=names.begin();it!=names.end();it++) {
 
-		// skip empty parts e.g. foo//bar has an empty part at position 1.
+    // skip empty parts e.g. foo//bar has an empty part at position 1.
 
-		if(it->length() && *it!=".") {
+    if(it->length() && *it!=".") {
 
-			if(*it=="..") {
+      if(*it=="..") {
 
-				if(normalised.size()==0)
-					return false;
+        if(normalised.size()==0)
+          return false;
 
-				// remove the last part
+        // remove the last part
 
-				normalised.pop_back();
-			}
-			else
-				normalised.push_back(*it);
-		}
-	}
+        normalised.pop_back();
+      }
+      else
+        normalised.push_back(*it);
+    }
+  }
 
-	// put it back together
+  // put it back together
 
-	path.clear();
+  path.clear();
 
-	for(auto it=normalised.begin();it!=normalised.end();it++) {
-		if(it!=normalised.begin())
-			path+='/';
+  for(auto it=normalised.begin();it!=normalised.end();it++) {
+    if(it!=normalised.begin())
+      path+='/';
 
-		path+=*it;
-	}
+    path+=*it;
+  }
 
-	return true;
+  return true;
 }
 
 
@@ -289,12 +289,12 @@ inline bool MyFtpServerConnection::normalisePath(std::string& path) const {
 
 inline std::string MyFtpServerConnection::appendPath(const std::string& prefix,const std::string& path) const {
 
-	std::string newpath(path),newprefix(prefix);
+  std::string newpath(path),newprefix(prefix);
 
-	StdStringUtil::trimRight(newprefix,"/");
-	StdStringUtil::trimLeft(newpath,"/");
+  StdStringUtil::trimRight(newprefix,"/");
+  StdStringUtil::trimLeft(newpath,"/");
 
-	return newprefix+"/"+newpath;
+  return newprefix+"/"+newpath;
 }
 
 
@@ -305,16 +305,16 @@ inline std::string MyFtpServerConnection::appendPath(const std::string& prefix,c
 
 inline std::string MyFtpServerConnection::getCurrentDirectory() const {
 
-	// _cwd has already been sanitised
+  // _cwd has already been sanitised
 
-	std::string dir(_ftpParameters->rootDirectory);
+  std::string dir(_ftpParameters->rootDirectory);
 
-	if(!_cwd.empty()) {
-		dir+='/';
-		dir+=_cwd;
-	}
+  if(!_cwd.empty()) {
+    dir+='/';
+    dir+=_cwd;
+  }
 
-	return dir;
+  return dir;
 }
 
 
@@ -324,7 +324,7 @@ inline std::string MyFtpServerConnection::getCurrentDirectory() const {
  */
 
 inline bool MyFtpServerConnection::simpleListing() {
-	return directoryListing(&MyFtpServerConnection::printFileName);
+  return directoryListing(&MyFtpServerConnection::printFileName);
 }
 
 
@@ -334,7 +334,7 @@ inline bool MyFtpServerConnection::simpleListing() {
  */
 
 inline bool MyFtpServerConnection::complexListing() {
-	return directoryListing(&MyFtpServerConnection::printFileDetails);
+  return directoryListing(&MyFtpServerConnection::printFileDetails);
 }
 
 
@@ -345,30 +345,30 @@ inline bool MyFtpServerConnection::complexListing() {
 
 inline bool MyFtpServerConnection::directoryListing(void (MyFtpServerConnection::*printFunction)(const FileInformation& finfo)) {
 
-	std::string fullPath(getCurrentDirectory());
-	scoped_ptr<DirectoryIterator> dit;
+  std::string fullPath(getCurrentDirectory());
+  scoped_ptr<DirectoryIterator> dit;
 
-	// get a directory iterator
+  // get a directory iterator
 
-	if(!_ftpParameters->fs->getDirectoryIterator(fullPath.c_str(),dit.address()))
-		return false;
+  if(!_ftpParameters->fs->getDirectoryIterator(fullPath.c_str(),dit.address()))
+    return false;
 
-	// list the names
+  // list the names
 
-	while(dit->next()) {
+  while(dit->next()) {
 
-		// get a reference to the FileInformation object that describes the file/directory
-		// that we're currently looking at
+    // get a reference to the FileInformation object that describes the file/directory
+    // that we're currently looking at
 
-		const FileInformation& fileInfo(dit->current());
+    const FileInformation& fileInfo(dit->current());
 
-		// write out the filename, ignoring "." and ".."
+    // write out the filename, ignoring "." and ".."
 
-		if(strcmp(".",fileInfo.getFilename())!=0 && strcmp("..",fileInfo.getFilename())!=0)
-			(this->*printFunction)(fileInfo);
-	}
+    if(strcmp(".",fileInfo.getFilename())!=0 && strcmp("..",fileInfo.getFilename())!=0)
+      (this->*printFunction)(fileInfo);
+  }
 
-	return true;
+  return true;
 }
 
 
@@ -377,7 +377,7 @@ inline bool MyFtpServerConnection::directoryListing(void (MyFtpServerConnection:
  */
 
 inline void MyFtpServerConnection::printFileName(const FileInformation& finfo) {
-	_dataConnection->addString(finfo.getFilename());
+  _dataConnection->addString(finfo.getFilename());
 }
 
 
@@ -387,42 +387,42 @@ inline void MyFtpServerConnection::printFileName(const FileInformation& finfo) {
 
 inline void MyFtpServerConnection::printFileDetails(const FileInformation& finfo) {
 
-	std::string str;
-	char buffer[20];
-	uint32_t len;
+  std::string str;
+  char buffer[20];
+  uint32_t len;
 
-	// permissions string
+  // permissions string
 
-	if((finfo.getAttributes() & FileInformation::ATTR_DIRECTORY)==0)
-		str="-";
-	else
-		str="d";
+  if((finfo.getAttributes() & FileInformation::ATTR_DIRECTORY)==0)
+    str="-";
+  else
+    str="d";
 
-	if((finfo.getAttributes() & FileInformation::ATTR_READ_ONLY)==0)
-		str+="r-xr-xr-x";
-	else
-		str+="rwxrwxrwx";
+  if((finfo.getAttributes() & FileInformation::ATTR_READ_ONLY)==0)
+    str+="r-xr-xr-x";
+  else
+    str+="rwxrwxrwx";
 
-	// owner/group (n/a)
+  // owner/group (n/a)
 
-	str+="   1      owner      group ";
+  str+="   1      owner      group ";
 
-	// size (pad to 10)
+  // size (pad to 10)
 
-	len=StringUtil::modp_uitoa10(finfo.getLength(),buffer);
-	memset(buffer+len,' ',10-len);
-	buffer[10]='\0';
+  len=StringUtil::modp_uitoa10(finfo.getLength(),buffer);
+  memset(buffer+len,' ',10-len);
+  buffer[10]='\0';
 
-	str+=buffer;
+  str+=buffer;
 
-	// date (fake this)
+  // date (fake this)
 
-	str+=" Jan  1  1980 ";
-	str+=finfo.getFilename();
+  str+=" Jan  1  1980 ";
+  str+=finfo.getFilename();
 
-	// add to the output
+  // add to the output
 
-	_dataConnection->addString(str.c_str());
+  _dataConnection->addString(str.c_str());
 }
 
 
@@ -433,42 +433,42 @@ inline void MyFtpServerConnection::printFileDetails(const FileInformation& finfo
 
 inline bool MyFtpServerConnection::download(const char *filename) {
 
-	std::string newdir,fullpath;
-	File *newFile;
+  std::string newdir,fullpath;
+  File *newFile;
 
-	if(!getPaths(filename,newdir,fullpath))
-		return false;
+  if(!getPaths(filename,newdir,fullpath))
+    return false;
 
-	// the file must not be a directory
+  // the file must not be a directory
 
-	{
-		scoped_ptr<FileInformation> finfo;
+  {
+    scoped_ptr<FileInformation> finfo;
 
-		if(!_ftpParameters->fs->getFileInformation(fullpath.c_str(),finfo.address()))
-			return false;
+    if(!_ftpParameters->fs->getFileInformation(fullpath.c_str(),finfo.address()))
+      return false;
 
-		if((finfo->getAttributes() & FileInformation::ATTR_DIRECTORY)!=0)
-			return false;
-	}
+    if((finfo->getAttributes() & FileInformation::ATTR_DIRECTORY)!=0)
+      return false;
+  }
 
-	// open the file
+  // open the file
 
-	if(!_ftpParameters->fs->openFile(fullpath.c_str(),newFile))
-		return false;
+  if(!_ftpParameters->fs->openFile(fullpath.c_str(),newFile))
+    return false;
 
-	// if the client used REST then seek accordingly
+  // if the client used REST then seek accordingly
 
-	if(_sendStartPosition!=0) {
-		if(!newFile->seek(_sendStartPosition,File::SeekStart)) {
-			delete newFile;
-			return false;
-		}
-	}
+  if(_sendStartPosition!=0) {
+    if(!newFile->seek(_sendStartPosition,File::SeekStart)) {
+      delete newFile;
+      return false;
+    }
+  }
 
-	// add an input stream on to the file that will take ownership of the file pointer
+  // add an input stream on to the file that will take ownership of the file pointer
 
-	_dataConnection->addStream(new OwnedFileInputStream(newFile),true);
-	return true;
+  _dataConnection->addStream(new OwnedFileInputStream(newFile),true);
+  return true;
 }
 
 
@@ -481,44 +481,44 @@ inline bool MyFtpServerConnection::download(const char *filename) {
 
 inline bool MyFtpServerConnection::upload(const char *filename,bool append,OutputStream *&stream) {
 
-	std::string newdir,fullpath;
-	File *newFile;
+  std::string newdir,fullpath;
+  File *newFile;
 
-	// user must have write access
+  // user must have write access
 
-	if(!_ftpParameters->users[_userIndex].writeAccess)
-		return false;
+  if(!_ftpParameters->users[_userIndex].writeAccess)
+    return false;
 
-	if(!getPaths(filename,newdir,fullpath))
-		return false;
+  if(!getPaths(filename,newdir,fullpath))
+    return false;
 
-	if(!append) {
+  if(!append) {
 
-		// delete if exists (ignore error, will be caught in next line)
+    // delete if exists (ignore error, will be caught in next line)
 
-		_ftpParameters->fs->deleteFile(fullpath.c_str());
+    _ftpParameters->fs->deleteFile(fullpath.c_str());
 
-		// create the file
+    // create the file
 
-		if(!_ftpParameters->fs->createFile(fullpath.c_str()))
-			return false;
-	}
+    if(!_ftpParameters->fs->createFile(fullpath.c_str()))
+      return false;
+  }
 
-	// open the file
+  // open the file
 
-	if(!_ftpParameters->fs->openFile(fullpath.c_str(),newFile))
-		return false;
+  if(!_ftpParameters->fs->openFile(fullpath.c_str(),newFile))
+    return false;
 
-	// if we are appending, seek to the end
+  // if we are appending, seek to the end
 
-	if(append && !newFile->seek(0,File::SeekEnd))
-		return false;
+  if(append && !newFile->seek(0,File::SeekEnd))
+    return false;
 
-	// add an output stream on to the file that will take ownership of the file pointer
-	// it's now the caller's responsibility to look after it
+  // add an output stream on to the file that will take ownership of the file pointer
+  // it's now the caller's responsibility to look after it
 
-	stream=new OwnedFileOutputStream(newFile);
-	return true;
+  stream=new OwnedFileOutputStream(newFile);
+  return true;
 }
 
 
@@ -531,19 +531,19 @@ inline bool MyFtpServerConnection::upload(const char *filename,bool append,Outpu
 
 inline bool MyFtpServerConnection::createDirectory(const char *dir,std::string& newdir) {
 
-	std::string fullpath;
+  std::string fullpath;
 
-	// user must have write access
+  // user must have write access
 
-	if(!_ftpParameters->users[_userIndex].writeAccess)
-		return false;
+  if(!_ftpParameters->users[_userIndex].writeAccess)
+    return false;
 
-	if(!getPaths(dir,newdir,fullpath))
-		return false;
+  if(!getPaths(dir,newdir,fullpath))
+    return false;
 
-	// try to create the directory
+  // try to create the directory
 
-	return _ftpParameters->fs->createDirectory(fullpath.c_str());
+  return _ftpParameters->fs->createDirectory(fullpath.c_str());
 }
 
 
@@ -555,19 +555,19 @@ inline bool MyFtpServerConnection::createDirectory(const char *dir,std::string& 
 
 inline bool MyFtpServerConnection::removeDirectory(const char *dir) {
 
-	std::string fullpath,newdir;
+  std::string fullpath,newdir;
 
-	// user must have write access
+  // user must have write access
 
-	if(!_ftpParameters->users[_userIndex].writeAccess)
-		return false;
+  if(!_ftpParameters->users[_userIndex].writeAccess)
+    return false;
 
-	if(!getPaths(dir,newdir,fullpath))
-		return false;
+  if(!getPaths(dir,newdir,fullpath))
+    return false;
 
-	// try to create the directory
+  // try to create the directory
 
-	return _ftpParameters->fs->deleteDirectory(fullpath.c_str());
+  return _ftpParameters->fs->deleteDirectory(fullpath.c_str());
 }
 
 
@@ -579,19 +579,19 @@ inline bool MyFtpServerConnection::removeDirectory(const char *dir) {
 
 inline bool MyFtpServerConnection::removeFile(const char *filename) {
 
-	std::string fullpath,newdir;
+  std::string fullpath,newdir;
 
-	// user must have write access
+  // user must have write access
 
-	if(!_ftpParameters->users[_userIndex].writeAccess)
-		return false;
+  if(!_ftpParameters->users[_userIndex].writeAccess)
+    return false;
 
-	if(!getPaths(filename,newdir,fullpath))
-		return false;
+  if(!getPaths(filename,newdir,fullpath))
+    return false;
 
-	// try to remove the file
+  // try to remove the file
 
-	return _ftpParameters->fs->deleteFile(fullpath.c_str());
+  return _ftpParameters->fs->deleteFile(fullpath.c_str());
 }
 
 
@@ -604,23 +604,23 @@ inline bool MyFtpServerConnection::removeFile(const char *filename) {
 
 inline bool MyFtpServerConnection::fileSize(const char *filename,uint32_t& fileSize) {
 
-	std::string fullpath,newdir;
-	scoped_ptr<FileInformation> finfo;
+  std::string fullpath,newdir;
+  scoped_ptr<FileInformation> finfo;
 
-	// get the full path
+  // get the full path
 
-	if(!getPaths(filename,newdir,fullpath))
-		return false;
+  if(!getPaths(filename,newdir,fullpath))
+    return false;
 
-	// get the file/directory information
+  // get the file/directory information
 
-	if(!_ftpParameters->fs->getFileInformation(fullpath.c_str(),finfo.address()))
-		return false;
+  if(!_ftpParameters->fs->getFileInformation(fullpath.c_str(),finfo.address()))
+    return false;
 
-	// return the size
+  // return the size
 
-	fileSize=finfo->getLength();
-	return true;
+  fileSize=finfo->getLength();
+  return true;
 }
 
 
@@ -634,22 +634,22 @@ inline bool MyFtpServerConnection::fileSize(const char *filename,uint32_t& fileS
 
 inline bool MyFtpServerConnection::getPaths(const char *dir,std::string& subdir,std::string& fullpath) {
 
-	// get the full path
+  // get the full path
 
-	if(dir[0]=='/')
-		subdir=dir;
-	else
-		subdir=appendPath(_cwd,dir);
+  if(dir[0]=='/')
+    subdir=dir;
+  else
+    subdir=appendPath(_cwd,dir);
 
-	// remove any path navigation stuff
+  // remove any path navigation stuff
 
-	if(!normalisePath(subdir))
-		return false;
+  if(!normalisePath(subdir))
+    return false;
 
-	// create the full path from the root and the normalised cwd
+  // create the full path from the root and the normalised cwd
 
-	fullpath=_ftpParameters->rootDirectory+'/'+subdir;
-	return true;
+  fullpath=_ftpParameters->rootDirectory+'/'+subdir;
+  return true;
 }
 
 
@@ -660,6 +660,6 @@ inline bool MyFtpServerConnection::getPaths(const char *dir,std::string& subdir,
  */
 
 inline bool MyFtpServerConnection::hasTimedOut(uint32_t idleMillis) const {
-	return _ftpParameters->idleTimeout && (idleMillis/1000>_ftpParameters->idleTimeout);
+  return _ftpParameters->idleTimeout && (idleMillis/1000>_ftpParameters->idleTimeout);
 }
 

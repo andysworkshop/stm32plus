@@ -9,23 +9,23 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Datalink layer frame information
-		 */
+    /**
+     * Datalink layer frame information
+     */
 
-		struct DatalinkFrame {
+    struct DatalinkFrame {
 
-			enum class FrameSource {
-				ETHERNET_FRAME
-			};
+      enum class FrameSource {
+        ETHERNET_FRAME
+      };
 
-			uint8_t *payload;						//!< frame payload data - do not attempt to free
-			uint32_t payloadLength;			//!< length of the frame payload
-			uint16_t protocol;					//!< values match EtherType
-			FrameSource frameSource;		//!< identify this frame to enable safe casting
-		};
-	}
+      uint8_t *payload;           //!< frame payload data - do not attempt to free
+      uint32_t payloadLength;     //!< length of the frame payload
+      uint16_t protocol;          //!< values match EtherType
+      FrameSource frameSource;    //!< identify this frame to enable safe casting
+    };
+  }
 }

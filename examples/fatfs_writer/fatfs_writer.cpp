@@ -37,8 +37,8 @@ using namespace stm32plus;
  * class 10 SDHC microSD card.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -47,228 +47,228 @@ using namespace stm32plus;
 
 class FatFsWriterTest  {
 
-	protected:
+  protected:
 
-		// SD card and file system objects
+    // SD card and file system objects
 
-		SdioDmaSdCard *_sdcard;
-		FileSystem *_fs;
-		NullTimeProvider _timeProvider;
+    SdioDmaSdCard *_sdcard;
+    FileSystem *_fs;
+    NullTimeProvider _timeProvider;
 
-		// USART objects
+    // USART objects
 
-		typedef Usart1<> MyUsart;
-		MyUsart *_usart;
+    typedef Usart1<> MyUsart;
+    MyUsart *_usart;
 
-	public:
+  public:
 
-		/*
-		 * Run the demo
-		 */
+    /*
+     * Run the demo
+     */
 
-		void run() {
+    void run() {
 
-			// initialisation for the card and LCD
+      // initialisation for the card and LCD
 
-			initUsart();
-			initSdcard();
+      initUsart();
+      initSdcard();
 
-			// now do the work
+      // now do the work
 
-			ensureDirectoryExists();
-			ensureFileDoesNotExist();
-			writeToFile();
-			sendFile();
+      ensureDirectoryExists();
+      ensureFileDoesNotExist();
+      writeToFile();
+      sendFile();
 
-			// we're done - lock up
+      // we're done - lock up
 
-			for(;;);
-		}
+      for(;;);
+    }
 
 
-		/*
-		 * Ensure that /output exists. If it does not then it will be created. If it
-		 * does exist then we check that it is a directory and not a file.
-		 */
+    /*
+     * Ensure that /output exists. If it does not then it will be created. If it
+     * does exist then we check that it is a directory and not a file.
+     */
 
-		void ensureDirectoryExists() {
+    void ensureDirectoryExists() {
 
-			FileInformation *info;
+      FileInformation *info;
 
-			// get a FileInformation for the directory
+      // get a FileInformation for the directory
 
-			if(_fs->getFileInformation("/output",info)) {
+      if(_fs->getFileInformation("/output",info)) {
 
-				// it exists - but if it's a file then it's an error
+        // it exists - but if it's a file then it's an error
 
-				if((info->getAttributes() & FileInformation::ATTR_DIRECTORY)==0)
-					error();
+        if((info->getAttributes() & FileInformation::ATTR_DIRECTORY)==0)
+          error();
 
-				// it's a directory, that's OK
+        // it's a directory, that's OK
 
-				delete info;
-				return;
-			}
+        delete info;
+        return;
+      }
 
-			// it does not exist, create it
+      // it does not exist, create it
 
-			if(!_fs->createDirectory("/output"))
-				error();
-		}
+      if(!_fs->createDirectory("/output"))
+        error();
+    }
 
 
-		/*
-		 * Ensure that the file does not exist. If it does exist then
-		 * it will be deleted.
-		 */
+    /*
+     * Ensure that the file does not exist. If it does exist then
+     * it will be deleted.
+     */
 
-		void ensureFileDoesNotExist() {
+    void ensureFileDoesNotExist() {
 
-			FileInformation *info;
+      FileInformation *info;
 
-			// get a FileInformation for the file
+      // get a FileInformation for the file
 
-			if(_fs->getFileInformation("/output/test.txt",info)) {
+      if(_fs->getFileInformation("/output/test.txt",info)) {
 
-				// it exists - make sure it's not a directory
+        // it exists - make sure it's not a directory
 
-				if((info->getAttributes() & FileInformation::ATTR_DIRECTORY)!=0)
-					error();
+        if((info->getAttributes() & FileInformation::ATTR_DIRECTORY)!=0)
+          error();
 
-				// clean up
+        // clean up
 
-				delete info;
+        delete info;
 
-				// we know it's a file, delete it
+        // we know it's a file, delete it
 
-				if(!_fs->deleteFile("/output/test.txt"))
-					error();
+        if(!_fs->deleteFile("/output/test.txt"))
+          error();
 
-				return;
-			}
-		}
+        return;
+      }
+    }
 
 
-		/*
-		 * Write the text "Hello World" to /output/test.txt. It is not necessary to delete/create
-		 * the file - it could be re-opened and overwritten either from the beginning or by seeking
-		 * to the end and appending to it.
-		 */
+    /*
+     * Write the text "Hello World" to /output/test.txt. It is not necessary to delete/create
+     * the file - it could be re-opened and overwritten either from the beginning or by seeking
+     * to the end and appending to it.
+     */
 
-		void writeToFile() {
+    void writeToFile() {
 
-			File *file;
+      File *file;
 
-			// any previous file has been erased, open this file. there is no concept of file mode
-			// here - any file can be read or written to.
+      // any previous file has been erased, open this file. there is no concept of file mode
+      // here - any file can be read or written to.
 
-			if(!_fs->createFile("/output/test.txt"))
-				error();
+      if(!_fs->createFile("/output/test.txt"))
+        error();
 
-			// open the 0 byte file
+      // open the 0 byte file
 
-			if(!_fs->openFile("/output/test.txt",file))
-				error();
+      if(!_fs->openFile("/output/test.txt",file))
+        error();
 
-			// write some test data
+      // write some test data
 
-			if(!file->write("Hello World",11))
-				error();
+      if(!file->write("Hello World",11))
+        error();
 
-			// finished with the file - close it
+      // finished with the file - close it
 
-			delete file;
-		}
+      delete file;
+    }
 
 
-		/*
-		 * open the file and send the contents to the USART
-		 */
+    /*
+     * open the file and send the contents to the USART
+     */
 
-		void sendFile() {
+    void sendFile() {
 
-			File *file;
+      File *file;
 
-			// open the file - we own the file pointer that comes back upon success and
-			// we must remember to delete it when we're finished
+      // open the file - we own the file pointer that comes back upon success and
+      // we must remember to delete it when we're finished
 
-			if(!_fs->openFile("/output/test.txt",file))
-				error();
+      if(!_fs->openFile("/output/test.txt",file))
+        error();
 
-			// attach an input stream to the file for easy sequential reading and an output
-			// stream to the usart for writing
+      // attach an input stream to the file for easy sequential reading and an output
+      // stream to the usart for writing
 
-			FileInputStream input(*file);
-			UsartPollingOutputStream output(*_usart);
+      FileInputStream input(*file);
+      UsartPollingOutputStream output(*_usart);
 
-			// the ConnectedInputOutputStream is a piece of plumbing that will copy one
-			// stream to another either as a whole or in chunks
+      // the ConnectedInputOutputStream is a piece of plumbing that will copy one
+      // stream to another either as a whole or in chunks
 
-			ConnectedInputOutputStream connector(input,output);
+      ConnectedInputOutputStream connector(input,output);
 
-			// copy the entire file to the USART
+      // copy the entire file to the USART
 
-			if(!connector.readWrite())
-				error();
+      if(!connector.readWrite())
+        error();
 
-			// finished with the file
+      // finished with the file
 
-			delete file;
-		}
+      delete file;
+    }
 
 
-		/*
-		 * Initialise the USART in 57600-8-N-1 mode with no hardware flow control
-		 */
+    /*
+     * Initialise the USART in 57600-8-N-1 mode with no hardware flow control
+     */
 
-		void initUsart() {
+    void initUsart() {
 
-			// configure the USART peripheral
+      // configure the USART peripheral
 
-			_usart=new MyUsart(57600);
-		}
+      _usart=new MyUsart(57600);
+    }
 
 
-		/*
-		 * Initialise the SD card and get a reference to a file system object. FAT16 and FAT32
-		 * are both supported.
-		 */
+    /*
+     * Initialise the SD card and get a reference to a file system object. FAT16 and FAT32
+     * are both supported.
+     */
 
-		void initSdcard() {
+    void initSdcard() {
 
-			// create the SDIO object and let it auto-initialise
+      // create the SDIO object and let it auto-initialise
 
-			_sdcard=new SdioDmaSdCard;
+      _sdcard=new SdioDmaSdCard;
 
-			if(errorProvider.hasError())
-				error();
+      if(errorProvider.hasError())
+        error();
 
-			// initialise a file system from that found on the card
+      // initialise a file system from that found on the card
 
-			if(!FileSystem::getInstance(*_sdcard,_timeProvider,_fs))
-				error();
-		}
+      if(!FileSystem::getInstance(*_sdcard,_timeProvider,_fs))
+        error();
+    }
 
 
-		/*
-		 * Print an error code if something goes wrong and lock up
-		 */
+    /*
+     * Print an error code if something goes wrong and lock up
+     */
 
-		void error() {
+    void error() {
 
-			char *ptr,errorCode[30];
+      char *ptr,errorCode[30];
 
-			// print the error code
+      // print the error code
 
-			StringUtil::modp_uitoa10(errorProvider.getLast(),errorCode);
+      StringUtil::modp_uitoa10(errorProvider.getLast(),errorCode);
 
-			for(ptr=errorCode;*ptr;ptr++)
-				_usart->send(*ptr);
+      for(ptr=errorCode;*ptr;ptr++)
+        _usart->send(*ptr);
 
-			// lock up
+      // lock up
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -278,15 +278,15 @@ class FatFsWriterTest  {
 
 int main() {
 
-	// set up the NVIC priority groups and subgroups
-	Nvic::initialise();
+  // set up the NVIC priority groups and subgroups
+  Nvic::initialise();
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	FatFsWriterTest test;
-	test.run();
+  FatFsWriterTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

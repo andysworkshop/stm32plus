@@ -8,25 +8,25 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
-		namespace w25q16dw {
+  namespace spiflash {
+    namespace w25q16dw {
 
 
-			/**
-			 * Erase suspend command implementation
-			 */
+      /**
+       * Erase suspend command implementation
+       */
 
-			template<class TSpi>
-			struct EraseResume : Command<TSpi> {
+      template<class TSpi>
+      struct EraseResume : Command<TSpi> {
 
-				/**
-				 * Provide a eraseSuspend() function for the derived class
-				 */
+        /**
+         * Provide a eraseSuspend() function for the derived class
+         */
 
-				bool eraseResume() const {
-					return this->writeCommand(CMD_ERASE_RESUME);
-				}
-			};
-		}
-	}
+        bool eraseResume() const {
+          return this->writeCommand(CMD_ERASE_RESUME);
+        }
+      };
+    }
+  }
 }

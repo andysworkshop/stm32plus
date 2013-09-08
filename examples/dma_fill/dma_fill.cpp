@@ -28,8 +28,8 @@ using namespace stm32plus;
  * that LED is active HIGH.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -38,76 +38,76 @@ using namespace stm32plus;
 
 class DmaFillTest {
 
-	protected:
+  protected:
 
-		/**
-		 * The LED is on PF6
-		 */
+    /**
+     * The LED is on PF6
+     */
 
-		enum { LED_PIN = 6 };
+    enum { LED_PIN = 6 };
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			uint8_t buffer[256],byteToFill;
-			int i;
+      uint8_t buffer[256],byteToFill;
+      int i;
 
-			// initialise the LED pin
+      // initialise the LED pin
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
 
-			// lights off (this LED is active low, i.e. PF6 is a sink)
+      // lights off (this LED is active low, i.e. PF6 is a sink)
 
-			pf[LED_PIN].set();
+      pf[LED_PIN].set();
 
-			// declare a DMA channel with the memory fill feature
-			// F4 users note that only DMA2 can do memory-to-memory transfers.
+      // declare a DMA channel with the memory fill feature
+      // F4 users note that only DMA2 can do memory-to-memory transfers.
 
 #if defined(STM32PLUS_F1)
 
-			Dma1Channel4<
-				DmaMemoryFillFeature<> 				// memory fill with default transfer size (bytes)
-			> dma;
+      Dma1Channel4<
+        DmaMemoryFillFeature<>        // memory fill with default transfer size (bytes)
+      > dma;
 
 #elif defined(STM32PLUS_F4)
 
-			Dma2Channel3Stream4<
-				DmaMemoryFillFeature<> 				// memory fill with default transfer size (bytes)
-			> dma;
+      Dma2Channel3Stream4<
+        DmaMemoryFillFeature<>        // memory fill with default transfer size (bytes)
+      > dma;
 
 #endif
 
-			byteToFill=0xaa;
+      byteToFill=0xaa;
 
-			for(;;) {
+      for(;;) {
 
-				// clear the target buffer
+        // clear the target buffer
 
-				memset(buffer,'\0',sizeof(buffer));
+        memset(buffer,'\0',sizeof(buffer));
 
-				// start the transfer of 256 bytes from buffer1 to buffer2. this executes asynchronously.
+        // start the transfer of 256 bytes from buffer1 to buffer2. this executes asynchronously.
 
-				dma.beginCopyMemory(buffer,&byteToFill,sizeof(buffer),DMA_Priority_Medium);
+        dma.beginCopyMemory(buffer,&byteToFill,sizeof(buffer),DMA_Priority_Medium);
 
-				// wait for transfer complete
+        // wait for transfer complete
 
-				dma.waitUntilComplete();
+        dma.waitUntilComplete();
 
-				// verify the result
+        // verify the result
 
-				for(i=0;i<256;i++)
-					if(buffer[i]!=0xaa)
-						for(;;);					// lock up on error
+        for(i=0;i<256;i++)
+          if(buffer[i]!=0xaa)
+            for(;;);          // lock up on error
 
-				// flash the LED for a second
+        // flash the LED for a second
 
-				pf[LED_PIN].reset();
-				MillisecondTimer::delay(1000);
-				pf[LED_PIN].set();
-				MillisecondTimer::delay(1000);
-			}
-		}
+        pf[LED_PIN].reset();
+        MillisecondTimer::delay(1000);
+        pf[LED_PIN].set();
+        MillisecondTimer::delay(1000);
+      }
+    }
 };
 
 
@@ -117,12 +117,12 @@ class DmaFillTest {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	DmaFillTest test;
-	test.run();
+  DmaFillTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

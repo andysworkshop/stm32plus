@@ -10,9 +10,9 @@
 
 namespace stm32plus {
 
-	/**
-	 * The singleton that can be referenced from anywhere in the app
-	 */
+  /**
+   * The singleton that can be referenced from anywhere in the app
+   */
 
-	Nvic nvicController;
+  Nvic nvicController;
 }

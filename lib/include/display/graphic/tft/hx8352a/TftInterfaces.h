@@ -12,70 +12,70 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * HX8352A interface: 64K colours, portrait and landscape
-		 */
+    /**
+     * HX8352A interface: 64K colours, portrait and landscape
+     */
 
-		template<class TAccessMode,class TPanelTraits> using HX8352A_Portrait_64K  = GraphicsLibrary<HX8352A<PORTRAIT,COLOURS_16BIT,TAccessMode,TPanelTraits>,TAccessMode>;
-		template<class TAccessMode,class TPanelTraits> using HX8352A_Landscape_64K = GraphicsLibrary<HX8352A<LANDSCAPE,COLOURS_16BIT,TAccessMode,TPanelTraits>,TAccessMode>;
+    template<class TAccessMode,class TPanelTraits> using HX8352A_Portrait_64K  = GraphicsLibrary<HX8352A<PORTRAIT,COLOURS_16BIT,TAccessMode,TPanelTraits>,TAccessMode>;
+    template<class TAccessMode,class TPanelTraits> using HX8352A_Landscape_64K = GraphicsLibrary<HX8352A<LANDSCAPE,COLOURS_16BIT,TAccessMode,TPanelTraits>,TAccessMode>;
 
-		/**
-		 * HX8352A interface: 262K colours, portrait and landscape
-		 */
+    /**
+     * HX8352A interface: 262K colours, portrait and landscape
+     */
 
-		template<class TAccessMode,class TPanelTraits> using HX8352A_Portrait_262K  = GraphicsLibrary<HX8352A<PORTRAIT,COLOURS_18BIT,TAccessMode,TPanelTraits>,TAccessMode>;
-		template<class TAccessMode,class TPanelTraits> using HX8352A_Landscape_262K = GraphicsLibrary<HX8352A<LANDSCAPE,COLOURS_18BIT,TAccessMode,TPanelTraits>,TAccessMode>;
+    template<class TAccessMode,class TPanelTraits> using HX8352A_Portrait_262K  = GraphicsLibrary<HX8352A<PORTRAIT,COLOURS_18BIT,TAccessMode,TPanelTraits>,TAccessMode>;
+    template<class TAccessMode,class TPanelTraits> using HX8352A_Landscape_262K = GraphicsLibrary<HX8352A<LANDSCAPE,COLOURS_18BIT,TAccessMode,TPanelTraits>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the HX8352A
-		 */
+    /**
+     * Graphic terminal modes for the HX8352A
+     */
 
-		template<class TDevice> using HX8352A_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using HX8352A_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+    template<class TDevice> using HX8352A_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using HX8352A_Terminal_Landscape = GraphicTerminal<TDevice,false>;
 
 
-		/**
-		 * Specialisations for the LG KF700 480x240 panel
-		 */
+    /**
+     * Specialisations for the LG KF700 480x240 panel
+     */
 
-		template<class TAccessMode> using LG_KF700_Portrait_64K =  HX8352A_Portrait_64K<TAccessMode,LG_KF700>;
-		template<class TAccessMode> using LG_KF700_Landscape_64K =  HX8352A_Landscape_64K<TAccessMode,LG_KF700>;
+    template<class TAccessMode> using LG_KF700_Portrait_64K =  HX8352A_Portrait_64K<TAccessMode,LG_KF700>;
+    template<class TAccessMode> using LG_KF700_Landscape_64K =  HX8352A_Landscape_64K<TAccessMode,LG_KF700>;
 
-		template<class TAccessMode> using LG_KF700_Portrait_262K =  HX8352A_Portrait_262K<TAccessMode,LG_KF700>;
-		template<class TAccessMode> using LG_KF700_Landscape_262K =  HX8352A_Landscape_262K<TAccessMode,LG_KF700>;
+    template<class TAccessMode> using LG_KF700_Portrait_262K =  HX8352A_Portrait_262K<TAccessMode,LG_KF700>;
+    template<class TAccessMode> using LG_KF700_Landscape_262K =  HX8352A_Landscape_262K<TAccessMode,LG_KF700>;
 
-		template<class TDevice> using LG_KF700_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using LG_KF700_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+    template<class TDevice> using LG_KF700_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using LG_KF700_Terminal_Landscape = GraphicTerminal<TDevice,false>;
 
 
 #if defined(STM32PLUS_F1)
 
-		/**
-		 * The optimised GPIO access mode is available for the 64K depths at max 72Mhz HCLK
-		 */
+    /**
+     * The optimised GPIO access mode is available for the 64K depths at max 72Mhz HCLK
+     */
 
-		template<class TPinPackage>
-		using Gpio16BitAccessMode_HX8352A_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>;
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_HX8352A_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>;
 
-		template<class TPinPackage>
-		using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,72,50,50>;
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,72,50,50>;
 
 #elif(defined(STM32PLUS_F4))
 
-		/**
-		 * The optimised GPIO access mode is available for the 64K depths at max 168Mhz HCLK
-		 */
+    /**
+     * The optimised GPIO access mode is available for the 64K depths at max 168Mhz HCLK
+     */
 
-		template<class TPinPackage>
-		using Gpio16BitAccessMode_HX8352A_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,168,50,50>;
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_HX8352A_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,168,50,50>;
 
-		template<class TPinPackage>
-		using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,168,50,50>;
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,168,50,50>;
 
 #else
 #error unsupported MCU
 #endif
-	}
+  }
 }

@@ -8,33 +8,33 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * subclass TCP connection so that we can tune the buffer parameters
-		 */
+    /**
+     * subclass TCP connection so that we can tune the buffer parameters
+     */
 
-		class MyTcpClientConnection : public TcpClientConnection {
+    class MyTcpClientConnection : public TcpClientConnection {
 
-			public:
-				MyTcpClientConnection();
-		};
+      public:
+        MyTcpClientConnection();
+    };
 
 
-		/**
-		 * Constructor
-		 */
+    /**
+     * Constructor
+     */
 
-		inline MyTcpClientConnection::MyTcpClientConnection() {
+    inline MyTcpClientConnection::MyTcpClientConnection() {
 
-			// the TCP connection has taken a reference to the _params Parameters
-			// class but it has not yet initialised itself from those parameters
-			// therefore we are able to tune them for our needs
+      // the TCP connection has taken a reference to the _params Parameters
+      // class but it has not yet initialised itself from those parameters
+      // therefore we are able to tune them for our needs
 
-			// increase receive buffer size to 3xMSL for better throughput
+      // increase receive buffer size to 3xMSL for better throughput
 
-			_params.tcp_receiveBufferSize=4380;
-		}
-	}
+      _params.tcp_receiveBufferSize=4380;
+    }
+  }
 }

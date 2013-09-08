@@ -9,30 +9,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a client Mac address announcement
-		 */
+    /**
+     * Event descriptor for a client Mac address announcement
+     */
 
-		struct MacAddressAnnouncementEvent : NetEventDescriptor {
+    struct MacAddressAnnouncementEvent : NetEventDescriptor {
 
-			/**
-			 * References to the value
-			 */
+      /**
+       * References to the value
+       */
 
-			const MacAddress& macAddress;
+      const MacAddress& macAddress;
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			MacAddressAnnouncementEvent(const MacAddress& address)
-				: NetEventDescriptor(NetEventType::MAC_ADDRESS_ANNOUNCEMENT),
-					macAddress(address) {
-			}
-		};
-	}
+      MacAddressAnnouncementEvent(const MacAddress& address)
+        : NetEventDescriptor(NetEventType::MAC_ADDRESS_ANNOUNCEMENT),
+          macAddress(address) {
+      }
+    };
+  }
 }

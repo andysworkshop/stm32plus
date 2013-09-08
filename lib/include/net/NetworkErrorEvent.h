@@ -9,35 +9,35 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a network error. We hold the provider, code and cause
-		 * variables because early reports using the errorProvider may be overwritten
-		 * as the error works its way up the stack.
-		 */
+    /**
+     * Event descriptor for a network error. We hold the provider, code and cause
+     * variables because early reports using the errorProvider may be overwritten
+     * as the error works its way up the stack.
+     */
 
-		struct NetworkErrorEvent : NetEventDescriptor {
+    struct NetworkErrorEvent : NetEventDescriptor {
 
-			int provider;
-			uint32_t code;
-			uint32_t cause;
+      int provider;
+      uint32_t code;
+      uint32_t cause;
 
-			/**
-			 * Constructor
-			 * @param provider The error provider code
-			 * @param code The error code (provider specific)
-			 * @param cause extended error information, if any
-			 */
+      /**
+       * Constructor
+       * @param provider The error provider code
+       * @param code The error code (provider specific)
+       * @param cause extended error information, if any
+       */
 
-			NetworkErrorEvent(int provider_,uint32_t code_,uint32_t cause_=0)
-				: NetEventDescriptor(NetEventType::NETWORK_ERROR),
-				  provider(provider_),
-				  code(code_),
-				  cause(cause_) {
-				errorProvider.set(provider,code,cause);
-			}
-		};
-	}
+      NetworkErrorEvent(int provider_,uint32_t code_,uint32_t cause_=0)
+        : NetEventDescriptor(NetEventType::NETWORK_ERROR),
+          provider(provider_),
+          code(code_),
+          cause(cause_) {
+        errorProvider.set(provider,code,cause);
+      }
+    };
+  }
 }

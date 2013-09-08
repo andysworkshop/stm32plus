@@ -12,23 +12,23 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * LGDP453x interface: 64K, 262K colours, portrait and landscape
-		 */
+    /**
+     * LGDP453x interface: 64K, 262K colours, portrait and landscape
+     */
 
-		template<class TAccessMode> using LGDP453x_Portrait_64K  = GraphicsLibrary<LGDP453x<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
-		template<class TAccessMode> using LGDP453x_Landscape_64K  = GraphicsLibrary<LGDP453x<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using LGDP453x_Portrait_64K  = GraphicsLibrary<LGDP453x<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using LGDP453x_Landscape_64K  = GraphicsLibrary<LGDP453x<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
 
-		template<class TAccessMode> using LGDP453x_Portrait_262K  = GraphicsLibrary<LGDP453x<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
-		template<class TAccessMode> using LGDP453x_Landscape_262K  = GraphicsLibrary<LGDP453x<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using LGDP453x_Portrait_262K  = GraphicsLibrary<LGDP453x<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using LGDP453x_Landscape_262K  = GraphicsLibrary<LGDP453x<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the LGDP453x
-		 */
+    /**
+     * Graphic terminal modes for the LGDP453x
+     */
 
-		template<class TDevice> using LGDP453x_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using LGDP453x_Terminal_Landscape = GraphicTerminal<TDevice,false>;
-	}
+    template<class TDevice> using LGDP453x_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using LGDP453x_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+  }
 }

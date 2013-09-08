@@ -9,14 +9,14 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/*
-		 * Constructor
-		 */
+    /*
+     * Constructor
+     */
 
-		FreeClusterFinder::FreeClusterFinder(FatFileSystem& fs_) :
-			_fs(fs_) {
-		}
-	}
+    FreeClusterFinder::FreeClusterFinder(FatFileSystem& fs_) :
+      _fs(fs_) {
+    }
+  }
 }

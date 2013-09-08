@@ -13,33 +13,33 @@
 
 class ImageManager : public Initialiser {
 
-	protected:
-		BitmapManager& _bmManager;
-		BlockDevice& _blockDevice;
-		uint32_t _currentImage;
-		ImageTransitionAnimator _imageTransition;
+  protected:
+    BitmapManager& _bmManager;
+    BlockDevice& _blockDevice;
+    uint32_t _currentImage;
+    ImageTransitionAnimator _imageTransition;
 
-	protected:
-		bool drawFullImage();
+  protected:
+    bool drawFullImage();
 
-	public:
-		ImageManager(LcdManager& lcdManager,BitmapManager& bmManager,BlockDevice& blockDevice);
-		virtual ~ImageManager() {}
+  public:
+    ImageManager(LcdManager& lcdManager,BitmapManager& bmManager,BlockDevice& blockDevice);
+    virtual ~ImageManager() {}
 
-		ImageTransitionAnimator& getAnimator();
+    ImageTransitionAnimator& getAnimator();
 
-		LcdManager& getLcdManager() {
-			return _lcdManager;
-		}
+    LcdManager& getLcdManager() {
+      return _lcdManager;
+    }
 
-		void setCurrentImage(uint32_t imageIndex) {
-			_currentImage=imageIndex;
-		}
+    void setCurrentImage(uint32_t imageIndex) {
+      _currentImage=imageIndex;
+    }
 
-		void nextImage();
-		void showImage();
+    void nextImage();
+    void showImage();
 
-		// overrides from Initialiser
+    // overrides from Initialiser
 
-		bool initialise();
+    bool initialise();
 };

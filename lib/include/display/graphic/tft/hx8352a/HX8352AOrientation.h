@@ -8,18 +8,18 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for HX8352A orientation-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for HX8352A orientation-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
-		class HX8352AOrientation {
-		};
-	}
+    template<Orientation TOrientation,class TAccessMode,class TPanelTraits>
+    class HX8352AOrientation {
+    };
+  }
 }
 
 

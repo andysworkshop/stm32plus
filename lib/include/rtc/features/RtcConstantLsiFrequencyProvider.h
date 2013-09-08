@@ -9,25 +9,25 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief class to return a hard-coded frequency for the LSI. No measuring is done
-	 *
-	 * The optimiser will reduce this to a simple load of a constant into a register.
-	 */
+  /**
+   * @brief class to return a hard-coded frequency for the LSI. No measuring is done
+   *
+   * The optimiser will reduce this to a simple load of a constant into a register.
+   */
 
-	template<uint32_t TConstantFrequency>
-	class RtcConstantLsiFrequencyProvider {
+  template<uint32_t TConstantFrequency>
+  class RtcConstantLsiFrequencyProvider {
 
-		public:
+    public:
 
-			static uint32_t getLsiFrequency() {
-				return TConstantFrequency;
-			}
-	};
+      static uint32_t getLsiFrequency() {
+        return TConstantFrequency;
+      }
+  };
 
-	/*
-	 * Since the LSI is supposed to always be 32kHz, provide that as a type
-	 */
+  /*
+   * Since the LSI is supposed to always be 32kHz, provide that as a type
+   */
 
-	typedef RtcConstantLsiFrequencyProvider<32768> Rtc32kHzLsiFrequencyProvider;
+  typedef RtcConstantLsiFrequencyProvider<32768> Rtc32kHzLsiFrequencyProvider;
 }

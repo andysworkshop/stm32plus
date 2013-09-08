@@ -9,30 +9,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor that announces a new domain suffix
-		 */
+    /**
+     * Event descriptor that announces a new domain suffix
+     */
 
-		struct DomainNameAnnouncementEvent : NetEventDescriptor {
+    struct DomainNameAnnouncementEvent : NetEventDescriptor {
 
-			/**
-			 * Your local domain suffix (\0 terminated string)
-			 */
+      /**
+       * Your local domain suffix (\0 terminated string)
+       */
 
-			const char *domainName;
+      const char *domainName;
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			DomainNameAnnouncementEvent(const char *domain)
-				: NetEventDescriptor(NetEventType::DOMAIN_NAME_ANNOUNCEMENT),
-					domainName(domain) {
-			}
-		};
-	}
+      DomainNameAnnouncementEvent(const char *domain)
+        : NetEventDescriptor(NetEventType::DOMAIN_NAME_ANNOUNCEMENT),
+          domainName(domain) {
+      }
+    };
+  }
 }

@@ -27,15 +27,15 @@ namespace stm32plus {
    * interrupt functionality
    */
 
-	DECLARE_EVENT_SIGNATURE(RtcSecondInterrupt,void());
+  DECLARE_EVENT_SIGNATURE(RtcSecondInterrupt,void());
 
   class RtcSecondInterruptFeature : public RtcFeatureBase {
 
     public:
-  		static RtcSecondInterruptFeature *_secondInterruptFeature;
-  		void (*_irqRef)();
+      static RtcSecondInterruptFeature *_secondInterruptFeature;
+      void (*_irqRef)();
 
-  		DECLARE_EVENT_SOURCE(RtcSecondInterrupt);
+      DECLARE_EVENT_SOURCE(RtcSecondInterrupt);
 
     public:
       RtcSecondInterruptFeature(RtcBase& rtc);
@@ -53,10 +53,10 @@ namespace stm32plus {
   inline RtcSecondInterruptFeature::RtcSecondInterruptFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
-  	_secondInterruptFeature=this;
-  	_irqRef=RTC_IRQHandler;
+    _secondInterruptFeature=this;
+    _irqRef=RTC_IRQHandler;
 
-  	Nvic::configureIrq(RTC_IRQn);
+    Nvic::configureIrq(RTC_IRQn);
   }
 
 

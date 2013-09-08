@@ -8,32 +8,32 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Simple intermediate class to manage holding the TcpConnection parameters
-		 * instance. Client connections are unlikely to need their own subclass of the
-		 * parameters and can customise the members of the default instance declared here.
-		 */
+    /**
+     * Simple intermediate class to manage holding the TcpConnection parameters
+     * instance. Client connections are unlikely to need their own subclass of the
+     * parameters and can customise the members of the default instance declared here.
+     */
 
-		class TcpClientConnection : public TcpConnection {
+    class TcpClientConnection : public TcpConnection {
 
-			protected:
-				TcpConnection::Parameters _params;
+      protected:
+        TcpConnection::Parameters _params;
 
-			public:
-				TcpClientConnection();
-		};
+      public:
+        TcpClientConnection();
+    };
 
 
-		/**
-		 * Constructor
-		 */
+    /**
+     * Constructor
+     */
 
-		inline TcpClientConnection::TcpClientConnection()
-			: TcpConnection(_params) {
-		}
-	}
+    inline TcpClientConnection::TcpClientConnection()
+      : TcpConnection(_params) {
+    }
+  }
 }
 

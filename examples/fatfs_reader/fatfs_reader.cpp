@@ -36,8 +36,8 @@ using namespace stm32plus;
  * 10 SDHC microSD card.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -46,127 +46,127 @@ using namespace stm32plus;
 
 class FatFsReaderTest  {
 
-	protected:
+  protected:
 
-		// SD card and file system objects
+    // SD card and file system objects
 
-		SdioDmaSdCard *_sdcard;
-		FileSystem *_fs;
-		NullTimeProvider _timeProvider;
+    SdioDmaSdCard *_sdcard;
+    FileSystem *_fs;
+    NullTimeProvider _timeProvider;
 
-		// USART objects
+    // USART objects
 
-		typedef Usart1<> MyUsart;
-		MyUsart *_usart;
+    typedef Usart1<> MyUsart;
+    MyUsart *_usart;
 
-	public:
+  public:
 
-		/*
-		 * Run the demo
-		 */
+    /*
+     * Run the demo
+     */
 
-		void run() {
+    void run() {
 
-			// initialisation for the card and LCD
+      // initialisation for the card and LCD
 
-			initUsart();
-			initSdcard();
+      initUsart();
+      initSdcard();
 
-			// now send the file
+      // now send the file
 
-			sendFile("/files/test.txt");
+      sendFile("/files/test.txt");
 
-			// we're done - lock up
+      // we're done - lock up
 
-			for(;;);
-		}
-
-
-		/*
-		 * open the file and send the contents to the USART
-		 */
-
-		void sendFile(const char *filename) {
-
-			scoped_ptr<File> file;
-			char buffer[256];
-
-			// open the file - we own the file pointer that comes back upon success and
-			// we must remember to delete it when we're finished
-
-			if(!_fs->openFile(filename,file.address()))
-				error();
-
-			// declare a file reader to read lines from the file and also a
-			// UsartPollingOutputStream for convenient output to the USART
-
-			FileReader reader(*file);
-			UsartPollingOutputStream output(*_usart);
-
-			while(reader.available()) {
-
-				// read the next line and send to the USART
-
-				if(!reader.readLine(buffer,sizeof(buffer)))
-					error();
-
-				output << buffer << "\r\n";
-			}
-		}
+      for(;;);
+    }
 
 
-		/*
-		 * Initialise the USART in 57600-8-N-1 mode with no hardware flow control
-		 */
+    /*
+     * open the file and send the contents to the USART
+     */
 
-		void initUsart() {
+    void sendFile(const char *filename) {
 
-			// configure the USART peripheral
+      scoped_ptr<File> file;
+      char buffer[256];
 
-			_usart=new MyUsart(57600);
-		}
+      // open the file - we own the file pointer that comes back upon success and
+      // we must remember to delete it when we're finished
+
+      if(!_fs->openFile(filename,file.address()))
+        error();
+
+      // declare a file reader to read lines from the file and also a
+      // UsartPollingOutputStream for convenient output to the USART
+
+      FileReader reader(*file);
+      UsartPollingOutputStream output(*_usart);
+
+      while(reader.available()) {
+
+        // read the next line and send to the USART
+
+        if(!reader.readLine(buffer,sizeof(buffer)))
+          error();
+
+        output << buffer << "\r\n";
+      }
+    }
 
 
-		/*
-		 * Initialise the SD card and get a reference to a file system object. FAT16 and FAT32
-		 * are both supported.
-		 */
+    /*
+     * Initialise the USART in 57600-8-N-1 mode with no hardware flow control
+     */
 
-		void initSdcard() {
+    void initUsart() {
 
-			// create the SDIO object and let it auto-initialise
+      // configure the USART peripheral
 
-			_sdcard=new SdioDmaSdCard;
-
-			if(errorProvider.hasError())
-				error();
-
-			// initialise a file system from that found on the card
-
-			if(!FileSystem::getInstance(*_sdcard,_timeProvider,_fs))
-				error();
-		}
+      _usart=new MyUsart(57600);
+    }
 
 
-		/*
-		 * Print an error code if something goes wrong and lock up
-		 */
+    /*
+     * Initialise the SD card and get a reference to a file system object. FAT16 and FAT32
+     * are both supported.
+     */
 
-		void error() {
+    void initSdcard() {
 
-			char *ptr,errorCode[30];
+      // create the SDIO object and let it auto-initialise
 
-			// print the error code
+      _sdcard=new SdioDmaSdCard;
 
-			StringUtil::modp_uitoa10(errorProvider.getLast(),errorCode);
+      if(errorProvider.hasError())
+        error();
 
-			for(ptr=errorCode;*ptr;ptr++)
-				_usart->send(*ptr);
+      // initialise a file system from that found on the card
 
-			// lock up
+      if(!FileSystem::getInstance(*_sdcard,_timeProvider,_fs))
+        error();
+    }
 
-			for(;;);
-		}
+
+    /*
+     * Print an error code if something goes wrong and lock up
+     */
+
+    void error() {
+
+      char *ptr,errorCode[30];
+
+      // print the error code
+
+      StringUtil::modp_uitoa10(errorProvider.getLast(),errorCode);
+
+      for(ptr=errorCode;*ptr;ptr++)
+        _usart->send(*ptr);
+
+      // lock up
+
+      for(;;);
+    }
 };
 
 
@@ -176,15 +176,15 @@ class FatFsReaderTest  {
 
 int main() {
 
-	// set up the NVIC priority groups and subgroups
-	Nvic::initialise();
+  // set up the NVIC priority groups and subgroups
+  Nvic::initialise();
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	FatFsReaderTest test;
-	test.run();
+  FatFsReaderTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

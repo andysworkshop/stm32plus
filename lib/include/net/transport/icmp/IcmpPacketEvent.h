@@ -8,40 +8,40 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for an ICMP packet arrival
-		 */
+    /**
+     * Event descriptor for an ICMP packet arrival
+     */
 
-		struct IcmpPacketEvent : NetEventDescriptor {
+    struct IcmpPacketEvent : NetEventDescriptor {
 
-			/**
-			 * The IP packet reference
-			 */
+      /**
+       * The IP packet reference
+       */
 
-			IpPacket& ipPacket;
-
-
-			/**
-			 * The ICMP packet data encapsulated in the above packet
-			 */
-
-			IcmpPacket& icmpPacket;
+      IpPacket& ipPacket;
 
 
-			/**
-			 * Constructor
-			 * @param icmp The ICMP packet
-			 * @param ip The IP packet holding the ICMP packet
-			 */
+      /**
+       * The ICMP packet data encapsulated in the above packet
+       */
 
-			IcmpPacketEvent(IcmpPacket& icmp,IpPacket& ip)
-				: NetEventDescriptor(NetEventType::ICMP_PACKET),
-					ipPacket(ip),
-					icmpPacket(icmp) {
-			}
-		};
-	}
+      IcmpPacket& icmpPacket;
+
+
+      /**
+       * Constructor
+       * @param icmp The ICMP packet
+       * @param ip The IP packet holding the ICMP packet
+       */
+
+      IcmpPacketEvent(IcmpPacket& icmp,IpPacket& ip)
+        : NetEventDescriptor(NetEventType::ICMP_PACKET),
+          ipPacket(ip),
+          icmpPacket(icmp) {
+      }
+    };
+  }
 }

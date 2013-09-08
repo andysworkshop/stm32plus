@@ -10,20 +10,20 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace GateScanControl2Cmd
-		{
-			enum
-			{
-				Opcode = 0x61,
+  namespace lgdp453x
+  {
+    namespace GateScanControl2Cmd
+    {
+      enum
+      {
+        Opcode = 0x61,
 
-				REV = 1,
-				VLE = 1<<1,
-				NDL = 1<<2
-			};
-		}
-	}
+        REV = 1,
+        VLE = 1<<1,
+        NDL = 1<<2
+      };
+    }
+  }
 }
 
 

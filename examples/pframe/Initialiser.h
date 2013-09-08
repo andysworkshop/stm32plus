@@ -13,17 +13,17 @@
 
 class Initialiser {
 
-	protected:
-		LcdManager& _lcdManager;
-		LcdManager::TerminalAccess& _term;
+  protected:
+    LcdManager& _lcdManager;
+    LcdManager::TerminalAccess& _term;
 
-	public:
-		virtual ~Initialiser() {}
+  public:
+    virtual ~Initialiser() {}
 
-	protected:
-		bool error(const char *message);
+  protected:
+    bool error(const char *message);
 
-		Initialiser(LcdManager& lcdManager);
+    Initialiser(LcdManager& lcdManager);
 
-		virtual bool initialise()=0;
+    virtual bool initialise()=0;
 };

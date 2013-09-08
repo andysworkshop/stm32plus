@@ -21,20 +21,20 @@ namespace stm32plus {
 
   template<class... Features>
   class Dma1Channel2Stream5 : public Dma,
-                 	 	 	 	 	 	 	public Features... {
+                              public Features... {
 
     public:
 
-  		/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			Dma1Channel2Stream5()
-				: Dma(DMA1_Stream5,DMA_Channel_2,DMA_FLAG_TCIF5,DMA_FLAG_HTIF5,DMA_FLAG_TEIF5),
-				  Features(static_cast<Dma&>(*this))... {
+      Dma1Channel2Stream5()
+        : Dma(DMA1_Stream5,DMA_Channel_2,DMA_FLAG_TCIF5,DMA_FLAG_HTIF5,DMA_FLAG_TEIF5),
+          Features(static_cast<Dma&>(*this))... {
 
-				ClockControl<PERIPHERAL_DMA1>::On();
-			}
+        ClockControl<PERIPHERAL_DMA1>::On();
+      }
   };
 
 

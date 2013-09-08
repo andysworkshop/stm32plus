@@ -24,32 +24,32 @@ RtcOverflowInterruptFeature *RtcOverflowInterruptFeature::_overflowInterruptFeat
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) RTC_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_IRQHandler(void) {
 
-		// check the ticker
+    // check the ticker
 
-		if(RTC_GetITStatus(RTC_IT_SEC)!=RESET) {
-			RtcSecondInterruptFeature::_secondInterruptFeature->RtcSecondInterruptEventSender.raiseEvent();
-			RTC_ClearITPendingBit(RTC_FLAG_SEC);
-			__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-		}
+    if(RTC_GetITStatus(RTC_IT_SEC)!=RESET) {
+      RtcSecondInterruptFeature::_secondInterruptFeature->RtcSecondInterruptEventSender.raiseEvent();
+      RTC_ClearITPendingBit(RTC_FLAG_SEC);
+      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+    }
 
-		// check the alarm
+    // check the alarm
 
-		else if(RTC_GetITStatus(RTC_IT_ALR)!=RESET) {
-			RtcAlarmInterruptFeature::_alarmInterruptFeature->RtcAlarmInterruptEventSender.raiseEvent();
-			RTC_ClearITPendingBit(RTC_FLAG_ALR);
-			__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-		}
+    else if(RTC_GetITStatus(RTC_IT_ALR)!=RESET) {
+      RtcAlarmInterruptFeature::_alarmInterruptFeature->RtcAlarmInterruptEventSender.raiseEvent();
+      RTC_ClearITPendingBit(RTC_FLAG_ALR);
+      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+    }
 
-		// check the overflow
+    // check the overflow
 
-		else if(::RTC_GetITStatus(RTC_IT_OW)!=RESET) {
-			RtcOverflowInterruptFeature::_overflowInterruptFeature->RtcOverflowInterruptEventSender.raiseEvent();
-			RTC_ClearITPendingBit(RTC_FLAG_OW);
-			__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-		}
-	}
+    else if(::RTC_GetITStatus(RTC_IT_OW)!=RESET) {
+      RtcOverflowInterruptFeature::_overflowInterruptFeature->RtcOverflowInterruptEventSender.raiseEvent();
+      RTC_ClearITPendingBit(RTC_FLAG_OW);
+      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+    }
+  }
 }
 
 #endif  // USE_RTC_INTERRUPT

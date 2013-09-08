@@ -12,20 +12,20 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * HX8347A interface: 64K colours, portrait and landscape
-		 */
+    /**
+     * HX8347A interface: 64K colours, portrait and landscape
+     */
 
-		template<class TAccessMode> using HX8347A_Portrait_64K  = GraphicsLibrary<HX8347A<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
-		template<class TAccessMode> using HX8347A_Landscape_64K = GraphicsLibrary<HX8347A<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using HX8347A_Portrait_64K  = GraphicsLibrary<HX8347A<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using HX8347A_Landscape_64K = GraphicsLibrary<HX8347A<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the HX8347A
-		 */
+    /**
+     * Graphic terminal modes for the HX8347A
+     */
 
-		template<class TDevice> using HX8347A_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using HX8347A_Terminal_Landscape = GraphicTerminal<TDevice,false>;
-	}
+    template<class TDevice> using HX8347A_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using HX8347A_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+  }
 }

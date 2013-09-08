@@ -8,29 +8,29 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a TCP connection being released
-		 */
+    /**
+     * Event descriptor for a TCP connection being released
+     */
 
-		class TcpConnection;
+    class TcpConnection;
 
-		struct TcpConnectionReleasedEvent : NetEventDescriptor {
+    struct TcpConnectionReleasedEvent : NetEventDescriptor {
 
-			const TcpConnection& connection;
+      const TcpConnection& connection;
 
-			/**
-			 * Constructor
-			 * @param c The connection being released
-			 */
+      /**
+       * Constructor
+       * @param c The connection being released
+       */
 
-			TcpConnectionReleasedEvent(const TcpConnection& c)
-				: NetEventDescriptor(NetEventDescriptor::NetEventType::TCP_CONNECTION_RELEASED),
-				  connection(c) {
-			}
-		};
-	}
+      TcpConnectionReleasedEvent(const TcpConnection& c)
+        : NetEventDescriptor(NetEventDescriptor::NetEventType::TCP_CONNECTION_RELEASED),
+          connection(c) {
+      }
+    };
+  }
 }
 

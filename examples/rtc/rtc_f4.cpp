@@ -27,7 +27,7 @@ using namespace stm32plus;
  * for the F1 and F4 (STM32F4DISCOVERY). This is the F4 demo.
  *
  * Compatible MCU:
- * 	 STM32F4
+ *   STM32F4
  *
  * Tested devices:
  *   STM32F407VGT6
@@ -35,116 +35,116 @@ using namespace stm32plus;
 
 class RtcTest {
 
-	protected:
+  protected:
 
-		enum { LED_PIN = 13 };
+    enum { LED_PIN = 13 };
 
-		bool _ledState;
+    bool _ledState;
 
-		volatile bool _ticked;
-		volatile bool _alarmed;
+    volatile bool _ticked;
+    volatile bool _alarmed;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			// initialise the LED port
+      // initialise the LED port
 
-			GpioD<DefaultDigitalOutputFeature<LED_PIN> > pd;
+      GpioD<DefaultDigitalOutputFeature<LED_PIN> > pd;
 
-			// lights off (this LED is active high, i.e. PD13 is a source)
+      // lights off (this LED is active high, i.e. PD13 is a source)
 
-			_ledState=true;
-			pd[LED_PIN].reset();
+      _ledState=true;
+      pd[LED_PIN].reset();
 
-			// declare an RTC instance customised with just the features we will use.
-			// a clock source is mandatory. The interrupt features are optional and
-			// will pull in the relevant methods and features for us to use
+      // declare an RTC instance customised with just the features we will use.
+      // a clock source is mandatory. The interrupt features are optional and
+      // will pull in the relevant methods and features for us to use
 
-			Rtc<
-				RtcLsiClockFeature<RtcMeasuredLsiFrequencyProvider>,	// we'll clock it from the LSI clock and calibrate the LSI using a timer
-				RtcSecondInterruptFeature,														// we want per-second interrupts
-				RtcAlarmAInterruptFeature															// we also want the alarm A interrupt
-			> rtc;
+      Rtc<
+        RtcLsiClockFeature<RtcMeasuredLsiFrequencyProvider>,  // we'll clock it from the LSI clock and calibrate the LSI using a timer
+        RtcSecondInterruptFeature,                            // we want per-second interrupts
+        RtcAlarmAInterruptFeature                             // we also want the alarm A interrupt
+      > rtc;
 
-			// insert ourselves as subscribers to the per-second and alarm interrupts.
-			// we need to qualify ExtiInterruptSender with the name of its containing class because
-			// there are two ExtiInterruptSender's in the hierarchy.
+      // insert ourselves as subscribers to the per-second and alarm interrupts.
+      // we need to qualify ExtiInterruptSender with the name of its containing class because
+      // there are two ExtiInterruptSender's in the hierarchy.
 
-			rtc.RtcSecondInterruptFeature::ExtiInterruptEventSender.insertSubscriber(ExtiInterruptEventSourceSlot::bind(this,&RtcTest::onTick));
-			rtc.RtcAlarmInterruptFeature::ExtiInterruptEventSender.insertSubscriber(ExtiInterruptEventSourceSlot::bind(this,&RtcTest::onAlarm));
+      rtc.RtcSecondInterruptFeature::ExtiInterruptEventSender.insertSubscriber(ExtiInterruptEventSourceSlot::bind(this,&RtcTest::onTick));
+      rtc.RtcAlarmInterruptFeature::ExtiInterruptEventSender.insertSubscriber(ExtiInterruptEventSourceSlot::bind(this,&RtcTest::onAlarm));
 
-			// set the time to midnight
+      // set the time to midnight
 
-			rtc.setTime(0,0,0);
+      rtc.setTime(0,0,0);
 
-			_ticked=_alarmed=false;
+      _ticked=_alarmed=false;
 
-			// start the second interrupt
+      // start the second interrupt
 
-			rtc.enableSecondInterrupt();
+      rtc.enableSecondInterrupt();
 
-			// configure the alarm to go off on 10s time match. i.e. 0:0:10, 0:1:10, 0:2:10 etc...
+      // configure the alarm to go off on 10s time match. i.e. 0:0:10, 0:1:10, 0:2:10 etc...
 
-			rtc.setAlarm(RTC_AlarmMask_DateWeekDay | RTC_AlarmMask_Hours | RTC_AlarmMask_Minutes,		// only consider seconds as the trigger
-									 RTC_AlarmDateWeekDaySel_Date,			// don't care
-									 0,																	// day/date (don't care)
-									 0,																	// hour (don't care)
-									 0,																	// minute (don't care)
-									 10);																// second - on the 10's.
+      rtc.setAlarm(RTC_AlarmMask_DateWeekDay | RTC_AlarmMask_Hours | RTC_AlarmMask_Minutes,   // only consider seconds as the trigger
+                   RTC_AlarmDateWeekDaySel_Date,      // don't care
+                   0,                                 // day/date (don't care)
+                   0,                                 // hour (don't care)
+                   0,                                 // minute (don't care)
+                   10);                               // second - on the 10's.
 
-			// main loop
+      // main loop
 
-			for(;;) {
+      for(;;) {
 
-				// if we ticked, toggle LED state
+        // if we ticked, toggle LED state
 
-				if(_ticked) {
-					_ledState^=true;
-					pd[LED_PIN].setState(_ledState);
+        if(_ticked) {
+          _ledState^=true;
+          pd[LED_PIN].setState(_ledState);
 
-					// reset for next time
+          // reset for next time
 
-					_ticked=false;
-				}
+          _ticked=false;
+        }
 
-				// if the alarm went off then flash rapidly
+        // if the alarm went off then flash rapidly
 
-				if(_alarmed) {
+        if(_alarmed) {
 
-					for(int i=0;i<5;i++) {
-						pd[LED_PIN].set();
-						MillisecondTimer::delay(50);
-						pd[LED_PIN].reset();
-						MillisecondTimer::delay(50);
-					}
+          for(int i=0;i<5;i++) {
+            pd[LED_PIN].set();
+            MillisecondTimer::delay(50);
+            pd[LED_PIN].reset();
+            MillisecondTimer::delay(50);
+          }
 
-					// put the LED back where it was
+          // put the LED back where it was
 
-					pd[LED_PIN].setState(_ledState);
+          pd[LED_PIN].setState(_ledState);
 
-					// reset for next time (in another 60 seconds)
+          // reset for next time (in another 60 seconds)
 
-					_alarmed=false;
-				}
-			}
-		}
+          _alarmed=false;
+        }
+      }
+    }
 
-		/*
-		 * the RTC has ticked
-		 */
+    /*
+     * the RTC has ticked
+     */
 
-		void onTick(uint8_t /* extiNumber */) {
-			_ticked=true;
-		}
+    void onTick(uint8_t /* extiNumber */) {
+      _ticked=true;
+    }
 
-		/*
-		 * the RTC has alarmed
-		 */
+    /*
+     * the RTC has alarmed
+     */
 
-		void onAlarm(uint8_t /* extiNumber */) {
-			_alarmed=true;
-		}
+    void onAlarm(uint8_t /* extiNumber */) {
+      _alarmed=true;
+    }
 };
 
 
@@ -154,19 +154,19 @@ class RtcTest {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
+  // set up SysTick at 1ms resolution
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	// we're using interrupts, initialise NVIC
+  // we're using interrupts, initialise NVIC
 
-	Nvic::initialise();
+  Nvic::initialise();
 
-	RtcTest test;
-	test.run();
+  RtcTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }
 
 #endif // STM32PLUS_F4

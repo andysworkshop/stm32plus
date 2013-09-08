@@ -7,22 +7,22 @@
 #pragma once
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief A Single font character definition
-		 *
-		 */
+    /**
+     * @brief A Single font character definition
+     *
+     */
 
-		struct FontChar {
-				/// The character code
-				uint8_t Code;
+    struct FontChar {
+        /// The character code
+        uint8_t Code;
 
-				/// Pixel width of this char
-				uint8_t PixelWidth;
+        /// Pixel width of this char
+        uint8_t PixelWidth;
 
-				/// Binary data packed left to right, top to bottom
-				const uint8_t* Data;
-		};
-	}
+        /// Binary data packed left to right, top to bottom
+        const uint8_t* Data;
+    };
+  }
 }

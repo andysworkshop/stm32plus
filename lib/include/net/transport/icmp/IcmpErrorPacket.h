@@ -8,45 +8,45 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Utility to create and initialise an ICMP error type
-		 * @param icmpCode The ICMP code corresponding to the error
-		 * @param ipPacket The IP packet that caused this error
-		 * @param[out] The size of the allocated packet
-		 * @return A pointer to the ICMP packet (free it with free() )
-		 */
+    /**
+     * Utility to create and initialise an ICMP error type
+     * @param icmpCode The ICMP code corresponding to the error
+     * @param ipPacket The IP packet that caused this error
+     * @param[out] The size of the allocated packet
+     * @return A pointer to the ICMP packet (free it with free() )
+     */
 
-		template<class T>
-		T *createIcmpErrorPacket(IcmpCode icmpCode,const IpPacket& ipPacket,uint16_t& packetSize) {
+    template<class T>
+    T *createIcmpErrorPacket(IcmpCode icmpCode,const IpPacket& ipPacket,uint16_t& packetSize) {
 
-			T *packet;
-			uint16_t dataSize;
+      T *packet;
+      uint16_t dataSize;
 
-			// up to 8 bytes of the payload go back in an error packet
+      // up to 8 bytes of the payload go back in an error packet
 
-			dataSize=Min(static_cast<uint16_t>(8),ipPacket.payloadLength);
+      dataSize=Min(static_cast<uint16_t>(8),ipPacket.payloadLength);
 
-			// allocate space for it
+      // allocate space for it
 
-			packetSize=T::getHeaderSize()+ipPacket.headerLength+dataSize;
-			packet=reinterpret_cast<T *>(malloc(packetSize));
+      packetSize=T::getHeaderSize()+ipPacket.headerLength+dataSize;
+      packet=reinterpret_cast<T *>(malloc(packetSize));
 
-			// initialise it
+      // initialise it
 
-			packet->initialise(icmpCode);
+      packet->initialise(icmpCode);
 
-			// copy the IP header and data fragment into place
+      // copy the IP header and data fragment into place
 
-			memcpy(reinterpret_cast<uint8_t *>(packet)+T::getHeaderSize(),
-			       ipPacket.header,
-			       ipPacket.headerLength+dataSize);
+      memcpy(reinterpret_cast<uint8_t *>(packet)+T::getHeaderSize(),
+             ipPacket.header,
+             ipPacket.headerLength+dataSize);
 
-			// ready
+      // ready
 
-			return packet;
-		}
-	}
+      return packet;
+    }
+  }
 }

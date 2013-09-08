@@ -48,8 +48,8 @@ using namespace stm32plus;
  * should be "ef6015".
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -58,316 +58,316 @@ using namespace stm32plus;
 
 class FlashSpiProgram {
 
-	// these are the peripherals we will use
+  // these are the peripherals we will use
 
-	typedef Spi2<> MySpi;
-	typedef Usart1<> MyUsart;
-	typedef spiflash::StandardSpiFlashDevice<MySpi> MyFlash;
+  typedef Spi2<> MySpi;
+  typedef Usart1<> MyUsart;
+  typedef spiflash::StandardSpiFlashDevice<MySpi> MyFlash;
 
-	// declare the peripheral pointers
+  // declare the peripheral pointers
 
-	MyUsart *_usart;
-	MySpi *_spi;
-	MyFlash *_flash;
-	SdioDmaSdCard *_sdcard;
-	FileSystem *_fs;
-	UsartPollingOutputStream *_usartStream;
+  MyUsart *_usart;
+  MySpi *_spi;
+  MyFlash *_flash;
+  SdioDmaSdCard *_sdcard;
+  FileSystem *_fs;
+  UsartPollingOutputStream *_usartStream;
 
-	// declare the program variables
+  // declare the program variables
 
-	struct FlashEntry {
-		char *filename;
-		uint32_t length;
-		uint32_t offset;
-	};
+  struct FlashEntry {
+    char *filename;
+    uint32_t length;
+    uint32_t offset;
+  };
 
-	std::vector<FlashEntry> _flashEntries;
+  std::vector<FlashEntry> _flashEntries;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			// initialise the USART
+      // initialise the USART
 
-			_usart=new MyUsart(57600);
-			_usartStream=new UsartPollingOutputStream(*_usart);
+      _usart=new MyUsart(57600);
+      _usartStream=new UsartPollingOutputStream(*_usart);
 
-			status("Initialising SD card.");
+      status("Initialising SD card.");
 
-			// initialise the SD card
+      // initialise the SD card
 
-			_sdcard=new SdioDmaSdCard;
+      _sdcard=new SdioDmaSdCard;
 
-			if(errorProvider.hasError())
-				error("SD card could not be initialised");
+      if(errorProvider.hasError())
+        error("SD card could not be initialised");
 
-			// initialise the filesystem on the card
+      // initialise the filesystem on the card
 
-			NullTimeProvider timeProvider;
+      NullTimeProvider timeProvider;
 
-			if(!FileSystem::getInstance(*_sdcard,timeProvider,_fs))
-				error("The file system on the SD card could not be initialised");
+      if(!FileSystem::getInstance(*_sdcard,timeProvider,_fs))
+        error("The file system on the SD card could not be initialised");
 
-			// Initialise the SPI peripheral in master mode. The SPI speed is bus/4
-			// Make sure that this is not too fast for your device.
+      // Initialise the SPI peripheral in master mode. The SPI speed is bus/4
+      // Make sure that this is not too fast for your device.
 
-			MySpi::Parameters spiParams;
-			spiParams.spi_mode=SPI_Mode_Master;
-			spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_4;
-			spiParams.spi_cpol=SPI_CPOL_Low;
-			spiParams.spi_cpha=SPI_CPHA_1Edge;
+      MySpi::Parameters spiParams;
+      spiParams.spi_mode=SPI_Mode_Master;
+      spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_4;
+      spiParams.spi_cpol=SPI_CPOL_Low;
+      spiParams.spi_cpha=SPI_CPHA_1Edge;
 
-			_spi=new MySpi(spiParams);
+      _spi=new MySpi(spiParams);
 
-			// initialise the flash device
+      // initialise the flash device
 
-			_flash=new MyFlash(*_spi);
+      _flash=new MyFlash(*_spi);
 
-			// show the device identifier
+      // show the device identifier
 
-			showDeviceIdentifier();
+      showDeviceIdentifier();
 
-			// read the index file
+      // read the index file
 
-			readIndexFile();
+      readIndexFile();
 
-			// erase the flash device
+      // erase the flash device
 
-			eraseFlash();
+      eraseFlash();
 
-			// write each file
+      // write each file
 
-			for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++)
-				writeFile(*it);
+      for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++)
+        writeFile(*it);
 
-			// verify each file
+      // verify each file
 
-			for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++)
-				verifyFile(*it);
+      for(auto it=_flashEntries.begin();it!=_flashEntries.end();it++)
+        verifyFile(*it);
 
-			// done
+      // done
 
-			status("Success");
-			for(;;);
-		}
+      status("Success");
+      for(;;);
+    }
 
 
-		/*
-		 * Show the flash device id
-		 */
+    /*
+     * Show the flash device id
+     */
 
-		void showDeviceIdentifier() {
+    void showDeviceIdentifier() {
 
-			uint8_t id[3];
-			char output[7];
+      uint8_t id[3];
+      char output[7];
 
-			if(!_flash->readJedecId(id,sizeof(id)))
-				error("Unable to read the flash id code");
+      if(!_flash->readJedecId(id,sizeof(id)))
+        error("Unable to read the flash id code");
 
-			StringUtil::toHex(id,sizeof(id),output);
-			output[sizeof(output)-1]='\0';
+      StringUtil::toHex(id,sizeof(id),output);
+      output[sizeof(output)-1]='\0';
 
-			*_usartStream << "Flash id = " << output << "\r\n";
-		}
+      *_usartStream << "Flash id = " << output << "\r\n";
+    }
 
 
-		/*
-		 * Erase the entire device
-		 */
+    /*
+     * Erase the entire device
+     */
 
-		void eraseFlash() {
+    void eraseFlash() {
 
-			status("Erasing the entire flash device");
+      status("Erasing the entire flash device");
 
-			if(!_flash->writeEnable())
-				error("Unable to enable write access");
+      if(!_flash->writeEnable())
+        error("Unable to enable write access");
 
-			if(!_flash->chipErase())
-				error("Unable to execute the erase command");
+      if(!_flash->chipErase())
+        error("Unable to execute the erase command");
 
-			if(!_flash->waitForIdle())
-				error("Failed to wait for the flash device to be idle");
+      if(!_flash->waitForIdle())
+        error("Failed to wait for the flash device to be idle");
 
-			status("Erase completed");
-		}
+      status("Erase completed");
+    }
 
 
-		/*
-		 * Write the file to the flash device
-		 */
+    /*
+     * Write the file to the flash device
+     */
 
-		void writeFile(const FlashEntry& fe) {
+    void writeFile(const FlashEntry& fe) {
 
-			uint8_t page[MyFlash::PAGE_SIZE];
-			scoped_ptr<File> file;
-			uint32_t remaining,actuallyRead,address;
+      uint8_t page[MyFlash::PAGE_SIZE];
+      scoped_ptr<File> file;
+      uint32_t remaining,actuallyRead,address;
 
-			*_usartStream << "Programming " << fe.filename << "\r\n";
+      *_usartStream << "Programming " << fe.filename << "\r\n";
 
-			if(!_fs->openFile(fe.filename,file.address()))
-				error("Failed to open file");
+      if(!_fs->openFile(fe.filename,file.address()))
+        error("Failed to open file");
 
-			address=fe.offset;
+      address=fe.offset;
 
-			for(remaining=fe.length;remaining;remaining-=actuallyRead) {
+      for(remaining=fe.length;remaining;remaining-=actuallyRead) {
 
-				// read a page from the file
+        // read a page from the file
 
-				if(!file->read(page,sizeof(page),actuallyRead))
-					error("Failed to read from file");
+        if(!file->read(page,sizeof(page),actuallyRead))
+          error("Failed to read from file");
 
-				// cannot hit EOF here
+        // cannot hit EOF here
 
-				if(!actuallyRead)
-					error("Unexpected end of file");
+        if(!actuallyRead)
+          error("Unexpected end of file");
 
-				// wait for the device to go idle
+        // wait for the device to go idle
 
-				if(!_flash->waitForIdle())
-					error("Failed to wait for the device to become idle");
+        if(!_flash->waitForIdle())
+          error("Failed to wait for the device to become idle");
 
-				// enable writing
+        // enable writing
 
-				if(!_flash->writeEnable())
-					error("Unable to enable write access");
+        if(!_flash->writeEnable())
+          error("Unable to enable write access");
 
-				if(!_flash->waitForIdle())
-					error("Failed to wait for the device to become idle");
+        if(!_flash->waitForIdle())
+          error("Failed to wait for the device to become idle");
 
-				// program the page
+        // program the page
 
-				if(!_flash->pageProgram(address,page,actuallyRead))
-					error("Failed to program the page");
+        if(!_flash->pageProgram(address,page,actuallyRead))
+          error("Failed to program the page");
 
-				// update for next
+        // update for next
 
-				address+=actuallyRead;
-			}
-		}
+        address+=actuallyRead;
+      }
+    }
 
 
-		/*
-		 * Verify the file just written to the device
-		 */
+    /*
+     * Verify the file just written to the device
+     */
 
-		void verifyFile(const FlashEntry& fe) {
+    void verifyFile(const FlashEntry& fe) {
 
-			uint8_t filePage[MyFlash::PAGE_SIZE],flashPage[MyFlash::PAGE_SIZE];
-			scoped_ptr<File> file;
-			uint32_t remaining,actuallyRead,address;
+      uint8_t filePage[MyFlash::PAGE_SIZE],flashPage[MyFlash::PAGE_SIZE];
+      scoped_ptr<File> file;
+      uint32_t remaining,actuallyRead,address;
 
-			*_usartStream << "Verifying " << fe.filename << "\r\n";
+      *_usartStream << "Verifying " << fe.filename << "\r\n";
 
-			if(!_fs->openFile(fe.filename,file.address()))
-				error("Failed to open file");
+      if(!_fs->openFile(fe.filename,file.address()))
+        error("Failed to open file");
 
-			address=fe.offset;
+      address=fe.offset;
 
-			for(remaining=fe.length;remaining;remaining-=actuallyRead) {
+      for(remaining=fe.length;remaining;remaining-=actuallyRead) {
 
-				// read a page from the file
+        // read a page from the file
 
-				if(!file->read(filePage,sizeof(filePage),actuallyRead))
-					error("Failed to read from file");
+        if(!file->read(filePage,sizeof(filePage),actuallyRead))
+          error("Failed to read from file");
 
-				// cannot hit EOF here
+        // cannot hit EOF here
 
-				if(!actuallyRead)
-					error("Unexpected end of file");
+        if(!actuallyRead)
+          error("Unexpected end of file");
 
-				// read the page from the flash device
+        // read the page from the flash device
 
-				if(!_flash->fastRead(address,flashPage,actuallyRead))
-					error("Failed to read from the flash device");
+        if(!_flash->fastRead(address,flashPage,actuallyRead))
+          error("Failed to read from the flash device");
 
-				// compare it
+        // compare it
 
-				if(memcmp(filePage,flashPage,actuallyRead)!=0)
-					error("Verify error: programming failed");
+        if(memcmp(filePage,flashPage,actuallyRead)!=0)
+          error("Verify error: programming failed");
 
-				// update for next
+        // update for next
 
-				address+=actuallyRead;
-			}
-		}
+        address+=actuallyRead;
+      }
+    }
 
 
-		/*
-		 * Read index.txt
-		 */
+    /*
+     * Read index.txt
+     */
 
-		void readIndexFile() {
+    void readIndexFile() {
 
-			scoped_ptr<File> file;
-			char line[200],*ptr;
+      scoped_ptr<File> file;
+      char line[200],*ptr;
 
-			status("Reading index file.");
+      status("Reading index file.");
 
-			// open the file
+      // open the file
 
-			if(!_fs->openFile("/spiflash/index.txt",file.address()))
-				error("Cannot open /index.txt");
+      if(!_fs->openFile("/spiflash/index.txt",file.address()))
+        error("Cannot open /index.txt");
 
-			// attach a reader and read each line
+      // attach a reader and read each line
 
-			FileReader reader(*file);
+      FileReader reader(*file);
 
-			while(reader.available()) {
+      while(reader.available()) {
 
-				scoped_ptr<File> dataFile;
+        scoped_ptr<File> dataFile;
 
-				// read line
+        // read line
 
-				if(!reader.readLine(line,sizeof(line)))
-					error("Failed to read line from file");
+        if(!reader.readLine(line,sizeof(line)))
+          error("Failed to read line from file");
 
-				// search for the = separator and break the text line at it
+        // search for the = separator and break the text line at it
 
-				if((ptr=strchr(line,'='))==nullptr)
-					error("Badly formatted index.txt line - cannot find = symbol");
+        if((ptr=strchr(line,'='))==nullptr)
+          error("Badly formatted index.txt line - cannot find = symbol");
 
-				*ptr='\0';
+        *ptr='\0';
 
-				// ensure this file can be opened
+        // ensure this file can be opened
 
-				if(!_fs->openFile(line,dataFile.address()))
-					error("Cannot open data file");
+        if(!_fs->openFile(line,dataFile.address()))
+          error("Cannot open data file");
 
-				FlashEntry fe;
-				fe.filename=strdup(line);
-				fe.offset=atoi(ptr+1);
-				fe.length=dataFile->getLength();
+        FlashEntry fe;
+        fe.filename=strdup(line);
+        fe.offset=atoi(ptr+1);
+        fe.length=dataFile->getLength();
 
-				_flashEntries.push_back(fe);
+        _flashEntries.push_back(fe);
 
-				*_usartStream << "Parsed " << fe.filename
-						          << " offset " << StringUtil::Ascii(fe.offset)
-						          << " length " << StringUtil::Ascii(fe.length)
-						          << "\r\n";
-			}
+        *_usartStream << "Parsed " << fe.filename
+                      << " offset " << StringUtil::Ascii(fe.offset)
+                      << " length " << StringUtil::Ascii(fe.length)
+                      << "\r\n";
+      }
 
-			*_usartStream << "Finished reading index, "
-										<< StringUtil::Ascii(_flashEntries.size()) << ", entries read\r\n";
-		}
+      *_usartStream << "Finished reading index, "
+                    << StringUtil::Ascii(_flashEntries.size()) << ", entries read\r\n";
+    }
 
 
-		/*
-		 * Unrecoverable error
-		 */
+    /*
+     * Unrecoverable error
+     */
 
-		void error(const char *text) {
-			status(text);
-			for(;;);
-		}
+    void error(const char *text) {
+      status(text);
+      for(;;);
+    }
 
 
-		/*
-		 * Write a status string to the usart
-		 */
+    /*
+     * Write a status string to the usart
+     */
 
-		void status(const char *text) {
-			*_usartStream << text << "\r\n";
-		}
+    void status(const char *text) {
+      *_usartStream << text << "\r\n";
+    }
 };
 
 
@@ -377,11 +377,11 @@ class FlashSpiProgram {
 
 int main() {
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	FlashSpiProgram test;
-	test.run();
+  FlashSpiProgram test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -14,42 +14,42 @@
  */
 
 namespace stm32plus {
-	namespace StringUtil {
+  namespace StringUtil {
 
-		/**
-		 * ASCII converter class
-		 */
+    /**
+     * ASCII converter class
+     */
 
-		class Ascii {
+    class Ascii {
 
-			protected:
-				scoped_array<char> _buffer;
+      protected:
+        scoped_array<char> _buffer;
 
-			public:
-				Ascii(long l);
+      public:
+        Ascii(long l);
 
-				operator const char *() const;
-		};
-
-
-		/**
-		 * Constructor with long
-		 * @param l The long to convert
-		 */
-
-		inline Ascii::Ascii(long l)
-			: _buffer(new char[20]) {
-
-			StringUtil::modp_uitoa10(l,_buffer.get());
-		}
+        operator const char *() const;
+    };
 
 
-		/**
-		 * Cast conversion
-		 */
+    /**
+     * Constructor with long
+     * @param l The long to convert
+     */
 
-		inline Ascii::operator const char *() const {
-			return _buffer.get();
-		}
-	}
+    inline Ascii::Ascii(long l)
+      : _buffer(new char[20]) {
+
+      StringUtil::modp_uitoa10(l,_buffer.get());
+    }
+
+
+    /**
+     * Cast conversion
+     */
+
+    inline Ascii::operator const char *() const {
+      return _buffer.get();
+    }
+  }
 }

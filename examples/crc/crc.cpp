@@ -42,8 +42,8 @@ using namespace stm32plus;
  *   data.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -52,59 +52,59 @@ using namespace stm32plus;
 
 class CrcTest {
 
-	/**
-	 * The selected CRC mode. We'll use big-endian. Input data is bit-reversed before going in to the
-	 * calculation and results are bit-reversed before coming back.
-	 */
+  /**
+   * The selected CRC mode. We'll use big-endian. Input data is bit-reversed before going in to the
+   * calculation and results are bit-reversed before coming back.
+   */
 
-	typedef CrcBigEndian MyCrcMode;
+  typedef CrcBigEndian MyCrcMode;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			static const char *testString="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
+      static const char *testString="Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua";
 
-			/*
-			 * Declare USART1 to run at 57600 and attach an output stream to it
-			 */
+      /*
+       * Declare USART1 to run at 57600 and attach an output stream to it
+       */
 
-			Usart1<> usart(57600);
-			UsartPollingOutputStream usartOutputStream(usart);
+      Usart1<> usart(57600);
+      UsartPollingOutputStream usartOutputStream(usart);
 
-			/*
-			 * Declare a big-endian CRC implementation with a default padding value
-			 * of zero and attach it to an output stream
-			 */
+      /*
+       * Declare a big-endian CRC implementation with a default padding value
+       * of zero and attach it to an output stream
+       */
 
-			MyCrcMode::Parameters p;
-			MyCrcMode crc(p);
+      MyCrcMode::Parameters p;
+      MyCrcMode crc(p);
 
-			CrcOutputStream<MyCrcMode> crcOutputStream(crc);
+      CrcOutputStream<MyCrcMode> crcOutputStream(crc);
 
-			/*
-			 * Calculate the CRC of the test string
-			 */
+      /*
+       * Calculate the CRC of the test string
+       */
 
-			crcOutputStream << testString;			// stream in the data to the CRC unit
+      crcOutputStream << testString;      // stream in the data to the CRC unit
 
-			crcOutputStream.close();						// close the stream (calls finish() on the CRC)
+      crcOutputStream.close();            // close the stream (calls finish() on the CRC)
 
-			/*
-			 * Write out the CRC value to the USART
-			 */
+      /*
+       * Write out the CRC value to the USART
+       */
 
-			char buf[15];
-			StringUtil::modp_uitoa10(crc.currentCrc(),buf);
+      char buf[15];
+      StringUtil::modp_uitoa10(crc.currentCrc(),buf);
 
-			usartOutputStream << "CRC is " << buf;
+      usartOutputStream << "CRC is " << buf;
 
-			/*
-			 * Done
-			 */
+      /*
+       * Done
+       */
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -114,9 +114,9 @@ class CrcTest {
 
 int main() {
 
-	CrcTest test;
-	test.run();
+  CrcTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

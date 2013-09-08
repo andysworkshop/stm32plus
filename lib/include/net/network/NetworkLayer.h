@@ -9,60 +9,60 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Template feature-holder for features that live in the network
-		 * layer of the stack, e.g. the IP and ICMP protocols. The next level down is the
-		 * data link layer and the next level up is the transport layer. The features
-		 * must themselves be templated on, and virtually inherit from TDatalinkLayer so
-		 * that the stack is correctly formed.
-		 */
+    /**
+     * Template feature-holder for features that live in the network
+     * layer of the stack, e.g. the IP and ICMP protocols. The next level down is the
+     * data link layer and the next level up is the transport layer. The features
+     * must themselves be templated on, and virtually inherit from TDatalinkLayer so
+     * that the stack is correctly formed.
+     */
 
-		template<class TDatalinkLayer,template<class> class... Features>
-		class NetworkLayer : public virtual TDatalinkLayer,
-												 public Features<TDatalinkLayer>... {
+    template<class TDatalinkLayer,template<class> class... Features>
+    class NetworkLayer : public virtual TDatalinkLayer,
+                         public Features<TDatalinkLayer>... {
 
-			public:
+      public:
 
-				/**
-				 * Base parameters collection-class for network features
-				 */
+        /**
+         * Base parameters collection-class for network features
+         */
 
-				struct Parameters : TDatalinkLayer::Parameters,
-														Features<TDatalinkLayer>::Parameters... {
-				};
-
-
-			public:
-				bool startup();
-				bool initialise(Parameters& params);
-		};
+        struct Parameters : TDatalinkLayer::Parameters,
+                            Features<TDatalinkLayer>::Parameters... {
+        };
 
 
-		/**
-		 * Initialise the features after initialising upwards first
-		 * @param params The parameters class to initialise the layer features
-		 * @return true if it worked
-		 */
-
-		template<class TDatalinkLayer,template<class> class... Features>
-		bool NetworkLayer<TDatalinkLayer,Features...>::initialise(Parameters& params) {
-			return TDatalinkLayer::initialise(params) &&
-						 RecursiveBoolInitWithParams<NetworkLayer,Features<TDatalinkLayer>...>::tinit(this,params);
-		}
+      public:
+        bool startup();
+        bool initialise(Parameters& params);
+    };
 
 
-		/**
-		 * Startup the components in this layer
-		 * @return
-		 */
+    /**
+     * Initialise the features after initialising upwards first
+     * @param params The parameters class to initialise the layer features
+     * @return true if it worked
+     */
 
-		template<class TDatalinkLayer,template<class> class... Features>
-		bool NetworkLayer<TDatalinkLayer,Features...>::startup() {
-			return TDatalinkLayer::startup() &&
-						 RecursiveBoolStartup<NetworkLayer,Features<TDatalinkLayer>...>::tstartup(this);
-		}
-	}
+    template<class TDatalinkLayer,template<class> class... Features>
+    bool NetworkLayer<TDatalinkLayer,Features...>::initialise(Parameters& params) {
+      return TDatalinkLayer::initialise(params) &&
+             RecursiveBoolInitWithParams<NetworkLayer,Features<TDatalinkLayer>...>::tinit(this,params);
+    }
+
+
+    /**
+     * Startup the components in this layer
+     * @return
+     */
+
+    template<class TDatalinkLayer,template<class> class... Features>
+    bool NetworkLayer<TDatalinkLayer,Features...>::startup() {
+      return TDatalinkLayer::startup() &&
+             RecursiveBoolStartup<NetworkLayer,Features<TDatalinkLayer>...>::tstartup(this);
+    }
+  }
 }

@@ -10,20 +10,20 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace DisplayCtrl4Cmd
-		{
-			enum
-			{
-				Opcode = 0xa,
+  namespace lgdp453x
+  {
+    namespace DisplayCtrl4Cmd
+    {
+      enum
+      {
+        Opcode = 0xa,
 
-				FMARKOE = 1<<3
-			};
+        FMARKOE = 1<<3
+      };
 
-			inline int FMI(uint16_t n) { return n; }
-		}
-	}
+      inline int FMI(uint16_t n) { return n; }
+    }
+  }
 }
 
 

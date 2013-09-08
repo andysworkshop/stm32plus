@@ -8,16 +8,16 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Empty generic class definition for HX8347A colour-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for HX8347A colour-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<ColourDepth TColour,class TAccessMode>
-		class HX8347AColour;
-	}
+    template<ColourDepth TColour,class TAccessMode>
+    class HX8347AColour;
+  }
 }
 
 

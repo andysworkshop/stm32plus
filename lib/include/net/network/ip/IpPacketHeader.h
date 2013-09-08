@@ -8,33 +8,33 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * Header of an IPv4 packet. Not documented here, documentation abounds on the internet.
-		 */
+    /**
+     * Header of an IPv4 packet. Not documented here, documentation abounds on the internet.
+     */
 
-		struct IpPacketHeader {
+    struct IpPacketHeader {
 
-			uint8_t ip_hdr_version;
-			uint8_t ip_hdr_typeOfService;
-			uint16_t ip_hdr_length;
-			uint16_t ip_hdr_identification;
-			uint16_t ip_hdr_flagsAndOffset;
-			uint8_t ip_hdr_ttl;
-			IpProtocol ip_hdr_protocol;
-			uint16_t ip_hdr_checksum;
+      uint8_t ip_hdr_version;
+      uint8_t ip_hdr_typeOfService;
+      uint16_t ip_hdr_length;
+      uint16_t ip_hdr_identification;
+      uint16_t ip_hdr_flagsAndOffset;
+      uint8_t ip_hdr_ttl;
+      IpProtocol ip_hdr_protocol;
+      uint16_t ip_hdr_checksum;
 
-			IpAddress ip_sourceAddress;
-			IpAddress ip_destinationAddress;
+      IpAddress ip_sourceAddress;
+      IpAddress ip_destinationAddress;
 
-			/**
-			 * Get the size of an IP header with no options
-			 */
+      /**
+       * Get the size of an IP header with no options
+       */
 
-			constexpr static uint16_t getNoOptionsHeaderSize() {
-				return 20;
-			}
-		} __attribute__((packed));			// 20 bytes.
-	}
+      constexpr static uint16_t getNoOptionsHeaderSize() {
+        return 20;
+      }
+    } __attribute__((packed));      // 20 bytes.
+  }
 }

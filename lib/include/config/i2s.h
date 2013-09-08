@@ -24,10 +24,10 @@
 // device-specific pin initialiser
 
 #if defined(STM32PLUS_F1)
-	#include "i2s/f1/I2SPinInitialiser.h"
+  #include "i2s/f1/I2SPinInitialiser.h"
 #elif defined(STM32PLUS_F4)
-	#include "i2s/f4/I2SAlternateFunctionMapper.h"
-	#include "i2s/f4/I2SPinInitialiser.h"
+  #include "i2s/f4/I2SAlternateFunctionMapper.h"
+  #include "i2s/f4/I2SPinInitialiser.h"
 #endif
 
 // generic peripheral includes

@@ -9,14 +9,14 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace VerticalRAMPositionStartCmd
-		{
-			enum
-			{
-				Opcode = 0x52
-			};
-		}
-	}
+  namespace ili9325
+  {
+    namespace VerticalRAMPositionStartCmd
+    {
+      enum
+      {
+        Opcode = 0x52
+      };
+    }
+  }
 }

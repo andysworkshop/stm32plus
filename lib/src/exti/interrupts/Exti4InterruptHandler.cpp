@@ -21,14 +21,14 @@ template<> ExtiPeripheral<EXTI_Line4> *ExtiPeripheral<EXTI_Line4>::_extiInstance
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) EXTI4_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) EXTI4_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line4)!=RESET) {
-				Exti4::_extiInstance->ExtiInterruptEventSender.raiseEvent(4);
-				EXTI_ClearITPendingBit(EXTI_Line4);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(EXTI_GetITStatus(EXTI_Line4)!=RESET) {
+        Exti4::_extiInstance->ExtiInterruptEventSender.raiseEvent(4);
+        EXTI_ClearITPendingBit(EXTI_Line4);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 #endif

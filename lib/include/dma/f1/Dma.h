@@ -15,13 +15,13 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Base class for DMA subclasses.
-	 */
+  /**
+   * @brief Base class for DMA subclasses.
+   */
 
-	class Dma {
+  class Dma {
 
-		public:
+    public:
 
       typedef DMA_Channel_TypeDef DMA_PeripheralType;
 
@@ -34,16 +34,16 @@ namespace stm32plus {
         E_TRANSFER_ERROR=1
       };
 
-		protected:
+    protected:
       DMA_PeripheralType *_peripheralAddress;
-			uint32_t _completeFlag;
-			uint32_t _halfCompleteFlag;
-			uint32_t _errorFlag;
+      uint32_t _completeFlag;
+      uint32_t _halfCompleteFlag;
+      uint32_t _errorFlag;
 
-		protected:
-			Dma(DMA_PeripheralType *peripheralAddress,uint32_t completeFlag,uint32_t halfCompleteFlag,uint32_t errorFlag);
+    protected:
+      Dma(DMA_PeripheralType *peripheralAddress,uint32_t completeFlag,uint32_t halfCompleteFlag,uint32_t errorFlag);
 
-		public:
+    public:
       void clearCompleteFlag() const;
       void clearHalfCompleteFlag() const;
       void clearErrorFlag() const;
@@ -54,8 +54,8 @@ namespace stm32plus {
       bool isHalfComplete() const;
       bool isError() const;
 
-			operator DMA_PeripheralType *();
-	};
+      operator DMA_PeripheralType *();
+  };
 
 
   /**
@@ -82,12 +82,12 @@ namespace stm32plus {
 
   inline bool Dma::isComplete() const {
 
-  	if(DMA_GetFlagStatus(_completeFlag)) {
-  		clearCompleteFlag();
-  		return true;
-  	}
+    if(DMA_GetFlagStatus(_completeFlag)) {
+      clearCompleteFlag();
+      return true;
+    }
 
-  	return false;
+    return false;
   }
 
 
@@ -98,12 +98,12 @@ namespace stm32plus {
 
   inline bool Dma::isHalfComplete() const {
 
-  	if(DMA_GetFlagStatus(_halfCompleteFlag)) {
-  		clearHalfCompleteFlag();
-  		return true;
-  	}
+    if(DMA_GetFlagStatus(_halfCompleteFlag)) {
+      clearHalfCompleteFlag();
+      return true;
+    }
 
-  	return false;
+    return false;
   }
 
 
@@ -114,13 +114,13 @@ namespace stm32plus {
 
   inline bool Dma::isError() const {
 
-  	if(DMA_GetFlagStatus(_errorFlag)) {
-  		clearErrorFlag();
-  		errorProvider.set(ErrorProvider::ERROR_PROVIDER_DMA,E_TRANSFER_ERROR);
-  		return true;
-  	}
+    if(DMA_GetFlagStatus(_errorFlag)) {
+      clearErrorFlag();
+      errorProvider.set(ErrorProvider::ERROR_PROVIDER_DMA,E_TRANSFER_ERROR);
+      return true;
+    }
 
-  	return false;
+    return false;
   }
 
 
@@ -179,6 +179,6 @@ namespace stm32plus {
    */
 
   inline Dma::operator DMA_PeripheralType *() {
-  	return _peripheralAddress;
+    return _peripheralAddress;
   }
 }

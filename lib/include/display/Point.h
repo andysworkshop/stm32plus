@@ -8,41 +8,41 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief A point co-ordinate structure
-		 */
+    /**
+     * @brief A point co-ordinate structure
+     */
 
-		class Point {
+    class Point {
 
-			public:
-				/// X co-ordinate
-				int16_t X;
+      public:
+        /// X co-ordinate
+        int16_t X;
 
-				/// Y co-ordinate
-				int16_t Y;
+        /// Y co-ordinate
+        int16_t Y;
 
-			public:
+      public:
 
-				/**
-				 * Return a (0,0) point.
-				 */
+        /**
+         * Return a (0,0) point.
+         */
 
-				static const Point Origin;
+        static const Point Origin;
 
-				Point() {}
+        Point() {}
 
-				/**
-				 * Constructor with parameters
-				 * @param[in] x The x-co-ord
-				 * @param[in] y The y-co-ord
-				 */
+        /**
+         * Constructor with parameters
+         * @param[in] x The x-co-ord
+         * @param[in] y The y-co-ord
+         */
 
-				Point(int16_t x,int16_t y) {
-					X=x;
-					Y=y;
-				}
-		};
-	}
+        Point(int16_t x,int16_t y) {
+          X=x;
+          Y=y;
+        }
+    };
+  }
 }

@@ -9,30 +9,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor that announces a new set of DNS servers (up to 3)
-		 */
+    /**
+     * Event descriptor that announces a new set of DNS servers (up to 3)
+     */
 
-		struct IpDnsServersAnnouncementEvent : NetEventDescriptor {
+    struct IpDnsServersAnnouncementEvent : NetEventDescriptor {
 
-			/**
-			 * Up to 3 DNS servers, call isValid() to find the end of the set if less than 3
-			 */
+      /**
+       * Up to 3 DNS servers, call isValid() to find the end of the set if less than 3
+       */
 
-			const IpAddress *ipDnsServers;
+      const IpAddress *ipDnsServers;
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			IpDnsServersAnnouncementEvent(const IpAddress *dnsServers)
-				: NetEventDescriptor(NetEventType::DNS_SERVERS_ANNOUNCEMENT),
-					ipDnsServers(dnsServers) {
-			}
-		};
-	}
+      IpDnsServersAnnouncementEvent(const IpAddress *dnsServers)
+        : NetEventDescriptor(NetEventType::DNS_SERVERS_ANNOUNCEMENT),
+          ipDnsServers(dnsServers) {
+      }
+    };
+  }
 }

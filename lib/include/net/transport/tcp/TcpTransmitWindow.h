@@ -8,24 +8,24 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * The sliding transmit window. This class manages the following variables.
-		 *
-		 *          |<       sendWindow        >|
-		 * +-----------------------------------------
-		 * |        |                 |         |
-		 * +-----------------------------------------
-		 *          ^                 ^
-		 *     sendUnacknowleged     sendNext
-		 */
+    /**
+     * The sliding transmit window. This class manages the following variables.
+     *
+     *          |<       sendWindow        >|
+     * +-----------------------------------------
+     * |        |                 |         |
+     * +-----------------------------------------
+     *          ^                 ^
+     *     sendUnacknowleged     sendNext
+     */
 
-		struct TcpTransmitWindow {
-			uint32_t sendUnacknowledged;			///< seq num of first byte of data sent but not acked
-			uint32_t sendNext;								///< seq num of next byte of data to be sent
-			uint16_t sendWindow;							///< send window (starts at _sendUnacknowledged)
-		};
-	}
+    struct TcpTransmitWindow {
+      uint32_t sendUnacknowledged;      ///< seq num of first byte of data sent but not acked
+      uint32_t sendNext;                ///< seq num of next byte of data to be sent
+      uint16_t sendWindow;              ///< send window (starts at _sendUnacknowledged)
+    };
+  }
 }

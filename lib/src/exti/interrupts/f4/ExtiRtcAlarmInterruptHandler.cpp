@@ -24,24 +24,24 @@ template<> ExtiPeripheral<EXTI_Line17> *ExtiPeripheral<EXTI_Line17>::_extiInstan
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) RTC_Alarm_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_Alarm_IRQHandler(void) {
 
-		if(RTC_GetITStatus(RTC_IT_ALRA)!=RESET) {
-			ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
-			RTC_ClearITPendingBit(RTC_IT_ALRA);
-			EXTI_ClearITPendingBit(EXTI_Line17);
-		}
-		else if(RTC_GetITStatus(RTC_IT_ALRB)!=RESET) {
-			ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
-			RTC_ClearITPendingBit(RTC_IT_ALRB);
-			EXTI_ClearITPendingBit(EXTI_Line17);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(RTC_GetITStatus(RTC_IT_ALRA)!=RESET) {
+      ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
+      RTC_ClearITPendingBit(RTC_IT_ALRA);
+      EXTI_ClearITPendingBit(EXTI_Line17);
+    }
+    else if(RTC_GetITStatus(RTC_IT_ALRB)!=RESET) {
+      ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
+      RTC_ClearITPendingBit(RTC_IT_ALRB);
+      EXTI_ClearITPendingBit(EXTI_Line17);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 
-	void RTCAlarm_IRQHandler(void) {
-		RTC_Alarm_IRQHandler();
-	}
+  void RTCAlarm_IRQHandler(void) {
+    RTC_Alarm_IRQHandler();
+  }
 
 }
 

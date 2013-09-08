@@ -13,12 +13,12 @@
 
 int main() {
 
-	PictureFrame pf;
+  PictureFrame pf;
 
-	pf.run();
+  pf.run();
 
-	for(;;);
+  for(;;);
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

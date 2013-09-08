@@ -8,195 +8,195 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * Class to manage a listening TCP server. Each TCP server has a port on which
-		 * it listens for incoming connections. When a remote client attempts a SYN with the
-		 * server we create a connection object to handle the interaction and leave it to
-		 * handle the state machine.
-		 *
-		 * Unlike the common berkeley sockets implementation there is no concept of a 'listen'
-		 * backlog because the API is entirely event based. The server is created in an unstarted
-		 * state. The user should subscribe to accept events and then call start().
-		 *
-		 * @tparam TConnection The user's derivation of the library-supplied connection class.
-		 * @tparam TUser optional type of a pointer that the user would like to be passed to the connection constructor.
-		 */
+    /**
+     * Class to manage a listening TCP server. Each TCP server has a port on which
+     * it listens for incoming connections. When a remote client attempts a SYN with the
+     * server we create a connection object to handle the interaction and leave it to
+     * handle the state machine.
+     *
+     * Unlike the common berkeley sockets implementation there is no concept of a 'listen'
+     * backlog because the API is entirely event based. The server is created in an unstarted
+     * state. The user should subscribe to accept events and then call start().
+     *
+     * @tparam TConnection The user's derivation of the library-supplied connection class.
+     * @tparam TUser optional type of a pointer that the user would like to be passed to the connection constructor.
+     */
 
-		template<class TConnection,class TUser=void>
-		class TcpServer : public TcpServerBase {
+    template<class TConnection,class TUser=void>
+    class TcpServer : public TcpServerBase {
 
-			protected:
-				TUser *_userptr;																						// connection constructor may take optional typed user parameter
-				const typename TConnection::Parameters _connectionParams;		// connection parameters are shared between instances
+      protected:
+        TUser *_userptr;                                            // connection constructor may take optional typed user parameter
+        const typename TConnection::Parameters _connectionParams;   // connection parameters are shared between instances
 
-			protected:
-				void onReceive(TcpSegmentEvent&);
+      protected:
+        void onReceive(TcpSegmentEvent&);
 
-			public:
-				TcpServer(uint16_t listeningPort,
-									NetworkUtilityObjects& networkUtilityObjects,
-									TcpEvents& tcpEvents,
-									const Parameters& params,
-									uint16_t segmentSizeLimit,
-									uint16_t additionalHeaderSize,
-									TUser *userptr);
+      public:
+        TcpServer(uint16_t listeningPort,
+                  NetworkUtilityObjects& networkUtilityObjects,
+                  TcpEvents& tcpEvents,
+                  const Parameters& params,
+                  uint16_t segmentSizeLimit,
+                  uint16_t additionalHeaderSize,
+                  TUser *userptr);
 
-				~TcpServer();
-		};
-
-
-		/**
-		 * Create a connection type by calling the correct constructor without forcing
-		 * the user to declare the 'other' constructor
-		 */
-
-		namespace {
-
-			/**
-			 * This instance creates a connection class where the user wants to pass in a
-			 * user-defined parameter
-			 */
-
-			template<class TConnection,class TUser>
-			struct ConnectionCreator {
-				static TConnection *createConnection(const typename TConnection::Parameters& params,TUser *userptr) {
-					return new TConnection(params,userptr);
-				}
-			};
+        ~TcpServer();
+    };
 
 
-			/**
-			 * This instance is a specialisation that calls the default constructor when the
-			 * user does not want to pass in a user defined parameter
-			 */
+    /**
+     * Create a connection type by calling the correct constructor without forcing
+     * the user to declare the 'other' constructor
+     */
 
-			template<class TConnection>
-			struct ConnectionCreator<TConnection,void> {
-				static TConnection *createConnection(const typename TConnection::Parameters& params,void *) {
-					return new TConnection(params);
-				}
-			};
-		}
+    namespace {
 
-		/**
-		 * Constructor
-		 * @param listeningPort the port number to listen on
-		 */
+      /**
+       * This instance creates a connection class where the user wants to pass in a
+       * user-defined parameter
+       */
 
-		template<class TConnection,class TUser>
-		inline TcpServer<TConnection,TUser>::TcpServer(uint16_t listeningPort,
-																						 NetworkUtilityObjects& networkUtilityObjects,
-																						 TcpEvents& tcpEvents,
-																						 const Parameters& params,
-																						 uint16_t segmentSizeLimit,
-																						 uint16_t additionalHeaderSize,
-																						 TUser *userptr)
-			: TcpServerBase(listeningPort,
-											networkUtilityObjects,
-											tcpEvents,
-											params,
-											segmentSizeLimit,
-											additionalHeaderSize),
-			  _userptr(userptr) {
-
-			// subscribe to receive events
-
-			_tcpEvents.TcpReceiveEventSender.insertSubscriber(TcpReceiveEventSourceSlot::bind(this,&TcpServer::onReceive));
-		}
+      template<class TConnection,class TUser>
+      struct ConnectionCreator {
+        static TConnection *createConnection(const typename TConnection::Parameters& params,TUser *userptr) {
+          return new TConnection(params,userptr);
+        }
+      };
 
 
-		/**
-		 * Send a notification that this server is being released
-		 */
+      /**
+       * This instance is a specialisation that calls the default constructor when the
+       * user does not want to pass in a user defined parameter
+       */
 
-		template<class TConnection,class TUser>
-		inline TcpServer<TConnection,TUser>::~TcpServer() {
+      template<class TConnection>
+      struct ConnectionCreator<TConnection,void> {
+        static TConnection *createConnection(const typename TConnection::Parameters& params,void *) {
+          return new TConnection(params);
+        }
+      };
+    }
 
-			// unsubscribe from receive events
+    /**
+     * Constructor
+     * @param listeningPort the port number to listen on
+     */
 
-			_tcpEvents.TcpReceiveEventSender.removeSubscriber(TcpReceiveEventSourceSlot::bind(this,&TcpServer::onReceive));
+    template<class TConnection,class TUser>
+    inline TcpServer<TConnection,TUser>::TcpServer(uint16_t listeningPort,
+                                             NetworkUtilityObjects& networkUtilityObjects,
+                                             TcpEvents& tcpEvents,
+                                             const Parameters& params,
+                                             uint16_t segmentSizeLimit,
+                                             uint16_t additionalHeaderSize,
+                                             TUser *userptr)
+      : TcpServerBase(listeningPort,
+                      networkUtilityObjects,
+                      tcpEvents,
+                      params,
+                      segmentSizeLimit,
+                      additionalHeaderSize),
+        _userptr(userptr) {
 
-			// raise the event that we're going away
+      // subscribe to receive events
 
-			_networkUtilityObjects.NetworkNotificationEventSender.raiseEvent(TcpServerReleasedEvent(*this));
-		}
+      _tcpEvents.TcpReceiveEventSender.insertSubscriber(TcpReceiveEventSourceSlot::bind(this,&TcpServer::onReceive));
+    }
 
 
-		/**
-		 * Network receive event
-		 * @param ned The event descriptor
-		 */
+    /**
+     * Send a notification that this server is being released
+     */
 
-		template<class TConnection,class TUser>
-		__attribute__((noinline)) inline void TcpServer<TConnection,TUser>::onReceive(TcpSegmentEvent& event) {
+    template<class TConnection,class TUser>
+    inline TcpServer<TConnection,TUser>::~TcpServer() {
 
-			// we are only interested in segments sent to our port
+      // unsubscribe from receive events
 
-			if(event.destinationPort!=_listeningPort)
-				return;
+      _tcpEvents.TcpReceiveEventSender.removeSubscriber(TcpReceiveEventSourceSlot::bind(this,&TcpServer::onReceive));
 
-			// we are only interested in segments that have the SYN flag set (but no ACK)
+      // raise the event that we're going away
 
-			if(!(event.tcpHeader.hasSyn() && !event.tcpHeader.hasAck()))
-				return;
+      _networkUtilityObjects.NetworkNotificationEventSender.raiseEvent(TcpServerReleasedEvent(*this));
+    }
 
-			// this event is handled here
 
-			event.handled=true;
+    /**
+     * Network receive event
+     * @param ned The event descriptor
+     */
 
-			// we are doing nothing unless we are started
+    template<class TConnection,class TUser>
+    __attribute__((noinline)) inline void TcpServer<TConnection,TUser>::onReceive(TcpSegmentEvent& event) {
 
-			if(!_started)
-				return;
+      // we are only interested in segments sent to our port
 
-			// if an existing connection already has this source/dest port combo then this
-			// segment is a retransmit and we're going to drop it
+      if(event.destinationPort!=_listeningPort)
+        return;
 
-			TcpFindConnectionNotificationEvent findconn(event.ipPacket.header->ip_sourceAddress,event.sourcePort,event.destinationPort);
-			_networkUtilityObjects.NetworkNotificationEventSender.raiseEvent(findconn);
+      // we are only interested in segments that have the SYN flag set (but no ACK)
 
-			// if there's a connection, return now as we have a dupe SYN
+      if(!(event.tcpHeader.hasSyn() && !event.tcpHeader.hasAck()))
+        return;
 
-			if(findconn.tcpConnection!=nullptr)
-				return;
+      // this event is handled here
 
-			// if we've hit the maximum number of connections then we have to ignore it
+      event.handled=true;
 
-			if(_connectionCount==_params.tcp_maxConnectionsPerServer)
-				return;
+      // we are doing nothing unless we are started
 
-			// new connection to record
+      if(!_started)
+        return;
 
-			_connectionCount++;
+      // if an existing connection already has this source/dest port combo then this
+      // segment is a retransmit and we're going to drop it
 
-			// create a new TcpConnection to handle the interaction
-			// there is 2 phase construction here so that the user's derivation of TcpConnection does
-			// not have to be aware of the objects required by the base class
+      TcpFindConnectionNotificationEvent findconn(event.ipPacket.header->ip_sourceAddress,event.sourcePort,event.destinationPort);
+      _networkUtilityObjects.NetworkNotificationEventSender.raiseEvent(findconn);
 
-			TConnection *connection=ConnectionCreator<TConnection,TUser>::createConnection(_connectionParams,_userptr);
+      // if there's a connection, return now as we have a dupe SYN
 
-			if(!connection->initialise(
-						_networkUtilityObjects,
-						_tcpEvents,
-						event,
-						_segmentSizeLimit,
-						_additionalHeaderSize)) {
+      if(findconn.tcpConnection!=nullptr)
+        return;
 
-				delete connection;
-				return;
-			}
+      // if we've hit the maximum number of connections then we have to ignore it
 
-			// send a notification event so the caller can claim the connection
+      if(_connectionCount==_params.tcp_maxConnectionsPerServer)
+        return;
 
-			TcpAcceptEvent acceptEvent(*this,connection);
-			TcpAcceptEventSender.raiseEvent(acceptEvent);
+      // new connection to record
 
-			// if the caller does not want this connection then we delete it
+      _connectionCount++;
 
-			if(!acceptEvent.accepted)
-				delete connection;
-		}
-	}
+      // create a new TcpConnection to handle the interaction
+      // there is 2 phase construction here so that the user's derivation of TcpConnection does
+      // not have to be aware of the objects required by the base class
+
+      TConnection *connection=ConnectionCreator<TConnection,TUser>::createConnection(_connectionParams,_userptr);
+
+      if(!connection->initialise(
+            _networkUtilityObjects,
+            _tcpEvents,
+            event,
+            _segmentSizeLimit,
+            _additionalHeaderSize)) {
+
+        delete connection;
+        return;
+      }
+
+      // send a notification event so the caller can claim the connection
+
+      TcpAcceptEvent acceptEvent(*this,connection);
+      TcpAcceptEventSender.raiseEvent(acceptEvent);
+
+      // if the caller does not want this connection then we delete it
+
+      if(!acceptEvent.accepted)
+        delete connection;
+    }
+  }
 }

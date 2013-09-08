@@ -8,26 +8,26 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Dirent with sector location on device
-		 */
+    /**
+     * @brief Dirent with sector location on device
+     */
 
-		struct DirectoryEntryWithLocation {
+    struct DirectoryEntryWithLocation {
 
-				/// The directory entry structure
-				DirectoryEntry Dirent;
+        /// The directory entry structure
+        DirectoryEntry Dirent;
 
-				/// The sector number on the FS where this entry came from
-				uint32_t SectorNumber;
+        /// The sector number on the FS where this entry came from
+        uint32_t SectorNumber;
 
-				/// The index within the sector where this entry came from. This is a byte offset.
-				uint32_t IndexWithinSector;
+        /// The index within the sector where this entry came from. This is a byte offset.
+        uint32_t IndexWithinSector;
 
-				bool isFile();
-				bool isDirectory();
-				void copyTimesTo(DirectoryEntry& dest_);
-		};
-	}
+        bool isFile();
+        bool isDirectory();
+        void copyTimesTo(DirectoryEntry& dest_);
+    };
+  }
 }

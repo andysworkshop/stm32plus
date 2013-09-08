@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Write disable command implementation
-		 */
+    /**
+     * Write disable command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_WRITE_DISABLE>
-		struct WriteDisable : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_WRITE_DISABLE>
+    struct WriteDisable : Command<TSpi> {
 
-			/**
-			 * Provide a writeDisable() function for the derived class
-			 */
+      /**
+       * Provide a writeDisable() function for the derived class
+       */
 
-			bool writeDisable() const {
-				return this->writeCommand(TOpCode);
-			}
-		};
-	}
+      bool writeDisable() const {
+        return this->writeCommand(TOpCode);
+      }
+    };
+  }
 }

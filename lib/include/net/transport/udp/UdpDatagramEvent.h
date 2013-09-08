@@ -8,29 +8,29 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a UDP datagram arrival
-		 */
+    /**
+     * Event descriptor for a UDP datagram arrival
+     */
 
-		struct UdpDatagramEvent : NetEventDescriptor {
+    struct UdpDatagramEvent : NetEventDescriptor {
 
-			UdpDatagram& udpDatagram;							///< the UDP datagram
-			bool handled;													///< set to true if this datagram was handled
+      UdpDatagram& udpDatagram;             ///< the UDP datagram
+      bool handled;                         ///< set to true if this datagram was handled
 
-			/**
-			 * Constructor
-			 * @param udp The UDP packet structure
-			 * @param ip The IP packet structure
-			 */
+      /**
+       * Constructor
+       * @param udp The UDP packet structure
+       * @param ip The IP packet structure
+       */
 
-			UdpDatagramEvent(UdpDatagram& udp)
-				: NetEventDescriptor(NetEventType::UDP_DATAGRAM),
-					udpDatagram(udp),
-					handled(false) {
-			}
-		};
-	}
+      UdpDatagramEvent(UdpDatagram& udp)
+        : NetEventDescriptor(NetEventType::UDP_DATAGRAM),
+          udpDatagram(udp),
+          handled(false) {
+      }
+    };
+  }
 }

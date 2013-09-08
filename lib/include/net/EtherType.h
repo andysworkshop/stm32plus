@@ -9,17 +9,17 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Known EtherType values used in this implementation
-		 */
+    /**
+     * Known EtherType values used in this implementation
+     */
 
-		enum class EtherType : uint16_t {
+    enum class EtherType : uint16_t {
 
-			IP = 0x0800,					///< Internet protocol v4
-		  ARP = 0x0806					///< Address resolution protocol
-		};
-	}
+      IP = 0x0800,          ///< Internet protocol v4
+      ARP = 0x0806          ///< Address resolution protocol
+    };
+  }
 }

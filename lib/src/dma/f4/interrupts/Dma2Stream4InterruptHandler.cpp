@@ -41,7 +41,7 @@ extern "C" {
         DmaInterruptFeature<2,4>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_TRANSFER_ERROR);
         DMA_ClearITPendingBit(DMA2_Stream4,DMA_IT_TEIF4);
       }
-  		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
+      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
     }
   #endif
 }

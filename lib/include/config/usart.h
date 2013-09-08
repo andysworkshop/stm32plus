@@ -25,12 +25,12 @@
 
 #if defined(STM32PLUS_F1)
 
-	#include "usart/f1/UsartPinInitialiser.h"
+  #include "usart/f1/UsartPinInitialiser.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#include "usart/f4/UsartAlternateFunctionMapper.h"
-	#include "usart/f4/UsartPinInitialiser.h"
+  #include "usart/f4/UsartAlternateFunctionMapper.h"
+  #include "usart/f4/UsartPinInitialiser.h"
 
 #endif
 
@@ -64,15 +64,15 @@
 
 #if defined(STM32PLUS_F1)
 
-	#include "usart/features/f1/UsartInterruptFeature.h"
+  #include "usart/features/f1/UsartInterruptFeature.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#define USE_USART6_INTERRUPT
+  #define USE_USART6_INTERRUPT
 
-	#include "usart/f4/Usart6.h"
+  #include "usart/f4/Usart6.h"
 
-	#include "usart/features/f4/UsartInterruptFeature.h"
+  #include "usart/features/f4/UsartInterruptFeature.h"
 
 #endif
 

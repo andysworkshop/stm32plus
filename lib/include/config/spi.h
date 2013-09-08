@@ -24,12 +24,12 @@
 
 #if defined(STM32PLUS_F1)
 
-	#include "spi/f1/SpiPinInitialiser.h"
+  #include "spi/f1/SpiPinInitialiser.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#include "spi/f4/SpiAlternateFunctionMapper.h"
-	#include "spi/f4/SpiPinInitialiser.h"
+  #include "spi/f4/SpiAlternateFunctionMapper.h"
+  #include "spi/f4/SpiPinInitialiser.h"
 
 #endif
 

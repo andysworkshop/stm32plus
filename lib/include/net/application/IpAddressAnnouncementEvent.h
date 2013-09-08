@@ -9,30 +9,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor that announces a new client IP address
-		 */
+    /**
+     * Event descriptor that announces a new client IP address
+     */
 
-		struct IpAddressAnnouncementEvent : NetEventDescriptor {
+    struct IpAddressAnnouncementEvent : NetEventDescriptor {
 
-			/**
-			 * References to the value
-			 */
+      /**
+       * References to the value
+       */
 
-			const IpAddress& ipAddress;						///< Your IP address
+      const IpAddress& ipAddress;           ///< Your IP address
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			IpAddressAnnouncementEvent(const IpAddress& address)
-				: NetEventDescriptor(NetEventType::IP_ADDRESS_ANNOUNCEMENT),
-					ipAddress(address) {
-			}
-		};
-	}
+      IpAddressAnnouncementEvent(const IpAddress& address)
+        : NetEventDescriptor(NetEventType::IP_ADDRESS_ANNOUNCEMENT),
+          ipAddress(address) {
+      }
+    };
+  }
 }

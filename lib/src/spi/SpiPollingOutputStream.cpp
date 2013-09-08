@@ -10,32 +10,32 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor for using the output stream in polling mode.
-	 * @param[in] spi The SPI peripheral for transmitting data.
-	 */
+  /**
+   * Constructor for using the output stream in polling mode.
+   * @param[in] spi The SPI peripheral for transmitting data.
+   */
 
-	SpiPollingOutputStream::SpiPollingOutputStream(Spi& spi) :
-		_spi(spi) {
-	}
+  SpiPollingOutputStream::SpiPollingOutputStream(Spi& spi) :
+    _spi(spi) {
+  }
 
-	/*
-	 * Write one byte
-	 */
+  /*
+   * Write one byte
+   */
 
-	bool SpiPollingOutputStream::write(uint8_t c) {
+  bool SpiPollingOutputStream::write(uint8_t c) {
 
-		while(!_spi.readyToSend());
-		return _spi.send(&c,1);
-	}
+    while(!_spi.readyToSend());
+    return _spi.send(&c,1);
+  }
 
-	/*
-	 * Write many bytes
-	 */
+  /*
+   * Write many bytes
+   */
 
-	bool SpiPollingOutputStream::write(const void *buffer,uint32_t size) {
+  bool SpiPollingOutputStream::write(const void *buffer,uint32_t size) {
 
-		while(!_spi.readyToSend());
-		return _spi.send(static_cast<const uint8_t *>(buffer),size);
-	}
+    while(!_spi.readyToSend());
+    return _spi.send(static_cast<const uint8_t *>(buffer),size);
+  }
 }

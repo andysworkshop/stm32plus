@@ -27,8 +27,8 @@ using namespace stm32plus;
  * PD13 to use the onboard LED on that board.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -37,79 +37,79 @@ using namespace stm32plus;
 
 class TimerInterruptsTest  {
 
-	protected:
+  protected:
 
-		enum { LED_PIN = 6 };
+    enum { LED_PIN = 6 };
 
-		/*
-		 * We'll need these as member variables so that we can see them from the interrupt handler
-		 */
+    /*
+     * We'll need these as member variables so that we can see them from the interrupt handler
+     */
 
-		GpioF<DefaultDigitalOutputFeature<LED_PIN> > _pf;
-		bool _ledState;
+    GpioF<DefaultDigitalOutputFeature<LED_PIN> > _pf;
+    bool _ledState;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Initialise timer1 running from the high speed internal APB2
-			 * clock with an interrupt feature
-			 */
+      /*
+       * Initialise timer1 running from the high speed internal APB2
+       * clock with an interrupt feature
+       */
 
-			Timer1<
-				Timer1InternalClockFeature,				// the timer clock source is APB2
-				Timer1InterruptFeature						// gain access to interrupt functionality
-			> timer;
+      Timer1<
+        Timer1InternalClockFeature,       // the timer clock source is APB2
+        Timer1InterruptFeature            // gain access to interrupt functionality
+      > timer;
 
-			/*
-			 * We've got a LED on PF[6] and it's active LOW. Set it up here and switch it off.
-			 */
+      /*
+       * We've got a LED on PF[6] and it's active LOW. Set it up here and switch it off.
+       */
 
-			_pf[LED_PIN].set();
-			_ledState=false;
+      _pf[LED_PIN].set();
+      _ledState=false;
 
-			/*
-			 * Set ourselves up as an observer for interrupts raised by the timer class.
-			 */
+      /*
+       * Set ourselves up as an observer for interrupts raised by the timer class.
+       */
 
-			timer.TimerInterruptEventSender.insertSubscriber(
-      		TimerInterruptEventSourceSlot::bind(this,&TimerInterruptsTest::onInterrupt)
-      	);
+      timer.TimerInterruptEventSender.insertSubscriber(
+          TimerInterruptEventSourceSlot::bind(this,&TimerInterruptsTest::onInterrupt)
+        );
 
 
-			/*
-			 * Set an up-down-timer up to tick at 5000Hz with an auto-reload value of 5000
-			 * The timer will count from 0 to 5000 inclusive, raise an Update interrupt and
-			 * then go backwards back down to 0 where it'll raise another Update interrupt
-			 * and start again. Each journey from one end to the other takes 1 second.
-			 *
-			 * Note that the lowest frequency you can set is 1098 for a 72Mhz timer clock source.
-			 * This is because the maximum prescaler value is 65536 (72Mhz/65536 = 1098Hz).
-			 */
+      /*
+       * Set an up-down-timer up to tick at 5000Hz with an auto-reload value of 5000
+       * The timer will count from 0 to 5000 inclusive, raise an Update interrupt and
+       * then go backwards back down to 0 where it'll raise another Update interrupt
+       * and start again. Each journey from one end to the other takes 1 second.
+       *
+       * Note that the lowest frequency you can set is 1098 for a 72Mhz timer clock source.
+       * This is because the maximum prescaler value is 65536 (72Mhz/65536 = 1098Hz).
+       */
 
-			timer.setTimeBaseByFrequency(5000,4999,TIM_CounterMode_CenterAligned3);
+      timer.setTimeBaseByFrequency(5000,4999,TIM_CounterMode_CenterAligned3);
 
-			/*
-			 * Enable just the Update interrupt.
-			 */
+      /*
+       * Enable just the Update interrupt.
+       */
 
-			timer.enableInterrupts(TIM_IT_Update);
+      timer.enableInterrupts(TIM_IT_Update);
 
-			/*
-			 * Start the timer
-			 */
+      /*
+       * Start the timer
+       */
 
-			timer.enablePeripheral();
+      timer.enablePeripheral();
 
-			/*
-			 * It's all running automatically now
-			 */
+      /*
+       * It's all running automatically now
+       */
 
-			for(;;);
-		}
+      for(;;);
+    }
 
-		/*
+    /*
      * Observer callback function. This is called when the update interrupt that we've
      * enabled is fired.
      */
@@ -118,12 +118,12 @@ class TimerInterruptsTest  {
 
       if(tet==TimerEventType::EVENT_UPDATE) {
 
-      	/*
-      	 * Toggle the LED state.
-      	 */
+        /*
+         * Toggle the LED state.
+         */
 
-      	_ledState^=true;
-      	_pf[LED_PIN].setState(_ledState);
+        _ledState^=true;
+        _pf[LED_PIN].setState(_ledState);
       }
     }
 };
@@ -135,13 +135,13 @@ class TimerInterruptsTest  {
 
 int main() {
 
-	// we're using interrupts, initialise NVIC
+  // we're using interrupts, initialise NVIC
 
-	Nvic::initialise();
+  Nvic::initialise();
 
-	TimerInterruptsTest test;
-	test.run();
+  TimerInterruptsTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

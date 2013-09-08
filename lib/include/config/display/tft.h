@@ -17,7 +17,7 @@
 #include "config/gpio.h"
 
 #if !defined(STM32PLUS_F1_CL)
-	#include "config/fsmc.h"
+  #include "config/fsmc.h"
 #endif
 
 #include "config/timing.h"
@@ -46,8 +46,8 @@
 #include "display/graphic/gamma/NullDisplayDeviceGamma.h"
 
 #if !defined(STM32PLUS_F1_CL)
-	#include "display/graphic/access/Fsmc16BitAccessMode.h"
-	#include "display/graphic/access/FSMC8BitAccessMode.h"
+  #include "display/graphic/access/Fsmc16BitAccessMode.h"
+  #include "display/graphic/access/FSMC8BitAccessMode.h"
 #endif
 
 // graphics library includes

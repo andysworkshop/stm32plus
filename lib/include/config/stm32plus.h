@@ -26,16 +26,16 @@
  */
 
 #if defined (STM32PLUS_F1_HD)
-	#define STM32PLUS_F1								// enable features common to all F1
-	#define STM32F10X_HD								// for the std peripheral library
+  #define STM32PLUS_F1                // enable features common to all F1
+  #define STM32F10X_HD                // for the std peripheral library
 #elif defined (STM32PLUS_F1_CL_E)
-	#define STM32PLUS_F1								// enable features common to all F1
-	#define STM32PLUS_F1_CL							// enable features common to F105 and F107
-	#define STM32F10X_CL								// for the std peripheral library
+  #define STM32PLUS_F1                // enable features common to all F1
+  #define STM32PLUS_F1_CL             // enable features common to F105 and F107
+  #define STM32F10X_CL                // for the std peripheral library
 #elif defined(STM32PLUS_F4)
-	// no additional defines
+  // no additional defines
 #else
-	#error "You must define an MCU type. See config/stm32plus.h"
+  #error "You must define an MCU type. See config/stm32plus.h"
 #endif
 
 
@@ -72,81 +72,81 @@
 namespace stm32plus {
 
 
-	/**
-	 * MCU Series names
-	 */
+  /**
+   * MCU Series names
+   */
 
-	enum McuSeries {
-		SERIES_F1,	//!< SERIES_F1
-		SERIES_F2,	//!< SERIES_F2
-		SERIES_F4 	//!< SERIES_F4
-	};
-
-
-	/**
-	 * Peripheral names
-	 */
-
-	enum PeripheralName {
-		PERIPHERAL_BACKUP,							//!< PERIPHERAL_BACKUP
-		PERIPHERAL_CRC,									//!< PERIPHERAL_CRC
-		PERIPHERAL_DAC1,								//!< PERIPHERAL_DAC1
-		PERIPHERAL_DAC2,								//!< PERIPHERAL_DAC2
-		PERIPHERAL_DMA1,								//!< PERIPHERAL_DMA1
-		PERIPHERAL_DMA2,								//!< PERIPHERAL_DMA2
-		PERIPHERAL_GPIO,   							//!< PERIPHERAL_GPIO
-		PERIPHERAL_FSMC,   							//!< PERIPHERAL_FSMC
-		PERIPHERAL_HASH,								//!< PERIPHERAL_HASH
-		PERIPHERAL_I2C1,								//!< PERIPHERAL_I2C1
-		PERIPHERAL_I2C2,								//!< PERIPHERAL_I2C2
-		PERIPHERAL_I2C3,								//!< PERIPHERAL_I2C3
-		PERIPHERAL_I2S2,								//!< PERIPHERAL_I2S2
-		PERIPHERAL_I2S3,								//!< PERIPHERAL_I2S3
-		PERIPHERAL_MAC,									//!< PERIPHERAL_MAC
-		PERIPHERAL_MAC_REMAP,						//!< PERIPHERAL_MAC_REMAP
-		PERIPHERAL_POWER,								//!< PERIPHERAL_POWER
-		PERIPHERAL_RNG,									//!< PERIPHERAL_RNG
-		PERIPHERAL_SDIO,   							//!< PERIPHERAL_SDIO
-		PERIPHERAL_SPI1,   							//!< PERIPHERAL_SPI1
-		PERIPHERAL_SPI1_REMAP,   				//!< PERIPHERAL_SPI1_REMAP
-		PERIPHERAL_SPI2,   							//!< PERIPHERAL_SPI2
-		PERIPHERAL_SPI3,   							//!< PERIPHERAL_SPI3
-		PERIPHERAL_SPI3_REMAP,   				//!< PERIPHERAL_SPI3_REMAP
-		PERIPHERAL_SYSCFG,							//!< PERIPHERAL_SYSCFG
-		PERIPHERAL_TIMER1, 							//!< PERIPHERAL_TIMER1
-		PERIPHERAL_TIMER2, 							//!< PERIPHERAL_TIMER2
-		PERIPHERAL_TIMER3, 							//!< PERIPHERAL_TIMER3
-		PERIPHERAL_TIMER4, 							//!< PERIPHERAL_TIMER4
-		PERIPHERAL_TIMER5, 							//!< PERIPHERAL_TIMER5
-		PERIPHERAL_TIMER6, 							//!< PERIPHERAL_TIMER6
-		PERIPHERAL_TIMER7, 							//!< PERIPHERAL_TIMER7
-		PERIPHERAL_TIMER8,							//!< PERIPHERAL_TIMER8
-		PERIPHERAL_TIMER9, 							//!< PERIPHERAL_TIMER9
-		PERIPHERAL_TIMER10,							//!< PERIPHERAL_TIMER10
-		PERIPHERAL_TIMER11,							//!< PERIPHERAL_TIMER11
-		PERIPHERAL_TIMER12,							//!< PERIPHERAL_TIMER12
-		PERIPHERAL_TIMER13,							//!< PERIPHERAL_TIMER13
-		PERIPHERAL_TIMER14,							//!< PERIPHERAL_TIMER14
-		PERIPHERAL_USART1, 							//!< PERIPHERAL_USART1
-		PERIPHERAL_USART1_REMAP,				//!< PERIPHERAL_USART1_REMAP
-		PERIPHERAL_USART2, 							//!< PERIPHERAL_USART2
-		PERIPHERAL_USART2_REMAP,				//!< PERIPHERAL_USART2_REMAP
-		PERIPHERAL_USART3, 							//!< PERIPHERAL_USART3
-		PERIPHERAL_USART3_PARTIAL_REMAP,	//!< PERIPHERAL_USART3_PARTIAL_REMAP
-		PERIPHERAL_USART3_FULL_REMAP,		//!< PERIPHERAL_USART3_FULL_REMAP
-		PERIPHERAL_UART4,  							//!< PERIPHERAL_UART4
-		PERIPHERAL_UART5,   						//!< PERIPHERAL_UART5
-		PERIPHERAL_USART6   						//!< PERIPHERAL_USART6
-	};
+  enum McuSeries {
+    SERIES_F1,  //!< SERIES_F1
+    SERIES_F2,  //!< SERIES_F2
+    SERIES_F4   //!< SERIES_F4
+  };
 
 
-	/**
-	 * Endian-ness values for when we need it
-	 */
-	enum Endian {
-		LITTLE_ENDIAN,	//!< LITTLE_ENDIAN
-		BIG_ENDIAN    	//!< BIG_ENDIAN
-	};
+  /**
+   * Peripheral names
+   */
+
+  enum PeripheralName {
+    PERIPHERAL_BACKUP,              //!< PERIPHERAL_BACKUP
+    PERIPHERAL_CRC,                 //!< PERIPHERAL_CRC
+    PERIPHERAL_DAC1,                //!< PERIPHERAL_DAC1
+    PERIPHERAL_DAC2,                //!< PERIPHERAL_DAC2
+    PERIPHERAL_DMA1,                //!< PERIPHERAL_DMA1
+    PERIPHERAL_DMA2,                //!< PERIPHERAL_DMA2
+    PERIPHERAL_GPIO,                //!< PERIPHERAL_GPIO
+    PERIPHERAL_FSMC,                //!< PERIPHERAL_FSMC
+    PERIPHERAL_HASH,                //!< PERIPHERAL_HASH
+    PERIPHERAL_I2C1,                //!< PERIPHERAL_I2C1
+    PERIPHERAL_I2C2,                //!< PERIPHERAL_I2C2
+    PERIPHERAL_I2C3,                //!< PERIPHERAL_I2C3
+    PERIPHERAL_I2S2,                //!< PERIPHERAL_I2S2
+    PERIPHERAL_I2S3,                //!< PERIPHERAL_I2S3
+    PERIPHERAL_MAC,                 //!< PERIPHERAL_MAC
+    PERIPHERAL_MAC_REMAP,           //!< PERIPHERAL_MAC_REMAP
+    PERIPHERAL_POWER,               //!< PERIPHERAL_POWER
+    PERIPHERAL_RNG,                 //!< PERIPHERAL_RNG
+    PERIPHERAL_SDIO,                //!< PERIPHERAL_SDIO
+    PERIPHERAL_SPI1,                //!< PERIPHERAL_SPI1
+    PERIPHERAL_SPI1_REMAP,          //!< PERIPHERAL_SPI1_REMAP
+    PERIPHERAL_SPI2,                //!< PERIPHERAL_SPI2
+    PERIPHERAL_SPI3,                //!< PERIPHERAL_SPI3
+    PERIPHERAL_SPI3_REMAP,          //!< PERIPHERAL_SPI3_REMAP
+    PERIPHERAL_SYSCFG,              //!< PERIPHERAL_SYSCFG
+    PERIPHERAL_TIMER1,              //!< PERIPHERAL_TIMER1
+    PERIPHERAL_TIMER2,              //!< PERIPHERAL_TIMER2
+    PERIPHERAL_TIMER3,              //!< PERIPHERAL_TIMER3
+    PERIPHERAL_TIMER4,              //!< PERIPHERAL_TIMER4
+    PERIPHERAL_TIMER5,              //!< PERIPHERAL_TIMER5
+    PERIPHERAL_TIMER6,              //!< PERIPHERAL_TIMER6
+    PERIPHERAL_TIMER7,              //!< PERIPHERAL_TIMER7
+    PERIPHERAL_TIMER8,              //!< PERIPHERAL_TIMER8
+    PERIPHERAL_TIMER9,              //!< PERIPHERAL_TIMER9
+    PERIPHERAL_TIMER10,             //!< PERIPHERAL_TIMER10
+    PERIPHERAL_TIMER11,             //!< PERIPHERAL_TIMER11
+    PERIPHERAL_TIMER12,             //!< PERIPHERAL_TIMER12
+    PERIPHERAL_TIMER13,             //!< PERIPHERAL_TIMER13
+    PERIPHERAL_TIMER14,             //!< PERIPHERAL_TIMER14
+    PERIPHERAL_USART1,              //!< PERIPHERAL_USART1
+    PERIPHERAL_USART1_REMAP,        //!< PERIPHERAL_USART1_REMAP
+    PERIPHERAL_USART2,              //!< PERIPHERAL_USART2
+    PERIPHERAL_USART2_REMAP,        //!< PERIPHERAL_USART2_REMAP
+    PERIPHERAL_USART3,              //!< PERIPHERAL_USART3
+    PERIPHERAL_USART3_PARTIAL_REMAP,  //!< PERIPHERAL_USART3_PARTIAL_REMAP
+    PERIPHERAL_USART3_FULL_REMAP,   //!< PERIPHERAL_USART3_FULL_REMAP
+    PERIPHERAL_UART4,               //!< PERIPHERAL_UART4
+    PERIPHERAL_UART5,               //!< PERIPHERAL_UART5
+    PERIPHERAL_USART6               //!< PERIPHERAL_USART6
+  };
+
+
+  /**
+   * Endian-ness values for when we need it
+   */
+  enum Endian {
+    LITTLE_ENDIAN,  //!< LITTLE_ENDIAN
+    BIG_ENDIAN      //!< BIG_ENDIAN
+  };
 }
 
 

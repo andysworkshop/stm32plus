@@ -23,14 +23,14 @@ template<> ExtiPeripheral<EXTI_Line20> *ExtiPeripheral<EXTI_Line20>::_extiInstan
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) OTG_HS_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) OTG_HS_WKUP_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line20)!=RESET) {
-				ExtiUsbHsWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(20);
-				EXTI_ClearITPendingBit(EXTI_Line20);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(EXTI_GetITStatus(EXTI_Line20)!=RESET) {
+        ExtiUsbHsWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(20);
+        EXTI_ClearITPendingBit(EXTI_Line20);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 #endif

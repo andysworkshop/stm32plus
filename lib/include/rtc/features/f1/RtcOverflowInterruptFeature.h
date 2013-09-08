@@ -27,15 +27,15 @@ namespace stm32plus {
    * interrupt functionality
    */
 
-	DECLARE_EVENT_SIGNATURE(RtcOverflowInterrupt,void());
+  DECLARE_EVENT_SIGNATURE(RtcOverflowInterrupt,void());
 
-	class RtcOverflowInterruptFeature : public RtcFeatureBase {
+  class RtcOverflowInterruptFeature : public RtcFeatureBase {
 
     public:
-  		static RtcOverflowInterruptFeature *_overflowInterruptFeature;
-  		void (*_irqRef)();
+      static RtcOverflowInterruptFeature *_overflowInterruptFeature;
+      void (*_irqRef)();
 
-  		DECLARE_EVENT_SOURCE(RtcOverflowInterrupt);
+      DECLARE_EVENT_SOURCE(RtcOverflowInterrupt);
 
     public:
       RtcOverflowInterruptFeature(RtcBase& rtc);
@@ -53,8 +53,8 @@ namespace stm32plus {
   inline RtcOverflowInterruptFeature::RtcOverflowInterruptFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
-  	_overflowInterruptFeature=this;
-  	_irqRef=RTC_IRQHandler;
+    _overflowInterruptFeature=this;
+    _irqRef=RTC_IRQHandler;
 
     Nvic::configureIrq(RTC_IRQn);
   }

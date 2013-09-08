@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PanelInterfaceControl6
-		{
-			enum
-			{
-				Opcode = 0x98
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace PanelInterfaceControl6
+    {
+      enum
+      {
+        Opcode = 0x98
+      };
+    }
+  }
 }
 
 

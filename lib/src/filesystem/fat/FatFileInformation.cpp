@@ -9,73 +9,73 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * Constructor. Extract attributes from dirent.
-		 *
-		 * @param[in] filename_ The name of the file to get information for.
-		 * @param[in] dirent_ The corresponding dirent for this file.
-		 */
+    /**
+     * Constructor. Extract attributes from dirent.
+     *
+     * @param[in] filename_ The name of the file to get information for.
+     * @param[in] dirent_ The corresponding dirent for this file.
+     */
 
-		FatFileInformation::FatFileInformation(const char *filename_,const DirectoryEntryWithLocation& dirent_) {
+    FatFileInformation::FatFileInformation(const char *filename_,const DirectoryEntryWithLocation& dirent_) {
 
-			_attributes=dirent_.Dirent.sdir.DIR_Attr;
-			_filename=filename_;
-			_length=dirent_.Dirent.sdir.DIR_FileSize;
+      _attributes=dirent_.Dirent.sdir.DIR_Attr;
+      _filename=filename_;
+      _length=dirent_.Dirent.sdir.DIR_FileSize;
 
-			DirectoryEntryIterator::calculateUnixTime(dirent_.Dirent.sdir.DIR_CrtDate,dirent_.Dirent.sdir.DIR_CrtTime,_creationDate);
-			DirectoryEntryIterator::calculateUnixTime(dirent_.Dirent.sdir.DIR_WrtDate,dirent_.Dirent.sdir.DIR_WrtTime,_lastWriteDateTime);
-			DirectoryEntryIterator::calculateUnixTime(dirent_.Dirent.sdir.DIR_LstAccDate,0,_lastAccessDateTime);
-		}
+      DirectoryEntryIterator::calculateUnixTime(dirent_.Dirent.sdir.DIR_CrtDate,dirent_.Dirent.sdir.DIR_CrtTime,_creationDate);
+      DirectoryEntryIterator::calculateUnixTime(dirent_.Dirent.sdir.DIR_WrtDate,dirent_.Dirent.sdir.DIR_WrtTime,_lastWriteDateTime);
+      DirectoryEntryIterator::calculateUnixTime(dirent_.Dirent.sdir.DIR_LstAccDate,0,_lastAccessDateTime);
+    }
 
-		/**
-		 * @copydoc FileInformation::getAttributes
-		 */
+    /**
+     * @copydoc FileInformation::getAttributes
+     */
 
-		uint32_t FatFileInformation::getAttributes() const {
-			return _attributes;
-		}
+    uint32_t FatFileInformation::getAttributes() const {
+      return _attributes;
+    }
 
-		/**
-		 * @copydoc FileInformation::getFilename
-		 */
+    /**
+     * @copydoc FileInformation::getFilename
+     */
 
-		const char *FatFileInformation::getFilename() const {
-			return _filename;
-		}
+    const char *FatFileInformation::getFilename() const {
+      return _filename;
+    }
 
-		/**
-		 * @copydoc FileInformation::getCreationDateTime
-		 */
+    /**
+     * @copydoc FileInformation::getCreationDateTime
+     */
 
-		time_t FatFileInformation::getCreationDateTime() const {
-			return _creationDate;
-		}
+    time_t FatFileInformation::getCreationDateTime() const {
+      return _creationDate;
+    }
 
-		/**
-		 * @copydoc FileInformation::getLastWriteDateTime
-		 */
+    /**
+     * @copydoc FileInformation::getLastWriteDateTime
+     */
 
-		time_t FatFileInformation::getLastWriteDateTime() const {
-			return _lastWriteDateTime;
-		}
+    time_t FatFileInformation::getLastWriteDateTime() const {
+      return _lastWriteDateTime;
+    }
 
-		/**
-		 * @copydoc FileInformation::getLastAccessDateTime
-		 */
+    /**
+     * @copydoc FileInformation::getLastAccessDateTime
+     */
 
-		time_t FatFileInformation::getLastAccessDateTime() const {
-			return _lastAccessDateTime;
-		}
+    time_t FatFileInformation::getLastAccessDateTime() const {
+      return _lastAccessDateTime;
+    }
 
-		/**
-		 * @copydoc FileInformation::getLength
-		 */
+    /**
+     * @copydoc FileInformation::getLength
+     */
 
-		uint32_t FatFileInformation::getLength() const {
-			return _length;
-		}
+    uint32_t FatFileInformation::getLength() const {
+      return _length;
+    }
 
-	}
+  }
 }

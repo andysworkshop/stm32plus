@@ -21,21 +21,21 @@ namespace stm32plus {
 
   template<class... Features>
   class Dma1Channel1 : public Dma,
-                 	 	 	 public Features... {
+                       public Features... {
 
     public:
-			typedef Dma1Channel1<Features...> DmaType;
+      typedef Dma1Channel1<Features...> DmaType;
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			Dma1Channel1()
-				: Dma(DMA1_Channel1,DMA1_FLAG_TC1,DMA1_FLAG_HT1,DMA1_FLAG_TE1),
-				  Features(static_cast<Dma&>(*this))... {
+      Dma1Channel1()
+        : Dma(DMA1_Channel1,DMA1_FLAG_TC1,DMA1_FLAG_HT1,DMA1_FLAG_TE1),
+          Features(static_cast<Dma&>(*this))... {
 
-				ClockControl<PERIPHERAL_DMA1>::On();
-			}
+        ClockControl<PERIPHERAL_DMA1>::On();
+      }
   };
 
   /**

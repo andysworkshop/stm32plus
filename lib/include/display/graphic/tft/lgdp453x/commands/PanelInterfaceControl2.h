@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PanelInterfaceControl2
-		{
-			enum
-			{
-				Opcode = 0x92
-			};
+  namespace lgdp453x
+  {
+    namespace PanelInterfaceControl2
+    {
+      enum
+      {
+        Opcode = 0x92
+      };
 
-			inline uint16_t NOWI(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t NOWI(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

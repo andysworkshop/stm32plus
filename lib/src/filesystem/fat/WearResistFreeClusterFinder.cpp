@@ -9,16 +9,16 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * Constructor: generate a random starting index between zero and the number of FAT entries.
-		 *
-		 * @param[in] fs_ A reference to the fat file system class. Must stay in scope.
-		 */
+    /**
+     * Constructor: generate a random starting index between zero and the number of FAT entries.
+     *
+     * @param[in] fs_ A reference to the fat file system class. Must stay in scope.
+     */
 
-		WearResistFreeClusterFinder::WearResistFreeClusterFinder(FatFileSystem& fs_) :
-			IteratingFreeClusterFinder(fs_,rand()%(fs_.getSectorsPerFat()*fs_.getSectorSizeInBytes())/fs_.getFatEntrySizeInBytes()) {
-		}
-	}
+    WearResistFreeClusterFinder::WearResistFreeClusterFinder(FatFileSystem& fs_) :
+      IteratingFreeClusterFinder(fs_,rand()%(fs_.getSectorsPerFat()*fs_.getSectorSizeInBytes())/fs_.getFatEntrySizeInBytes()) {
+    }
+  }
 }

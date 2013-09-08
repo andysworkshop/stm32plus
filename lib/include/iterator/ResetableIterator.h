@@ -16,15 +16,15 @@ namespace stm32plus {
  * Resettng an iterator moves it back to before the first element.
  */
 
-	template<typename T> 
+  template<typename T> 
   class ResetableIterator : public Iterator<T> {
     public:
 
-  		virtual ~ResetableIterator() {}
+      virtual ~ResetableIterator() {}
 
-  	/**
-  	 * Reset the iterator to before the first element.
-  	 */
+    /**
+     * Reset the iterator to before the first element.
+     */
 
       virtual void reset()=0;
   };

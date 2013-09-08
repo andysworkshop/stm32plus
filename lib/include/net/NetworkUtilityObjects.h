@@ -8,21 +8,21 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * Do-nothing container that holds all the base structures that are required by
-		 * all layers of the network stack. This is convenient for passing as a reference
-		 * to utility classes that are not directly linked into the stack but do need to
-		 * make use of its events and clock during their lifetime.
-		 */
+    /**
+     * Do-nothing container that holds all the base structures that are required by
+     * all layers of the network stack. This is convenient for passing as a reference
+     * to utility classes that are not directly linked into the stack but do need to
+     * make use of its events and clock during their lifetime.
+     */
 
-		struct NetworkUtilityObjects : virtual NetworkReceiveEvents,
-																	 virtual NetworkSendEvents,
-																	 virtual NetworkErrorEvents,
-																	 virtual NetworkNotificationEvents,
-																	 virtual NetworkIntervalTicker,
-																	 virtual DefaultRng {
-		};
-	}
+    struct NetworkUtilityObjects : virtual NetworkReceiveEvents,
+                                   virtual NetworkSendEvents,
+                                   virtual NetworkErrorEvents,
+                                   virtual NetworkNotificationEvents,
+                                   virtual NetworkIntervalTicker,
+                                   virtual DefaultRng {
+    };
+  }
 }

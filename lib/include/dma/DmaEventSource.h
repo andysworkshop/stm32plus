@@ -9,29 +9,29 @@
 
 namespace stm32plus {
 
-	/**
-	 * DMA event types
-	 */
+  /**
+   * DMA event types
+   */
 
-	enum class DmaEventType : uint8_t {
+  enum class DmaEventType : uint8_t {
     EVENT_COMPLETE,
     EVENT_HALF_COMPLETE,
     EVENT_TRANSFER_ERROR,
-	};
+  };
 
 
-	/**
-	 * The signature for DMA events: void myHandler(DmaEventType det);
-	 */
+  /**
+   * The signature for DMA events: void myHandler(DmaEventType det);
+   */
 
-	DECLARE_EVENT_SIGNATURE(DmaInterrupt,void(DmaEventType));
+  DECLARE_EVENT_SIGNATURE(DmaInterrupt,void(DmaEventType));
 
 
-	/**
-	 * Base structure that holds just the event subscriber/publisher for DMA
-	 */
+  /**
+   * Base structure that holds just the event subscriber/publisher for DMA
+   */
 
-	struct DmaEventSource {
-		DECLARE_EVENT_SOURCE(DmaInterrupt);
-	};
+  struct DmaEventSource {
+    DECLARE_EVENT_SOURCE(DmaInterrupt);
+  };
 }

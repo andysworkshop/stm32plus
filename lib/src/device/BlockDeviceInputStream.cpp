@@ -32,12 +32,12 @@ namespace stm32plus {
 
   int16_t BlockDeviceInputStream::read() {
 
-  	int16_t errorCode;
+    int16_t errorCode;
 
     // need 1 byte
 
     if((errorCode=requireBytes())!=ErrorProvider::ERROR_NO_ERROR)
-    	return errorCode;
+      return errorCode;
 
     // get from the block
 

@@ -13,7 +13,7 @@
  * to give access to the peripheral. SDIO support is not available on the F105 and F107 devices.
  */
 
-#if defined(STM32PLUS_F1_CL)			// the 105/107 do not have SDIO
+#if defined(STM32PLUS_F1_CL)      // the 105/107 do not have SDIO
 #error SDIO is not available on the F105/F107
 #endif
 
@@ -31,7 +31,7 @@
 #define USE_SDIO_INTERRUPT
 
 #if defined(STM32PLUS_F4)
-	#include "sdcard/f4/SdioAlternateFunctionMapper.h"
+  #include "sdcard/f4/SdioAlternateFunctionMapper.h"
 #endif
 
 // includes for the peripheral

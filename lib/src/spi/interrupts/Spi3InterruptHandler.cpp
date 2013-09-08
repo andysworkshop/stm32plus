@@ -24,14 +24,14 @@ extern "C" {
 
   void __attribute__ ((interrupt("IRQ"))) SPI3_IRQHandler(void) {
     if(SPI_I2S_GetITStatus(SPI3,SPI_I2S_IT_RXNE)!=RESET) {
-    	SpiInterruptFeature<3>::_spiInstance->SpiInterruptEventSender.raiseEvent(SpiEventType::EVENT_RECEIVE);
+      SpiInterruptFeature<3>::_spiInstance->SpiInterruptEventSender.raiseEvent(SpiEventType::EVENT_RECEIVE);
       SPI_I2S_ClearITPendingBit(SPI3,SPI_I2S_IT_RXNE);
     }
     else if(SPI_I2S_GetITStatus(SPI3,SPI_I2S_IT_TXE)!=RESET) {
       SpiInterruptFeature<3>::_spiInstance->SpiInterruptEventSender.raiseEvent(SpiEventType::EVENT_READY_TO_TRANSMIT);
       SPI_I2S_ClearITPendingBit(SPI3,SPI_I2S_IT_TXE);
     }
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }
 
 #endif

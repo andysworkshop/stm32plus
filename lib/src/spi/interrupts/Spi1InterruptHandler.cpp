@@ -30,7 +30,7 @@ extern "C" {
         SpiInterruptFeature<1>::_spiInstance->SpiInterruptEventSender.raiseEvent(SpiEventType::EVENT_READY_TO_TRANSMIT);
         SPI_I2S_ClearITPendingBit(SPI1,SPI_I2S_IT_TXE);
       }
-  		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
+      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
     }
 
 }

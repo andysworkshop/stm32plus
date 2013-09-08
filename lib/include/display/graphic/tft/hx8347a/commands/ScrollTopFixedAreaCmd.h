@@ -7,12 +7,12 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace ScrollTopFixedAreaCmd {
-			enum {
-				OpcodeHigh=0xe,
-				OpcodeLow=0xf
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace ScrollTopFixedAreaCmd {
+      enum {
+        OpcodeHigh=0xe,
+        OpcodeLow=0xf
+      };
+    }
+  }
 }

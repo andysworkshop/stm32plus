@@ -28,8 +28,8 @@ using namespace stm32plus::display;
  * by the JPEG decoder.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -38,115 +38,115 @@ using namespace stm32plus::display;
 
 class FlashSpiReader {
 
-	// definitions for the LCD panel
+  // definitions for the LCD panel
 
-	typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-	typedef LG_KF700_Landscape_64K<LcdAccessMode> LcdPanel;
+  typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
+  typedef LG_KF700_Landscape_64K<LcdAccessMode> LcdPanel;
 
-	LcdAccessMode *_accessMode;
-	LcdPanel *_gl;
+  LcdAccessMode *_accessMode;
+  LcdPanel *_gl;
 
-	// these are the peripherals we will use for the flash access
+  // these are the peripherals we will use for the flash access
 
-	typedef Spi2<> MySpi;
-	typedef spiflash::StandardSpiFlashDevice<MySpi> MyFlash;
+  typedef Spi2<> MySpi;
+  typedef spiflash::StandardSpiFlashDevice<MySpi> MyFlash;
 
-	// declare the peripheral pointers
+  // declare the peripheral pointers
 
-	MySpi *_spi;
-	MyFlash *_flash;
+  MySpi *_spi;
+  MyFlash *_flash;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			// Initialise the SPI peripheral in master mode. The SPI speed is the highest available.
-			// Make sure that this is not too fast for your flash device.
+      // Initialise the SPI peripheral in master mode. The SPI speed is the highest available.
+      // Make sure that this is not too fast for your flash device.
 
-			MySpi::Parameters spiParams;
-			spiParams.spi_mode=SPI_Mode_Master;
-			spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_2;
-			spiParams.spi_cpol=SPI_CPOL_Low;
-			spiParams.spi_cpha=SPI_CPHA_1Edge;
+      MySpi::Parameters spiParams;
+      spiParams.spi_mode=SPI_Mode_Master;
+      spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_2;
+      spiParams.spi_cpol=SPI_CPOL_Low;
+      spiParams.spi_cpha=SPI_CPHA_1Edge;
 
-			_spi=new MySpi(spiParams);
+      _spi=new MySpi(spiParams);
 
-			// initialise the flash device
+      // initialise the flash device
 
-			_flash=new MyFlash(*_spi);
+      _flash=new MyFlash(*_spi);
 
-			// LCD reset is on PE1 and LCD RS (D/CX) is on PD11
+      // LCD reset is on PE1 and LCD RS (D/CX) is on PD11
 
-			GpioE<DefaultDigitalOutputFeature<1> > pe;
-			GpioD<DefaultFsmcAlternateFunctionFeature<11>> pd;
+      GpioE<DefaultDigitalOutputFeature<1> > pe;
+      GpioD<DefaultFsmcAlternateFunctionFeature<11>> pd;
 
-			// set up the FSMC timing. these numbers (particularly the data setup time) are dependent on
-			// both the FSMC bus speed and the panel timing parameters.
+      // set up the FSMC timing. these numbers (particularly the data setup time) are dependent on
+      // both the FSMC bus speed and the panel timing parameters.
 
-			Fsmc8080LcdTiming fsmcTiming(0,2);
+      Fsmc8080LcdTiming fsmcTiming(0,2);
 
-			// set up the FSMC with RS=A16 (PD11)
+      // set up the FSMC with RS=A16 (PD11)
 
-			_accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
-			_gl=new LcdPanel(*_accessMode);
+      _accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
+      _gl=new LcdPanel(*_accessMode);
 
-			// apply gamma settings
+      // apply gamma settings
 
-			HX8352AGamma gamma(0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03);
-			_gl->applyGamma(gamma);
+      HX8352AGamma gamma(0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03);
+      _gl->applyGamma(gamma);
 
-			// clear to black while the lights are out
+      // clear to black while the lights are out
 
-			_gl->setBackground(0);
-			_gl->clearScreen();
+      _gl->setBackground(0);
+      _gl->clearScreen();
 
-			// create the backlight on timer4, channel2 (PD13)
+      // create the backlight on timer4, channel2 (PD13)
 
-			DefaultBacklight backlight;
+      DefaultBacklight backlight;
 
-			// fade up to 100% in 4ms steps
+      // fade up to 100% in 4ms steps
 
-			backlight.fadeTo(100,4);
+      backlight.fadeTo(100,4);
 
-			// the 'flash_spi_program' example wrote a sequence of 3 JPEG files to the SPI
-			// flash device. For convenience this demo hard-codes the size and location.
+      // the 'flash_spi_program' example wrote a sequence of 3 JPEG files to the SPI
+      // flash device. For convenience this demo hard-codes the size and location.
 
-			for(;;) {
+      for(;;) {
 
-				copyJpegToLcd(0,57961,367,240);
-				copyJpegToLcd(58112,19272,240,160);
-				copyJpegToLcd(77568,182190,480,240);
-			}
-		}
+        copyJpegToLcd(0,57961,367,240);
+        copyJpegToLcd(58112,19272,240,160);
+        copyJpegToLcd(77568,182190,480,240);
+      }
+    }
 
 
-		/*
-		 * Copy a JPEG from flash to the LCD
-		 */
+    /*
+     * Copy a JPEG from flash to the LCD
+     */
 
-		void copyJpegToLcd(uint32_t offset,uint32_t size,int width,int height) {
+    void copyJpegToLcd(uint32_t offset,uint32_t size,int width,int height) {
 
-			// draw in the center
+      // draw in the center
 
-			Rectangle rc(
-					(_gl->getWidth()-width)/2,
-					(_gl->getHeight()-height)/2,
-					width,
-					height);
+      Rectangle rc(
+          (_gl->getWidth()-width)/2,
+          (_gl->getHeight()-height)/2,
+          width,
+          height);
 
-			// clear the display
+      // clear the display
 
-			_gl->clearScreen();
+      _gl->clearScreen();
 
-			// declare an input stream to read the JPEG and then do it
+      // declare an input stream to read the JPEG and then do it
 
-			spiflash::SpiFlashInputStream<MyFlash> is(*_flash,offset,size);
-			_gl->drawJpeg(rc,is);
+      spiflash::SpiFlashInputStream<MyFlash> is(*_flash,offset,size);
+      _gl->drawJpeg(rc,is);
 
-			// wait for 5 seconds
+      // wait for 5 seconds
 
-			MillisecondTimer::delay(5000);
-		}
+      MillisecondTimer::delay(5000);
+    }
 };
 
 
@@ -156,11 +156,11 @@ class FlashSpiReader {
 
 int main() {
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	FlashSpiReader test;
-	test.run();
+  FlashSpiReader test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -7,11 +7,11 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace SetPageAddressCmd {
-			enum {
-				Opcode=0x2B
-			};
-		}
-	}
+  namespace ili9327 {
+    namespace SetPageAddressCmd {
+      enum {
+        Opcode=0x2B
+      };
+    }
+  }
 }

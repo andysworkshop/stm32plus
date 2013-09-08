@@ -9,36 +9,36 @@
 
 namespace stm32plus {
 
-	/**
-	 * @namespace display 'display' is a sub-namespace of stm32plus. Everything to do with graphics libraries
-	 * and drivers is in this namespace
-	 */
+  /**
+   * @namespace display 'display' is a sub-namespace of stm32plus. Everything to do with graphics libraries
+   * and drivers is in this namespace
+   */
 
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief A pixel size structure
-		 */
+    /**
+     * @brief A pixel size structure
+     */
 
-		struct Size {
+    struct Size {
 
-				/// The width
-				int16_t Width;
+        /// The width
+        int16_t Width;
 
-				/// The height
-				int16_t Height;
+        /// The height
+        int16_t Height;
 
-				Size() {}
+        Size() {}
 
-				/**
-				 * Constructor
-				 * @param[in] width The width parameter.
-				 * @param[in] height The height parameter.
-				 */
+        /**
+         * Constructor
+         * @param[in] width The width parameter.
+         * @param[in] height The height parameter.
+         */
 
-				Size(int16_t width,int16_t height) :
-					Width(width), Height(height) {
-				}
-		};
-	}
+        Size(int16_t width,int16_t height) :
+          Width(width), Height(height) {
+        }
+    };
+  }
 }

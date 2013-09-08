@@ -23,15 +23,15 @@ template<> ExtiPeripheral<EXTI_Line22> *ExtiPeripheral<EXTI_Line22>::_extiInstan
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) RTC_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_WKUP_IRQHandler(void) {
 
-		if(RTC_GetITStatus(RTC_IT_WUT)!=RESET) {
-			ExtiRtcWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(22);
-			EXTI_ClearITPendingBit(EXTI_Line22);
-			RTC_ClearITPendingBit(RTC_IT_WUT);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(RTC_GetITStatus(RTC_IT_WUT)!=RESET) {
+      ExtiRtcWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(22);
+      EXTI_ClearITPendingBit(EXTI_Line22);
+      RTC_ClearITPendingBit(RTC_IT_WUT);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 #endif

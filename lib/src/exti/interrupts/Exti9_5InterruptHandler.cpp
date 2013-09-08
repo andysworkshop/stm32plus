@@ -25,30 +25,30 @@ template<> ExtiPeripheral<EXTI_Line9> *ExtiPeripheral<EXTI_Line9>::_extiInstance
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) EXTI9_5_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) EXTI9_5_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line5)!=RESET) {
-			Exti5::_extiInstance->ExtiInterruptEventSender.raiseEvent(5);
-			EXTI_ClearITPendingBit(EXTI_Line5);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line6)!=RESET) {
-			Exti6::_extiInstance->ExtiInterruptEventSender.raiseEvent(6);
-			EXTI_ClearITPendingBit(EXTI_Line6);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line7)!=RESET) {
-			Exti7::_extiInstance->ExtiInterruptEventSender.raiseEvent(7);
-			EXTI_ClearITPendingBit(EXTI_Line7);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line8)!=RESET) {
-			Exti8::_extiInstance->ExtiInterruptEventSender.raiseEvent(8);
-			EXTI_ClearITPendingBit(EXTI_Line8);
-		}
-		else if(EXTI_GetITStatus(EXTI_Line9)!=RESET) {
-			Exti9::_extiInstance->ExtiInterruptEventSender.raiseEvent(9);
-			EXTI_ClearITPendingBit(EXTI_Line9);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(EXTI_GetITStatus(EXTI_Line5)!=RESET) {
+      Exti5::_extiInstance->ExtiInterruptEventSender.raiseEvent(5);
+      EXTI_ClearITPendingBit(EXTI_Line5);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line6)!=RESET) {
+      Exti6::_extiInstance->ExtiInterruptEventSender.raiseEvent(6);
+      EXTI_ClearITPendingBit(EXTI_Line6);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line7)!=RESET) {
+      Exti7::_extiInstance->ExtiInterruptEventSender.raiseEvent(7);
+      EXTI_ClearITPendingBit(EXTI_Line7);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line8)!=RESET) {
+      Exti8::_extiInstance->ExtiInterruptEventSender.raiseEvent(8);
+      EXTI_ClearITPendingBit(EXTI_Line8);
+    }
+    else if(EXTI_GetITStatus(EXTI_Line9)!=RESET) {
+      Exti9::_extiInstance->ExtiInterruptEventSender.raiseEvent(9);
+      EXTI_ClearITPendingBit(EXTI_Line9);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 #endif

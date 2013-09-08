@@ -18,22 +18,22 @@ extern "C" void SPI3_IRQHandler();
 
 namespace stm32plus {
 
-	/**
-	 * Helper class to enable only the desired interrupts in the NVIC. This will
-	 * be fully specialised for each Spi peripheral
+  /**
+   * Helper class to enable only the desired interrupts in the NVIC. This will
+   * be fully specialised for each Spi peripheral
    * @tparam TSpiNumber The number of the Spi peripheral (1..3)
-	 */
+   */
 
-	template<uint8_t TSpiNumber>
-	class SpiInterruptFeatureEnabler {
+  template<uint8_t TSpiNumber>
+  class SpiInterruptFeatureEnabler {
 
-	  private:
+    private:
       typedef void (*FPTR)();         // this trick will force the linker to include the ISR
       static FPTR _forceLinkage;
 
     public:
       static void enable(uint8_t priority,uint8_t subPriority);
-	};
+  };
 
 
   /**
@@ -43,7 +43,7 @@ namespace stm32plus {
 
   template<uint8_t TSpiNumber>
   class SpiInterruptFeature : public SpiEventSource,
-  														public SpiFeatureBase {
+                              public SpiFeatureBase {
 
     protected:
       uint16_t _interruptMask;
@@ -87,7 +87,7 @@ namespace stm32plus {
 
   template<uint8_t TSpiNumber>
   inline SpiInterruptFeature<TSpiNumber>::SpiInterruptFeature(Spi& spi)
-  	: SpiFeatureBase(spi) {
+    : SpiFeatureBase(spi) {
     _interruptMask=0;
     _nvicPriority=_nvicSubPriority=0;
     _spiInstance=this;
@@ -115,8 +115,8 @@ namespace stm32plus {
 
   template<uint8_t TSpiNumber>
   inline void SpiInterruptFeature<TSpiNumber>::setNvicPriorities(uint8_t priority,uint8_t subPriority) {
-  	_nvicPriority=priority;
-  	_nvicSubPriority=subPriority;
+    _nvicPriority=priority;
+    _nvicSubPriority=subPriority;
   }
 
 
@@ -163,7 +163,7 @@ namespace stm32plus {
   template<>
   inline void SpiInterruptFeatureEnabler<2>::enable(uint8_t priority,uint8_t subPriority) {
     _forceLinkage=&SPI2_IRQHandler;
-  	Nvic::configureIrq(SPI2_IRQn,ENABLE,priority,subPriority);
+    Nvic::configureIrq(SPI2_IRQn,ENABLE,priority,subPriority);
   }
 
   /**

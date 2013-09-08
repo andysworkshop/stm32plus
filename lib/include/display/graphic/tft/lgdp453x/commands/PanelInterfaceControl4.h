@@ -12,19 +12,19 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PanelInterfaceControl4
-		{
-			enum
-			{
-				Opcode = 0x95
-			};
+  namespace lgdp453x
+  {
+    namespace PanelInterfaceControl4
+    {
+      enum
+      {
+        Opcode = 0x95
+      };
 
-			inline uint16_t RTNE(uint16_t n) { return n; }
-			inline uint16_t DIVE(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t RTNE(uint16_t n) { return n; }
+      inline uint16_t DIVE(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

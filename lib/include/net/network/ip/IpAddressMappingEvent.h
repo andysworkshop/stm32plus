@@ -9,22 +9,22 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * Notify about an association between a MAC and an IP
-		 */
+    /**
+     * Notify about an association between a MAC and an IP
+     */
 
-		struct IpAddressMappingEvent : NetEventDescriptor {
+    struct IpAddressMappingEvent : NetEventDescriptor {
 
-			const MacAddress& macAddress;
-			const IpAddress& ipAddress;
+      const MacAddress& macAddress;
+      const IpAddress& ipAddress;
 
-			IpAddressMappingEvent(const MacAddress& mac,const IpAddress& ip)
-				: NetEventDescriptor(NetEventType::IP_ADDRESS_MAPPING),
-					macAddress(mac),
-				  ipAddress(ip) {
-			}
-		};
-	}
+      IpAddressMappingEvent(const MacAddress& mac,const IpAddress& ip)
+        : NetEventDescriptor(NetEventType::IP_ADDRESS_MAPPING),
+          macAddress(mac),
+          ipAddress(ip) {
+      }
+    };
+  }
 }

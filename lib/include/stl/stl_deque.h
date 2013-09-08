@@ -1357,11 +1357,11 @@ void deque<_Tp,_Alloc>::_M_insert_aux(iterator __pos,
   size_type __length = size();
 
 #ifdef STM32PLUS_BUILD
-  if ((unsigned long)__elemsbefore < __length / 2) {				// ptrdiff_t = signed on STM32 (long int)
+  if ((unsigned long)__elemsbefore < __length / 2) {        // ptrdiff_t = signed on STM32 (long int)
 #else
   if (__elemsbefore < __length / 2) {
 #endif
-  	iterator __new_start = _M_reserve_elements_at_front(__n);
+    iterator __new_start = _M_reserve_elements_at_front(__n);
     iterator __old_start = _M_start;
     __pos = _M_start + __elemsbefore;
     __STL_TRY {

@@ -8,21 +8,21 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Traits class for the ILI9327 that declares a "short" panel
-		 * of 400x240, less than the driver maximum of 432x240
-		 */
+    /**
+     * Traits class for the ILI9327 that declares a "short" panel
+     * of 400x240, less than the driver maximum of 432x240
+     */
 
-		class ILI9327400x240PanelTraits {
+    class ILI9327400x240PanelTraits {
 
-			public:
-				enum {
-					LONG_SIDE = 400,
-					SHORT_SIDE = 240
-				};
-		};
-	}
+      public:
+        enum {
+          LONG_SIDE = 400,
+          SHORT_SIDE = 240
+        };
+    };
+  }
 }

@@ -7,13 +7,13 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace InterfaceControlCmd {
-			enum {
-				Opcode=0xc6,
+  namespace ili9327 {
+    namespace InterfaceControlCmd {
+      enum {
+        Opcode=0xc6,
 
-				DPL=1, EPL=1 << 1, HSPL=1 << 3, VSPL=1 << 4, SDA_EN=1 << 7
-			};
-		}
-	}
+        DPL=1, EPL=1 << 1, HSPL=1 << 3, VSPL=1 << 4, SDA_EN=1 << 7
+      };
+    }
+  }
 }

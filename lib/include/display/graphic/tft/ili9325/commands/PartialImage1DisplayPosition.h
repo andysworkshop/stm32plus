@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PartialImage1DisplayPosition
-		{
-			enum
-			{
-				Opcode = 0x80
-			};
+  namespace ili9325
+  {
+    namespace PartialImage1DisplayPosition
+    {
+      enum
+      {
+        Opcode = 0x80
+      };
 
-			inline uint16_t POSITION(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t POSITION(uint16_t n) { return n; }
+    }
+  }
 }
 
 

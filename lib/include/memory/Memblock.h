@@ -19,58 +19,58 @@ namespace stm32plus {
  * only works with simple types and structures.
  */
 
-	template<typename T>
-	class Memblock {
+  template<typename T>
+  class Memblock {
 
-		private:
-			T *_data;
-			uint32_t _size;
+    private:
+      T *_data;
+      uint32_t _size;
 
-		public:
+    public:
 
-			/**
-			 * Default constructor
-			 */
+      /**
+       * Default constructor
+       */
 
-			Memblock() {
-				_data=nullptr;
-				_size=0;
-			}
-
-
-			/**
-			 * Construct with space for the given number of types.
-			 * @param[in] numTypes The number of types to store here.
-			 */
-
-			Memblock(uint32_t numTypes) {
-				allocate(numTypes);
-			}
+      Memblock() {
+        _data=nullptr;
+        _size=0;
+      }
 
 
-			/**
-			 * Copy constructor.
-			 * @param[in] src The memory block to copy from
-			 */
+      /**
+       * Construct with space for the given number of types.
+       * @param[in] numTypes The number of types to store here.
+       */
 
-			Memblock(const Memblock<T>& src) {
-				assign(src);
-			}
-
-
-			/**
-			 * Destructor, de-allocate memory
-			 */
-
-			~Memblock() {
-				cleanup();
-			}
+      Memblock(uint32_t numTypes) {
+        allocate(numTypes);
+      }
 
 
-			/**
-			 * Get a pointer to the data block.
-			 * @return A pointer.
-			 */
+      /**
+       * Copy constructor.
+       * @param[in] src The memory block to copy from
+       */
+
+      Memblock(const Memblock<T>& src) {
+        assign(src);
+      }
+
+
+      /**
+       * Destructor, de-allocate memory
+       */
+
+      ~Memblock() {
+        cleanup();
+      }
+
+
+      /**
+       * Get a pointer to the data block.
+       * @return A pointer.
+       */
 
       T *getData() const {
         return _data;
@@ -82,98 +82,98 @@ namespace stm32plus {
        * @return The number of types.
        */
 
-			uint32_t getSize() const {
-				return _size;
-			}
+      uint32_t getSize() const {
+        return _size;
+      }
 
 
-			/**
-			 * Cast operator
-			 * @return A pointer to the data.
-			 */
+      /**
+       * Cast operator
+       * @return A pointer to the data.
+       */
 
-			operator T* () {
-				return _data;
-			}
-
-
-			/**
-			 * Assignment operator.
-			 * @param[in] src The block to assign from.
-			 * @return A reference to this.
-			 */
-
-			Memblock<T>& operator=(const Memblock<T>& src) {
-				cleanup();
-				assign(src);
-
-				return *this;
-			}
+      operator T* () {
+        return _data;
+      }
 
 
-			/**
-			 * Array access operator.
-			 * @param[in] pos The index in the block to return.
-			 * @return A reference to the item at the index.
-			 */
+      /**
+       * Assignment operator.
+       * @param[in] src The block to assign from.
+       * @return A reference to this.
+       */
 
-			T& operator[](int pos) const {
-				return _data[pos];
-			}
+      Memblock<T>& operator=(const Memblock<T>& src) {
+        cleanup();
+        assign(src);
 
-
-			/**
-			 * Reallocate to handle new data. Only increases are supported.
-			 * @param[in] newSize The size to increase to.
-			 */
-
-			void reallocate(uint32_t newSize) {
-				T *newData;
-
-				if(_data==nullptr)
-					allocate(newSize);
-				else {
-					newData=new T[newSize];
-					memcpy(newData,_data,_size*sizeof(T));
-					delete [] _data;
-					_data=newData;
-					_size=newSize;
-				}
-			}
-
-			/**
-			 * Free existing data and start with a fresh buffer of the given size
-			 * @param[in] resetSize The size to start again with
-			 */
-
-			void reset(uint32_t resetSize) {
-				cleanup();
-				allocate(resetSize);
-			}
-
-		private:
-
-			void allocate(uint32_t numTypes) {
-				_data=new T[numTypes];
-				_size=numTypes;
-			}
-
-			void cleanup() {
-				if(_data!=nullptr) {
-					delete [] _data;
-					_data=nullptr;
-					_size=0;
-				}
-			}
-
-			void assign(const Memblock<T>& src) {
-				_data=new T[src.getSize()];
-				_size=src.getSize();
-				memcpy(_data,const_cast<Memblock<T>&>(src),_size*sizeof(T));
-			}
-	};
+        return *this;
+      }
 
 
-	/// Typedef for the common case of a block of bytes
-	typedef Memblock<uint8_t> ByteMemblock;
+      /**
+       * Array access operator.
+       * @param[in] pos The index in the block to return.
+       * @return A reference to the item at the index.
+       */
+
+      T& operator[](int pos) const {
+        return _data[pos];
+      }
+
+
+      /**
+       * Reallocate to handle new data. Only increases are supported.
+       * @param[in] newSize The size to increase to.
+       */
+
+      void reallocate(uint32_t newSize) {
+        T *newData;
+
+        if(_data==nullptr)
+          allocate(newSize);
+        else {
+          newData=new T[newSize];
+          memcpy(newData,_data,_size*sizeof(T));
+          delete [] _data;
+          _data=newData;
+          _size=newSize;
+        }
+      }
+
+      /**
+       * Free existing data and start with a fresh buffer of the given size
+       * @param[in] resetSize The size to start again with
+       */
+
+      void reset(uint32_t resetSize) {
+        cleanup();
+        allocate(resetSize);
+      }
+
+    private:
+
+      void allocate(uint32_t numTypes) {
+        _data=new T[numTypes];
+        _size=numTypes;
+      }
+
+      void cleanup() {
+        if(_data!=nullptr) {
+          delete [] _data;
+          _data=nullptr;
+          _size=0;
+        }
+      }
+
+      void assign(const Memblock<T>& src) {
+        _data=new T[src.getSize()];
+        _size=src.getSize();
+        memcpy(_data,const_cast<Memblock<T>&>(src),_size*sizeof(T));
+      }
+  };
+
+
+  /// Typedef for the common case of a block of bytes
+  typedef Memblock<uint8_t> ByteMemblock;
 }

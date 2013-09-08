@@ -34,7 +34,7 @@ namespace stm32plus {
   inline RtcLseClockFeature::RtcLseClockFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
-  	RTC_InitTypeDef init;
+    RTC_InitTypeDef init;
 
     // on with the LSE
 
@@ -51,7 +51,7 @@ namespace stm32plus {
     // Configure the RTC hour format and prescaler for a 32.768kHz clock
 
     init.RTC_AsynchPrediv=0x7F;
-    init.RTC_SynchPrediv=0xFF;				// LSI freq (Hz / 128)-1 = (32768 / 128 ) -1 = 255
+    init.RTC_SynchPrediv=0xFF;        // LSI freq (Hz / 128)-1 = (32768 / 128 ) -1 = 255
     init.RTC_HourFormat=_rtc.getHourFormat();
     RTC_Init(&init);
   }

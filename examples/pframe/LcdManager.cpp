@@ -14,45 +14,45 @@
 
 bool LcdManager::initialise() {
 
-	// reset is on PE1 and RS (D/CX) is on PD11
+  // reset is on PE1 and RS (D/CX) is on PD11
 
-	GpioE<DefaultDigitalOutputFeature<1> > pe;
-	GpioD<DefaultFsmcAlternateFunctionFeature<11> > pd;
+  GpioE<DefaultDigitalOutputFeature<1> > pe;
+  GpioD<DefaultFsmcAlternateFunctionFeature<11> > pd;
 
-	// set up the FSMC on bank 0 with A16 as the RS line
+  // set up the FSMC on bank 0 with A16 as the RS line
 
-	Fsmc8080LcdTiming fsmcTiming(2,5);
-	_accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
+  Fsmc8080LcdTiming fsmcTiming(2,5);
+  _accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
 
-	// create the LCD and object
+  // create the LCD and object
 
-	_lcd=new LcdAccess(*_accessMode);
+  _lcd=new LcdAccess(*_accessMode);
 
-	// create and select the font
+  // create and select the font
 
-	_font=new Font_APPLE8();
-	*_lcd << *_font;
+  _font=new Font_APPLE8();
+  *_lcd << *_font;
 
-	// create the terminal object using the selected font
+  // create the terminal object using the selected font
 
-	_terminal=new TerminalAccess(*_lcd);
+  _terminal=new TerminalAccess(*_lcd);
 
-	// apply gamma settings
+  // apply gamma settings
 
-	ILI9325Gamma gamma(0x0006,0x0101,0x0003,0x0106,0x0b02,0x0302,0x0707,0x0007,0x0600,0x020b);
-	_lcd->applyGamma(gamma);
+  ILI9325Gamma gamma(0x0006,0x0101,0x0003,0x0106,0x0b02,0x0302,0x0707,0x0007,0x0600,0x020b);
+  _lcd->applyGamma(gamma);
 
-	// clear down to black
+  // clear down to black
 
-	_lcd->setBackground(ColourNames::BLACK);
-	_lcd->setForeground(ColourNames::WHITE);
+  _lcd->setBackground(ColourNames::BLACK);
+  _lcd->setForeground(ColourNames::WHITE);
 
-	_terminal->clearScreen();
+  _terminal->clearScreen();
 
-	// lights on at 100% in 4ms steps from zero.
+  // lights on at 100% in 4ms steps from zero.
 
-	_backlight=new DefaultBacklight;
-	_backlight->fadeTo(100,4);
+  _backlight=new DefaultBacklight;
+  _backlight->fadeTo(100,4);
 
-	return true;
+  return true;
 }

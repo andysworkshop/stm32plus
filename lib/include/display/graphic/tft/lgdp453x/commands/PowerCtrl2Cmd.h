@@ -10,19 +10,19 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PowerCtrl2Cmd
-		{
-			enum
-			{
-				Opcode = 0x11
-			};
-			inline uint16_t VC(uint16_t n){return n;}
-			inline uint16_t DC0(uint16_t n){return n<<4;}
-			inline uint16_t DC1(uint16_t n){return n<<8;}
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace PowerCtrl2Cmd
+    {
+      enum
+      {
+        Opcode = 0x11
+      };
+      inline uint16_t VC(uint16_t n){return n;}
+      inline uint16_t DC0(uint16_t n){return n<<4;}
+      inline uint16_t DC1(uint16_t n){return n<<8;}
+    }
+  }
 }
 
 

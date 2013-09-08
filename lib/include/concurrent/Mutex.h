@@ -10,22 +10,22 @@
 namespace stm32plus {
 
 
-	/**
-	 * Mutex class using the ARM primitive LRDEX/STREX instructions.
-	 * Do not nest Mutex's. i.e. Do not call claim() on Mutex #1 and then call claim() somewhere
-	 * else on Mutex #2 before Mutex #1 has been released. The ARM synchronisation primitives
-	 * will automatically release #1 if you do that.
-	 */
+  /**
+   * Mutex class using the ARM primitive LRDEX/STREX instructions.
+   * Do not nest Mutex's. i.e. Do not call claim() on Mutex #1 and then call claim() somewhere
+   * else on Mutex #2 before Mutex #1 has been released. The ARM synchronisation primitives
+   * will automatically release #1 if you do that.
+   */
 
-	class Mutex {
+  class Mutex {
 
-		protected:
-			volatile uint8_t _flag;
+    protected:
+      volatile uint8_t _flag;
 
-		public:
-			Mutex();
+    public:
+      Mutex();
 
-			bool claim(uint32_t millisToWait);
-			void release();
-	};
+      bool claim(uint32_t millisToWait);
+      void release();
+  };
 }

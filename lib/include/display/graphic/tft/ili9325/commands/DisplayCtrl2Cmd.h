@@ -12,19 +12,19 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace DisplayCtrl2Cmd
-		{
-			enum
-			{
-				Opcode = 8
-			};
+  namespace ili9325
+  {
+    namespace DisplayCtrl2Cmd
+    {
+      enum
+      {
+        Opcode = 8
+      };
 
-			inline uint16_t BACK_PORCH(uint16_t n) { return n; }
-			inline uint16_t FRONT_PORCH(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t BACK_PORCH(uint16_t n) { return n; }
+      inline uint16_t FRONT_PORCH(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

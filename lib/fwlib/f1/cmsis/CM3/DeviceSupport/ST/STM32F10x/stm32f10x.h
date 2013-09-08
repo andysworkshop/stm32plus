@@ -59,10 +59,10 @@
 /* stm32plus addition */
 
 #if defined(STM32PLUS_F1_HD) && !defined(STM32F10X_HD)
-	#define STM32F10X_HD
+  #define STM32F10X_HD
 #else
   #if (defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F1_CL_E)) && !defined(STM32F10X_CL)
-	#define STM32F10X_CL
+  #define STM32F10X_CL
   #endif
 #endif
 
@@ -803,7 +803,7 @@ typedef struct
 typedef struct
 {
   __IO uint32_t IDCODE;
-  __IO uint32_t CR;	
+  __IO uint32_t CR; 
 }DBGMCU_TypeDef;
 
 /** 
@@ -7930,7 +7930,7 @@ typedef struct
   #define ETH_MACFFR_PCF_ForwardAll              ((uint32_t)0x00000080)  /* MAC forwards all control frames to application even if they fail the Address Filter */
   #define ETH_MACFFR_PCF_ForwardPassedAddrFilter ((uint32_t)0x000000C0)  /* MAC forwards control frames that pass the Address Filter. */ 
 #define ETH_MACFFR_BFD    ((uint32_t)0x00000020)  /* Broadcast frame disable */ 
-#define ETH_MACFFR_PAM 	  ((uint32_t)0x00000010)  /* Pass all mutlicast */ 
+#define ETH_MACFFR_PAM    ((uint32_t)0x00000010)  /* Pass all mutlicast */ 
 #define ETH_MACFFR_DAIF   ((uint32_t)0x00000008)  /* DA Inverse filtering */ 
 #define ETH_MACFFR_HM     ((uint32_t)0x00000004)  /* Hash multicast */ 
 #define ETH_MACFFR_HU     ((uint32_t)0x00000002)  /* Hash unicast */
@@ -7949,8 +7949,8 @@ typedef struct
   #define ETH_MACMIIAR_CR_Div42   ((uint32_t)0x00000000)  /* HCLK:60-72 MHz; MDC clock= HCLK/42 */
   #define ETH_MACMIIAR_CR_Div16   ((uint32_t)0x00000008)  /* HCLK:20-35 MHz; MDC clock= HCLK/16 */
   #define ETH_MACMIIAR_CR_Div26   ((uint32_t)0x0000000C)  /* HCLK:35-60 MHz; MDC clock= HCLK/26 */
-	#define ETH_MACMIIAR_CR_Div102  ((uint32_t)0x00000010)  /* HCLK:150-168 MHz; MDC clock= HCLK/102 XXX: Andy compat mod */
-	#define ETH_MACMIIAR_CR_Div62   ((uint32_t)0x00000004)  /* HCLK:100-150 MHz; MDC clock= HCLK/62 XXX: Andy compat mod */
+  #define ETH_MACMIIAR_CR_Div102  ((uint32_t)0x00000010)  /* HCLK:150-168 MHz; MDC clock= HCLK/102 XXX: Andy compat mod */
+  #define ETH_MACMIIAR_CR_Div62   ((uint32_t)0x00000004)  /* HCLK:100-150 MHz; MDC clock= HCLK/62 XXX: Andy compat mod */
 #define ETH_MACMIIAR_MW   ((uint32_t)0x00000002)  /* MII write */ 
 #define ETH_MACMIIAR_MB   ((uint32_t)0x00000001)  /* MII busy */ 
   

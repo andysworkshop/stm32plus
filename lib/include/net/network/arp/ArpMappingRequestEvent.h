@@ -9,24 +9,24 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * Request an ARP mapping (get MAC from IP)
-		 */
+    /**
+     * Request an ARP mapping (get MAC from IP)
+     */
 
-		struct ArpMappingRequestEvent : NetEventDescriptor {
+    struct ArpMappingRequestEvent : NetEventDescriptor {
 
-			const IpAddress& ipAddress;				///< the address to lookup
+      const IpAddress& ipAddress;       ///< the address to lookup
 
-			MacAddress macAddress;							///< the returned MAC or nullptr
-			bool found;
+      MacAddress macAddress;              ///< the returned MAC or nullptr
+      bool found;
 
-			ArpMappingRequestEvent(const IpAddress& address)
-				: NetEventDescriptor(NetEventType::ARP_MAPPING_REQUEST),
-					ipAddress(address),
-				  found(false) {
-			}
-		};
-	}
+      ArpMappingRequestEvent(const IpAddress& address)
+        : NetEventDescriptor(NetEventType::ARP_MAPPING_REQUEST),
+          ipAddress(address),
+          found(false) {
+      }
+    };
+  }
 }

@@ -9,30 +9,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Your default gateway (router)
-		 */
+    /**
+     * Your default gateway (router)
+     */
 
-		struct IpDefaultGatewayAnnouncementEvent : NetEventDescriptor {
+    struct IpDefaultGatewayAnnouncementEvent : NetEventDescriptor {
 
-			/**
-			 * References to the values
-			 */
+      /**
+       * References to the values
+       */
 
-			const IpAddress& defaultGateway;
+      const IpAddress& defaultGateway;
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			IpDefaultGatewayAnnouncementEvent(const IpAddress& gateway)
-				: NetEventDescriptor(NetEventType::DEFAULT_GATEWAY_ANNOUNCEMENT),
-					defaultGateway(gateway) {
-			}
-		};
-	}
+      IpDefaultGatewayAnnouncementEvent(const IpAddress& gateway)
+        : NetEventDescriptor(NetEventType::DEFAULT_GATEWAY_ANNOUNCEMENT),
+          defaultGateway(gateway) {
+      }
+    };
+  }
 }

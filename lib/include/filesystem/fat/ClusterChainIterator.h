@@ -8,52 +8,52 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-	/**
-	 * @brief Iterate over the clusters in a chain
-	 */
+  /**
+   * @brief Iterate over the clusters in a chain
+   */
 
-		class ClusterChainIterator : public Iterator<uint32_t> {
+    class ClusterChainIterator : public Iterator<uint32_t> {
 
-			public:
-				/**
-				 * Whether to extend the chain when the end is hit
-				 */
+      public:
+        /**
+         * Whether to extend the chain when the end is hit
+         */
 
-				enum ExtensionMode {
-					/// Extend the chain.
-					extensionExtend,
+        enum ExtensionMode {
+          /// Extend the chain.
+          extensionExtend,
 
-					/// Don't extend the chain.
-					extensionDontExtend };
+          /// Don't extend the chain.
+          extensionDontExtend };
 
-			protected:
-				bool _first;
-				ExtensionMode _extend;
-				uint32_t _currentClusterNumber;
-				uint32_t _firstClusterNumber;
-				FatFileSystem& _fs;
+      protected:
+        bool _first;
+        ExtensionMode _extend;
+        uint32_t _currentClusterNumber;
+        uint32_t _firstClusterNumber;
+        FatFileSystem& _fs;
 
-			public:
-				ClusterChainIterator(FatFileSystem& fs_,uint32_t firstClusterNumber_,ExtensionMode extend_);
+      public:
+        ClusterChainIterator(FatFileSystem& fs_,uint32_t firstClusterNumber_,ExtensionMode extend_);
 
-				/**
-				 * Virtual destructor, do nothing.
-				 */
+        /**
+         * Virtual destructor, do nothing.
+         */
 
-				virtual ~ClusterChainIterator() {}
+        virtual ~ClusterChainIterator() {}
 
-				uint32_t currentSectorNumber();
-				void reset(uint32_t firstClusterNumber_);
+        uint32_t currentSectorNumber();
+        void reset(uint32_t firstClusterNumber_);
 
-				// overrides from Iterator
+        // overrides from Iterator
 
-				virtual bool next() override;
-				virtual uint32_t current() override;
-		};
+        virtual bool next() override;
+        virtual uint32_t current() override;
+    };
 
-	}
+  }
 }
 
 

@@ -18,7 +18,7 @@ namespace stm32plus {
    * Dma 1, channel 7 interrupt feature
    */
 
-	typedef DmaInterruptFeature<1,7> Dma1Channel7InterruptFeature;
+  typedef DmaInterruptFeature<1,7> Dma1Channel7InterruptFeature;
 
   // typedefs for the peripherals that use this channel
 

@@ -12,10 +12,10 @@
  */
 
 ImageManager::ImageManager(LcdManager& lcdManager,BitmapManager& bmManager,BlockDevice& bd)
-	: Initialiser(lcdManager),
-	  _bmManager(bmManager),
-	  _blockDevice(bd),
-	  _imageTransition(_lcdManager.getLcd(),bd) {
+  : Initialiser(lcdManager),
+    _bmManager(bmManager),
+    _blockDevice(bd),
+    _imageTransition(_lcdManager.getLcd(),bd) {
 }
 
 
@@ -25,9 +25,9 @@ ImageManager::ImageManager(LcdManager& lcdManager,BitmapManager& bmManager,Block
 
 bool ImageManager::initialise()
 {
-	_currentImage=0;
+  _currentImage=0;
 
-	return drawFullImage();
+  return drawFullImage();
 }
 
 
@@ -37,34 +37,34 @@ bool ImageManager::initialise()
 
 bool ImageManager::drawFullImage() {
 
-	uint32_t blockIndex,i;
-	uint16_t blocks[512];
+  uint32_t blockIndex,i;
+  uint16_t blocks[512];
 
-	// get the first block. There are two blocks per scan line.
+  // get the first block. There are two blocks per scan line.
 
-	blockIndex=_bmManager.getFirstBlockIndex(_currentImage);
+  blockIndex=_bmManager.getFirstBlockIndex(_currentImage);
 
-	// get the display device
+  // get the display device
 
-	LcdManager::LcdAccess& lcd=_lcdManager.getLcd();
+  LcdManager::LcdAccess& lcd=_lcdManager.getLcd();
 
-	lcd.moveTo(lcd.getFullScreenRectangle());
-	lcd.beginWriting();
+  lcd.moveTo(lcd.getFullScreenRectangle());
+  lcd.beginWriting();
 
-	for(i=blockIndex;i<blockIndex+640;i+=2) {
+  for(i=blockIndex;i<blockIndex+640;i+=2) {
 
-		// read the 2 blocks (one scan)
+    // read the 2 blocks (one scan)
 
-		if(!_blockDevice.readBlocks(blocks,i,2))
-			return false;
+    if(!_blockDevice.readBlocks(blocks,i,2))
+      return false;
 
-		// write to the device
+    // write to the device
 
-		lcd.rawTransfer(blocks,120);               // 120 pixels are here (480 bytes in one 512b sector)
-		lcd.rawTransfer(&blocks[256],120);         // and the next 120 are here
-	}
+    lcd.rawTransfer(blocks,120);               // 120 pixels are here (480 bytes in one 512b sector)
+    lcd.rawTransfer(&blocks[256],120);         // and the next 120 are here
+  }
 
-	return true;
+  return true;
 }
 
 
@@ -74,16 +74,16 @@ bool ImageManager::drawFullImage() {
 
 void ImageManager::nextImage() {
 
-	// advance and wrap if we have to
+  // advance and wrap if we have to
 
-	if(_currentImage==_bmManager.getImageCount()-1)
-		_currentImage=0;
-	else
-		_currentImage++;
+  if(_currentImage==_bmManager.getImageCount()-1)
+    _currentImage=0;
+  else
+    _currentImage++;
 
-	// show the current image
+  // show the current image
 
-	showImage();
+  showImage();
 }
 
 
@@ -93,13 +93,13 @@ void ImageManager::nextImage() {
 
 void ImageManager::showImage() {
 
-	// set the new image
+  // set the new image
 
-	_imageTransition.setNewImageBlockIndex(_bmManager.getFirstBlockIndex(_currentImage));
+  _imageTransition.setNewImageBlockIndex(_bmManager.getFirstBlockIndex(_currentImage));
 
-	// start the timeline
+  // start the timeline
 
-	_imageTransition.start();
+  _imageTransition.start();
 }
 
 
@@ -108,5 +108,5 @@ void ImageManager::showImage() {
  */
 
 ImageTransitionAnimator& ImageManager::getAnimator() {
-	return _imageTransition;
+  return _imageTransition;
 }

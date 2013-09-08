@@ -8,17 +8,17 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Empty generic class definition for LDS285 colour-dependent operations
-		 * Everything is provided in the specialisations.
-		 */
+    /**
+     * Empty generic class definition for LDS285 colour-dependent operations
+     * Everything is provided in the specialisations.
+     */
 
-		template<ColourDepth TColour,class TAccessMode,class TPanelTraits>
-		class LDS285Colour;
-	}
+    template<ColourDepth TColour,class TAccessMode,class TPanelTraits>
+    class LDS285Colour;
+  }
 }
 
 

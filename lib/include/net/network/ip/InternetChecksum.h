@@ -8,33 +8,33 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		class IpPacketHeader;
-		class UdpDatagram;
+    class IpPacketHeader;
+    class UdpDatagram;
 
 
-		/**
-		 * Utility class to do the IP checksum algorithm
-		 */
+    /**
+     * Utility class to do the IP checksum algorithm
+     */
 
-		class InternetChecksum {
+    class InternetChecksum {
 
-			protected:
+      protected:
 
-				struct PseudoHeader {
-					IpAddress sourceAddress;
-					IpAddress destinationAddress;
-					uint8_t zero;
-					IpProtocol protocol;
-					uint16_t length;
-				};
+        struct PseudoHeader {
+          IpAddress sourceAddress;
+          IpAddress destinationAddress;
+          uint8_t zero;
+          IpProtocol protocol;
+          uint16_t length;
+        };
 
-			protected:
-				static void sumit(const void *vptr,uint16_t length,uint32_t& sum);
+      protected:
+        static void sumit(const void *vptr,uint16_t length,uint32_t& sum);
 
-			public:
-				static void calculate(const IpAddress& sourceAddress,const IpAddress& destinationAddress,NetBuffer& nb);
-		};
-	}
+      public:
+        static void calculate(const IpAddress& sourceAddress,const IpAddress& destinationAddress,NetBuffer& nb);
+    };
+  }
 }

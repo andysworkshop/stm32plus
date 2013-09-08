@@ -9,10 +9,10 @@
 
 namespace stm32plus {
 
-	/**
-	 * base class for FSMC implementations
-	 * @tparam TBankIdentifier FSMC_Bank1_NORSRAM1 etc...
-	 */
+  /**
+   * base class for FSMC implementations
+   * @tparam TBankIdentifier FSMC_Bank1_NORSRAM1 etc...
+   */
 
-	template<uint32_t TBankIdentifier> class FsmcPeripheral;
+  template<uint32_t TBankIdentifier> class FsmcPeripheral;
 }

@@ -13,7 +13,7 @@
  * The FSMC is not available on the F105 and F107 devices.
  */
 
-#if defined(STM32PLUS_F1_CL)			// the 105/107 do not have SDIO
+#if defined(STM32PLUS_F1_CL)      // the 105/107 do not have SDIO
 #error The FSMC is not available on the F105/F107
 #endif
 
@@ -32,7 +32,7 @@
 #if defined(STM32PLUS_F1)
   #include "fsmc/f1/FsmcPeripheral.h"
 #elif defined(STM32PLUS_F4)
-	#include "fsmc/f4/FsmcAlternateFunctionMapper.h"
+  #include "fsmc/f4/FsmcAlternateFunctionMapper.h"
   #include "fsmc/f4/FsmcPeripheral.h"
 #endif
 

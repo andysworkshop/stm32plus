@@ -8,29 +8,29 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-	/**
-	 * @brief Iterator for directory entries in the Fat16 root directory.
-	 *
-	 * The Fat16 root directory is a contiguous block of sectors.
-	 */
+  /**
+   * @brief Iterator for directory entries in the Fat16 root directory.
+   *
+   * The Fat16 root directory is a contiguous block of sectors.
+   */
 
-		class Fat16RootDirectoryEntryIterator : public DirectoryEntryIterator {
+    class Fat16RootDirectoryEntryIterator : public DirectoryEntryIterator {
 
-			protected:
-				uint32_t _currentIndex;
-				uint32_t _firstEntryInCurrentSector;
-				uint32_t _entriesPerSector;
+      protected:
+        uint32_t _currentIndex;
+        uint32_t _firstEntryInCurrentSector;
+        uint32_t _entriesPerSector;
         uint32_t _rootDirMaxEntries;
-				Memblock<uint8_t> _currentSector;
+        Memblock<uint8_t> _currentSector;
 
-			protected:
-				uint32_t entryOffsetInSector(uint32_t entryIndex) const;
-				bool isEntryInCurrentSector() const;
-				uint32_t sectorIndexForEntry(uint32_t entryIndex) const;
-				bool readSectorForEntry(uint32_t entryIndex);
-				
+      protected:
+        uint32_t entryOffsetInSector(uint32_t entryIndex) const;
+        bool isEntryInCurrentSector() const;
+        uint32_t sectorIndexForEntry(uint32_t entryIndex) const;
+        bool readSectorForEntry(uint32_t entryIndex);
+        
       // overrides from DirectoryEntryIterator
 
         virtual bool internalNext() override;
@@ -48,20 +48,20 @@ namespace stm32plus {
 
         enum {
 
-        	/// The root directory is full
+          /// The root directory is full
           E_ROOT_DIRECTORY_FULL = 1
         };
 
-			public:
-				Fat16RootDirectoryEntryIterator(FatFileSystem& fs_,Options options_);
+      public:
+        Fat16RootDirectoryEntryIterator(FatFileSystem& fs_,Options options_);
 
-				/**
-				 * Virtual destructor. Does nothing
-				 */
+        /**
+         * Virtual destructor. Does nothing
+         */
 
-				virtual ~Fat16RootDirectoryEntryIterator() {}
-		};
+        virtual ~Fat16RootDirectoryEntryIterator() {}
+    };
 
-	}
+  }
 }
 

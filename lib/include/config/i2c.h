@@ -39,7 +39,7 @@
 // includes for the alternate function mappings
 
 #if defined(STM32PLUS_F4)
-	#include "i2c/f4/I2CAlternateFunctionMapper.h"
+  #include "i2c/f4/I2CAlternateFunctionMapper.h"
 #endif
 
 // generic peripheral includes
@@ -58,11 +58,11 @@
 
 #if defined(STM32PLUS_F4)
 
-	#define USE_I2C3_INTERRUPT
+  #define USE_I2C3_INTERRUPT
 
-	#include "i2c/features/f4/I2CInterruptFeature.h"
+  #include "i2c/features/f4/I2CInterruptFeature.h"
 
-	#include "i2c/f4/I2C2Remap.h"
-	#include "i2c/f4/I2C3.h"
+  #include "i2c/f4/I2C2Remap.h"
+  #include "i2c/f4/I2C3.h"
 
 #endif

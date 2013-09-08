@@ -7,11 +7,11 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace ReadMemoryStartCmd {
-			enum {
-				Opcode=0x2E
-			};
-		}
-	}
+  namespace ili9327 {
+    namespace ReadMemoryStartCmd {
+      enum {
+        Opcode=0x2E
+      };
+    }
+  }
 }

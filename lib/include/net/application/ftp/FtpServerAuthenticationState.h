@@ -8,17 +8,17 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * The client's authentication state
-		 */
+    /**
+     * The client's authentication state
+     */
 
-		enum class FtpServerAuthenticationState : uint8_t {
-			STARTING,						///< The server is starting up
-			UNAUTHENTICATED,		///< The server is ready to get credentials
-			AUTHENTICATED  			///< The user has authenticated
-		};
-	}
+    enum class FtpServerAuthenticationState : uint8_t {
+      STARTING,           ///< The server is starting up
+      UNAUTHENTICATED,    ///< The server is ready to get credentials
+      AUTHENTICATED       ///< The user has authenticated
+    };
+  }
 }

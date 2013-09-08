@@ -8,28 +8,28 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief Gamma values for the LDS285
-		 *
-		 * This device support 4 fixed gamma curves, so we just need a word
-		 * to hold the index of the current curve
-		 */
+    /**
+     * @brief Gamma values for the LDS285
+     *
+     * This device support 4 fixed gamma curves, so we just need a word
+     * to hold the index of the current curve
+     */
 
-		class LDS285Gamma : public DisplayDeviceGamma {
+    class LDS285Gamma : public DisplayDeviceGamma {
 
-			public:
+      public:
 
-			/**
-			 * Constructor. The LDS285 takes 1 gamma value index. The constructor must be supplied with that value
-			 * that can range between 0..3
-			 */
+      /**
+       * Constructor. The LDS285 takes 1 gamma value index. The constructor must be supplied with that value
+       * that can range between 0..3
+       */
 
-				LDS285Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
-					_gamma[0]=gammaIndex;
-				}
-		};
+        LDS285Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
+          _gamma[0]=gammaIndex;
+        }
+    };
 
-	}
+  }
 }

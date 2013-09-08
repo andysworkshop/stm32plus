@@ -5,22 +5,22 @@
  */
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * HTTP method constants
-		 */
+    /**
+     * HTTP method constants
+     */
 
-		enum class HttpMethod : uint8_t {
-			OPTIONS,		//!< OPTIONS
-			GET,    		//!< GET
-			HEAD,   		//!< HEAD
-			POST,   		//!< POST
-			PUT,    		//!< PUT
-			DELETE, 		//!< DELETE
-			TRACE,  		//!< TRACE
-			CONNECT 		//!< CONNECT
-		};
-	}
+    enum class HttpMethod : uint8_t {
+      OPTIONS,    //!< OPTIONS
+      GET,        //!< GET
+      HEAD,       //!< HEAD
+      POST,       //!< POST
+      PUT,        //!< PUT
+      DELETE,     //!< DELETE
+      TRACE,      //!< TRACE
+      CONNECT     //!< CONNECT
+    };
+  }
 }

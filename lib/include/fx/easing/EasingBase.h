@@ -8,46 +8,46 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/**
-		 * Base class for easing functions
-		 */
+    /**
+     * Base class for easing functions
+     */
 
-		class EasingBase {
+    class EasingBase {
 
-			protected:
-				double _change;
-				double _duration;
+      protected:
+        double _change;
+        double _duration;
 
-			public:
-				/// default constructor
-				EasingBase();
-				virtual ~EasingBase() {}
+      public:
+        /// default constructor
+        EasingBase();
+        virtual ~EasingBase() {}
 
-				/**
-				 * Ease a transition in
-				 * @param[in] time_ The time to do the transition.
-				 */
+        /**
+         * Ease a transition in
+         * @param[in] time_ The time to do the transition.
+         */
 
-				virtual double easeIn(double time_) const=0;
+        virtual double easeIn(double time_) const=0;
 
-				/**
-				 * Ease a transition out.
-				 * @param[in] time_ The time to do the transition.
-				 */
+        /**
+         * Ease a transition out.
+         * @param[in] time_ The time to do the transition.
+         */
 
-				virtual double easeOut(double time_) const=0;
+        virtual double easeOut(double time_) const=0;
 
-				/**
-				 * Ease a transition in and out.
-				 * @param[in] time_ The time to do the transition.
-				 */
+        /**
+         * Ease a transition in and out.
+         * @param[in] time_ The time to do the transition.
+         */
 
-				virtual double easeInOut(double time_) const=0;
+        virtual double easeInOut(double time_) const=0;
 
-				void setDuration(double duration_);
-				void setTotalChangeInPosition(double totalChangeInPosition_);
-		};
-	}
+        void setDuration(double duration_);
+        void setTotalChangeInPosition(double totalChangeInPosition_);
+    };
+  }
 }

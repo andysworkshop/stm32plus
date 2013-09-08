@@ -10,126 +10,126 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor.
-	 * @param[in] original The original string. This string is not modified.
-	 * @param[in] separators The token separators.
-	 */
+  /**
+   * Constructor.
+   * @param[in] original The original string. This string is not modified.
+   * @param[in] separators The token separators.
+   */
 
-	TokenisedString::TokenisedString(const char *original,const char *separators) {
+  TokenisedString::TokenisedString(const char *original,const char *separators) {
 
-		char *ptr,*current;
-		int i;
+    char *ptr,*current;
+    int i;
 
-	// count tokens
+  // count tokens
 
-		_numTokens=0;
-		_first=0;
-		_last=-1;
-		_tokens=nullptr;
+    _numTokens=0;
+    _first=0;
+    _last=-1;
+    _tokens=nullptr;
 
-		if(original==nullptr)
-			return;
+    if(original==nullptr)
+      return;
 
-		ptr=strdup(original);
-		current=strtok(ptr,separators);
+    ptr=strdup(original);
+    current=strtok(ptr,separators);
 
-		while(current!=nullptr) {
-			_numTokens++;
-			current=strtok(nullptr,separators);
-		}
-		free(ptr);
+    while(current!=nullptr) {
+      _numTokens++;
+      current=strtok(nullptr,separators);
+    }
+    free(ptr);
 
-	// anything?
+  // anything?
 
-		if(_numTokens==0)
-			return;
+    if(_numTokens==0)
+      return;
 
-	// allocate
+  // allocate
 
-		_tokens=new char *[_numTokens];
+    _tokens=new char *[_numTokens];
 
-	// parse again
+  // parse again
 
-		ptr=strdup(original);
-		current=strtok(ptr,separators);
-		i=0;
+    ptr=strdup(original);
+    current=strtok(ptr,separators);
+    i=0;
 
-		while(current!=nullptr) {
-			_tokens[i++]=strdup(current);
-			current=strtok(nullptr,separators);
-		}
-		free(ptr);
+    while(current!=nullptr) {
+      _tokens[i++]=strdup(current);
+      current=strtok(nullptr,separators);
+    }
+    free(ptr);
 
-		_last=_numTokens-1;
-	}
-
-
-	/**
-	 * Destructor. Free memory used by tokens.
-	 */
-
-	TokenisedString::~TokenisedString() {
-
-		int i;
-
-		if(_numTokens>0) {
-			for(i=0;i<_numTokens;i++)
-				free(_tokens[i]);
-
-			delete [] _tokens;
-		}
-	}
-
-	/**
-	 * Get the number of tokens, taking into account the range if set.
-	 * @return The number of tokens.
-	 */
-
-	int TokenisedString::getNumTokens() const {
-		return (_last-_first)+1;
-	}
+    _last=_numTokens-1;
+  }
 
 
-	/**
-	 * Get a token, taking into account the range if set.
-	 * @param[in] pos The token index to get.
-	 * @return An internal pointer to the token.
-	 */
+  /**
+   * Destructor. Free memory used by tokens.
+   */
 
-	const char *TokenisedString::operator[](int pos) const {
-		return _tokens[_first+pos];
-	}
+  TokenisedString::~TokenisedString() {
 
+    int i;
 
-	/**
-	 * Return the last entry.
-	 * @return The last token.
-	 */
+    if(_numTokens>0) {
+      for(i=0;i<_numTokens;i++)
+        free(_tokens[i]);
 
-	const char *TokenisedString::last() const {
-		return _tokens[_last];
-	}
+      delete [] _tokens;
+    }
+  }
 
+  /**
+   * Get the number of tokens, taking into account the range if set.
+   * @return The number of tokens.
+   */
 
-	/**
-	 * Limit the range of tokens returned so that the caller can only see a subset of all the tokens.
-	 * @param[in] first The first token in the range.
-	 * @param[in] last The last token in the range.
-	 */
-
-	void TokenisedString::setRange(int first,int last) {
-		_first=first;
-		_last=last;
-	}
+  int TokenisedString::getNumTokens() const {
+    return (_last-_first)+1;
+  }
 
 
-	/**
-	 * Clear the range parameters.
-	 */
+  /**
+   * Get a token, taking into account the range if set.
+   * @param[in] pos The token index to get.
+   * @return An internal pointer to the token.
+   */
 
-	void TokenisedString::resetRange() {
-		_first=0;
-		_last=_numTokens-1;
-	}
+  const char *TokenisedString::operator[](int pos) const {
+    return _tokens[_first+pos];
+  }
+
+
+  /**
+   * Return the last entry.
+   * @return The last token.
+   */
+
+  const char *TokenisedString::last() const {
+    return _tokens[_last];
+  }
+
+
+  /**
+   * Limit the range of tokens returned so that the caller can only see a subset of all the tokens.
+   * @param[in] first The first token in the range.
+   * @param[in] last The last token in the range.
+   */
+
+  void TokenisedString::setRange(int first,int last) {
+    _first=first;
+    _last=last;
+  }
+
+
+  /**
+   * Clear the range parameters.
+   */
+
+  void TokenisedString::resetRange() {
+    _first=0;
+    _last=_numTokens-1;
+  }
 }

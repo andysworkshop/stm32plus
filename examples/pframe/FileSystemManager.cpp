@@ -12,7 +12,7 @@
  */
 
 FileSystemManager::FileSystemManager(LcdManager& lcdManager)
-	: Initialiser(lcdManager) {
+  : Initialiser(lcdManager) {
 }
 
 
@@ -22,26 +22,26 @@ FileSystemManager::FileSystemManager(LcdManager& lcdManager)
 
 bool FileSystemManager::initialise() {
 
-	_term.writeString("Initialising SD card.\n");
+  _term.writeString("Initialising SD card.\n");
 
-	// create the SDIO block device - the constructor will attempt to deduce the optimum
-	// clock dividers for initialisation and data transfer
+  // create the SDIO block device - the constructor will attempt to deduce the optimum
+  // clock dividers for initialisation and data transfer
 
-	_sdcard=new SdioDmaSdCard;
-	if(errorProvider.getLast()!=0)
-		return error("Failed to init SD card");
+  _sdcard=new SdioDmaSdCard;
+  if(errorProvider.getLast()!=0)
+    return error("Failed to init SD card");
 
-	// attach the block device to the file system
+  // attach the block device to the file system
 
-	_term.writeString("Initialising file system.\n");
+  _term.writeString("Initialising file system.\n");
 
-	_cachedBlockDevice=new CachedBlockDevice(*_sdcard,4);
+  _cachedBlockDevice=new CachedBlockDevice(*_sdcard,4);
 
-	if(!FileSystem::getInstance(*_cachedBlockDevice,*new NullTimeProvider,_fs))
-		return error("Failed to init file system");
+  if(!FileSystem::getInstance(*_cachedBlockDevice,*new NullTimeProvider,_fs))
+    return error("Failed to init file system");
 
-	readImageCacheStatus();
-	return true;
+  readImageCacheStatus();
+  return true;
 }
 
 
@@ -53,27 +53,27 @@ bool FileSystemManager::initialise() {
 
 void FileSystemManager::readImageCacheStatus() {
 
-	DirectoryIterator *it;
+  DirectoryIterator *it;
 
-	// preset for not-set
+  // preset for not-set
 
-	_imagesAreCached=false;
+  _imagesAreCached=false;
 
-	// iterate the pframe directory
+  // iterate the pframe directory
 
-	if(!_fs->getDirectoryIterator("/pframe",it))
-		return;
+  if(!_fs->getDirectoryIterator("/pframe",it))
+    return;
 
-	while(it->next()) {
+  while(it->next()) {
 
-		if(!strncasecmp("cacheloc-",it->current().getFilename(),9)) {
-			_firstCacheBlock=atoi(it->current().getFilename()+9);
-			_imagesAreCached=true;
-			break;
-		}
-	}
+    if(!strncasecmp("cacheloc-",it->current().getFilename(),9)) {
+      _firstCacheBlock=atoi(it->current().getFilename()+9);
+      _imagesAreCached=true;
+      break;
+    }
+  }
 
-	delete it;
+  delete it;
 }
 
 
@@ -83,42 +83,42 @@ void FileSystemManager::readImageCacheStatus() {
 
 bool FileSystemManager::allocateBlocks(uint32_t imageCount) {
 
-	uint32_t blocksRequired,blocksPerCluster,clustersRequired,firstCluster;
-	char buffer[50];
+  uint32_t blocksRequired,blocksPerCluster,clustersRequired,firstCluster;
+  char buffer[50];
 
-	// the filesystem is required to be FATxx so this is safe
+  // the filesystem is required to be FATxx so this is safe
 
-	fat::FatFileSystem& fs=(fat::FatFileSystem&)*_fs;
-	fat::LinearFreeClusterFinder finder(fs);
+  fat::FatFileSystem& fs=(fat::FatFileSystem&)*_fs;
+  fat::LinearFreeClusterFinder finder(fs);
 
-	// status
+  // status
 
-	_term.writeString("Allocating image cache.\n");
+  _term.writeString("Allocating image cache.\n");
 
-	// get the number of clusters required for the buffer
+  // get the number of clusters required for the buffer
 
-	blocksRequired=2*320*imageCount;
-	blocksPerCluster=fs.getBootSector().BPB_SecPerClus;
-	clustersRequired=blocksRequired/blocksPerCluster;
+  blocksRequired=2*320*imageCount;
+  blocksPerCluster=fs.getBootSector().BPB_SecPerClus;
+  clustersRequired=blocksRequired/blocksPerCluster;
 
-	if(blocksRequired % blocksPerCluster!=0)
-		clustersRequired++;
+  if(blocksRequired % blocksPerCluster!=0)
+    clustersRequired++;
 
-	// ask the FS for the first cluster of a sequential free block
-	// long enough for our buffer
+  // ask the FS for the first cluster of a sequential free block
+  // long enough for our buffer
 
-	if(!finder.findMultipleSequential(clustersRequired,firstCluster))
-		return error("Not enough free space on card");
+  if(!finder.findMultipleSequential(clustersRequired,firstCluster))
+    return error("Not enough free space on card");
 
-	// convert the cluster number to a block number
+  // convert the cluster number to a block number
 
-	_firstCacheBlock=fs.clusterToSector(firstCluster)+_fs->getFirstSector();
+  _firstCacheBlock=fs.clusterToSector(firstCluster)+_fs->getFirstSector();
 
-	// write the cache
+  // write the cache
 
-	strcpy(buffer,"/pframe/cacheloc-");
-	StringUtil::itoa(_firstCacheBlock,buffer+17,10);
+  strcpy(buffer,"/pframe/cacheloc-");
+  StringUtil::itoa(_firstCacheBlock,buffer+17,10);
 
-	_fs->createFile(buffer);
-	return true;
+  _fs->createFile(buffer);
+  return true;
 }

@@ -9,26 +9,26 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a debug message.
-		 */
+    /**
+     * Event descriptor for a debug message.
+     */
 
-		struct NetworkDebugEvent : NetEventDescriptor {
+    struct NetworkDebugEvent : NetEventDescriptor {
 
-			const char *message;
+      const char *message;
 
-			/**
-			 * Constructor
-			 * @param msg Message to send
-			 */
+      /**
+       * Constructor
+       * @param msg Message to send
+       */
 
-			NetworkDebugEvent(const char *msg)
-				: NetEventDescriptor(NetEventDescriptor::NetEventType::DEBUG_MESSAGE),
-				  message(msg) {
-			}
-		};
-	}
+      NetworkDebugEvent(const char *msg)
+        : NetEventDescriptor(NetEventDescriptor::NetEventType::DEBUG_MESSAGE),
+          message(msg) {
+      }
+    };
+  }
 }

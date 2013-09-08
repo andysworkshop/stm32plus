@@ -8,36 +8,36 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * TCP connection closed event. This event signifies that the remote end has closed and will
-		 * not be sending any more data. It is legal to send data to the remote end in this state but
-		 * most likely you'll want to delete your TcpConnection object, thereby closing your end and
-		 * cleaning up.
-		 */
+    /**
+     * TCP connection closed event. This event signifies that the remote end has closed and will
+     * not be sending any more data. It is legal to send data to the remote end in this state but
+     * most likely you'll want to delete your TcpConnection object, thereby closing your end and
+     * cleaning up.
+     */
 
-		class TcpConnection;
+    class TcpConnection;
 
-		struct TcpConnectionClosedEvent : NetEventDescriptor {
+    struct TcpConnectionClosedEvent : NetEventDescriptor {
 
-			/**
-			 * Reference to the TCP connection object.
-			 */
+      /**
+       * Reference to the TCP connection object.
+       */
 
-			TcpConnection& connection;
+      TcpConnection& connection;
 
 
-			/**
-			 * Constructor
-			 * @param The connection reference
-			 */
+      /**
+       * Constructor
+       * @param The connection reference
+       */
 
-			TcpConnectionClosedEvent(TcpConnection& c)
-				: NetEventDescriptor(NetEventDescriptor::NetEventType::TCP_CONNECTION_CLOSED),
-				  connection(c) {
-			}
-		};
-	}
+      TcpConnectionClosedEvent(TcpConnection& c)
+        : NetEventDescriptor(NetEventDescriptor::NetEventType::TCP_CONNECTION_CLOSED),
+          connection(c) {
+      }
+    };
+  }
 }

@@ -8,49 +8,49 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Base class for free cluster finders
-		 */
+    /**
+     * @brief Base class for free cluster finders
+     */
 
-		class FreeClusterFinder {
-			protected:
-				FatFileSystem& _fs;
+    class FreeClusterFinder {
+      protected:
+        FatFileSystem& _fs;
 
-			protected:
-				FreeClusterFinder(FatFileSystem& fs);
+      protected:
+        FreeClusterFinder(FatFileSystem& fs);
 
-			public:
+      public:
 
-				/**
-				 * Error codes
-				 */
+        /**
+         * Error codes
+         */
 
-				enum {
-					/// The disk is full. There are no more free clusters available.
-					E_NO_FREE_CLUSTERS=1
-				};
-
-
-				/**
-				 * Virtual destructor. Does nothing
-				 */
-
-				virtual ~FreeClusterFinder() {
-				}
+        enum {
+          /// The disk is full. There are no more free clusters available.
+          E_NO_FREE_CLUSTERS=1
+        };
 
 
-				/**
-				 * Derivations of this class must implement this. Finds the next free cluster and
-				 * returns it to the client in the freeCluster_ reference.
-				 *
-				 * @param[in] freeCluster_ The next free cluster.
-				 * @return false if it fails, check error provider for details.
-				 */
+        /**
+         * Virtual destructor. Does nothing
+         */
 
-				virtual bool find(uint32_t& freeCluster)=0;
-		};
+        virtual ~FreeClusterFinder() {
+        }
 
-	}
+
+        /**
+         * Derivations of this class must implement this. Finds the next free cluster and
+         * returns it to the client in the freeCluster_ reference.
+         *
+         * @param[in] freeCluster_ The next free cluster.
+         * @return false if it fails, check error provider for details.
+         */
+
+        virtual bool find(uint32_t& freeCluster)=0;
+    };
+
+  }
 }

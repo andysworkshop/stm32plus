@@ -9,26 +9,26 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor that announces that the DHCP release
-		 * is due for renewal
-		 */
+    /**
+     * Event descriptor that announces that the DHCP release
+     * is due for renewal
+     */
 
-		struct DhcpRenewalDueEvent : NetEventDescriptor {
+    struct DhcpRenewalDueEvent : NetEventDescriptor {
 
-			/**
-			 * The expiry time expressed as an RTC time in ticks. This is a time, not an offset.
-			 */
+      /**
+       * The expiry time expressed as an RTC time in ticks. This is a time, not an offset.
+       */
 
-			uint32_t renewalTime;
+      uint32_t renewalTime;
 
-			DhcpRenewalDueEvent(uint32_t rt)
-				: NetEventDescriptor(NetEventType::DHCP_RENEWAL_DUE),
-				  renewalTime(rt) {
-			}
-		};
-	}
+      DhcpRenewalDueEvent(uint32_t rt)
+        : NetEventDescriptor(NetEventType::DHCP_RENEWAL_DUE),
+          renewalTime(rt) {
+      }
+    };
+  }
 }

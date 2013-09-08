@@ -8,18 +8,18 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Base class for Tcp that declares the events. Lifting this up gets us out of the trap
-		 * of circular dependencies.
-		 */
+    /**
+     * Base class for Tcp that declares the events. Lifting this up gets us out of the trap
+     * of circular dependencies.
+     */
 
-		DECLARE_EVENT_SIGNATURE(TcpReceive,void (TcpSegmentEvent&));
+    DECLARE_EVENT_SIGNATURE(TcpReceive,void (TcpSegmentEvent&));
 
-		struct TcpEvents {
-			DECLARE_EVENT_SOURCE(TcpReceive);
-		};
-	}
+    struct TcpEvents {
+      DECLARE_EVENT_SOURCE(TcpReceive);
+    };
+  }
 }

@@ -15,76 +15,76 @@
 
 namespace stm32plus {
 
-	/**
-	 * Recursive initialisation of feature classes defined using variadic templates.
-	 * This initialiser has a parameters class and returns bool
-	 * Here's the forward definition
-	 */
+  /**
+   * Recursive initialisation of feature classes defined using variadic templates.
+   * This initialiser has a parameters class and returns bool
+   * Here's the forward definition
+   */
 
-	template<class F,class... T>
-	struct RecursiveBoolInitWithParams;
+  template<class F,class... T>
+  struct RecursiveBoolInitWithParams;
 
-	/**
-	 * Recursion termination condition, always return success
-	 */
+  /**
+   * Recursion termination condition, always return success
+   */
 
-	template<class F>
-	struct RecursiveBoolInitWithParams<F> {
-		static bool tinit(F *,typename F::Parameters&) {
-			return true;
-		}
-	};
-
-
-	/**
-	 * General recursive initialiser
-	 */
-
-	template<class F,class T,class... G>
-	struct RecursiveBoolInitWithParams<F,T,G...> {
-		static bool tinit(F *ptr,typename F::Parameters& p) {
-
-			if(!ptr->T::initialise(p))
-				return false;
-
-			return RecursiveBoolInitWithParams<F,G...>::tinit(ptr,p);
-		}
-	};
+  template<class F>
+  struct RecursiveBoolInitWithParams<F> {
+    static bool tinit(F *,typename F::Parameters&) {
+      return true;
+    }
+  };
 
 
-	/**
-	 * Recursive startup of feature classes defined using variadic templates.
-	 * This initialiser returns bool
-	 * Here's the forward definition
-	 */
+  /**
+   * General recursive initialiser
+   */
 
-	template<class F,class... T>
-	struct RecursiveBoolStartup;
+  template<class F,class T,class... G>
+  struct RecursiveBoolInitWithParams<F,T,G...> {
+    static bool tinit(F *ptr,typename F::Parameters& p) {
 
-	/**
-	 * Recursion termination condition, always return success
-	 */
+      if(!ptr->T::initialise(p))
+        return false;
 
-	template<class F>
-	struct RecursiveBoolStartup<F> {
-		static bool tstartup(F *) {
-			return true;
-		}
-	};
+      return RecursiveBoolInitWithParams<F,G...>::tinit(ptr,p);
+    }
+  };
 
 
-	/**
-	 * General recursive initialiser
-	 */
+  /**
+   * Recursive startup of feature classes defined using variadic templates.
+   * This initialiser returns bool
+   * Here's the forward definition
+   */
 
-	template<class F,class T,class... G>
-	struct RecursiveBoolStartup<F,T,G...> {
-		static bool tstartup(F *ptr) {
+  template<class F,class... T>
+  struct RecursiveBoolStartup;
 
-			if(!ptr->T::startup())
-				return false;
+  /**
+   * Recursion termination condition, always return success
+   */
 
-			return RecursiveBoolStartup<F,G...>::tstartup(ptr);
-		}
-	};
+  template<class F>
+  struct RecursiveBoolStartup<F> {
+    static bool tstartup(F *) {
+      return true;
+    }
+  };
+
+
+  /**
+   * General recursive initialiser
+   */
+
+  template<class F,class T,class... G>
+  struct RecursiveBoolStartup<F,T,G...> {
+    static bool tstartup(F *ptr) {
+
+      if(!ptr->T::startup())
+        return false;
+
+      return RecursiveBoolStartup<F,G...>::tstartup(ptr);
+    }
+  };
 }

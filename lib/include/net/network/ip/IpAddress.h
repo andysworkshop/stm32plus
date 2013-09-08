@@ -9,197 +9,197 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * IP address structure
-		 */
+    /**
+     * IP address structure
+     */
 
-		struct IpAddress {
-			union {
-				uint32_t ipAddress;								// big-endian. 192.0.2.235 = 0xC00002EB
-				uint8_t ipAddressBytes[4];				// e.g. 0xC0 0x00 0x02 0xEB
-			};
-
-
-			/**
-			 * Constructor, ensure address is zero when we start up
-			 */
-
-			IpAddress() : ipAddress(0) {
-			}
+    struct IpAddress {
+      union {
+        uint32_t ipAddress;               // big-endian. 192.0.2.235 = 0xC00002EB
+        uint8_t ipAddressBytes[4];        // e.g. 0xC0 0x00 0x02 0xEB
+      };
 
 
-			/**
-			 * Copy constructor - ensure this gets done with a single word copy
-			 * @param src
-			 */
+      /**
+       * Constructor, ensure address is zero when we start up
+       */
 
-			IpAddress(const IpAddress& src) {
-				ipAddress=src.ipAddress;
-			}
+      IpAddress() : ipAddress(0) {
+      }
 
 
-			/**
-			 * Construct from a dotted IP address
-			 * @param dottedIp The a.b.c.d address
-			 */
+      /**
+       * Copy constructor - ensure this gets done with a single word copy
+       * @param src
+       */
 
-			IpAddress(const char *dottedIp) {
-				operator=(dottedIp);
-			}
-
-
-			/**
-			 * Check if this is a valid (non-zero) address
-			 */
-
-			bool isValid() const {
-				return ipAddress!=0;
-			}
+      IpAddress(const IpAddress& src) {
+        ipAddress=src.ipAddress;
+      }
 
 
-			/**
-			 * Check if this is the broadcast address 255.255.255.255
-			 * @return true if it is the broadcast address
-			 */
+      /**
+       * Construct from a dotted IP address
+       * @param dottedIp The a.b.c.d address
+       */
 
-			bool isBroadcast() const {
-				return ipAddress==0xFFFFFFFF;
-			}
-
-
-			/**
-			 * Check if this is the all-hosts multicast group (224.0.0.1)
-			 * @return true if it matches
-			 */
-
-			bool isAllHostsMulticastGroup() const {
-				return ipAddress==0x010000E0;
-			}
+      IpAddress(const char *dottedIp) {
+        operator=(dottedIp);
+      }
 
 
-			/**
-			 * Check if this is an address in any of the host groups
-			 */
+      /**
+       * Check if this is a valid (non-zero) address
+       */
 
-			bool isMulticastGroup() const {
-				return NetUtil::ntohl(ipAddress)>=0xE0000001 && NetUtil::ntohl(ipAddress)<=0xEFFFFFFF;
-			}
-
-
-			/**
-			 * Invalidate this address
-			 */
-
-			void invalidate() {
-				ipAddress=0;
-			}
+      bool isValid() const {
+        return ipAddress!=0;
+      }
 
 
-			/**
-			 * Equality operator
-			 */
+      /**
+       * Check if this is the broadcast address 255.255.255.255
+       * @return true if it is the broadcast address
+       */
 
-			bool operator==(const IpAddress& rhs) const {
-				return ipAddress==rhs.ipAddress;
-			}
-			bool operator!=(const IpAddress& rhs) const {
-				return !operator==(rhs);
-			}
+      bool isBroadcast() const {
+        return ipAddress==0xFFFFFFFF;
+      }
 
 
-			/**
-			 * Set up from a dotted quad "a.b.c.d". The format is not error checked.
-			 * @param addr The dotted quad address
-			 * @return a self reference
-			 */
+      /**
+       * Check if this is the all-hosts multicast group (224.0.0.1)
+       * @return true if it matches
+       */
 
-			IpAddress& operator=(const char *addr) {
-
-				uint8_t *ptr,index;
-
-				index=0;
-				ptr=ipAddressBytes;
-				*ptr=0;
-
-				while(index<4 && *addr) {
-
-					if(isdigit(*addr))
-						*ptr=(*ptr*10)+(*addr)-'0';
-					else if(*addr=='.') {
-						ptr++;
-						*ptr=0;
-					}
-
-					addr++;
-				}
-
-				return *this;
-			}
+      bool isAllHostsMulticastGroup() const {
+        return ipAddress==0x010000E0;
+      }
 
 
-			/**
-			 * Assignment
-			 * @param rhs Copy source
-			 * @return self reference
-			 */
+      /**
+       * Check if this is an address in any of the host groups
+       */
 
-			IpAddress& operator=(const IpAddress& rhs) {
-				ipAddress=rhs.ipAddress;
-				return *this;
-			}
+      bool isMulticastGroup() const {
+        return NetUtil::ntohl(ipAddress)>=0xE0000001 && NetUtil::ntohl(ipAddress)<=0xEFFFFFFF;
+      }
 
 
-			/**
-			 * Assign 127.0.0.1 to this address
-			 */
+      /**
+       * Invalidate this address
+       */
 
-			void setLocalhost() {
-				ipAddress=0x7f000001;
-			}
-
-
-			/**
-			 * Check if this IP address is localhost
-			 * @return true if it is localhost
-			 */
-
-			bool isLocalhost() const {
-				return ipAddress==0x7f000001;
-			}
+      void invalidate() {
+        ipAddress=0;
+      }
 
 
-			/**
-			 * Check if this IP address is on the local class A network (127.X.X.X)
-			 * @return true if it's on the local net
-			 */
+      /**
+       * Equality operator
+       */
 
-			bool isLocalNetwork() const {
-				return ipAddressBytes[0]==127;
-			}
+      bool operator==(const IpAddress& rhs) const {
+        return ipAddress==rhs.ipAddress;
+      }
+      bool operator!=(const IpAddress& rhs) const {
+        return !operator==(rhs);
+      }
 
 
-			/**
-			 * Write to a user-supplied buffer as A.B.C.D
-			 * @param buffer Where to write
-			 */
+      /**
+       * Set up from a dotted quad "a.b.c.d". The format is not error checked.
+       * @param addr The dotted quad address
+       * @return a self reference
+       */
 
-			void toString(char *buffer) const {
+      IpAddress& operator=(const char *addr) {
 
-				uint8_t i;
+        uint8_t *ptr,index;
 
-				for(i=0;i<4;i++) {
+        index=0;
+        ptr=ipAddressBytes;
+        *ptr=0;
 
-					StringUtil::modp_uitoa10(ipAddressBytes[i],buffer);
-					buffer+=strlen(buffer);
+        while(index<4 && *addr) {
 
-					if(i!=3)
-						*buffer++='.';
-				}
-			}
+          if(isdigit(*addr))
+            *ptr=(*ptr*10)+(*addr)-'0';
+          else if(*addr=='.') {
+            ptr++;
+            *ptr=0;
+          }
 
-		} __attribute__((packed));
-	}
+          addr++;
+        }
+
+        return *this;
+      }
+
+
+      /**
+       * Assignment
+       * @param rhs Copy source
+       * @return self reference
+       */
+
+      IpAddress& operator=(const IpAddress& rhs) {
+        ipAddress=rhs.ipAddress;
+        return *this;
+      }
+
+
+      /**
+       * Assign 127.0.0.1 to this address
+       */
+
+      void setLocalhost() {
+        ipAddress=0x7f000001;
+      }
+
+
+      /**
+       * Check if this IP address is localhost
+       * @return true if it is localhost
+       */
+
+      bool isLocalhost() const {
+        return ipAddress==0x7f000001;
+      }
+
+
+      /**
+       * Check if this IP address is on the local class A network (127.X.X.X)
+       * @return true if it's on the local net
+       */
+
+      bool isLocalNetwork() const {
+        return ipAddressBytes[0]==127;
+      }
+
+
+      /**
+       * Write to a user-supplied buffer as A.B.C.D
+       * @param buffer Where to write
+       */
+
+      void toString(char *buffer) const {
+
+        uint8_t i;
+
+        for(i=0;i<4;i++) {
+
+          StringUtil::modp_uitoa10(ipAddressBytes[i],buffer);
+          buffer+=strlen(buffer);
+
+          if(i!=3)
+            *buffer++='.';
+        }
+      }
+
+    } __attribute__((packed));
+  }
 }

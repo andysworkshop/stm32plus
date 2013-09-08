@@ -10,20 +10,20 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace PowerSettingNormalModeCmd
-		{
-			enum
-			{
-				Opcode = 0xD2
-			};
+  namespace ili9481
+  {
+    namespace PowerSettingNormalModeCmd
+    {
+      enum
+      {
+        Opcode = 0xD2
+      };
 
-			inline uint16_t AP(uint16_t n) { return n; }
-			inline uint16_t DC(uint16_t n) { return n; }
-			inline uint16_t DC10(uint16_t n) { return n<<4; }
-		}
-	}
+      inline uint16_t AP(uint16_t n) { return n; }
+      inline uint16_t DC(uint16_t n) { return n; }
+      inline uint16_t DC10(uint16_t n) { return n<<4; }
+    }
+  }
 }
 
 

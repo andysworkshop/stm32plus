@@ -11,52 +11,52 @@
 namespace stm32plus {
 
 
-	class Gpio;
+  class Gpio;
 
-	/**
-	 * Base class for the GpioPort template class
-	 */
+  /**
+   * Base class for the GpioPort template class
+   */
 
-	class GpioPortBase {
+  class GpioPortBase {
 
-		public:
-			Gpio *_pinHandlers[16];
-			GPIO_TypeDef *_peripheralAddress;
+    public:
+      Gpio *_pinHandlers[16];
+      GPIO_TypeDef *_peripheralAddress;
 
-		public:
-			GpioPortBase(GPIO_TypeDef *peripheralAddress);
+    public:
+      GpioPortBase(GPIO_TypeDef *peripheralAddress);
 
-			void setPinHandler(uint8_t index,Gpio *pinHandler);
-			GPIO_TypeDef * getPeripheralAddress() const;
-	};
-
-
-	/**
-	 * Constructor
-	 * @param peripheralAddress
-	 */
-
-	inline GpioPortBase::GpioPortBase(GPIO_TypeDef *peripheralAddress)
-		: _peripheralAddress(peripheralAddress) {
-	}
+      void setPinHandler(uint8_t index,Gpio *pinHandler);
+      GPIO_TypeDef * getPeripheralAddress() const;
+  };
 
 
-	/**
-	 * Set the pin handler for the pin at a given position
-	 * @param index The position (0..15)
-	 * @param pinHandler The handler for that position
-	 */
+  /**
+   * Constructor
+   * @param peripheralAddress
+   */
 
-	inline void GpioPortBase::setPinHandler(uint8_t index,Gpio *pinHandler) {
-		_pinHandlers[index]=pinHandler;
-	}
+  inline GpioPortBase::GpioPortBase(GPIO_TypeDef *peripheralAddress)
+    : _peripheralAddress(peripheralAddress) {
+  }
 
 
-	/**
-	 * Cast to the GPIO peripheral address
-	 */
+  /**
+   * Set the pin handler for the pin at a given position
+   * @param index The position (0..15)
+   * @param pinHandler The handler for that position
+   */
 
-	inline GPIO_TypeDef *GpioPortBase::getPeripheralAddress() const {
-		return _peripheralAddress;
-	}
+  inline void GpioPortBase::setPinHandler(uint8_t index,Gpio *pinHandler) {
+    _pinHandlers[index]=pinHandler;
+  }
+
+
+  /**
+   * Cast to the GPIO peripheral address
+   */
+
+  inline GPIO_TypeDef *GpioPortBase::getPeripheralAddress() const {
+    return _peripheralAddress;
+  }
 }

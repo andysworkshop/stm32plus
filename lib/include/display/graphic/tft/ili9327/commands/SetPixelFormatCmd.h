@@ -7,13 +7,13 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace SetPixelFormatCmd {
-			enum {
-				Opcode=0x3A,
+  namespace ili9327 {
+    namespace SetPixelFormatCmd {
+      enum {
+        Opcode=0x3A,
 
-				COLOURS_8=0x11, COLOURS_64K=0x55, COLOURS_262K=0x66
-			};
-		}
-	}
+        COLOURS_8=0x11, COLOURS_64K=0x55, COLOURS_262K=0x66
+      };
+    }
+  }
 }

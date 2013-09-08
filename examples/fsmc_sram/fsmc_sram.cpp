@@ -23,8 +23,8 @@ using namespace stm32plus;
  * then a LED attached to PF6 will be flashed for 500ms.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -32,122 +32,122 @@ using namespace stm32plus;
 
 class FsmcSramTest  {
 
-	protected:
+  protected:
 
-		/**
-		 * The pin number of the LED
-		 */
+    /**
+     * The pin number of the LED
+     */
 
-		enum { LED_PIN = 6 };
+    enum { LED_PIN = 6 };
 
-		/**
-		 * The SRAM and FSMC location typedef
-		 */
+    /**
+     * The SRAM and FSMC location typedef
+     */
 
-		typedef IS61LV25616<FsmcBank1NorSram3> MySram;
+    typedef IS61LV25616<FsmcBank1NorSram3> MySram;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
 
-			// initialise the SRAM
+      // initialise the SRAM
 
-			MySram sram(MySram::TEN_NS);
+      MySram sram(MySram::TEN_NS);
 
-			// lights off (this LED is active low, i.e. PF6 is a sink)
+      // lights off (this LED is active low, i.e. PF6 is a sink)
 
-			pf[6].set();
+      pf[6].set();
 
-			for(;;) {
-				testDirect(pf[LED_PIN]);
-				testStream(sram,pf[LED_PIN]);
-			}
-		}
-
-
-		/**
-		 * Test by directly accessing the memory locations
-		 */
-
-		void testDirect(GpioPinRef led) {
-
-			uint32_t i;
-			uint16_t *ptr;
-
-			// write a pattern
-
-			ptr=FsmcBank1NorSram3::getBaseAddress<uint16_t>();
-			for(i=0;i<MySram::SIZE_IN_BYTES/2;i++)
-				*ptr++=0xaa55;
-
-			// read it back
-
-			ptr=FsmcBank1NorSram3::getBaseAddress<uint16_t>();
-			for(i=0;i<MySram::SIZE_IN_BYTES/2;i++)
-				if(*ptr++!=0xaa55)
-					for(;;);									// lock up
-
-			// switch the LED on and off for 500ms
-
-			led.reset();
-			MillisecondTimer::delay(500);
-			led.set();
-			MillisecondTimer::delay(500);
-		}
+      for(;;) {
+        testDirect(pf[LED_PIN]);
+        testStream(sram,pf[LED_PIN]);
+      }
+    }
 
 
-		/**
-		 * Test by accessing as a stream. This test writes out a string repeatedly
-		 * until the SRAM is full and then reads it back to make sure it's good.
-		 */
+    /**
+     * Test by directly accessing the memory locations
+     */
 
-		void testStream(MySram& sram,GpioPinRef led) {
+    void testDirect(GpioPinRef led) {
 
-			int32_t available;
-			uint32_t actuallyRead;
-			char buffer[28];
+      uint32_t i;
+      uint16_t *ptr;
 
-			{
-				// initialise a buffered output stream on to the memory
+      // write a pattern
 
-				BlockDeviceOutputStream os(sram,0,true);
+      ptr=FsmcBank1NorSram3::getBaseAddress<uint16_t>();
+      for(i=0;i<MySram::SIZE_IN_BYTES/2;i++)
+        *ptr++=0xaa55;
 
-				// write out a pattern to the stream
+      // read it back
 
-				for(available=MySram::SIZE_IN_BYTES;available>=27;available-=27)
-					os.write("Hello world, this is a test",27);			// 27 bytes
-			}
+      ptr=FsmcBank1NorSram3::getBaseAddress<uint16_t>();
+      for(i=0;i<MySram::SIZE_IN_BYTES/2;i++)
+        if(*ptr++!=0xaa55)
+          for(;;);                  // lock up
 
-			// initialise an input stream on to the memory
+      // switch the LED on and off for 500ms
 
-			BlockDeviceInputStream is(sram,0);
+      led.reset();
+      MillisecondTimer::delay(500);
+      led.set();
+      MillisecondTimer::delay(500);
+    }
 
-			// read back the data
 
-			buffer[27]='\0';
+    /**
+     * Test by accessing as a stream. This test writes out a string repeatedly
+     * until the SRAM is full and then reads it back to make sure it's good.
+     */
 
-			for(available=MySram::SIZE_IN_BYTES;available>=27;available-=27) {
+    void testStream(MySram& sram,GpioPinRef led) {
 
-				// get 27 bytes from the stream
+      int32_t available;
+      uint32_t actuallyRead;
+      char buffer[28];
 
-				if(!is.read(buffer,27,actuallyRead) || actuallyRead!=27)
-					for(;;);
+      {
+        // initialise a buffered output stream on to the memory
 
-				// ensure it's what we expect
+        BlockDeviceOutputStream os(sram,0,true);
 
-				if(strcmp(buffer,"Hello world, this is a test")!=0)
-					for(;;);
-			}
+        // write out a pattern to the stream
 
-			// switch the LED on and off for 500ms
+        for(available=MySram::SIZE_IN_BYTES;available>=27;available-=27)
+          os.write("Hello world, this is a test",27);     // 27 bytes
+      }
 
-			led.reset();
-			MillisecondTimer::delay(500);
-			led.set();
-			MillisecondTimer::delay(500);
-		}
+      // initialise an input stream on to the memory
+
+      BlockDeviceInputStream is(sram,0);
+
+      // read back the data
+
+      buffer[27]='\0';
+
+      for(available=MySram::SIZE_IN_BYTES;available>=27;available-=27) {
+
+        // get 27 bytes from the stream
+
+        if(!is.read(buffer,27,actuallyRead) || actuallyRead!=27)
+          for(;;);
+
+        // ensure it's what we expect
+
+        if(strcmp(buffer,"Hello world, this is a test")!=0)
+          for(;;);
+      }
+
+      // switch the LED on and off for 500ms
+
+      led.reset();
+      MillisecondTimer::delay(500);
+      led.set();
+      MillisecondTimer::delay(500);
+    }
 };
 
 
@@ -157,12 +157,12 @@ class FsmcSramTest  {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	FsmcSramTest test;
-	test.run();
+  FsmcSramTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

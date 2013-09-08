@@ -10,20 +10,20 @@
 
 namespace stm32plus {
 
-	/**
-	 * Default Constructor, set the current position to zero.
-	 */
+  /**
+   * Default Constructor, set the current position to zero.
+   */
 
-	File::File() {
-		_offset=0;
-	}
+  File::File() {
+    _offset=0;
+  }
 
-	/**
-	 * Get the current offset
-	 * @return The current file offset.
-	 */
+  /**
+   * Get the current offset
+   * @return The current file offset.
+   */
 
-	uint32_t File::getOffset() const {
-		return _offset;
-	}
+  uint32_t File::getOffset() const {
+    return _offset;
+  }
 }

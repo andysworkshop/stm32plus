@@ -27,7 +27,7 @@ extern "C" {
  */
 
 #if defined(USE_DMA1_4_INTERRUPT)
-	void __attribute__ ((interrupt("IRQ"))) DMA1_Channel4_IRQHandler() {
+  void __attribute__ ((interrupt("IRQ"))) DMA1_Channel4_IRQHandler() {
 
     if(DMA_GetITStatus(DMA1_IT_TC4)!=RESET) {
       DmaInterruptFeature<1,4>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_COMPLETE);
@@ -41,7 +41,7 @@ extern "C" {
       DmaInterruptFeature<1,4>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_TRANSFER_ERROR);
       DMA_ClearITPendingBit(DMA1_IT_TE4);
     }
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }
 #endif
 

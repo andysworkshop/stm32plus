@@ -9,54 +9,54 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Abstract base class for output streams.
-	 *
-	 * An output stream gives you the ability to write data sequentially
-	 * to a device.
-	 */
+  /**
+   * @brief Abstract base class for output streams.
+   *
+   * An output stream gives you the ability to write data sequentially
+   * to a device.
+   */
 
-	class OutputStream : public StreamBase {
+  class OutputStream : public StreamBase {
 
-		protected:
-			OutputStream& opWrite(void *buffer,uint32_t bufferSize);
+    protected:
+      OutputStream& opWrite(void *buffer,uint32_t bufferSize);
 
-		public:
-			virtual ~OutputStream() {}
+    public:
+      virtual ~OutputStream() {}
 
-			// some convenience operators when you don't care about errors or endian-ness
+      // some convenience operators when you don't care about errors or endian-ness
 
-			OutputStream& operator<<(int8_t c);
-			OutputStream& operator<<(int16_t c);
-			OutputStream& operator<<(int32_t c);
-			OutputStream& operator<<(uint8_t c);
-			OutputStream& operator<<(uint16_t c);
-			OutputStream& operator<<(uint32_t c);
-			OutputStream& operator<<(const char *string);
+      OutputStream& operator<<(int8_t c);
+      OutputStream& operator<<(int16_t c);
+      OutputStream& operator<<(int32_t c);
+      OutputStream& operator<<(uint8_t c);
+      OutputStream& operator<<(uint16_t c);
+      OutputStream& operator<<(uint32_t c);
+      OutputStream& operator<<(const char *string);
 
-			/**
-			 * Write a byte to the stream.
-			 * @param[in] c The byte to write.
-			 * @return false if it fails.
-			 */
+      /**
+       * Write a byte to the stream.
+       * @param[in] c The byte to write.
+       * @return false if it fails.
+       */
 
-			virtual bool write(uint8_t c)=0;
+      virtual bool write(uint8_t c)=0;
 
-			/**
-			 * Write a buffer of data to the stream.
-			 * @param[in] buffer The buffer of data to write.
-			 * @param[in] size The number of bytes to write.
-			 * @return false if the write fails.
-			 */
+      /**
+       * Write a buffer of data to the stream.
+       * @param[in] buffer The buffer of data to write.
+       * @param[in] size The number of bytes to write.
+       * @return false if the write fails.
+       */
 
-			virtual bool write(const void *buffer,uint32_t size)=0;
+      virtual bool write(const void *buffer,uint32_t size)=0;
 
-			/**
-			 * Flush any cached data to the stream. If the stream does not support
-			 * caching then it returns true.
-			 * @return false if it fails.
-			 */
+      /**
+       * Flush any cached data to the stream. If the stream does not support
+       * caching then it returns true.
+       * @return false if it fails.
+       */
 
-			virtual bool flush()=0;
-	};
+      virtual bool flush()=0;
+  };
 }

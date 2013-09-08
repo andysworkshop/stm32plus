@@ -8,58 +8,58 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * This template contains generic operations
-		 */
+    /**
+     * This template contains generic operations
+     */
 
-		template<class TImpl>
-		class SpiFlashDevice {
+    template<class TImpl>
+    class SpiFlashDevice {
 
-			public:
+      public:
 
-				/**
-				 * Error codes
-				 */
+        /**
+         * Error codes
+         */
 
-				enum {
-					E_TIMED_OUT = 1			//!< Timed out while performing an operation
-				};
+        enum {
+          E_TIMED_OUT = 1     //!< Timed out while performing an operation
+        };
 
-			public:
-				bool waitForIdle(uint32_t timeoutMillis=0) const;
-		};
+      public:
+        bool waitForIdle(uint32_t timeoutMillis=0) const;
+    };
 
 
-		/**
-		 * Wait for the status register to clear the BUSY bit
-		 * @param timeoutMillis Maximum time to wait, or zero to wait forever
-		 * @return true if it worked
-		 */
+    /**
+     * Wait for the status register to clear the BUSY bit
+     * @param timeoutMillis Maximum time to wait, or zero to wait forever
+     * @return true if it worked
+     */
 
-		template<class TImpl>
-		inline bool SpiFlashDevice<TImpl>::waitForIdle(uint32_t timeoutMillis) const {
+    template<class TImpl>
+    inline bool SpiFlashDevice<TImpl>::waitForIdle(uint32_t timeoutMillis) const {
 
-			uint8_t sr;
-			uint32_t start;
+      uint8_t sr;
+      uint32_t start;
 
-			if(timeoutMillis)
-				start=MillisecondTimer::millis();
+      if(timeoutMillis)
+        start=MillisecondTimer::millis();
 
-			for(;;) {
+      for(;;) {
 
-				if(!static_cast<const TImpl *>(this)->readStatusRegister(sr))
-					return false;
+        if(!static_cast<const TImpl *>(this)->readStatusRegister(sr))
+          return false;
 
-				if((sr & TImpl::STATUS_BUSY_BIT_MASK)==0)
-					return true;
+        if((sr & TImpl::STATUS_BUSY_BIT_MASK)==0)
+          return true;
 
-				if(timeoutMillis && MillisecondTimer::hasTimedOut(start,timeoutMillis))
-					return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SPI_FLASH,E_TIMED_OUT);
-			}
-		}
-	}
+        if(timeoutMillis && MillisecondTimer::hasTimedOut(start,timeoutMillis))
+          return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SPI_FLASH,E_TIMED_OUT);
+      }
+    }
+  }
 }
 

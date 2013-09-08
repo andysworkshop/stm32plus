@@ -10,12 +10,12 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor
-	 * @param[in] pathname_ The pathname to tokenise.
-	 */
+  /**
+   * Constructor
+   * @param[in] pathname_ The pathname to tokenise.
+   */
 
-	TokenisedPathname::TokenisedPathname(const char *pathname_) :
-		TokenisedString(pathname_,"\\/") {
-	}
+  TokenisedPathname::TokenisedPathname(const char *pathname_) :
+    TokenisedString(pathname_,"\\/") {
+  }
 }

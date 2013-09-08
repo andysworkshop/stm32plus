@@ -7,15 +7,15 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace ColourModeCmd {
-			enum {
-				Opcode=0x17,
+  namespace hx8347 {
+    namespace ColourModeCmd {
+      enum {
+        Opcode=0x17,
 
-				COLOURS_64K = 0x55,
-				COLOURS_262K = 0x66
-			};
-		}
-	}
+        COLOURS_64K = 0x55,
+        COLOURS_262K = 0x66
+      };
+    }
+  }
 }
 

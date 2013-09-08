@@ -14,394 +14,394 @@
 
 namespace stm32plus {
 
-	/**
-	 * BACKUP
-	 */
+  /**
+   * BACKUP
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_BACKUP> {
+  template<>
+  struct ClockControl<PERIPHERAL_BACKUP> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_BKP,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_BKP,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_BKP,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_BKP,DISABLE);
+    }
+  };
 
-	/**
-	 * CRC
-	 */
+  /**
+   * CRC
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_CRC> {
+  template<>
+  struct ClockControl<PERIPHERAL_CRC> {
 
-		static void On() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC,ENABLE);
-		}
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC,ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC,DISABLE);
+    }
+  };
 
-	/**
-	 * DMA1
-	 */
+  /**
+   * DMA1
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_DMA1> {
+  template<>
+  struct ClockControl<PERIPHERAL_DMA1> {
 
-		static void On() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
-		}
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,DISABLE);
+    }
+  };
 
-	/**
-	 * DMA2
-	 */
+  /**
+   * DMA2
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_DMA2> {
+  template<>
+  struct ClockControl<PERIPHERAL_DMA2> {
 
-		static void On() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2,ENABLE);
-		}
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2,ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA2,DISABLE);
+    }
+  };
 
-#if !defined(STM32PLUS_F1_CL)			// the 105/107 do not have the FSMC
+#if !defined(STM32PLUS_F1_CL)     // the 105/107 do not have the FSMC
 
-	/**
-	 * FSMC
-	 */
+  /**
+   * FSMC
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_FSMC> {
+  template<>
+  struct ClockControl<PERIPHERAL_FSMC> {
 
-		static void On() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC,ENABLE);
-			RCC_AHBPeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-		}
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC,ENABLE);
+      RCC_AHBPeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_FSMC,DISABLE);
+    }
+  };
 
 #endif
 
-	/**
-	 * I2S2
-	 */
+  /**
+   * I2S2
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_I2S2> {
+  template<>
+  struct ClockControl<PERIPHERAL_I2S2> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI2,DISABLE);
+    }
+  };
 
-	/**
-	 * I2S3
-	 */
+  /**
+   * I2S3
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_I2S3> {
+  template<>
+  struct ClockControl<PERIPHERAL_I2S3> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,DISABLE);
+    }
+  };
 
-	/**
-	 * POWER
-	 */
+  /**
+   * POWER
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_POWER> {
+  template<>
+  struct ClockControl<PERIPHERAL_POWER> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR | RCC_APB1Periph_BKP,DISABLE);
+    }
+  };
 
-	/**
-	 * SPI1
-	 */
+  /**
+   * SPI1
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_SPI1> {
+  template<>
+  struct ClockControl<PERIPHERAL_SPI1> {
 
-		static void On() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_AFIO,ENABLE);
-		}
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_AFIO,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
+    }
+  };
 
-	/**
-	 * SPI1_REMAP
-	 */
+  /**
+   * SPI1_REMAP
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_SPI1_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_SPI1_REMAP> {
 
-		static void On() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_AFIO,ENABLE);
-			GPIO_PinRemapConfig(GPIO_Remap_SPI1,ENABLE);
-		}
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_AFIO,ENABLE);
+      GPIO_PinRemapConfig(GPIO_Remap_SPI1,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
+    }
+  };
 
-	/**
-	 * SPI3_REMAP
-	 */
+  /**
+   * SPI3_REMAP
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_SPI3_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_SPI3_REMAP> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
-			GPIO_PinRemapConfig(GPIO_Remap_SPI3,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
+      GPIO_PinRemapConfig(GPIO_Remap_SPI3,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,DISABLE);
+    }
+  };
 
-	/**
-	 * USART1
-	 */
+  /**
+   * USART1
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART1> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART1> {
 
-		static void On() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO,ENABLE);
-		}
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,DISABLE);
+    }
+  };
 
-	/**
-	 * USART1
-	 */
+  /**
+   * USART1
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART1_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART1_REMAP> {
 
-		static void On() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO,ENABLE);
-			GPIO_PinRemapConfig(GPIO_Remap_USART1,ENABLE);
-		}
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO,ENABLE);
+      GPIO_PinRemapConfig(GPIO_Remap_USART1,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,DISABLE);
+    }
+  };
 
-	/**
-	 * USART2
-	 */
+  /**
+   * USART2
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART2> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART2> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,DISABLE);
+    }
+  };
 
-	/**
-	 * USART2
-	 */
+  /**
+   * USART2
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART2_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART2_REMAP> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
-			GPIO_PinRemapConfig(GPIO_Remap_USART2,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
+      GPIO_PinRemapConfig(GPIO_Remap_USART2,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,DISABLE);
+    }
+  };
 
-	/**
-	 * USART3
-	 */
+  /**
+   * USART3
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART3> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART3> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
+    }
+  };
 
-	/**
-	 * USART3 full remap
-	 */
+  /**
+   * USART3 full remap
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART3_FULL_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART3_FULL_REMAP> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
-			GPIO_PinRemapConfig(GPIO_FullRemap_USART3,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
+      GPIO_PinRemapConfig(GPIO_FullRemap_USART3,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
+    }
+  };
 
-	/**
-	 * USART3 partial remap
-	 */
+  /**
+   * USART3 partial remap
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_USART3_PARTIAL_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_USART3_PARTIAL_REMAP> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
-			GPIO_PinRemapConfig(GPIO_PartialRemap_USART3,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
+      GPIO_PinRemapConfig(GPIO_PartialRemap_USART3,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
+    }
+  };
 
-#if !defined(STM32PLUS_F1_CL)			// the 105/107 do not have SDIO
+#if !defined(STM32PLUS_F1_CL)     // the 105/107 do not have SDIO
 
-	/**
-	 * SDIO
-	 */
+  /**
+   * SDIO
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_SDIO> {
+  template<>
+  struct ClockControl<PERIPHERAL_SDIO> {
 
-		static void On() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_SDIO,ENABLE);
-		}
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_SDIO,ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_SDIO,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_SDIO,DISABLE);
+    }
+  };
 
 #endif
 
 
-	/**
-	 * UART4
-	 */
+  /**
+   * UART4
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_UART4> {
+  template<>
+  struct ClockControl<PERIPHERAL_UART4> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART4,DISABLE);
+    }
+  };
 
-	/**
-	 * UART5
-	 */
+  /**
+   * UART5
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_UART5> {
+  template<>
+  struct ClockControl<PERIPHERAL_UART5> {
 
-		static void On() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5,ENABLE);
-		}
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5,ENABLE);
+    }
 
-		static void Off() {
-			RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_UART5,DISABLE);
+    }
+  };
 
 
 #if defined(STM32PLUS_F1_CL_E)
 
-	/*
-	 * Ethernet MAC
-	 */
+  /*
+   * Ethernet MAC
+   */
 
-	template<>
-	struct ClockControl<PERIPHERAL_MAC> {
+  template<>
+  struct ClockControl<PERIPHERAL_MAC> {
 
-		// configure Tx, Rx
+    // configure Tx, Rx
 
-		static void On() {
-			RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
-		}
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,DISABLE);
+    }
+  };
 
-	template<>
-	struct ClockControl<PERIPHERAL_MAC_REMAP> {
+  template<>
+  struct ClockControl<PERIPHERAL_MAC_REMAP> {
 
-		// configure Tx, Rx
+    // configure Tx, Rx
 
-		static void On() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
-			GPIO_PinRemapConfig(GPIO_Remap_ETH, ENABLE);
-		}
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,ENABLE);
+      GPIO_PinRemapConfig(GPIO_Remap_ETH, ENABLE);
+    }
 
-		static void Off() {
-			RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,DISABLE);
-		}
-	};
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_ETH_MAC | RCC_AHBPeriph_ETH_MAC_Tx | RCC_AHBPeriph_ETH_MAC_Rx,DISABLE);
+    }
+  };
 
 #endif
 

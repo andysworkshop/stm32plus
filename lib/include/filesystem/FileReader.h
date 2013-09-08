@@ -10,116 +10,116 @@
 namespace stm32plus {
 
 
-	/**
-	 * Extension of FileInputStream to provide the facility to read lines
-	 * from a file. This is unbuffered, hence can be slow.
-	 */
+  /**
+   * Extension of FileInputStream to provide the facility to read lines
+   * from a file. This is unbuffered, hence can be slow.
+   */
 
-	class FileReader : public Reader {
+  class FileReader : public Reader {
 
-		protected:
-			FileInputStream _fis;
+    protected:
+      FileInputStream _fis;
 
-		public:
-			FileReader(File& file);
-			virtual ~FileReader() {}
+    public:
+      FileReader(File& file);
+      virtual ~FileReader() {}
 
-			// overrides from Reader
+      // overrides from Reader
 
-			virtual bool readLine(char *buffer,uint32_t maxLength) override;
+      virtual bool readLine(char *buffer,uint32_t maxLength) override;
 
-			// overrides from InputStream
+      // overrides from InputStream
 
-			virtual int16_t read() override;
-			virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
-			virtual bool close() override;
-			virtual bool skip(uint32_t howMuch) override;
-			virtual bool available() override;
-			virtual bool reset() override;
-	};
-
-
-	/**
-	 * Constructor
-	 * @param file The file to read from
-	 */
-
-	inline FileReader::FileReader(File& file)
-		: _fis(file) {
-	}
+      virtual int16_t read() override;
+      virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
+      virtual bool close() override;
+      virtual bool skip(uint32_t howMuch) override;
+      virtual bool available() override;
+      virtual bool reset() override;
+  };
 
 
-	/**
-	 * Read a line from the file
-	 * @param buffer Where to store the characters
-	 * @param maxLength The most to read, including a null
-	 * @return true if it worked, false for failure
-	 */
+  /**
+   * Constructor
+   * @param file The file to read from
+   */
 
-	inline bool FileReader::readLine(char *buffer,uint32_t maxLength) {
-
-		char *ptr;
-		int16_t c;
-
-		// set up pointer and decrease maxlength for the \0 terminator
-
-		ptr=buffer;
-		maxLength--;
-
-		for(;;) {
-
-			// get and check for error
-
-			if((c=_fis.read())==E_STREAM_ERROR)
-				return false;
-
-			// check for EOF or EOL
-
-			if(c==E_END_OF_STREAM || c=='\n')
-				break;
-
-			// store character if not a CR and there is space
-
-			if(c!='\r' && maxLength) {
-
-				*ptr++=c;
-				maxLength--;
-			}
-		}
-
-		// terminate the line
-
-		*ptr='\0';
-		return true;
-	}
+  inline FileReader::FileReader(File& file)
+    : _fis(file) {
+  }
 
 
-	/*
-	 * InputStream overrides deferred to the contained class
-	 */
+  /**
+   * Read a line from the file
+   * @param buffer Where to store the characters
+   * @param maxLength The most to read, including a null
+   * @return true if it worked, false for failure
+   */
 
-	inline int16_t FileReader::read() {
-		return _fis.read();
-	}
+  inline bool FileReader::readLine(char *buffer,uint32_t maxLength) {
 
-	inline bool FileReader::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
-		return _fis.read(buffer,size,actuallyRead);
-	}
+    char *ptr;
+    int16_t c;
 
-	inline bool FileReader::close() {
-		return _fis.close();
-	}
+    // set up pointer and decrease maxlength for the \0 terminator
 
-	inline bool FileReader::skip(uint32_t howMuch) {
-		return _fis.skip(howMuch);
-	}
+    ptr=buffer;
+    maxLength--;
 
-	inline bool FileReader::available() {
-		return _fis.available();
-	}
+    for(;;) {
 
-	inline bool FileReader::reset() {
-		return _fis.reset();
-	}
+      // get and check for error
+
+      if((c=_fis.read())==E_STREAM_ERROR)
+        return false;
+
+      // check for EOF or EOL
+
+      if(c==E_END_OF_STREAM || c=='\n')
+        break;
+
+      // store character if not a CR and there is space
+
+      if(c!='\r' && maxLength) {
+
+        *ptr++=c;
+        maxLength--;
+      }
+    }
+
+    // terminate the line
+
+    *ptr='\0';
+    return true;
+  }
+
+
+  /*
+   * InputStream overrides deferred to the contained class
+   */
+
+  inline int16_t FileReader::read() {
+    return _fis.read();
+  }
+
+  inline bool FileReader::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
+    return _fis.read(buffer,size,actuallyRead);
+  }
+
+  inline bool FileReader::close() {
+    return _fis.close();
+  }
+
+  inline bool FileReader::skip(uint32_t howMuch) {
+    return _fis.skip(howMuch);
+  }
+
+  inline bool FileReader::available() {
+    return _fis.available();
+  }
+
+  inline bool FileReader::reset() {
+    return _fis.reset();
+  }
 }
 

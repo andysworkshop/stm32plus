@@ -9,45 +9,45 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Abstract class defining how an input stream behaves.
-	 *
-	 * Input streams give you the ability to read data sequentially. The base
-	 * class supplies an implementation of the popular stream operators
-	 * << and >>. These should be used with care as error handling is
-	 * not easily implemented.
-	 */
+  /**
+   * @brief Abstract class defining how an input stream behaves.
+   *
+   * Input streams give you the ability to read data sequentially. The base
+   * class supplies an implementation of the popular stream operators
+   * << and >>. These should be used with care as error handling is
+   * not easily implemented.
+   */
 
-	class StreamBase {
+  class StreamBase {
 
-		protected:
-			virtual ~StreamBase() {}
+    protected:
+      virtual ~StreamBase() {}
 
-		public:
+    public:
 
-			/**
-			 * Error codes
-			 */
+      /**
+       * Error codes
+       */
 
-			enum {
-				/// End of stream has been reached
-				E_END_OF_STREAM=-1,
+      enum {
+        /// End of stream has been reached
+        E_END_OF_STREAM=-1,
 
-				/// An error occurred while reading from the stream
-				E_STREAM_ERROR=-2,
+        /// An error occurred while reading from the stream
+        E_STREAM_ERROR=-2,
 
-				/// The operation is not supported
-				E_OPERATION_NOT_SUPPORTED=-3
-			};
+        /// The operation is not supported
+        E_OPERATION_NOT_SUPPORTED=-3
+      };
 
-		public:
+    public:
 
-			/**
-			 * Close the stream. If the stream does not support the operation
-			 * then it returns true.
-			 * @return false if it fails.
-			 */
+      /**
+       * Close the stream. If the stream does not support the operation
+       * then it returns true.
+       * @return false if it fails.
+       */
 
-			virtual bool close()=0;
-	};
+      virtual bool close()=0;
+  };
 }

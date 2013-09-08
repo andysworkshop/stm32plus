@@ -9,37 +9,37 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Read event for a PHY. Sent as a notification by the physical layer PHY and
-		 * actioned in the datalink layer by the MAC. The interface to a PHY is via
-		 * 16-bit registers.
-		 */
+    /**
+     * Read event for a PHY. Sent as a notification by the physical layer PHY and
+     * actioned in the datalink layer by the MAC. The interface to a PHY is via
+     * 16-bit registers.
+     */
 
-		struct PhyReadRequestEvent : NetEventDescriptor {
+    struct PhyReadRequestEvent : NetEventDescriptor {
 
-			uint16_t phyAddress;					///< The station id of the PHY
-			uint16_t regNumber;						///< The register number to read
-			uint32_t timeoutMillis;				///< How long to wait in ms
+      uint16_t phyAddress;          ///< The station id of the PHY
+      uint16_t regNumber;           ///< The register number to read
+      uint32_t timeoutMillis;       ///< How long to wait in ms
 
-			bool succeeded;								///< set by the link layer to true if able to read
-			uint16_t result;							///< the result of the read if it was successful
+      bool succeeded;               ///< set by the link layer to true if able to read
+      uint16_t result;              ///< the result of the read if it was successful
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			PhyReadRequestEvent(uint16_t address,uint16_t rnum,uint32_t timeout)
-				: NetEventDescriptor(NetEventType::PHY_READ_REQUEST),
-				  phyAddress(address),
-				  regNumber(rnum),
-				  timeoutMillis(timeout) {
+      PhyReadRequestEvent(uint16_t address,uint16_t rnum,uint32_t timeout)
+        : NetEventDescriptor(NetEventType::PHY_READ_REQUEST),
+          phyAddress(address),
+          regNumber(rnum),
+          timeoutMillis(timeout) {
 
-				succeeded=false;
-			}
-		};
-	}
+        succeeded=false;
+      }
+    };
+  }
 }

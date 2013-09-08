@@ -7,16 +7,16 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace SetScrollStartCmd {
-			enum {
-				Opcode=0x37
+  namespace ili9327 {
+    namespace SetScrollStartCmd {
+      enum {
+        Opcode=0x37
 
-			};
+      };
 
-			inline uint16_t VSP(uint16_t n) {
-				return n;
-			}
-		}
-	}
+      inline uint16_t VSP(uint16_t n) {
+        return n;
+      }
+    }
+  }
 }

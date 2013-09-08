@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Page program command implementation
-		 */
+    /**
+     * Page program command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_PAGE_PROGRAM,uint8_t TAddressBytes=3>
-		struct PageProgram : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_PAGE_PROGRAM,uint8_t TAddressBytes=3>
+    struct PageProgram : Command<TSpi> {
 
-			/**
-			 * Provide a pageProgram() function for the derived class
-			 */
+      /**
+       * Provide a pageProgram() function for the derived class
+       */
 
-			bool pageProgram(uint32_t address,const void *data,uint32_t dataSize) const {
-				return this->writeCommand(TOpCode,address,TAddressBytes,0,data,dataSize);
-			}
-		};
-	}
+      bool pageProgram(uint32_t address,const void *data,uint32_t dataSize) const {
+        return this->writeCommand(TOpCode,address,TAddressBytes,0,data,dataSize);
+      }
+    };
+  }
 }

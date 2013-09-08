@@ -9,13 +9,13 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Tokenised pathname string: supports back and forward slash as separator
-	 */
+  /**
+   * @brief Tokenised pathname string: supports back and forward slash as separator
+   */
 
-	class TokenisedPathname : public TokenisedString {
-		public:
-			TokenisedPathname(const char *pathname_);
-			virtual ~TokenisedPathname() {}
-	};
+  class TokenisedPathname : public TokenisedString {
+    public:
+      TokenisedPathname(const char *pathname_);
+      virtual ~TokenisedPathname() {}
+  };
 }

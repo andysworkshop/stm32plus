@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace GRAMStartWritingCmd
-		{
-			enum
-			{
-				Opcode = 0x22
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace GRAMStartWritingCmd
+    {
+      enum
+      {
+        Opcode = 0x22
+      };
+    }
+  }
 }
 
 

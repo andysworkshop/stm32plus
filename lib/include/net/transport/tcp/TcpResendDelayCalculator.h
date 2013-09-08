@@ -8,93 +8,93 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * State management for the resend algorithm. This implements the algorithm in RFC2988 as
-		 * best we can here. Round-trip times are used to calculate an adaptive value that defines
-		 * how long to wait before a packet is considered lost and should be retransmitted for the
-		 * first time.
-		 */
+    /**
+     * State management for the resend algorithm. This implements the algorithm in RFC2988 as
+     * best we can here. Round-trip times are used to calculate an adaptive value that defines
+     * how long to wait before a packet is considered lost and should be retransmitted for the
+     * first time.
+     */
 
-		class TcpResendDelayCalculator {
+    class TcpResendDelayCalculator {
 
-			protected:
-				uint16_t _initialDelay;
-				uint16_t _maxDelay;
+      protected:
+        uint16_t _initialDelay;
+        uint16_t _maxDelay;
 
-				uint32_t _srtt;
-				uint32_t _rttvar;
-				uint32_t _timerStart;
-				bool _first;
+        uint32_t _srtt;
+        uint32_t _rttvar;
+        uint32_t _timerStart;
+        bool _first;
 
-			public:
-				bool initialise(uint16_t initialDelay,uint16_t maxDelay);
+      public:
+        bool initialise(uint16_t initialDelay,uint16_t maxDelay);
 
-				void startTimer();
-				void stopTimer();
+        void startTimer();
+        void stopTimer();
 
-				uint16_t getResendDelay() const;
-		};
-
-
-		/**
-		 * Initialise the class
-		 * @param initialDelay The first delay seconds
-		 * @param maxDelay The maximum delay seconds
-		 * @return true
-		 */
-
-		inline bool TcpResendDelayCalculator::initialise(uint16_t initialDelay,uint16_t maxDelay) {
-			_initialDelay=initialDelay;
-			_maxDelay=maxDelay;
-			return true;
-		}
+        uint16_t getResendDelay() const;
+    };
 
 
-		/**
-		 * Start the RTT timer
-		 */
+    /**
+     * Initialise the class
+     * @param initialDelay The first delay seconds
+     * @param maxDelay The maximum delay seconds
+     * @return true
+     */
 
-		inline void TcpResendDelayCalculator::startTimer() {
-			_timerStart=MillisecondTimer::millis();
-		}
-
-
-		/**
-		 * Stop the RTT timer and calculate the state variables
-		 */
-
-		inline void TcpResendDelayCalculator::stopTimer() {
-
-			uint32_t r;
-
-			r=MillisecondTimer::difference(_timerStart);
-
-			if(_first) {
-				_srtt=r;
-				_rttvar=r/2;
-				_first=false;
-			}
-			else {
-				_rttvar=((3*_rttvar)+Abs((int32_t)_srtt-(int32_t)r))/4;
-				_srtt=((7*_srtt)+r)/8;
-			}
-		}
+    inline bool TcpResendDelayCalculator::initialise(uint16_t initialDelay,uint16_t maxDelay) {
+      _initialDelay=initialDelay;
+      _maxDelay=maxDelay;
+      return true;
+    }
 
 
-		/**
-		 * Get the current resend delay, calculated from the state variables
-		 * @return the current resend delay
-		 */
+    /**
+     * Start the RTT timer
+     */
 
-		inline uint16_t TcpResendDelayCalculator::getResendDelay() const {
+    inline void TcpResendDelayCalculator::startTimer() {
+      _timerStart=MillisecondTimer::millis();
+    }
 
-			if(_first)
-				return _initialDelay;
 
-			return Min((uint32_t)_maxDelay,(_srtt+Max(1ul,4*_rttvar))/1000);
-		}
-	}
+    /**
+     * Stop the RTT timer and calculate the state variables
+     */
+
+    inline void TcpResendDelayCalculator::stopTimer() {
+
+      uint32_t r;
+
+      r=MillisecondTimer::difference(_timerStart);
+
+      if(_first) {
+        _srtt=r;
+        _rttvar=r/2;
+        _first=false;
+      }
+      else {
+        _rttvar=((3*_rttvar)+Abs((int32_t)_srtt-(int32_t)r))/4;
+        _srtt=((7*_srtt)+r)/8;
+      }
+    }
+
+
+    /**
+     * Get the current resend delay, calculated from the state variables
+     * @return the current resend delay
+     */
+
+    inline uint16_t TcpResendDelayCalculator::getResendDelay() const {
+
+      if(_first)
+        return _initialDelay;
+
+      return Min((uint32_t)_maxDelay,(_srtt+Max(1ul,4*_rttvar))/1000);
+    }
+  }
 }

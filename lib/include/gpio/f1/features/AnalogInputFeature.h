@@ -17,59 +17,59 @@
 namespace stm32plus {
 
 
-	/**
-	 * Template feature class to support initialisation of analog input pins on the F1.
-	 * Multiple pins can be initialised in one instantiation
-	 */
+  /**
+   * Template feature class to support initialisation of analog input pins on the F1.
+   * Multiple pins can be initialised in one instantiation
+   */
 
-	template<uint8_t... TPins>
-	class AnalogInputFeature : public Gpio {
+  template<uint8_t... TPins>
+  class AnalogInputFeature : public Gpio {
 
-		public:
+    public:
 
-		/**
-		 * Constructor
-		 * @param port the port reference
-		 */
+    /**
+     * Constructor
+     * @param port the port reference
+     */
 
-			AnalogInputFeature(GpioPortBase& port)
-				: Gpio(port) {
+      AnalogInputFeature(GpioPortBase& port)
+        : Gpio(port) {
 
-				uint32_t pins;
+        uint32_t pins;
 
-				// recurse to get the pin mask
+        // recurse to get the pin mask
 
-				pins=0;
-				GpioPinMerge<TPins...>(pins);
+        pins=0;
+        GpioPinMerge<TPins...>(pins);
 
-				// do the initialisation
+        // do the initialisation
 
-				initialise(pins);
-			}
+        initialise(pins);
+      }
 
 
-			/**
-			 * Alternative to template initialisation - initialise programatically
-			 * @param pinIds
-			 */
+      /**
+       * Alternative to template initialisation - initialise programatically
+       * @param pinIds
+       */
 
-			void initialise(uint16_t pinIds) {
+      void initialise(uint16_t pinIds) {
 
-				uint8_t i;
-				GPIO_InitTypeDef init;
+        uint8_t i;
+        GPIO_InitTypeDef init;
 
-				this->_pinIds=pinIds;
+        this->_pinIds=pinIds;
 
-				init.GPIO_Pin=pinIds;
-				init.GPIO_Mode=GPIO_Mode_AIN;
+        init.GPIO_Pin=pinIds;
+        init.GPIO_Mode=GPIO_Mode_AIN;
 
-				GPIO_Init(_peripheralAddress,&init);
+        GPIO_Init(_peripheralAddress,&init);
 
-				// set ourselves as the pin handler in the port base
+        // set ourselves as the pin handler in the port base
 
-				for(i=0;i<16;i++)
-					if((pinIds & (1<<i))!=0)
-						_portBase.setPinHandler(i,this);
-			}
-	};
+        for(i=0;i<16;i++)
+          if((pinIds & (1<<i))!=0)
+            _portBase.setPinHandler(i,this);
+      }
+  };
 }

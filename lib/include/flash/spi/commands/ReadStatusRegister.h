@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Read status register command implementation
-		 */
+    /**
+     * Read status register command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_READ_STATUS_REGISTER>
-		struct ReadStatusRegister : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_READ_STATUS_REGISTER>
+    struct ReadStatusRegister : Command<TSpi> {
 
-			/**
-			 * Provide a readStatusRegister() function for the derived class
-			 */
+      /**
+       * Provide a readStatusRegister() function for the derived class
+       */
 
-			bool readStatusRegister(uint8_t& sr) const {
-				return this->readCommand(TOpCode,0,0,0,&sr,1);
-			}
-		};
-	}
+      bool readStatusRegister(uint8_t& sr) const {
+        return this->readCommand(TOpCode,0,0,0,&sr,1);
+      }
+    };
+  }
 }

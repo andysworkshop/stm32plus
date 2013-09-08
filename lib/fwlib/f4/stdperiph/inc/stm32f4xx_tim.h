@@ -255,7 +255,7 @@ typedef struct
                           ((MODE) == TIM_OCMode_Inactive) || \
                           ((MODE) == TIM_OCMode_Toggle)|| \
                           ((MODE) == TIM_OCMode_PWM1) || \
-                          ((MODE) == TIM_OCMode_PWM2) ||	\
+                          ((MODE) == TIM_OCMode_PWM2) ||  \
                           ((MODE) == TIM_ForcedAction_Active) || \
                           ((MODE) == TIM_ForcedAction_InActive))
 /**
@@ -925,7 +925,7 @@ typedef struct
 #define TIM11_GPIO                         ((uint16_t)0x0000)
 #define TIM11_HSE                          ((uint16_t)0x0002)
 
-#define IS_TIM_REMAP(TIM_REMAP)	 (((TIM_REMAP) == TIM2_TIM8_TRGO)||\
+#define IS_TIM_REMAP(TIM_REMAP)  (((TIM_REMAP) == TIM2_TIM8_TRGO)||\
                                   ((TIM_REMAP) == TIM2_ETH_PTP)||\
                                   ((TIM_REMAP) == TIM2_USBFS_SOF)||\
                                   ((TIM_REMAP) == TIM2_USBHS_SOF)||\

@@ -9,29 +9,29 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Subclass of a file input stream that owns the file pointer
-	 * and will delete it when the stream is deleted
-	 */
+  /**
+   * @brief Subclass of a file input stream that owns the file pointer
+   * and will delete it when the stream is deleted
+   */
 
-	struct OwnedFileInputStream : FileInputStream {
+  struct OwnedFileInputStream : FileInputStream {
 
-		/**
-		 * Constructor
-		 * @param file The file pointer
-		 */
+    /**
+     * Constructor
+     * @param file The file pointer
+     */
 
-		OwnedFileInputStream(File *file) :
-			FileInputStream(*file) {
-		}
+    OwnedFileInputStream(File *file) :
+      FileInputStream(*file) {
+    }
 
 
-		/**
-		 * Destructor, delete the file pointer
-		 */
+    /**
+     * Destructor, delete the file pointer
+     */
 
-		virtual ~OwnedFileInputStream() {
-			delete &_file;
-		}
-	};
+    virtual ~OwnedFileInputStream() {
+      delete &_file;
+    }
+  };
 }

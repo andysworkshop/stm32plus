@@ -8,14 +8,14 @@
 
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace VcomControlCmd {
-			enum {
-				Opcode1=0x43,
-				Opcode2=0x44,
-				Opcode3=0x45
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace VcomControlCmd {
+      enum {
+        Opcode1=0x43,
+        Opcode2=0x44,
+        Opcode3=0x45
+      };
+    }
+  }
 }
 

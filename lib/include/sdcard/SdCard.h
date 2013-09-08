@@ -9,16 +9,16 @@
 
 namespace stm32plus {
 
-	/**
-	 * Template feature collection class for the sd-card peripheral.
-	 */
+  /**
+   * Template feature collection class for the sd-card peripheral.
+   */
 
-	template<class... Features>
-	struct SdCard : SdCardBase,
-									Features... {
+  template<class... Features>
+  struct SdCard : SdCardBase,
+                  Features... {
 
-		SdCard() :
-			Features(static_cast<SdCardBase&>(*this))... {
-		}
-	};
+    SdCard() :
+      Features(static_cast<SdCardBase&>(*this))... {
+    }
+  };
 }

@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Read JEDEC id command implementation
-		 */
+    /**
+     * Read JEDEC id command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_READ_JEDEC_ID>
-		struct ReadJedecId : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_READ_JEDEC_ID>
+    struct ReadJedecId : Command<TSpi> {
 
-			/**
-			 * Provide a readJedecId() function for the derived class
-			 */
+      /**
+       * Provide a readJedecId() function for the derived class
+       */
 
-			bool readJedecId(uint8_t *data,uint32_t dataSize) const {
-				return this->readCommand(TOpCode,0,0,0,data,dataSize);
-			}
-		};
-	}
+      bool readJedecId(uint8_t *data,uint32_t dataSize) const {
+        return this->readCommand(TOpCode,0,0,0,data,dataSize);
+      }
+    };
+  }
 }

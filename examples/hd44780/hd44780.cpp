@@ -31,8 +31,8 @@ using namespace stm32plus::display;
  * reaches the end of the display.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -51,62 +51,62 @@ static const char *sampleText[]={
 
 class HD44780Test {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			int i,written,len;
+      int i,written,len;
 
-			/*
-			 * Initialise the 6 required pins for output
-			 */
+      /*
+       * Initialise the 6 required pins for output
+       */
 
-			GpioC<DefaultDigitalOutputFeature<0,1,2,3,4,5> > pc;
+      GpioC<DefaultDigitalOutputFeature<0,1,2,3,4,5> > pc;
 
-			/*
-			 * Initialise the 20x4 display
-			 */
+      /*
+       * Initialise the 20x4 display
+       */
 
-			HD44780 lcd(pc[0],pc[1],pc[2],pc[3],pc[4],pc[5],20,4);
+      HD44780 lcd(pc[0],pc[1],pc[2],pc[3],pc[4],pc[5],20,4);
 
-			/*
-			 * Attach a terminal to the display so we can easily demonstrate the
-			 * text output function
-			 */
+      /*
+       * Attach a terminal to the display so we can easily demonstrate the
+       * text output function
+       */
 
-			CharacterLcdTerminal<HD44780> terminal(lcd);
+      CharacterLcdTerminal<HD44780> terminal(lcd);
 
-			/*
-			 * Write out the sample text
-			 */
+      /*
+       * Write out the sample text
+       */
 
-			terminal.clear();
+      terminal.clear();
 
-			for(i=written=0;;) {
+      for(i=written=0;;) {
 
-				// if the current word plus trailing space would wrap, start a new line
+        // if the current word plus trailing space would wrap, start a new line
 
-				len=strlen(sampleText[i])+1;
-				if(written+len>20) {
-					terminal << '\n';
-					written=0;
-				}
+        len=strlen(sampleText[i])+1;
+        if(written+len>20) {
+          terminal << '\n';
+          written=0;
+        }
 
-				// write out the current word with the following space
+        // write out the current word with the following space
 
-				terminal << sampleText[i] << ' ';
-				written+=len;
+        terminal << sampleText[i] << ' ';
+        written+=len;
 
-				// if there is no next word then start again
+        // if there is no next word then start again
 
-				if(sampleText[++i]==NULL)
-					i=0;
+        if(sampleText[++i]==NULL)
+          i=0;
 
-				// delay for a 500ms before the next word
+        // delay for a 500ms before the next word
 
-				MillisecondTimer::delay(500);
-			}
-		}
+        MillisecondTimer::delay(500);
+      }
+    }
 };
 
 
@@ -116,12 +116,12 @@ class HD44780Test {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	HD44780Test test;
-	test.run();
+  HD44780Test test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

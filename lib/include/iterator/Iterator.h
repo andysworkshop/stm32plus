@@ -19,37 +19,37 @@ namespace stm32plus {
  * differentiate between end-of-sequence and fail.
  */
 
-	template<typename T> class Iterator {
-		public:
+  template<typename T> class Iterator {
+    public:
 
-			/**
-			 * Error codes
-			 */
+      /**
+       * Error codes
+       */
 
-			enum {
-				/// Iteration has reached the end.
-				E_END_OF_ENTRIES=1
-			};
+      enum {
+        /// Iteration has reached the end.
+        E_END_OF_ENTRIES=1
+      };
 
-			/**
-			 * Virtual destructor. Does nothing.
-			 */
+      /**
+       * Virtual destructor. Does nothing.
+       */
 
-			virtual ~Iterator() {}
+      virtual ~Iterator() {}
 
-			/**
-			 * Move to the next item in the sequence, or on to the first item in the sequence if this is the
-			 * first call to next().
-			 * @return false if there is an error or the end of sequence is reached. The difference between an error
-			 * and the end of a sequence can be determined by inspecting the error provider.
-			 */
+      /**
+       * Move to the next item in the sequence, or on to the first item in the sequence if this is the
+       * first call to next().
+       * @return false if there is an error or the end of sequence is reached. The difference between an error
+       * and the end of a sequence can be determined by inspecting the error provider.
+       */
 
-			virtual bool next()=0;
+      virtual bool next()=0;
 
-			/**
-			 * Get the current item pointed at by the iterator.
-			 */
+      /**
+       * Get the current item pointed at by the iterator.
+       */
 
-			virtual T current()=0;
-	};
+      virtual T current()=0;
+  };
 }

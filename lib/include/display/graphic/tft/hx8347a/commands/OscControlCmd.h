@@ -7,13 +7,13 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace OscControlCmd {
-			enum {
-				Opcode1=0x19,
-				Opcode3=0x93
-			};
-		}
-	}
+  namespace hx8347 {
+    namespace OscControlCmd {
+      enum {
+        Opcode1=0x19,
+        Opcode3=0x93
+      };
+    }
+  }
 }
 

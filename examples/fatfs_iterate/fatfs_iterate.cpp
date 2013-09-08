@@ -40,8 +40,8 @@ using namespace stm32plus::display;
  * include/stl to the compile-time include path.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -50,179 +50,179 @@ using namespace stm32plus::display;
 
 class FatFsIterateTest  {
 
-	protected:
+  protected:
 
-		// graphics library and terminal types and objects
+    // graphics library and terminal types and objects
 
-		typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-		typedef ILI9325_Portrait_64K<LcdAccessMode> LcdPanel;
-		typedef ILI9325_Terminal_Portrait<LcdPanel> LcdTerminal;
+    typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
+    typedef ILI9325_Portrait_64K<LcdAccessMode> LcdPanel;
+    typedef ILI9325_Terminal_Portrait<LcdPanel> LcdTerminal;
 
-		LcdAccessMode *_accessMode;
-		LcdPanel *_graphicsLibrary;
-		LcdTerminal *_terminal;
-		Font *_font;
-		DefaultBacklight *_backlight;
+    LcdAccessMode *_accessMode;
+    LcdPanel *_graphicsLibrary;
+    LcdTerminal *_terminal;
+    Font *_font;
+    DefaultBacklight *_backlight;
 
-		// SD card and file system objects
+    // SD card and file system objects
 
-		SdioDmaSdCard *_sdcard;
-		FileSystem *_fs;
-		NullTimeProvider _timeProvider;
+    SdioDmaSdCard *_sdcard;
+    FileSystem *_fs;
+    NullTimeProvider _timeProvider;
 
-	public:
+  public:
 
-		/*
-		 * Run the demo
-		 */
+    /*
+     * Run the demo
+     */
 
-		void run() {
+    void run() {
 
-			// initialisation for the card and LCD
+      // initialisation for the card and LCD
 
-			initLcd();
-			initSdcard();
+      initLcd();
+      initSdcard();
 
-			// now iterate the directories on the card
+      // now iterate the directories on the card
 
-			iterateDirectories("");
+      iterateDirectories("");
 
-			// we're done - lock up
+      // we're done - lock up
 
-			*_terminal << "Completed";
-			for(;;);
-		}
+      *_terminal << "Completed";
+      for(;;);
+    }
 
 
-		/*
-		 * Recursively iterate over the directories and files on this card
-		 */
+    /*
+     * Recursively iterate over the directories and files on this card
+     */
 
-		void iterateDirectories(const std::string& directoryName) {
+    void iterateDirectories(const std::string& directoryName) {
 
-			DirectoryIterator *it;
+      DirectoryIterator *it;
 
-			// print the name of the current directory
+      // print the name of the current directory
 
-			*_terminal << "=> " << directoryName.c_str() << "\n";
+      *_terminal << "=> " << directoryName.c_str() << "\n";
 
-			// get an iterator on to this directory. note that we own the returned
-			// pointer and must delete it when we're finished.
+      // get an iterator on to this directory. note that we own the returned
+      // pointer and must delete it when we're finished.
 
-			if(!_fs->getDirectoryIterator(directoryName.c_str(),it))
-				error();
+      if(!_fs->getDirectoryIterator(directoryName.c_str(),it))
+        error();
 
-			// iterate over all entries in this directory
+      // iterate over all entries in this directory
 
-			while(it->next()) {
+      while(it->next()) {
 
-				// get a reference to the FileInformation object that describes the file/directory
-				// that we're currently looking at
+        // get a reference to the FileInformation object that describes the file/directory
+        // that we're currently looking at
 
-				const FileInformation& fileInfo(it->current());
+        const FileInformation& fileInfo(it->current());
 
-				// print the name and length in bytes. other attributes such as the type and various
-				// date/times are also available
+        // print the name and length in bytes. other attributes such as the type and various
+        // date/times are also available
 
-				*_terminal << fileInfo.getFilename() << " = " << fileInfo.getLength() << " bytes\n";
+        *_terminal << fileInfo.getFilename() << " = " << fileInfo.getLength() << " bytes\n";
 
-				// if this is a directory and it's not one of the two special "." and ".." entries then
-				// recursively print its contents
+        // if this is a directory and it's not one of the two special "." and ".." entries then
+        // recursively print its contents
 
-				if((fileInfo.getAttributes() & FileInformation::ATTR_DIRECTORY)!=0
-						&& strcmp(".",fileInfo.getFilename())!=0
-						&& strcmp("..",fileInfo.getFilename())!=0) {
+        if((fileInfo.getAttributes() & FileInformation::ATTR_DIRECTORY)!=0
+            && strcmp(".",fileInfo.getFilename())!=0
+            && strcmp("..",fileInfo.getFilename())!=0) {
 
-					iterateDirectories(directoryName+"/"+std::string(fileInfo.getFilename()));
-				}
-			}
+          iterateDirectories(directoryName+"/"+std::string(fileInfo.getFilename()));
+        }
+      }
 
-			// finished with the iterator, delete it
+      // finished with the iterator, delete it
 
-			delete it;
-		}
+      delete it;
+    }
 
 
-		/*
-		 * Initialise the LCD. This demo uses the ILI9325 QVGA LCD connected to the FSMC
-		 * in 16 bit mode. We use a portrait-orientation terminal that will take advantage of
-		 * the hardware scrolling ability of the panel.
-		 */
+    /*
+     * Initialise the LCD. This demo uses the ILI9325 QVGA LCD connected to the FSMC
+     * in 16 bit mode. We use a portrait-orientation terminal that will take advantage of
+     * the hardware scrolling ability of the panel.
+     */
 
-		void initLcd() {
+    void initLcd() {
 
-			// reset is on PE1 and RS (D/CX) is on PD11
+      // reset is on PE1 and RS (D/CX) is on PD11
 
-			GpioE<DefaultDigitalOutputFeature<1> > pe;
-			GpioD<DefaultFsmcAlternateFunctionFeature<11>> pd;
+      GpioE<DefaultDigitalOutputFeature<1> > pe;
+      GpioD<DefaultFsmcAlternateFunctionFeature<11>> pd;
 
-			// set up the FSMC with RS=A16 (PD11)
+      // set up the FSMC with RS=A16 (PD11)
 
-			Fsmc8080LcdTiming fsmcTiming(0,2);
-			_accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
+      Fsmc8080LcdTiming fsmcTiming(0,2);
+      _accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
 
-			// declare an lcd driver and make a fixed font active
+      // declare an lcd driver and make a fixed font active
 
-			_graphicsLibrary=new LcdPanel(*_accessMode);
-			_font=new Font_APPLE8;
-			*_graphicsLibrary << *_font;
+      _graphicsLibrary=new LcdPanel(*_accessMode);
+      _font=new Font_APPLE8;
+      *_graphicsLibrary << *_font;
 
-			// declare the terminal
+      // declare the terminal
 
-			_terminal=new LcdTerminal(*_graphicsLibrary);
+      _terminal=new LcdTerminal(*_graphicsLibrary);
 
-			// clear the screen
+      // clear the screen
 
-			_graphicsLibrary->setBackground(ColourNames::BLACK);
-			_graphicsLibrary->setForeground(ColourNames::WHITE);
+      _graphicsLibrary->setBackground(ColourNames::BLACK);
+      _graphicsLibrary->setForeground(ColourNames::WHITE);
 
-			_terminal->clearScreen();
+      _terminal->clearScreen();
 
-			// create the backlight on timer4, channel2 (PD13)
+      // create the backlight on timer4, channel2 (PD13)
 
-			DefaultBacklight backlight;
+      DefaultBacklight backlight;
 
-			// fade up to 100% in 4ms steps
+      // fade up to 100% in 4ms steps
 
-			backlight.fadeTo(100,4);
-		}
+      backlight.fadeTo(100,4);
+    }
 
 
-		/*
-		 * Initialise the SD card and get a reference to a file system object. FAT16 and FAT32
-		 * are both supported.
-		 */
+    /*
+     * Initialise the SD card and get a reference to a file system object. FAT16 and FAT32
+     * are both supported.
+     */
 
-		void initSdcard() {
+    void initSdcard() {
 
-			// create the SDIO object and let it auto-initialise
+      // create the SDIO object and let it auto-initialise
 
-			_sdcard=new SdioDmaSdCard;
+      _sdcard=new SdioDmaSdCard;
 
-			if(errorProvider.hasError())
-				error();
+      if(errorProvider.hasError())
+        error();
 
-			// initialise a file system from that found on the card
+      // initialise a file system from that found on the card
 
-			if(!FileSystem::getInstance(*_sdcard,_timeProvider,_fs))
-				error();
-		}
+      if(!FileSystem::getInstance(*_sdcard,_timeProvider,_fs))
+        error();
+    }
 
 
-		/*
-		 * Print an error code if something goes wrong and lock up
-		 */
+    /*
+     * Print an error code if something goes wrong and lock up
+     */
 
-		void error() {
+    void error() {
 
-			// print the error code
+      // print the error code
 
-			*_terminal << "ERROR: " << errorProvider.getLast();
+      *_terminal << "ERROR: " << errorProvider.getLast();
 
-			// lock up
+      // lock up
 
-			for(;;);
-		}
+      for(;;);
+    }
 };
 
 
@@ -232,15 +232,15 @@ class FatFsIterateTest  {
 
 int main() {
 
-	// set up the NVIC priority groups and subgroups
-	Nvic::initialise();
+  // set up the NVIC priority groups and subgroups
+  Nvic::initialise();
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	FatFsIterateTest test;
-	test.run();
+  FatFsIterateTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -9,47 +9,47 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief Base class for display device gamma implementations
-		 *
-		 * A gamma configuration consists of a set of
-		 * 16-bit values used to configure internal registers in the controller. The number of values
-		 * is dependent on the controller and the values of the gammas is dependent on the panel.
-		 */
+    /**
+     * @brief Base class for display device gamma implementations
+     *
+     * A gamma configuration consists of a set of
+     * 16-bit values used to configure internal registers in the controller. The number of values
+     * is dependent on the controller and the values of the gammas is dependent on the panel.
+     */
 
-		class DisplayDeviceGamma {
+    class DisplayDeviceGamma {
 
-			protected:
-				Memblock<uint16_t> _gamma;
-				uint16_t _lcdGammaCount;
+      protected:
+        Memblock<uint16_t> _gamma;
+        uint16_t _lcdGammaCount;
 
-			protected:
-				DisplayDeviceGamma(int count) : _gamma(count) {
-				}
+      protected:
+        DisplayDeviceGamma(int count) : _gamma(count) {
+        }
 
-			public:
+      public:
 
-				virtual ~DisplayDeviceGamma() {}
+        virtual ~DisplayDeviceGamma() {}
 
-				/**
-				 * Get the number of gammas
-				 * @return The number of gammas supported by this device.
-				 */
+        /**
+         * Get the number of gammas
+         * @return The number of gammas supported by this device.
+         */
 
-				uint16_t getGammaCount() {
-					return _gamma.getSize();
-				}
+        uint16_t getGammaCount() {
+          return _gamma.getSize();
+        }
 
-				/**
-				 * [] operator. Get a modifiable gamma value.
-				 * @return a reference to the gamma entry
-				 */
+        /**
+         * [] operator. Get a modifiable gamma value.
+         * @return a reference to the gamma entry
+         */
 
-				uint16_t& operator[](int pos) {
-					return _gamma[pos];
-				}
-		};
-	}
+        uint16_t& operator[](int pos) {
+          return _gamma[pos];
+        }
+    };
+  }
 }

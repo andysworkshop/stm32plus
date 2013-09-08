@@ -15,7 +15,7 @@ namespace stm32plus {
    * its source.
    */
 
-	template<uint8_t TAPBBusNumber>
+  template<uint8_t TAPBBusNumber>
   class TimerInternalClockFeature : public TimerFeatureBase {
     public:
       TimerInternalClockFeature(Timer& timer);
@@ -30,70 +30,70 @@ namespace stm32plus {
    * TIM1,8,9,10,11 are on APB2. The remainder are on APB1
    */
 
-	template<>
+  template<>
   inline TimerInternalClockFeature<1>::TimerInternalClockFeature(Timer& timer)
     : TimerFeatureBase(timer) {
 
-		uint32_t timerClock;
+    uint32_t timerClock;
 
-		switch(RCC->CFGR & RCC_CFGR_PPRE1) {
+    switch(RCC->CFGR & RCC_CFGR_PPRE1) {
 
-			case RCC_CFGR_PPRE1_DIV1:							// additional multiplier = 1
-			case RCC_CFGR_PPRE1_DIV2:							// additional multiplier = 2
-				timerClock=SystemCoreClock;
-				break;
+      case RCC_CFGR_PPRE1_DIV1:             // additional multiplier = 1
+      case RCC_CFGR_PPRE1_DIV2:             // additional multiplier = 2
+        timerClock=SystemCoreClock;
+        break;
 
-			case RCC_CFGR_PPRE1_DIV4:							// additional multiplier = 2
-				timerClock=SystemCoreClock/2;
-				break;
+      case RCC_CFGR_PPRE1_DIV4:             // additional multiplier = 2
+        timerClock=SystemCoreClock/2;
+        break;
 
-			case RCC_CFGR_PPRE1_DIV8:							// additional multiplier = 2
-				timerClock=SystemCoreClock/4;
-				break;
+      case RCC_CFGR_PPRE1_DIV8:             // additional multiplier = 2
+        timerClock=SystemCoreClock/4;
+        break;
 
-			case RCC_CFGR_PPRE1_DIV16:						// additional multiplier = 2
-			default:
-				timerClock=SystemCoreClock/8;
-				break;
-		}
+      case RCC_CFGR_PPRE1_DIV16:            // additional multiplier = 2
+      default:
+        timerClock=SystemCoreClock/8;
+        break;
+    }
 
-		// set up the internal clock
+    // set up the internal clock
 
-		TIM_InternalClockConfig(timer);
+    TIM_InternalClockConfig(timer);
     timer.setClock(timerClock);
   }
 
 
-	template<>
+  template<>
   inline TimerInternalClockFeature<2>::TimerInternalClockFeature(Timer& timer)
     : TimerFeatureBase(timer) {
 
-		uint32_t timerClock;
+    uint32_t timerClock;
 
-		switch(RCC->CFGR & RCC_CFGR_PPRE2) {
+    switch(RCC->CFGR & RCC_CFGR_PPRE2) {
 
-			case RCC_CFGR_PPRE2_DIV1:							// additional multiplier = 1
-			case RCC_CFGR_PPRE2_DIV2:							// additional multiplier = 2
-				timerClock=SystemCoreClock;
-				break;
+      case RCC_CFGR_PPRE2_DIV1:             // additional multiplier = 1
+      case RCC_CFGR_PPRE2_DIV2:             // additional multiplier = 2
+        timerClock=SystemCoreClock;
+        break;
 
-			case RCC_CFGR_PPRE2_DIV4:							// additional multiplier = 2
-				timerClock=SystemCoreClock/2;
-				break;
+      case RCC_CFGR_PPRE2_DIV4:             // additional multiplier = 2
+        timerClock=SystemCoreClock/2;
+        break;
 
-			case RCC_CFGR_PPRE2_DIV8:							// additional multiplier = 2
-				timerClock=SystemCoreClock/4;
-				break;
+      case RCC_CFGR_PPRE2_DIV8:             // additional multiplier = 2
+        timerClock=SystemCoreClock/4;
+        break;
 
-			case RCC_CFGR_PPRE2_DIV16:						// additional multiplier = 2
-			default:
-				timerClock=SystemCoreClock/8;
-				break;
-		}
+      case RCC_CFGR_PPRE2_DIV16:            // additional multiplier = 2
+      default:
+        timerClock=SystemCoreClock/8;
+        break;
+    }
 
-		// set up the internal clock
+    // set up the internal clock
 
-		TIM_InternalClockConfig(timer);
+    TIM_InternalClockConfig(timer);
     timer.setClock(timerClock);
   }
 
@@ -101,21 +101,21 @@ namespace stm32plus {
    * Helpers for easy user access to this class
    */
 
-	typedef TimerInternalClockFeature<2> Timer1InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer2InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer3InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer4InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer5InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer6InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer7InternalClockFeature;
-	typedef TimerInternalClockFeature<2> Timer8InternalClockFeature;
+  typedef TimerInternalClockFeature<2> Timer1InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer2InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer3InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer4InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer5InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer6InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer7InternalClockFeature;
+  typedef TimerInternalClockFeature<2> Timer8InternalClockFeature;
 
 #if defined(STM32PLUS_F1_XL) || defined(STM32PLUS_F4)
-	typedef TimerInternalClockFeature<2> Timer9InternalClockFeature;
-	typedef TimerInternalClockFeature<2> Timer10InternalClockFeature;
-	typedef TimerInternalClockFeature<2> Timer11InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer12InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer13InternalClockFeature;
-	typedef TimerInternalClockFeature<1> Timer14InternalClockFeature;
+  typedef TimerInternalClockFeature<2> Timer9InternalClockFeature;
+  typedef TimerInternalClockFeature<2> Timer10InternalClockFeature;
+  typedef TimerInternalClockFeature<2> Timer11InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer12InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer13InternalClockFeature;
+  typedef TimerInternalClockFeature<1> Timer14InternalClockFeature;
 #endif
 }

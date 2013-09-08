@@ -9,31 +9,31 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for an IP packet arrival
-		 */
+    /**
+     * Event descriptor for an IP packet arrival
+     */
 
-		struct IpPacketEvent : NetEventDescriptor {
+    struct IpPacketEvent : NetEventDescriptor {
 
-			/**
-			 * The IP packet reference
-			 */
+      /**
+       * The IP packet reference
+       */
 
-			IpPacket& ipPacket;
+      IpPacket& ipPacket;
 
 
-			/**
-			 * Constructor
-			 * @param frame
-			 */
+      /**
+       * Constructor
+       * @param frame
+       */
 
-			IpPacketEvent(IpPacket& packet)
-				: NetEventDescriptor(NetEventType::IP_PACKET),
-					ipPacket(packet) {
-			}
-		};
-	}
+      IpPacketEvent(IpPacket& packet)
+        : NetEventDescriptor(NetEventType::IP_PACKET),
+          ipPacket(packet) {
+      }
+    };
+  }
 }

@@ -16,59 +16,59 @@
 namespace stm32plus {
 
 
-	/**
-	 * @brief Base class for holding common pin functionality. Inherits from the
-	 * GPIO_InitTypeDef structure
-	 */
+  /**
+   * @brief Base class for holding common pin functionality. Inherits from the
+   * GPIO_InitTypeDef structure
+   */
 
-	class Gpio {
+  class Gpio {
 
-		protected:
-			GpioPortBase& _portBase;
-			GPIO_TypeDef *_peripheralAddress;
+    protected:
+      GpioPortBase& _portBase;
+      GPIO_TypeDef *_peripheralAddress;
 
-			uint16_t _pinIds;
-			uint16_t _selectedPin;
+      uint16_t _pinIds;
+      uint16_t _selectedPin;
 
-		public:
+    public:
 
-			/**
-			 * Possible mode types
-			 */
+      /**
+       * Possible mode types
+       */
 
-			enum GpioModeType {
-				OUTPUT,
-				INPUT,
-				ANALOG,
-				ALTERNATE_FUNCTION
-			};
+      enum GpioModeType {
+        OUTPUT,
+        INPUT,
+        ANALOG,
+        ALTERNATE_FUNCTION
+      };
 
-			/**
-			 * Possible output types
-			 */
+      /**
+       * Possible output types
+       */
 
-			enum GpioOutputType {
-				OPEN_DRAIN,//!< OPEN_DRAIN
-				PUSH_PULL  //!< PUSH_PULL
-			};
+      enum GpioOutputType {
+        OPEN_DRAIN,//!< OPEN_DRAIN
+        PUSH_PULL  //!< PUSH_PULL
+      };
 
-			/**
-			 * Possible pull-up / down types
-			 */
+      /**
+       * Possible pull-up / down types
+       */
 
-			enum GpioPullUpDownType {
-				PUPD_NONE,//!< PP_NONE
-				PUPD_UP,  //!< PP_UP
-				PUPD_DOWN //!< PP_DOWN
-			};
+      enum GpioPullUpDownType {
+        PUPD_NONE,//!< PP_NONE
+        PUPD_UP,  //!< PP_UP
+        PUPD_DOWN //!< PP_DOWN
+      };
 
-		protected:
-			void getPortAndPinSource(uint8_t& portSource,uint8_t& pinSource) const;
+    protected:
+      void getPortAndPinSource(uint8_t& portSource,uint8_t& pinSource) const;
 
-		public:
-			Gpio(GpioPortBase& portBase);
+    public:
+      Gpio(GpioPortBase& portBase);
 
-			void set() const;
+      void set() const;
       void reset() const;
       void setAll() const;
       void resetAll() const;
@@ -81,81 +81,81 @@ namespace stm32plus {
       volatile uint32_t *getResetRegister() const;
       volatile uint32_t *getOutputRegister() const;
 
-			void setSelectedPin(uint8_t pinNumber);
-			uint16_t getSelectedPin() const;
+      void setSelectedPin(uint8_t pinNumber);
+      uint16_t getSelectedPin() const;
 
-			GPIO_TypeDef *getPeripheralAddress() const;
-	};
-
-
-	/**
-	 * These two functions are for the variadic parameter pack expansion. When called they will
-	 * do compile-time recursion to compute the 32-bit pin bit mask from a variadic pack of
-	 * pin numbers (0..15)
-	 */
-
-	namespace  {
-
-		/**
-		 * Recursion termination condition
-		 */
-
-		template<uint8_t TPin>
-		void GpioPinMerge(uint32_t& pins) {
-			pins|=1 << TPin;
-		}
+      GPIO_TypeDef *getPeripheralAddress() const;
+  };
 
 
-		/**
-		 * General recursive caller
-		 */
+  /**
+   * These two functions are for the variadic parameter pack expansion. When called they will
+   * do compile-time recursion to compute the 32-bit pin bit mask from a variadic pack of
+   * pin numbers (0..15)
+   */
 
-		template<uint8_t First,uint8_t Next,uint8_t... Rest>
-		void GpioPinMerge(uint32_t& pins) {
-			pins|=1 << First;
-			GpioPinMerge<Next,Rest...>(pins);
-		}
-	}
+  namespace  {
 
+    /**
+     * Recursion termination condition
+     */
 
-	/**
-	 * Constructor
-	 * @param port
-	 */
-
-	inline Gpio::Gpio(GpioPortBase& portBase)
-		: _portBase(portBase),
-		  _peripheralAddress(portBase.getPeripheralAddress()) {
-	}
+    template<uint8_t TPin>
+    void GpioPinMerge(uint32_t& pins) {
+      pins|=1 << TPin;
+    }
 
 
-	/**
-	 * Get the currently selected pin id
-	 * @return The pin ID
-	 */
+    /**
+     * General recursive caller
+     */
 
-	inline uint16_t Gpio::getSelectedPin() const {
-		return _selectedPin;
-	}
-
-
-	/**
-	 * Cast to the port typedef
-	 */
-
-	inline GPIO_TypeDef *Gpio::getPeripheralAddress() const {
-		return _peripheralAddress;
-	}
+    template<uint8_t First,uint8_t Next,uint8_t... Rest>
+    void GpioPinMerge(uint32_t& pins) {
+      pins|=1 << First;
+      GpioPinMerge<Next,Rest...>(pins);
+    }
+  }
 
 
-	/**
-	 * Set the selected pin number to one of those that you initialised this class with
-	 * @param pinNumber The pin number (0..15)
-	 */
+  /**
+   * Constructor
+   * @param port
+   */
 
-	inline void Gpio::setSelectedPin(uint8_t pinNumber) {
-		_selectedPin=1 << pinNumber;
-	}
+  inline Gpio::Gpio(GpioPortBase& portBase)
+    : _portBase(portBase),
+      _peripheralAddress(portBase.getPeripheralAddress()) {
+  }
+
+
+  /**
+   * Get the currently selected pin id
+   * @return The pin ID
+   */
+
+  inline uint16_t Gpio::getSelectedPin() const {
+    return _selectedPin;
+  }
+
+
+  /**
+   * Cast to the port typedef
+   */
+
+  inline GPIO_TypeDef *Gpio::getPeripheralAddress() const {
+    return _peripheralAddress;
+  }
+
+
+  /**
+   * Set the selected pin number to one of those that you initialised this class with
+   * @param pinNumber The pin number (0..15)
+   */
+
+  inline void Gpio::setSelectedPin(uint8_t pinNumber) {
+    _selectedPin=1 << pinNumber;
+  }
 
 
   /**
@@ -172,7 +172,7 @@ namespace stm32plus {
    */
 
   inline void Gpio::setAll() const {
-  	GPIO_WriteBit(_peripheralAddress,_pinIds,Bit_SET);
+    GPIO_WriteBit(_peripheralAddress,_pinIds,Bit_SET);
   }
 
 
@@ -286,7 +286,7 @@ namespace stm32plus {
    */
 
   inline volatile uint32_t *Gpio::getSetRegister() const {
-  	return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->BSRR);
+    return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->BSRR);
   }
 
 
@@ -297,7 +297,7 @@ namespace stm32plus {
    */
 
   inline volatile uint32_t *Gpio::getResetRegister() const {
-  	return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->BRR);
+    return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->BRR);
   }
 
 
@@ -308,6 +308,6 @@ namespace stm32plus {
    */
 
   inline volatile uint32_t *Gpio::getOutputRegister() const {
-  	return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->ODR);
+    return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->ODR);
   }
 }

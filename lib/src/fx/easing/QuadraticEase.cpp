@@ -9,38 +9,38 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/*
-		 * Ease in
-		 */
+    /*
+     * Ease in
+     */
 
-		double QuadraticEase::easeIn(double time_) const {
-			time_/=_duration;
-			return _change * time_ * time_;
-		}
+    double QuadraticEase::easeIn(double time_) const {
+      time_/=_duration;
+      return _change * time_ * time_;
+    }
 
-		/*
-		 * Ease out
-		 */
+    /*
+     * Ease out
+     */
 
-		double QuadraticEase::easeOut(double time_) const {
-			time_/=_duration;
-			return -_change * time_ * (time_ - 2);
-		}
+    double QuadraticEase::easeOut(double time_) const {
+      time_/=_duration;
+      return -_change * time_ * (time_ - 2);
+    }
 
-		/*
-		 * Ease in and out
-		 */
+    /*
+     * Ease in and out
+     */
 
-		double QuadraticEase::easeInOut(double time_) const {
-			time_/=_duration / 2;
+    double QuadraticEase::easeInOut(double time_) const {
+      time_/=_duration / 2;
 
-			if(time_ < 1)
-				return _change / 2 * time_ * time_;
+      if(time_ < 1)
+        return _change / 2 * time_ * time_;
 
-			time_--;
-			return -_change / 2 * (time_ * (time_ - 2) - 1);
-		}
-	}
+      time_--;
+      return -_change / 2 * (time_ * (time_ - 2) - 1);
+    }
+  }
 }

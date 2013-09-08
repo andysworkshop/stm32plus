@@ -8,55 +8,55 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Handle the generation of dirents given a long filename.
-		 *
-		 * This class does all the work necessary to generate the sequence of directory entries
-		 * that are required to represent a long file name, i.e. a filename that is more than
-		 * the 8.3 format supported by old versions of MSDOS.
-		 *
-		 * This class does not actually write the new directory entries. The caller is responsible for that.
-		 */
+    /**
+     * @brief Handle the generation of dirents given a long filename.
+     *
+     * This class does all the work necessary to generate the sequence of directory entries
+     * that are required to represent a long file name, i.e. a filename that is more than
+     * the 8.3 format supported by old versions of MSDOS.
+     *
+     * This class does not actually write the new directory entries. The caller is responsible for that.
+     */
 
-		class LongNameDirentGenerator {
+    class LongNameDirentGenerator {
 
-			protected:
-				DirectoryEntryIterator& _targetDir;
-				const char *_longName;
-				DirectoryEntry *_dirents;
-				uint16_t _createDate;
-				uint16_t _createTime;
-				int _direntCount;
-				int _currentIteratorIndex;
+      protected:
+        DirectoryEntryIterator& _targetDir;
+        const char *_longName;
+        DirectoryEntry *_dirents;
+        uint16_t _createDate;
+        uint16_t _createTime;
+        int _direntCount;
+        int _currentIteratorIndex;
 
-			public:
+      public:
 
-				/**
-				 * Error codes
-				 */
+        /**
+         * Error codes
+         */
 
-				enum {
-					/// The filename already exists in the directory.
-					E_FILE_EXISTS=1
-				};
+        enum {
+          /// The filename already exists in the directory.
+          E_FILE_EXISTS=1
+        };
 
-			public:
-				LongNameDirentGenerator(const char *longName_,DirectoryEntryIterator& targetDir_,uint16_t createDate_,uint16_t createTime_);
-				~LongNameDirentGenerator();
+      public:
+        LongNameDirentGenerator(const char *longName_,DirectoryEntryIterator& targetDir_,uint16_t createDate_,uint16_t createTime_);
+        ~LongNameDirentGenerator();
 
-				int getDirentCount();
-				DirectoryEntry *getDirents();
+        int getDirentCount();
+        DirectoryEntry *getDirents();
 
-			protected:
-				bool generateDirentsFromLongName();
-				void generateShortName(char *shortName_) const;
-				void computeLossyShortName(const char *shortName_,char *lossyName_,int tailNumber_) const;
-				uint8_t shortNameChecksum(const uint8_t *shortName_) const;
-				bool isLongNameValidShortName() const;
-				void copyChars(const char *& src_,int& srcLen_,uint16_t *dest_,int destLen_);
-				bool findUniqueShortName(char *shortName_);
-		};
-	}
+      protected:
+        bool generateDirentsFromLongName();
+        void generateShortName(char *shortName_) const;
+        void computeLossyShortName(const char *shortName_,char *lossyName_,int tailNumber_) const;
+        uint8_t shortNameChecksum(const uint8_t *shortName_) const;
+        bool isLongNameValidShortName() const;
+        void copyChars(const char *& src_,int& srcLen_,uint16_t *dest_,int destLen_);
+        bool findUniqueShortName(char *shortName_);
+    };
+  }
 }

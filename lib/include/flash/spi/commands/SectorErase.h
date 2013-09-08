@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Sector erase command implementation
-		 */
+    /**
+     * Sector erase command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_SECTOR_ERASE,uint8_t TAddressBytes=3>
-		struct SectorErase : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_SECTOR_ERASE,uint8_t TAddressBytes=3>
+    struct SectorErase : Command<TSpi> {
 
-			/**
-			 * Provide a sectorErase() function for the derived class
-			 */
+      /**
+       * Provide a sectorErase() function for the derived class
+       */
 
-			bool sectorErase(uint32_t address) const {
-				return this->writeCommand(TOpCode,address,TAddressBytes,0,nullptr,0);
-			}
-		};
-	}
+      bool sectorErase(uint32_t address) const {
+        return this->writeCommand(TOpCode,address,TAddressBytes,0,nullptr,0);
+      }
+    };
+  }
 }

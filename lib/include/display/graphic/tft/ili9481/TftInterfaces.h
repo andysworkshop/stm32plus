@@ -12,23 +12,23 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * ILI9481 interface: 64K colours, portrait and landscape
-		 */
+    /**
+     * ILI9481 interface: 64K colours, portrait and landscape
+     */
 
-		template<class TAccessMode> using ILI9481_Portrait_64K  = GraphicsLibrary<ILI9481<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
-		template<class TAccessMode> using ILI9481_Landscape_64K  = GraphicsLibrary<ILI9481<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using ILI9481_Portrait_64K  = GraphicsLibrary<ILI9481<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using ILI9481_Landscape_64K  = GraphicsLibrary<ILI9481<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
 
-		template<class TAccessMode> using ILI9481_Portrait_262K  = GraphicsLibrary<ILI9481<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
-		template<class TAccessMode> using ILI9481_Landscape_262K  = GraphicsLibrary<ILI9481<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using ILI9481_Portrait_262K  = GraphicsLibrary<ILI9481<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using ILI9481_Landscape_262K  = GraphicsLibrary<ILI9481<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the ILI9481
-		 */
+    /**
+     * Graphic terminal modes for the ILI9481
+     */
 
-		template<class TDevice> using ILI9481_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using ILI9481_Terminal_Landscape = GraphicTerminal<TDevice,false>;
-	}
+    template<class TDevice> using ILI9481_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using ILI9481_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+  }
 }

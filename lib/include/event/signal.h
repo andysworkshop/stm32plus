@@ -20,7 +20,7 @@
 ///    in the product documentation would be appreciated but is not required.
 ///
 /// 2. Altered source versions must be plainly marked as such,
-///	   and must not be misrepresented as being the original software.
+///    and must not be misrepresented as being the original software.
 ///
 /// 3. The above copyright notice and this permission notice shall be included in
 ///    all copies or substantial portions of the Software.
@@ -35,46 +35,46 @@
 
 
 namespace wink {
-	template<class Slot>
-	struct signal {
+  template<class Slot>
+  struct signal {
 
-		protected:
+    protected:
 
-			typedef Slot slot_type;
-			std::slist<slot_type> _slots;
+      typedef Slot slot_type;
+      std::slist<slot_type> _slots;
 
-		public:
+    public:
 
-			/// Connects a slot to the signal
-			/// \param slot The slot you wish to connect
-			/// \see bind To bind a slot to a function
+      /// Connects a slot to the signal
+      /// \param slot The slot you wish to connect
+      /// \see bind To bind a slot to a function
 
-			void insertSubscriber(const slot_type& slot) {
-				_slots.push_front(slot);
-			}
+      void insertSubscriber(const slot_type& slot) {
+        _slots.push_front(slot);
+      }
 
-			/// Disconnects a slot from the signal
-			/// \param slot The slot you wish to disconnect
-			/// \see bind To bind a slot to a function
+      /// Disconnects a slot from the signal
+      /// \param slot The slot you wish to disconnect
+      /// \see bind To bind a slot to a function
 
-			bool removeSubscriber(const slot_type& slot) {
+      bool removeSubscriber(const slot_type& slot) {
 
-				for(auto it=_slots.begin();it!=_slots.end();it++) {
-					if(*it==slot) {
-						_slots.erase(it);
-						return true;
-					}
-				}
-				return false;
-			}
+        for(auto it=_slots.begin();it!=_slots.end();it++) {
+          if(*it==slot) {
+            _slots.erase(it);
+            return true;
+          }
+        }
+        return false;
+      }
 
-			/// Emits the events you wish to send to the call-backs
-			/// \param args The arguments to emit to the slots connected to the signal
-			template <class ...Args>
-			void raiseEvent(Args&&... args) const {
+      /// Emits the events you wish to send to the call-backs
+      /// \param args The arguments to emit to the slots connected to the signal
+      template <class ...Args>
+      void raiseEvent(Args&&... args) const {
 
-				for(auto it=_slots.begin();it!=_slots.end();it++)
-					(*it)(args...);
-			}
-	};
+        for(auto it=_slots.begin();it!=_slots.end();it++)
+          (*it)(args...);
+      }
+  };
 }

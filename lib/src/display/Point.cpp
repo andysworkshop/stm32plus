@@ -9,11 +9,11 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		// initialise the static member
+    // initialise the static member
 
-		const Point Point::Origin=Point(0,0);
+    const Point Point::Origin=Point(0,0);
 
-	}
+  }
 }

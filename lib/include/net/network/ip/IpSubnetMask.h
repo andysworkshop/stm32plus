@@ -9,79 +9,79 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * IP subnet mask structure. Same core a.b.c.d structure as an IP address
-		 * but it has special interpretation as a bitmask
-		 */
+    /**
+     * IP subnet mask structure. Same core a.b.c.d structure as an IP address
+     * but it has special interpretation as a bitmask
+     */
 
-		struct IpSubnetMask : IpAddress {
+    struct IpSubnetMask : IpAddress {
 
-			/**
-			 * Default constructor
-			 */
+      /**
+       * Default constructor
+       */
 
-			IpSubnetMask() {
-			}
-
-
-			/**
-			 * Copy constructor - ensure this gets done with a single word copy
-			 * @param src
-			 */
-
-			IpSubnetMask(const IpSubnetMask& src)
-				: IpAddress(src) {
-			}
+      IpSubnetMask() {
+      }
 
 
-			/**
-			 * Construct from a dotted IP address
-			 * @param dottedIp The a.b.c.d address
-			 */
+      /**
+       * Copy constructor - ensure this gets done with a single word copy
+       * @param src
+       */
 
-			IpSubnetMask(const char *dottedIp) {
-				IpAddress::operator=(dottedIp);
-			}
-
-
-			/**
-			 * Check if this IP address is contained within the subnet managed by the
-			 * provided gateway. Basically they must be on the same network
-			 * @param ipAddress
-			 * @return
-			 */
-
-			bool matches(const IpAddress& addr,const IpAddress& gway) const {
-				return (addr.ipAddress & ipAddress)==(gway.ipAddress & ipAddress);
-			}
+      IpSubnetMask(const IpSubnetMask& src)
+        : IpAddress(src) {
+      }
 
 
-			/**
-			 * Check if this is the broadcast address for this subnet. The broadcast address is found
-			 * by taking the network address (found by masking the incoming ip address with the subnet)
-			 * and or-ing it with the compliment of the subnet mask.
-			 * @param addr The address to be tested
-			 * @return true if it is
-			 */
+      /**
+       * Construct from a dotted IP address
+       * @param dottedIp The a.b.c.d address
+       */
 
-			bool isBroadcastAddress(const IpAddress& addr) const {
-				return ((addr.ipAddress & ipAddress) | ~ipAddress)==addr.ipAddress;
-			}
+      IpSubnetMask(const char *dottedIp) {
+        IpAddress::operator=(dottedIp);
+      }
 
 
-			/**
-			 * Assignment operator
-			 * @param addr
-			 * @return self-reference
-			 */
+      /**
+       * Check if this IP address is contained within the subnet managed by the
+       * provided gateway. Basically they must be on the same network
+       * @param ipAddress
+       * @return
+       */
 
-			IpSubnetMask& operator=(const char *addr) {
-				IpAddress::operator=(addr);
-				return *this;
-			}
-		} __attribute__((packed));
-	}
+      bool matches(const IpAddress& addr,const IpAddress& gway) const {
+        return (addr.ipAddress & ipAddress)==(gway.ipAddress & ipAddress);
+      }
+
+
+      /**
+       * Check if this is the broadcast address for this subnet. The broadcast address is found
+       * by taking the network address (found by masking the incoming ip address with the subnet)
+       * and or-ing it with the compliment of the subnet mask.
+       * @param addr The address to be tested
+       * @return true if it is
+       */
+
+      bool isBroadcastAddress(const IpAddress& addr) const {
+        return ((addr.ipAddress & ipAddress) | ~ipAddress)==addr.ipAddress;
+      }
+
+
+      /**
+       * Assignment operator
+       * @param addr
+       * @return self-reference
+       */
+
+      IpSubnetMask& operator=(const char *addr) {
+        IpAddress::operator=(addr);
+        return *this;
+      }
+    } __attribute__((packed));
+  }
 }

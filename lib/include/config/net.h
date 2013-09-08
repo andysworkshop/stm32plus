@@ -91,16 +91,16 @@
 
 #if defined(STM32PLUS_F4)
 
-	#include "net/datalink/mac/f4/MiiInterface.h"
-	#include "net/datalink/mac/f4/RmiiInterface.h"
+  #include "net/datalink/mac/f4/MiiInterface.h"
+  #include "net/datalink/mac/f4/RmiiInterface.h"
 
 #elif defined(STM32PLUS_F1_CL_E)
 
-	#include "net/datalink/mac/f1/MiiInterface.h"
-	#include "net/datalink/mac/f1/RmiiInterface.h"
+  #include "net/datalink/mac/f1/MiiInterface.h"
+  #include "net/datalink/mac/f1/RmiiInterface.h"
 
 #else
-	#error "Unsupported MCU"
+  #error "Unsupported MCU"
 #endif
 
 // network layer

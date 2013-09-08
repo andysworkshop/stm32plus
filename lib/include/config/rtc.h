@@ -24,11 +24,11 @@
 
 #if defined(STM32PLUS_F1)
 
-	#include "rtc/f1/RtcBase.h"
+  #include "rtc/f1/RtcBase.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#include "rtc/f4/RtcBase.h"
+  #include "rtc/f4/RtcBase.h"
 
 #endif
 
@@ -43,22 +43,22 @@
 
 #if defined(STM32PLUS_F1)
 
-	#define USE_RTC_INTERRUPT
+  #define USE_RTC_INTERRUPT
 
-	#include "rtc/features/f1/RtcAlarmInterruptFeature.h"
-	#include "rtc/features/f1/RtcLseClockFeature.h"
-	#include "rtc/features/f1/RtcOverflowInterruptFeature.h"
-	#include "rtc/features/f1/RtcSecondInterruptFeature.h"
-	#include "rtc/features/f1/RtcTamperOutputFeature.h"
-	#include "rtc/features/f1/RtcLsiClockFeature.h"
+  #include "rtc/features/f1/RtcAlarmInterruptFeature.h"
+  #include "rtc/features/f1/RtcLseClockFeature.h"
+  #include "rtc/features/f1/RtcOverflowInterruptFeature.h"
+  #include "rtc/features/f1/RtcSecondInterruptFeature.h"
+  #include "rtc/features/f1/RtcTamperOutputFeature.h"
+  #include "rtc/features/f1/RtcLsiClockFeature.h"
 
 #elif defined(STM32PLUS_F4)
 
-	#include "rtc/features/f4/RtcAlarmInterruptFeature.h"
-	#include "rtc/features/f4/RtcLseClockFeature.h"
-	#include "rtc/features/f4/RtcLsiClockFeature.h"
-	#include "rtc/features/f4/RtcSecondInterruptFeature.h"
-	#include "rtc/features/f4/RtcMeasuredLsiFrequencyProvider.h"
+  #include "rtc/features/f4/RtcAlarmInterruptFeature.h"
+  #include "rtc/features/f4/RtcLseClockFeature.h"
+  #include "rtc/features/f4/RtcLsiClockFeature.h"
+  #include "rtc/features/f4/RtcSecondInterruptFeature.h"
+  #include "rtc/features/f4/RtcMeasuredLsiFrequencyProvider.h"
 
 #endif
 

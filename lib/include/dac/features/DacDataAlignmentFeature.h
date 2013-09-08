@@ -10,87 +10,87 @@
 namespace stm32plus {
 
 
-	/**
-	 * Feature class to enable the 3 DAC data alignment modes
-	 *
-	 * @tparam TChannel The DAC channel (DAC_Channel_1/2)
-	 * @tparam TAlignment The data alignment (DAC_Align_12b_R / DAC_Align_12b_L / DAC_Align_8b_R)
-	 */
+  /**
+   * Feature class to enable the 3 DAC data alignment modes
+   *
+   * @tparam TChannel The DAC channel (DAC_Channel_1/2)
+   * @tparam TAlignment The data alignment (DAC_Align_12b_R / DAC_Align_12b_L / DAC_Align_8b_R)
+   */
 
-	template<uint32_t TChannel,uint32_t TAlignment>
-	class DacDataAlignmentFeature : public DacFeatureBase {
+  template<uint32_t TChannel,uint32_t TAlignment>
+  class DacDataAlignmentFeature : public DacFeatureBase {
 
-		public:
-			enum {
-				DUAL_CHANNEL_FEATURE = 0
-			};
+    public:
+      enum {
+        DUAL_CHANNEL_FEATURE = 0
+      };
 
-		public:
-			DacDataAlignmentFeature(Dac& dac);
+    public:
+      DacDataAlignmentFeature(Dac& dac);
 
-			static uint32_t getAlignment();
-			static uint32_t getChannel();
-			static void write(uint16_t data);
-	};
-
-
-	/**
-	 * Constructor
-	 * @param dac
-	 */
-
-	template<uint32_t TChannel,uint32_t TAlignment>
-	inline DacDataAlignmentFeature<TChannel,TAlignment>::DacDataAlignmentFeature(Dac& dac)
-		: DacFeatureBase(dac) {
-	}
+      static uint32_t getAlignment();
+      static uint32_t getChannel();
+      static void write(uint16_t data);
+  };
 
 
-	/**
-	 * Get the alignment
-	 */
+  /**
+   * Constructor
+   * @param dac
+   */
 
-	template<uint32_t TChannel,uint32_t TAlignment>
-	inline uint32_t DacDataAlignmentFeature<TChannel,TAlignment>::getAlignment() {
-		return TAlignment;
-	}
-
-
-	/**
-	 * Get the channel
-	 */
-
-	template<uint32_t TChannel,uint32_t TAlignment>
-	inline uint32_t DacDataAlignmentFeature<TChannel,TAlignment>::getChannel() {
-		return TChannel;
-	}
+  template<uint32_t TChannel,uint32_t TAlignment>
+  inline DacDataAlignmentFeature<TChannel,TAlignment>::DacDataAlignmentFeature(Dac& dac)
+    : DacFeatureBase(dac) {
+  }
 
 
-	/**
-	 * Write data
-	 */
+  /**
+   * Get the alignment
+   */
 
-	template<uint32_t TChannel,uint32_t TAlignment>
-	inline void DacDataAlignmentFeature<TChannel,TAlignment>::write(uint16_t data) {
-
-		// This is a comparison of constants - the optimiser will eliminate the comparison completely
-
-		if(TChannel==DAC_Channel_1)
-			DAC_SetChannel1Data(TAlignment,data);
-		else
-			DAC_SetChannel2Data(TAlignment,data);
-	}
+  template<uint32_t TChannel,uint32_t TAlignment>
+  inline uint32_t DacDataAlignmentFeature<TChannel,TAlignment>::getAlignment() {
+    return TAlignment;
+  }
 
 
-	/**
-	 * Typedefs for all combinations of cases
-	 */
+  /**
+   * Get the channel
+   */
 
-	typedef DacDataAlignmentFeature<DAC_Channel_1,DAC_Align_12b_R> DacChannel112BitRightAlignmentFeature;
-	typedef DacDataAlignmentFeature<DAC_Channel_2,DAC_Align_12b_R> DacChannel212BitRightAlignmentFeature;
+  template<uint32_t TChannel,uint32_t TAlignment>
+  inline uint32_t DacDataAlignmentFeature<TChannel,TAlignment>::getChannel() {
+    return TChannel;
+  }
 
-	typedef DacDataAlignmentFeature<DAC_Channel_1,DAC_Align_12b_L> DacChannel112BitLeftAlignmentFeature;
-	typedef DacDataAlignmentFeature<DAC_Channel_2,DAC_Align_12b_L> DacChannel212BitLeftAlignmentFeature;
 
-	typedef DacDataAlignmentFeature<DAC_Channel_1,DAC_Align_8b_R> DacChannel18BitRightAlignmentFeature;
-	typedef DacDataAlignmentFeature<DAC_Channel_2,DAC_Align_8b_R> DacChannel28BitRightAlignmentFeature;
+  /**
+   * Write data
+   */
+
+  template<uint32_t TChannel,uint32_t TAlignment>
+  inline void DacDataAlignmentFeature<TChannel,TAlignment>::write(uint16_t data) {
+
+    // This is a comparison of constants - the optimiser will eliminate the comparison completely
+
+    if(TChannel==DAC_Channel_1)
+      DAC_SetChannel1Data(TAlignment,data);
+    else
+      DAC_SetChannel2Data(TAlignment,data);
+  }
+
+
+  /**
+   * Typedefs for all combinations of cases
+   */
+
+  typedef DacDataAlignmentFeature<DAC_Channel_1,DAC_Align_12b_R> DacChannel112BitRightAlignmentFeature;
+  typedef DacDataAlignmentFeature<DAC_Channel_2,DAC_Align_12b_R> DacChannel212BitRightAlignmentFeature;
+
+  typedef DacDataAlignmentFeature<DAC_Channel_1,DAC_Align_12b_L> DacChannel112BitLeftAlignmentFeature;
+  typedef DacDataAlignmentFeature<DAC_Channel_2,DAC_Align_12b_L> DacChannel212BitLeftAlignmentFeature;
+
+  typedef DacDataAlignmentFeature<DAC_Channel_1,DAC_Align_8b_R> DacChannel18BitRightAlignmentFeature;
+  typedef DacDataAlignmentFeature<DAC_Channel_2,DAC_Align_8b_R> DacChannel28BitRightAlignmentFeature;
 }

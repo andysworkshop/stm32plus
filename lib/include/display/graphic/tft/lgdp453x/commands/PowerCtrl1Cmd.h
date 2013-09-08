@@ -12,24 +12,24 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace PowerCtrl1Cmd
-		{
-			enum
-			{
-				Opcode = 0x10,
+  namespace lgdp453x
+  {
+    namespace PowerCtrl1Cmd
+    {
+      enum
+      {
+        Opcode = 0x10,
 
-				STB  = 1,
-				SLP  = 1<<1,
-				DSTB = 1<<2,
-				DK   = 1<<3
-			};
-			inline uint16_t AP(uint16_t n) { return n<<4; }
-			inline uint16_t BT(uint16_t n) { return n<<8; }
-			inline uint16_t SAP(uint16_t n) { return n<<12; }
-		}
-	}
+        STB  = 1,
+        SLP  = 1<<1,
+        DSTB = 1<<2,
+        DK   = 1<<3
+      };
+      inline uint16_t AP(uint16_t n) { return n<<4; }
+      inline uint16_t BT(uint16_t n) { return n<<8; }
+      inline uint16_t SAP(uint16_t n) { return n<<12; }
+    }
+  }
 }
 
 

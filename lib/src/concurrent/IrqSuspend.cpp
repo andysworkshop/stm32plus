@@ -10,5 +10,5 @@
 
 namespace stm32plus {
 
-	uint32_t IrqSuspend::_counter=0;
+  uint32_t IrqSuspend::_counter=0;
 }

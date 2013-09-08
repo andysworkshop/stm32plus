@@ -14,289 +14,289 @@ static const uint8_t LZG_LENGTH_DECODE_LUT[32]= { 2,3,4,5,6,7,8,9,10,11,12,13,14
 namespace stm32plus {
 
 
-	/**
-	 * Constructor. Initiates the decompression.
-	 * The error provider should be checked to ensure that nothing went wrong
-	 * while setting up the decompressor
-	 *
-	 * @param input The source of compressed bytes
-	 * @param compressedSize the number of bytes of compressed data
-	 */
+  /**
+   * Constructor. Initiates the decompression.
+   * The error provider should be checked to ensure that nothing went wrong
+   * while setting up the decompressor
+   *
+   * @param input The source of compressed bytes
+   * @param compressedSize the number of bytes of compressed data
+   */
 
-	LzgDecompressionStream::LzgDecompressionStream(InputStream& input,uint32_t compressedSize)
-		: _input(input),
-		  _compressedSize(compressedSize) {
+  LzgDecompressionStream::LzgDecompressionStream(InputStream& input,uint32_t compressedSize)
+    : _input(input),
+      _compressedSize(compressedSize) {
 
-		int i;
+    int i;
 
-		// no error yet
+    // no error yet
 
-		errorProvider.clear();
+    errorProvider.clear();
 
-		// initialize the output byte buffer
+    // initialize the output byte buffer
 
-		_compressedDataAvailable=_compressedSize;
-		_historyCopyDataAvailable=0;
+    _compressedDataAvailable=_compressedSize;
+    _historyCopyDataAvailable=0;
 
-		_dst=_circbuf;
-		_dstEnd=_circbuf+sizeof(_circbuf);
+    _dst=_circbuf;
+    _dstEnd=_circbuf+sizeof(_circbuf);
 
-		// skip header information
+    // skip header information
 
-		if(!input.skip(16))
-			return;
+    if(!input.skip(16))
+      return;
 
-		// Get marker symbols from the input stream
+    // Get marker symbols from the input stream
 
-		_input >> _marker1;
-		_input >> _marker2;
-		_input >> _marker3;
-		_input >> _marker4;
+    _input >> _marker1;
+    _input >> _marker2;
+    _input >> _marker3;
+    _input >> _marker4;
 
-		_compressedDataAvailable-=20;  					// the header and 4 markers
+    _compressedDataAvailable-=20;           // the header and 4 markers
 
-		// Initialize marker symbol LUT
+    // Initialize marker symbol LUT
 
-		for(i=0;i<256;++i)
-			_isMarkerSymbolLUT[i]=0;
+    for(i=0;i<256;++i)
+      _isMarkerSymbolLUT[i]=0;
 
-		_isMarkerSymbolLUT[_marker1]=1;
-		_isMarkerSymbolLUT[_marker2]=1;
-		_isMarkerSymbolLUT[_marker3]=1;
-		_isMarkerSymbolLUT[_marker4]=1;
-	}
+    _isMarkerSymbolLUT[_marker1]=1;
+    _isMarkerSymbolLUT[_marker2]=1;
+    _isMarkerSymbolLUT[_marker3]=1;
+    _isMarkerSymbolLUT[_marker4]=1;
+  }
 
 
-	/*
-	 * Read a byte from the stream, or return EOF or an error
-	 */
+  /*
+   * Read a byte from the stream, or return EOF or an error
+   */
 
-	int16_t LzgDecompressionStream::read() {
+  int16_t LzgDecompressionStream::read() {
 
-		uint8_t nextByte;
+    uint8_t nextByte;
 
-		// check for end of stream
+    // check for end of stream
 
-		if(_historyCopyDataAvailable==0 && _compressedDataAvailable==0)
-			return E_END_OF_STREAM;
+    if(_historyCopyDataAvailable==0 && _compressedDataAvailable==0)
+      return E_END_OF_STREAM;
 
-		// return the next byte
+    // return the next byte
 
-		if(readNextUncompressedByte(nextByte))
-			return nextByte;
+    if(readNextUncompressedByte(nextByte))
+      return nextByte;
 
-		return false;
-	}
+    return false;
+  }
 
 
-	bool LzgDecompressionStream::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
+  bool LzgDecompressionStream::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
 
-		uint8_t *ptr;
+    uint8_t *ptr;
 
-		ptr=static_cast<uint8_t *>(buffer);
-		actuallyRead=0;
+    ptr=static_cast<uint8_t *>(buffer);
+    actuallyRead=0;
 
-		while(size-- && available()) {
+    while(size-- && available()) {
 
-			if(!readNextUncompressedByte(*ptr++))
-				return false;
+      if(!readNextUncompressedByte(*ptr++))
+        return false;
 
-			actuallyRead++;
-		}
+      actuallyRead++;
+    }
 
-		return true;
-	}
+    return true;
+  }
 
 
-	/*
-	 * Can't close, and can't go wrong either
-	 */
+  /*
+   * Can't close, and can't go wrong either
+   */
 
-	bool LzgDecompressionStream::close() {
-		return true;
-	}
+  bool LzgDecompressionStream::close() {
+    return true;
+  }
 
 
-	/*
-	 * Can't skip
-	 */
+  /*
+   * Can't skip
+   */
 
-	bool LzgDecompressionStream::skip(uint32_t howMuch __attribute__((unused))) {
-		return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_OPERATION_NOT_SUPPORTED);
-	}
+  bool LzgDecompressionStream::skip(uint32_t howMuch __attribute__((unused))) {
+    return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_OPERATION_NOT_SUPPORTED);
+  }
 
 
-	/*
-	 * Return true if there is data available
-	 */
+  /*
+   * Return true if there is data available
+   */
 
-	bool LzgDecompressionStream::available() {
-		return _compressedDataAvailable>0 || _historyCopyDataAvailable>0;
-	}
+  bool LzgDecompressionStream::available() {
+    return _compressedDataAvailable>0 || _historyCopyDataAvailable>0;
+  }
 
 
-	/*
-	 * Cannot reset because we can't guarantee that the compressed data
-	 * started at the beginning of the input stream
-	 */
+  /*
+   * Cannot reset because we can't guarantee that the compressed data
+   * started at the beginning of the input stream
+   */
 
-	bool LzgDecompressionStream::reset() {
-		return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_OPERATION_NOT_SUPPORTED);
-	}
+  bool LzgDecompressionStream::reset() {
+    return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_OPERATION_NOT_SUPPORTED);
+  }
 
 
-	/*
-	 * Read the next uncompressed byte from the stream
-	 */
+  /*
+   * Read the next uncompressed byte from the stream
+   */
 
-	bool LzgDecompressionStream::readNextUncompressedByte(uint8_t& nextByte) {
+  bool LzgDecompressionStream::readNextUncompressedByte(uint8_t& nextByte) {
 
-		uint8_t symbol,b,b2;
-		uint16_t offset,length;
+    uint8_t symbol,b,b2;
+    uint16_t offset,length;
 
-		// if we're in mid-copy from the history window, take the next byte from there
+    // if we're in mid-copy from the history window, take the next byte from there
 
-		if(_historyCopyDataAvailable>0) {
-			nextByte=getByteFromHistoryCopy();
-			return true;
-		}
+    if(_historyCopyDataAvailable>0) {
+      nextByte=getByteFromHistoryCopy();
+      return true;
+    }
 
-		// get the next symbol
+    // get the next symbol
 
-		if(!nextByteFromStream(symbol))
-			return false;
+    if(!nextByteFromStream(symbol))
+      return false;
 
-		// Marker symbol?
+    // Marker symbol?
 
-		if(!_isMarkerSymbolLUT[symbol]) {
+    if(!_isMarkerSymbolLUT[symbol]) {
 
-			// Literal copy
+      // Literal copy
 
-			nextByte=symbol;
+      nextByte=symbol;
 
-			*_dst++=symbol;
-			if(_dst==_dstEnd)
-				_dst=_circbuf;
-		} else {
+      *_dst++=symbol;
+      if(_dst==_dstEnd)
+        _dst=_circbuf;
+    } else {
 
-			if(!nextByteFromStream(b))
-				return false;
+      if(!nextByteFromStream(b))
+        return false;
 
-			if(b) {
+      if(b) {
 
-				// Decode offset / length parameters
+        // Decode offset / length parameters
 
-				if(symbol == _marker1) {
+        if(symbol == _marker1) {
 
-					// distant copy is not supported on the STM32 due to lack of SRAM)
+          // distant copy is not supported on the STM32 due to lack of SRAM)
 
-					return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_UNSUPPORTED_COMPRESSED_DATA);
+          return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_UNSUPPORTED_COMPRESSED_DATA);
 
-				} else if(symbol == _marker2) {
+        } else if(symbol == _marker2) {
 
-					// Medium copy
+          // Medium copy
 
-					length=LZG_LENGTH_DECODE_LUT[b & 0x1f];
+          length=LZG_LENGTH_DECODE_LUT[b & 0x1f];
 
-					if(!nextByteFromStream(b2))
-						return false;
+          if(!nextByteFromStream(b2))
+            return false;
 
-					offset=(((uint16_t)(b & 0xe0)) << 3) | b2;
-					offset+=8;
-				} else if(symbol == _marker3) {
+          offset=(((uint16_t)(b & 0xe0)) << 3) | b2;
+          offset+=8;
+        } else if(symbol == _marker3) {
 
-					// Short copy
+          // Short copy
 
-					length=(b >> 6) + 3;
-					offset=(b & 0x3f) + 8;
-				} else {
+          length=(b >> 6) + 3;
+          offset=(b & 0x3f) + 8;
+        } else {
 
-					// Near copy (including RLE)
+          // Near copy (including RLE)
 
-					length=LZG_LENGTH_DECODE_LUT[b & 0x1f];
-					offset=(b >> 5) + 1;
-				}
+          length=LZG_LENGTH_DECODE_LUT[b & 0x1f];
+          offset=(b >> 5) + 1;
+        }
 
-				// Copy corresponding data from history window
+        // Copy corresponding data from history window
 
-				if(offset<=static_cast<uint16_t>(_dst-_circbuf))
-					_historyCopyPosition=_dst-offset;
-				else
-					_historyCopyPosition=_dstEnd-(offset-(uint16_t)(_dst-_circbuf));
+        if(offset<=static_cast<uint16_t>(_dst-_circbuf))
+          _historyCopyPosition=_dst-offset;
+        else
+          _historyCopyPosition=_dstEnd-(offset-(uint16_t)(_dst-_circbuf));
 
-				_historyCopyDataAvailable=length;
+        _historyCopyDataAvailable=length;
 
-				nextByte=getByteFromHistoryCopy();
+        nextByte=getByteFromHistoryCopy();
 
-			} else {
+      } else {
 
-				// single occurance of a marker symbol
+        // single occurance of a marker symbol
 
-				nextByte=symbol;
+        nextByte=symbol;
 
-				*_dst++=symbol;
-				if(_dst==_dstEnd)
-					_dst=_circbuf;
-			}
-		}
+        *_dst++=symbol;
+        if(_dst==_dstEnd)
+          _dst=_circbuf;
+      }
+    }
 
-		return true;
-	}
+    return true;
+  }
 
 
-	/*
-	 * Get next byte from input stream
-	 */
+  /*
+   * Get next byte from input stream
+   */
 
-	bool LzgDecompressionStream::nextByteFromStream(uint8_t& nextByte) {
+  bool LzgDecompressionStream::nextByteFromStream(uint8_t& nextByte) {
 
-		int16_t value;
+    int16_t value;
 
-		// must have a byte to read
+    // must have a byte to read
 
-		if(_compressedSize==0)
-			return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_END_OF_STREAM);
+    if(_compressedSize==0)
+      return errorProvider.set(ErrorProvider::ERROR_PROVIDER_LZG_DECOMPRESSION_STREAM,E_END_OF_STREAM);
 
-		// read next byte
+    // read next byte
 
-		if((value=_input.read())<0)
-			return false;
+    if((value=_input.read())<0)
+      return false;
 
-		// return it
+    // return it
 
-		nextByte=value;
-		_compressedSize--;
+    nextByte=value;
+    _compressedSize--;
 
-		return true;
-	}
+    return true;
+  }
 
 
-	/*
-	 * Get one byte from the available data in this history window.
-	 * Data must be available!
-	 */
+  /*
+   * Get one byte from the available data in this history window.
+   * Data must be available!
+   */
 
-	uint8_t LzgDecompressionStream::getByteFromHistoryCopy() {
+  uint8_t LzgDecompressionStream::getByteFromHistoryCopy() {
 
-		uint8_t retval;
+    uint8_t retval;
 
-		// get the next value from the copy position, copy back to the circular buffer
+    // get the next value from the copy position, copy back to the circular buffer
 
-		retval=*_historyCopyPosition++;
-		*_dst++=retval;
+    retval=*_historyCopyPosition++;
+    *_dst++=retval;
 
-		// copy position and source pointer are both in the circular buffer and must be updated
+    // copy position and source pointer are both in the circular buffer and must be updated
 
-		if(_dst==_dstEnd)
-			_dst=_circbuf;
+    if(_dst==_dstEnd)
+      _dst=_circbuf;
 
-		if(_historyCopyPosition==_dstEnd)
-			_historyCopyPosition=_circbuf;
+    if(_historyCopyPosition==_dstEnd)
+      _historyCopyPosition=_circbuf;
 
-		// that's one less byte available for next time
+    // that's one less byte available for next time
 
-		_historyCopyDataAvailable--;
+    _historyCopyDataAvailable--;
 
-		return retval;
-	}
+    return retval;
+  }
 }

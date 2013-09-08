@@ -21,19 +21,19 @@ extern "C" void HASH_RNG_IRQHandler();
 
 namespace stm32plus {
 
-	/**
-	 * Helper class to enable only the desired interrupts in the NVIC.
-	 */
+  /**
+   * Helper class to enable only the desired interrupts in the NVIC.
+   */
 
-	class RngInterruptFeatureEnabler {
+  class RngInterruptFeatureEnabler {
 
-	  private:
+    private:
       typedef void (*FPTR)();         // this trick will force the linker to include the ISR
       static FPTR _forceLinkage;
 
     public:
       static void enable(uint8_t priority,uint8_t subPriority);
-	};
+  };
 
 
   /**
@@ -86,7 +86,7 @@ namespace stm32plus {
    */
 
   inline RngInterruptFeature::~RngInterruptFeature() {
-  	disableInterrupts();
+    disableInterrupts();
   }
 
 
@@ -98,8 +98,8 @@ namespace stm32plus {
    */
 
   inline void RngInterruptFeature::setNvicPriorities(uint8_t priority,uint8_t subPriority) {
-  	_nvicPriority=priority;
-  	_nvicSubPriority=subPriority;
+    _nvicPriority=priority;
+    _nvicSubPriority=subPriority;
   }
 
 

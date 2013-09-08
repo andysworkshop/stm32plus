@@ -12,23 +12,23 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * ILI9327 400x240 interface: 64K and 262K colours, portrait and landscape
-		 */
+    /**
+     * ILI9327 400x240 interface: 64K and 262K colours, portrait and landscape
+     */
 
-		template<class TAccessMode> using ILI9327_400x240_Portrait_64K = GraphicsLibrary<ILI9327<PORTRAIT,COLOURS_16BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
-		template<class TAccessMode> using ILI9327_400x240_Landscape_64K = GraphicsLibrary<ILI9327<LANDSCAPE,COLOURS_16BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
+    template<class TAccessMode> using ILI9327_400x240_Portrait_64K = GraphicsLibrary<ILI9327<PORTRAIT,COLOURS_16BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
+    template<class TAccessMode> using ILI9327_400x240_Landscape_64K = GraphicsLibrary<ILI9327<LANDSCAPE,COLOURS_16BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
 
-		template<class TAccessMode> using ILI9327_400x240_Portrait_262K = GraphicsLibrary<ILI9327<PORTRAIT,COLOURS_18BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
-		template<class TAccessMode> using ILI9327_400x240_Landscape_262K = GraphicsLibrary<ILI9327<LANDSCAPE,COLOURS_18BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
+    template<class TAccessMode> using ILI9327_400x240_Portrait_262K = GraphicsLibrary<ILI9327<PORTRAIT,COLOURS_18BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
+    template<class TAccessMode> using ILI9327_400x240_Landscape_262K = GraphicsLibrary<ILI9327<LANDSCAPE,COLOURS_18BIT,TAccessMode,ILI9327400x240PanelTraits>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the ILI9327
-		 */
+    /**
+     * Graphic terminal modes for the ILI9327
+     */
 
-		template<class TDevice> using ILI9327_Terminal_Portrait = GraphicTerminal<TDevice,true>;
-		template<class TDevice> using ILI9327_Terminal_Landscape = GraphicTerminal<TDevice,false>;
-	}
+    template<class TDevice> using ILI9327_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using ILI9327_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+  }
 }

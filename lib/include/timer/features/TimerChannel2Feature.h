@@ -15,29 +15,29 @@ namespace stm32plus {
    * a specific timer channel
    */
 
-	template<>
+  template<>
   class TimerChannelFeature<2> : public TimerChannelFeatureBase {
 
-  	protected:
+    protected:
       uint8_t _dutyCycle;
 
-  	public:
+    public:
       TimerChannelFeature(Timer& timer);
 
-			uint16_t getCapture() const;
-			void initCompareForPwmOutput(uint8_t initialDutyCycle=0,uint16_t ocMode=TIM_OCMode_PWM1,uint16_t ocPolarity=TIM_OCPolarity_High);
+      uint16_t getCapture() const;
+      void initCompareForPwmOutput(uint8_t initialDutyCycle=0,uint16_t ocMode=TIM_OCMode_PWM1,uint16_t ocPolarity=TIM_OCPolarity_High);
       void initCompare(uint16_t compareValue,uint16_t ocMode=TIM_OCMode_Toggle,uint16_t polarity=TIM_OCPolarity_Low,uint16_t preload=TIM_OCPreload_Disable);
       void initCapture(uint16_t polarity=TIM_ICPolarity_Rising,uint16_t selection=TIM_ICSelection_DirectTI,uint16_t prescaler=TIM_ICPSC_DIV1,uint16_t filter=0,uint16_t timerPrescaler=1);
       void setCompare(uint16_t compare) const;
       void setDutyCycle(uint8_t dutyCycle);
-	};
+  };
 
 
-	/*
-	 * Typedef for easier access
-	 */
+  /*
+   * Typedef for easier access
+   */
 
-	typedef TimerChannelFeature<2> TimerChannel2Feature;
+  typedef TimerChannelFeature<2> TimerChannel2Feature;
 
 
   /**
@@ -78,33 +78,33 @@ namespace stm32plus {
 
   inline void TimerChannelFeature<2>::initCompare(uint16_t compareValue,uint16_t ocMode,uint16_t polarity,uint16_t preload) {
 
-  	TIM_OCInitTypeDef oci;
+    TIM_OCInitTypeDef oci;
 
-  	// initialise the channel OC
+    // initialise the channel OC
 
     TIM_OCStructInit(&oci);
 
     oci.TIM_OCMode=ocMode;
-  	oci.TIM_OutputState=TIM_OutputState_Enable;
-  	oci.TIM_Pulse=compareValue;
-  	oci.TIM_OCPolarity=polarity;
+    oci.TIM_OutputState=TIM_OutputState_Enable;
+    oci.TIM_Pulse=compareValue;
+    oci.TIM_OCPolarity=polarity;
 
-  	TIM_OC2Init(_timer,&oci);
-  	TIM_OC2PreloadConfig(_timer,preload);
-  	TIM_CtrlPWMOutputs(_timer,ENABLE);
+    TIM_OC2Init(_timer,&oci);
+    TIM_OC2PreloadConfig(_timer,preload);
+    TIM_CtrlPWMOutputs(_timer,ENABLE);
   }
 
 
-	/**
-	 * Initialise the channel in PWM output mode.
-	 * @param initialDutyCycle Default is zero. Duty cycle is a percentage, 0..100
-	 * @param ocMode Default is TIM_OCMode_PWM1 (edge aligned). Use TIM_OCMode_PWM2 for center aligned.
-	 * @param ocPolarity Default is TIM_OCPolarity_High
-	 */
+  /**
+   * Initialise the channel in PWM output mode.
+   * @param initialDutyCycle Default is zero. Duty cycle is a percentage, 0..100
+   * @param ocMode Default is TIM_OCMode_PWM1 (edge aligned). Use TIM_OCMode_PWM2 for center aligned.
+   * @param ocPolarity Default is TIM_OCPolarity_High
+   */
 
   inline void TimerChannelFeature<2>::initCompareForPwmOutput(uint8_t initialDutyCycle,uint16_t ocMode,uint16_t ocPolarity) {
-  	initCompare(0,ocMode,ocPolarity);
-  	setDutyCycle(initialDutyCycle);
+    initCompare(0,ocMode,ocPolarity);
+    setDutyCycle(initialDutyCycle);
   }
 
 
@@ -129,9 +129,9 @@ namespace stm32plus {
     // watch out for overflow
 
     if(period<0xFFFFFFFF/100)
-    	compareValue=static_cast<uint16_t>((period*static_cast<uint32_t>(dutyCycle))/100L);
+      compareValue=static_cast<uint16_t>((period*static_cast<uint32_t>(dutyCycle))/100L);
     else
-    	compareValue=(period/100L)*static_cast<uint32_t>(dutyCycle);
+      compareValue=(period/100L)*static_cast<uint32_t>(dutyCycle);
 
     setCompare(compareValue);
   }
@@ -148,17 +148,17 @@ namespace stm32plus {
 
   inline void TimerChannelFeature<2>::initCapture(uint16_t polarity,uint16_t selection,uint16_t prescaler,uint16_t filter,uint16_t timerPrescaler) {
 
-  	TIM_ICInitTypeDef init;
+    TIM_ICInitTypeDef init;
 
-  	// do the peripheral initialisation
+    // do the peripheral initialisation
 
-  	init.TIM_Channel=TIM_Channel_2;
-  	init.TIM_ICPolarity=polarity;
-  	init.TIM_ICSelection=selection;
-  	init.TIM_ICPrescaler=prescaler;
-  	init.TIM_ICFilter=filter;
+    init.TIM_Channel=TIM_Channel_2;
+    init.TIM_ICPolarity=polarity;
+    init.TIM_ICSelection=selection;
+    init.TIM_ICPrescaler=prescaler;
+    init.TIM_ICFilter=filter;
 
-  	TIM_ICInit(_timer,&init);
-  	_timer.setPrescaler(timerPrescaler,TIM_PSCReloadMode_Immediate);
+    TIM_ICInit(_timer,&init);
+    _timer.setPrescaler(timerPrescaler,TIM_PSCReloadMode_Immediate);
   }
 }

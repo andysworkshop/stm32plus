@@ -9,31 +9,31 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a datalink frame
-		 */
+    /**
+     * Event descriptor for a datalink frame
+     */
 
-		struct DatalinkFrameEvent : NetEventDescriptor {
+    struct DatalinkFrameEvent : NetEventDescriptor {
 
-			/**
-			 * The frame reference
-			 */
+      /**
+       * The frame reference
+       */
 
-			DatalinkFrame& datalinkFrame;
+      DatalinkFrame& datalinkFrame;
 
 
-			/**
-			 * Constructor
-			 * @param frame
-			 */
+      /**
+       * Constructor
+       * @param frame
+       */
 
-			DatalinkFrameEvent(DatalinkFrame& frame)
-				: NetEventDescriptor(NetEventType::DATALINK_FRAME),
-					datalinkFrame(frame) {
-			}
-		};
-	}
+      DatalinkFrameEvent(DatalinkFrame& frame)
+        : NetEventDescriptor(NetEventType::DATALINK_FRAME),
+          datalinkFrame(frame) {
+      }
+    };
+  }
 }

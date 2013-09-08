@@ -9,39 +9,39 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Time provider that uses the real time clock
-	 */
+  /**
+   * @brief Time provider that uses the real time clock
+   */
 
-	class RtcTimeProvider : public TimeProvider {
-		protected:
-			const RtcBase& _rtc;
+  class RtcTimeProvider : public TimeProvider {
+    protected:
+      const RtcBase& _rtc;
 
-		public:
+    public:
 
-			/**
-			 * Constructor.
-			 * @param[in] rtc_ The RTC. Caller supplied parameter, must not go out of scope.
-			 */
+      /**
+       * Constructor.
+       * @param[in] rtc_ The RTC. Caller supplied parameter, must not go out of scope.
+       */
 
-			RtcTimeProvider(const RtcBase& rtc) :
-				_rtc(rtc) {
-			}
+      RtcTimeProvider(const RtcBase& rtc) :
+        _rtc(rtc) {
+      }
 
-			/**
-			 * Virtual destructor
-			 */
+      /**
+       * Virtual destructor
+       */
 
-			virtual ~RtcTimeProvider() {}
+      virtual ~RtcTimeProvider() {}
 
-			/**
-			 * Return the time. Actually returns the tick-count from the RTC.
-			 * @return The tick count.
-			 */
+      /**
+       * Return the time. Actually returns the tick-count from the RTC.
+       * @return The tick count.
+       */
 
-			virtual time_t getTime() const override {
-				return _rtc.getTick();
-			}
-	};
+      virtual time_t getTime() const override {
+        return _rtc.getTick();
+      }
+  };
 
 }

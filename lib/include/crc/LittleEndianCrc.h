@@ -9,112 +9,112 @@
 
 namespace stm32plus {
 
-	/**
-	 * Generic template implementation of the CRC peripheral. This peripheral is the
-	 * same on the F1 and F4 so there are no specialisations.
-	 *
-	 * The CRC unit operates on 32 bit words and you are most likely to be operating on
-	 * a byte stream, hence this class takes bytes as input.
-	 *
-	 * reset() is called on construction and you can call it whenever afterwards. You then
-	 * call addNewData() as many times as you have bytes to use and then call finish to
-	 * flush any remaining bytes (with configurable padding). Both finish() and addNewData()
-	 * return the current CRC value. The only valid method call after finish() has been
-	 * called is reset()
-	 *
-	 * The little endian implementation operates in the default mode of the CRC unit.
-	 */
+  /**
+   * Generic template implementation of the CRC peripheral. This peripheral is the
+   * same on the F1 and F4 so there are no specialisations.
+   *
+   * The CRC unit operates on 32 bit words and you are most likely to be operating on
+   * a byte stream, hence this class takes bytes as input.
+   *
+   * reset() is called on construction and you can call it whenever afterwards. You then
+   * call addNewData() as many times as you have bytes to use and then call finish to
+   * flush any remaining bytes (with configurable padding). Both finish() and addNewData()
+   * return the current CRC value. The only valid method call after finish() has been
+   * called is reset()
+   *
+   * The little endian implementation operates in the default mode of the CRC unit.
+   */
 
-	template<>
-	class CrcPeripheral<LITTLE_ENDIAN> : public CrcBase {
+  template<>
+  class CrcPeripheral<LITTLE_ENDIAN> : public CrcBase {
 
-		public:
-			struct Parameters {
-				uint8_t crc_padding;
+    public:
+      struct Parameters {
+        uint8_t crc_padding;
 
-				Parameters(uint8_t padding=0) {
-					crc_padding=padding;
-				}
-			};
+        Parameters(uint8_t padding=0) {
+          crc_padding=padding;
+        }
+      };
 
-		public:
-			CrcPeripheral(const Parameters& params);
-			uint32_t addNewData(uint8_t nextByte);
+    public:
+      CrcPeripheral(const Parameters& params);
+      uint32_t addNewData(uint8_t nextByte);
 
-			uint32_t finish() const;
-			uint32_t currentCrc() const;
-	};
-
-
-	/**
-	 * typedefs for easy use
-	 */
-
-	typedef CrcPeripheral<LITTLE_ENDIAN> CrcLittleEndian;
+      uint32_t finish() const;
+      uint32_t currentCrc() const;
+  };
 
 
-	/**
-	 * Constructor. Initialise state variables
-	 * @param padding The byte to pad the final word with when your input stream size is not a multiple of 32 bits.
-	 */
+  /**
+   * typedefs for easy use
+   */
 
-	inline CrcPeripheral<LITTLE_ENDIAN>::CrcPeripheral(const Parameters& params)
-		: CrcBase(params.crc_padding) {
-	}
+  typedef CrcPeripheral<LITTLE_ENDIAN> CrcLittleEndian;
 
 
-	/**
-	 * Add a new data byte to the calculation and return the current value of the calculation. The current value will change
-	 * every 4 bytes because of the 32-bit resolution of the peripheral
-	 * @param nextByte The next byte to add to the calculation
-	 * @return The current value of the CRC.
-	 */
+  /**
+   * Constructor. Initialise state variables
+   * @param padding The byte to pad the final word with when your input stream size is not a multiple of 32 bits.
+   */
 
-	inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::addNewData(uint8_t nextByte) {
-
-		// shift down the current word to make space for the new data and OR it in
-
-		_currentWord>>=8;
-		_currentWord|=static_cast<uint32_t>(nextByte) << 24;
-
-		if(_currentIndex++==3) {
-
-			uint32_t crc;
-
-			crc=CRC_CalcCRC(_currentWord);
-			_currentWord=_padding;
-			_currentIndex=0;
-
-			return crc;
-		}
-
-		return currentCrc();
-	}
+  inline CrcPeripheral<LITTLE_ENDIAN>::CrcPeripheral(const Parameters& params)
+    : CrcBase(params.crc_padding) {
+  }
 
 
-	/**
-	 * Finish the stream, writing any remaining bytes including the padding
-	 * @return The final CRC value
-	 */
+  /**
+   * Add a new data byte to the calculation and return the current value of the calculation. The current value will change
+   * every 4 bytes because of the 32-bit resolution of the peripheral
+   * @param nextByte The next byte to add to the calculation
+   * @return The current value of the CRC.
+   */
 
-	inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::finish() const {
+  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::addNewData(uint8_t nextByte) {
 
-		// if there are no pending bytes then return the current CRC value
-		// otherwise add the pending word and return the updated CRC
+    // shift down the current word to make space for the new data and OR it in
 
-		if(_currentIndex==0)
-			return currentCrc();
-		else
-			return CRC_CalcCRC(_currentWord);
-	}
+    _currentWord>>=8;
+    _currentWord|=static_cast<uint32_t>(nextByte) << 24;
+
+    if(_currentIndex++==3) {
+
+      uint32_t crc;
+
+      crc=CRC_CalcCRC(_currentWord);
+      _currentWord=_padding;
+      _currentIndex=0;
+
+      return crc;
+    }
+
+    return currentCrc();
+  }
 
 
-	/**
-	 * Return the current CRC value
-	 * @return The current CRC
-	 */
+  /**
+   * Finish the stream, writing any remaining bytes including the padding
+   * @return The final CRC value
+   */
 
-	inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::currentCrc() const {
-		return CRC_GetCRC();
-	}
+  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::finish() const {
+
+    // if there are no pending bytes then return the current CRC value
+    // otherwise add the pending word and return the updated CRC
+
+    if(_currentIndex==0)
+      return currentCrc();
+    else
+      return CRC_CalcCRC(_currentWord);
+  }
+
+
+  /**
+   * Return the current CRC value
+   * @return The current CRC
+   */
+
+  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::currentCrc() const {
+    return CRC_GetCRC();
+  }
 }

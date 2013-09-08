@@ -15,26 +15,26 @@
  */
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Nokia N93 interface: 64K, 262K, 16M colours, portrait and landscape
-		 */
+    /**
+     * Nokia N93 interface: 64K, 262K, 16M colours, portrait and landscape
+     */
 
-		template<class TAccessMode> using NokiaN93_Portrait_64K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
-		template<class TAccessMode> using NokiaN93_Landscape_64K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
+    template<class TAccessMode> using NokiaN93_Portrait_64K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_16BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
+    template<class TAccessMode> using NokiaN93_Landscape_64K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_16BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
 
-		template<class TAccessMode> using NokiaN93_Portrait_262K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
-		template<class TAccessMode> using NokiaN93_Landscape_262K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
+    template<class TAccessMode> using NokiaN93_Portrait_262K_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_18BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
+    template<class TAccessMode> using NokiaN93_Landscape_262K_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_18BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
 
-		template<class TAccessMode> using NokiaN93_Portrait_16M_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
-		template<class TAccessMode> using NokiaN93_Landscape_16M_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
+    template<class TAccessMode> using NokiaN93_Portrait_16M_TypeA  = GraphicsLibrary<MC2PA8201<PORTRAIT,COLOURS_24BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
+    template<class TAccessMode> using NokiaN93_Landscape_16M_TypeA = GraphicsLibrary<MC2PA8201<LANDSCAPE,COLOURS_24BIT,TAccessMode,NokiaN93_TypeA>,TAccessMode>;
 
-		/**
-		 * Graphic terminal modes for the Nokia N93
-		 */
+    /**
+     * Graphic terminal modes for the Nokia N93
+     */
 
-		template<class TDevice> using NokiaN93_Terminal_Portrait = GraphicTerminal<TDevice,false>;
-		template<class TDevice> using NokiaN93_Terminal_Landscape = GraphicTerminal<TDevice,false>;
-	}
+    template<class TDevice> using NokiaN93_Terminal_Portrait = GraphicTerminal<TDevice,false>;
+    template<class TDevice> using NokiaN93_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+  }
 }

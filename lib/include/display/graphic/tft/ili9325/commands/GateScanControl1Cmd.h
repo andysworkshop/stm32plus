@@ -12,21 +12,21 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace GateScanControl1Cmd
-		{
-			enum
-			{
-				Opcode = 0x60,
+  namespace ili9325
+  {
+    namespace GateScanControl1Cmd
+    {
+      enum
+      {
+        Opcode = 0x60,
 
-				GS = 1<<15
-			};
+        GS = 1<<15
+      };
 
-			inline uint16_t SCAN_GATE_LINE(uint16_t n) { return n; }
-			inline uint16_t NUM_LINES(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t SCAN_GATE_LINE(uint16_t n) { return n; }
+      inline uint16_t NUM_LINES(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 

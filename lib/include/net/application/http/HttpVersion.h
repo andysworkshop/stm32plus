@@ -5,16 +5,16 @@
  */
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * HTTP version enumeration
-		 */
+    /**
+     * HTTP version enumeration
+     */
 
-		enum class HttpVersion : uint8_t {
-			HTTP_1_0,					// version 1.0 (1 request per connection)
-			HTTP_1_1					// version 1.1 (connection keep alive)
-		};
-	}
+    enum class HttpVersion : uint8_t {
+      HTTP_1_0,         // version 1.0 (1 request per connection)
+      HTTP_1_1          // version 1.1 (connection keep alive)
+    };
+  }
 }

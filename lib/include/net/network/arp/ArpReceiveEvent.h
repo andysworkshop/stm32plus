@@ -8,30 +8,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * ARP receive frame event
-		 */
+    /**
+     * ARP receive frame event
+     */
 
-		struct ArpReceiveEvent : NetEventDescriptor {
+    struct ArpReceiveEvent : NetEventDescriptor {
 
-			/**
-			 * The ARP frame that arrived
-			 */
+      /**
+       * The ARP frame that arrived
+       */
 
-			const ArpFrameData& arpFrameData;
+      const ArpFrameData& arpFrameData;
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			ArpReceiveEvent(const ArpFrameData& afd)
-				: NetEventDescriptor(NetEventType::ARP_FRAME),
-				  arpFrameData(afd) {
-			}
-		};
-	}
+      ArpReceiveEvent(const ArpFrameData& afd)
+        : NetEventDescriptor(NetEventType::ARP_FRAME),
+          arpFrameData(afd) {
+      }
+    };
+  }
 }

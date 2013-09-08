@@ -12,28 +12,28 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace DisplayCtrl3Cmd
-		{
-			enum
-			{
-				Opcode = 9,
+  namespace ili9325
+  {
+    namespace DisplayCtrl3Cmd
+    {
+      enum
+      {
+        Opcode = 9,
 
-				NON_DISPLAY_SCAN_MODE_NORMAL = 0,
-				NON_DISPLAY_SCAN_MODE_INTERVAL = 2<<4,
+        NON_DISPLAY_SCAN_MODE_NORMAL = 0,
+        NON_DISPLAY_SCAN_MODE_INTERVAL = 2<<4,
 
-				NON_DISPLAY_SOURCE_OUT_V63_V0_REG = 0,
-				NON_DISPLAY_SOURCE_OUT_GND_GND_REG = 2<<8,
-				NON_DISPLAY_SOURCE_OUT_HIZ_HIZ_REG = 3<<8,
-				NON_DISPLAY_SOURCE_OUT_V63_V0_FREQ = 4<<8,
-				NON_DISPLAY_SOURCE_OUT_GND_GND_FREQ = 6<<8,
-				NON_DISPLAY_SOURCE_OUT_HIZ_HIZ_FREQ = 7<<8
-			};
+        NON_DISPLAY_SOURCE_OUT_V63_V0_REG = 0,
+        NON_DISPLAY_SOURCE_OUT_GND_GND_REG = 2<<8,
+        NON_DISPLAY_SOURCE_OUT_HIZ_HIZ_REG = 3<<8,
+        NON_DISPLAY_SOURCE_OUT_V63_V0_FREQ = 4<<8,
+        NON_DISPLAY_SOURCE_OUT_GND_GND_FREQ = 6<<8,
+        NON_DISPLAY_SOURCE_OUT_HIZ_HIZ_FREQ = 7<<8
+      };
 
-			inline uint16_t NON_DISPLAY_SCAN_CYCLE_CODE(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t NON_DISPLAY_SCAN_CYCLE_CODE(uint16_t n) { return n; }
+    }
+  }
 }
 
 #endif /* DISPLAYCTRL3CMD_H_ */

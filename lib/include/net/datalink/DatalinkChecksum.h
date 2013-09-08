@@ -8,17 +8,17 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * The type of checksum calculation requested
-		 */
+    /**
+     * The type of checksum calculation requested
+     */
 
-		enum class DatalinkChecksum {
-			NONE,                  			//!< NONE: Already done
-			IP_HEADER,            			//!< IP_HEADER: Just the IP header
-			IP_HEADER_AND_PROTOCOL			//!< IP_HEADER_AND_PROTOCOL: IP header and protocol
-		};
-	}
+    enum class DatalinkChecksum {
+      NONE,                       //!< NONE: Already done
+      IP_HEADER,                  //!< IP_HEADER: Just the IP header
+      IP_HEADER_AND_PROTOCOL      //!< IP_HEADER_AND_PROTOCOL: IP header and protocol
+    };
+  }
 }

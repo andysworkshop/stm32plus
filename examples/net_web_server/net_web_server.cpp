@@ -53,50 +53,50 @@ using namespace stm32plus::net;
 
 class NetHttpServerTest {
 
-	public:
+  public:
 
-		/**
-		 * Types that define the network stack
-		 */
+    /**
+     * Types that define the network stack
+     */
 
-		typedef PhysicalLayer<DP83848C> MyPhysicalLayer;
-		typedef DatalinkLayer<MyPhysicalLayer,DefaultRmiiInterface,Mac> MyDatalinkLayer;
-		typedef NetworkLayer<MyDatalinkLayer,DefaultIp,Arp> MyNetworkLayer;
-		typedef TransportLayer<MyNetworkLayer,Icmp,Udp,Tcp> MyTransportLayer;
-		typedef ApplicationLayer<MyTransportLayer,DhcpClient> MyApplicationLayer;
-		typedef NetworkStack<MyApplicationLayer> MyNetworkStack;
+    typedef PhysicalLayer<DP83848C> MyPhysicalLayer;
+    typedef DatalinkLayer<MyPhysicalLayer,DefaultRmiiInterface,Mac> MyDatalinkLayer;
+    typedef NetworkLayer<MyDatalinkLayer,DefaultIp,Arp> MyNetworkLayer;
+    typedef TransportLayer<MyNetworkLayer,Icmp,Udp,Tcp> MyTransportLayer;
+    typedef ApplicationLayer<MyTransportLayer,DhcpClient> MyApplicationLayer;
+    typedef NetworkStack<MyApplicationLayer> MyNetworkStack;
 
 
-		/*
-		 * The network stack, sdio and filesystem objects that we'll need for this demo
-		 */
+    /*
+     * The network stack, sdio and filesystem objects that we'll need for this demo
+     */
 
-		MyNetworkStack *_net;
+    MyNetworkStack *_net;
     SdioDmaSdCard *_sdcard;
     FileSystem *_fs;
     RtcTimeProvider *_timeProvider;
 
 
-		/*
-		 * Run the test
-		 */
+    /*
+     * Run the test
+     */
 
-		void run() {
+    void run() {
 
-			// declare the RTC that that stack requires. it's used for cache timeouts, DHCP lease expiry
-			// and such like so it does not have to be calibrated for accuracy. A few seconds here or there
-			// over a 24 hour period isn't going to make any difference. Start it ticking at zero which is
-			// some way back in 2000 but that doesn't matter to us
+      // declare the RTC that that stack requires. it's used for cache timeouts, DHCP lease expiry
+      // and such like so it does not have to be calibrated for accuracy. A few seconds here or there
+      // over a 24 hour period isn't going to make any difference. Start it ticking at zero which is
+      // some way back in 2000 but that doesn't matter to us
 
-			Rtc<RtcLsiClockFeature<Rtc32kHzLsiFrequencyProvider>,RtcSecondInterruptFeature> rtc;
-			rtc.setTick(0);
+      Rtc<RtcLsiClockFeature<Rtc32kHzLsiFrequencyProvider>,RtcSecondInterruptFeature> rtc;
+      rtc.setTick(0);
 
-			// create the RTC time provider for the file system. if writes are made to the card then
-			// this provider will be used to timestamp them.
+      // create the RTC time provider for the file system. if writes are made to the card then
+      // this provider will be used to timestamp them.
 
-			_timeProvider=new RtcTimeProvider(rtc);
+      _timeProvider=new RtcTimeProvider(rtc);
 
-			// declare the SD card and check for error. the card must be inserted at this point
+      // declare the SD card and check for error. the card must be inserted at this point
 
       _sdcard=new SdioDmaSdCard;
 
@@ -109,67 +109,67 @@ class NetHttpServerTest {
       if(!FileSystem::getInstance(*_sdcard,*_timeProvider,_fs))
         error();
 
-			// declare an instance of the network stack
+      // declare an instance of the network stack
 
-			MyNetworkStack::Parameters params;
-			_net=new MyNetworkStack;
+      MyNetworkStack::Parameters params;
+      _net=new MyNetworkStack;
 
-			// the stack requires the RTC
+      // the stack requires the RTC
 
-			params.base_rtc=&rtc;
+      params.base_rtc=&rtc;
 
-			// It's nice to give the DHCP client a host name because then it'll show up in DHCP
-			// 'active leases' page. In a home router this is often called 'attached devices'
+      // It's nice to give the DHCP client a host name because then it'll show up in DHCP
+      // 'active leases' page. In a home router this is often called 'attached devices'
 
-			params.dhcp_hostname="stm32plus";
+      params.dhcp_hostname="stm32plus";
 
-			// increase the number of connections per server
+      // increase the number of connections per server
 
-			params.tcp_maxConnectionsPerServer=10;
+      params.tcp_maxConnectionsPerServer=10;
 
-			// Initialise the stack. This will reset the PHY, initialise the MAC
-			// and attempt to create a link to our link partner. Ensure your cable
-			// is plugged in when you run this or be prepared to handle the error
+      // Initialise the stack. This will reset the PHY, initialise the MAC
+      // and attempt to create a link to our link partner. Ensure your cable
+      // is plugged in when you run this or be prepared to handle the error
 
-			if(!_net->initialise(params))
-				error();
+      if(!_net->initialise(params))
+        error();
 
-			// start the ethernet MAC Tx/Rx DMA channels
-			// this will trigger the DHCP transaction
+      // start the ethernet MAC Tx/Rx DMA channels
+      // this will trigger the DHCP transaction
 
-			if(!_net->startup())
-				error();
+      if(!_net->startup())
+        error();
 
-			// create an HTTP server on port 80 (our HTTP operates over TCP (the most common case))
-			// Here we take advantage of the second template parameter to the TcpServer template to
-			// pass in a user-defined type to the constructor of MyHttpConnection. We use it to pass
-			// in a pointer to the filesystem object that holds the web documents.
+      // create an HTTP server on port 80 (our HTTP operates over TCP (the most common case))
+      // Here we take advantage of the second template parameter to the TcpServer template to
+      // pass in a user-defined type to the constructor of MyHttpConnection. We use it to pass
+      // in a pointer to the filesystem object that holds the web documents.
 
-			TcpServer<MyHttpConnection,FileSystem> *httpServer;
+      TcpServer<MyHttpConnection,FileSystem> *httpServer;
 
-			if(!_net->tcpCreateServer(80,httpServer,_fs))
-				error();
+      if(!_net->tcpCreateServer(80,httpServer,_fs))
+        error();
 
-			// create an array to hold the active connections and configure it to
-			// automatically receive connections as they arrive. It will also
-			// automatically remove connections as they are closed.
+      // create an array to hold the active connections and configure it to
+      // automatically receive connections as they arrive. It will also
+      // automatically remove connections as they are closed.
 
-			TcpConnectionArray<MyHttpConnection> connections(*httpServer);
+      TcpConnectionArray<MyHttpConnection> connections(*httpServer);
 
-			// now all the plumbing is in place, open up the server to start
-			// accepting connection requests
+      // now all the plumbing is in place, open up the server to start
+      // accepting connection requests
 
-			httpServer->start();
+      httpServer->start();
 
-			// loop forever servicing connections via their handleXXX() methods
+      // loop forever servicing connections via their handleXXX() methods
 
-			connections.wait(TcpWaitState::WRITE | TcpWaitState::READ | TcpWaitState::CLOSED,0);
-		}
+      connections.wait(TcpWaitState::WRITE | TcpWaitState::READ | TcpWaitState::CLOSED,0);
+    }
 
 
-		void error() {
-			for(;;);
-		}
+    void error() {
+      for(;;);
+    }
 };
 
 
@@ -179,15 +179,15 @@ class NetHttpServerTest {
 
 int main() {
 
-	// interrupts
-	Nvic::initialise();
+  // interrupts
+  Nvic::initialise();
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	NetHttpServerTest test;
-	test.run();
+  NetHttpServerTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

@@ -10,17 +10,17 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace GammaControlCmd
-		{
-			enum
-			{
-				FirstOpcode = 0x30,
-				LastOpcode  = 0x3d
-			};
-		}
-	}
+  namespace lgdp453x
+  {
+    namespace GammaControlCmd
+    {
+      enum
+      {
+        FirstOpcode = 0x30,
+        LastOpcode  = 0x3d
+      };
+    }
+  }
 }
 
 

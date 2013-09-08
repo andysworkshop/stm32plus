@@ -9,57 +9,57 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Template feature-holder for features that live in the datalink
-		 * network layer, e.g. MAC. The layer below this is the physical layer
-		 * and the layer above is the network layer.
-		 */
+    /**
+     * Template feature-holder for features that live in the datalink
+     * network layer, e.g. MAC. The layer below this is the physical layer
+     * and the layer above is the network layer.
+     */
 
-		template<class TPhysicalLayer,template<class> class... Features>
-		class DatalinkLayer : public virtual TPhysicalLayer,
-													public Features<TPhysicalLayer>... {
+    template<class TPhysicalLayer,template<class> class... Features>
+    class DatalinkLayer : public virtual TPhysicalLayer,
+                          public Features<TPhysicalLayer>... {
 
-			public:
+      public:
 
-			  /**
-				 * Base parameters collection-class for datalink features
-				 */
+        /**
+         * Base parameters collection-class for datalink features
+         */
 
-				struct Parameters : TPhysicalLayer::Parameters,
-														Features<TPhysicalLayer>::Parameters... {
-				};
+        struct Parameters : TPhysicalLayer::Parameters,
+                            Features<TPhysicalLayer>::Parameters... {
+        };
 
-			public:
-				bool initialise(Parameters& params);
-				bool startup();
-		};
-
-
-		/**
-		 * Initialise the features
-		 * @param params The parameters class to initialise the layer features
-		 * @return true if it worked
-		 */
-
-		template<class TPhysicalLayer,template<class> class... Features>
-		bool DatalinkLayer<TPhysicalLayer,Features...>::initialise(Parameters& params) {
-			return TPhysicalLayer::initialise(params) &&
-						 RecursiveBoolInitWithParams<DatalinkLayer,Features<TPhysicalLayer>...>::tinit(this,params);
-		}
+      public:
+        bool initialise(Parameters& params);
+        bool startup();
+    };
 
 
-		/**
-		 * Startup the components in this layer
-		 * @return
-		 */
+    /**
+     * Initialise the features
+     * @param params The parameters class to initialise the layer features
+     * @return true if it worked
+     */
 
-		template<class TPhysicalLayer,template<class> class... Features>
-		bool DatalinkLayer<TPhysicalLayer,Features...>::startup() {
-			return TPhysicalLayer::startup() &&
-						 RecursiveBoolStartup<DatalinkLayer,Features<TPhysicalLayer>...>::tstartup(this);
-		}
-	}
+    template<class TPhysicalLayer,template<class> class... Features>
+    bool DatalinkLayer<TPhysicalLayer,Features...>::initialise(Parameters& params) {
+      return TPhysicalLayer::initialise(params) &&
+             RecursiveBoolInitWithParams<DatalinkLayer,Features<TPhysicalLayer>...>::tinit(this,params);
+    }
+
+
+    /**
+     * Startup the components in this layer
+     * @return
+     */
+
+    template<class TPhysicalLayer,template<class> class... Features>
+    bool DatalinkLayer<TPhysicalLayer,Features...>::startup() {
+      return TPhysicalLayer::startup() &&
+             RecursiveBoolStartup<DatalinkLayer,Features<TPhysicalLayer>...>::tstartup(this);
+    }
+  }
 }

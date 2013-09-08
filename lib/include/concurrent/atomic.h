@@ -37,472 +37,472 @@
 namespace stm32plus {
 
 
-	/**
-	 * compare-and-swap internal definitions
-	 */
+  /**
+   * compare-and-swap internal definitions
+   */
 
-	namespace __atomic_internal {
+  namespace __atomic_internal {
 
-		template<typename T, typename U, size_t sz>
-		struct sync_bool_compare_and_swap_internal {
-		};
+    template<typename T, typename U, size_t sz>
+    struct sync_bool_compare_and_swap_internal {
+    };
 
-		template<typename T, typename U>
-		struct sync_bool_compare_and_swap_internal<T, U, sizeof(long)> {
-			bool operator()(T *ptr, U oldval, U newval) const {
-				register int result;
-				asm volatile (
-						"ldrex    r0, [%1]         \n\t" /*exclusive load of ptr */
-						"cmp      r0,  %2          \n\t" /*compare the oldval ==  *ptr */
-						"ite eq\n\t"
-						"strexeq  %0,  %3, [%1]\n\t" /*store if eq, strex+eq*/
-						"clrexne"
-						: "=&r" (result)
-						: "r"(ptr), "r"(oldval),"r"(newval)
-						: "r0"
-				);
-				return result == 0;
-			}
-		};
+    template<typename T, typename U>
+    struct sync_bool_compare_and_swap_internal<T, U, sizeof(long)> {
+      bool operator()(T *ptr, U oldval, U newval) const {
+        register int result;
+        asm volatile (
+            "ldrex    r0, [%1]         \n\t" /*exclusive load of ptr */
+            "cmp      r0,  %2          \n\t" /*compare the oldval ==  *ptr */
+            "ite eq\n\t"
+            "strexeq  %0,  %3, [%1]\n\t" /*store if eq, strex+eq*/
+            "clrexne"
+            : "=&r" (result)
+            : "r"(ptr), "r"(oldval),"r"(newval)
+            : "r0"
+        );
+        return result == 0;
+      }
+    };
 
-		template<typename T, typename U>
-		struct sync_bool_compare_and_swap_internal<T, U, sizeof(short)> {
-			bool operator()(T *ptr, U oldval, U newval) const {
-				register int result;
-				asm volatile (
-						"ldrexh   r1, [%1]         \n\t" /*exclusive load of ptr*/
-						"cmp      r1,  %2          \n\t"/*compare the low reg oldval == low *ptr*/
-						"ite eq\n\t"
-						"strexheq %0,  %3, [%1]\n\t" /*store if eq, strex+eq*/
-						"clrexne"
-						: "=&r" (result)
-						: "r"(ptr), "r"(oldval),"r"(newval)
-						: "r1"
-				);
-				return result == 0;
-			}
-		};
+    template<typename T, typename U>
+    struct sync_bool_compare_and_swap_internal<T, U, sizeof(short)> {
+      bool operator()(T *ptr, U oldval, U newval) const {
+        register int result;
+        asm volatile (
+            "ldrexh   r1, [%1]         \n\t" /*exclusive load of ptr*/
+            "cmp      r1,  %2          \n\t"/*compare the low reg oldval == low *ptr*/
+            "ite eq\n\t"
+            "strexheq %0,  %3, [%1]\n\t" /*store if eq, strex+eq*/
+            "clrexne"
+            : "=&r" (result)
+            : "r"(ptr), "r"(oldval),"r"(newval)
+            : "r1"
+        );
+        return result == 0;
+      }
+    };
 
-		template<typename T, typename U>
-		struct sync_bool_compare_and_swap_internal<T, U, sizeof(char)> {
-			bool operator()(T *ptr, U oldval, U newval) const {
-				register int result;
-				asm volatile (
-						"ldrexb   r1, [%1]         \n\t" /*exclusive load of ptr*/
-						"cmp      r1,  %2          \n\t"/*compare the low reg oldval == low *ptr*/
-						"ite eq\n\t"
-						"strexbeq %0,  %3, [%1]" /*store if eq, strex+eq*/
-						"clrexne"
-						: "=&r" (result)
-						: "r"(ptr), "r"(oldval),"r"(newval)
-						: "r1"
-				);
-				return result == 0;
-			}
-		};
-	}
+    template<typename T, typename U>
+    struct sync_bool_compare_and_swap_internal<T, U, sizeof(char)> {
+      bool operator()(T *ptr, U oldval, U newval) const {
+        register int result;
+        asm volatile (
+            "ldrexb   r1, [%1]         \n\t" /*exclusive load of ptr*/
+            "cmp      r1,  %2          \n\t"/*compare the low reg oldval == low *ptr*/
+            "ite eq\n\t"
+            "strexbeq %0,  %3, [%1]" /*store if eq, strex+eq*/
+            "clrexne"
+            : "=&r" (result)
+            : "r"(ptr), "r"(oldval),"r"(newval)
+            : "r1"
+        );
+        return result == 0;
+      }
+    };
+  }
 
-	/*
-	 * Compare-and-swap API
-	 */
+  /*
+   * Compare-and-swap API
+   */
 
-	template<typename T, typename U>
-	bool sync_bool_compare_and_swap(T *ptr, U oldval, U newval) {
-		return __atomic_internal::sync_bool_compare_and_swap_internal<T, U, sizeof(T)>()(ptr, oldval, newval);
-	}
-
-
-	/*
-	 * Test-and-set internal definitions
-	 */
-
-	namespace __atomic_internal {
-
-		template<typename T, typename U, size_t sz>
-		struct sync_lock_test_and_set {
-		};
+  template<typename T, typename U>
+  bool sync_bool_compare_and_swap(T *ptr, U oldval, U newval) {
+    return __atomic_internal::sync_bool_compare_and_swap_internal<T, U, sizeof(T)>()(ptr, oldval, newval);
+  }
 
 
-		template<typename T, typename U>
-		struct sync_lock_test_and_set<T, U, sizeof(long)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm (
-						"1: ldrex   %0,  [%1]		\n\t"
-						"strex   r4,   %2, [%1]		\n\t"
-						"cmp     r4,   #0		\n\t"
-						"bne     1b			\n\t "
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r4"
-				);
-				return result;
-			}
-		};
+  /*
+   * Test-and-set internal definitions
+   */
 
-		template<typename T, typename U>
-		struct sync_lock_test_and_set<T, U, sizeof(short)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm (
-						"1: ldrexh   %0,  [%1]		\n\t"
-						"strexh   r4,   %2, [%1]		\n\t"
-						"cmp     r4,   #0		\n\t"
-						"bne     1b			\n\t "
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r4"
-				);
-				return result;
-			}
-		};
+  namespace __atomic_internal {
+
+    template<typename T, typename U, size_t sz>
+    struct sync_lock_test_and_set {
+    };
 
 
-		template<typename T, typename U>
-		struct sync_lock_test_and_set<T, U, sizeof(char)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm (
-						"1: ldrexb   %0,  [%1]\n\t"
-						"strexb   r4,   %2, [%1]\n\t"
-						"cmp     r4,   #0\n\t"
-						"bne     1b	\n\t "
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r4"
-				);
-				return result;
-			}
-		};
-	}
+    template<typename T, typename U>
+    struct sync_lock_test_and_set<T, U, sizeof(long)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm (
+            "1: ldrex   %0,  [%1]   \n\t"
+            "strex   r4,   %2, [%1]   \n\t"
+            "cmp     r4,   #0   \n\t"
+            "bne     1b     \n\t "
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r4"
+        );
+        return result;
+      }
+    };
 
-	/*
-	 * Test-and-set API
-	 */
-
-	template<typename T, typename U>
-	inline T sync_lock_test_and_set(T *ptr, U value) {
-		return __atomic_internal::sync_lock_test_and_set<T, U, sizeof(T)>()(ptr,value);
-	}
-
-
-	/*
-	 * fetch-and-add internal definitions
-	 */
-
-	namespace __atomic_internal {
-
-		template<typename T, typename U, size_t sz>
-		struct sync_fetch_and_add {
-		};
-
-		template<typename T, typename U>
-		struct sync_fetch_and_add<T, U, sizeof(long)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1: ldrex   %0,  [%1]	\n\t"
-						"add     r1,   %0,  %2	\n\t"
-						"strex   r2,   r1, [%1]	\n\t"
-						"cmp     r2,   #0	\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1","r2"
-				);
-				return result;
-			}
-		};
-
-		template<typename T, typename U>
-		struct sync_fetch_and_add<T, U, sizeof(short)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1: ldrexh  %0,  [%1]	\n\t"
-						"add     r1,   %0,  %2	\n\t"
-						"strexh  r2,   r1, [%1]	\n\t"
-						"cmp     r2,   #0	\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1","r2"
-				);
-				return result;
-			}
-		};
-
-		template<typename T, typename U>
-		struct sync_fetch_and_add<T, U, sizeof(char)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1: ldrexb  %0,  [%1]	\n\t"
-						"add     r1,   %0,  %2	\n\t"
-						"strexb  r2,   r1, [%1]	\n\t"
-						"cmp     r2,   #0	\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1","r2"
-				);
-				return result;
-			}
-		};
-	}
-
-	/*
-	 * Fetch-and-add API
-	 */
-
-	template<typename T, typename U>
-	inline T sync_fetch_and_add(T *ptr, U value) {
-		return __atomic_internal::sync_fetch_and_add<T, U, sizeof(T)>()(ptr, value);
-	}
+    template<typename T, typename U>
+    struct sync_lock_test_and_set<T, U, sizeof(short)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm (
+            "1: ldrexh   %0,  [%1]    \n\t"
+            "strexh   r4,   %2, [%1]    \n\t"
+            "cmp     r4,   #0   \n\t"
+            "bne     1b     \n\t "
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r4"
+        );
+        return result;
+      }
+    };
 
 
-	/*
-	 * add-and-fetch internal definitions
-	 */
+    template<typename T, typename U>
+    struct sync_lock_test_and_set<T, U, sizeof(char)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm (
+            "1: ldrexb   %0,  [%1]\n\t"
+            "strexb   r4,   %2, [%1]\n\t"
+            "cmp     r4,   #0\n\t"
+            "bne     1b \n\t "
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r4"
+        );
+        return result;
+      }
+    };
+  }
+
+  /*
+   * Test-and-set API
+   */
+
+  template<typename T, typename U>
+  inline T sync_lock_test_and_set(T *ptr, U value) {
+    return __atomic_internal::sync_lock_test_and_set<T, U, sizeof(T)>()(ptr,value);
+  }
 
 
-	namespace __atomic_internal {
+  /*
+   * fetch-and-add internal definitions
+   */
 
-		template<typename T, typename U, size_t sz>
-		struct sync_add_and_fetch {
-		};
+  namespace __atomic_internal {
 
-		template<typename T, typename U>
-		struct sync_add_and_fetch<T, U, sizeof(long)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1:   ldrex   %0,  [%1]			\n\t"
-						"add     %0,   %0,  %2		\n\t"
-						"strex   r1,   %0, [%1]	\n\t"
-						"cmp     r1,   #0			\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1"
-				);
-				return result;
-			}
-		};
+    template<typename T, typename U, size_t sz>
+    struct sync_fetch_and_add {
+    };
 
-		template<typename T, typename U>
-		struct sync_add_and_fetch<T, U, sizeof(short)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1:   ldrexh  %0,  [%1]			\n\t"
-						"add     %0,   %0,  %2		\n\t"
-						"strexh  r1,   %0, [%1]	\n\t"
-						"cmp     r1,   #0			\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1"
-				);
-				return result;
-			}
-		};
+    template<typename T, typename U>
+    struct sync_fetch_and_add<T, U, sizeof(long)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1: ldrex   %0,  [%1] \n\t"
+            "add     r1,   %0,  %2  \n\t"
+            "strex   r2,   r1, [%1] \n\t"
+            "cmp     r2,   #0 \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1","r2"
+        );
+        return result;
+      }
+    };
 
-		template<typename T, typename U>
-		struct sync_add_and_fetch<T, U, sizeof(char)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1:   ldrexb  %0,  [%1]			\n\t"
-						"add     %0,   %0,  %2		\n\t"
-						"strexb  r1,   %0, [%1]	\n\t"
-						"cmp     r1,   #0			\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1"
-				);
-				return result;
-			}
-		};
-	}
+    template<typename T, typename U>
+    struct sync_fetch_and_add<T, U, sizeof(short)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1: ldrexh  %0,  [%1] \n\t"
+            "add     r1,   %0,  %2  \n\t"
+            "strexh  r2,   r1, [%1] \n\t"
+            "cmp     r2,   #0 \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1","r2"
+        );
+        return result;
+      }
+    };
 
-	/*
-	 * add-and-fetch API
-	 */
+    template<typename T, typename U>
+    struct sync_fetch_and_add<T, U, sizeof(char)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1: ldrexb  %0,  [%1] \n\t"
+            "add     r1,   %0,  %2  \n\t"
+            "strexb  r2,   r1, [%1] \n\t"
+            "cmp     r2,   #0 \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1","r2"
+        );
+        return result;
+      }
+    };
+  }
 
-	template<typename T, typename U>
-	inline T sync_add_and_fetch(T *ptr, U value) {
-		return __atomic_internal::sync_add_and_fetch<T, U, sizeof(T)>()(ptr, value);
-	}
+  /*
+   * Fetch-and-add API
+   */
 
-
-	/*
-	 * Fetch and sub internal definitions
-	 */
-
-	namespace __atomic_internal {
-
-		template<typename T, typename U, size_t sz>
-		struct sync_fetch_and_sub {
-		};
-
-		template<typename T, typename U>
-		struct sync_fetch_and_sub<T, U, sizeof(long)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1: ldrex   %0,  [%1]	\n\t"
-						"sub     r1,   %0,  %2	\n\t"
-						"strex   r2,   r1, [%1]	\n\t"
-						"cmp     r2,   #0	\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1","r2"
-				);
-				return result;
-			}
-		};
-
-		template<typename T, typename U>
-		struct sync_fetch_and_sub<T, U, sizeof(short)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1: ldrexh  %0,  [%1]	\n\t"
-						"sub     r1,   %0,  %2	\n\t"
-						"strexh  r2,   r1, [%1]	\n\t"
-						"cmp     r2,   #0	\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1","r2"
-				);
-				return result;
-			}
-		};
-
-		template<typename T, typename U>
-		struct sync_fetch_and_sub<T, U, sizeof(char)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1: ldrexb  %0,  [%1]	\n\t"
-						"sub     r1,   %0,  %2	\n\t"
-						"strexb  r2,   r1, [%1]	\n\t"
-						"cmp     r2,   #0	\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1","r2"
-				);
-				return result;
-			}
-		};
-	}
-
-	/*
-	 * fetch-and-sub API
-	 */
-
-	template<typename T, typename U>
-	inline T sync_fetch_and_sub(T *ptr, U value) {
-		return __atomic_internal::sync_fetch_and_sub<T, U, sizeof(T)>()(ptr, value);
-	}
+  template<typename T, typename U>
+  inline T sync_fetch_and_add(T *ptr, U value) {
+    return __atomic_internal::sync_fetch_and_add<T, U, sizeof(T)>()(ptr, value);
+  }
 
 
-	/*
-	 * sub-and-fetch internal definitions
-	 */
+  /*
+   * add-and-fetch internal definitions
+   */
 
-	namespace __atomic_internal {
 
-		template<typename T, typename U, size_t sz>
-		struct sync_sub_and_fetch {
-		};
+  namespace __atomic_internal {
 
-		template<typename T, typename U>
-		struct sync_sub_and_fetch<T, U, sizeof(long)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1:   ldrex   %0,  [%1]			\n\t"
-						"sub     %0,   %0,  %2		\n\t"
-						"strex   r1,   %0, [%1]	\n\t"
-						"cmp     r1,   #0			\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1"
-				);
-				return result;
-			}
-		};
+    template<typename T, typename U, size_t sz>
+    struct sync_add_and_fetch {
+    };
 
-		template<typename T, typename U>
-		struct sync_sub_and_fetch<T, U, sizeof(short)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1:   ldrexh  %0,  [%1]			\n\t"
-						"sub     %0,   %0,  %2		\n\t"
-						"strexh  r1,   %0, [%1]	\n\t"
-						"cmp     r1,   #0			\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1"
-				);
-				return result;
-			}
-		};
+    template<typename T, typename U>
+    struct sync_add_and_fetch<T, U, sizeof(long)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1:   ldrex   %0,  [%1]     \n\t"
+            "add     %0,   %0,  %2    \n\t"
+            "strex   r1,   %0, [%1] \n\t"
+            "cmp     r1,   #0     \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1"
+        );
+        return result;
+      }
+    };
 
-		template<typename T, typename U>
-		struct sync_sub_and_fetch<T, U, sizeof(char)> {
-			T operator()(T *ptr, U value) const {
-				register T result;
-				asm volatile (
-						"1:   ldrexb  %0,  [%1]			\n\t"
-						"sub     %0,   %0,  %2		\n\t"
-						"strexb  r1,   %0, [%1]	\n\t"
-						"cmp     r1,   #0			\n\t"
-						"bne     1b"
-						: "=&r" (result)
-						: "r"(ptr), "r"(value)
-						: "r1"
-				);
-				return result;
-			}
-		};
-	}
+    template<typename T, typename U>
+    struct sync_add_and_fetch<T, U, sizeof(short)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1:   ldrexh  %0,  [%1]     \n\t"
+            "add     %0,   %0,  %2    \n\t"
+            "strexh  r1,   %0, [%1] \n\t"
+            "cmp     r1,   #0     \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1"
+        );
+        return result;
+      }
+    };
 
-	/*
-	 * increment/decrement API
-	 */
+    template<typename T, typename U>
+    struct sync_add_and_fetch<T, U, sizeof(char)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1:   ldrexb  %0,  [%1]     \n\t"
+            "add     %0,   %0,  %2    \n\t"
+            "strexb  r1,   %0, [%1] \n\t"
+            "cmp     r1,   #0     \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1"
+        );
+        return result;
+      }
+    };
+  }
 
-	template<typename T, typename U>
-	inline T sync_sub_and_fetch(T *ptr, U value) {
-		return __atomic_internal::sync_sub_and_fetch<T, U, sizeof(T)>()(ptr, value);
-	}
+  /*
+   * add-and-fetch API
+   */
 
-	template<typename T>
-	inline T sync_increment_and_fetch(T *ptr) {
-		return __atomic_internal::sync_add_and_fetch<T, int, sizeof(T)>()(ptr, 1);
-	}
+  template<typename T, typename U>
+  inline T sync_add_and_fetch(T *ptr, U value) {
+    return __atomic_internal::sync_add_and_fetch<T, U, sizeof(T)>()(ptr, value);
+  }
 
-	template<typename T>
-	inline T sync_decrement_and_fetch(T *ptr) {
-		return __atomic_internal::sync_sub_and_fetch<T, int, sizeof(T)>()(ptr, 1);
-	}
 
-	template<typename T>
-	inline T sync_fetch_and_increment(T *ptr) {
-		return __atomic_internal::sync_fetch_and_add<T, int, sizeof(T)>()(ptr, 1);
-	}
+  /*
+   * Fetch and sub internal definitions
+   */
 
-	template<typename T>
-	inline T sync_fetch_and_decrement(T *ptr) {
-		return __atomic_internal::sync_fetch_and_sub<T, int, sizeof(T)>()(ptr, 1);
-	}
+  namespace __atomic_internal {
+
+    template<typename T, typename U, size_t sz>
+    struct sync_fetch_and_sub {
+    };
+
+    template<typename T, typename U>
+    struct sync_fetch_and_sub<T, U, sizeof(long)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1: ldrex   %0,  [%1] \n\t"
+            "sub     r1,   %0,  %2  \n\t"
+            "strex   r2,   r1, [%1] \n\t"
+            "cmp     r2,   #0 \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1","r2"
+        );
+        return result;
+      }
+    };
+
+    template<typename T, typename U>
+    struct sync_fetch_and_sub<T, U, sizeof(short)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1: ldrexh  %0,  [%1] \n\t"
+            "sub     r1,   %0,  %2  \n\t"
+            "strexh  r2,   r1, [%1] \n\t"
+            "cmp     r2,   #0 \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1","r2"
+        );
+        return result;
+      }
+    };
+
+    template<typename T, typename U>
+    struct sync_fetch_and_sub<T, U, sizeof(char)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1: ldrexb  %0,  [%1] \n\t"
+            "sub     r1,   %0,  %2  \n\t"
+            "strexb  r2,   r1, [%1] \n\t"
+            "cmp     r2,   #0 \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1","r2"
+        );
+        return result;
+      }
+    };
+  }
+
+  /*
+   * fetch-and-sub API
+   */
+
+  template<typename T, typename U>
+  inline T sync_fetch_and_sub(T *ptr, U value) {
+    return __atomic_internal::sync_fetch_and_sub<T, U, sizeof(T)>()(ptr, value);
+  }
+
+
+  /*
+   * sub-and-fetch internal definitions
+   */
+
+  namespace __atomic_internal {
+
+    template<typename T, typename U, size_t sz>
+    struct sync_sub_and_fetch {
+    };
+
+    template<typename T, typename U>
+    struct sync_sub_and_fetch<T, U, sizeof(long)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1:   ldrex   %0,  [%1]     \n\t"
+            "sub     %0,   %0,  %2    \n\t"
+            "strex   r1,   %0, [%1] \n\t"
+            "cmp     r1,   #0     \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1"
+        );
+        return result;
+      }
+    };
+
+    template<typename T, typename U>
+    struct sync_sub_and_fetch<T, U, sizeof(short)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1:   ldrexh  %0,  [%1]     \n\t"
+            "sub     %0,   %0,  %2    \n\t"
+            "strexh  r1,   %0, [%1] \n\t"
+            "cmp     r1,   #0     \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1"
+        );
+        return result;
+      }
+    };
+
+    template<typename T, typename U>
+    struct sync_sub_and_fetch<T, U, sizeof(char)> {
+      T operator()(T *ptr, U value) const {
+        register T result;
+        asm volatile (
+            "1:   ldrexb  %0,  [%1]     \n\t"
+            "sub     %0,   %0,  %2    \n\t"
+            "strexb  r1,   %0, [%1] \n\t"
+            "cmp     r1,   #0     \n\t"
+            "bne     1b"
+            : "=&r" (result)
+            : "r"(ptr), "r"(value)
+            : "r1"
+        );
+        return result;
+      }
+    };
+  }
+
+  /*
+   * increment/decrement API
+   */
+
+  template<typename T, typename U>
+  inline T sync_sub_and_fetch(T *ptr, U value) {
+    return __atomic_internal::sync_sub_and_fetch<T, U, sizeof(T)>()(ptr, value);
+  }
+
+  template<typename T>
+  inline T sync_increment_and_fetch(T *ptr) {
+    return __atomic_internal::sync_add_and_fetch<T, int, sizeof(T)>()(ptr, 1);
+  }
+
+  template<typename T>
+  inline T sync_decrement_and_fetch(T *ptr) {
+    return __atomic_internal::sync_sub_and_fetch<T, int, sizeof(T)>()(ptr, 1);
+  }
+
+  template<typename T>
+  inline T sync_fetch_and_increment(T *ptr) {
+    return __atomic_internal::sync_fetch_and_add<T, int, sizeof(T)>()(ptr, 1);
+  }
+
+  template<typename T>
+  inline T sync_fetch_and_decrement(T *ptr) {
+    return __atomic_internal::sync_fetch_and_sub<T, int, sizeof(T)>()(ptr, 1);
+  }
 }

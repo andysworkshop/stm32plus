@@ -26,22 +26,22 @@ extern "C" void USART6_IRQHandler();
 
 namespace stm32plus {
 
-	/**
-	 * Helper class to enable only the desired interrupts in the NVIC. This will
-	 * be fully specialised for each USART peripheral
+  /**
+   * Helper class to enable only the desired interrupts in the NVIC. This will
+   * be fully specialised for each USART peripheral
    * @tparam TUsartNumber The number of the USART peripheral (1..6)
-	 */
+   */
 
-	template<uint8_t TUsartNumber>
-	class UsartInterruptFeatureEnabler {
+  template<uint8_t TUsartNumber>
+  class UsartInterruptFeatureEnabler {
 
-		private:
-			typedef void (*FPTR)();					// this trick will force the linker to include the ISR
-			static FPTR _forceLinkage;
+    private:
+      typedef void (*FPTR)();         // this trick will force the linker to include the ISR
+      static FPTR _forceLinkage;
 
-		public:
-			static void enable();
-	};
+    public:
+      static void enable();
+  };
 
 
   /**
@@ -59,8 +59,8 @@ namespace stm32plus {
     public:
 
       enum {
-      	RECEIVE = USART_IT_RXNE,
-      	TRANSMIT = USART_IT_TXE
+        RECEIVE = USART_IT_RXNE,
+        TRANSMIT = USART_IT_TXE
       };
 
       static UsartEventSource *_usartInstance;
@@ -100,9 +100,9 @@ namespace stm32plus {
 
   template<uint8_t TUsartNumber>
   inline UsartInterruptFeature<TUsartNumber>::UsartInterruptFeature(Usart& usart)
-  	: UsartFeatureBase(usart) {
+    : UsartFeatureBase(usart) {
 
-  	_interruptMask=0;
+    _interruptMask=0;
     _usartInstance=this;
   }
 
@@ -151,8 +151,8 @@ namespace stm32plus {
 
   template<>
   inline void UsartInterruptFeatureEnabler<1>::enable() {
-  	_forceLinkage=&USART1_IRQHandler;
-  	Nvic::configureIrq(USART1_IRQn);
+    _forceLinkage=&USART1_IRQHandler;
+    Nvic::configureIrq(USART1_IRQn);
   }
 
   /**
@@ -161,8 +161,8 @@ namespace stm32plus {
 
   template<>
   inline void UsartInterruptFeatureEnabler<2>::enable() {
-  	_forceLinkage=&USART2_IRQHandler;
-  	Nvic::configureIrq(USART2_IRQn);
+    _forceLinkage=&USART2_IRQHandler;
+    Nvic::configureIrq(USART2_IRQn);
   }
 
   /**
@@ -171,8 +171,8 @@ namespace stm32plus {
 
   template<>
   inline void UsartInterruptFeatureEnabler<3>::enable() {
-  	_forceLinkage=&USART3_IRQHandler;
-  	Nvic::configureIrq(USART3_IRQn);
+    _forceLinkage=&USART3_IRQHandler;
+    Nvic::configureIrq(USART3_IRQn);
   }
 
   /**
@@ -181,8 +181,8 @@ namespace stm32plus {
 
   template<>
   inline void UsartInterruptFeatureEnabler<4>::enable() {
-  	_forceLinkage=&UART4_IRQHandler;
-  	Nvic::configureIrq(UART4_IRQn);
+    _forceLinkage=&UART4_IRQHandler;
+    Nvic::configureIrq(UART4_IRQn);
   }
 
   /**
@@ -191,8 +191,8 @@ namespace stm32plus {
 
   template<>
   inline void UsartInterruptFeatureEnabler<5>::enable() {
-  	_forceLinkage=&UART5_IRQHandler;
-  	Nvic::configureIrq(UART5_IRQn);
+    _forceLinkage=&UART5_IRQHandler;
+    Nvic::configureIrq(UART5_IRQn);
   }
 
 
@@ -202,7 +202,7 @@ namespace stm32plus {
 
   template<>
   inline void UsartInterruptFeatureEnabler<6>::enable() {
-  	_forceLinkage=&USART6_IRQHandler;
-  	Nvic::configureIrq(USART6_IRQn);
+    _forceLinkage=&USART6_IRQHandler;
+    Nvic::configureIrq(USART6_IRQn);
   }
 }

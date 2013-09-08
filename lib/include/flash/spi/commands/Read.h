@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Read command implementation
-		 */
+    /**
+     * Read command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_READ,uint8_t TAddressBytes=3>
-		struct Read : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_READ,uint8_t TAddressBytes=3>
+    struct Read : Command<TSpi> {
 
-			/**
-			 * Provide a read() function for the derived class
-			 */
+      /**
+       * Provide a read() function for the derived class
+       */
 
-			bool read(uint32_t address,void *data,uint32_t dataSize) const {
-				return this->readCommand(TOpCode,address,TAddressBytes,0,data,dataSize);
-			}
-		};
-	}
+      bool read(uint32_t address,void *data,uint32_t dataSize) const {
+        return this->readCommand(TOpCode,address,TAddressBytes,0,data,dataSize);
+      }
+    };
+  }
 }

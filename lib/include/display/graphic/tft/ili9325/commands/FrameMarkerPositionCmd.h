@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace FrameMarkerPositionCmd
-		{
-			enum
-			{
-				Opcode = 0xd
-			};
+  namespace ili9325
+  {
+    namespace FrameMarkerPositionCmd
+    {
+      enum
+      {
+        Opcode = 0xd
+      };
 
-			inline uint16_t FRAME_MARKER_POSITION(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t FRAME_MARKER_POSITION(uint16_t n) { return n; }
+    }
+  }
 }
 
 

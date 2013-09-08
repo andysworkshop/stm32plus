@@ -672,7 +672,7 @@ __attribute__( ( always_inline ) ) static __INLINE uint32_t __QSUB(uint32_t op1,
   uint32_t __RES, __ARG1 = (ARG1), __ARG2 = (ARG2); \
   if (ARG3 == 0) \
     __ASM ("pkhtb %0, %1, %2" : "=r" (__RES) :  "r" (__ARG1), "r" (__ARG2)  ); \
-  else	\
+  else  \
     __ASM ("pkhtb %0, %1, %2, asr %3" : "=r" (__RES) :  "r" (__ARG1), "r" (__ARG2), "I" (ARG3)  ); \
   __RES; \
  })

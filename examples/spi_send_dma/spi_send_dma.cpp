@@ -37,8 +37,8 @@ using namespace stm32plus;
  * SCLK:        PA5 <=> PB13
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -47,125 +47,125 @@ using namespace stm32plus;
 
 class SpiSendDmaTest {
 
-	protected:
+  protected:
 
-		enum { LED_PIN = 6 };
+    enum { LED_PIN = 6 };
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			const uint8_t *dataToSend=(const uint8_t *)"Hello World";
-			uint8_t receiveBuffer[12];
+      const uint8_t *dataToSend=(const uint8_t *)"Hello World";
+      uint8_t receiveBuffer[12];
 
-			// initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
+      // initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
-			pf[LED_PIN].set();
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      pf[LED_PIN].set();
 
-			/*
-			 * Declare our SPI objects with no extra features beyond the ability to send and
-			 * receive data bytes. SPI1 is going to be the master and SPI2 the slave. All the SPI
-			 * remap configurations are available with names such as Spi1_Remap if you need to use the
-			 * remapped pins.
-			 */
+      /*
+       * Declare our SPI objects with no extra features beyond the ability to send and
+       * receive data bytes. SPI1 is going to be the master and SPI2 the slave. All the SPI
+       * remap configurations are available with names such as Spi1_Remap if you need to use the
+       * remapped pins.
+       */
 
-			typedef Spi1<> MySender;
-			typedef Spi2<> MyReceiver;
+      typedef Spi1<> MySender;
+      typedef Spi2<> MyReceiver;
 
-			MySender::Parameters senderParams;
-			MyReceiver::Parameters receiverParams;
+      MySender::Parameters senderParams;
+      MyReceiver::Parameters receiverParams;
 
-			senderParams.spi_mode=SPI_Mode_Master;
-			receiverParams.spi_mode=SPI_Mode_Slave;
+      senderParams.spi_mode=SPI_Mode_Master;
+      receiverParams.spi_mode=SPI_Mode_Slave;
 
-			MySender sender(senderParams);
-			MyReceiver receiver(receiverParams);
+      MySender sender(senderParams);
+      MyReceiver receiver(receiverParams);
 
-			/*
-			 * Declare the transmit and receive DMA channels assigned to the two peripherals.
-			 * We'll give reception a higher priority than transmit since we are both the
-			 * sender and the receiver.
-			 *
-			 * On the F4 the DMA FIFO is enabled by default. If you want to disable the FIFO then
-			 * you can do that with an additional template parameter to SpiDmaWriterFeature and
-			 * SpiDmaReaderFeature.
-			 */
+      /*
+       * Declare the transmit and receive DMA channels assigned to the two peripherals.
+       * We'll give reception a higher priority than transmit since we are both the
+       * sender and the receiver.
+       *
+       * On the F4 the DMA FIFO is enabled by default. If you want to disable the FIFO then
+       * you can do that with an additional template parameter to SpiDmaWriterFeature and
+       * SpiDmaReaderFeature.
+       */
 
-			Spi1TxDmaChannel<SpiDmaWriterFeature<Spi1PeripheralTraits,DMA_Priority_Medium> > dmaSender;
-			Spi2RxDmaChannel<SpiDmaReaderFeature<Spi2PeripheralTraits,DMA_Priority_High> > dmaReceiver;
+      Spi1TxDmaChannel<SpiDmaWriterFeature<Spi1PeripheralTraits,DMA_Priority_Medium> > dmaSender;
+      Spi2RxDmaChannel<SpiDmaReaderFeature<Spi2PeripheralTraits,DMA_Priority_High> > dmaReceiver;
 
-			for(;;) {
+      for(;;) {
 
-				/*
-				 * Clear out the receive buffer for this session
-				 */
+        /*
+         * Clear out the receive buffer for this session
+         */
 
-				memset(receiveBuffer,0,12);
+        memset(receiveBuffer,0,12);
 
-				/*
-				 * Start the DMA receiver ready for the data
-				 */
+        /*
+         * Start the DMA receiver ready for the data
+         */
 
-				dmaReceiver.beginRead(receiveBuffer,12);
+        dmaReceiver.beginRead(receiveBuffer,12);
 
         /*
          * NSS (slave select) is active LOW. ST made such a mess of the hardware implementation of NSS
          * that we always control it through software. Here it's pulled LOW ready for transmission.
          */
 
-				sender.setNss(false);
+        sender.setNss(false);
 
-				/*
-				 * Start the DMA sender and let those bytes flow. The receiver has already been started and is
-				 * stalled waiting for this
-				 */
+        /*
+         * Start the DMA sender and let those bytes flow. The receiver has already been started and is
+         * stalled waiting for this
+         */
 
-				dmaSender.beginWrite(dataToSend,12);
+        dmaSender.beginWrite(dataToSend,12);
 
-				/*
-				 * Wait until the receiver gets all the bytes
-				 */
+        /*
+         * Wait until the receiver gets all the bytes
+         */
 
-				if(!dmaReceiver.waitUntilComplete()) {
-				  // handle error properly
+        if(!dmaReceiver.waitUntilComplete()) {
+          // handle error properly
 
-				  for(;;);
-				}
+          for(;;);
+        }
 
-				/*
-				 * Wait until the sender has signalled that it's finished
-				 */
+        /*
+         * Wait until the sender has signalled that it's finished
+         */
 
-				if(!dmaSender.waitUntilComplete()) {
-				  // handle error properly
+        if(!dmaSender.waitUntilComplete()) {
+          // handle error properly
 
-				  for(;;);
-				}
+          for(;;);
+        }
 
-				/*
-				 * The session is complete, deactivate NSS.
-				 */
+        /*
+         * The session is complete, deactivate NSS.
+         */
 
-				sender.setNss(true);
+        sender.setNss(true);
 
-				/*
-				 * Test the received buffer. If the data is incorrect then lock up
-				 */
+        /*
+         * Test the received buffer. If the data is incorrect then lock up
+         */
 
-				if(memcmp(receiveBuffer,dataToSend,12)!=0)
-					for(;;);
+        if(memcmp(receiveBuffer,dataToSend,12)!=0)
+          for(;;);
 
-				/*
-				 * The data is correct, flash the LED on PF6 for one second
-				 */
+        /*
+         * The data is correct, flash the LED on PF6 for one second
+         */
 
-				pf[LED_PIN].reset();
-				MillisecondTimer::delay(1000);
-				pf[LED_PIN].set();
-				MillisecondTimer::delay(1000);
-			}
-		}
+        pf[LED_PIN].reset();
+        MillisecondTimer::delay(1000);
+        pf[LED_PIN].set();
+        MillisecondTimer::delay(1000);
+      }
+    }
 };
 
 
@@ -175,11 +175,11 @@ class SpiSendDmaTest {
 
 int main() {
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	SpiSendDmaTest test;
-	test.run();
+  SpiSendDmaTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

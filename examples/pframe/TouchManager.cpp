@@ -12,8 +12,8 @@
  */
 
 TouchManager::TouchManager(LcdManager& lcdManager,FileSystemManager& fsManager)
-	: Initialiser(lcdManager),
-	  _fsManager(fsManager) {
+  : Initialiser(lcdManager),
+    _fsManager(fsManager) {
 }
 
 
@@ -23,69 +23,69 @@ TouchManager::TouchManager(LcdManager& lcdManager,FileSystemManager& fsManager)
 
 bool TouchManager::initialise() {
 
-	int16_t i,j;
+  int16_t i,j;
 
-	_term.writeString("Initialising touch screen.\n");
+  _term.writeString("Initialising touch screen.\n");
 
-	// initialise hardware: the pen IRQ is on PB6
+  // initialise hardware: the pen IRQ is on PB6
 
-	GpioB<DefaultDigitalInputFeature<6> > pb;
-	_penIrqPin=pb[6];
+  GpioB<DefaultDigitalInputFeature<6> > pb;
+  _penIrqPin=pb[6];
 
-	_exti=new Exti6(EXTI_Mode_Interrupt,EXTI_Trigger_Falling,pb[6]);
+  _exti=new Exti6(EXTI_Mode_Interrupt,EXTI_Trigger_Falling,pb[6]);
 
-	Spi1<>::Parameters params;
-	params.spi_baudRatePrescaler=SPI_BaudRatePrescaler_256;
-	params.spi_cpol=SPI_CPOL_Low;
-	params.spi_cpha=SPI_CPHA_1Edge;
+  Spi1<>::Parameters params;
+  params.spi_baudRatePrescaler=SPI_BaudRatePrescaler_256;
+  params.spi_cpol=SPI_CPOL_Low;
+  params.spi_cpha=SPI_CPHA_1Edge;
 
-	_spi=new Spi1<>(params);
+  _spi=new Spi1<>(params);
 
-	// get calibration data if there is any
+  // get calibration data if there is any
 
-	if(loadCalibration())
-		_needsCalibration=false;
-	else {
-		_calibration=new PassThroughTouchScreenCalibration;
-		_needsCalibration=true;
-	}
+  if(loadCalibration())
+    _needsCalibration=false;
+  else {
+    _calibration=new PassThroughTouchScreenCalibration;
+    _needsCalibration=true;
+  }
 
-	// create the touch screen API
+  // create the touch screen API
 
-	_touchScreen=new ADS7843AsyncTouchScreen(
-			*_calibration,
-			_passThroughPostProcessor,
-			*_spi,
-			_penIrqPin,
-			*_exti);
+  _touchScreen=new ADS7843AsyncTouchScreen(
+      *_calibration,
+      _passThroughPostProcessor,
+      *_spi,
+      _penIrqPin,
+      *_exti);
 
-	// do the 5 second countdown for recalibration
+  // do the 5 second countdown for recalibration
 
-	_clicked=false;
+  _clicked=false;
 
-	_touchScreen->TouchScreenReadyEventSender.insertSubscriber(
-			TouchScreenReadyEventSourceSlot::bind(this,&TouchManager::onTouchScreenReady)
-		);
+  _touchScreen->TouchScreenReadyEventSender.insertSubscriber(
+      TouchScreenReadyEventSourceSlot::bind(this,&TouchManager::onTouchScreenReady)
+    );
 
-	if(!_needsCalibration) {
-		for(i=5;i>=0;i--) {
+  if(!_needsCalibration) {
+    for(i=5;i>=0;i--) {
 
-			_term.clearLine();
-			_term << "Tap screen to recalibrate: " << i;
+      _term.clearLine();
+      _term << "Tap screen to recalibrate: " << i;
 
-			for(j=0;j<100;j++) {
-				MillisecondTimer::delay(10);
+      for(j=0;j<100;j++) {
+        MillisecondTimer::delay(10);
 
-				if(_clicked) {
-					calibrate();
-					return true;
-				}
-			}
-		}
-		_term << '\n';
-	}
+        if(_clicked) {
+          calibrate();
+          return true;
+        }
+      }
+    }
+    _term << '\n';
+  }
 
-	return true;
+  return true;
 }
 
 
@@ -95,43 +95,43 @@ bool TouchManager::initialise() {
 
 bool TouchManager::calibrate() {
 
-	TouchScreenCalibration* newResults;
+  TouchScreenCalibration* newResults;
 
-	// wait for the pen to come up
+  // wait for the pen to come up
 
-	while(_touchScreen->isTouched());
+  while(_touchScreen->isTouched());
 
-	// create the calibrator
+  // create the calibrator
 
-	ThreePointTouchScreenCalibrator calibrator(*_touchScreen,*this);
+  ThreePointTouchScreenCalibrator calibrator(*_touchScreen,*this);
 
-	// important preparation for calibration: we must set the screen to pass through mode
-	// so that the calibrator sees raw co-ordinates and not calibrated!
+  // important preparation for calibration: we must set the screen to pass through mode
+  // so that the calibrator sees raw co-ordinates and not calibrated!
 
-	_touchScreen->setCalibration(_passThroughCalibration);
+  _touchScreen->setCalibration(_passThroughCalibration);
 
-	// calibrate the screen and get the new results
+  // calibrate the screen and get the new results
 
-	if(!calibrator.calibrate(newResults))
-		return false;
+  if(!calibrator.calibrate(newResults))
+    return false;
 
-	_term.clearScreen();
+  _term.clearScreen();
 
-	// set the new results
+  // set the new results
 
-	if(_calibration!=NULL)
-		delete _calibration;
+  if(_calibration!=NULL)
+    delete _calibration;
 
-	_calibration=newResults;
+  _calibration=newResults;
 
-	// re-initialise the touch screen with the calibration data
+  // re-initialise the touch screen with the calibration data
 
-	_touchScreen->setCalibration(*_calibration);
-	_needsCalibration=false;
+  _touchScreen->setCalibration(*_calibration);
+  _needsCalibration=false;
 
-	// save the new results to the file system as /pframe/touchcal.bin
+  // save the new results to the file system as /pframe/touchcal.bin
 
-	return saveCalibration();
+  return saveCalibration();
 }
 
 
@@ -141,33 +141,33 @@ bool TouchManager::calibrate() {
 
 bool TouchManager::saveCalibration() {
 
-	File *file;
-	bool retval;
+  File *file;
+  bool retval;
 
-	_term.writeString("Saving calibration data.\n");
+  _term.writeString("Saving calibration data.\n");
 
-	// delete old file
+  // delete old file
 
-	_fsManager.getFileSystem().deleteFile("/pframe/touchcal.bin");
+  _fsManager.getFileSystem().deleteFile("/pframe/touchcal.bin");
 
-	// open the file
+  // open the file
 
-	if(!_fsManager.getFileSystem().createFile("/pframe/touchcal.bin")) {
-		_term.writeString("Unable to create calibration file.\n");
-		return false;
-	}
-	if(!_fsManager.getFileSystem().openFile("/pframe/touchcal.bin",file)) {
-		_term.writeString("Unable to open calibration file.\n");
-		return false;
-	}
+  if(!_fsManager.getFileSystem().createFile("/pframe/touchcal.bin")) {
+    _term.writeString("Unable to create calibration file.\n");
+    return false;
+  }
+  if(!_fsManager.getFileSystem().openFile("/pframe/touchcal.bin",file)) {
+    _term.writeString("Unable to open calibration file.\n");
+    return false;
+  }
 
-	// attach the file to a stream and serialize the data into the file
+  // attach the file to a stream and serialize the data into the file
 
-	FileOutputStream ostream(*file);
-	retval=_calibration->serialise(ostream);
+  FileOutputStream ostream(*file);
+  retval=_calibration->serialise(ostream);
 
-	delete file;
-	return retval;
+  delete file;
+  return retval;
 }
 
 
@@ -177,27 +177,27 @@ bool TouchManager::saveCalibration() {
 
 bool TouchManager::loadCalibration() {
 
-	File *file;
-	bool retval;
+  File *file;
+  bool retval;
 
-	_term.writeString("Loading calibration data.\n");
+  _term.writeString("Loading calibration data.\n");
 
-	// open the file
+  // open the file
 
-	if(!_fsManager.getFileSystem().openFile("/pframe/touchcal.bin",file)) {
-		_term.writeString("Calibration data not found.\n");
-		return false;
-	}
+  if(!_fsManager.getFileSystem().openFile("/pframe/touchcal.bin",file)) {
+    _term.writeString("Calibration data not found.\n");
+    return false;
+  }
 
-	// attach the file to a stream and deserialize the data into the class
+  // attach the file to a stream and deserialize the data into the class
 
-	FileInputStream istream(*file);
+  FileInputStream istream(*file);
 
-	_calibration=new ThreePointTouchScreenCalibration;
-	retval=_calibration->deserialise(istream);
+  _calibration=new ThreePointTouchScreenCalibration;
+  retval=_calibration->deserialise(istream);
 
-	delete file;
-	return retval;
+  delete file;
+  return retval;
 }
 
 
@@ -207,19 +207,19 @@ bool TouchManager::loadCalibration() {
 
 void TouchManager::displayPrompt(const char *text) {
 
-	Size size;
-	LcdManager::LcdAccess lcd=_lcdManager.getLcd();
+  Size size;
+  LcdManager::LcdAccess lcd=_lcdManager.getLcd();
 
-	lcd.setBackground(ColourNames::BLACK);
-	lcd.setForeground(ColourNames::WHITE);
+  lcd.setBackground(ColourNames::BLACK);
+  lcd.setForeground(ColourNames::WHITE);
 
-	lcd.clearScreen();
+  lcd.clearScreen();
 
-	// show the prompt at the top center
+  // show the prompt at the top center
 
-	size=lcd.measureString(*(lcd.getStreamSelectedFont()),text);
+  size=lcd.measureString(*(lcd.getStreamSelectedFont()),text);
 
-	lcd << Point((lcd.getWidth()/2)-(size.Width/2),0) << text;
+  lcd << Point((lcd.getWidth()/2)-(size.Width/2),0) << text;
 }
 
 
@@ -229,16 +229,16 @@ void TouchManager::displayPrompt(const char *text) {
 
 void TouchManager::displayHitPoint(const Point& pt) {
 
-	int16_t i,j,x,y;
+  int16_t i,j,x,y;
 
-	x=pt.X-1;
-	y=pt.Y-1;
+  x=pt.X-1;
+  y=pt.Y-1;
 
-	_lcdManager.getLcd().setForeground(ColourNames::RED);
+  _lcdManager.getLcd().setForeground(ColourNames::RED);
 
-	for(i=0;i<3;i++)
-		for(j=0;j<3;j++)
-			_lcdManager.getLcd().plotPoint(Point(x+j,y+i));
+  for(i=0;i<3;i++)
+    for(j=0;j<3;j++)
+      _lcdManager.getLcd().plotPoint(Point(x+j,y+i));
 }
 
 
@@ -248,7 +248,7 @@ void TouchManager::displayHitPoint(const Point& pt) {
 
 Size TouchManager::getPanelSize() {
 
-	return Size(_lcdManager.getLcd().getWidth(),_lcdManager.getLcd().getHeight());
+  return Size(_lcdManager.getLcd().getWidth(),_lcdManager.getLcd().getHeight());
 }
 
 
@@ -257,5 +257,5 @@ Size TouchManager::getPanelSize() {
  */
 
 void TouchManager::onTouchScreenReady() {
-	_clicked=true;
+  _clicked=true;
 }

@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace SetDisplayOnCmd
-		{
-			enum
-			{
-				Opcode = 0x29
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace SetDisplayOnCmd
+    {
+      enum
+      {
+        Opcode = 0x29
+      };
+    }
+  }
 }
 
 

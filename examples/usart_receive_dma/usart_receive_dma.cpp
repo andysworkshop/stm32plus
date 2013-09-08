@@ -32,8 +32,8 @@ using namespace stm32plus;
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -42,36 +42,36 @@ using namespace stm32plus;
 
 class UsartReceiveDmaTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
-			 * if your application demands that you use the alternate pins for USART1
-			 */
+      /*
+       * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
+       * if your application demands that you use the alternate pins for USART1
+       */
 
-			Usart1<> usart(57600);
+      Usart1<> usart(57600);
 
-			Usart1TxDmaChannel<UsartDmaWriterFeature<Usart1PeripheralTraits> > dmaWriter;
-			Usart1RxDmaChannel<UsartDmaReaderFeature<Usart1PeripheralTraits> > dmaReader;
+      Usart1TxDmaChannel<UsartDmaWriterFeature<Usart1PeripheralTraits> > dmaWriter;
+      Usart1RxDmaChannel<UsartDmaReaderFeature<Usart1PeripheralTraits> > dmaReader;
 
-			/*
-			 * Go into a loop reading 5 characters at a time and then writing them
-			 * right back again.
-			 */
+      /*
+       * Go into a loop reading 5 characters at a time and then writing them
+       * right back again.
+       */
 
-			for(;;) {
+      for(;;) {
 
-				uint8_t buffer[5];
+        uint8_t buffer[5];
 
-				dmaReader.beginRead(buffer,sizeof(buffer));
-				dmaReader.waitUntilComplete();
+        dmaReader.beginRead(buffer,sizeof(buffer));
+        dmaReader.waitUntilComplete();
 
-				dmaWriter.beginWrite(buffer,sizeof(buffer));
-				dmaWriter.waitUntilComplete();
-			}
-		}
+        dmaWriter.beginWrite(buffer,sizeof(buffer));
+        dmaWriter.waitUntilComplete();
+      }
+    }
 };
 
 
@@ -81,9 +81,9 @@ class UsartReceiveDmaTest {
 
 int main() {
 
-	UsartReceiveDmaTest test;
-	test.run();
+  UsartReceiveDmaTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

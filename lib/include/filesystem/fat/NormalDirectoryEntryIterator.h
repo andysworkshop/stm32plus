@@ -8,41 +8,41 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Iterate over normal directory entries.
-		 *
-		 * A normal directory entry iterator iterates over directory entries stored in a "file" structure,
-		 * i.e. a sequence of clusters specified by their FAT entries.
-		 */
+    /**
+     * @brief Iterate over normal directory entries.
+     *
+     * A normal directory entry iterator iterates over directory entries stored in a "file" structure,
+     * i.e. a sequence of clusters specified by their FAT entries.
+     */
 
-		class NormalDirectoryEntryIterator : public DirectoryEntryIterator {
-			protected:
-				uint32_t _indexWithinSector;
-				FileSectorIterator _iterator;
-				uint32_t _firstClusterIndex;
-				uint32_t _currentDirentIndex;
+    class NormalDirectoryEntryIterator : public DirectoryEntryIterator {
+      protected:
+        uint32_t _indexWithinSector;
+        FileSectorIterator _iterator;
+        uint32_t _firstClusterIndex;
+        uint32_t _currentDirentIndex;
 
-			protected:
-				// overrides from DirectoryEntryIterator
+      protected:
+        // overrides from DirectoryEntryIterator
 
-				virtual bool internalNext() override;
-				virtual bool extendDirectory(DirectoryEntry *dirents,uint32_t direntCount) override;
+        virtual bool internalNext() override;
+        virtual bool extendDirectory(DirectoryEntry *dirents,uint32_t direntCount) override;
 
-				// overrides from ResettableIterator
+        // overrides from ResettableIterator
 
-				virtual void reset() override;
+        virtual void reset() override;
 
-			public:
-				NormalDirectoryEntryIterator(FatFileSystem& fs,uint32_t firstClusterIndex,Options options);
+      public:
+        NormalDirectoryEntryIterator(FatFileSystem& fs,uint32_t firstClusterIndex,Options options);
 
-				/**
-				 * Virtual destructor. Does nothing.
-				 */
+        /**
+         * Virtual destructor. Does nothing.
+         */
 
-				virtual ~NormalDirectoryEntryIterator() {
-				}
-		};
-	}
+        virtual ~NormalDirectoryEntryIterator() {
+        }
+    };
+  }
 }

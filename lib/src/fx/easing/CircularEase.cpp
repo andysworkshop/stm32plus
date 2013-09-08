@@ -9,40 +9,40 @@
 
 
 namespace stm32plus {
-	namespace fx {
+  namespace fx {
 
-		/*
-		 * Ease in
-		 */
+    /*
+     * Ease in
+     */
 
-		double CircularEase::easeIn(double time_) const {
-			time_/=_duration;
+    double CircularEase::easeIn(double time_) const {
+      time_/=_duration;
 
-			return -_change * (sqrt(1 - time_ * time_) - 1);
-		}
+      return -_change * (sqrt(1 - time_ * time_) - 1);
+    }
 
-		/*
-		 * Ease out
-		 */
+    /*
+     * Ease out
+     */
 
-		double CircularEase::easeOut(double time_) const {
-			time_=time_ / _duration - 1;
-			return _change * sqrt(1 - time_ * time_);
-		}
+    double CircularEase::easeOut(double time_) const {
+      time_=time_ / _duration - 1;
+      return _change * sqrt(1 - time_ * time_);
+    }
 
-		/*
-		 * Ease in and out
-		 */
+    /*
+     * Ease in and out
+     */
 
-		double CircularEase::easeInOut(double time_) const {
-			time_/=_duration / 2;
+    double CircularEase::easeInOut(double time_) const {
+      time_/=_duration / 2;
 
-			if(time_ < 1)
-				return -_change / 2 * (sqrt(1 - time_ * time_) - 1);
+      if(time_ < 1)
+        return -_change / 2 * (sqrt(1 - time_ * time_) - 1);
 
-			time_-=2;
-			return _change / 2 * (sqrt(1 - time_ * time_) + 1);
-		}
+      time_-=2;
+      return _change / 2 * (sqrt(1 - time_ * time_) + 1);
+    }
 
-	}
+  }
 }

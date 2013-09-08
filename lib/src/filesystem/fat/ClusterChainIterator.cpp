@@ -9,98 +9,98 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * Constructor
-		 *
-		 * @param[in] fs_ The filesystem reference.
-		 * @param[in] firstClusterNumber_ The number of the first cluster in the chain.
-		 * @param[in] extend_ Whether or not to extend when the end is reached.
-		 */
+    /**
+     * Constructor
+     *
+     * @param[in] fs_ The filesystem reference.
+     * @param[in] firstClusterNumber_ The number of the first cluster in the chain.
+     * @param[in] extend_ Whether or not to extend when the end is reached.
+     */
 
-		ClusterChainIterator::ClusterChainIterator(FatFileSystem& fs_,uint32_t firstClusterNumber_,ExtensionMode extend_) :
-			_fs(fs_) {
-			_currentClusterNumber=firstClusterNumber_;
-			_first=true;
-			_firstClusterNumber=firstClusterNumber_;
-			_extend=extend_;
-		}
+    ClusterChainIterator::ClusterChainIterator(FatFileSystem& fs_,uint32_t firstClusterNumber_,ExtensionMode extend_) :
+      _fs(fs_) {
+      _currentClusterNumber=firstClusterNumber_;
+      _first=true;
+      _firstClusterNumber=firstClusterNumber_;
+      _extend=extend_;
+    }
 
-		/**
-		 * Reset the iterator to the beginning.
-		 * @param[in] firstClusterNumber_ The first cluster in the chain.
-		 */
+    /**
+     * Reset the iterator to the beginning.
+     * @param[in] firstClusterNumber_ The first cluster in the chain.
+     */
 
-		void ClusterChainIterator::reset(uint32_t firstClusterNumber_) {
-			_currentClusterNumber=firstClusterNumber_;
-			_first=true;
-		}
+    void ClusterChainIterator::reset(uint32_t firstClusterNumber_) {
+      _currentClusterNumber=firstClusterNumber_;
+      _first=true;
+    }
 
-		/*
-		 * Get the current cluster number
-		 */
+    /*
+     * Get the current cluster number
+     */
 
-		uint32_t ClusterChainIterator::current() {
-			return _currentClusterNumber;
-		}
+    uint32_t ClusterChainIterator::current() {
+      return _currentClusterNumber;
+    }
 
-		/**
-		 * Get the current sector number.
-		 * @return The current sector number.
-		 */
+    /**
+     * Get the current sector number.
+     * @return The current sector number.
+     */
 
-		uint32_t ClusterChainIterator::currentSectorNumber() {
-			return _fs.clusterToSector(_currentClusterNumber);
-		}
+    uint32_t ClusterChainIterator::currentSectorNumber() {
+      return _fs.clusterToSector(_currentClusterNumber);
+    }
 
-		/*
-		 * Move to the next in the chain
-		 */
+    /*
+     * Move to the next in the chain
+     */
 
-		bool ClusterChainIterator::next() {
+    bool ClusterChainIterator::next() {
 
-			uint32_t nextNumber;
+      uint32_t nextNumber;
 
-			// clear error
+      // clear error
 
-			errorProvider.clear();
+      errorProvider.clear();
 
-			// first call to next() must return the first cluster
+      // first call to next() must return the first cluster
 
-			if(_first) {
-				nextNumber=_currentClusterNumber;
-				_first=false;
-			} else {
+      if(_first) {
+        nextNumber=_currentClusterNumber;
+        _first=false;
+      } else {
 
-				// read from the FAT
+        // read from the FAT
 
-				if(!_fs.readFatEntry(_currentClusterNumber,nextNumber))
-					return false;
-			}
+        if(!_fs.readFatEntry(_currentClusterNumber,nextNumber))
+          return false;
+      }
 
-			// reached the end?
+      // reached the end?
 
-			if(nextNumber == 0 || _fs.isEndOfClusterChainMarker(nextNumber)) {
-				if(_extend == extensionExtend) {
+      if(nextNumber == 0 || _fs.isEndOfClusterChainMarker(nextNumber)) {
+        if(_extend == extensionExtend) {
 
-					// try to extend the cluster chain with a new entry
+          // try to extend the cluster chain with a new entry
 
-					if(!_fs.allocateNewCluster(_currentClusterNumber,nextNumber))
-						return false;
-				} else
-					return errorProvider.set(ErrorProvider::ERROR_PROVIDER_ITERATOR,E_END_OF_ENTRIES);
-			}
+          if(!_fs.allocateNewCluster(_currentClusterNumber,nextNumber))
+            return false;
+        } else
+          return errorProvider.set(ErrorProvider::ERROR_PROVIDER_ITERATOR,E_END_OF_ENTRIES);
+      }
 
-			// check for bad cluster
+      // check for bad cluster
 
-			if(nextNumber == _fs.getBadClusterMarker())
-				return errorProvider.set(ErrorProvider::ERROR_PROVIDER_FAT_FILESYSTEM,FatFileSystem::E_BAD_CLUSTER);
+      if(nextNumber == _fs.getBadClusterMarker())
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_FAT_FILESYSTEM,FatFileSystem::E_BAD_CLUSTER);
 
-			// OK
+      // OK
 
-			_currentClusterNumber=nextNumber;
-			return true;
-		}
-	}
+      _currentClusterNumber=nextNumber;
+      return true;
+    }
+  }
 }

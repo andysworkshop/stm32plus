@@ -10,18 +10,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace StartOscillationCmd
-		{
-			enum
-			{
-				Opcode = 0,
+  namespace ili9325
+  {
+    namespace StartOscillationCmd
+    {
+      enum
+      {
+        Opcode = 0,
 
-				Enable = 1
-			};
-		}
-	}
+        Enable = 1
+      };
+    }
+  }
 }
 
 

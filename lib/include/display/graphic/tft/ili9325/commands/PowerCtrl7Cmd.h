@@ -12,18 +12,18 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace PowerCtrl7Cmd
-		{
-			enum
-			{
-				Opcode = 0x29
-			};
+  namespace ili9325
+  {
+    namespace PowerCtrl7Cmd
+    {
+      enum
+      {
+        Opcode = 0x29
+      };
 
-			inline uint16_t VCOMH(uint16_t n) { return n; }
-		}
-	}
+      inline uint16_t VCOMH(uint16_t n) { return n; }
+    }
+  }
 }
 
 

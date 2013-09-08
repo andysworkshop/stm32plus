@@ -203,7 +203,7 @@ typedef struct
                                      ((PERIPH) == TIM4) || \
                                      ((PERIPH) == TIM5) || \
                                      ((PERIPH) == TIM8)) 
-									                                 
+                                                   
 /* LIST4: TIM 1, 2, 3, 4, 5, 8, 15, 16 and 17 */
 #define IS_TIM_LIST4_PERIPH(PERIPH) (((PERIPH) == TIM1) || \
                                      ((PERIPH) == TIM2) || \
@@ -232,7 +232,7 @@ typedef struct
                                       ((PERIPH) == TIM5) || \
                                       ((PERIPH) == TIM8) || \
                                       ((PERIPH) == TIM9) || \
-									  ((PERIPH) == TIM12)|| \
+                    ((PERIPH) == TIM12)|| \
                                       ((PERIPH) == TIM15))
 
 /* LIST7: TIM 1, 2, 3, 4, 5, 6, 7, 8, 9, 12 and 15 */
@@ -303,7 +303,7 @@ typedef struct
                           ((MODE) == TIM_OCMode_Inactive) || \
                           ((MODE) == TIM_OCMode_Toggle)|| \
                           ((MODE) == TIM_OCMode_PWM1) || \
-                          ((MODE) == TIM_OCMode_PWM2) ||	\
+                          ((MODE) == TIM_OCMode_PWM2) ||  \
                           ((MODE) == TIM_ForcedAction_Active) || \
                           ((MODE) == TIM_ForcedAction_InActive))
 /**

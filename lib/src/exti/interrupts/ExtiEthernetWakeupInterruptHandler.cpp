@@ -24,14 +24,14 @@ template<> ExtiPeripheral<EXTI_Line19> *ExtiPeripheral<EXTI_Line19>::_extiInstan
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) ETH_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) ETH_WKUP_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line19)!=RESET) {
-				ExtiEthernetWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(19);
-				EXTI_ClearITPendingBit(EXTI_Line19);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(EXTI_GetITStatus(EXTI_Line19)!=RESET) {
+        ExtiEthernetWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(19);
+        EXTI_ClearITPendingBit(EXTI_Line19);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 #endif

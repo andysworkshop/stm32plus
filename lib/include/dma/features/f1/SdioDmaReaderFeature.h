@@ -14,69 +14,69 @@
 
 namespace stm32plus {
 
-	/**
-	 * DMA feature to enable reading via DMA
-	 */
+  /**
+   * DMA feature to enable reading via DMA
+   */
 
-	template<uint32_t TPriority=DMA_Priority_High>
-	class SdioDmaReaderFeature : public DmaFeatureBase {
+  template<uint32_t TPriority=DMA_Priority_High>
+  class SdioDmaReaderFeature : public DmaFeatureBase {
 
-		public:
-			SdioDmaReaderFeature(Dma& dma);
-			void beginRead(void *dest,uint32_t count);
-	};
-
-
-	/**
-	 * Constructor, store the reference to the DMA base class
-	 * @param dma the base class reference
-	 */
-
-	template<uint32_t TPriority>
-	inline SdioDmaReaderFeature<TPriority>::SdioDmaReaderFeature(Dma& dma)
-		: DmaFeatureBase(dma) {
-
-		// enable what we can
-
-		_init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&SDIO->FIFO);
-		_init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;
-		_init.DMA_MemoryInc=DMA_MemoryInc_Enable;
-		_init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Word;
-		_init.DMA_MemoryDataSize=DMA_MemoryDataSize_Word;
-		_init.DMA_Mode=DMA_Mode_Normal;
-		_init.DMA_Priority=TPriority;
-		_init.DMA_M2M=DMA_M2M_Disable;
-	}
+    public:
+      SdioDmaReaderFeature(Dma& dma);
+      void beginRead(void *dest,uint32_t count);
+  };
 
 
-	/**
-	 * Start a transfer of data to the destination
-	 *
-	 * @param[in] dest The destination of the transfer.
-	 * @param[in] count The number of bytes to transfer. Must be a block multiple
-	 */
+  /**
+   * Constructor, store the reference to the DMA base class
+   * @param dma the base class reference
+   */
 
-	template<uint32_t TPriority>
-	inline void SdioDmaReaderFeature<TPriority>::beginRead(void *dest,uint32_t count) {
+  template<uint32_t TPriority>
+  inline SdioDmaReaderFeature<TPriority>::SdioDmaReaderFeature(Dma& dma)
+    : DmaFeatureBase(dma) {
 
-		DMA_Channel_TypeDef *peripheralAddress;
+    // enable what we can
 
-		// set up the parameters for this transfer
+    _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&SDIO->FIFO);
+    _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;
+    _init.DMA_MemoryInc=DMA_MemoryInc_Enable;
+    _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Word;
+    _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Word;
+    _init.DMA_Mode=DMA_Mode_Normal;
+    _init.DMA_Priority=TPriority;
+    _init.DMA_M2M=DMA_M2M_Disable;
+  }
 
-		_init.DMA_MemoryBaseAddr=reinterpret_cast<uint32_t>(dest);
-		_init.DMA_BufferSize=count/4;
-		_init.DMA_DIR=DMA_DIR_PeripheralSRC;
 
-		// this class is always in a hierarchy with DmaPeripheral
+  /**
+   * Start a transfer of data to the destination
+   *
+   * @param[in] dest The destination of the transfer.
+   * @param[in] count The number of bytes to transfer. Must be a block multiple
+   */
 
-		peripheralAddress=_dma;
+  template<uint32_t TPriority>
+  inline void SdioDmaReaderFeature<TPriority>::beginRead(void *dest,uint32_t count) {
 
-		// disable and then re-enable
+    DMA_Channel_TypeDef *peripheralAddress;
 
-		SDIO_DMACmd(ENABLE);
+    // set up the parameters for this transfer
 
-		DMA_Cmd(peripheralAddress,DISABLE);
-		DMA_Init(peripheralAddress,&_init);
-		DMA_Cmd(peripheralAddress,ENABLE);
-	}
+    _init.DMA_MemoryBaseAddr=reinterpret_cast<uint32_t>(dest);
+    _init.DMA_BufferSize=count/4;
+    _init.DMA_DIR=DMA_DIR_PeripheralSRC;
+
+    // this class is always in a hierarchy with DmaPeripheral
+
+    peripheralAddress=_dma;
+
+    // disable and then re-enable
+
+    SDIO_DMACmd(ENABLE);
+
+    DMA_Cmd(peripheralAddress,DISABLE);
+    DMA_Init(peripheralAddress,&_init);
+    DMA_Cmd(peripheralAddress,ENABLE);
+  }
 }

@@ -9,95 +9,95 @@
 
 namespace stm32plus {
 
-	/**
-	 * This class implements Peterson's algorithm for mutual exclusion. It is useful
-	 * where you have exactly two contenders for a resource and you know at the time
-	 * of calling who is who. e.g. normal code and an IRQ handler. This class has
-	 * the benefit of being nestable.
-	 */
+  /**
+   * This class implements Peterson's algorithm for mutual exclusion. It is useful
+   * where you have exactly two contenders for a resource and you know at the time
+   * of calling who is who. e.g. normal code and an IRQ handler. This class has
+   * the benefit of being nestable.
+   */
 
-	class CriticalSection {
+  class CriticalSection {
 
-		public:
+    public:
 
-			/**
-			 * Who wants to enter the critical section
-			 */
+      /**
+       * Who wants to enter the critical section
+       */
 
-			enum class Identity : uint8_t {
-				NORMAL_CODE = 0,			//!< NORMAL_CODE
-				IRQ_CODE    = 1,   		//!< IRQ_CODE
-			};
+      enum class Identity : uint8_t {
+        NORMAL_CODE = 0,      //!< NORMAL_CODE
+        IRQ_CODE    = 1,      //!< IRQ_CODE
+      };
 
-		protected:
-			volatile uint8_t _flags[2];
-			volatile Identity _turn;
+    protected:
+      volatile uint8_t _flags[2];
+      volatile Identity _turn;
 
-		public:
-			CriticalSection();
+    public:
+      CriticalSection();
 
-			bool claim(Identity id,uint32_t millisToWait=0);
-			void release(Identity id);
-	};
-
-
-	/**
-	 * Constructor
-	 */
-
-	inline CriticalSection::CriticalSection() {
-		_flags[0]=_flags[1]=false;
-	}
+      bool claim(Identity id,uint32_t millisToWait=0);
+      void release(Identity id);
+  };
 
 
-	/**
-	 * Claim the critical section for your identity
-	 * @param id The identity to claim for
-	 * @param millisToWait The number of ms to block waiting for the critical section or zero to not block. Do not try
-	 *   to block if you are an IRQ source.
-	 * @return true if it worked, false if the critical section is busy
-	 */
+  /**
+   * Constructor
+   */
 
-	inline bool CriticalSection::claim(Identity id,uint32_t millisToWait) {
+  inline CriticalSection::CriticalSection() {
+    _flags[0]=_flags[1]=false;
+  }
 
-		Identity otherId;
-		uint32_t now;
 
-		// check that an IRQ is not trying to block
+  /**
+   * Claim the critical section for your identity
+   * @param id The identity to claim for
+   * @param millisToWait The number of ms to block waiting for the critical section or zero to not block. Do not try
+   *   to block if you are an IRQ source.
+   * @return true if it worked, false if the critical section is busy
+   */
 
-		if(id==Identity::IRQ_CODE)
-			millisToWait=0;
+  inline bool CriticalSection::claim(Identity id,uint32_t millisToWait) {
 
-		if(millisToWait)
-			now=MillisecondTimer::millis();
+    Identity otherId;
+    uint32_t now;
 
-		// get the other id
+    // check that an IRQ is not trying to block
 
-		otherId=id==Identity::IRQ_CODE ? Identity::NORMAL_CODE : Identity::IRQ_CODE;
+    if(id==Identity::IRQ_CODE)
+      millisToWait=0;
 
-		// set the entry condition
+    if(millisToWait)
+      now=MillisecondTimer::millis();
 
-		_flags[static_cast<uint8_t>(id)]=true;
+    // get the other id
+
+    otherId=id==Identity::IRQ_CODE ? Identity::NORMAL_CODE : Identity::IRQ_CODE;
+
+    // set the entry condition
+
+    _flags[static_cast<uint8_t>(id)]=true;
     _turn=otherId;
 
-		// try to claim the critical section
+    // try to claim the critical section
 
     while(_flags[static_cast<uint8_t>(otherId)] && _turn==otherId)
-    	if(!millisToWait || MillisecondTimer::hasTimedOut(now,millisToWait))
-    		return false;
+      if(!millisToWait || MillisecondTimer::hasTimedOut(now,millisToWait))
+        return false;
 
     // it's ours
 
     return true;
-	}
+  }
 
 
-	/**
-	 * Release the critical section
-	 * @param id The identity of the caller
-	 */
+  /**
+   * Release the critical section
+   * @param id The identity of the caller
+   */
 
-	inline void CriticalSection::release(Identity id) {
-		_flags[static_cast<uint8_t>(id)]=false;
-	}
+  inline void CriticalSection::release(Identity id) {
+    _flags[static_cast<uint8_t>(id)]=false;
+  }
 }

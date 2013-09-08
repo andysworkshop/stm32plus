@@ -22,37 +22,37 @@ using namespace stm32plus::net;
 
 class MyHttpConnection : public HttpServerConnection<MyHttpConnection> {
 
-	public:
+  public:
 
-		/**
-		 * Customised parameters for this web server
-		 */
+    /**
+     * Customised parameters for this web server
+     */
 
-		struct Parameters : HttpServerConnection<MyHttpConnection>::Parameters {
-			Parameters() {
-				tcp_receiveBufferSize=512;						// increased receive buffer to get the request in one segment
-				http_outputStreamBufferMaxSize=2048;	// increased send buffer to push out larger segments to the browser
-				http_version11=true;									// permit http/1.1 keep-alive to keep closing connection states down
-			}
-		};
+    struct Parameters : HttpServerConnection<MyHttpConnection>::Parameters {
+      Parameters() {
+        tcp_receiveBufferSize=512;            // increased receive buffer to get the request in one segment
+        http_outputStreamBufferMaxSize=2048;  // increased send buffer to push out larger segments to the browser
+        http_version11=true;                  // permit http/1.1 keep-alive to keep closing connection states down
+      }
+    };
 
-	protected:
-		FileSystem *_fs;
-		File *_file;
+  protected:
+    FileSystem *_fs;
+    File *_file;
 
-	protected:
-		void processRequest();
-		void closeFile();
-		FileInputStream *getErrorPageStream(const std::string& errorCode);
+  protected:
+    void processRequest();
+    void closeFile();
+    FileInputStream *getErrorPageStream(const std::string& errorCode);
 
-	public:
-		MyHttpConnection(const Parameters& params,FileSystem *fs);
-		~MyHttpConnection();
+  public:
+    MyHttpConnection(const Parameters& params,FileSystem *fs);
+    ~MyHttpConnection();
 
-		bool handleClosed();
-		bool handleCallback();
-		State handleStateChange(State newState);
-		void handleRequestHeader(const std::string&);
+    bool handleClosed();
+    bool handleCallback();
+    State handleStateChange(State newState);
+    void handleRequestHeader(const std::string&);
 };
 
 
@@ -62,9 +62,9 @@ class MyHttpConnection : public HttpServerConnection<MyHttpConnection> {
  */
 
 inline MyHttpConnection::MyHttpConnection(const Parameters& params,FileSystem *fs)
-	: HttpServerConnection<MyHttpConnection>(params),
-	  _fs(fs),
-	  _file(nullptr) {
+  : HttpServerConnection<MyHttpConnection>(params),
+    _fs(fs),
+    _file(nullptr) {
 }
 
 
@@ -73,15 +73,15 @@ inline MyHttpConnection::MyHttpConnection(const Parameters& params,FileSystem *f
  */
 
 inline MyHttpConnection::~MyHttpConnection() {
-	closeFile();
+  closeFile();
 }
 
 
 inline void MyHttpConnection::closeFile() {
-	if(_file!=nullptr) {
-		delete _file;
-		_file=nullptr;
-	}
+  if(_file!=nullptr) {
+    delete _file;
+    _file=nullptr;
+  }
 }
 
 
@@ -94,8 +94,8 @@ inline void MyHttpConnection::closeFile() {
  */
 
 inline bool MyHttpConnection::handleClosed() {
-	delete this;
-	return true;
+  delete this;
+  return true;
 }
 
 
@@ -105,7 +105,7 @@ inline bool MyHttpConnection::handleClosed() {
  */
 
 inline bool MyHttpConnection::handleCallback() {
-	return true;
+  return true;
 }
 
 
@@ -117,15 +117,15 @@ inline bool MyHttpConnection::handleCallback() {
 
 inline HttpServerConnection<MyHttpConnection>::State MyHttpConnection::handleStateChange(State newState) {
 
-	// a move away from the read states and on to the first write state is our trigger to
-	// process the request and make the response available
+  // a move away from the read states and on to the first write state is our trigger to
+  // process the request and make the response available
 
-	if(newState==State::READING_REQUEST_LINE)
-		closeFile();													// restarting an HTTP/1.1 connection
-	if(newState==State::WRITING_RESPONSE)
-		processRequest();
+  if(newState==State::READING_REQUEST_LINE)
+    closeFile();                          // restarting an HTTP/1.1 connection
+  if(newState==State::WRITING_RESPONSE)
+    processRequest();
 
-	return newState;
+  return newState;
 }
 
 
@@ -144,45 +144,45 @@ inline void MyHttpConnection::handleRequestHeader(const std::string&) {
 
 inline void MyHttpConnection::processRequest() {
 
-	std::string *response;
-	FileInputStream *fis;
+  std::string *response;
+  FileInputStream *fis;
 
-	fis=nullptr;
+  fis=nullptr;
 
-	if(!strcasecmp(_action.c_str(),"GET")) {
+  if(!strcasecmp(_action.c_str(),"GET")) {
 
-		if(_fs->openFile(_uri.c_str(),_file)) {
+    if(_fs->openFile(_uri.c_str(),_file)) {
 
-			response=new std::string(_version+" 200 OK\r\n");
-			fis=new FileInputStream(*_file);
-		}
-		else {
-			response=new std::string(_version+" 404 Not Found\r\n");
-			fis=getErrorPageStream("404");
-		}
-	}
-	else {
-		response=new std::string(_version+" 501 Not Implemented\r\n");
-		fis=getErrorPageStream("501");
-	}
+      response=new std::string(_version+" 200 OK\r\n");
+      fis=new FileInputStream(*_file);
+    }
+    else {
+      response=new std::string(_version+" 404 Not Found\r\n");
+      fis=getErrorPageStream("404");
+    }
+  }
+  else {
+    response=new std::string(_version+" 501 Not Implemented\r\n");
+    fis=getErrorPageStream("501");
+  }
 
-	// add headers
+  // add headers
 
-	addConnectionHeader(*response);
+  addConnectionHeader(*response);
 
-	if(fis) {
-		addContentTypeHeader(*response);
-		addContentLengthHeader(*response,_file->getLength());
-	}
+  if(fis) {
+    addContentTypeHeader(*response);
+    addContentLengthHeader(*response,_file->getLength());
+  }
 
-	(*response)+="\r\n";
+  (*response)+="\r\n";
 
-	// add streams to response
+  // add streams to response
 
-	_output.addStream(new StlStringInputStream(response,true),true);
+  _output.addStream(new StlStringInputStream(response,true),true);
 
-	if(fis)
-		_output.addStream(fis,true);
+  if(fis)
+    _output.addStream(fis,true);
 }
 
 
@@ -194,22 +194,22 @@ inline void MyHttpConnection::processRequest() {
 
 inline FileInputStream *MyHttpConnection::getErrorPageStream(const std::string& errorCode) {
 
-	std::string filename("/errors/"+errorCode+".html");
+  std::string filename("/errors/"+errorCode+".html");
 
-	// first try the specific error page
+  // first try the specific error page
 
-	if(!_fs->openFile(filename.c_str(),_file)) {
+  if(!_fs->openFile(filename.c_str(),_file)) {
 
-		// now try the generic error page
+    // now try the generic error page
 
-		filename="/error.html";
-		if(!_fs->openFile(filename.c_str(),_file))
-			return nullptr;
-	}
+    filename="/error.html";
+    if(!_fs->openFile(filename.c_str(),_file))
+      return nullptr;
+  }
 
-	// got it
+  // got it
 
-	_uri=filename;
-	return new FileInputStream(*_file);
+  _uri=filename;
+  return new FileInputStream(*_file);
 }
 

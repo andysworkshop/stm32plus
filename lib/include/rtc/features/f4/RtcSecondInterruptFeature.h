@@ -40,10 +40,10 @@ namespace stm32plus {
     : RtcFeatureBase(rtc),
       ExtiRtcWakeup(EXTI_Mode_Interrupt,EXTI_Trigger_Rising) {
 
-  	// set the clock source to the 1Hz SPRE and reset the counter
+    // set the clock source to the 1Hz SPRE and reset the counter
 
-  	RTC_WakeUpClockConfig(RTC_WakeUpClock_CK_SPRE_16bits);
-  	RTC_SetWakeUpCounter(0);
+    RTC_WakeUpClockConfig(RTC_WakeUpClock_CK_SPRE_16bits);
+    RTC_SetWakeUpCounter(0);
   }
 
 
@@ -62,7 +62,7 @@ namespace stm32plus {
    */
 
   inline void RtcSecondInterruptFeature::disableSecondInterrupt() const {
-  	RTC_ITConfig(RTC_IT_WUT,DISABLE);
-  	RTC_WakeUpCmd(DISABLE);
+    RTC_ITConfig(RTC_IT_WUT,DISABLE);
+    RTC_WakeUpCmd(DISABLE);
   }
 }

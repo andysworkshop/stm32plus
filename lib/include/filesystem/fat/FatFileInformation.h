@@ -8,47 +8,47 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * @brief Extended file information to include the FAT-specific DirectoryEntry
-		 */
+    /**
+     * @brief Extended file information to include the FAT-specific DirectoryEntry
+     */
 
-		class FatFileInformation : public FileInformation {
+    class FatFileInformation : public FileInformation {
 
-			protected:
-				uint32_t _attributes;
-				const char *_filename;
-				time_t _creationDate;
-				time_t _lastWriteDateTime;
-				time_t _lastAccessDateTime;
-				uint32_t _length;
+      protected:
+        uint32_t _attributes;
+        const char *_filename;
+        time_t _creationDate;
+        time_t _lastWriteDateTime;
+        time_t _lastAccessDateTime;
+        uint32_t _length;
 
-			public:
-				/**
-				 * Default constructor. Do nothing.
-				 */
+      public:
+        /**
+         * Default constructor. Do nothing.
+         */
 
-				FatFileInformation() {
-				}
+        FatFileInformation() {
+        }
 
-				FatFileInformation(const char *filename,const DirectoryEntryWithLocation& dirent);
+        FatFileInformation(const char *filename,const DirectoryEntryWithLocation& dirent);
 
-				/**
-				 * Virtual destructor. Do nothing.
-				 */
+        /**
+         * Virtual destructor. Do nothing.
+         */
 
-				virtual ~FatFileInformation() {
-				}
+        virtual ~FatFileInformation() {
+        }
 
-				// overrides from FileInformation
+        // overrides from FileInformation
 
-				virtual uint32_t getAttributes() const override;
-				virtual const char *getFilename() const override;
-				virtual time_t getCreationDateTime() const override;
-				virtual time_t getLastWriteDateTime() const override;
-				virtual time_t getLastAccessDateTime() const override;
-				virtual uint32_t getLength() const override;
-		};
-	}
+        virtual uint32_t getAttributes() const override;
+        virtual const char *getFilename() const override;
+        virtual time_t getCreationDateTime() const override;
+        virtual time_t getLastWriteDateTime() const override;
+        virtual time_t getLastAccessDateTime() const override;
+        virtual uint32_t getLength() const override;
+    };
+  }
 }

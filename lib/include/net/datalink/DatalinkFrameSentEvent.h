@@ -9,33 +9,33 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor for a datalink frame-sent event. This event is
-		 * sent when a frame has been put on to the wire and the NetBuffer
-		 * is about to be released.
-		 */
+    /**
+     * Event descriptor for a datalink frame-sent event. This event is
+     * sent when a frame has been put on to the wire and the NetBuffer
+     * is about to be released.
+     */
 
-		struct DatalinkFrameSentEvent : NetEventDescriptor {
+    struct DatalinkFrameSentEvent : NetEventDescriptor {
 
-			/**
-			 * The net buffer reference
-			 */
+      /**
+       * The net buffer reference
+       */
 
-			NetBuffer& netBuffer;
+      NetBuffer& netBuffer;
 
 
-			/**
-			 * Constructor
-			 * @param nb The NetBuffer holding the frame that's just gone
-			 */
+      /**
+       * Constructor
+       * @param nb The NetBuffer holding the frame that's just gone
+       */
 
-			DatalinkFrameSentEvent(NetBuffer& nb)
-				: NetEventDescriptor(NetEventType::DATALINK_FRAME_SENT),
-					netBuffer(nb) {
-			}
-		};
-	}
+      DatalinkFrameSentEvent(NetBuffer& nb)
+        : NetEventDescriptor(NetEventType::DATALINK_FRAME_SENT),
+          netBuffer(nb) {
+      }
+    };
+  }
 }

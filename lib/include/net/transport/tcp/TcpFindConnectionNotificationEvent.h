@@ -8,40 +8,40 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event used to find an existing TCP connection that matches
-		 * the given source and destination ports
-		 */
+    /**
+     * Event used to find an existing TCP connection that matches
+     * the given source and destination ports
+     */
 
-		class TcpConnection;
+    class TcpConnection;
 
-		struct TcpFindConnectionNotificationEvent : NetEventDescriptor {
+    struct TcpFindConnectionNotificationEvent : NetEventDescriptor {
 
-			const IpAddress& remoteAddress;				///< the remote address
-			uint16_t localPort;											///< local port
-			uint16_t remotePort;										///< remote port
+      const IpAddress& remoteAddress;       ///< the remote address
+      uint16_t localPort;                     ///< local port
+      uint16_t remotePort;                    ///< remote port
 
-			TcpConnection *tcpConnection;   				///< the connection if found, nullptr if not
+      TcpConnection *tcpConnection;           ///< the connection if found, nullptr if not
 
 
-			/**
-			 * Constructor
-			 * @param raddr The remote address
-			 * @param sPort The source port (remote end)
-			 * @param dPort The destination port (local end)
-			 */
+      /**
+       * Constructor
+       * @param raddr The remote address
+       * @param sPort The source port (remote end)
+       * @param dPort The destination port (local end)
+       */
 
-			TcpFindConnectionNotificationEvent(const IpAddress& raddr,uint16_t sPort,uint16_t dPort)
-				: NetEventDescriptor(NetEventType::TCP_FIND_CONNECTION),
-				  remoteAddress(raddr),
-				  localPort(dPort),
-				  remotePort(sPort),
-				  tcpConnection(nullptr) {
-			}
-		};
-	}
+      TcpFindConnectionNotificationEvent(const IpAddress& raddr,uint16_t sPort,uint16_t dPort)
+        : NetEventDescriptor(NetEventType::TCP_FIND_CONNECTION),
+          remoteAddress(raddr),
+          localPort(dPort),
+          remotePort(sPort),
+          tcpConnection(nullptr) {
+      }
+    };
+  }
 }
 

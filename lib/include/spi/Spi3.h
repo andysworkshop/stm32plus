@@ -9,88 +9,88 @@
 
 namespace stm32plus {
 
-	/**
-	 * Generic class for any pin package
-	 */
+  /**
+   * Generic class for any pin package
+   */
 
-	template<class TPinPackage,class... Features>
-	struct Spi3_Custom : SpiPeripheral<TPinPackage,PERIPHERAL_SPI3>,
-                 	 	 	 Features... {
+  template<class TPinPackage,class... Features>
+  struct Spi3_Custom : SpiPeripheral<TPinPackage,PERIPHERAL_SPI3>,
+                       Features... {
 
-	  Spi3_Custom(const typename SpiPeripheral<TPinPackage,PERIPHERAL_SPI3>::Parameters& params)
-	  	: SpiPeripheral<TPinPackage,PERIPHERAL_SPI3>(params),
-	  	  Features(static_cast<Spi&>(*this))... {
-	  }
-	};
-
-
-	/*
-	 * Default pin package:
-	 */
-
-	struct Spi3DefaultPinPackage {
-		enum {
-			Port_NSS =GPIOA_BASE,
-			Port_SCK =GPIOB_BASE,
-			Port_MISO=GPIOB_BASE,
-			Port_MOSI=GPIOB_BASE,
-
-			Pin_NSS  = GPIO_Pin_15,
-			Pin_SCK  = GPIO_Pin_3,
-			Pin_MISO = GPIO_Pin_4,
-			Pin_MOSI = GPIO_Pin_5
-		};
-	};
+    Spi3_Custom(const typename SpiPeripheral<TPinPackage,PERIPHERAL_SPI3>::Parameters& params)
+      : SpiPeripheral<TPinPackage,PERIPHERAL_SPI3>(params),
+        Features(static_cast<Spi&>(*this))... {
+    }
+  };
 
 
-	/**
-	 * Convenience class to match the F1 pin for pin.
-	 */
+  /*
+   * Default pin package:
+   */
 
-	template<class... Features>
-	struct Spi3 : SpiPeripheral<Spi3DefaultPinPackage,PERIPHERAL_SPI3>,
-             	 	Features... {
+  struct Spi3DefaultPinPackage {
+    enum {
+      Port_NSS =GPIOA_BASE,
+      Port_SCK =GPIOB_BASE,
+      Port_MISO=GPIOB_BASE,
+      Port_MOSI=GPIOB_BASE,
 
-	  Spi3(const Parameters& params)
-	  	: SpiPeripheral<Spi3DefaultPinPackage,PERIPHERAL_SPI3>(params),
-	  	  Features(static_cast<Spi&>(*this))... {
-	  }
-	};
+      Pin_NSS  = GPIO_Pin_15,
+      Pin_SCK  = GPIO_Pin_3,
+      Pin_MISO = GPIO_Pin_4,
+      Pin_MOSI = GPIO_Pin_5
+    };
+  };
+
+
+  /**
+   * Convenience class to match the F1 pin for pin.
+   */
+
+  template<class... Features>
+  struct Spi3 : SpiPeripheral<Spi3DefaultPinPackage,PERIPHERAL_SPI3>,
+                Features... {
+
+    Spi3(const Parameters& params)
+      : SpiPeripheral<Spi3DefaultPinPackage,PERIPHERAL_SPI3>(params),
+        Features(static_cast<Spi&>(*this))... {
+    }
+  };
 
 #if defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F4)
 
-	/**
-	 * NSS is on PA[15]. The others move to PB
-	 */
+  /**
+   * NSS is on PA[15]. The others move to PB
+   */
 
-	struct Spi3Remap1PinPackage {
-		enum {
-			Port_NSS=GPIOA_BASE,
-			Port_SCK=GPIOC_BASE,
-			Port_MISO=GPIOC_BASE,
-			Port_MOSI=GPIOC_BASE,
+  struct Spi3Remap1PinPackage {
+    enum {
+      Port_NSS=GPIOA_BASE,
+      Port_SCK=GPIOC_BASE,
+      Port_MISO=GPIOC_BASE,
+      Port_MOSI=GPIOC_BASE,
 
-			Pin_NSS  = GPIO_Pin_4,
-			Pin_SCK  = GPIO_Pin_10,
-			Pin_MISO = GPIO_Pin_11,
-			Pin_MOSI = GPIO_Pin_12
-		};
-	};
+      Pin_NSS  = GPIO_Pin_4,
+      Pin_SCK  = GPIO_Pin_10,
+      Pin_MISO = GPIO_Pin_11,
+      Pin_MOSI = GPIO_Pin_12
+    };
+  };
 
 
-	/**
-	 * Convenience class to match the F1 pin for pin.
-	 */
+  /**
+   * Convenience class to match the F1 pin for pin.
+   */
 
-	template<class... Features>
-	struct Spi3_Remap1 : SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>,
-               	 			 Features... {
+  template<class... Features>
+  struct Spi3_Remap1 : SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>,
+                       Features... {
 
-	  Spi3_Remap1(const Parameters& params)
-	  	: SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>(params),
-	  	  Features(static_cast<Spi&>(*this))... {
-	  }
-	};
+    Spi3_Remap1(const Parameters& params)
+      : SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>(params),
+        Features(static_cast<Spi&>(*this))... {
+    }
+  };
 #endif
 }
 

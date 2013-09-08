@@ -16,64 +16,64 @@
 namespace stm32plus {
 
 
-	/*
-	 * Remap #1 pin package:
-	 * (SCL,SDA) = (PF1,PF0)
-	 */
+  /*
+   * Remap #1 pin package:
+   * (SCL,SDA) = (PF1,PF0)
+   */
 
-	struct I2C2Remap1PinPackage {
-		enum {
-			Port_SCL=GPIOF_BASE,
-			Port_SDA=GPIOF_BASE,
+  struct I2C2Remap1PinPackage {
+    enum {
+      Port_SCL=GPIOF_BASE,
+      Port_SDA=GPIOF_BASE,
 
-			Pin_SCL=GPIO_Pin_1,
-			Pin_SDA=GPIO_Pin_0
-		};
-	};
-
-
-	/**
-	 * Class to manage the remap package
-	 */
-
-	template<class... Features>
-	struct I2C2_Remap1 : I2CPeripheral<I2C2Remap1PinPackage,PERIPHERAL_I2C2>,
-                 	 	 	 Features... {
-
-	  I2C2_Remap1(const Parameters& params)
-	  	: I2CPeripheral<I2C2Remap1PinPackage,PERIPHERAL_I2C2>(params),
-	  	  Features(static_cast<I2C&>(*this))... {
-	  }
-	};
+      Pin_SCL=GPIO_Pin_1,
+      Pin_SDA=GPIO_Pin_0
+    };
+  };
 
 
-	/*
-	 * Remap #2 pin package:
-	 * (SCL,SDA) = (PH4,PH5)
-	 */
+  /**
+   * Class to manage the remap package
+   */
 
-	struct I2C2Remap2PinPackage {
-		enum {
-			Port_SCL=GPIOH_BASE,
-			Port_SDA=GPIOH_BASE,
+  template<class... Features>
+  struct I2C2_Remap1 : I2CPeripheral<I2C2Remap1PinPackage,PERIPHERAL_I2C2>,
+                       Features... {
 
-			Pin_SCL=GPIO_Pin_4,
-			Pin_SDA=GPIO_Pin_5
-		};
-	};
+    I2C2_Remap1(const Parameters& params)
+      : I2CPeripheral<I2C2Remap1PinPackage,PERIPHERAL_I2C2>(params),
+        Features(static_cast<I2C&>(*this))... {
+    }
+  };
 
 
-	/**
-	 * Class to manage the remap package
-	 */
+  /*
+   * Remap #2 pin package:
+   * (SCL,SDA) = (PH4,PH5)
+   */
 
-	template<class... Features>
-	struct I2C2_Remap2 : I2CPeripheral<I2C2Remap2PinPackage,PERIPHERAL_I2C2>,
-                 	 	 	 Features... {
+  struct I2C2Remap2PinPackage {
+    enum {
+      Port_SCL=GPIOH_BASE,
+      Port_SDA=GPIOH_BASE,
 
-	  I2C2_Remap2(const Parameters& params)
-	  	: I2CPeripheral<I2C2Remap2PinPackage,PERIPHERAL_I2C2>(params),
-	  	  Features(static_cast<I2C&>(*this))... {
-	  }
-	};
+      Pin_SCL=GPIO_Pin_4,
+      Pin_SDA=GPIO_Pin_5
+    };
+  };
+
+
+  /**
+   * Class to manage the remap package
+   */
+
+  template<class... Features>
+  struct I2C2_Remap2 : I2CPeripheral<I2C2Remap2PinPackage,PERIPHERAL_I2C2>,
+                       Features... {
+
+    I2C2_Remap2(const Parameters& params)
+      : I2CPeripheral<I2C2Remap2PinPackage,PERIPHERAL_I2C2>(params),
+        Features(static_cast<I2C&>(*this))... {
+    }
+  };
 }

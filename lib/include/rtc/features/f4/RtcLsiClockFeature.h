@@ -20,7 +20,7 @@ namespace stm32plus {
    * in their examples so we optionally provide that functionality as well.
    */
 
-	template<class TLsiFrequencyProvider>
+  template<class TLsiFrequencyProvider>
   class RtcLsiClockFeature : public RtcFeatureBase {
 
     public:
@@ -37,7 +37,7 @@ namespace stm32plus {
   inline RtcLsiClockFeature<TLsiFrequencyProvider>::RtcLsiClockFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
-  	RTC_InitTypeDef init;
+    RTC_InitTypeDef init;
 
     // on with the LSI
 
@@ -53,7 +53,7 @@ namespace stm32plus {
 
     // Configure the RTC hour format and prescaler for whatever the LSI is running at
 
-    init.RTC_AsynchPrediv=0x7F;			// max value
+    init.RTC_AsynchPrediv=0x7F;     // max value
     init.RTC_SynchPrediv=(TLsiFrequencyProvider::getLsiFrequency()/128)-1;
     init.RTC_HourFormat=_rtc.getHourFormat();
 

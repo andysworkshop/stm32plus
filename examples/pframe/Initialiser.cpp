@@ -12,8 +12,8 @@
  */
 
 Initialiser::Initialiser(LcdManager& lcdManager)
-	: _lcdManager(lcdManager),
-	  _term(_lcdManager.getTerminal()) {
+  : _lcdManager(lcdManager),
+    _term(_lcdManager.getTerminal()) {
 }
 
 
@@ -23,6 +23,6 @@ Initialiser::Initialiser(LcdManager& lcdManager)
 
 bool Initialiser::error(const char *message) {
 
-	_term << message << '\n';
-	return false;
+  _term << message << '\n';
+  return false;
 }

@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * The sliding receive window. This class manages the following variables.
-		 *
-		 *          |<      receiveWindow       >   |
-		 * +---------------------------------------------
-		 * |        |                               |
-		 * +---------------------------------------------
-		 *          ^
-		 *     receiveNext
-		 */
+    /**
+     * The sliding receive window. This class manages the following variables.
+     *
+     *          |<      receiveWindow       >   |
+     * +---------------------------------------------
+     * |        |                               |
+     * +---------------------------------------------
+     *          ^
+     *     receiveNext
+     */
 
-		struct TcpReceiveWindow {
-			uint32_t receiveNext;						///< seq num of next byte expected to arrive
-			uint16_t receiveWindow;					///< the number of bytes that we are currently prepared to receive
-		};
-	}
+    struct TcpReceiveWindow {
+      uint32_t receiveNext;           ///< seq num of next byte expected to arrive
+      uint16_t receiveWindow;         ///< the number of bytes that we are currently prepared to receive
+    };
+  }
 }

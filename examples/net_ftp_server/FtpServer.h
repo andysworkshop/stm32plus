@@ -29,20 +29,20 @@ typedef NetworkStack<MyApplicationLayer> MyNetworkStack;
 
 struct FtpUser {
 
-	std::string name;
-	std::string passwordHash;
-	std::string passwordSalt;
-	bool writeAccess;
+  std::string name;
+  std::string passwordHash;
+  std::string passwordSalt;
+  bool writeAccess;
 
-	static FtpUser createAnonymous() {
+  static FtpUser createAnonymous() {
 
-		FtpUser user;
+    FtpUser user;
 
-		user.name="anonymous";
-		user.writeAccess=false;
+    user.name="anonymous";
+    user.writeAccess=false;
 
-		return user;
-	}
+    return user;
+  }
 };
 
 
@@ -52,27 +52,27 @@ struct FtpUser {
 
 struct FtpParameters {
 
-	// parameters read from the card
+  // parameters read from the card
 
-	std::string serverGreeting;				/// no default: you have to set one
-	std::string serverGoodbye;				/// no default: you have to set one
-	std::string rootDirectory;				/// the root directory for this server: default is ""
-	bool anonymousPermitted;					/// default is false
-	uint32_t idleTimeout;							/// default is 120 seconds, 0=never time out
-	std::vector<FtpUser> users;				/// user specifications, no defaults. anonymous always gets entry zero if enabled.
+  std::string serverGreeting;       /// no default: you have to set one
+  std::string serverGoodbye;        /// no default: you have to set one
+  std::string rootDirectory;        /// the root directory for this server: default is ""
+  bool anonymousPermitted;          /// default is false
+  uint32_t idleTimeout;             /// default is 120 seconds, 0=never time out
+  std::vector<FtpUser> users;       /// user specifications, no defaults. anonymous always gets entry zero if enabled.
 
-	// internal references created during server startup
+  // internal references created during server startup
 
-	FileSystem *fs;
-	Tcp<MyNetworkLayer> *tcpImpl;
+  FileSystem *fs;
+  Tcp<MyNetworkLayer> *tcpImpl;
 
 
-	/**
-	 * Constructor
-	 */
+  /**
+   * Constructor
+   */
 
-	FtpParameters() {
-		anonymousPermitted=false;
-		idleTimeout=120;
-	}
+  FtpParameters() {
+    anonymousPermitted=false;
+    idleTimeout=120;
+  }
 };

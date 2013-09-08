@@ -30,25 +30,25 @@ RngInterruptFeatureEnabler::FPTR RngInterruptFeatureEnabler::_forceLinkage=nullp
 
 extern "C" {
 
-	/**
-	 * IRQ handler for HASH and RNG
-	 */
+  /**
+   * IRQ handler for HASH and RNG
+   */
 
-	void __attribute__ ((interrupt("IRQ"))) HASH_RNG_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) HASH_RNG_IRQHandler(void) {
 
-		if(RNG_GetITStatus(RNG_IT_CEI)!=RESET) {
-			RngInterruptFeature::_rngInstance->RngInterruptEventSender.raiseEvent(RngEventType::EVENT_CLOCK_ERROR,0);
-			RNG_ClearITPendingBit(RNG_IT_CEI);
-		}
-		else if(RNG_GetITStatus(RNG_IT_SEI)!=RESET) {
-			RngInterruptFeature::_rngInstance->RngInterruptEventSender.raiseEvent(RngEventType::EVENT_SEED_ERROR,0);
-			RNG_ClearITPendingBit(RNG_IT_SEI);
-		}
-		else if(RNG_GetFlagStatus(RNG_FLAG_DRDY))
-			RngInterruptFeature::_rngInstance->RngInterruptEventSender.raiseEvent(RngEventType::EVENT_DATA_READY,RNG_GetRandomNumber());
+    if(RNG_GetITStatus(RNG_IT_CEI)!=RESET) {
+      RngInterruptFeature::_rngInstance->RngInterruptEventSender.raiseEvent(RngEventType::EVENT_CLOCK_ERROR,0);
+      RNG_ClearITPendingBit(RNG_IT_CEI);
+    }
+    else if(RNG_GetITStatus(RNG_IT_SEI)!=RESET) {
+      RngInterruptFeature::_rngInstance->RngInterruptEventSender.raiseEvent(RngEventType::EVENT_SEED_ERROR,0);
+      RNG_ClearITPendingBit(RNG_IT_SEI);
+    }
+    else if(RNG_GetFlagStatus(RNG_FLAG_DRDY))
+      RngInterruptFeature::_rngInstance->RngInterruptEventSender.raiseEvent(RngEventType::EVENT_DATA_READY,RNG_GetRandomNumber());
 
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 

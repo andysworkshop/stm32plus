@@ -17,22 +17,22 @@ extern "C" void I2C2_EV_IRQHandler();
 
 namespace stm32plus {
 
-	/**
-	 * Helper class to enable only the desired interrupts in the NVIC. This will
-	 * be fully specialised for each I2C peripheral
+  /**
+   * Helper class to enable only the desired interrupts in the NVIC. This will
+   * be fully specialised for each I2C peripheral
    * @tparam TI2CNumber The number of the I2C peripheral (1..3)
-	 */
+   */
 
-	template<uint8_t TI2CNumber>
-	class I2CInterruptFeatureEnabler {
+  template<uint8_t TI2CNumber>
+  class I2CInterruptFeatureEnabler {
 
-	  private:
+    private:
       typedef void (*FPTR)();         // this trick will force the linker to include the ISR
       static FPTR _forceLinkage;
 
     public:
       static void enable(uint8_t priority,uint8_t subPriority);
-	};
+  };
 
 
   /**
@@ -42,7 +42,7 @@ namespace stm32plus {
 
   template<uint8_t TI2CNumber>
   class I2CInterruptFeature : public I2CEventSource,
-  														public I2CFeatureBase {
+                              public I2CFeatureBase {
 
     protected:
       uint16_t _interruptMask;
@@ -85,7 +85,7 @@ namespace stm32plus {
 
   template<uint8_t TI2CNumber>
   inline I2CInterruptFeature<TI2CNumber>::I2CInterruptFeature(I2C& I2C)
-  	: I2CFeatureBase(I2C) {
+    : I2CFeatureBase(I2C) {
     _interruptMask=0;
     _nvicPriority=_nvicSubPriority=0;
     _i2cInstance=this;
@@ -113,8 +113,8 @@ namespace stm32plus {
 
   template<uint8_t TI2CNumber>
   inline void I2CInterruptFeature<TI2CNumber>::setNvicPriorities(uint8_t priority,uint8_t subPriority) {
-  	_nvicPriority=priority;
-  	_nvicSubPriority=subPriority;
+    _nvicPriority=priority;
+    _nvicSubPriority=subPriority;
   }
 
 

@@ -9,17 +9,17 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * IP protocol numbers. Not all of them.
-		 */
+    /**
+     * IP protocol numbers. Not all of them.
+     */
 
-		enum class IpProtocol : uint8_t {
-			ICMP = 0x01,
-			TCP   = 0x06,
-			UDP   = 0x11
-		};
-	}
+    enum class IpProtocol : uint8_t {
+      ICMP = 0x01,
+      TCP   = 0x06,
+      UDP   = 0x11
+    };
+  }
 }
 

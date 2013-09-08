@@ -14,28 +14,28 @@
 
 namespace stm32plus {
 
-	/**
-	 * Specialisation of the AF mapper for this peripheral
-	 */
+  /**
+   * Specialisation of the AF mapper for this peripheral
+   */
 
-	template<uint32_t TPort,uint16_t TPin>
-	struct GpioAlternateFunctionMapper<PERIPHERAL_SPI1,TPort,TPin> {
-		enum {
-			GPIO_AF = GPIO_AF_SPI1
-		};
-	};
+  template<uint32_t TPort,uint16_t TPin>
+  struct GpioAlternateFunctionMapper<PERIPHERAL_SPI1,TPort,TPin> {
+    enum {
+      GPIO_AF = GPIO_AF_SPI1
+    };
+  };
 
-	template<uint32_t TPort,uint16_t TPin>
-	struct GpioAlternateFunctionMapper<PERIPHERAL_SPI2,TPort,TPin> {
-		enum {
-			GPIO_AF = GPIO_AF_SPI2
-		};
-	};
+  template<uint32_t TPort,uint16_t TPin>
+  struct GpioAlternateFunctionMapper<PERIPHERAL_SPI2,TPort,TPin> {
+    enum {
+      GPIO_AF = GPIO_AF_SPI2
+    };
+  };
 
-	template<uint32_t TPort,uint16_t TPin>
-	struct GpioAlternateFunctionMapper<PERIPHERAL_SPI3,TPort,TPin> {
-		enum {
-			GPIO_AF = GPIO_AF_SPI3
-		};
-	};
+  template<uint32_t TPort,uint16_t TPin>
+  struct GpioAlternateFunctionMapper<PERIPHERAL_SPI3,TPort,TPin> {
+    enum {
+      GPIO_AF = GPIO_AF_SPI3
+    };
+  };
 }

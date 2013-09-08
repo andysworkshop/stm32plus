@@ -16,7 +16,7 @@ namespace stm32plus {
 
   class SdCardFeatureBase {
 
-  	protected:
+    protected:
       SdCardBase& _sdcard;
 
     public:

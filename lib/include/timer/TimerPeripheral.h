@@ -10,19 +10,19 @@
 namespace stm32plus {
 
  /**
-	* The level of remapping required (none, partial1, partial2, full)
-	* Not all remap levels are available for each timer. check the ST reference manual for details
-	*/
+  * The level of remapping required (none, partial1, partial2, full)
+  * Not all remap levels are available for each timer. check the ST reference manual for details
+  */
 
-	enum TimerGpioRemapLevel {
-		TIMER_REMAP_NONE     = 0,
-		TIMER_REMAP_PARTIAL1 = 1,
-		TIMER_REMAP_PARTIAL2 = 2,
-		TIMER_REMAP_FULL     = 3
-	};
+  enum TimerGpioRemapLevel {
+    TIMER_REMAP_NONE     = 0,
+    TIMER_REMAP_PARTIAL1 = 1,
+    TIMER_REMAP_PARTIAL2 = 2,
+    TIMER_REMAP_FULL     = 3
+  };
 
 
-	/**
+  /**
    * Generic timer functionality
    * @tparam TTimer The timer class type (Timer1, Timer2...)
    * @tparam TPeripheralName the peripheral class for the clocks
@@ -31,13 +31,13 @@ namespace stm32plus {
   template<class TTimer,PeripheralName TPeripheralName>
   class TimerPeripheral : public Timer {
 
-  	protected:
-  		TimerPeripheral(TIM_TypeDef *peripheralAddress);
-  		~TimerPeripheral();
+    protected:
+      TimerPeripheral(TIM_TypeDef *peripheralAddress);
+      ~TimerPeripheral();
 
-  	public:
-  		void setPrescalerImmediately(uint16_t value);
-  		void setPrescalerAtUpdate(uint16_t value);
+    public:
+      void setPrescalerImmediately(uint16_t value);
+      void setPrescalerAtUpdate(uint16_t value);
   };
 
 
@@ -47,11 +47,11 @@ namespace stm32plus {
 
   template<class TTimer,PeripheralName TPeripheralName>
   inline TimerPeripheral<TTimer,TPeripheralName>::TimerPeripheral(TIM_TypeDef *peripheralAddress)
-  	: Timer(peripheralAddress) {
+    : Timer(peripheralAddress) {
 
-  	// enable the clock before the feature constructors are called
+    // enable the clock before the feature constructors are called
 
-  	ClockControl<TPeripheralName>::On();
+    ClockControl<TPeripheralName>::On();
   }
 
 
@@ -62,9 +62,9 @@ namespace stm32plus {
   template<class TTimer,PeripheralName TPeripheralName>
   inline TimerPeripheral<TTimer,TPeripheralName>::~TimerPeripheral() {
 
-  	// disable the clock
+    // disable the clock
 
-  	ClockControl<TPeripheralName>::Off();
+    ClockControl<TPeripheralName>::Off();
   }
 
 

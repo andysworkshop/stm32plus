@@ -1120,9 +1120,9 @@ random_sample(_InputIter __first, _InputIter __last,
 
 template <class _ForwardIter, class _Predicate>
 _ForwardIter __partition(_ForwardIter __first,
-		         _ForwardIter __last,
-			 _Predicate   __pred,
-			 forward_iterator_tag) {
+             _ForwardIter __last,
+       _Predicate   __pred,
+       forward_iterator_tag) {
   if (__first == __last) return __first;
 
   while (__pred(*__first))
@@ -1142,8 +1142,8 @@ _ForwardIter __partition(_ForwardIter __first,
 template <class _BidirectionalIter, class _Predicate>
 _BidirectionalIter __partition(_BidirectionalIter __first,
                                _BidirectionalIter __last,
-			       _Predicate __pred,
-			       bidirectional_iterator_tag) {
+             _Predicate __pred,
+             bidirectional_iterator_tag) {
   while (true) {
     while (true)
       if (__first == __last)
@@ -1167,8 +1167,8 @@ _BidirectionalIter __partition(_BidirectionalIter __first,
 
 template <class _ForwardIter, class _Predicate>
 inline _ForwardIter partition(_ForwardIter __first,
-   			      _ForwardIter __last,
-			      _Predicate   __pred) {
+              _ForwardIter __last,
+            _Predicate   __pred) {
   __STL_REQUIRES(_ForwardIter, _Mutable_ForwardIterator);
   __STL_UNARY_FUNCTION_CHECK(_Predicate, bool, 
         typename iterator_traits<_ForwardIter>::value_type);
@@ -1938,7 +1938,7 @@ _ForwardIter __lower_bound(_ForwardIter __first, _ForwardIter __last,
 
 template <class _ForwardIter, class _Tp>
 inline _ForwardIter lower_bound(_ForwardIter __first, _ForwardIter __last,
-				const _Tp& __val) {
+        const _Tp& __val) {
   __STL_REQUIRES(_ForwardIter, _ForwardIterator);
   __STL_REQUIRES_SAME_TYPE(_Tp,
       typename iterator_traits<_ForwardIter>::value_type);
@@ -2830,7 +2830,7 @@ _ForwardIter max_element(_ForwardIter __first, _ForwardIter __last) {
 
 template <class _ForwardIter, class _Compare>
 _ForwardIter max_element(_ForwardIter __first, _ForwardIter __last,
-			 _Compare __comp) {
+       _Compare __comp) {
   __STL_REQUIRES(_ForwardIter, _ForwardIterator);
   __STL_BINARY_FUNCTION_CHECK(_Compare, bool,
     typename iterator_traits<_ForwardIter>::value_type,
@@ -2857,7 +2857,7 @@ _ForwardIter min_element(_ForwardIter __first, _ForwardIter __last) {
 
 template <class _ForwardIter, class _Compare>
 _ForwardIter min_element(_ForwardIter __first, _ForwardIter __last,
-			 _Compare __comp) {
+       _Compare __comp) {
   __STL_REQUIRES(_ForwardIter, _ForwardIterator);
   __STL_BINARY_FUNCTION_CHECK(_Compare, bool,
     typename iterator_traits<_ForwardIter>::value_type,

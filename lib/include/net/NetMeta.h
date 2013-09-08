@@ -8,43 +8,43 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Recursive initialisation of feature classes defined using variadic templates.
-		 * This initialiser has parameters and NetworkUtilityObjects class and returns bool
-		 * Here's the forward definition
-		 */
+    /**
+     * Recursive initialisation of feature classes defined using variadic templates.
+     * This initialiser has parameters and NetworkUtilityObjects class and returns bool
+     * Here's the forward definition
+     */
 
-		template<typename F,typename... T>
-		struct RecursiveBoolInitWithParamsAndNetworkUtilityObjects;
+    template<typename F,typename... T>
+    struct RecursiveBoolInitWithParamsAndNetworkUtilityObjects;
 
-		/**
-		 * Recursion termination condition, always return success
-		 */
+    /**
+     * Recursion termination condition, always return success
+     */
 
-		template<class F>
-		struct RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F> {
-			static bool tinit(F *,typename F::Parameters&,NetworkUtilityObjects&) {
-				return true;
-			}
-		};
+    template<class F>
+    struct RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F> {
+      static bool tinit(F *,typename F::Parameters&,NetworkUtilityObjects&) {
+        return true;
+      }
+    };
 
 
-		/**
-		 * General recursive initialiser
-		 */
+    /**
+     * General recursive initialiser
+     */
 
-		template<class F,class T,class... G>
-		struct RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F,T,G...> {
-			static bool tinit(F *ptr,typename F::Parameters& p,NetworkUtilityObjects& netUtils) {
+    template<class F,class T,class... G>
+    struct RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F,T,G...> {
+      static bool tinit(F *ptr,typename F::Parameters& p,NetworkUtilityObjects& netUtils) {
 
-				if(!ptr->T::initialise(p,netUtils))
-					return false;
+        if(!ptr->T::initialise(p,netUtils))
+          return false;
 
-				return RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F,G...>::tinit(ptr,p,netUtils);
-			}
-		};
-	}
+        return RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F,G...>::tinit(ptr,p,netUtils);
+      }
+    };
+  }
 }

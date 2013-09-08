@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace EnterNormalModeCmd
-		{
-			enum
-			{
-				Opcode = 0x13
-			};
-		}
-	}
+  namespace ili9481
+  {
+    namespace EnterNormalModeCmd
+    {
+      enum
+      {
+        Opcode = 0x13
+      };
+    }
+  }
 }
 
 

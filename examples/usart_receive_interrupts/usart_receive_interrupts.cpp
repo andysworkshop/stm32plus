@@ -35,8 +35,8 @@ using namespace stm32plus;
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -45,99 +45,99 @@ using namespace stm32plus;
 
 class UsartReceiveInterruptsTest {
 
-	protected:
+  protected:
 
-		/*
-		 * We'll use this as our simple I/O buffer
-		 */
+    /*
+     * We'll use this as our simple I/O buffer
+     */
 
-		uint8_t _buffer[5];
-		uint8_t _index;
+    uint8_t _buffer[5];
+    uint8_t _index;
 
-		/*
-		 * The USART1 peripheral configured with the interrupt feature
-		 */
+    /*
+     * The USART1 peripheral configured with the interrupt feature
+     */
 
-		typedef Usart1InterruptFeature MyUsartInterrupt;
-		Usart1<MyUsartInterrupt> _usart;
+    typedef Usart1InterruptFeature MyUsartInterrupt;
+    Usart1<MyUsartInterrupt> _usart;
 
-	public:
+  public:
 
-		/*
-		 * Use the constructor base initialiser to set up the USART at 57600
-		 */
+    /*
+     * Use the constructor base initialiser to set up the USART at 57600
+     */
 
-		UsartReceiveInterruptsTest()
-			:_usart(57600) {
-		}
+    UsartReceiveInterruptsTest()
+      :_usart(57600) {
+    }
 
-		/*
-		 * Run the test
-		 */
+    /*
+     * Run the test
+     */
 
-		void run()  {
+    void run()  {
 
-			/*
-			 * We're using interrupts, set up the NVIC
-			 */
+      /*
+       * We're using interrupts, set up the NVIC
+       */
 
-			Nvic::initialise();
+      Nvic::initialise();
 
-			// register ourselves as an observer of the USART interrupts
+      // register ourselves as an observer of the USART interrupts
 
-			_usart.UsartInterruptEventSender.insertSubscriber(
-      		UsartInterruptEventSourceSlot::bind(this,&UsartReceiveInterruptsTest::onInterrupt)
-      	);
+      _usart.UsartInterruptEventSender.insertSubscriber(
+          UsartInterruptEventSourceSlot::bind(this,&UsartReceiveInterruptsTest::onInterrupt)
+        );
 
-			// enable the receive interrupt. this will start the whole chain of events
+      // enable the receive interrupt. this will start the whole chain of events
 
-			_index=0;
-			_usart.enableInterrupts(MyUsartInterrupt::RECEIVE);
+      _index=0;
+      _usart.enableInterrupts(MyUsartInterrupt::RECEIVE);
 
-			// it's all going on in the background now. wish us luck :)
+      // it's all going on in the background now. wish us luck :)
 
-			for(;;);
-		}
+      for(;;);
+    }
 
 
-		/*
-		 * Interrupt callback function. This is called when the TXE interrupt that we've
-		 * enabled is fired.
-		 */
+    /*
+     * Interrupt callback function. This is called when the TXE interrupt that we've
+     * enabled is fired.
+     */
 
-		void onInterrupt(UsartEventType uet) {
+    void onInterrupt(UsartEventType uet) {
 
-			if(uet==UsartEventType::EVENT_RECEIVE) {
+      if(uet==UsartEventType::EVENT_RECEIVE) {
 
-				// receive the next character
+        // receive the next character
 
-				_buffer[_index++]=_usart.receive();
+        _buffer[_index++]=_usart.receive();
 
-				// if we've got the 5 characters then disable receiving interrupts
-				// and enable sending
+        // if we've got the 5 characters then disable receiving interrupts
+        // and enable sending
 
-				if(_index==5) {
-					_index=0;
-					_usart.disableInterrupts(MyUsartInterrupt::RECEIVE);
-					_usart.enableInterrupts(MyUsartInterrupt::TRANSMIT);
-				}
-			}
-			else if(uet==UsartEventType::EVENT_READY_TO_TRANSMIT) {
+        if(_index==5) {
+          _index=0;
+          _usart.disableInterrupts(MyUsartInterrupt::RECEIVE);
+          _usart.enableInterrupts(MyUsartInterrupt::TRANSMIT);
+        }
+      }
+      else if(uet==UsartEventType::EVENT_READY_TO_TRANSMIT) {
 
-				// send the next character
+        // send the next character
 
-				_usart.send(_buffer[_index++]);
+        _usart.send(_buffer[_index++]);
 
-				// if we've sent back all 5 then disable sending interrupts and go back
-				// to receiving again
+        // if we've sent back all 5 then disable sending interrupts and go back
+        // to receiving again
 
-				if(_index==5) {
-					_index=0;
-					_usart.disableInterrupts(MyUsartInterrupt::TRANSMIT);
-					_usart.enableInterrupts(MyUsartInterrupt::RECEIVE);
-				}
-			}
-		}
+        if(_index==5) {
+          _index=0;
+          _usart.disableInterrupts(MyUsartInterrupt::TRANSMIT);
+          _usart.enableInterrupts(MyUsartInterrupt::RECEIVE);
+        }
+      }
+    }
 };
 
 
@@ -147,9 +147,9 @@ class UsartReceiveInterruptsTest {
 
 int main() {
 
-	UsartReceiveInterruptsTest test;
-	test.run();
+  UsartReceiveInterruptsTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

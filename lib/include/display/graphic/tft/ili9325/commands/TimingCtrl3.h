@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace TimingCtrl3
-		{
-			enum
-			{
-				Opcode = 0xef
-			};
-		}
-	}
+  namespace ili9325
+  {
+    namespace TimingCtrl3
+    {
+      enum
+      {
+        Opcode = 0xef
+      };
+    }
+  }
 }
 
 

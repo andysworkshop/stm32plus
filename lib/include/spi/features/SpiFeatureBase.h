@@ -10,35 +10,35 @@
 namespace stm32plus {
 
 
-	/**
-	 * Base class for SPI features
-	 */
+  /**
+   * Base class for SPI features
+   */
 
-	class SpiFeatureBase {
-		protected:
-			Spi& _spi;
+  class SpiFeatureBase {
+    protected:
+      Spi& _spi;
 
-		public:
-			SpiFeatureBase(Spi& spi);
-			operator Spi&();
-	};
-
-
-	/**
-	 * Constructor
-	 * @param spi
-	 */
-
-	inline SpiFeatureBase::SpiFeatureBase(Spi& spi)
-		: _spi(spi) {
-	}
+    public:
+      SpiFeatureBase(Spi& spi);
+      operator Spi&();
+  };
 
 
-	/**
-	 * Cast to Spi reference
-	 */
+  /**
+   * Constructor
+   * @param spi
+   */
 
-	inline SpiFeatureBase::operator Spi&() {
-		return _spi;
-	}
+  inline SpiFeatureBase::SpiFeatureBase(Spi& spi)
+    : _spi(spi) {
+  }
+
+
+  /**
+   * Cast to Spi reference
+   */
+
+  inline SpiFeatureBase::operator Spi&() {
+    return _spi;
+  }
 }

@@ -10,16 +10,16 @@
 
 namespace stm32plus
 {
-	namespace ili9325
-	{
-		namespace GRAMStartWritingCmd
-		{
-			enum
-			{
-				Opcode = 0x22
-			};
-		}
-	}
+  namespace ili9325
+  {
+    namespace GRAMStartWritingCmd
+    {
+      enum
+      {
+        Opcode = 0x22
+      };
+    }
+  }
 }
 
 

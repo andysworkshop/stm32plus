@@ -18,21 +18,21 @@ template<> TimerInterruptFeatureEnabler<7>::FPTR TimerInterruptFeatureEnabler<7>
 
 extern "C" {
 
-	/**
-	 * TIM7 interrupt handler
-	 * TIM7 can have Update
+  /**
+   * TIM7 interrupt handler
+   * TIM7 can have Update
    */
 
 #if defined(USE_TIM7_INTERRUPT)
 
-	void __attribute__ ((interrupt("IRQ"))) TIM7_IRQHandler() {
+  void __attribute__ ((interrupt("IRQ"))) TIM7_IRQHandler() {
 
-		if(TIM_GetITStatus(TIM7,TIM_IT_Update)!=RESET) {
-			TimerInterruptFeature<7>::_timerInstance->TimerInterruptEventSender.raiseEvent(TimerEventType::EVENT_UPDATE,7);
-			TIM_ClearITPendingBit(TIM7,TIM_IT_Update);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(TIM_GetITStatus(TIM7,TIM_IT_Update)!=RESET) {
+      TimerInterruptFeature<7>::_timerInstance->TimerInterruptEventSender.raiseEvent(TimerEventType::EVENT_UPDATE,7);
+      TIM_ClearITPendingBit(TIM7,TIM_IT_Update);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 
 #endif
 

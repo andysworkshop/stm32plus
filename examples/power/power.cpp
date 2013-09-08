@@ -39,8 +39,8 @@ using namespace stm32plus;
  * the button pin number.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -49,99 +49,99 @@ using namespace stm32plus;
 
 class PowerTest {
 
-	protected:
+  protected:
 
-		enum {
-			BUTTON_PIN = 8,
-			LED_PIN = 6
-		};
+    enum {
+      BUTTON_PIN = 8,
+      LED_PIN = 6
+    };
 
-		LowPowerModes _lpm;
-		bool _triggered;
+    LowPowerModes _lpm;
+    bool _triggered;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			// initialise the LED and button pins
+      // initialise the LED and button pins
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
-			GpioA<DefaultDigitalInputFeature<BUTTON_PIN> > pa;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioA<DefaultDigitalInputFeature<BUTTON_PIN> > pa;
 
-			// subscribe to interrupts from the button
+      // subscribe to interrupts from the button
 
-			Exti8 exti(EXTI_Mode_Interrupt,EXTI_Trigger_Falling,pa[BUTTON_PIN]);
+      Exti8 exti(EXTI_Mode_Interrupt,EXTI_Trigger_Falling,pa[BUTTON_PIN]);
 
-			exti.ExtiInterruptEventSender.insertSubscriber(
-					ExtiInterruptEventSourceSlot::bind(this,&PowerTest::onInterrupt)
-				);
+      exti.ExtiInterruptEventSender.insertSubscriber(
+          ExtiInterruptEventSourceSlot::bind(this,&PowerTest::onInterrupt)
+        );
 
-			// if we're here because of a previous standby then flash quickly 3 times
+      // if we're here because of a previous standby then flash quickly 3 times
 
-			if(LowPowerModes::wasInStandby())
-				flashLed(pf[LED_PIN],3);
+      if(LowPowerModes::wasInStandby())
+        flashLed(pf[LED_PIN],3);
 
-			// if we're here because of a wakeup then flash quickly 6 times
+      // if we're here because of a wakeup then flash quickly 6 times
 
-			if(LowPowerModes::wasWokenUp())
-				flashLed(pf[LED_PIN],6);
+      if(LowPowerModes::wasWokenUp())
+        flashLed(pf[LED_PIN],6);
 
-			// enable the WAKEUP pin
+      // enable the WAKEUP pin
 
-			_lpm.enableWakeup();
+      _lpm.enableWakeup();
 
-			_triggered=false;
+      _triggered=false;
 
-			for(;;) {
+      for(;;) {
 
-				// flash the LED
+        // flash the LED
 
-				pf[LED_PIN].set();
-				MillisecondTimer::delay(250);
-				pf[LED_PIN].reset();
-				MillisecondTimer::delay(250);
+        pf[LED_PIN].set();
+        MillisecondTimer::delay(250);
+        pf[LED_PIN].reset();
+        MillisecondTimer::delay(250);
 
-				// if the interrupt set the trigger, do our stuff
+        // if the interrupt set the trigger, do our stuff
 
-				if(_triggered) {
+        if(_triggered) {
 
-					// wakeup following STOP will continue after here
-					_lpm.stopInterruptWakeup();
+          // wakeup following STOP will continue after here
+          _lpm.stopInterruptWakeup();
 
-					// wakeup following STANDBY will reset the device
-					//_lpm.standby();
+          // wakeup following STANDBY will reset the device
+          //_lpm.standby();
 
-					_triggered=false;
-				}
-			}
-		}
+          _triggered=false;
+        }
+      }
+    }
 
-		/*
-		 * Observer notification callback for the EXTI interrupt that's wired to the falling
-		 * edge of the button GPIO line.
-		 */
+    /*
+     * Observer notification callback for the EXTI interrupt that's wired to the falling
+     * edge of the button GPIO line.
+     */
 
-		void onInterrupt(uint8_t /* extiLine */) {
-			_triggered=true;
-		}
+    void onInterrupt(uint8_t /* extiLine */) {
+      _triggered=true;
+    }
 
 
-		/**
-		 * Flash the LED for the number times then wait 3 seconds
-		 * @param count number of times to flash
-		 */
+    /**
+     * Flash the LED for the number times then wait 3 seconds
+     * @param count number of times to flash
+     */
 
-		void flashLed(const GpioPinRef& gpio,int count) {
+    void flashLed(const GpioPinRef& gpio,int count) {
 
-			for(int i=0;i<count;i++) {
-				gpio.reset();
-				MillisecondTimer::delay(100);
-				gpio.set();
-				MillisecondTimer::delay(100);
-			}
+      for(int i=0;i<count;i++) {
+        gpio.reset();
+        MillisecondTimer::delay(100);
+        gpio.set();
+        MillisecondTimer::delay(100);
+      }
 
-			MillisecondTimer::delay(3000);
-		}
+      MillisecondTimer::delay(3000);
+    }
 };
 
 
@@ -151,12 +151,12 @@ class PowerTest {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	PowerTest test;
-	test.run();
+  PowerTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

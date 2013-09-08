@@ -27,15 +27,15 @@ namespace stm32plus {
    * RTC feature to enable access to the alarm functionality
    */
 
-	DECLARE_EVENT_SIGNATURE(RtcAlarmInterrupt,void());
+  DECLARE_EVENT_SIGNATURE(RtcAlarmInterrupt,void());
 
   class RtcAlarmInterruptFeature : public RtcFeatureBase {
 
     public:
-  		static RtcAlarmInterruptFeature *_alarmInterruptFeature;
-  		void (*_irqRef)();
+      static RtcAlarmInterruptFeature *_alarmInterruptFeature;
+      void (*_irqRef)();
 
-  		DECLARE_EVENT_SOURCE(RtcAlarmInterrupt);
+      DECLARE_EVENT_SOURCE(RtcAlarmInterrupt);
 
     public:
       RtcAlarmInterruptFeature(RtcBase& rtc);
@@ -53,10 +53,10 @@ namespace stm32plus {
   inline RtcAlarmInterruptFeature::RtcAlarmInterruptFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
-  	_alarmInterruptFeature=this;
-  	_irqRef=RTC_IRQHandler;
+    _alarmInterruptFeature=this;
+    _irqRef=RTC_IRQHandler;
 
-  	Nvic::configureIrq(RTC_IRQn);
+    Nvic::configureIrq(RTC_IRQn);
   }
 
 

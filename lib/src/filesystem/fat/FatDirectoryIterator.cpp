@@ -9,253 +9,253 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/*
-		 * Constructor - open the directory pointed to by dirent
-		 */
+    /*
+     * Constructor - open the directory pointed to by dirent
+     */
 
-		FatDirectoryIterator::FatDirectoryIterator(FatFileSystem& fs,DirectoryEntryWithLocation& direntWithLocation) :
-			_fs(fs) {
+    FatDirectoryIterator::FatDirectoryIterator(FatFileSystem& fs,DirectoryEntryWithLocation& direntWithLocation) :
+      _fs(fs) {
 
-			DirectoryEntry& dirent=direntWithLocation.Dirent;
+      DirectoryEntry& dirent=direntWithLocation.Dirent;
 
-			_entryIterator=new NormalDirectoryEntryIterator(fs,(uint32_t)dirent.sdir.DIR_FstClusLO | ((uint32_t)dirent.sdir.DIR_FstClusHI) << 16,DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
-		}
+      _entryIterator=new NormalDirectoryEntryIterator(fs,(uint32_t)dirent.sdir.DIR_FstClusLO | ((uint32_t)dirent.sdir.DIR_FstClusHI) << 16,DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
+    }
 
-		/*
-		 * Constructor over the root directory
-		 */
+    /*
+     * Constructor over the root directory
+     */
 
-		FatDirectoryIterator::FatDirectoryIterator(FatFileSystem& fs) :
-			_fs(fs) {
+    FatDirectoryIterator::FatDirectoryIterator(FatFileSystem& fs) :
+      _fs(fs) {
 
-			_entryIterator=_fs.getRootDirectoryIterator(DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
-		}
+      _entryIterator=_fs.getRootDirectoryIterator(DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
+    }
 
-		/**
-		 * Virtual destructor, clean up internal iterator.
-		 */
+    /**
+     * Virtual destructor, clean up internal iterator.
+     */
 
-		FatDirectoryIterator::~FatDirectoryIterator() {
+    FatDirectoryIterator::~FatDirectoryIterator() {
 
-			if(_entryIterator != nullptr)
-				delete _entryIterator;
-		}
+      if(_entryIterator != nullptr)
+        delete _entryIterator;
+    }
 
-		/**
-		 * Get the directory entry iterator
-		 * @return The internal directory entry iterator.
-		 */
+    /**
+     * Get the directory entry iterator
+     * @return The internal directory entry iterator.
+     */
 
-		DirectoryEntryIterator& FatDirectoryIterator::getDirectoryEntryIterator() {
-			return *_entryIterator;
-		}
+    DirectoryEntryIterator& FatDirectoryIterator::getDirectoryEntryIterator() {
+      return *_entryIterator;
+    }
 
-		/**
-		 * @copydoc Iterator::current
-		 */
+    /**
+     * @copydoc Iterator::current
+     */
 
-		const FileInformation& FatDirectoryIterator::current() {
-			return *this;
-		}
+    const FileInformation& FatDirectoryIterator::current() {
+      return *this;
+    }
 
-		/**
-		 * @copydoc FileInformation::getFilename
-		 */
+    /**
+     * @copydoc FileInformation::getFilename
+     */
 
-		const char *FatDirectoryIterator::getFilename() const {
-			return _entryIterator->getFilename();
-		}
+    const char *FatDirectoryIterator::getFilename() const {
+      return _entryIterator->getFilename();
+    }
 
-		/**
-		 * @copydoc FileInformation::getAttributes
-		 */
+    /**
+     * @copydoc FileInformation::getAttributes
+     */
 
-		uint32_t FatDirectoryIterator::getAttributes() const {
-			return _entryIterator->current().Dirent.sdir.DIR_Attr;
-		}
+    uint32_t FatDirectoryIterator::getAttributes() const {
+      return _entryIterator->current().Dirent.sdir.DIR_Attr;
+    }
 
-		/**
-		 *@copydoc FileInformation::getCreationDateTime
-		 */
+    /**
+     *@copydoc FileInformation::getCreationDateTime
+     */
 
-		time_t FatDirectoryIterator::getCreationDateTime() const {
-			return _entryIterator->getCreationDateTime();
-		}
+    time_t FatDirectoryIterator::getCreationDateTime() const {
+      return _entryIterator->getCreationDateTime();
+    }
 
-		/**
-		 * @copydoc FileInformation::getLastWriteDateTime
-		 */
+    /**
+     * @copydoc FileInformation::getLastWriteDateTime
+     */
 
-		time_t FatDirectoryIterator::getLastWriteDateTime() const {
-			return _entryIterator->getLastWriteDateTime();
-		}
+    time_t FatDirectoryIterator::getLastWriteDateTime() const {
+      return _entryIterator->getLastWriteDateTime();
+    }
 
-		/**
-		 * @copydoc FileInformation::getLastAccessDateTime
-		 */
+    /**
+     * @copydoc FileInformation::getLastAccessDateTime
+     */
 
-		time_t FatDirectoryIterator::getLastAccessDateTime() const {
-			return _entryIterator->getLastAccessDateTime();
-		}
+    time_t FatDirectoryIterator::getLastAccessDateTime() const {
+      return _entryIterator->getLastAccessDateTime();
+    }
 
-		/**
-		 * @copydoc DirectoryIterator::isCurrentDirectory
-		 */
+    /**
+     * @copydoc DirectoryIterator::isCurrentDirectory
+     */
 
-		bool FatDirectoryIterator::isCurrentDirectory() {
-			return !strcmp(_entryIterator->getFilename(),"."); // only dirs can have this name
-		}
+    bool FatDirectoryIterator::isCurrentDirectory() {
+      return !strcmp(_entryIterator->getFilename(),"."); // only dirs can have this name
+    }
 
-		/**
-		 * @copydoc DirectoryIterator::isParentDirectory
-		 */
+    /**
+     * @copydoc DirectoryIterator::isParentDirectory
+     */
 
-		bool FatDirectoryIterator::isParentDirectory() {
-			return !strcmp(_entryIterator->getFilename(),".."); // only dirs can have this name
-		}
+    bool FatDirectoryIterator::isParentDirectory() {
+      return !strcmp(_entryIterator->getFilename(),".."); // only dirs can have this name
+    }
 
-		/**
-		 * @copydoc FileInformation::getLength
-		 */
+    /**
+     * @copydoc FileInformation::getLength
+     */
 
-		uint32_t FatDirectoryIterator::getLength() const {
-			return _entryIterator->current().Dirent.sdir.DIR_FileSize;
-		}
+    uint32_t FatDirectoryIterator::getLength() const {
+      return _entryIterator->current().Dirent.sdir.DIR_FileSize;
+    }
 
-		/**
-		 * @copydoc DirectoryIterator::getSubdirectoryIterator
-		 */
+    /**
+     * @copydoc DirectoryIterator::getSubdirectoryIterator
+     */
 
-		bool FatDirectoryIterator::getSubdirectoryIterator(DirectoryIterator*& newIterator) {
+    bool FatDirectoryIterator::getSubdirectoryIterator(DirectoryIterator*& newIterator) {
 
-			// ensure that this is a directory we are currently looking at
+      // ensure that this is a directory we are currently looking at
 
-			if((_entryIterator->current().Dirent.sdir.DIR_Attr & DirectoryEntry::ATTR_DIRECTORY) == 0)
-				return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_NOT_A_DIRECTORY);
+      if((_entryIterator->current().Dirent.sdir.DIR_Attr & DirectoryEntry::ATTR_DIRECTORY) == 0)
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_NOT_A_DIRECTORY);
 
-			// open it
+      // open it
 
-			newIterator=new FatDirectoryIterator(_fs,_entryIterator->current());
-			return true;
-		}
+      newIterator=new FatDirectoryIterator(_fs,_entryIterator->current());
+      return true;
+    }
 
-		/**
-		 * @copydoc DirectoryIterator::moveTo
-		 */
+    /**
+     * @copydoc DirectoryIterator::moveTo
+     */
 
-		bool FatDirectoryIterator::moveTo(const char *filename) {
+    bool FatDirectoryIterator::moveTo(const char *filename) {
 
-			while(next()) {
+      while(next()) {
 
-				if(!strcasecmp(getFilename(),filename))
-					return true;
-			}
+        if(!strcasecmp(getFilename(),filename))
+          return true;
+      }
 
-			// not found
+      // not found
 
-			return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_ENTRY_NOT_FOUND);
-		}
+      return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_ENTRY_NOT_FOUND);
+    }
 
-		/**
-		 * @copydoc DirectoryIterator::openFile
-		 */
+    /**
+     * @copydoc DirectoryIterator::openFile
+     */
 
-		bool FatDirectoryIterator::openFile(File*& newFile) {
+    bool FatDirectoryIterator::openFile(File*& newFile) {
 
-			newFile=new FatFile(_fs,_entryIterator->current());
+      newFile=new FatFile(_fs,_entryIterator->current());
 
-			return true;
-		}
+      return true;
+    }
 
-		/**
-		 * @copydoc Iterator::next
-		 */
+    /**
+     * @copydoc Iterator::next
+     */
 
-		bool FatDirectoryIterator::next() {
+    bool FatDirectoryIterator::next() {
 
-			// move to next
+      // move to next
 
-			return _entryIterator->next();
-		}
+      return _entryIterator->next();
+    }
 
-		/**
-		 * Create an instance of the directory iterator suitable for the given directory.
-		 *
-		 * @param[in] fs Reference to the filesystem class.
-		 * @param[in] tp The tokenised pathname that points to this directory.
-		 * @param[out] newIterator The directory iterator created by this call if it succeeds. Caller must delete this pointer when finished.
-		 * @return false if it fails.
-		 */
+    /**
+     * Create an instance of the directory iterator suitable for the given directory.
+     *
+     * @param[in] fs Reference to the filesystem class.
+     * @param[in] tp The tokenised pathname that points to this directory.
+     * @param[out] newIterator The directory iterator created by this call if it succeeds. Caller must delete this pointer when finished.
+     * @return false if it fails.
+     */
 
-		bool FatDirectoryIterator::getInstance(FatFileSystem& fs,const TokenisedPathname& tp,FatDirectoryIterator *& newIterator) {
+    bool FatDirectoryIterator::getInstance(FatFileSystem& fs,const TokenisedPathname& tp,FatDirectoryIterator *& newIterator) {
 
-			int i;
-			DirectoryEntryIterator *it,*tempIterator;
+      int i;
+      DirectoryEntryIterator *it,*tempIterator;
 
-			// check for root directory
+      // check for root directory
 
-			if(tp.getNumTokens()==0) {
+      if(tp.getNumTokens()==0) {
 
-				// create a new iterator over the root directory
+        // create a new iterator over the root directory
 
-				newIterator=new FatDirectoryIterator(fs);
-				return true;
-			}
+        newIterator=new FatDirectoryIterator(fs);
+        return true;
+      }
 
-			// iterate for every component of the name
+      // iterate for every component of the name
 
-			it=nullptr;
+      it=nullptr;
 
-			for(i=0;i<tp.getNumTokens();i++) {
+      for(i=0;i<tp.getNumTokens();i++) {
 
-				if(it==nullptr) {
+        if(it==nullptr) {
 
-					// create a new iterator over the root directory
+          // create a new iterator over the root directory
 
-					it=fs.getRootDirectoryIterator(DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
-				} else {
+          it=fs.getRootDirectoryIterator(DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
+        } else {
 
-					// create a new iterator over the subdirectory we just found
+          // create a new iterator over the subdirectory we just found
 
-					DirectoryEntry& dirent=it->current().Dirent;
+          DirectoryEntry& dirent=it->current().Dirent;
 
-					tempIterator=new NormalDirectoryEntryIterator(fs,dirent.sdir.DIR_FstClusLO | (((uint32_t)dirent.sdir.DIR_FstClusHI) << 16),DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
-					delete it;
-					it=tempIterator;
-				}
+          tempIterator=new NormalDirectoryEntryIterator(fs,dirent.sdir.DIR_FstClusLO | (((uint32_t)dirent.sdir.DIR_FstClusHI) << 16),DirectoryEntryIterator::OPT_DEFAULT_REAL_ENTRIES);
+          delete it;
+          it=tempIterator;
+        }
 
-				// get next entry
+        // get next entry
 
-				do {
-					if(!it->next())
-						return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_DIRECTORY_NOT_FOUND);
+        do {
+          if(!it->next())
+            return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_DIRECTORY_NOT_FOUND);
 
-					// test the filename in the entry against the component
+          // test the filename in the entry against the component
 
-				} while(strcasecmp(it->getFilename(),tp[i]) != 0);
-			}
+        } while(strcasecmp(it->getFilename(),tp[i]) != 0);
+      }
 
-			// the final entry must be a directory
+      // the final entry must be a directory
 
-			if(!it->current().isDirectory())
-				return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_NOT_A_DIRECTORY);
+      if(!it->current().isDirectory())
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_DIRECTORY_ITERATOR,E_NOT_A_DIRECTORY);
 
-			newIterator=new FatDirectoryIterator(fs,it->current());
+      newIterator=new FatDirectoryIterator(fs,it->current());
 
-			delete it;
-			return true;
-		}
+      delete it;
+      return true;
+    }
 
-		/**
-		 * Get the DirectoryEntryWithLocation structure for this entry.
-		 * @return The directory entry structure.
-		 */
+    /**
+     * Get the DirectoryEntryWithLocation structure for this entry.
+     * @return The directory entry structure.
+     */
 
-		DirectoryEntryWithLocation& FatDirectoryIterator::getDirectoryEntryWithLocation() {
-			return _entryIterator->current();
-		}
+    DirectoryEntryWithLocation& FatDirectoryIterator::getDirectoryEntryWithLocation() {
+      return _entryIterator->current();
+    }
 
-	}
+  }
 }

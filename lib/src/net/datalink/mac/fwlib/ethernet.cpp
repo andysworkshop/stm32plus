@@ -147,7 +147,7 @@ void ETH_DeInit(void)
   RCC_AHBPeriphResetCmd(RCC_AHBPeriph_ETH_MAC, ENABLE);
   RCC_AHBPeriphResetCmd(RCC_AHBPeriph_ETH_MAC, DISABLE);
 #else
-	#error Unsupported MCU
+  #error Unsupported MCU
 #endif
 }
 
@@ -1356,7 +1356,7 @@ uint32_t ETH_GetRxPktSize(ETH_DMADESCTypeDef *DMARxDesc)
   return frameLength;
 }
 
-#ifdef USE_ENHANCED_DMA_DESCRIPTORS			// not available on the F107
+#ifdef USE_ENHANCED_DMA_DESCRIPTORS     // not available on the F107
 /**
   * @brief  Enables or disables the Enhanced descriptor structure.
   * @param  NewState: new state of the Enhanced descriptor structure.

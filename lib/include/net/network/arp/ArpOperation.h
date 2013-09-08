@@ -8,15 +8,15 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
-		/**
-		 * ARP operation codes - always big-endian
-		 */
+    /**
+     * ARP operation codes - always big-endian
+     */
 
-		enum class ArpOperation : uint16_t {
-			REQUEST = 0x0100,				//!< REQUEST
-			REPLY   = 0x0200,				//!< REPLY
-		};
-	}
+    enum class ArpOperation : uint16_t {
+      REQUEST = 0x0100,       //!< REQUEST
+      REPLY   = 0x0200,       //!< REPLY
+    };
+  }
 }

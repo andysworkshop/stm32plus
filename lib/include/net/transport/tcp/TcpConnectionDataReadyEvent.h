@@ -8,33 +8,33 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * TCP connection data ready event. This event signifies that we have buffered
-		 * some data from the remote end that the application should consume.
-		 */
+    /**
+     * TCP connection data ready event. This event signifies that we have buffered
+     * some data from the remote end that the application should consume.
+     */
 
-		class TcpConnection;
+    class TcpConnection;
 
-		struct TcpConnectionDataReadyEvent : NetEventDescriptor {
+    struct TcpConnectionDataReadyEvent : NetEventDescriptor {
 
-			/**
-			 * Reference to the TCP connection object.
-			 */
+      /**
+       * Reference to the TCP connection object.
+       */
 
-			TcpConnection& connection;
+      TcpConnection& connection;
 
-			/**
-			 * Constructor
-			 * @param The connection reference
-			 */
+      /**
+       * Constructor
+       * @param The connection reference
+       */
 
-			TcpConnectionDataReadyEvent(TcpConnection& c)
-				: NetEventDescriptor(NetEventDescriptor::NetEventType::TCP_CONNECTION_DATA_READY),
-				  connection(c) {
-			}
-		};
-	}
+      TcpConnectionDataReadyEvent(TcpConnection& c)
+        : NetEventDescriptor(NetEventDescriptor::NetEventType::TCP_CONNECTION_DATA_READY),
+          connection(c) {
+      }
+    };
+  }
 }

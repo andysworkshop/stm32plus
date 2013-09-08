@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Deep power down command implementation
-		 */
+    /**
+     * Deep power down command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_DEEP_POWER_DOWN>
-		struct DeepPowerDown : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_DEEP_POWER_DOWN>
+    struct DeepPowerDown : Command<TSpi> {
 
-			/**
-			 * Provide a deepPowerDown() function for the derived class
-			 */
+      /**
+       * Provide a deepPowerDown() function for the derived class
+       */
 
-			bool deepPowerDown() const {
-				return this->writeCommand(TOpCode);
-			}
-		};
-	}
+      bool deepPowerDown() const {
+        return this->writeCommand(TOpCode);
+      }
+    };
+  }
 }

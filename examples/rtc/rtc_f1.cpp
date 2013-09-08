@@ -26,7 +26,7 @@ using namespace stm32plus;
  * for the F1 and F4 (STM32F4DISCOVERY)
  *
  * Compatible MCU:
- * 	 STM32F1
+ *   STM32F1
  *
  * Tested devices:
  *   STM32F103ZET6
@@ -34,110 +34,110 @@ using namespace stm32plus;
 
 class RtcTest {
 
-	protected:
-		uint32_t _alarmTick;
-		bool _ledState;
+  protected:
+    uint32_t _alarmTick;
+    bool _ledState;
 
-		volatile bool _ticked;
-		volatile bool _alarmed;
+    volatile bool _ticked;
+    volatile bool _alarmed;
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			// initialise the LED port
+      // initialise the LED port
 
-			GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioF<DefaultDigitalOutputFeature<6> > pf;
 
-			// lights off (this LED is active low, i.e. PF6 is a sink)
+      // lights off (this LED is active low, i.e. PF6 is a sink)
 
-			_ledState=true;
-			pf[6].set();
+      _ledState=true;
+      pf[6].set();
 
-			// declare an RTC instance customised with just the features we will use.
-			// a clock source is mandatory. The interrupt features are optional and
-			// will pull in the relevant methods and features for us to use
+      // declare an RTC instance customised with just the features we will use.
+      // a clock source is mandatory. The interrupt features are optional and
+      // will pull in the relevant methods and features for us to use
 
-			Rtc<
-				RtcLseClockFeature,							// we'll clock it from the LSE clock
-				RtcSecondInterruptFeature,			// we want per-second interrupts
-				RtcAlarmInterruptFeature				// we also want the alarm interrupt
-			> rtc;
+      Rtc<
+        RtcLseClockFeature,             // we'll clock it from the LSE clock
+        RtcSecondInterruptFeature,      // we want per-second interrupts
+        RtcAlarmInterruptFeature        // we also want the alarm interrupt
+      > rtc;
 
-			// insert ourselves as subscribers to the per-second and alarm interrupts.
+      // insert ourselves as subscribers to the per-second and alarm interrupts.
 
-			rtc.RtcSecondInterruptEventSender.insertSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&RtcTest::onTick));
-			rtc.RtcAlarmInterruptEventSender.insertSubscriber(RtcAlarmInterruptEventSourceSlot::bind(this,&RtcTest::onAlarm));
+      rtc.RtcSecondInterruptEventSender.insertSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&RtcTest::onTick));
+      rtc.RtcAlarmInterruptEventSender.insertSubscriber(RtcAlarmInterruptEventSourceSlot::bind(this,&RtcTest::onAlarm));
 
-			_ticked=_alarmed=false;
+      _ticked=_alarmed=false;
 
-			// start the second interrupt
+      // start the second interrupt
 
-			rtc.enableSecondInterrupt();
+      rtc.enableSecondInterrupt();
 
-			// configure the alarm to go off after 10 seconds
+      // configure the alarm to go off after 10 seconds
 
-			rtc.setAlarm(_alarmTick=10);
+      rtc.setAlarm(_alarmTick=10);
 
-			// main loop
+      // main loop
 
-			for(;;) {
+      for(;;) {
 
-				// if we ticked, toggle LED state
+        // if we ticked, toggle LED state
 
-				if(_ticked) {
-					_ledState^=true;
-					pf[6].setState(_ledState);
+        if(_ticked) {
+          _ledState^=true;
+          pf[6].setState(_ledState);
 
-					// reset for next time
+          // reset for next time
 
-					_ticked=false;
-				}
+          _ticked=false;
+        }
 
-				// if the alarm went off then flash rapidly
+        // if the alarm went off then flash rapidly
 
-				if(_alarmed) {
+        if(_alarmed) {
 
-					for(int i=0;i<5;i++) {
-						pf[6].reset();
-						MillisecondTimer::delay(50);
-						pf[6].set();
-						MillisecondTimer::delay(50);
-					}
+          for(int i=0;i<5;i++) {
+            pf[6].reset();
+            MillisecondTimer::delay(50);
+            pf[6].set();
+            MillisecondTimer::delay(50);
+          }
 
-					// put the LED back where it was
+          // put the LED back where it was
 
-					pf[6].setState(_ledState);
+          pf[6].setState(_ledState);
 
-					// bump forward the alarm by 10 seconds
+          // bump forward the alarm by 10 seconds
 
-					_alarmTick+=10;
-					rtc.setAlarm(_alarmTick);
+          _alarmTick+=10;
+          rtc.setAlarm(_alarmTick);
 
-					// reset for next time
+          // reset for next time
 
-					_alarmed=false;
-				}
-			}
-		}
-
-
-		/*
-		 * The RTC has ticked
-		 */
-
-		void onTick() {
-			_ticked=true;
-		}
+          _alarmed=false;
+        }
+      }
+    }
 
 
-		/*
-		 * The RTC has alarmed
-		 */
+    /*
+     * The RTC has ticked
+     */
 
-		void onAlarm() {
-			_alarmed=true;
-		}
+    void onTick() {
+      _ticked=true;
+    }
+
+
+    /*
+     * The RTC has alarmed
+     */
+
+    void onAlarm() {
+      _alarmed=true;
+    }
 };
 
 
@@ -147,14 +147,14 @@ class RtcTest {
 
 int main() {
 
-	// set up SysTick at 1ms resolution
-	MillisecondTimer::initialise();
+  // set up SysTick at 1ms resolution
+  MillisecondTimer::initialise();
 
-	RtcTest test;
-	test.run();
+  RtcTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }
 
 #endif // STM32PLUS_F1

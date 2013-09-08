@@ -8,101 +8,101 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-	/**
-	 * Template implementation of a graphics library. This library inherits from the device implementation
-	 * that provides the methods that the graphics library needs to access the hardware
-	 *
-	 * @tparam TDevice The device driver type that this graphics library is customised for
-	 * @tparam TDeviceAccessMode The access mode class for the device
-	 */
+  /**
+   * Template implementation of a graphics library. This library inherits from the device implementation
+   * that provides the methods that the graphics library needs to access the hardware
+   *
+   * @tparam TDevice The device driver type that this graphics library is customised for
+   * @tparam TDeviceAccessMode The access mode class for the device
+   */
 
-	template<class TDevice,typename TDeviceAccessMode>
-	class GraphicsLibrary : public TDevice {
+  template<class TDevice,typename TDeviceAccessMode>
+  class GraphicsLibrary : public TDevice {
 
-		public:
-			typedef typename TDevice::UnpackedColour UnpackedColour;		///< Helper type for the unpacked colour structure
-			typedef typename TDevice::tCOLOUR tCOLOUR;									///< Helper type for the packed colour type
+    public:
+      typedef typename TDevice::UnpackedColour UnpackedColour;    ///< Helper type for the unpacked colour structure
+      typedef typename TDevice::tCOLOUR tCOLOUR;                  ///< Helper type for the packed colour type
 
-		protected:
+    protected:
 
-			UnpackedColour _foreground;
-			UnpackedColour _background;
+      UnpackedColour _foreground;
+      UnpackedColour _background;
 
-			Point _streamSelectedPoint;					// need to keep a copy so rvalue points can be used
-			const Font *_streamSelectedFont;		// can keep a ptr, user should not delete font while selected
-			bool _fontFilledBackground;					// true to use filled backgrounds for fonts
+      Point _streamSelectedPoint;         // need to keep a copy so rvalue points can be used
+      const Font *_streamSelectedFont;    // can keep a ptr, user should not delete font while selected
+      bool _fontFilledBackground;         // true to use filled backgrounds for fonts
 
-		protected:
-			void plot4EllipsePoints(int16_t cx,int16_t cy,int16_t x,int16_t y);
+    protected:
+      void plot4EllipsePoints(int16_t cx,int16_t cy,int16_t x,int16_t y);
 
-		public:
-			GraphicsLibrary(TDeviceAccessMode& accessMode);
+    public:
+      GraphicsLibrary(TDeviceAccessMode& accessMode);
 
-			// colour choices
+      // colour choices
 
-			void setForeground(tCOLOUR cr);
-			void setBackground(tCOLOUR cr);
+      void setForeground(tCOLOUR cr);
+      void setBackground(tCOLOUR cr);
 
-			// panel querying
+      // panel querying
 
-			int16_t getXmax() const;
-			int16_t getYmax() const;
-			Rectangle getFullScreenRectangle() const;
+      int16_t getXmax() const;
+      int16_t getYmax() const;
+      Rectangle getFullScreenRectangle() const;
 
-		  // text output methods
+      // text output methods
 
-			void setFontFilledBackground(bool fontFilledBackground);
+      void setFontFilledBackground(bool fontFilledBackground);
 
-			Size writeString(const Point& p,const Font& font,const char *str);
-			void writeCharacterFill(const Point& p,const Font& font,const FontChar& fc);
-			void writeCharacterNoFill(const Point& p,const Font& font,const FontChar& fc);
-			Size measureString(const Font& font,const char *str) const;
-			const Font *getStreamSelectedFont() const;
+      Size writeString(const Point& p,const Font& font,const char *str);
+      void writeCharacterFill(const Point& p,const Font& font,const FontChar& fc);
+      void writeCharacterNoFill(const Point& p,const Font& font,const FontChar& fc);
+      Size measureString(const Font& font,const char *str) const;
+      const Font *getStreamSelectedFont() const;
 
-			// text output methods - LZG fonts
+      // text output methods - LZG fonts
 
-			Size writeString(const Point& p,const LzgFont& font,const char *str) const;
-			void writeCharacter(const Point& p,const LzgFont& font,const FontChar& fc) const;
+      Size writeString(const Point& p,const LzgFont& font,const char *str) const;
+      void writeCharacter(const Point& p,const LzgFont& font,const FontChar& fc) const;
 
-			// can't do these as a template with specialisation because you can't specialise
-			// members in a template class that isn't also fully specialised
+      // can't do these as a template with specialisation because you can't specialise
+      // members in a template class that isn't also fully specialised
 
-			GraphicsLibrary& operator<<(const char *str);
-			GraphicsLibrary& operator<<(char c);
-			GraphicsLibrary& operator<<(int32_t val);
-			GraphicsLibrary& operator<<(uint32_t val);
-			GraphicsLibrary& operator<<(int16_t val);
-			GraphicsLibrary& operator<<(uint16_t val);
-			GraphicsLibrary& operator<<(const DoublePrecision& val);
-			GraphicsLibrary& operator<<(double val);
-			GraphicsLibrary& operator<<(const Point& p);
-			GraphicsLibrary& operator<<(const Font& f);
+      GraphicsLibrary& operator<<(const char *str);
+      GraphicsLibrary& operator<<(char c);
+      GraphicsLibrary& operator<<(int32_t val);
+      GraphicsLibrary& operator<<(uint32_t val);
+      GraphicsLibrary& operator<<(int16_t val);
+      GraphicsLibrary& operator<<(uint16_t val);
+      GraphicsLibrary& operator<<(const DoublePrecision& val);
+      GraphicsLibrary& operator<<(double val);
+      GraphicsLibrary& operator<<(const Point& p);
+      GraphicsLibrary& operator<<(const Font& f);
 
-			// drawing primitives
+      // drawing primitives
 
-			void moveToPoint(const Point& pt) const;
-			void clearScreen();
-			void plotPoint(const Point& p);
-			void drawRectangle(const Rectangle& rc);
-			void fillRectangle(const Rectangle& rc);
-			void clearRectangle(const Rectangle& rc);
-			void gradientFillRectangle(const Rectangle& rc,Direction dir,tCOLOUR first,tCOLOUR last);
-			void drawEllipse(const Point& center,const Size& size);
-			void fillEllipse(const Point& center,const Size& size);
-			void drawLine(const Point& p1,const Point& p2);
+      void moveToPoint(const Point& pt) const;
+      void clearScreen();
+      void plotPoint(const Point& p);
+      void drawRectangle(const Rectangle& rc);
+      void fillRectangle(const Rectangle& rc);
+      void clearRectangle(const Rectangle& rc);
+      void gradientFillRectangle(const Rectangle& rc,Direction dir,tCOLOUR first,tCOLOUR last);
+      void drawEllipse(const Point& center,const Size& size);
+      void fillEllipse(const Point& center,const Size& size);
+      void drawLine(const Point& p1,const Point& p2);
 
-			// bitmap handling
+      // bitmap handling
 
-			bool drawBitmap(const Rectangle& rc,InputStream& source,DmaFsmcLcdMemoryCopyFeature<TDeviceAccessMode>& dma,uint32_t priority=DMA_Priority_High);
-			bool drawBitmap(const Rectangle& rc,InputStream& source);
+      bool drawBitmap(const Rectangle& rc,InputStream& source,DmaFsmcLcdMemoryCopyFeature<TDeviceAccessMode>& dma,uint32_t priority=DMA_Priority_High);
+      bool drawBitmap(const Rectangle& rc,InputStream& source);
 
-			// jpeg handling
+      // jpeg handling
 
-			void drawJpeg(const Rectangle& rc,InputStream& source);
-		};
-	}
+      void drawJpeg(const Rectangle& rc,InputStream& source);
+    };
+  }
 }
 
 

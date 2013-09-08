@@ -8,44 +8,44 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Disable the packet reassembler feature with stub methods
-		 */
+    /**
+     * Disable the packet reassembler feature with stub methods
+     */
 
-		class IpDisablePacketReassemblerFeature {
+    class IpDisablePacketReassemblerFeature {
 
-			public:
-				enum {
-					E_FEATURE_DISABLED = 1
-				};
+      public:
+        enum {
+          E_FEATURE_DISABLED = 1
+        };
 
-			public:
-				struct Parameters {
-				};
+      public:
+        struct Parameters {
+        };
 
-				NetworkUtilityObjects *_networkUtilityObjects;
+        NetworkUtilityObjects *_networkUtilityObjects;
 
-			public:
+      public:
 
-				bool initialise(const Parameters&,NetworkUtilityObjects& networkUtilityObjects) {
-					_networkUtilityObjects=&networkUtilityObjects;
-					return true;
-				}
+        bool initialise(const Parameters&,NetworkUtilityObjects& networkUtilityObjects) {
+          _networkUtilityObjects=&networkUtilityObjects;
+          return true;
+        }
 
-				bool startup() {
-					return true;
-				}
+        bool startup() {
+          return true;
+        }
 
-				bool ip_handleFragment(const IpPacket& /* packet */,IpFragmentedPacket*& fp) {
-					fp=nullptr;
-					return _networkUtilityObjects->setError(ErrorProvider::ERROR_PROVIDER_NET_IP_DISABLED_PACKET_REASSEMBLER_FEATURE,E_FEATURE_DISABLED);
-				}
+        bool ip_handleFragment(const IpPacket& /* packet */,IpFragmentedPacket*& fp) {
+          fp=nullptr;
+          return _networkUtilityObjects->setError(ErrorProvider::ERROR_PROVIDER_NET_IP_DISABLED_PACKET_REASSEMBLER_FEATURE,E_FEATURE_DISABLED);
+        }
 
-				void ip_freePacket(IpFragmentedPacket * /* packetToFree */ ) {
-				}
-		};
-	}
+        void ip_freePacket(IpFragmentedPacket * /* packetToFree */ ) {
+        }
+    };
+  }
 }

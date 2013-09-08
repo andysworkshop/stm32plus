@@ -12,17 +12,17 @@
 namespace stm32plus {
 
 
-	volatile uint32_t MillisecondTimer::_counter;
+  volatile uint32_t MillisecondTimer::_counter;
 
 
-	/**
-	 * Initialise SysTick to tick at 1ms by initialising it with SystemCoreClock/1000.
-	 */
+  /**
+   * Initialise SysTick to tick at 1ms by initialising it with SystemCoreClock/1000.
+   */
 
-	void MillisecondTimer::initialise() {
-		_counter=0;
-		SysTick_Config(SystemCoreClock / 1000);
-	}
+  void MillisecondTimer::initialise() {
+    _counter=0;
+    SysTick_Config(SystemCoreClock / 1000);
+  }
 }
 
 
@@ -31,7 +31,7 @@ namespace stm32plus {
  */
 
 extern "C" {
-	void __attribute__ ((interrupt("IRQ"))) SysTick_Handler(void) {
-		stm32plus::MillisecondTimer::_counter++;
-	}
+  void __attribute__ ((interrupt("IRQ"))) SysTick_Handler(void) {
+    stm32plus::MillisecondTimer::_counter++;
+  }
 }

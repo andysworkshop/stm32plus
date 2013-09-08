@@ -238,7 +238,7 @@ typedef struct
 
 #define IS_CAN_OPERATING_MODE(MODE) (((MODE) == CAN_OperatingMode_Initialization) ||\
                                     ((MODE) == CAN_OperatingMode_Normal)|| \
-																		((MODE) == CAN_OperatingMode_Sleep))
+                                    ((MODE) == CAN_OperatingMode_Sleep))
 /**
   * @}
   */
@@ -421,7 +421,7 @@ typedef struct
 #define CAN_TxStatus_Pending        ((uint8_t)0x02) /*!< CAN transmission pending */
 #define CAN_TxStatus_NoMailBox      ((uint8_t)0x04) /*!< CAN cell did not provide 
                                                          an empty mailbox */
-/* Legacy defines */	
+/* Legacy defines */  
 #define CANTXFAILED                  CAN_TxStatus_Failed
 #define CANTXOK                      CAN_TxStatus_Ok
 #define CANTXPENDING                 CAN_TxStatus_Pending
@@ -447,7 +447,7 @@ typedef struct
 #define CAN_Sleep_Failed     ((uint8_t)0x00) /*!< CAN did not enter the sleep mode */
 #define CAN_Sleep_Ok         ((uint8_t)0x01) /*!< CAN entered the sleep mode */
 
-/* Legacy defines */	
+/* Legacy defines */  
 #define CANSLEEPFAILED   CAN_Sleep_Failed
 #define CANSLEEPOK       CAN_Sleep_Ok
 /**
@@ -472,13 +472,13 @@ typedef struct
   * @{
   */                                                         
 #define CAN_ErrorCode_NoErr           ((uint8_t)0x00) /*!< No Error */ 
-#define	CAN_ErrorCode_StuffErr        ((uint8_t)0x10) /*!< Stuff Error */ 
-#define	CAN_ErrorCode_FormErr         ((uint8_t)0x20) /*!< Form Error */ 
-#define	CAN_ErrorCode_ACKErr          ((uint8_t)0x30) /*!< Acknowledgment Error */ 
-#define	CAN_ErrorCode_BitRecessiveErr ((uint8_t)0x40) /*!< Bit Recessive Error */ 
-#define	CAN_ErrorCode_BitDominantErr  ((uint8_t)0x50) /*!< Bit Dominant Error */ 
-#define	CAN_ErrorCode_CRCErr          ((uint8_t)0x60) /*!< CRC Error  */ 
-#define	CAN_ErrorCode_SoftwareSetErr  ((uint8_t)0x70) /*!< Software Set Error */ 
+#define CAN_ErrorCode_StuffErr        ((uint8_t)0x10) /*!< Stuff Error */ 
+#define CAN_ErrorCode_FormErr         ((uint8_t)0x20) /*!< Form Error */ 
+#define CAN_ErrorCode_ACKErr          ((uint8_t)0x30) /*!< Acknowledgment Error */ 
+#define CAN_ErrorCode_BitRecessiveErr ((uint8_t)0x40) /*!< Bit Recessive Error */ 
+#define CAN_ErrorCode_BitDominantErr  ((uint8_t)0x50) /*!< Bit Dominant Error */ 
+#define CAN_ErrorCode_CRCErr          ((uint8_t)0x60) /*!< CRC Error  */ 
+#define CAN_ErrorCode_SoftwareSetErr  ((uint8_t)0x70) /*!< Software Set Error */ 
 /**
   * @}
   */

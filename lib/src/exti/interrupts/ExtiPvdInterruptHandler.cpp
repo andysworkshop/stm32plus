@@ -21,14 +21,14 @@ template<> ExtiPeripheral<EXTI_Line16> *ExtiPeripheral<EXTI_Line16>::_extiInstan
 
 extern "C" {
 
-	void __attribute__ ((interrupt("IRQ"))) PVD_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) PVD_IRQHandler(void) {
 
-		if(EXTI_GetITStatus(EXTI_Line16)!=RESET) {
-				ExtiPvd::_extiInstance->ExtiInterruptEventSender.raiseEvent(16);
-				EXTI_ClearITPendingBit(EXTI_Line16);
-		}
-		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
-	}
+    if(EXTI_GetITStatus(EXTI_Line16)!=RESET) {
+        ExtiPvd::_extiInstance->ExtiInterruptEventSender.raiseEvent(16);
+        EXTI_ClearITPendingBit(EXTI_Line16);
+    }
+    __DSB();      // prevent erroneous recall of this handler due to delayed memory write
+  }
 }
 
 #endif

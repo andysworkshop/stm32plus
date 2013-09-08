@@ -15,25 +15,25 @@
 namespace stm32plus {
 
 
-	/**
-	 * Remap HSE/prescaler to TIM11 channel 1 input
-	 */
+  /**
+   * Remap HSE/prescaler to TIM11 channel 1 input
+   */
 
-	class Timer11RemapHseFeature : public TimerFeatureBase {
+  class Timer11RemapHseFeature : public TimerFeatureBase {
 
-		public:
-			Timer11RemapHseFeature(Timer& timer);
-	};
+    public:
+      Timer11RemapHseFeature(Timer& timer);
+  };
 
 
-	/**
-	 * Constructor
-	 * @param timer
-	 */
+  /**
+   * Constructor
+   * @param timer
+   */
 
-	inline Timer11RemapHseFeature::Timer11RemapHseFeature(Timer& timer)
-		: TimerFeatureBase(timer) {
+  inline Timer11RemapHseFeature::Timer11RemapHseFeature(Timer& timer)
+    : TimerFeatureBase(timer) {
 
-		TIM_RemapConfig(TIM11,TIM11_HSE);
-	}
+    TIM_RemapConfig(TIM11,TIM11_HSE);
+  }
 }

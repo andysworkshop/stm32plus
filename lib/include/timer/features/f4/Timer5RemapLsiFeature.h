@@ -15,25 +15,25 @@
 namespace stm32plus {
 
 
-	/**
-	 * Remap LSI output to TIM5 channel 4 input
-	 */
+  /**
+   * Remap LSI output to TIM5 channel 4 input
+   */
 
-	class Timer5RemapLsiFeature : public TimerFeatureBase {
+  class Timer5RemapLsiFeature : public TimerFeatureBase {
 
-		public:
-			Timer5RemapLsiFeature(Timer& timer);
-	};
+    public:
+      Timer5RemapLsiFeature(Timer& timer);
+  };
 
 
-	/**
-	 * Constructor
-	 * @param timer
-	 */
+  /**
+   * Constructor
+   * @param timer
+   */
 
-	inline Timer5RemapLsiFeature::Timer5RemapLsiFeature(Timer& timer)
-		: TimerFeatureBase(timer) {
+  inline Timer5RemapLsiFeature::Timer5RemapLsiFeature(Timer& timer)
+    : TimerFeatureBase(timer) {
 
-		TIM_RemapConfig(TIM5,TIM5_LSI);
-	}
+    TIM_RemapConfig(TIM5,TIM5_LSI);
+  }
 }

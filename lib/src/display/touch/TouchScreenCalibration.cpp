@@ -9,32 +9,32 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/*
-		 * Translate: Do nothing, just copy
-		 */
+    /*
+     * Translate: Do nothing, just copy
+     */
 
-		Point PassThroughTouchScreenCalibration::translate(const Point& rawPoint) {
-			return Point(rawPoint);
-		}
-
-
-		/*
-		 * Can't serialise
-		 */
-
-		bool PassThroughTouchScreenCalibration::serialise(OutputStream& ostream __attribute__((unused))) {
-			return errorProvider.set(ErrorProvider::ERROR_PROVIDER_TOUCH_SCREEN_CALIBRATION,E_SERIALISATION_NOT_SUPPORTED);
-		}
+    Point PassThroughTouchScreenCalibration::translate(const Point& rawPoint) {
+      return Point(rawPoint);
+    }
 
 
-		/*
-		 * Can't deserialise
-		 */
+    /*
+     * Can't serialise
+     */
 
-		bool PassThroughTouchScreenCalibration::deserialise(InputStream& istream __attribute__((unused))) {
-			return errorProvider.set(ErrorProvider::ERROR_PROVIDER_TOUCH_SCREEN_CALIBRATION,E_SERIALISATION_NOT_SUPPORTED);
-		}
-	}
+    bool PassThroughTouchScreenCalibration::serialise(OutputStream& ostream __attribute__((unused))) {
+      return errorProvider.set(ErrorProvider::ERROR_PROVIDER_TOUCH_SCREEN_CALIBRATION,E_SERIALISATION_NOT_SUPPORTED);
+    }
+
+
+    /*
+     * Can't deserialise
+     */
+
+    bool PassThroughTouchScreenCalibration::deserialise(InputStream& istream __attribute__((unused))) {
+      return errorProvider.set(ErrorProvider::ERROR_PROVIDER_TOUCH_SCREEN_CALIBRATION,E_SERIALISATION_NOT_SUPPORTED);
+    }
+  }
 }

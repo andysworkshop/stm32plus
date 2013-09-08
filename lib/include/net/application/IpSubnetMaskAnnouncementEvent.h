@@ -9,30 +9,30 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * Event descriptor that announces a new subnet mask
-		 */
+    /**
+     * Event descriptor that announces a new subnet mask
+     */
 
-		struct IpSubnetMaskAnnouncementEvent : NetEventDescriptor {
+    struct IpSubnetMaskAnnouncementEvent : NetEventDescriptor {
 
-			/**
-			 *  Your subnet mask
-			 */
+      /**
+       *  Your subnet mask
+       */
 
-			const IpSubnetMask& subnetMask;
+      const IpSubnetMask& subnetMask;
 
 
-			/**
-			 * Constructor
-			 */
+      /**
+       * Constructor
+       */
 
-			IpSubnetMaskAnnouncementEvent(const IpSubnetMask& subnetMask)
-				: NetEventDescriptor(NetEventType::SUBNET_MASK_ANNOUNCEMENT),
-					subnetMask(subnetMask) {
-			}
-		};
-	}
+      IpSubnetMaskAnnouncementEvent(const IpSubnetMask& subnetMask)
+        : NetEventDescriptor(NetEventType::SUBNET_MASK_ANNOUNCEMENT),
+          subnetMask(subnetMask) {
+      }
+    };
+  }
 }

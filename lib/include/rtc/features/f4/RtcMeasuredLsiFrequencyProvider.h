@@ -14,25 +14,25 @@
 
 namespace stm32plus {
 
-	/**
-	 * Class to measure the frequency of the LSI using its output into channel 4
-	 * of Timer5. Of course this method fundamentally relies on the accuracy of the
-	 * oscillator (probably HSE) being better than that of the LSI itself.
-	 *
-	 * As an observation, the LSI on my STM32F4DISCOVERY board was measured at about 37.4kHz,
-	 * way off the target of 32.768kHz. This led to the clock running about 5 seconds fast per
-	 * minute. Using this class as the provider of the LSI frequency successfully calibrated
-	 * the LSI and got me an accurate RTC 1Hz tick.
-	 */
+  /**
+   * Class to measure the frequency of the LSI using its output into channel 4
+   * of Timer5. Of course this method fundamentally relies on the accuracy of the
+   * oscillator (probably HSE) being better than that of the LSI itself.
+   *
+   * As an observation, the LSI on my STM32F4DISCOVERY board was measured at about 37.4kHz,
+   * way off the target of 32.768kHz. This led to the clock running about 5 seconds fast per
+   * minute. Using this class as the provider of the LSI frequency successfully calibrated
+   * the LSI and got me an accurate RTC 1Hz tick.
+   */
 
-	class RtcMeasuredLsiFrequencyProvider {
+  class RtcMeasuredLsiFrequencyProvider {
 
-		/**
-		 * Compute the LSI frequency
-		 * @return The measured frequency
-		 */
+    /**
+     * Compute the LSI frequency
+     * @return The measured frequency
+     */
 
-		public:
-			static uint32_t getLsiFrequency();
-	};
+    public:
+      static uint32_t getLsiFrequency();
+  };
 }

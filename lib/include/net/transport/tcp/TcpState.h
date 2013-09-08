@@ -8,25 +8,25 @@
 
 
 namespace stm32plus {
-	namespace net {
+  namespace net {
 
 
-		/**
-		 * State of a TCP connection as illustrated in the state diagram from
-		 * TCP/IP Illustrated by W. Richard Stevens
-		 */
+    /**
+     * State of a TCP connection as illustrated in the state diagram from
+     * TCP/IP Illustrated by W. Richard Stevens
+     */
 
-		enum class TcpState : uint8_t {
-			CLOSED,
-			SYN_RCVD,
-			SYN_SENT,
-			ESTABLISHED,
-			CLOSE_WAIT,
-			CLOSING,
-			FIN_WAIT_1,
-			FIN_WAIT_2,
-			TIME_WAIT,
-			LAST_ACK
-		};
-	}
+    enum class TcpState : uint8_t {
+      CLOSED,
+      SYN_RCVD,
+      SYN_SENT,
+      ESTABLISHED,
+      CLOSE_WAIT,
+      CLOSING,
+      FIN_WAIT_1,
+      FIN_WAIT_2,
+      TIME_WAIT,
+      LAST_ACK
+    };
+  }
 }

@@ -8,28 +8,28 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * @brief Gamma values for the MC2PA801
-		 *
-		 * This device support 4 fixed gamma curves, so we just need a word
-		 * to hold the index of the current curve
-		 */
+    /**
+     * @brief Gamma values for the MC2PA801
+     *
+     * This device support 4 fixed gamma curves, so we just need a word
+     * to hold the index of the current curve
+     */
 
-		class MC2PA8201Gamma : public DisplayDeviceGamma {
+    class MC2PA8201Gamma : public DisplayDeviceGamma {
 
-			public:
+      public:
 
-			/**
-			 * Constructor. The MC2PA801 takes 1 gamma value index. The constructor must be supplied with that value
-			 * that can range between 0..3
-			 */
+      /**
+       * Constructor. The MC2PA801 takes 1 gamma value index. The constructor must be supplied with that value
+       * that can range between 0..3
+       */
 
-				MC2PA8201Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
-					_gamma[0]=gammaIndex;
-				}
-		};
+        MC2PA8201Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
+          _gamma[0]=gammaIndex;
+        }
+    };
 
-	}
+  }
 }

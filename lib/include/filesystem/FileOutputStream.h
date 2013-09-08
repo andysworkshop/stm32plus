@@ -9,77 +9,77 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Implementation of an output stream for files
-	 */
+  /**
+   * @brief Implementation of an output stream for files
+   */
 
-	class FileOutputStream : public OutputStream {
-		protected:
-			File& _file;
+  class FileOutputStream : public OutputStream {
+    protected:
+      File& _file;
 
-		public:
-			FileOutputStream(File& f);
+    public:
+      FileOutputStream(File& f);
 
-		public:
+    public:
 
-			// overrides from OutputStream
+      // overrides from OutputStream
 
-			virtual bool write(uint8_t c) override;
-			virtual bool write(const void *buffer,uint32_t size) override;
-			virtual bool close() override;
+      virtual bool write(uint8_t c) override;
+      virtual bool write(const void *buffer,uint32_t size) override;
+      virtual bool close() override;
 
-			virtual bool flush() override;
-	};
-
-
-	/**
-	 * Constructor with file.
-	 * @param[in] file The file to write to. Caller supplied parameter, must not go out of scope.
-	 */
-
-	inline FileOutputStream::FileOutputStream(File& file)
-		: _file(file) {
-	}
+      virtual bool flush() override;
+  };
 
 
-	/**
-	 * Write data to the file
-	 * @param buffer source of your data
-	 * @param size How much to write
-	 */
+  /**
+   * Constructor with file.
+   * @param[in] file The file to write to. Caller supplied parameter, must not go out of scope.
+   */
 
-	inline bool FileOutputStream::write(const void *buffer,uint32_t size) {
-		return _file.write(buffer,size);
-	}
-
-
-	/**
-	 * no-op close
-	 * @return true
-	 */
-
-	inline bool FileOutputStream::close() {
-		return true;
-	}
+  inline FileOutputStream::FileOutputStream(File& file)
+    : _file(file) {
+  }
 
 
-	/**
-	 * Write byte to file
-	 * @param c The byte to write
-	 * @return true if it worked
-	 */
+  /**
+   * Write data to the file
+   * @param buffer source of your data
+   * @param size How much to write
+   */
 
-	inline bool FileOutputStream::write(uint8_t c) {
-		return _file.write(&c,sizeof(c));
-	}
+  inline bool FileOutputStream::write(const void *buffer,uint32_t size) {
+    return _file.write(buffer,size);
+  }
 
 
-	/**
-	 * No-op flush
-	 * @return true always
-	 */
+  /**
+   * no-op close
+   * @return true
+   */
 
-	inline bool FileOutputStream::flush() {
-		return true;
-	}
+  inline bool FileOutputStream::close() {
+    return true;
+  }
+
+
+  /**
+   * Write byte to file
+   * @param c The byte to write
+   * @return true if it worked
+   */
+
+  inline bool FileOutputStream::write(uint8_t c) {
+    return _file.write(&c,sizeof(c));
+  }
+
+
+  /**
+   * No-op flush
+   * @return true always
+   */
+
+  inline bool FileOutputStream::flush() {
+    return true;
+  }
 }

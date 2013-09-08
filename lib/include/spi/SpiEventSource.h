@@ -9,28 +9,28 @@
 
 namespace stm32plus {
 
-	/**
-	 * SPI event types
-	 */
+  /**
+   * SPI event types
+   */
 
-	enum class SpiEventType : uint8_t {
+  enum class SpiEventType : uint8_t {
     EVENT_RECEIVE,
     EVENT_READY_TO_TRANSMIT
-	};
+  };
 
 
-	/**
-	 * The signature for SPI events: void myHandler(SpiEventType set);
-	 */
+  /**
+   * The signature for SPI events: void myHandler(SpiEventType set);
+   */
 
-	DECLARE_EVENT_SIGNATURE(SpiInterrupt,void(SpiEventType));
+  DECLARE_EVENT_SIGNATURE(SpiInterrupt,void(SpiEventType));
 
 
-	/**
-	 * Base structure that holds just the event subscriber/publisher for SPI
-	 */
+  /**
+   * Base structure that holds just the event subscriber/publisher for SPI
+   */
 
-	struct SpiEventSource {
-		DECLARE_EVENT_SOURCE(SpiInterrupt);
-	};
+  struct SpiEventSource {
+    DECLARE_EVENT_SOURCE(SpiInterrupt);
+  };
 }

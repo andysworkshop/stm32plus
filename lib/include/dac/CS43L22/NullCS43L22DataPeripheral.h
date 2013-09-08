@@ -9,17 +9,17 @@
 
 namespace stm32plus {
 
-	/**
-	 * Nothing class to allow construction of CS43L22 without a digital data source
-	 */
+  /**
+   * Nothing class to allow construction of CS43L22 without a digital data source
+   */
 
-	struct NullCS43L22DataPeripheral {
+  struct NullCS43L22DataPeripheral {
 
-		struct Parameters {
-		};
+    struct Parameters {
+    };
 
-		NullCS43L22DataPeripheral(const Parameters&) {
-		}
-	};
+    NullCS43L22DataPeripheral(const Parameters&) {
+    }
+  };
 }
 

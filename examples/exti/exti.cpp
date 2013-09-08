@@ -30,13 +30,13 @@ using namespace stm32plus;
  * onboard button and LEDs:
  *
  *  LED_PIN to 13
- * 	BUTTON_PIN to 0
- * 	GpioF... to GpioD...
- * 	Exti8 to Exit0
+ *  BUTTON_PIN to 0
+ *  GpioF... to GpioD...
+ *  Exti8 to Exit0
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
@@ -45,58 +45,58 @@ using namespace stm32plus;
 
 class ExtiTest {
 
-	protected:
-		volatile bool _stateChanged;
+  protected:
+    volatile bool _stateChanged;
 
-		enum {
-			LED_PIN = 6,
-			BUTTON_PIN = 8
-		};
+    enum {
+      LED_PIN = 6,
+      BUTTON_PIN = 8
+    };
 
-	public:
-		void run() {
+  public:
+    void run() {
 
-			// initialise the LED and button pins
+      // initialise the LED and button pins
 
-			GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
-			GpioA<DefaultDigitalInputFeature<BUTTON_PIN> > pa;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioA<DefaultDigitalInputFeature<BUTTON_PIN> > pa;
 
-			// enable EXTI on the button pin and subscribe to interrupts
+      // enable EXTI on the button pin and subscribe to interrupts
 
-			Exti8 exti(EXTI_Mode_Interrupt,EXTI_Trigger_Rising_Falling,pa[BUTTON_PIN]);
+      Exti8 exti(EXTI_Mode_Interrupt,EXTI_Trigger_Rising_Falling,pa[BUTTON_PIN]);
 
-			exti.ExtiInterruptEventSender.insertSubscriber(
-					ExtiInterruptEventSourceSlot::bind(this,&ExtiTest::onInterrupt)
-				);
+      exti.ExtiInterruptEventSender.insertSubscriber(
+          ExtiInterruptEventSourceSlot::bind(this,&ExtiTest::onInterrupt)
+        );
 
-			// lights off (this LED is active low, i.e. PF6 is a sink)
+      // lights off (this LED is active low, i.e. PF6 is a sink)
 
-			pf[LED_PIN].set();
+      pf[LED_PIN].set();
 
-			// main loop
+      // main loop
 
-			for(;;) {
+      for(;;) {
 
-				_stateChanged=false;			// race conditition, but it's demo code...
+        _stateChanged=false;      // race conditition, but it's demo code...
 
-				// wait for the interrupt to tell us that there's been a button press/release
+        // wait for the interrupt to tell us that there's been a button press/release
 
-				while(!_stateChanged);
+        while(!_stateChanged);
 
-				// act on the new state and reset for the next run
+        // act on the new state and reset for the next run
 
-				pf[LED_PIN].setState(pa[BUTTON_PIN].read());
-			}
-		}
+        pf[LED_PIN].setState(pa[BUTTON_PIN].read());
+      }
+    }
 
 
-		/**
-		 * Interrupt callback from the EXTI interrupt
-		 */
+    /**
+     * Interrupt callback from the EXTI interrupt
+     */
 
-		void onInterrupt(uint8_t /* extiLine */) {
-			_stateChanged=true;
-		}
+    void onInterrupt(uint8_t /* extiLine */) {
+      _stateChanged=true;
+    }
 };
 
 
@@ -106,9 +106,9 @@ class ExtiTest {
 
 int main() {
 
-	ExtiTest test;
-	test.run();
+  ExtiTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

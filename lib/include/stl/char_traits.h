@@ -37,8 +37,8 @@ public:
 
 #ifdef STM32PLUS_BUILD
   typedef signed int char_traits_off_type;
-	typedef char state_type;
-	typedef char_traits_off_type off_type;
+  typedef char state_type;
+  typedef char_traits_off_type off_type;
   typedef char_traits_off_type pos_type;
 #else
 #ifdef __STL_USE_NEW_IOSTREAMS

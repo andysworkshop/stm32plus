@@ -7,13 +7,13 @@
 #pragma once
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace GateScanControlCmd {
-			enum {
-				Opcode=0x18,
+  namespace hx8347 {
+    namespace GateScanControlCmd {
+      enum {
+        Opcode=0x18,
 
-				SCROLL_ON=1 << 1, SM=1
-			};
-		}
-	}
+        SCROLL_ON=1 << 1, SM=1
+      };
+    }
+  }
 }

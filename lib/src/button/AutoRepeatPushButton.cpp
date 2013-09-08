@@ -10,80 +10,80 @@
 
 namespace stm32plus {
 
-	/**
-	 * Constructor
-	 * @param[in] pin The pin that the button is wired to.
-	 * @param[in] pressedState true if the pressed state is HIGH, false if it is low.
-	 * @param[in] initialDelayMillis The delay before repeating starts.
-	 * @param[in] repeatDelayMillis The delay between repeats.
-	 */
+  /**
+   * Constructor
+   * @param[in] pin The pin that the button is wired to.
+   * @param[in] pressedState true if the pressed state is HIGH, false if it is low.
+   * @param[in] initialDelayMillis The delay before repeating starts.
+   * @param[in] repeatDelayMillis The delay between repeats.
+   */
 
-	AutoRepeatPushButton::AutoRepeatPushButton(const GpioPinRef& pin,bool pressedState,uint32_t initialDelayMillis,uint32_t repeatDelayMillis)
-	: PushButton(pin,pressedState) {
+  AutoRepeatPushButton::AutoRepeatPushButton(const GpioPinRef& pin,bool pressedState,uint32_t initialDelayMillis,uint32_t repeatDelayMillis)
+  : PushButton(pin,pressedState) {
 
-		// setup the encapsulated class and remember params
+    // setup the encapsulated class and remember params
 
-		_initialDelayMillis=initialDelayMillis;
-		_repeatDelayMillis=repeatDelayMillis;
-	}
+    _initialDelayMillis=initialDelayMillis;
+    _repeatDelayMillis=repeatDelayMillis;
+  }
 
 
-	/**
-	 * Get the current state of the button.
-	 * @return The current state.
-	 */
+  /**
+   * Get the current state of the button.
+   * @return The current state.
+   */
 
-	PushButton::ButtonState AutoRepeatPushButton::getState() {
+  PushButton::ButtonState AutoRepeatPushButton::getState() {
 
-		uint32_t now;
+    uint32_t now;
 
-		// if button is not pressed then our state machine is reset
+    // if button is not pressed then our state machine is reset
 
-		if(PushButton::getState()==NotPressed) {
-			_internalState=Idle;
-			return NotPressed;
-		}
+    if(PushButton::getState()==NotPressed) {
+      _internalState=Idle;
+      return NotPressed;
+    }
 
-		now=MillisecondTimer::millis();
+    now=MillisecondTimer::millis();
 
-		switch(_internalState) {
+    switch(_internalState) {
 
-			// first press, record that we are now waiting for the
-			// initial repeat and save the time we started.
+      // first press, record that we are now waiting for the
+      // initial repeat and save the time we started.
 
-			case Idle:
-				_internalState=WaitingForInitial;
-				_lastEventTime=now;
-				return Pressed;
+      case Idle:
+        _internalState=WaitingForInitial;
+        _lastEventTime=now;
+        return Pressed;
 
-				// lead up to the initial repeat. When the time is reached
-				// advance the state into the multi-repeat stage
+        // lead up to the initial repeat. When the time is reached
+        // advance the state into the multi-repeat stage
 
-			case WaitingForInitial:
-				if(now-_lastEventTime>=_initialDelayMillis)
-				{
-					_internalState=WaitingForRepeat;
-					_lastEventTime=now;
-					return Pressed;
-				}
-				else
-					return NotPressed;
+      case WaitingForInitial:
+        if(now-_lastEventTime>=_initialDelayMillis)
+        {
+          _internalState=WaitingForRepeat;
+          _lastEventTime=now;
+          return Pressed;
+        }
+        else
+          return NotPressed;
 
-				// we're in the repeat loop. Return 'Pressed' each time
-				// the time interval is passed
+        // we're in the repeat loop. Return 'Pressed' each time
+        // the time interval is passed
 
-			case WaitingForRepeat:
-				if(now-_lastEventTime>=_repeatDelayMillis)
-				{
-					_lastEventTime=now;
-					return Pressed;
-				}
-				else
-					return NotPressed;
-		}
+      case WaitingForRepeat:
+        if(now-_lastEventTime>=_repeatDelayMillis)
+        {
+          _lastEventTime=now;
+          return Pressed;
+        }
+        else
+          return NotPressed;
+    }
 
-		// should never get here
+    // should never get here
 
-		return NotPressed;
-	}
+    return NotPressed;
+  }
 }

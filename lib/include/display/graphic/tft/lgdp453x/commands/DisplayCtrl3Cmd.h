@@ -12,20 +12,20 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace DisplayCtrl3Cmd
-		{
-			enum
-			{
-				Opcode = 0x09
-			};
+  namespace lgdp453x
+  {
+    namespace DisplayCtrl3Cmd
+    {
+      enum
+      {
+        Opcode = 0x09
+      };
 
-			inline uint16_t ISC(uint16_t n) { return n; }
-			inline uint16_t PTG(uint16_t n) { return n<<4; }
-			inline uint16_t PTS(uint16_t n) { return n<<8; }
-		}
-	}
+      inline uint16_t ISC(uint16_t n) { return n; }
+      inline uint16_t PTG(uint16_t n) { return n<<4; }
+      inline uint16_t PTS(uint16_t n) { return n<<8; }
+    }
+  }
 }
 
 #endif /* DISPLAYCTRL3CMD_H_ */

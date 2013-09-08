@@ -14,75 +14,75 @@
  */
 
 namespace stm32plus {
-	namespace StdStringUtil {
+  namespace StdStringUtil {
 
-		static const char *defaultTrimChars="\n\r\t ";
+    static const char *defaultTrimChars="\n\r\t ";
 
-		/**
-		 * Remove white space (\n\r\t ) from the start of a string
-		 * @param str the string to left-trim
-		 */
+    /**
+     * Remove white space (\n\r\t ) from the start of a string
+     * @param str the string to left-trim
+     */
 
-		inline void trimLeft(std::string& str,const char *trimChars=defaultTrimChars) {
+    inline void trimLeft(std::string& str,const char *trimChars=defaultTrimChars) {
 
-			std::string::size_type pos;
+      std::string::size_type pos;
 
-			if((pos=str.find_first_not_of(trimChars))==std::string::npos)
-				str.clear();
-			else if(pos!=0)
-				str=str.substr(pos);
-		}
-
-
-		/**
-		 * Remove white space (\n\r\t ) from the end of a string
-		 * @param str the string to right-trim
-		 */
-
-		inline void trimRight(std::string& str,const char *trimChars=defaultTrimChars) {
-
-			std::string::size_type pos;
-
-			if((pos=str.find_last_not_of(trimChars))==std::string::npos)
-				str.clear();
-			else if(pos!=str.size()-1)
-				str=str.substr(0,pos+1);
-		}
+      if((pos=str.find_first_not_of(trimChars))==std::string::npos)
+        str.clear();
+      else if(pos!=0)
+        str=str.substr(pos);
+    }
 
 
-		/**
-		 * Remove white space (\n\r\t ) from both ends of a string
-		 * @param str the string to fully trim
-		 */
+    /**
+     * Remove white space (\n\r\t ) from the end of a string
+     * @param str the string to right-trim
+     */
 
-		inline void trim(std::string& str,const char *trimChars=defaultTrimChars) {
-			trimLeft(str,trimChars);
-			trimRight(str,trimChars);
-		}
+    inline void trimRight(std::string& str,const char *trimChars=defaultTrimChars) {
+
+      std::string::size_type pos;
+
+      if((pos=str.find_last_not_of(trimChars))==std::string::npos)
+        str.clear();
+      else if(pos!=str.size()-1)
+        str=str.substr(0,pos+1);
+    }
 
 
-		/**
-		 * Tokenise a string based on supplied separators
-		 * @param cmdText
-		 */
+    /**
+     * Remove white space (\n\r\t ) from both ends of a string
+     * @param str the string to fully trim
+     */
 
-		inline void tokenise(const std::string& cmdText,const char *separators,std::vector<std::string>& words) {
+    inline void trim(std::string& str,const char *trimChars=defaultTrimChars) {
+      trimLeft(str,trimChars);
+      trimRight(str,trimChars);
+    }
 
-			std::string::size_type first,last;
 
-			// tokenise the command
+    /**
+     * Tokenise a string based on supplied separators
+     * @param cmdText
+     */
 
-			for(first=cmdText.find_first_not_of(separators);first!=std::string::npos && last!=std::string::npos;) {
+    inline void tokenise(const std::string& cmdText,const char *separators,std::vector<std::string>& words) {
 
-				if((last=cmdText.find_first_of(separators,first))==std::string::npos)
-					break;
+      std::string::size_type first,last;
 
-				words.push_back(cmdText.substr(first,last-first));
-				first=cmdText.find_first_not_of(separators,last);
-			}
+      // tokenise the command
 
-			if(first!=std::string::npos)
-				words.push_back(cmdText.substr(first,cmdText.length()-first));
-		}
-	}
+      for(first=cmdText.find_first_not_of(separators);first!=std::string::npos && last!=std::string::npos;) {
+
+        if((last=cmdText.find_first_of(separators,first))==std::string::npos)
+          break;
+
+        words.push_back(cmdText.substr(first,last-first));
+        first=cmdText.find_first_not_of(separators,last);
+      }
+
+      if(first!=std::string::npos)
+        words.push_back(cmdText.substr(first,cmdText.length()-first));
+    }
+  }
 }

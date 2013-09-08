@@ -12,59 +12,59 @@
 namespace stm32plus {
 
 
-	/**
-	 * Constructor, set flag to unclaimed
-	 */
+  /**
+   * Constructor, set flag to unclaimed
+   */
 
-	Mutex::Mutex() {
-		_flag=0;
-	}
-
-
-	/**
-	 * Try to claim the mutex, give up after the specified number of millis
-	 * @param millisToWait max time to wait, set to zero to never block
-	 * @return true if was claimed
-	 */
-
-	bool Mutex::claim(uint32_t millisToWait) {
-
-		uint8_t oldval,newval;
-		uint32_t now;
-
-		if(millisToWait)
-			now=MillisecondTimer::millis();
-
-		do {
-
-			// get the current mutex value
-
-			if((oldval=__LDREXB(&_flag))==0) {
-
-				// try to claim it and return if OK
-
-				if((newval=__STREXB(1,&_flag))==0) {
-					__DMB();
-					return true;
-				}
-			}
-
-			// abort if not allowed to wait
-
-			if(!millisToWait)
-				return false;
-
-		} while(!MillisecondTimer::hasTimedOut(now,millisToWait));
-
-		return false;
-	}
+  Mutex::Mutex() {
+    _flag=0;
+  }
 
 
-	/**
-	 * Release a locked mutex
-	 */
+  /**
+   * Try to claim the mutex, give up after the specified number of millis
+   * @param millisToWait max time to wait, set to zero to never block
+   * @return true if was claimed
+   */
 
-	void Mutex::release() {
-		_flag=0;
-	}
+  bool Mutex::claim(uint32_t millisToWait) {
+
+    uint8_t oldval,newval;
+    uint32_t now;
+
+    if(millisToWait)
+      now=MillisecondTimer::millis();
+
+    do {
+
+      // get the current mutex value
+
+      if((oldval=__LDREXB(&_flag))==0) {
+
+        // try to claim it and return if OK
+
+        if((newval=__STREXB(1,&_flag))==0) {
+          __DMB();
+          return true;
+        }
+      }
+
+      // abort if not allowed to wait
+
+      if(!millisToWait)
+        return false;
+
+    } while(!MillisecondTimer::hasTimedOut(now,millisToWait));
+
+    return false;
+  }
+
+
+  /**
+   * Release a locked mutex
+   */
+
+  void Mutex::release() {
+    _flag=0;
+  }
 }

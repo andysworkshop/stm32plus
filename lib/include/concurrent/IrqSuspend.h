@@ -50,8 +50,8 @@ namespace stm32plus {
 
     static void suspend() {
 
-    	if(sync_fetch_and_increment(&_counter)==0)
-      	Nvic::disableAllInterrupts();
+      if(sync_fetch_and_increment(&_counter)==0)
+        Nvic::disableAllInterrupts();
     }
 
 

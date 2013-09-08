@@ -8,145 +8,145 @@
 namespace stm32plus {
 
 
-	/**
-	 * Helper class to read from an STL string using the InputStream interface
-	 */
+  /**
+   * Helper class to read from an STL string using the InputStream interface
+   */
 
-	class StlStringInputStream : public InputStream {
+  class StlStringInputStream : public InputStream {
 
-		public:
-			enum {
-				E_INVALID_SEEK_POSITION = 1
-			};
+    public:
+      enum {
+        E_INVALID_SEEK_POSITION = 1
+      };
 
-		protected:
-			const std::string *_string;
-			bool _delete;
-			std::string::size_type _pos;
+    protected:
+      const std::string *_string;
+      bool _delete;
+      std::string::size_type _pos;
 
-		public:
-			StlStringInputStream(const std::string *str,bool takeOwnership);
-			virtual ~StlStringInputStream();
+    public:
+      StlStringInputStream(const std::string *str,bool takeOwnership);
+      virtual ~StlStringInputStream();
 
-			// overrides from InputStream
+      // overrides from InputStream
 
-			virtual int16_t read() override;
-			virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
-			virtual bool skip(uint32_t howMuch) override;
-			virtual bool available() override;
-			virtual bool reset() override;
+      virtual int16_t read() override;
+      virtual bool read(void *buffer,uint32_t size,uint32_t& actuallyRead) override;
+      virtual bool skip(uint32_t howMuch) override;
+      virtual bool available() override;
+      virtual bool reset() override;
 
-			// overrides from StreamBase
+      // overrides from StreamBase
 
-			virtual bool close() override;
-	};
-
-
-	/**
-	 * Constructor
-	 * @param str The string pointer
-	 * @param takeOwnership true if we must delete on destruction
-	 */
-
-	inline StlStringInputStream::StlStringInputStream(const std::string *str,bool takeOwnership)
-		: _string(str),
-		  _delete(takeOwnership),
-		  _pos(0) {
-	}
+      virtual bool close() override;
+  };
 
 
-	/**
-	 * Destructor
-	 */
+  /**
+   * Constructor
+   * @param str The string pointer
+   * @param takeOwnership true if we must delete on destruction
+   */
 
-	inline StlStringInputStream::~StlStringInputStream() {
-		if(_delete)
-			delete _string;
-	}
-
-
-	/**
-	 * Read a single byte
-	 * @return the byte or E_END_OF_STREAM
-	 */
-
-	inline int16_t StlStringInputStream::read() {
-
-		if(_pos==_string->length())
-			return E_END_OF_STREAM;
-
-		return (*_string)[_pos++];
-	}
+  inline StlStringInputStream::StlStringInputStream(const std::string *str,bool takeOwnership)
+    : _string(str),
+      _delete(takeOwnership),
+      _pos(0) {
+  }
 
 
-	/**
-	 * Read many characters
-	 * @param buffer Where to read out to
-	 * @param size Number requested
-	 * @param actuallyRead Number actually read out
-	 * @return true, always. zero actually read indicates EOF
-	 */
+  /**
+   * Destructor
+   */
 
-	inline bool StlStringInputStream::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
-
-		actuallyRead=Min(size,static_cast<uint32_t>(_string->length()-_pos));
-
-		if(actuallyRead) {
-			memcpy(buffer,_string->c_str()+_pos,actuallyRead);
-			_pos+=actuallyRead;
-		}
-
-		return true;
-	}
+  inline StlStringInputStream::~StlStringInputStream() {
+    if(_delete)
+      delete _string;
+  }
 
 
-	/**
-	 * Seek forward in the stream
-	 * @param howMuch amount to seek
-	 * @return true if OK, false if tried to seek past end
-	 */
+  /**
+   * Read a single byte
+   * @return the byte or E_END_OF_STREAM
+   */
 
-	inline bool StlStringInputStream::skip(uint32_t howMuch) {
+  inline int16_t StlStringInputStream::read() {
 
-		// check validity of how much
+    if(_pos==_string->length())
+      return E_END_OF_STREAM;
 
-		if(howMuch>_string->length()-_pos)
-			return errorProvider.set(ErrorProvider::ERROR_PROVIDER_STL_STRING_INPUT_STREAM,E_INVALID_SEEK_POSITION);
-
-		// move forward
-
-		_pos+=howMuch;
-		return true;
-	}
+    return (*_string)[_pos++];
+  }
 
 
-	/**
-	 * Return true if some data is available for reading
-	 * @return true if data is available
-	 */
+  /**
+   * Read many characters
+   * @param buffer Where to read out to
+   * @param size Number requested
+   * @param actuallyRead Number actually read out
+   * @return true, always. zero actually read indicates EOF
+   */
 
-	inline bool StlStringInputStream::available() {
-		return _string->length()!=_pos;
-	}
+  inline bool StlStringInputStream::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
+
+    actuallyRead=Min(size,static_cast<uint32_t>(_string->length()-_pos));
+
+    if(actuallyRead) {
+      memcpy(buffer,_string->c_str()+_pos,actuallyRead);
+      _pos+=actuallyRead;
+    }
+
+    return true;
+  }
 
 
-	/**
-	 * Reset to the start of the stream
-	 * @return Always true
-	 */
+  /**
+   * Seek forward in the stream
+   * @param howMuch amount to seek
+   * @return true if OK, false if tried to seek past end
+   */
 
-	inline bool StlStringInputStream::reset() {
-		_pos=0;
-		return true;
-	}
+  inline bool StlStringInputStream::skip(uint32_t howMuch) {
+
+    // check validity of how much
+
+    if(howMuch>_string->length()-_pos)
+      return errorProvider.set(ErrorProvider::ERROR_PROVIDER_STL_STRING_INPUT_STREAM,E_INVALID_SEEK_POSITION);
+
+    // move forward
+
+    _pos+=howMuch;
+    return true;
+  }
 
 
-	/**
-	 * Do nothing close
-	 * @return true always
-	 */
+  /**
+   * Return true if some data is available for reading
+   * @return true if data is available
+   */
 
-	inline bool StlStringInputStream::close() {
-		return true;
-	}
+  inline bool StlStringInputStream::available() {
+    return _string->length()!=_pos;
+  }
+
+
+  /**
+   * Reset to the start of the stream
+   * @return Always true
+   */
+
+  inline bool StlStringInputStream::reset() {
+    _pos=0;
+    return true;
+  }
+
+
+  /**
+   * Do nothing close
+   * @return true always
+   */
+
+  inline bool StlStringInputStream::close() {
+    return true;
+  }
 }

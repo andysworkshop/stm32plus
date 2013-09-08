@@ -54,7 +54,7 @@ extern "C" {
         UsartInterruptFeature<3>::_usartInstance->UsartInterruptEventSender.raiseEvent(UsartEventType::EVENT_ERROR);
         USART_ClearITPendingBit(USART3,USART_IT_ERR);
       }
-  		__DSB();			// prevent erroneous recall of this handler due to delayed memory write
+      __DSB();      // prevent erroneous recall of this handler due to delayed memory write
     }
 
   #endif

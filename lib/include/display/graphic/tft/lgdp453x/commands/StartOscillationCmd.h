@@ -10,18 +10,18 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace StartOscillationCmd
-		{
-			enum
-			{
-				Opcode = 0,
+  namespace lgdp453x
+  {
+    namespace StartOscillationCmd
+    {
+      enum
+      {
+        Opcode = 0,
 
-				Enable = 1
-			};
-		}
-	}
+        Enable = 1
+      };
+    }
+  }
 }
 
 

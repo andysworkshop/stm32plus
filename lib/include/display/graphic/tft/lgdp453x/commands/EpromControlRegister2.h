@@ -10,20 +10,20 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace EpromControlRegister2
-		{
-			enum
-			{
-				Opcode = 0x41,
+  namespace lgdp453x
+  {
+    namespace EpromControlRegister2
+    {
+      enum
+      {
+        Opcode = 0x41,
 
-				AUTOWR = 1<<4
-			};
-			inline uint16_t VCMSEL(uint16_t n){return n;}
-			inline uint16_t RA(uint16_t n){return n<<2;}
-		}
-	}
+        AUTOWR = 1<<4
+      };
+      inline uint16_t VCMSEL(uint16_t n){return n;}
+      inline uint16_t RA(uint16_t n){return n<<2;}
+    }
+  }
 }
 
 

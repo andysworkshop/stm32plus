@@ -13,36 +13,36 @@
 
 class LcdManager {
 
-	public:
+  public:
 
-		// we'll use the ILI9325
+    // we'll use the ILI9325
 
     typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
     typedef ILI9325_Portrait_262K<LcdAccessMode> LcdAccess;
     typedef ILI9325_Terminal_Portrait<LcdAccess> TerminalAccess;
 
-	protected:
+  protected:
 
-		// members
+    // members
 
-		LcdAccessMode *_accessMode;
-		LcdAccess *_lcd;
-		TerminalAccess *_terminal;
-		DefaultBacklight *_backlight;
-		Font *_font;
+    LcdAccessMode *_accessMode;
+    LcdAccess *_lcd;
+    TerminalAccess *_terminal;
+    DefaultBacklight *_backlight;
+    Font *_font;
 
-	public:
-		bool initialise();
+  public:
+    bool initialise();
 
-		LcdAccess& getLcd() const {
-			return *_lcd;
-		}
+    LcdAccess& getLcd() const {
+      return *_lcd;
+    }
 
-		Font& getFont() const {
-			return *_font;
-		}
+    Font& getFont() const {
+      return *_font;
+    }
 
-		TerminalAccess& getTerminal() const {
-			return *_terminal;
-		}
+    TerminalAccess& getTerminal() const {
+      return *_terminal;
+    }
 };

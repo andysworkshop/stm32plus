@@ -10,25 +10,25 @@
 
 namespace stm32plus
 {
-	namespace ili9481
-	{
-		namespace FrameRateAndInversionControlCmd
-		{
-			enum
-			{
-				Opcode = 0xC5,
+  namespace ili9481
+  {
+    namespace FrameRateAndInversionControlCmd
+    {
+      enum
+      {
+        Opcode = 0xC5,
 
-				FR_125 = 0,
-				FR_100 = 1,
-				FR_85  = 2,
-				FR_72  = 3,
-				FR_56  = 4,
-				FR_50  = 5,
-				FR_45  = 6,
-				FR_42  = 7
-			};
-		}
-	}
+        FR_125 = 0,
+        FR_100 = 1,
+        FR_85  = 2,
+        FR_72  = 3,
+        FR_56  = 4,
+        FR_50  = 5,
+        FR_45  = 6,
+        FR_42  = 7
+      };
+    }
+  }
 }
 
 

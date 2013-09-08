@@ -41,8 +41,8 @@ using namespace stm32plus;
  * should reformat the card after you're done.
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F407VGT6
@@ -52,137 +52,137 @@ using namespace stm32plus;
 
 class SdioTest {
 
-	protected:
+  protected:
 
-		GpioF<DefaultDigitalOutputFeature<6> > _pf;
+    GpioF<DefaultDigitalOutputFeature<6> > _pf;
 
-	public:
+  public:
 
-			void run() {
+      void run() {
 
-				/*
-				 * Clear the LED. Our LED on PF[6] is active LOW.
-				 */
+        /*
+         * Clear the LED. Our LED on PF[6] is active LOW.
+         */
 
-				_pf[6].set();
-
-
-				/*
-				 * Initialise the sdcard with the SDIO interface feature. The constructor will attempt
-				 * to detect the initialisation and transfer clock dividers automatically for target frequencies
-				 * of 200kHz and 24MHz, respectively. You can override these by calling setInitDivider() and
-				 * setTransferDivider() and use 'false' as the constructor parameter so that the auto-init
-				 * does not happen. In this case you will need to call powerOn() and initialiseCard() yourself.
-				 */
-
-				SdioDmaSdCard sdcard;
-
-				/*
-				 * Check for any errors raised in the constructor
-				 */
-
-				if(errorProvider.hasError())
-					error();
-
-				for(;;) {
-					eraseBlocks(sdcard);
-					writeBlocks(sdcard);
-					readBlocks(sdcard);
-				}
-			}
+        _pf[6].set();
 
 
+        /*
+         * Initialise the sdcard with the SDIO interface feature. The constructor will attempt
+         * to detect the initialisation and transfer clock dividers automatically for target frequencies
+         * of 200kHz and 24MHz, respectively. You can override these by calling setInitDivider() and
+         * setTransferDivider() and use 'false' as the constructor parameter so that the auto-init
+         * does not happen. In this case you will need to call powerOn() and initialiseCard() yourself.
+         */
 
-			/*
-			 * Erase blocks 20000 to 20099
-			 */
+        SdioDmaSdCard sdcard;
 
-			void eraseBlocks(SdioDmaSdCard& sdcard) {
+        /*
+         * Check for any errors raised in the constructor
+         */
 
-				// erase the blocks
+        if(errorProvider.hasError())
+          error();
 
-				if(!sdcard.eraseBlocks(20000,20099))
-					error();
-
-				// it worked
-
-				signalOK();
-			}
-
-
-			/*
-			 * Write blocks 20000 to 20099
-			 */
-
-			void writeBlocks(SdioDmaSdCard& sdcard) {
-
-				int i;
-				uint8_t block[512];
-
-				// init the block
-
-				for(i=0;i<512;i++)
-					block[i]=i & 0xff;
-
-				for(i=20000;i<20099;i++)
-					if(!sdcard.writeBlock(block,i))
-						error();
-			}
+        for(;;) {
+          eraseBlocks(sdcard);
+          writeBlocks(sdcard);
+          readBlocks(sdcard);
+        }
+      }
 
 
-			/*
-			 * Read blocks 20000 to 20099
-			 */
 
-			void readBlocks(SdioDmaSdCard& sdcard) {
+      /*
+       * Erase blocks 20000 to 20099
+       */
 
-				int i,j;
-				uint8_t block[512];
+      void eraseBlocks(SdioDmaSdCard& sdcard) {
 
-				// read each block
+        // erase the blocks
 
-				for(i=20000;i<20099;i++) {
+        if(!sdcard.eraseBlocks(20000,20099))
+          error();
 
-					// read this block
+        // it worked
 
-					if(!sdcard.readBlock(block,i))
-						error();
-
-					// verify the content
-
-					for(j=0;j<512;j++)
-						if(block[j]!=(j & 0xff))
-							error();
-				}
-			}
+        signalOK();
+      }
 
 
-			/*
-			 * Signal that we completed an operation OK
-			 */
+      /*
+       * Write blocks 20000 to 20099
+       */
 
-			void signalOK() {
-				_pf[6].reset();											// on
-				MillisecondTimer::delay(1000);			// wait a second
-				_pf[6].set();												// off
-			}
+      void writeBlocks(SdioDmaSdCard& sdcard) {
+
+        int i;
+        uint8_t block[512];
+
+        // init the block
+
+        for(i=0;i<512;i++)
+          block[i]=i & 0xff;
+
+        for(i=20000;i<20099;i++)
+          if(!sdcard.writeBlock(block,i))
+            error();
+      }
 
 
-			/*
-			 * There's been an error. Lock up and flash the LED on PF6 rapidly
-			 */
+      /*
+       * Read blocks 20000 to 20099
+       */
 
-			void error() {
+      void readBlocks(SdioDmaSdCard& sdcard) {
 
-				for(;;) {
+        int i,j;
+        uint8_t block[512];
 
-					_pf[6].set();
-					MillisecondTimer::delay(200);
-					_pf[6].reset();
-					MillisecondTimer::delay(200);
-				}
-			}
-	};
+        // read each block
+
+        for(i=20000;i<20099;i++) {
+
+          // read this block
+
+          if(!sdcard.readBlock(block,i))
+            error();
+
+          // verify the content
+
+          for(j=0;j<512;j++)
+            if(block[j]!=(j & 0xff))
+              error();
+        }
+      }
+
+
+      /*
+       * Signal that we completed an operation OK
+       */
+
+      void signalOK() {
+        _pf[6].reset();                     // on
+        MillisecondTimer::delay(1000);      // wait a second
+        _pf[6].set();                       // off
+      }
+
+
+      /*
+       * There's been an error. Lock up and flash the LED on PF6 rapidly
+       */
+
+      void error() {
+
+        for(;;) {
+
+          _pf[6].set();
+          MillisecondTimer::delay(200);
+          _pf[6].reset();
+          MillisecondTimer::delay(200);
+        }
+      }
+  };
 
 
 /*
@@ -191,17 +191,17 @@ class SdioTest {
 
 int main() {
 
-	// we're using timing
+  // we're using timing
 
-	MillisecondTimer::initialise();
+  MillisecondTimer::initialise();
 
-	// configure Nvic
+  // configure Nvic
 
-	Nvic::initialise();
+  Nvic::initialise();
 
-	SdioTest sdio;
-	sdio.run();
+  SdioTest sdio;
+  sdio.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

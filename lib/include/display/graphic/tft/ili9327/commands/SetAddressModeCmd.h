@@ -7,19 +7,19 @@
 #pragma once
 
 namespace stm32plus {
-	namespace ili9327 {
-		namespace SetAddressModeCmd {
-			enum {
-				Opcode=0x36,
+  namespace ili9327 {
+    namespace SetAddressModeCmd {
+      enum {
+        Opcode=0x36,
 
-				VERTICAL_FLIP=1,
-				HORIZONTAL_FLIP=1 << 1,
-				BGR=1 << 3,
-				VERTICAL_ORDER=1 << 4,
-				PAGECOL_SELECTION=1 << 5,
-				COLUMN_ADDRESS_ORDER=1 << 6,
-				PAGE_ADDRESS_ORDER=1 << 7
-			};
-		}
-	}
+        VERTICAL_FLIP=1,
+        HORIZONTAL_FLIP=1 << 1,
+        BGR=1 << 3,
+        VERTICAL_ORDER=1 << 4,
+        PAGECOL_SELECTION=1 << 5,
+        COLUMN_ADDRESS_ORDER=1 << 6,
+        PAGE_ADDRESS_ORDER=1 << 7
+      };
+    }
+  }
 }

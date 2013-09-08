@@ -8,48 +8,48 @@
 
 
 namespace stm32plus {
-	namespace fat {
+  namespace fat {
 
-		/**
-		 * Fat filesystem formatter base class
-		 */
+    /**
+     * Fat filesystem formatter base class
+     */
 
-		class FatFileSystemFormatter {
+    class FatFileSystemFormatter {
 
-			protected:
-				char _volumeLabel[11];
-				BlockDevice& _blockDevice;
-				uint32_t _numSectors;
-				uint32_t _firstSectorIndex;
-				BootSector _bootSector;
+      protected:
+        char _volumeLabel[11];
+        BlockDevice& _blockDevice;
+        uint32_t _numSectors;
+        uint32_t _firstSectorIndex;
+        BootSector _bootSector;
 
-			protected:
-				FatFileSystemFormatter(BlockDevice& blockDevice,uint32_t firstSectorIndex,uint32_t numSectors,const char *volumeLabel);
-				virtual ~FatFileSystemFormatter() {}
+      protected:
+        FatFileSystemFormatter(BlockDevice& blockDevice,uint32_t firstSectorIndex,uint32_t numSectors,const char *volumeLabel);
+        virtual ~FatFileSystemFormatter() {}
 
-				virtual bool createNewBootSector();
+        virtual bool createNewBootSector();
 
-				void setReservedSectorSignature(uint8_t *sector) const;
-				void initVolumeLabelDirent(uint8_t *rootDirSector) const;
-				bool writeBootSector(uint32_t bootSectorIndex);
-				bool writeFats(uint32_t firstFatFirstSector,uint32_t sectorsPerFat) const;
-				bool writeRootDirectoryEntries(uint32_t sectorIndex) const;
+        void setReservedSectorSignature(uint8_t *sector) const;
+        void initVolumeLabelDirent(uint8_t *rootDirSector) const;
+        bool writeBootSector(uint32_t bootSectorIndex);
+        bool writeFats(uint32_t firstFatFirstSector,uint32_t sectorsPerFat) const;
+        bool writeRootDirectoryEntries(uint32_t sectorIndex) const;
 
-				virtual bool writeReservedSectors()=0;
-				virtual void initReservedClusters(uint8_t *sector) const=0;
+        virtual bool writeReservedSectors()=0;
+        virtual void initReservedClusters(uint8_t *sector) const=0;
 
-			protected:
-				static const uint8_t MEDIA_TYPE=0xf8;					// fixed media, which this may not be.
+      protected:
+        static const uint8_t MEDIA_TYPE=0xf8;         // fixed media, which this may not be.
 
-			public:
+      public:
 
-				enum {
-					/// tried to format a disk whose size is out of range for the format.
-					E_INVALID_DISK_SIZE=1
-				};
+        enum {
+          /// tried to format a disk whose size is out of range for the format.
+          E_INVALID_DISK_SIZE=1
+        };
 
-		};
-	}
+    };
+  }
 }
 
 

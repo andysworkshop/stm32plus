@@ -10,38 +10,38 @@
 
 namespace stm32plus {
 
-	/**
-	 * Helper class to assist with SD card detection
-	 */
+  /**
+   * Helper class to assist with SD card detection
+   */
 
-	class SdCardDetector {
+  class SdCardDetector {
 
-		protected:
-			GpioPinRef _cardDetect;
+    protected:
+      GpioPinRef _cardDetect;
 
-		public:
-			SdCardDetector(const GpioPinRef& pin);
+    public:
+      SdCardDetector(const GpioPinRef& pin);
 
-			bool isCardPresent() const;
-	};
-
-
-	/**
-	 * Constructor
-	 * @param pin
-	 */
-
-	inline SdCardDetector::SdCardDetector(const GpioPinRef& pin)
-		: _cardDetect(pin) {
-	}
+      bool isCardPresent() const;
+  };
 
 
-	/**
-	 * Return true if the card is present (the line is active low)
-	 * @return true if present
-	 */
+  /**
+   * Constructor
+   * @param pin
+   */
 
-	inline bool SdCardDetector::isCardPresent() const {
-		return !_cardDetect.read();
-	}
+  inline SdCardDetector::SdCardDetector(const GpioPinRef& pin)
+    : _cardDetect(pin) {
+  }
+
+
+  /**
+   * Return true if the card is present (the line is active low)
+   * @return true if present
+   */
+
+  inline bool SdCardDetector::isCardPresent() const {
+    return !_cardDetect.read();
+  }
 }

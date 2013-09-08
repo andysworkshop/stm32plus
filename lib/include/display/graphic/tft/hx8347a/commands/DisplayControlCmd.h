@@ -8,22 +8,22 @@
 
 
 namespace stm32plus {
-	namespace hx8347 {
-		namespace DisplayControlCmd {
-			enum {
-				OpcodeNBP=0x27,
-				OpcodeNFP=0x28,
-				OpcodePIB=0x29,
-				OpcodePIF=0x2a,
-				OpcodeIBP=0x2c,
-				OpcodeIFP=0x2d,
+  namespace hx8347 {
+    namespace DisplayControlCmd {
+      enum {
+        OpcodeNBP=0x27,
+        OpcodeNFP=0x28,
+        OpcodePIB=0x29,
+        OpcodePIF=0x2a,
+        OpcodeIBP=0x2c,
+        OpcodeIFP=0x2d,
 
-				Opcode1=0x26,
-				Opcode8=0x90,
-				Opcode9=0x35,
-				Opcode10=0x36,
-				Opcode14=0x41
-			};
-		}
-	}
+        Opcode1=0x26,
+        Opcode8=0x90,
+        Opcode9=0x35,
+        Opcode10=0x36,
+        Opcode14=0x41
+      };
+    }
+  }
 }

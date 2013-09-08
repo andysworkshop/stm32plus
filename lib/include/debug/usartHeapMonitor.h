@@ -11,43 +11,43 @@
 namespace stm32plus {
 
 
-	/**
-	 * Convenient extension of the heap monitor to output to a usart
-	 */
+  /**
+   * Convenient extension of the heap monitor to output to a usart
+   */
 
-	class UsartHeapMonitor : public HeapMonitor {
+  class UsartHeapMonitor : public HeapMonitor {
 
-		protected:
-			UsartPollingOutputStream *_usartOutputStream;
+    protected:
+      UsartPollingOutputStream *_usartOutputStream;
 
-		public:
-			UsartHeapMonitor();
-			void start(RtcSecondInterruptFeature& rtc,uint32_t frequency,Usart& usart);
-	};
-
-
-	/**
-	 * Constructor
-	 */
-
-	inline UsartHeapMonitor::UsartHeapMonitor()
-		: _usartOutputStream(nullptr) {
-	}
+    public:
+      UsartHeapMonitor();
+      void start(RtcSecondInterruptFeature& rtc,uint32_t frequency,Usart& usart);
+  };
 
 
-	/**
-	 * Start it off
-	 * @param rtc RTC instance
-	 * @param usart The usart to use
-	 * @param frequency
-	 */
+  /**
+   * Constructor
+   */
 
-	inline void UsartHeapMonitor::start(RtcSecondInterruptFeature& rtc,uint32_t frequency,Usart& usart) {
+  inline UsartHeapMonitor::UsartHeapMonitor()
+    : _usartOutputStream(nullptr) {
+  }
 
-		if(_usartOutputStream)
-			delete _usartOutputStream;
 
-		_usartOutputStream=new UsartPollingOutputStream(usart);
-		HeapMonitor::start(rtc,*_usartOutputStream,frequency);
-	}
+  /**
+   * Start it off
+   * @param rtc RTC instance
+   * @param usart The usart to use
+   * @param frequency
+   */
+
+  inline void UsartHeapMonitor::start(RtcSecondInterruptFeature& rtc,uint32_t frequency,Usart& usart) {
+
+    if(_usartOutputStream)
+      delete _usartOutputStream;
+
+    _usartOutputStream=new UsartPollingOutputStream(usart);
+    HeapMonitor::start(rtc,*_usartOutputStream,frequency);
+  }
 }

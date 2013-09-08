@@ -10,28 +10,28 @@
 
 namespace stm32plus
 {
-	namespace lgdp453x
-	{
-		namespace RGBDisplayInterfaceCtrl2Cmd
-		{
-			enum
-			{
-				Opcode = 0xf,
+  namespace lgdp453x
+  {
+    namespace RGBDisplayInterfaceCtrl2Cmd
+    {
+      enum
+      {
+        Opcode = 0xf,
 
-				DPL_RISING = 0,
-				DPL_FALLING = 1,
+        DPL_RISING = 0,
+        DPL_FALLING = 1,
 
-				EPL_LOW = 0,
-				EPL_HIGH = 1<<1,
+        EPL_LOW = 0,
+        EPL_HIGH = 1<<1,
 
-				HSPL_LOW = 0,
-				HSPL_HIGH = 1<<3,
+        HSPL_LOW = 0,
+        HSPL_HIGH = 1<<3,
 
-				VSPL_LOW = 0,
-				VSPL_HIGH = 1<<4
-			};
-		}
-	}
+        VSPL_LOW = 0,
+        VSPL_HIGH = 1<<4
+      };
+    }
+  }
 }
 
 

@@ -9,9 +9,9 @@
 
 namespace stm32plus {
 
-	/**
-	 * Sram timing just needs address and data setup
-	 */
+  /**
+   * Sram timing just needs address and data setup
+   */
 
-	typedef FsmcAddressDataSetupTiming FsmcSramTiming;
+  typedef FsmcAddressDataSetupTiming FsmcSramTiming;
 }

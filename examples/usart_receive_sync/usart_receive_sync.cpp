@@ -29,8 +29,8 @@ using namespace stm32plus;
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
- * 	 STM32F1
- * 	 STM32F4
+ *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103VET6
@@ -39,44 +39,44 @@ using namespace stm32plus;
 
 class UsartReceiveSyncTest {
 
-	public:
+  public:
 
-		void run() {
+    void run() {
 
-			/*
-			 * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
-			 * if your application demands that you use the alternate pins for USART1
-			 */
+      /*
+       * Declare a USART1 object. Note that an alternative Usart1_Remap object is available
+       * if your application demands that you use the alternate pins for USART1
+       */
 
-			Usart1<> usart(57600);
+      Usart1<> usart(57600);
 
-			/*
-			 * We'll use streams to send and receive the data.
-			 */
+      /*
+       * We'll use streams to send and receive the data.
+       */
 
-			UsartPollingOutputStream outputStream(usart);
-			UsartPollingInputStream inputStream(usart);
+      UsartPollingOutputStream outputStream(usart);
+      UsartPollingInputStream inputStream(usart);
 
-			/*
-			 * Go into a loop reading 5 characters at a time and then writing them
-			 * right back again.
-			 */
+      /*
+       * Go into a loop reading 5 characters at a time and then writing them
+       * right back again.
+       */
 
-			for(;;) {
+      for(;;) {
 
-				uint8_t buffer[5];
-				uint32_t actuallyRead;
+        uint8_t buffer[5];
+        uint32_t actuallyRead;
 
-				if(!inputStream.read(buffer,sizeof(buffer),actuallyRead) || actuallyRead!=sizeof(buffer)) {
-					// read error: handle it here
-				}
+        if(!inputStream.read(buffer,sizeof(buffer),actuallyRead) || actuallyRead!=sizeof(buffer)) {
+          // read error: handle it here
+        }
 
-				if(!outputStream.write(buffer,sizeof(buffer))) {
-					// write error: handle it here
-				}
+        if(!outputStream.write(buffer,sizeof(buffer))) {
+          // write error: handle it here
+        }
 
-			}
-		}
+      }
+    }
 };
 
 
@@ -86,9 +86,9 @@ class UsartReceiveSyncTest {
 
 int main() {
 
-	UsartReceiveSyncTest test;
-	test.run();
+  UsartReceiveSyncTest test;
+  test.run();
 
-	// not reached
-	return 0;
+  // not reached
+  return 0;
 }

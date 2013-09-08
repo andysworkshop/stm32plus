@@ -8,23 +8,23 @@
 
 
 namespace stm32plus {
-	namespace spiflash {
+  namespace spiflash {
 
 
-		/**
-		 * Bulk chip erase command implementation
-		 */
+    /**
+     * Bulk chip erase command implementation
+     */
 
-		template<class TSpi,uint8_t TOpCode=CMD_CHIP_ERASE>
-		struct ChipErase : Command<TSpi> {
+    template<class TSpi,uint8_t TOpCode=CMD_CHIP_ERASE>
+    struct ChipErase : Command<TSpi> {
 
-			/**
-			 * Provide a chipErase() function for the derived class
-			 */
+      /**
+       * Provide a chipErase() function for the derived class
+       */
 
-			bool chipErase() const {
-				return this->writeCommand(TOpCode);
-			}
-		};
-	}
+      bool chipErase() const {
+        return this->writeCommand(TOpCode);
+      }
+    };
+  }
 }

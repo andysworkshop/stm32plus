@@ -8,47 +8,47 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * @brief base class for post processors of touch screen coords
-		 *
-		 * A post processor may perform such functions as averaging successive points to
-		 * get a more stable result.
-		 */
+    /**
+     * @brief base class for post processors of touch screen coords
+     *
+     * A post processor may perform such functions as averaging successive points to
+     * get a more stable result.
+     */
 
-		class TouchScreenPostProcessor {
-			public:
+    class TouchScreenPostProcessor {
+      public:
 
-				/**
-				 * Possible results from the postProcess call.
-				 */
+        /**
+         * Possible results from the postProcess call.
+         */
 
-				enum PostProcessAction {
+        enum PostProcessAction {
 
-					/// post processing is completed, no more samples are required
-					Completed,
+          /// post processing is completed, no more samples are required
+          Completed,
 
-					/// something went wrong in the post processing, abort.
-					Error,
+          /// something went wrong in the post processing, abort.
+          Error,
 
-					/// more sample are required, call postProcess again.
-					MoreSamplesRequired
-				};
+          /// more sample are required, call postProcess again.
+          MoreSamplesRequired
+        };
 
-			public:
+      public:
 
-				/**
-				 * Post process a point from the touch screen.
-				 * @param[in] point The point received from the touch screen.
-				 * @param[in] sequenceNumber The zero based index of this sample from the
-				 * 	touch screen.
-				 */
+        /**
+         * Post process a point from the touch screen.
+         * @param[in] point The point received from the touch screen.
+         * @param[in] sequenceNumber The zero based index of this sample from the
+         *  touch screen.
+         */
 
-				virtual PostProcessAction postProcess(Point& point,int sequenceNumber)=0;
+        virtual PostProcessAction postProcess(Point& point,int sequenceNumber)=0;
 
-				virtual ~TouchScreenPostProcessor() {}
-		};
-	}
+        virtual ~TouchScreenPostProcessor() {}
+    };
+  }
 }

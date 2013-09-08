@@ -9,29 +9,29 @@
 
 namespace stm32plus {
 
-	/**
-	 * @brief Subclass of a file output stream that owns the file pointer
-	 * and will delete it when the stream is deleted
-	 */
+  /**
+   * @brief Subclass of a file output stream that owns the file pointer
+   * and will delete it when the stream is deleted
+   */
 
-	struct OwnedFileOutputStream : FileOutputStream {
+  struct OwnedFileOutputStream : FileOutputStream {
 
-		/**
-		 * Constructor
-		 * @param file The file pointer
-		 */
+    /**
+     * Constructor
+     * @param file The file pointer
+     */
 
-		OwnedFileOutputStream(File *file) :
-			FileOutputStream(*file) {
-		}
+    OwnedFileOutputStream(File *file) :
+      FileOutputStream(*file) {
+    }
 
 
-		/**
-		 * Destructor, delete the file pointer
-		 */
+    /**
+     * Destructor, delete the file pointer
+     */
 
-		virtual ~OwnedFileOutputStream() {
-			delete &_file;
-		}
-	};
+    virtual ~OwnedFileOutputStream() {
+      delete &_file;
+    }
+  };
 }
