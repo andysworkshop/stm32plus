@@ -47,6 +47,13 @@ using namespace stm32plus;
  * of these are customisable by you. The device identification code reported by the W25Q16DW
  * should be "ef6015".
  *
+ * The pinout for SPI2 is:
+ *
+ *   NSS  = PB12
+ *   SCK  = PB13
+ *   MISO = PB14
+ *   MOSI = PB15
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
