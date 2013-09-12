@@ -47,7 +47,7 @@
 
 #if !defined(STM32PLUS_F1_CL)
   #include "display/graphic/access/Fsmc16BitAccessMode.h"
-  #include "display/graphic/access/FSMC8BitAccessMode.h"
+  #include "display/graphic/access/Fsmc8BitAccessMode.h"
 #endif
 
 // graphics library includes
