@@ -70,8 +70,9 @@ class HX8352ATest {
       GpioE<DefaultDigitalOutputFeature<1> > pe;
       GpioD<DefaultFsmcAlternateFunctionFeature<11>> pd;
 
-      // set up the FSMC timing. these numbers (particularly the data setup time) are dependent on
-      // both the FSMC bus speed and the panel timing parameters.
+      // Set up the FSMC timing. These numbers (particularly the data setup time) are dependent on
+      // both the FSMC bus speed and the panel timing parameters. If you see corrupted graphics then
+      // you may need to adjust these to uit the characteristics of your particular panel.
 
 #if defined(STM32PLUS_F4)
       Fsmc8080LcdTiming fsmcTiming(3,6);
