@@ -50,6 +50,8 @@ Working in Eclipse
 ------------------
 I do all my development in Eclipse Indigo using the CDT and the GNU ARM Eclipse plugin. The `.project` and `.cproject` files for the main library and all the examples are included. You can use Eclipse's import option on the root checkout directory to bring them all into your workspace in one go. I recommend that you create a _working set_ to contain all the stm32plus projects because there's a lot of them.
 
+The projects are configured to use the external `cs-make` builder. Linux users should change this to 'Internal builder' in the 'C/C++ Build' project properties page.  
+
 How do I report a bug?
 ======================
 
