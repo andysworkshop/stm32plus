@@ -13,7 +13,7 @@
  * include everything that's required from the ST Microelectronics Standard Peripheral Library.
  */
 
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F1)
 
 #include "fwlib/f1/stdperiph/inc/misc.h"
 #include "fwlib/f1/stdperiph/inc/stm32f10x_dac.h"

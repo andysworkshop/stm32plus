@@ -130,11 +130,15 @@ namespace stm32plus {
 
 #else
 
+#if !defined(STM32PLUS_F1_MD_VL)
+
   template<>
   inline void ExtiInterruptEnabler<18>::enable() {
     _forceLinkage=&USBWakeUp_IRQHandler;
     Nvic::configureIrq(USBWakeUp_IRQn);
   }
+
+#endif
 
 #endif
 

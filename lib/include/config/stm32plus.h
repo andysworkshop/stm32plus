@@ -25,13 +25,17 @@
  * Verify that an MCU has been selected
  */
 
-#if defined (STM32PLUS_F1_HD)
+#if defined(STM32PLUS_F1_HD)
   #define STM32PLUS_F1                // enable features common to all F1
   #define STM32F10X_HD                // for the std peripheral library
-#elif defined (STM32PLUS_F1_CL_E)
+#elif defined(STM32PLUS_F1_CL_E)
   #define STM32PLUS_F1                // enable features common to all F1
   #define STM32PLUS_F1_CL             // enable features common to F105 and F107
   #define STM32F10X_CL                // for the std peripheral library
+#elif defined(STM32PLUS_F1_MD_VL)
+  #define STM32PLUS_F1                // enable features common to all F1
+  #define STM32PLUS_F1_VL             // enable features common to all VL devices
+  #define STM32F10X_MD_VL             // for the std peripheral library
 #elif defined(STM32PLUS_F4)
   // no additional defines
 #else
