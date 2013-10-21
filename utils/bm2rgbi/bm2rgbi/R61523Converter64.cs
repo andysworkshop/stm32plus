@@ -7,7 +7,7 @@ namespace bm2rgbi {
   /// Converter for 64K colours
   /// </summary>
   
-  public class ILI9325Converter64 : ILI9325Converter, IBitmapConverter {
+  public class R61523Converter64 : R61523Converter, IBitmapConverter {
   
     /// <summary>
     /// Use the generic converter
@@ -20,7 +20,7 @@ namespace bm2rgbi {
     /// </summary>
 
     public void convert(Bitmap bm,FileStream fs) {
-      _converter.convertRGB(bm,fs);
+      _converter.convertBGR(bm,fs);
     }
   }
 }

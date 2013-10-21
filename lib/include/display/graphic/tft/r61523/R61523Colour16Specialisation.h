@@ -6,8 +6,7 @@
 
 #pragma once
 
-#include "display/graphic/tft/r61523/commands/WriteMemoryStartCmd.h"
-#include "display/graphic/tft/r61523/commands/SetPixelFormatCmd.h"
+#include "display/graphic/tft/r61523/commands/AllCommands.h"
 
 
 namespace stm32plus {

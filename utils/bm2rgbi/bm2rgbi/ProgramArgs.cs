@@ -86,6 +86,10 @@ namespace bm2rgbi {
           this.TargetDevice=ST7783Converter.createInstance(depth);
           break;
 
+        case "r61523":
+          this.TargetDevice=R61523Converter.createInstance(depth);
+          break;
+
         default:
           throw new Exception(device+" is an unrecognised device");
       }
@@ -122,6 +126,7 @@ namespace bm2rgbi {
       Console.WriteLine("  ssd1963 262");
       Console.WriteLine("  st7783 64");
       Console.WriteLine("  st7783 262");
+      Console.WriteLine("  r61523 64");
 
       Environment.Exit(0);
     }

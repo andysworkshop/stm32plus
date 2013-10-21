@@ -17,7 +17,7 @@ namespace stm32plus {
      * Used for displays that don't support gamma correction
      */
 
-    class NullDisplayDeviceGamma : public DisplayDeviceGamma {
+    class NullDisplayDeviceGamma : public DisplayDeviceGamma<uint8_t> {
 
       public:
         NullDisplayDeviceGamma() : DisplayDeviceGamma(1) {}

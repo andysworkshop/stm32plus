@@ -20,7 +20,7 @@ namespace bm2rgbi {
     /// </summary>
 
     public void convert(Bitmap bm,FileStream fs) {
-      _converter.convert(bm,fs);
+      _converter.convertRGB(bm,fs);
     }
   }
 }

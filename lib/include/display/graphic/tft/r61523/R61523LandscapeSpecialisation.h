@@ -14,12 +14,12 @@ namespace stm32plus {
 
 
     /**
-     * Specialisation of R61523Orientation for the panel in PORTRAIT mode.
+     * Specialisation of R61523Orientation for the panel in LANDSCAPE mode.
      * @tparam TAccessMode the access mode implementation, e.g. Fsmc16BitAccessMode
      */
 
     template<class TAccessMode>
-    class R61523Orientation<PORTRAIT,TAccessMode> {
+    class R61523Orientation<LANDSCAPE,TAccessMode> {
 
       private:
         TAccessMode& _accessMode;
@@ -47,7 +47,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline R61523Orientation<PORTRAIT,TAccessMode>::R61523Orientation(TAccessMode& accessMode)
+    inline R61523Orientation<LANDSCAPE,TAccessMode>::R61523Orientation(TAccessMode& accessMode)
       : _accessMode(accessMode) {
     }
 
@@ -58,8 +58,8 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    constexpr inline uint16_t R61523Orientation<PORTRAIT,TAccessMode>::getAddressMode() const {
-      return 0x40;      // portrait mode
+    constexpr inline uint16_t R61523Orientation<LANDSCAPE,TAccessMode>::getAddressMode() const {
+      return 0xe0;             // portrait mode is the default
     }
 
 
@@ -69,8 +69,8 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    constexpr inline int16_t R61523Orientation<PORTRAIT,TAccessMode>::getWidth() const {
-      return 360;
+    constexpr inline int16_t R61523Orientation<LANDSCAPE,TAccessMode>::getWidth() const {
+      return 640;
     }
 
 
@@ -80,8 +80,8 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    constexpr inline int16_t R61523Orientation<PORTRAIT,TAccessMode>::getHeight() const {
-      return 640;
+    constexpr inline int16_t R61523Orientation<LANDSCAPE,TAccessMode>::getHeight() const {
+      return 360;
     }
 
 
@@ -91,7 +91,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Orientation<PORTRAIT,TAccessMode>::moveTo(const Rectangle& rc) const {
+    inline void R61523Orientation<LANDSCAPE,TAccessMode>::moveTo(const Rectangle& rc) const {
       moveTo(rc.X,rc.Y,rc.X+rc.Width-1,rc.Y+rc.Height-1);
     }
 
@@ -105,7 +105,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Orientation<PORTRAIT,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
+    inline void R61523Orientation<LANDSCAPE,TAccessMode>::moveTo(int16_t xstart,int16_t ystart,int16_t xend,int16_t yend) const {
 
       _accessMode.writeCommand(r61523::SET_COLUMN_ADDRESS,xstart >> 8);
       _accessMode.writeData(xstart & 0xff);
@@ -126,7 +126,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Orientation<PORTRAIT,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
+    inline void R61523Orientation<LANDSCAPE,TAccessMode>::moveX(int16_t xstart,int16_t xend) const {
       _accessMode.writeCommand(r61523::SET_COLUMN_ADDRESS,xstart >> 8);
       _accessMode.writeData(xstart & 0xff);
       _accessMode.writeData(xend >> 8);
@@ -141,7 +141,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Orientation<PORTRAIT,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
+    inline void R61523Orientation<LANDSCAPE,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
       _accessMode.writeCommand(r61523::SET_PAGE_ADDRESS,ystart >> 8);
       _accessMode.writeData(ystart & 0xff);
       _accessMode.writeData(yend >> 8);
@@ -154,7 +154,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Orientation<PORTRAIT,TAccessMode>::setScrollPosition(int16_t /* scrollPosition */) {
+    inline void R61523Orientation<LANDSCAPE,TAccessMode>::setScrollPosition(int16_t /* scrollPosition */) {
       // not supported by the R61523
     }
   }

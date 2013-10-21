@@ -19,7 +19,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode> using R61523_Portrait_64K  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
-//    template<class TAccessMode> using R61523_Landscape_64K  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using R61523_Landscape_64K  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
 
 //    template<class TAccessMode> using R61523_Portrait_262K  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
 //    template<class TAccessMode> using R61523_Landscape_262K  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
@@ -29,6 +29,6 @@ namespace stm32plus {
      */
 
     template<class TDevice> using R61523_Terminal_Portrait = GraphicTerminal<TDevice,false>;
-//    template<class TDevice> using R61523_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+    template<class TDevice> using R61523_Terminal_Landscape = GraphicTerminal<TDevice,false>;
   }
 }
