@@ -28,13 +28,16 @@ namespace stm32plus {
         volatile uint16_t *_registerAddress;
         GpioPinRef _resetPin;
 
+      protected:
+        void initialise(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine);
+        void initialiseTiming(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming);
+
       public:
         Fsmc16BitAccessMode(const Fsmc8080LcdTiming& timing,uint16_t registerAddressLine,const GpioPinRef& resetPin);
+        Fsmc16BitAccessMode(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine,const GpioPinRef& resetPin);
 
         void enable(bool enable);
-
         void reset();
-        void initialiseTiming(const Fsmc8080LcdTiming& timing);
 
         void writeCommand(uint16_t command) const;
         void writeCommand(uint16_t command,uint16_t parameter) const;
@@ -48,9 +51,10 @@ namespace stm32plus {
         static void getDmaTransferSizes(uint32_t& peripheralsize,uint32_t& memsize);
     };
 
+
     /**
      * Constructor. Initialises the AFIO GPIO pins for the FSMC used to control an 8080 LCD.
-     * @param[in] timing The timing structure for this LCD panel
+     * @param[in] timing The timing structure for this LCD panel in both read and write mode
      * @param[in] registerAddressLine The address line index used to switch between data and register select. e.g. 16 = A16.
      * @param[in] resetPin The GPIO pin that corresponds to the TFT reset line.
      */
@@ -59,6 +63,39 @@ namespace stm32plus {
     inline Fsmc16BitAccessMode<TFsmc>::Fsmc16BitAccessMode(const Fsmc8080LcdTiming& timing,
                                                            uint16_t registerAddressLine,
                                                            const GpioPinRef& resetPin) : _resetPin(resetPin) {
+      initialise(timing,timing,registerAddressLine);
+    }
+
+
+    /**
+     * Constructor. Initialises the AFIO GPIO pins for the FSMC used to control an 8080 LCD.
+     * @param[in] readTiming The timing structure for this LCD panel in read mode
+     * @param[in] writeTiming The timing structure for this LCD panel in write mode
+     * @param[in] registerAddressLine The address line index used to switch between data and register select. e.g. 16 = A16.
+     * @param[in] resetPin The GPIO pin that corresponds to the TFT reset line.
+     */
+
+    template<class TFsmc>
+    inline Fsmc16BitAccessMode<TFsmc>::Fsmc16BitAccessMode(const Fsmc8080LcdTiming& readTiming,
+                                                           const Fsmc8080LcdTiming& writeTiming,
+                                                           uint16_t registerAddressLine,
+                                                           const GpioPinRef& resetPin) : _resetPin(resetPin) {
+      initialise(readTiming,writeTiming,registerAddressLine);
+    }
+
+
+    /**
+     * Main initialiser. Initialises the AFIO GPIO pins for the FSMC used to control an 8080 LCD.
+     * @param[in] readTiming The timing structure for this LCD panel in read mode
+     * @param[in] writeTiming The timing structure for this LCD panel in write mode
+     * @param[in] registerAddressLine The address line index used to switch between data and register select. e.g. 16 = A16.
+     * @param[in] resetPin The GPIO pin that corresponds to the TFT reset line.
+     */
+
+    template<class TFsmc>
+    inline void Fsmc16BitAccessMode<TFsmc>::initialise(const Fsmc8080LcdTiming& readTiming,
+                                                       const Fsmc8080LcdTiming& writeTiming,
+                                                       uint16_t registerAddressLine) {
 
       // initialise the FSMC and the NE line (different for each bank)
 
@@ -103,7 +140,7 @@ namespace stm32plus {
 
       // initialise the timing parameters
 
-      initialiseTiming(timing);
+      initialiseTiming(readTiming,writeTiming);
 
       // calculate the data and register addresses
 
@@ -118,7 +155,7 @@ namespace stm32plus {
      */
 
     template<class TFsmc>
-    inline void Fsmc16BitAccessMode<TFsmc>::initialiseTiming(const Fsmc8080LcdTiming& timing) {
+    inline void Fsmc16BitAccessMode<TFsmc>::initialiseTiming(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming) {
 
       enable(false);
 
@@ -134,11 +171,22 @@ namespace stm32plus {
       FSMC_WaitSignalActive=FSMC_WaitSignalActive_BeforeWaitState;
       FSMC_WriteOperation=FSMC_WriteOperation_Enable;
       FSMC_WaitSignal=FSMC_WaitSignal_Disable;
-      FSMC_ExtendedMode=FSMC_ExtendedMode_Disable;
       FSMC_WriteBurst=FSMC_WriteBurst_Disable;
-      FSMC_ReadWriteTimingStruct=const_cast<Fsmc8080LcdTiming *> (&timing);
-      FSMC_WriteTimingStruct=const_cast<Fsmc8080LcdTiming *> (&timing);
       FSMC_AsynchronousWait=FSMC_AsynchronousWait_Disable;
+
+      // extended mode is required only if the user has provided separate
+      // timings for read and write
+
+      if(&readTiming==&writeTiming) {
+        FSMC_ExtendedMode=FSMC_ExtendedMode_Disable;
+        FSMC_ReadWriteTimingStruct=const_cast<Fsmc8080LcdTiming *>(&writeTiming);
+        FSMC_WriteTimingStruct=nullptr;
+      }
+      else {
+        FSMC_ExtendedMode=FSMC_ExtendedMode_Enable;
+        FSMC_ReadWriteTimingStruct=const_cast<Fsmc8080LcdTiming *>(&readTiming);
+        FSMC_WriteTimingStruct=const_cast<Fsmc8080LcdTiming *>(&writeTiming);
+      }
 
       // initialise the FSMC and then enable it
 
