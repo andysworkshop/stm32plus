@@ -16,7 +16,7 @@ namespace stm32plus {
      * Samples for 3.5 inch QDS LCD: 0,0x30,0x36,0x45,0x4,0x16,0x37,0x75,0x77,0x54,0xf,0x0
      */
 
-    class ILI9481Gamma : public DisplayDeviceGamma {
+    class ILI9481Gamma : public DisplayDeviceGamma<uint16_t> {
 
       public:
 

@@ -17,7 +17,7 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class MC2PA8201Gamma : public DisplayDeviceGamma {
+    class MC2PA8201Gamma : public DisplayDeviceGamma<uint16_t> {
 
       public:
 

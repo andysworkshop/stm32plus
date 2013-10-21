@@ -81,6 +81,7 @@
 #include "display/graphic/tft/st7783/ST7783.h"
 #include "display/graphic/tft/lgdp453x/LGDP453x.h"
 #include "display/graphic/tft/hx8352a/HX8352A.h"
+#include "display/graphic/tft/r61523/R61523.h"
 #include "display/graphic/tft/hx8352a/panelTraits/LG_KF700.h"
 
 #include "display/graphic/tft/TftInterfaces.h"

@@ -17,7 +17,7 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class SSD1963Gamma : public DisplayDeviceGamma {
+    class SSD1963Gamma : public DisplayDeviceGamma<uint16_t> {
 
       public:
 

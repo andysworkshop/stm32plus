@@ -18,7 +18,7 @@ namespace stm32plus {
      * 0x7,0x302,0x105,0x206,0x808,0x206,0x504,0x7,0x105,0x808
      */
 
-    class LGDP453xGamma : public DisplayDeviceGamma {
+    class LGDP453xGamma : public DisplayDeviceGamma<uint16_t> {
 
       public:
 

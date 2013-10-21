@@ -17,7 +17,7 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class HX8352AGamma : public DisplayDeviceGamma {
+    class HX8352AGamma : public DisplayDeviceGamma<uint16_t> {
 
       public:
 

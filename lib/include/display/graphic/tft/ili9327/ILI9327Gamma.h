@@ -14,7 +14,7 @@ namespace stm32plus {
      * @brief Gamma values for the ILI9327
      */
 
-    class ILI9327Gamma : public DisplayDeviceGamma {
+    class ILI9327Gamma : public DisplayDeviceGamma<uint16_t> {
 
       public:
 
