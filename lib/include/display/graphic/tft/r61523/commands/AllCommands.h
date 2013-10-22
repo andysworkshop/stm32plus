@@ -36,6 +36,8 @@ namespace stm32plus {
         IDLE_MODE_OFF           = 0x38,
         IDLE_MODE_ON            = 0x39,
         SET_PIXEL_FORMAT        = 0x3a,
+        MCAP                    = 0xb0,
+        SET_FRAME_AND_INTERFACE = 0xb1,
         GAMMA_SET_A             = 0xc8,
         GAMMA_SET_B             = 0xc9,
         GAMMA_SET_C             = 0xca

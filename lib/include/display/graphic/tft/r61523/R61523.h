@@ -7,10 +7,11 @@
 #pragma once
 
 
+#include "display/graphic/tft/r61523/commands/AllCommands.h"
 #include "display/graphic/tft/r61523/R61523Colour.h"
 #include "display/graphic/tft/r61523/R61523Orientation.h"
 #include "display/graphic/tft/r61523/R61523Gamma.h"
-#include "display/graphic/tft/r61523/commands/AllCommands.h"
+#include "display/graphic/tft/r61523/R61523Backlight.h"
 
 
 namespace stm32plus {
@@ -77,19 +78,20 @@ namespace stm32plus {
       _accessMode.writeCommand(r61523::SLEEP_OUT);
       MillisecondTimer::delay(120);
 
+      // enable access to all the manufacturer commands
+
+      _accessMode.writeCommand(r61523::MCAP);
+
       // clear to black
 
       this->unpackColour(0,uc);
       this->moveTo(0,0,this->getWidth()-1,this->getHeight()-1);
       this->fillPixels(static_cast<uint32_t>(this->getWidth())*static_cast<uint32_t>(this->getHeight()),uc);
 
-      // set the orientation
+      // set the orientation and colour depth
 
-      _accessMode.writeCommand(r61523::SET_ADDRESS_MODE,this->getAddressMode());
-
-      // set the colour depth
-
-      _accessMode.writeCommand(r61523::SET_PIXEL_FORMAT,this->getPixelFormat());
+      this->setOrientation();
+      this->setColourDepth();
 
       // display on
 

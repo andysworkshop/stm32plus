@@ -15,14 +15,18 @@ namespace stm32plus {
   namespace display {
 
     /**
-     * R61523 interface: 64K colours, portrait and landscape
+     * R61523 interface: 64K, 262K, 16.7M colours, portrait and landscape
      */
 
     template<class TAccessMode> using R61523_Portrait_64K  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_16BIT,TAccessMode>,TAccessMode>;
     template<class TAccessMode> using R61523_Landscape_64K  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_16BIT,TAccessMode>,TAccessMode>;
 
-//    template<class TAccessMode> using R61523_Portrait_262K  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
-//    template<class TAccessMode> using R61523_Landscape_262K  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+
+    template<class TAccessMode> using R61523_Portrait_262K  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using R61523_Landscape_262K  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_18BIT,TAccessMode>,TAccessMode>;
+
+    template<class TAccessMode> using R61523_Portrait_16M  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_24BIT,TAccessMode>,TAccessMode>;
+    template<class TAccessMode> using R61523_Landscape_16M  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_24BIT,TAccessMode>,TAccessMode>;
 
     /**
      * Graphic terminal modes for the R61523
