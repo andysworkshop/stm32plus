@@ -67,7 +67,7 @@ namespace stm32plus {
 
       _accessMode.writeCommand(r61523::SET_PIXEL_FORMAT,0x7);
 
-      // now set DFM to 1 (2 transfers = 1 pixel) (this is requires MCAP enable)
+      // now set DFM to 1 (2 transfers = 1 pixel) (this requires MCAP enable)
 
       _accessMode.writeCommand(r61523::SET_FRAME_AND_INTERFACE);
       _accessMode.writeData(0x80);
@@ -79,7 +79,7 @@ namespace stm32plus {
      * Unpack the colour from rrggbb to the internal format.
      *
      * 00000000RRRRRRRR+GGGGGGGGBBBBBBBB ->
-     * 00000000RRRRRRRR,GGGGGGGGBBBBBBBB ->
+     * 00000000BBBBBBBB,GGGGGGGGRRRRRRRR ->
      *
      * @param src rrggbb
      * @param dest The unpacked colour structure
@@ -87,8 +87,8 @@ namespace stm32plus {
 
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_24BIT,TAccessMode>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
-      dest.first=src >> 16;
-      dest.second=src;
+      dest.first=src & 0xff;
+      dest.second=(src >> 16) | (src & 0xFF00);
     }
 
 
@@ -103,8 +103,8 @@ namespace stm32plus {
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_24BIT,TAccessMode>::unpackColour(uint8_t red,uint8_t green,uint8_t blue,UnpackedColour& dest) const {
 
-      dest.first=red;
-      dest.second=(static_cast<uint16_t>(green) << 8) | blue;
+      dest.first=blue;
+      dest.second=(static_cast<uint16_t>(green) << 8) | red;
     }
 
 

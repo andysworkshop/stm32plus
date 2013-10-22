@@ -34,6 +34,17 @@ namespace stm32plus {
           DEVICE_CODE = 0x01221523
         };
 
+
+        /**
+         * Possible modes for the tearing effect
+         */
+
+        enum TearingEffectMode {
+          TE_VBLANK,            //!< vertical blank only
+          TE_VBLANK_HBLANK,     //!< vertical and horizontal blank
+        };
+
+
       protected:
         bool _enablePwmPin;
         TAccessMode& _accessMode;
@@ -48,7 +59,9 @@ namespace stm32plus {
         void wake() const;
         void beginWriting() const;
 
-        uint32_t readDeviceIdentifier() const;
+        uint32_t readDeviceCode() const;
+        void enableTearingEffect(TearingEffectMode teMode) const;
+        void disableTearingEffect() const;
     };
 
 
@@ -84,6 +97,7 @@ namespace stm32plus {
       // enable access to all the manufacturer commands
 
       _accessMode.writeCommand(r61523::MCAP);
+      _accessMode.writeData(4);
 
       if(_enablePwmPin) {
 
@@ -169,7 +183,7 @@ namespace stm32plus {
      */
 
     template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-    inline uint32_t R61523<TOrientation,TColourDepth,TAccessMode>::readDeviceIdentifier() const {
+    inline uint32_t R61523<TOrientation,TColourDepth,TAccessMode>::readDeviceCode() const {
 
       uint32_t deviceCode;
 
@@ -184,6 +198,28 @@ namespace stm32plus {
       deviceCode|=static_cast<uint32_t>(_accessMode.readData());
 
       return deviceCode;
+    }
+
+
+    /**
+     * Enable the tearing effect signal
+     */
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    void R61523<TOrientation,TColourDepth,TAccessMode>::enableTearingEffect(TearingEffectMode teMode) const {
+
+      _accessMode.writeCommand(r61523::SET_TEAR_ON);
+      _accessMode.writeData(teMode==TE_VBLANK ? 0 : 1);
+    }
+
+
+    /**
+     * Disable the tearing effect signal
+     */
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    void R61523<TOrientation,TColourDepth,TAccessMode>::disableTearingEffect() const {
+      _accessMode.writeCommand(r61523::SET_TEAR_OFF);
     }
   }
 }

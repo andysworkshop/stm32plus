@@ -87,8 +87,8 @@ namespace stm32plus {
 
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_18BIT,TAccessMode>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
-      dest.first=(src >> 16) & 0xfc;
-      dest.second=(src & 0xfcfc);
+      dest.first=src & 0xfc;
+      dest.second=((src >> 16) | (src & 0xFF00)) & 0xfcfc;
     }
 
 
@@ -103,8 +103,8 @@ namespace stm32plus {
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_18BIT,TAccessMode>::unpackColour(uint8_t red,uint8_t green,uint8_t blue,UnpackedColour& dest) const {
 
-      dest.first=red & 0xfc;
-      dest.second=((static_cast<uint16_t>(green) << 8) | blue) & 0xfcfc;
+      dest.first=blue & 0xfc;
+      dest.second=((static_cast<uint16_t>(green) << 8) | red) & 0xfcfc;
     }
 
 

@@ -30,21 +30,21 @@ namespace stm32plus {
         MEMORY_WRITE            = 0x2c,
         MEMORY_READ             = 0x2e,
         PARTIAL_AREA            = 0x30,
-        TEARING_EFFECT_LINE_OFF = 0x34,
-        TEARING_EFFECT_LINE_ON  = 0x35,
+        SET_TEAR_OFF            = 0x34,
+        SET_TEAR_ON             = 0x35,
         SET_ADDRESS_MODE        = 0x36,
         IDLE_MODE_OFF           = 0x38,
         IDLE_MODE_ON            = 0x39,
         SET_PIXEL_FORMAT        = 0x3a,
         MCAP                    = 0xb0,
-        SET_FRAME_AND_INTERFACE = 0xb1,
+        SET_FRAME_AND_INTERFACE = 0xb3,
         BACKLIGHT_CONTROL_1     = 0xb8,
         BACKLIGHT_CONTROL_2     = 0xb9,
         BACKLIGHT_CONTROL_3     = 0xba,
         DEVICE_CODE_READ        = 0xbf,
         GAMMA_SET_A             = 0xc8,
         GAMMA_SET_B             = 0xc9,
-        GAMMA_SET_C             = 0xca
+        GAMMA_SET_C             = 0xca,
       };
     }
   }

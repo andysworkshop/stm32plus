@@ -47,7 +47,7 @@ using namespace stm32plus::display;
  * And for the backlight, connect together the following
  * two pins on the LCD breakout board:
  *
- * BLPWM => EN
+ * BL_PWM => EN
  *
  * Compatible MCU:
  *   STM32F1
@@ -62,7 +62,7 @@ class R61523Test {
 
   protected:
     typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-    typedef R61523_Portrait_64K<LcdAccessMode> LcdPanel;
+    typedef R61523_Portrait_262K<LcdAccessMode> LcdPanel;
     typedef R61523PwmBacklight<LcdAccessMode> LcdBacklight;
 
     LcdAccessMode *_accessMode;
@@ -84,14 +84,15 @@ class R61523Test {
 #if defined(STM32PLUS_F4)
       Fsmc8080LcdTiming fsmcTiming(3,6);
 #elif defined(STM32PLUS_F1)
-      Fsmc8080LcdTiming fsmcTiming(0,2);
+      Fsmc8080LcdTiming fsmcReadTiming(0,20);
+      Fsmc8080LcdTiming fsmcWriteTiming(0,3);
 #else
 #error Invalid MCU
 #endif
 
       // set up the FSMC with RS=A16 (PD11)
 
-      _accessMode=new LcdAccessMode(fsmcTiming,16,pe[1]);
+      _accessMode=new LcdAccessMode(fsmcReadTiming,fsmcWriteTiming,16,pe[1]);
 
       // declare a panel
 
@@ -111,10 +112,10 @@ class R61523Test {
       *_gl << *_font;
 
       for(;;) {
+        basicColoursTest();
+        jpegTest();
         lzgTest();
         rectTest();
-        jpegTest();
-        basicColoursTest();
         lineTest();
         textTest();
         ellipseTest();
@@ -260,7 +261,7 @@ class R61523Test {
 
       uint16_t i;
 
-      static const uint32_t colours[7]={
+      static const uint32_t colours[8]={
         ColourNames::RED,
         ColourNames::GREEN,
         ColourNames::BLUE,
@@ -268,6 +269,7 @@ class R61523Test {
         ColourNames::MAGENTA,
         ColourNames::YELLOW,
         ColourNames::BLACK,
+        ColourNames::WHITE,
       };
 
       prompt("Basic colours test");
