@@ -12,12 +12,12 @@ namespace stm32plus {
 
 
     /**
-     * Template class holding the specialisation of R61523Colour for 16-bit colours
+     * Template class holding the specialisation of R61523Colour for 24-bit colours
      * @tparam TAccessMode The access mode class (e.g. FSMC)
      */
 
     template<class TAccessMode>
-    class R61523Colour<COLOURS_16BIT,TAccessMode> {
+    class R61523Colour<COLOURS_24BIT,TAccessMode> {
 
       private:
         TAccessMode& _accessMode;
@@ -30,7 +30,7 @@ namespace stm32plus {
         typedef uint32_t tCOLOUR;
 
         struct UnpackedColour {
-          uint16_t packed565;
+          uint16_t first,second;
         };
 
       public:
@@ -51,36 +51,46 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline R61523Colour<COLOURS_16BIT,TAccessMode>::R61523Colour(TAccessMode& accessMode)
+    inline R61523Colour<COLOURS_24BIT,TAccessMode>::R61523Colour(TAccessMode& accessMode)
       : _accessMode(accessMode) {
     }
 
 
     /**
-     * Set the colour depth to 16-bit
+     * Set the colour depth to 24-bit
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::setColourDepth() const {
-      _accessMode.writeCommand(r61523::SET_PIXEL_FORMAT,0x5);
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::setColourDepth() const {
+
+      // set the pixel format to 24bpp
+
+      _accessMode.writeCommand(r61523::SET_PIXEL_FORMAT,0x7);
+
+      // now set DFM to 1 (2 transfers = 1 pixel) (this is requires MCAP enable)
+
+      _accessMode.writeCommand(r61523::SET_FRAME_AND_INTERFACE);
+      _accessMode.writeData(0x80);
+      _accessMode.writeData(0x1 << 4);
     }
 
 
     /**
-     * Unpack the colour from rrggbb to the internal 5-6-5 format. The internal format
-     * is BGR because the U5 Vivaz panels are hardcoded to BGR.
+     * Unpack the colour from rrggbb to the internal format.
      *
-     * 00000000RRRRRRRRGGGGGGGGBBBBBBBB ->
-     * 0000000000000000BBBBBGGGGGGRRRRR
+     * 00000000RRRRRRRR+GGGGGGGGBBBBBBBB ->
+     * 00000000RRRRRRRR,GGGGGGGGBBBBBBBB ->
      *
      * @param src rrggbb
      * @param dest The unpacked colour structure
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
-      dest.packed565=(src & 0xf80000) >> 19 | (src & 0xfc00) >> 5 | (src & 0xf8) << 9;
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
+      dest.first=src >> 16;
+      dest.second=src;
     }
+
 
     /**
      * Unpack the colour from components to the internal format
@@ -91,13 +101,10 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::unpackColour(uint8_t red,uint8_t green,uint8_t blue,UnpackedColour& dest) const {
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::unpackColour(uint8_t red,uint8_t green,uint8_t blue,UnpackedColour& dest) const {
 
-      red &= 0xf8;
-      green &= 0xfc;
-      blue &= 0xf8;
-
-      dest.packed565=(((uint16_t)red) >> 3) | ((uint16_t)green << 3) | (blue << 8);
+      dest.first=red;
+      dest.second=(static_cast<uint16_t>(green) << 8) | blue;
     }
 
 
@@ -108,8 +115,9 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::writePixel(const UnpackedColour& cr) const {
-      _accessMode.writeData(cr.packed565);
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::writePixel(const UnpackedColour& cr) const {
+      _accessMode.writeData(cr.first);
+      _accessMode.writeData(cr.second);
     }
 
 
@@ -121,8 +129,9 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::writePixelAgain(const UnpackedColour& cr) const {
-      _accessMode.writeDataAgain(cr.packed565);
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::writePixelAgain(const UnpackedColour& cr) const {
+      _accessMode.writeData(cr.first);
+      _accessMode.writeData(cr.second);
     }
 
 
@@ -134,10 +143,19 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::fillPixels(uint32_t numPixels,const UnpackedColour& cr) const {
+
+      uint16_t first,second;
 
       _accessMode.writeCommand(r61523::MEMORY_WRITE);
-      _accessMode.writeMultiData(numPixels,cr.packed565);
+
+      first=cr.first;
+      second=cr.second;
+
+      while(numPixels--) {
+        _accessMode.writeData(first);
+        _accessMode.writeData(second);
+      }
     }
 
 
@@ -151,9 +169,9 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::allocatePixelBuffer(uint32_t numPixels,uint8_t*& buffer,uint32_t& bytesPerPixel) const {
-      buffer=new uint8_t[numPixels*2];
-      bytesPerPixel=2;
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::allocatePixelBuffer(uint32_t numPixels,uint8_t*& buffer,uint32_t& bytesPerPixel) const {
+      buffer=new uint8_t[numPixels*4];
+      bytesPerPixel=4;
     }
 
 
@@ -165,8 +183,8 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-      _accessMode.rawTransfer(buffer,numPixels);
+    inline void R61523Colour<COLOURS_24BIT,TAccessMode>::rawTransfer(const void *buffer,uint32_t numPixels) const {
+      _accessMode.rawTransfer(buffer,numPixels*2);
     }
   }
 }

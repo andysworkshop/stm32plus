@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "display/graphic/tft/r61523/commands/AllCommands.h"
-
 
 namespace stm32plus {
   namespace display {
@@ -27,7 +25,7 @@ namespace stm32plus {
       protected:
         R61523Orientation(TAccessMode& accessMode);
 
-        constexpr uint16_t getAddressMode() const;
+        void setOrientation() const;
 
       public:
         constexpr int16_t getWidth() const;
@@ -37,8 +35,6 @@ namespace stm32plus {
         void moveTo(const Rectangle& rc) const;
         void moveX(int16_t xstart,int16_t xend) const;
         void moveY(int16_t ystart,int16_t yend) const;
-
-        void setScrollPosition(int16_t scrollPosition);
     };
 
 
@@ -53,13 +49,12 @@ namespace stm32plus {
 
 
     /**
-     * Get the register setting for portrait mode
-     * @return The address mode register setting for portrait
+     * Set the orientation to landscape
      */
 
     template<class TAccessMode>
-    constexpr inline uint16_t R61523Orientation<LANDSCAPE,TAccessMode>::getAddressMode() const {
-      return 0xe0;             // portrait mode is the default
+    inline void R61523Orientation<LANDSCAPE,TAccessMode>::setOrientation() const {
+      _accessMode.writeCommand(r61523::SET_ADDRESS_MODE,0xe0);
     }
 
 
@@ -146,16 +141,6 @@ namespace stm32plus {
       _accessMode.writeData(ystart & 0xff);
       _accessMode.writeData(yend >> 8);
       _accessMode.writeData(yend & 0xff);
-    }
-
-
-    /**
-     * Set a vertical scroll position (not supported)
-     */
-
-    template<class TAccessMode>
-    inline void R61523Orientation<LANDSCAPE,TAccessMode>::setScrollPosition(int16_t /* scrollPosition */) {
-      // not supported by the R61523
     }
   }
 }

@@ -26,3 +26,5 @@ namespace stm32plus {
  */
 
 #include "display/graphic/tft/r61523/R61523Colour16Specialisation.h"
+#include "display/graphic/tft/r61523/R61523Colour18Specialisation.h"
+#include "display/graphic/tft/r61523/R61523Colour24Specialisation.h"
