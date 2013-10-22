@@ -7,8 +7,8 @@
 #pragma once
 
 
-namespace display {
-  namespace r61523 {
+namespace stm32plus {
+  namespace display {
 
     /**
      * Possible frequencies for the backlight
@@ -37,22 +37,29 @@ namespace display {
      * @tparam TPolarity 0 means signal high is lit, 1 means signal low is lit.
      */
 
-    template<bool TSmooth=true,R61523BacklightFrequency TFrequency=FREQUENCY_13_7,uint8_t TPolarity=0>
+    template<class TAccessMode,bool TSmooth=true,R61523BacklightFrequency TFrequency=FREQUENCY_13_7,uint8_t TPolarity=0>
     class R61523PwmBacklight {
 
+      protected:
+        uint16_t _currentPercentage;
+        TAccessMode& _accessMode;
+
       public:
-        R61523PwmBacklight();
+        R61523PwmBacklight(TAccessMode& accessMode);
 
         void fadeTo(uint16_t newPercentage,int msPerStep);
+        void setPercentage(uint16_t newPercentage);
     };
 
 
     /**
-     * Constructor
+     * Constructor. The device constructor sets up the backlight with 0% cycle
      */
 
-    template<bool TSmooth,R61523BacklightFrequency TFrequency,uint8_t TPolarity>
-    inline R61523PwmBacklight::R61523PwmBacklight() {
+    template<class TAccessMode,bool TSmooth,R61523BacklightFrequency TFrequency,uint8_t TPolarity>
+    inline R61523PwmBacklight<TAccessMode,TSmooth,TFrequency,TPolarity>::R61523PwmBacklight(TAccessMode& accessMode)
+      : _currentPercentage(0),
+        _accessMode(accessMode) {
     }
 
 
@@ -63,13 +70,58 @@ namespace display {
      * @param msPerStep Milliseconds to pause between each step
      */
 
-    template<bool TSmooth,R61523BacklightFrequency TFrequency,uint8_t TPolarity>
-    inline void R61523PwmBacklight::fadeTo(uint16_t newPercentage,int msPerStep) {
+    template<class TAccessMode,bool TSmooth,R61523BacklightFrequency TFrequency,uint8_t TPolarity>
+    inline void R61523PwmBacklight<TAccessMode,TSmooth,TFrequency,TPolarity>::fadeTo(uint16_t newPercentage,int msPerStep) {
+
+      int8_t direction;
+
+      // check for no change
+
+      if(newPercentage==_currentPercentage)
+        return;
+
+      if(TSmooth)
+        setPercentage(newPercentage);     // hardware controlled smooth operation
+      else {
+
+        // control the smooth operation ourselves
+
+        direction=newPercentage>_currentPercentage ? 1 : -1;
+
+        while(newPercentage!=_currentPercentage) {
+          newPercentage+=direction;
+          setPercentage(newPercentage);
+
+          MillisecondTimer::delay(msPerStep);
+        }
+      }
+    }
+
+
+    /**
+     * Set the backlight percentage value
+     * @param newPercentage
+     */
+
+    template<class TAccessMode,bool TSmooth,R61523BacklightFrequency TFrequency,uint8_t TPolarity>
+    inline void R61523PwmBacklight<TAccessMode,TSmooth,TFrequency,TPolarity>::setPercentage(uint16_t newPercentage) {
+
+      uint8_t dutyCycle,dim,polarity;
+
+      // calculate the duty cycle (0..255)
+
+      dutyCycle=(newPercentage*255)/100;
+
+      dim=TSmooth ? 1 : 0;
+      polarity=TPolarity ? 1 << 2 : 0;
+
+      // set the register value
+
+      _accessMode.writeCommand(r61523::BACKLIGHT_CONTROL_2);
+      _accessMode.writeData(0x1);                       // PWMON=1
+      _accessMode.writeData(dutyCycle);                 // BDCV=duty cycle
+      _accessMode.writeData(TFrequency);                // 13.7kHz
+      _accessMode.writeData(0x18 | dim | polarity);     // PWMWM=1, LEDPWME=1
     }
   }
 }
-
-
-// include the specialisations
-
-#include "R61523PwmBacklight.h"

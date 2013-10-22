@@ -38,6 +38,10 @@ namespace stm32plus {
         SET_PIXEL_FORMAT        = 0x3a,
         MCAP                    = 0xb0,
         SET_FRAME_AND_INTERFACE = 0xb1,
+        BACKLIGHT_CONTROL_1     = 0xb8,
+        BACKLIGHT_CONTROL_2     = 0xb9,
+        BACKLIGHT_CONTROL_3     = 0xba,
+        DEVICE_CODE_READ        = 0xbf,
         GAMMA_SET_A             = 0xc8,
         GAMMA_SET_B             = 0xc9,
         GAMMA_SET_C             = 0xca

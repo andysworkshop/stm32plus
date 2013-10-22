@@ -29,14 +29,17 @@ namespace stm32plus {
       public:
         enum {
           SHORT_SIDE = 360,
-          LONG_SIDE = 640
+          LONG_SIDE = 640,
+
+          DEVICE_CODE = 0x01221523
         };
 
       protected:
+        bool _enablePwmPin;
         TAccessMode& _accessMode;
 
       public:
-        R61523(TAccessMode& accessMode);
+        R61523(TAccessMode& accessMode,bool enablePwmPin=true);
 
         void initialise() const;
 
@@ -44,19 +47,24 @@ namespace stm32plus {
         void sleep() const;
         void wake() const;
         void beginWriting() const;
+
+        uint32_t readDeviceIdentifier() const;
     };
 
 
     /**
      * Constructor. Pass the access mode reference up the hierarchy where it'll get stored in the
      * common base class for use by all.
+     * @param accessMode The access mode
+     * @param enablePwmPin true if the PWM backlight out pin is to be enabled
      */
 
     template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
-    inline R61523<TOrientation,TColourDepth,TAccessMode>::R61523(TAccessMode& accessMode)
+    inline R61523<TOrientation,TColourDepth,TAccessMode>::R61523(TAccessMode& accessMode,bool enablePwmPin)
       : R61523Colour<TColourDepth,TAccessMode>(accessMode),
         R61523Orientation<TOrientation,TAccessMode>(accessMode),
-      _accessMode(accessMode) {
+        _enablePwmPin(enablePwmPin),
+        _accessMode(accessMode) {
     }
 
 
@@ -73,14 +81,25 @@ namespace stm32plus {
 
       _accessMode.reset();
 
+      // enable access to all the manufacturer commands
+
+      _accessMode.writeCommand(r61523::MCAP);
+
+      if(_enablePwmPin) {
+
+        // enable the backlight PWM output pin with some default settings and a 0% duty cycle
+
+        _accessMode.writeCommand(r61523::BACKLIGHT_CONTROL_2);
+        _accessMode.writeData(0x1);         // PWMON=1
+        _accessMode.writeData(0);           // BDCV=0 (off)
+        _accessMode.writeData(0x3);         // 13.7kHz
+        _accessMode.writeData(0x18);        // PWMWM=1, LEDPWME=1
+      }
+
       // exit sleep mode
 
       _accessMode.writeCommand(r61523::SLEEP_OUT);
       MillisecondTimer::delay(120);
-
-      // enable access to all the manufacturer commands
-
-      _accessMode.writeCommand(r61523::MCAP);
 
       // clear to black
 
@@ -140,6 +159,31 @@ namespace stm32plus {
     template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
     inline void R61523<TOrientation,TColourDepth,TAccessMode>::beginWriting() const {
       _accessMode.writeCommand(r61523::MEMORY_WRITE);
+    }
+
+
+    /**
+     * Read the device ID code. This can be used to verify that you are talking to an R61523
+     * and that you've got the timings correct for read transactions.
+     * @return The device ID code. It should match DEVICE_CODE.
+     */
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline uint32_t R61523<TOrientation,TColourDepth,TAccessMode>::readDeviceIdentifier() const {
+
+      uint32_t deviceCode;
+
+      // the device code is 4 bytes
+
+      _accessMode.writeCommand(r61523::DEVICE_CODE_READ);
+      _accessMode.readData();
+
+      deviceCode=static_cast<uint32_t>(_accessMode.readData()) << 24;
+      deviceCode|=static_cast<uint32_t>(_accessMode.readData()) << 16;
+      deviceCode|=static_cast<uint32_t>(_accessMode.readData()) << 8;
+      deviceCode|=static_cast<uint32_t>(_accessMode.readData());
+
+      return deviceCode;
     }
   }
 }

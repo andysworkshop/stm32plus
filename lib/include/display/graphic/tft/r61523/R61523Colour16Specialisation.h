@@ -61,7 +61,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::getPixelFormat() const {
+    inline void R61523Colour<COLOURS_16BIT,TAccessMode>::setColourDepth() const {
       _accessMode.writeCommand(r61523::SET_PIXEL_FORMAT,0x5);
     }
 

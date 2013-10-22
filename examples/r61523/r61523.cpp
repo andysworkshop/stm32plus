@@ -22,7 +22,9 @@ using namespace stm32plus::display;
 
 
 /**
- * R61523 LCD test, show a looping graphics demo
+ * R61523 LCD test, show a looping graphics demo. We will make
+ * use of the built-in PWM generator to control the backlight.
+ * This saves us an MCU output pin and a timer peripheral.
  *
  * It's a 16-bit device and we control it in this demo
  * using the FSMC peripheral on bank 1. The wiring
@@ -42,6 +44,11 @@ using namespace stm32plus::display;
  * PE9  => D6    PD9  => D14
  * PE10 => D7    PD10 => D15
  *
+ * And for the backlight, connect together the following
+ * two pins on the LCD breakout board:
+ *
+ * BLPWM => EN
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
@@ -56,6 +63,7 @@ class R61523Test {
   protected:
     typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
     typedef R61523_Portrait_64K<LcdAccessMode> LcdPanel;
+    typedef R61523PwmBacklight<LcdAccessMode> LcdBacklight;
 
     LcdAccessMode *_accessMode;
     LcdPanel *_gl;
@@ -89,10 +97,13 @@ class R61523Test {
 
       _gl=new LcdPanel(*_accessMode);
 
-      // apply gamma settings
+      // create the backlight using default template parameters
 
-//      R61523Gamma gamma(0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03);
-  //    _gl->applyGamma(gamma);
+      LcdBacklight backlight(*_accessMode);
+
+      // fade up the backlight to 100% using the hardware to do the smooth fade
+
+      backlight.setPercentage(100);
 
       // create a font
 

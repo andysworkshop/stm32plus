@@ -61,7 +61,7 @@ namespace stm32plus {
      */
 
     template<class TAccessMode>
-    inline void R61523Colour<COLOURS_18BIT,TAccessMode>::getPixelFormat() const {
+    inline void R61523Colour<COLOURS_18BIT,TAccessMode>::setColourDepth() const {
 
       // set the pixel format to 18bpp
 
