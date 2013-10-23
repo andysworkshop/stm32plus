@@ -47,7 +47,7 @@ namespace stm32plus {
        * Not applicable
        */
 
-      constexpr uint8_t getMaximumValue(uint16_t index) const {
+      static constexpr uint8_t getMaximumValue(uint16_t /* index */) {
         return 255;
       }
    };

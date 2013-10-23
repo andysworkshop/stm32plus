@@ -17,30 +17,24 @@ namespace stm32plus {
      * Used for displays that don't support gamma correction
      */
 
-    class NullDisplayDeviceGamma : public DisplayDeviceGamma<uint8_t> {
+    struct NullDisplayDeviceGamma : public DisplayDeviceGamma<NullDisplayDeviceGamma,uint8_t> {
 
-      public:
-        NullDisplayDeviceGamma();
+      /**
+       * Constructor
+       */
 
-        constexpr uint8_t getMaximumValue(uint16_t /* index */) const;
+      NullDisplayDeviceGamma()
+        : DisplayDeviceGamma(1) {
+      }
+
+
+      /**
+       * Get the max value per gamma
+       */
+
+      static constexpr uint8_t getMaximumValue(uint16_t /* index */) {
+        return 0;
+      }
     };
-
-
-    /**
-     * Constructor
-     */
-
-    inline NullDisplayDeviceGamma::NullDisplayDeviceGamma()
-      : DisplayDeviceGamma(1) {}
-    }
-
-
-    /**
-     * Get the max value per gamma
-     */
-
-    inline constexpr uint8_t getMaximumValue(uint16_t /* index */) const {
-      return 0;
-    }
   }
 }

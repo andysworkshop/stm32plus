@@ -144,7 +144,7 @@ namespace stm32plus {
 
       applyGamma(r61523::GAMMA_SET_A,&gamma[0*13]);
       applyGamma(r61523::GAMMA_SET_B,&gamma[2*13]);
-      applyGamma(r61523::GAMMA_SET_B,&gamma[4*13]);
+      applyGamma(r61523::GAMMA_SET_C,&gamma[4*13]);
     }
 
 

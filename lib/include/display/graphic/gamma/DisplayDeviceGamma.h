@@ -32,7 +32,8 @@ namespace stm32plus {
       public:
         uint16_t getGammaCount();
         T& operator[](int pos);
-        uint8_t getMaximumValue(uint16_t index) const;
+
+        static uint16_t getMaximumValue(uint16_t index);
     };
 
 
@@ -73,8 +74,8 @@ namespace stm32plus {
      */
 
     template<class TImpl,typename T>
-    inline uint8_t DisplayDeviceGamma<TImpl,T>::getMaximumValue(uint16_t index) const {
-      return static_cast<TImpl *>(this)->getMaximumValue(index);
+    inline uint16_t DisplayDeviceGamma<TImpl,T>::getMaximumValue(uint16_t index) {
+      return TImpl::getMaximumValue(index);
     }
   }
 }

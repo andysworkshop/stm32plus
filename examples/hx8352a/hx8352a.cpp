@@ -6,7 +6,6 @@
 
 #include "config/stm32plus.h"
 #include "config/display/tft.h"
-#include "config/usart.h"
 
 
 extern uint32_t BulbPixelsSize,BulbPixels;

@@ -40,6 +40,16 @@ namespace stm32plus {
         _gamma[8]=g9_;
         _gamma[9]=g10_;
       }
+
+
+      /**
+       * Get the maximum value that a gamma value can have
+       * @return the maximum value
+       */
+
+      static constexpr uint16_t getMaximumValue(uint16_t /* index */) {
+        return 4095;
+      }
     };
   }
 }

@@ -28,13 +28,12 @@ namespace stm32plus {
         volatile uint16_t *_registerAddress;
         GpioPinRef _resetPin;
 
-      protected:
-        void initialise(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine);
-        void initialiseTiming(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming);
-
       public:
         Fsmc16BitAccessMode(const Fsmc8080LcdTiming& timing,uint16_t registerAddressLine,const GpioPinRef& resetPin);
         Fsmc16BitAccessMode(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine,const GpioPinRef& resetPin);
+
+        void initialise(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine);
+        void initialiseTiming(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming);
 
         void enable(bool enable);
         void reset();

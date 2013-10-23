@@ -93,7 +93,7 @@ class SSD1963Test {
       // the reset sequence is complete but the SSD1963 is special in that the reset sequence is
       // done at a slow speed so now we have to speed up the FSMC to get optimum performance
 
-      _accessMode->initialiseTiming(fsmcTiming);
+      _accessMode->initialiseTiming(fsmcTiming,fsmcTiming);
 
       // apply gamma settings (zero = no curve selected)
 
