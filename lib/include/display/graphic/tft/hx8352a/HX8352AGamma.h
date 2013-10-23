@@ -17,33 +17,31 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class HX8352AGamma : public DisplayDeviceGamma<uint16_t> {
+    struct HX8352AGamma : DisplayDeviceGamma<HX8352AGamma,uint16_t> {
 
-      public:
+    /**
+     * Constructor. The HX8352A takes 12 gamma values. The constructor must be supplied with those values.
+     * Example: 0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03
+     */
 
-      /**
-       * Constructor. The HX8352A takes 12 gamma values. The constructor must be supplied with those values.
-       * Example: 0xA0,0x03,0x00,0x45,0x03,0x47,0x23,0x77,0x01,0x1F,0x0F,0x03
-       */
+      HX8352AGamma(
+          uint16_t g1,uint16_t g2,uint16_t g3,uint16_t g4,uint16_t g5,uint16_t g6,
+          uint16_t g7,uint16_t g8,uint16_t g9,uint16_t g10,uint16_t g11,uint16_t g12)
+            : DisplayDeviceGamma(12) {
 
-        HX8352AGamma(
-            uint16_t g1,uint16_t g2,uint16_t g3,uint16_t g4,uint16_t g5,uint16_t g6,
-            uint16_t g7,uint16_t g8,uint16_t g9,uint16_t g10,uint16_t g11,uint16_t g12)
-              : DisplayDeviceGamma(12) {
-
-          _gamma[0]=g1;
-          _gamma[1]=g2;
-          _gamma[2]=g3;
-          _gamma[3]=g4;
-          _gamma[4]=g5;
-          _gamma[5]=g6;
-          _gamma[6]=g7;
-          _gamma[7]=g8;
-          _gamma[8]=g9;
-          _gamma[9]=g10;
-          _gamma[10]=g11;
-          _gamma[11]=g12;
-        }
+        _gamma[0]=g1;
+        _gamma[1]=g2;
+        _gamma[2]=g3;
+        _gamma[3]=g4;
+        _gamma[4]=g5;
+        _gamma[5]=g6;
+        _gamma[6]=g7;
+        _gamma[7]=g8;
+        _gamma[8]=g9;
+        _gamma[9]=g10;
+        _gamma[10]=g11;
+        _gamma[11]=g12;
+      }
     };
   }
 }

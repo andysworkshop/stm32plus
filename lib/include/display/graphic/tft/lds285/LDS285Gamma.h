@@ -17,19 +17,25 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class LDS285Gamma : public DisplayDeviceGamma<uint16_t> {
+    struct LDS285Gamma : DisplayDeviceGamma<LDS285Gamma,uint16_t> {
 
-      public:
+    /**
+     * Constructor. The LDS285 takes 1 gamma value index. The constructor must be supplied with that value
+     * that can range between 0..3
+     */
+
+      LDS285Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
+        _gamma[0]=gammaIndex;
+      }
+
 
       /**
-       * Constructor. The LDS285 takes 1 gamma value index. The constructor must be supplied with that value
-       * that can range between 0..3
+       * Not applicable
        */
 
-        LDS285Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
-          _gamma[0]=gammaIndex;
-        }
+      constexpr uint8_t getMaximumValue(uint16_t index) const {
+        return 0;
+      }
     };
-
   }
 }

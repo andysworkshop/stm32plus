@@ -19,7 +19,7 @@ namespace stm32plus {
      * is dependent on the controller and the values of the gammas is dependent on the panel.
      */
 
-    template<class T>
+    template<class TImpl,typename T>
     class DisplayDeviceGamma {
 
       protected:
@@ -27,30 +27,54 @@ namespace stm32plus {
         uint16_t _lcdGammaCount;
 
       protected:
-        DisplayDeviceGamma(int count) : _gamma(count) {
-        }
+        DisplayDeviceGamma(int count);
 
       public:
-
-        virtual ~DisplayDeviceGamma() {}
-
-        /**
-         * Get the number of gammas
-         * @return The number of gammas supported by this device.
-         */
-
-        uint16_t getGammaCount() {
-          return _gamma.getSize();
-        }
-
-        /**
-         * [] operator. Get a modifiable gamma value.
-         * @return a reference to the gamma entry
-         */
-
-        T& operator[](int pos) {
-          return _gamma[pos];
-        }
+        uint16_t getGammaCount();
+        T& operator[](int pos);
+        uint8_t getMaximumValue(uint16_t index) const;
     };
+
+
+    /**
+     * Constructor
+     */
+
+    template<class TImpl,typename T>
+    inline DisplayDeviceGamma<TImpl,T>::DisplayDeviceGamma(int count)
+      : _gamma(count) {
+    }
+
+    /**
+     * Get the number of gammas
+     * @return The number of gammas supported by this device.
+     */
+
+    template<class TImpl,typename T>
+    inline uint16_t DisplayDeviceGamma<TImpl,T>::getGammaCount() {
+      return _gamma.getSize();
+    }
+
+
+    /**
+     * [] operator. Get a modifiable gamma value.
+     * @return a reference to the gamma entry
+     */
+
+    template<class TImpl,typename T>
+    inline T& DisplayDeviceGamma<TImpl,T>::operator[](int pos) {
+      return _gamma[pos];
+    }
+
+
+    /**
+     * Get the maximum value that a particular gamma value can have. Many panels
+     * support only a small number of bits per value
+     */
+
+    template<class TImpl,typename T>
+    inline uint8_t DisplayDeviceGamma<TImpl,T>::getMaximumValue(uint16_t index) const {
+      return static_cast<TImpl *>(this)->getMaximumValue(index);
+    }
   }
 }

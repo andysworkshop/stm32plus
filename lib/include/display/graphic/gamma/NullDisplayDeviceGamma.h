@@ -20,8 +20,27 @@ namespace stm32plus {
     class NullDisplayDeviceGamma : public DisplayDeviceGamma<uint8_t> {
 
       public:
-        NullDisplayDeviceGamma() : DisplayDeviceGamma(1) {}
-        virtual ~NullDisplayDeviceGamma() {}
+        NullDisplayDeviceGamma();
+
+        constexpr uint8_t getMaximumValue(uint16_t /* index */) const;
     };
+
+
+    /**
+     * Constructor
+     */
+
+    inline NullDisplayDeviceGamma::NullDisplayDeviceGamma()
+      : DisplayDeviceGamma(1) {}
+    }
+
+
+    /**
+     * Get the max value per gamma
+     */
+
+    inline constexpr uint8_t getMaximumValue(uint16_t /* index */) const {
+      return 0;
+    }
   }
 }

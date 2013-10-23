@@ -55,6 +55,8 @@ namespace stm32plus {
         void initialise() const;
 
         void applyGamma(R61523Gamma& gamma) const;
+        void applyGamma(uint16_t command,uint8_t *baseAddress) const;
+        void applyGamma(uint8_t *values) const;
         void sleep() const;
         void wake() const;
         void beginWriting() const;
@@ -139,6 +141,34 @@ namespace stm32plus {
 
     template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
     inline void R61523<TOrientation,TColourDepth,TAccessMode>::applyGamma(R61523Gamma& gamma) const {
+
+      applyGamma(r61523::GAMMA_SET_A,&gamma[0*13]);
+      applyGamma(r61523::GAMMA_SET_B,&gamma[2*13]);
+      applyGamma(r61523::GAMMA_SET_B,&gamma[4*13]);
+    }
+
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void R61523<TOrientation,TColourDepth,TAccessMode>::applyGamma(uint16_t command,uint8_t *baseAddress) const {
+
+      _accessMode.writeCommand(command);
+      applyGamma(baseAddress);
+      applyGamma(baseAddress+13);
+    }
+
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void R61523<TOrientation,TColourDepth,TAccessMode>::applyGamma(uint8_t *values) const {
+
+      _accessMode.writeData(values[0]);
+      _accessMode.writeData(values[1]);
+      _accessMode.writeData(values[3] << 4 | values[2]);
+      _accessMode.writeData(values[5] << 4 | values[4]);
+      _accessMode.writeData(values[6]);
+      _accessMode.writeData(values[8] << 4 | values[7]);
+      _accessMode.writeData(values[10] << 4 | values[9]);
+      _accessMode.writeData(values[11]);
+      _accessMode.writeData(values[12]);
     }
 
 

@@ -17,19 +17,25 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class MC2PA8201Gamma : public DisplayDeviceGamma<uint16_t> {
-
-      public:
+    struct MC2PA8201Gamma : DisplayDeviceGamma<MC2PA8201Gamma,uint16_t> {
 
       /**
        * Constructor. The MC2PA801 takes 1 gamma value index. The constructor must be supplied with that value
        * that can range between 0..3
        */
 
-        MC2PA8201Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
-          _gamma[0]=gammaIndex;
-        }
-    };
+      MC2PA8201Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
+        _gamma[0]=gammaIndex;
+      }
 
+
+      /**
+       * Not applicable
+       */
+
+      constexpr uint8_t getMaximumValue(uint16_t index) const {
+        return 0;
+      }
+    };
   }
 }

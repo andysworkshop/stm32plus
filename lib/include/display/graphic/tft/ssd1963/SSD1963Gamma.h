@@ -17,9 +17,7 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class SSD1963Gamma : public DisplayDeviceGamma<uint16_t> {
-
-      public:
+    struct SSD1963Gamma : DisplayDeviceGamma<SSD1963Gamma,uint16_t> {
 
       /**
        * Constructor. The SSD1963 takes 1 gamma value index. The constructor must be supplied with that value
