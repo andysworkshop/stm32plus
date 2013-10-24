@@ -61,7 +61,7 @@ class R61523Test {
 
   protected:
     typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-    typedef R61523_Portrait_16M<LcdAccessMode> LcdPanel;
+    typedef R61523_Portrait_64K<LcdAccessMode> LcdPanel;
     typedef R61523PwmBacklight<LcdAccessMode> LcdBacklight;
 
     LcdAccessMode *_accessMode;
