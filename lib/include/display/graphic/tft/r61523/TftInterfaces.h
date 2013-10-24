@@ -29,10 +29,45 @@ namespace stm32plus {
     template<class TAccessMode> using R61523_Landscape_16M  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_24BIT,TAccessMode>,TAccessMode>;
 
     /**
-     * Graphic terminal modes for the R61523
+     * Graphic terminal modes for the R61523 (no hardware scrolling either orientation)
      */
 
     template<class TDevice> using R61523_Terminal_Portrait = GraphicTerminal<TDevice,false>;
     template<class TDevice> using R61523_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+
+
+#if defined(STM32PLUS_F1)
+
+    /**
+     * The optimised GPIO access mode is available for the 64K depths at max 72Mhz HCLK
+     */
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,30,30>;
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,72,30,30>;
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_16M=Gpio16BitAccessMode<TPinPackage,COLOURS_24BIT,72,30,30>;
+
+#elif(defined(STM32PLUS_F4))
+
+    /**
+     * The optimised GPIO access mode is available for the 64K depths at max 168Mhz HCLK
+     */
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,168,30,30>;
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,168,30,30>;
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_16M=Gpio16BitAccessMode<TPinPackage,COLOURS_24BIT,168,30,30>;
+
+#else
+#error unsupported MCU
+#endif
   }
 }
