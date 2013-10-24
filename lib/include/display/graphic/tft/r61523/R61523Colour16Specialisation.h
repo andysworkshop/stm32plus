@@ -79,7 +79,7 @@ namespace stm32plus {
 
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_16BIT,TAccessMode>::unpackColour(tCOLOUR src,UnpackedColour& dest) const {
-      dest.packed565=(src & 0xf80000) >> 19 | (src & 0xfc00) >> 5 | (src & 0xf8) << 9;
+      dest.packed565=(src & 0xf80000) >> 19 | (src & 0xfc00) >> 5 | (src & 0xf8) << 8;
     }
 
     /**
