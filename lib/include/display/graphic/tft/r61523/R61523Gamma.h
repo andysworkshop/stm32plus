@@ -18,28 +18,12 @@ namespace stm32plus {
 
       /**
        * Constructor
-       * @param redPositive
-       * @param redNegative
-       * @param greenPositive
-       * @param greenNegative
-       * @param bluePositive
-       * @param blueNegative
+       * @param levels
        */
 
-      R61523Gamma(uint8_t *redPositive,
-                  uint8_t *redNegative,
-                  uint8_t *greenPositive,
-                  uint8_t *greenNegative,
-                  uint8_t *bluePositive,
-                  uint8_t *blueNegative)
-       : DisplayDeviceGamma(6*13) {
-
-        memcpy(&_gamma[0*13],redPositive,13);
-        memcpy(&_gamma[1*13],redNegative,13);
-        memcpy(&_gamma[2*13],greenPositive,13);
-        memcpy(&_gamma[3*13],greenNegative,13);
-        memcpy(&_gamma[4*13],bluePositive,13);
-        memcpy(&_gamma[5*13],blueNegative,13);
+      R61523Gamma(uint8_t *levels)
+       : DisplayDeviceGamma(13) {
+        memcpy(&_gamma[0],levels,13);
       }
 
 

@@ -100,14 +100,8 @@ class R61523Test {
       // apply the gamma curve. Note that gammas are panel specific. This curve is appropriate
       // to a replacement (non-original) panel obtained from ebay.
 
-      uint8_t rp[13]={ 0,0xf,1,3,1,0,0,0xf,0xc,6,0xf,5,0 };
-      uint8_t rn[13]={ 0xb,0,0,0,0,0,4,0,0,0,3,0,0 };
-      uint8_t gp[13]={ 4,4,0,0,0,0,3,7,8,3,4,7,0xa };
-      uint8_t gn[13]={ 3,0,0,0,0,0,0,0,8,0,0,0,0 };
-      uint8_t bp[13]={ 0,0,0,0,0,0xa,3,4,4,4,0xe,4,4 };
-      uint8_t bn[13]={ 0,0,1,0,0,0,0xe,0,0xe,0xf,0,7,4 };
-
-      R61523Gamma gamma(rp,rn,gp,gn,bp,bn);
+      uint8_t levels[13]={ 0xe,0,1,1,0,0,0,0,0,0,3,4,0 };
+      R61523Gamma gamma(levels);
       _gl->applyGamma(gamma);
 
       // create the backlight using default template parameters
@@ -120,18 +114,21 @@ class R61523Test {
 
       // create a font
 
+      _gl->setBackground(0);
+      _gl->clearScreen();
+
       _font=new Font_PROGGYCLEAN16;
       *_gl << *_font;
 
       for(;;) {
-        textTest();
         basicColoursTest();
         jpegTest();
         lzgTest();
+        gradientTest();
+        textTest();
         rectTest();
         lineTest();
         ellipseTest();
-        gradientTest();
         clearTest();
         sleepTest();
       }
