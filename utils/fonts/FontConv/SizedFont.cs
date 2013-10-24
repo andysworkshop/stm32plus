@@ -189,6 +189,7 @@ namespace FontConv {
       str=Path.GetFileNameWithoutExtension(str);
 
       this.Name=str.ToUpperInvariant().Replace(" ","_");
+      this.Name=this.Name.Replace("-","_");
     }
 
 

@@ -120,16 +120,16 @@ class R61523Test {
 
       // create a font
 
-      _font=new Font_VOLTER__28GOLDFISH_299;
+      _font=new Font_PROGGYCLEAN16;
       *_gl << *_font;
 
       for(;;) {
+        textTest();
         basicColoursTest();
         jpegTest();
         lzgTest();
         rectTest();
         lineTest();
-        textTest();
         ellipseTest();
         gradientTest();
         clearTest();

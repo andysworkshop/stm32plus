@@ -37,10 +37,15 @@
 
 // include the sample fonts
 
-#include "display/graphic/Font_apple_8.h"
-#include "display/graphic/Font_volter_goldfish_9.h"
-#include "display/graphic/Font_kyrou9_bold_8.h"
-#include "display/graphic/Font_kyrou9_regular_8.h"
+#include "display/graphic/fonts/Font_apple_8.h"
+#include "display/graphic/fonts/Font_volter_goldfish_9.h"
+#include "display/graphic/fonts/Font_kyrou9_bold_8.h"
+#include "display/graphic/fonts/Font_kyrou9_regular_8.h"
+#include "display/graphic/fonts/Font_atari_st_16.h"
+#include "display/graphic/fonts/Font_dos_16.h"
+#include "display/graphic/fonts/Font_nintendo_ds_16.h"
+#include "display/graphic/fonts/Font_pixelade_13.h"
+#include "display/graphic/fonts/Font_proggy_clean_16.h"
 
 #include "display/graphic/gamma/DisplayDeviceGamma.h"
 #include "display/graphic/gamma/NullDisplayDeviceGamma.h"
