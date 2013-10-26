@@ -28,6 +28,7 @@
      */
     private void InitializeComponent()
     {
+      this.components = new System.ComponentModel.Container();
       System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(FormMain));
       this._charsPanel = new System.Windows.Forms.FlowLayoutPanel();
       this._previewPanel = new System.Windows.Forms.FlowLayoutPanel();
@@ -64,6 +65,7 @@
       this.groupBox4 = new System.Windows.Forms.GroupBox();
       this._openFontFileDialog = new System.Windows.Forms.OpenFileDialog();
       this._logo = new System.Windows.Forms.PictureBox();
+      this._tooltip = new System.Windows.Forms.ToolTip(this.components);
       ((System.ComponentModel.ISupportInitialize)(this._charSpace)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this._extraLines)).BeginInit();
       ((System.ComponentModel.ISupportInitialize)(this._xoffset)).BeginInit();
@@ -527,6 +529,7 @@
     private System.Windows.Forms.Button _btnSelectAlpha;
     private System.Windows.Forms.Button _btnSelect7Bit;
     private System.Windows.Forms.PictureBox _logo;
+    private System.Windows.Forms.ToolTip _tooltip;
   }
 }
 

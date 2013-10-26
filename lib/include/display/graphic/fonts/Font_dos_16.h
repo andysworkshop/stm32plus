@@ -11,7 +11,7 @@ namespace stm32plus { namespace display {
   class Font_PERFECT_DOS_VGA_437_WIN16 : public Font {
     public:
       Font_PERFECT_DOS_VGA_437_WIN16()
-        : Font(32,96,15,0,FDEF_PERFECT_DOS_VGA_437_WIN_CHAR) {
+        : Font(32,143,15,0,FDEF_PERFECT_DOS_VGA_437_WIN_CHAR) {
       }
   };
 } }

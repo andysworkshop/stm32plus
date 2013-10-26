@@ -15,14 +15,15 @@ namespace stm32plus {
      * Constructor
      */
 
-    FontBase::FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters) {
+    FontBase::FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters)
+      : _fontType(type),
+        _characters(characters),
+        _characterCount(characterCount),
+        _firstCharacter(firstChar),
+        _height(height),
+        _characterSpacing(spacing) {
 
-      _fontType=type;
-      _characterCount=characterCount;
-      _firstCharacter=firstChar;
-      _height=height;
-      _characterSpacing=spacing;
-      _characters=characters;
+      _lastCharacter=_characters[characterCount-1].Code;
     }
 
 
@@ -40,9 +41,11 @@ namespace stm32plus {
 
       ptr=nullptr;
 
-      if(character-_firstCharacter<_characterCount) {
+      if(character>=_firstCharacter && character<_lastCharacter) {
 
-        if(_characters[character-_firstCharacter].Code==character)
+        // the character is in range and indexable, is it in sequential place?
+
+        if(character-_firstCharacter<_characterCount && _characters[character-_firstCharacter].Code==character)
           ptr=&_characters[character-_firstCharacter];
         else {
 
@@ -60,7 +63,7 @@ namespace stm32plus {
       }
 
       if(ptr==nullptr)
-        ptr=&_characters[0];
+        ptr=&_characters[0];        // didn't found it, default to first char so user knows something is wrong
 
       // set up the return data
 

@@ -28,11 +28,12 @@ namespace stm32plus {
         } _fontType;
 
       private:
+        const struct FontChar * _characters;
         uint8_t _characterCount;
+        uint8_t _firstCharacter;
         uint8_t _height;
         int8_t _characterSpacing;
-        uint8_t _firstCharacter;
-        const struct FontChar * _characters;
+        uint8_t _lastCharacter;
 
       public:
         FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters);
