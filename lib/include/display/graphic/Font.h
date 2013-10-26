@@ -30,19 +30,37 @@ namespace stm32plus {
       private:
         uint8_t _characterCount;
         uint8_t _height;
-        uint8_t _characterSpacing;
+        int8_t _characterSpacing;
         uint8_t _firstCharacter;
         const struct FontChar * _characters;
 
       public:
-        FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,uint8_t spacing,const struct FontChar *characters);
+        FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters);
 
         void getCharacter(uint8_t character,const FontChar*& fc) const;
         uint16_t getId() const;
         uint8_t getHeight() const;
-        uint8_t getCharacterSpacing() const;
+        int8_t getCharacterSpacing() const;
         FontType getType() const;
     };
+
+
+    /**
+     * Get the font height.
+     */
+
+    inline uint8_t FontBase::getHeight() const {
+      return _height;
+    }
+
+
+    /**
+     * Get the character spacing
+     */
+
+    inline int8_t FontBase::getCharacterSpacing() const {
+      return _characterSpacing;
+    }
 
 
     /**
@@ -52,7 +70,7 @@ namespace stm32plus {
 
     class Font : public FontBase {
       public:
-        Font(uint8_t firstChar,uint8_t characterCount,uint8_t height,uint8_t spacing,const struct FontChar *characters)
+        Font(uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters)
           : FontBase(FONT_BITMAP,firstChar,characterCount,height,spacing,characters) {
         }
     };
@@ -64,7 +82,7 @@ namespace stm32plus {
 
     class LzgFont : public FontBase {
       public:
-        LzgFont(uint8_t firstChar,uint8_t characterCount,uint8_t height,uint8_t spacing,const struct FontChar *characters)
+        LzgFont(uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters)
           : FontBase(FONT_LZG,firstChar,characterCount,height,spacing,characters) {
         }
     };

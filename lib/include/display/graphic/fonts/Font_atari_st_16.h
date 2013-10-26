@@ -11,7 +11,7 @@ namespace stm32plus { namespace display {
   class Font_ATARIST8X16SYSTEMFONT16 : public Font {
     public:
       Font_ATARIST8X16SYSTEMFONT16()
-        : Font(32,96,16,-4,FDEF_ATARIST8X16SYSTEMFONT_CHAR) {
+        : Font(32,96,16,0,FDEF_ATARIST8X16SYSTEMFONT_CHAR) {
       }
   };
 } }

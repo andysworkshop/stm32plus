@@ -15,7 +15,7 @@ namespace stm32plus {
      * Constructor
      */
 
-    FontBase::FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,uint8_t spacing,const struct FontChar *characters) {
+    FontBase::FontBase(FontType type,uint8_t firstChar,uint8_t characterCount,uint8_t height,int8_t spacing,const struct FontChar *characters) {
 
       _fontType=type;
       _characterCount=characterCount;
@@ -65,23 +65,6 @@ namespace stm32plus {
       // set up the return data
 
       fc=ptr;
-    }
-
-    /**
-     * Get the font height.
-     */
-
-    uint8_t FontBase::getHeight() const {
-      return _height;
-    }
-
-
-    /**
-     * Get the character spacing
-     */
-
-    uint8_t FontBase::getCharacterSpacing() const {
-      return _characterSpacing;
     }
   }
 }

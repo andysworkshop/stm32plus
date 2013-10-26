@@ -104,6 +104,11 @@ class R61523Test {
       R61523Gamma gamma(levels);
       _gl->applyGamma(gamma);
 
+      // clear to black
+
+      _gl->setBackground(0);
+      _gl->clearScreen();
+
       // create the backlight using default template parameters
 
       LcdBacklight backlight(*_accessMode);
@@ -112,10 +117,9 @@ class R61523Test {
 
       backlight.setPercentage(100);
 
-      // create a font
-
-      _gl->setBackground(0);
-      _gl->clearScreen();
+      // Create a font. A wide range of sample fonts are available. See the
+      // "lib/include/display/graphic/fonts" directory for a full list and
+      // you can always download and convert your own using the FontConv utility.
 
       _font=new Font_PROGGYCLEAN16;
       *_gl << *_font;

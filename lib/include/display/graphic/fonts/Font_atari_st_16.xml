@@ -1,10 +1,10 @@
 <FontConv>
-  <Filename>C:\Users\andy\Desktop\New folder (2)\AtariST8x16SystemFont.ttf</Filename>
+  <Filename>P:\docs\source\stm32plus\lib\resources\ttf\AtariST8x16SystemFont.ttf</Filename>
   <Size>16</Size>
   <XOffset>0</XOffset>
   <YOffset>-1</YOffset>
   <ExtraLines>0</ExtraLines>
-  <CharSpace>-4</CharSpace>
+  <CharSpace>0</CharSpace>
   <Chars>
     <Char>32</Char>
     <Char>33</Char>

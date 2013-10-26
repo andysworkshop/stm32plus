@@ -96,13 +96,12 @@ class SSD1289Test {
 
       backlight.fadeTo(100,4);
 
-      // create a font
+      // Create a font. A wide range of sample fonts are available. See the
+      // "lib/include/display/graphic/fonts" directory for a full list and
+      // you can always download and convert your own using the FontConv utility.
 
       _font=new Font_VOLTER__28GOLDFISH_299;
       *_gl << *_font;
-
-      _gl->setForeground(ColourNames::RED);
-      _gl->fillRectangle(Rectangle(10,20,5,10));
 
       for(;;) {
         jpegTest();
