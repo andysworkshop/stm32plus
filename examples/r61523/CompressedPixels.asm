@@ -21,21 +21,21 @@
 	.global GlobePixelsSize
 
 BulbPixels:
-	.incbin "lzg/r61523/bulb.r61523.64.lzg"
+	.incbin "lzg/r61523/bulb.r61523.16.lzg"
 	BulbPixelsSize=.-BulbPixels
 
 AudioPixels:
-	.incbin "lzg/r61523/audio.r61523.64.lzg"
+	.incbin "lzg/r61523/audio.r61523.16.lzg"
 	AudioPixelsSize=.-AudioPixels
 
 FlagPixels:
-	.incbin "lzg/r61523/flag.r61523.64.lzg"
+	.incbin "lzg/r61523/flag.r61523.16.lzg"
 	FlagPixelsSize=.-FlagPixels
 
 DocPixels:
-	.incbin "lzg/r61523/doc.r61523.64.lzg"
+	.incbin "lzg/r61523/doc.r61523.16.lzg"
 	DocPixelsSize=.-DocPixels
 
 GlobePixels:
-	.incbin "lzg/r61523/globe.r61523.64.lzg"
+	.incbin "lzg/r61523/globe.r61523.16.lzg"
 	GlobePixelsSize=.-GlobePixels

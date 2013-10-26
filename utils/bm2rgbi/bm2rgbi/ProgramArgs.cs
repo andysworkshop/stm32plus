@@ -127,6 +127,8 @@ namespace bm2rgbi {
       Console.WriteLine("  st7783 64");
       Console.WriteLine("  st7783 262");
       Console.WriteLine("  r61523 64");
+      Console.WriteLine("  r61523 262");
+      Console.WriteLine("  r61523 16");
 
       Environment.Exit(0);
     }

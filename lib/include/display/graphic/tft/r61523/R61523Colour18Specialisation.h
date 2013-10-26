@@ -170,8 +170,8 @@ namespace stm32plus {
 
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_18BIT,TAccessMode>::allocatePixelBuffer(uint32_t numPixels,uint8_t*& buffer,uint32_t& bytesPerPixel) const {
-      buffer=new uint8_t[numPixels*4];
-      bytesPerPixel=4;
+      buffer=new uint8_t[numPixels*3];
+      bytesPerPixel=3;
     }
 
 
@@ -184,7 +184,7 @@ namespace stm32plus {
 
     template<class TAccessMode>
     inline void R61523Colour<COLOURS_18BIT,TAccessMode>::rawTransfer(const void *buffer,uint32_t numPixels) const {
-      _accessMode.rawTransfer(buffer,numPixels*2);
+      _accessMode.rawTransfer(buffer,numPixels*3);
     }
   }
 }

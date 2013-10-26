@@ -61,7 +61,7 @@ class R61523Test {
 
   protected:
     typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-    typedef R61523_Portrait_64K<LcdAccessMode> LcdPanel;
+    typedef R61523_Landscape_16M<LcdAccessMode> LcdPanel;
     typedef R61523PwmBacklight<LcdAccessMode> LcdBacklight;
 
     LcdAccessMode *_accessMode;
@@ -84,7 +84,7 @@ class R61523Test {
       Fsmc8080LcdTiming fsmcTiming(3,6);
 #elif defined(STM32PLUS_F1)
       Fsmc8080LcdTiming fsmcReadTiming(0,20);
-      Fsmc8080LcdTiming fsmcWriteTiming(0,3);
+      Fsmc8080LcdTiming fsmcWriteTiming(0,4);
 #else
 #error Invalid MCU
 #endif
@@ -121,9 +121,9 @@ class R61523Test {
       *_gl << *_font;
 
       for(;;) {
-        basicColoursTest();
-        jpegTest();
         lzgTest();
+        jpegTest();
+        basicColoursTest();
         gradientTest();
         textTest();
         rectTest();
@@ -155,16 +155,16 @@ class R61523Test {
 
     void jpegTest() {
 
-      // only draw in portrait mode and if it can fit on screen
+      // only draw if it can fit on screen
 
-      if(_gl->getHeight()>_gl->getWidth() && _gl->getHeight()>=320 && _gl->getWidth()>=240) {
+      if(_gl->getHeight()==360 && _gl->getWidth()==640) {
 
         prompt("JPEG bitmap test");
 
         // draw it centered
 
         LinearBufferInputOutputStream compressedData((uint8_t *)&JpegTest0Pixels,(uint32_t)&JpegTest0PixelsSize);
-        _gl->drawJpeg(Rectangle((_gl->getWidth()-240)/2,(_gl->getHeight()-320)/2,240,320),compressedData);
+        _gl->drawJpeg(Rectangle(0,0,640,360),compressedData);
 
         MillisecondTimer::delay(3000);
       }

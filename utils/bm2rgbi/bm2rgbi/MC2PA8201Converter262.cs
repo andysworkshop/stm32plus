@@ -5,7 +5,7 @@ namespace bm2rgbi {
   
   /// <summary>
   /// 262K colour converter for MC2PA8201. This is a packed format:
-  /// BBBBBB00 GGGGGG00 RRRRRR00
+  /// RRRRRR00 BBBBBB00 GGGGGG00
   /// </summary>
   
   class MC2PA8201Converter262 : MC2PA8201Converter, IBitmapConverter {

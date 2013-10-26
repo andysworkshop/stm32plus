@@ -4,11 +4,11 @@ using System.IO;
 namespace bm2rgbi {
   
   /// <summary>
-  /// 16M colour converter for MC2PA8201. This is a packed format:
-  /// RRRRRRRR GGGGGGGG BBBBBBBB
+  /// 262K colour converter for R61523. This is a packed format:
+  /// BBBBBB00 GGGGGG00 RRRRRR00
   /// </summary>
   
-  class MC2PA8201Converter16 : MC2PA8201Converter, IBitmapConverter {
+  class R61523Converter262 : R61523Converter, IBitmapConverter {
 
     /// <summary>
     /// Do the conversion. 
@@ -26,15 +26,16 @@ namespace bm2rgbi {
 
           c=bm.GetPixel(x,y);
 
-          // convert to 888
+          // convert to 666
 
-          r=(byte)c.R;
-          g=(byte)c.G;
-          b=(byte)c.B;
+          r=(byte)(c.R & 0xFC);
+          g=(byte)(c.G & 0xFC);
+          b=(byte)(c.B & 0xFC);
 
+          fs.WriteByte(b);
+          fs.WriteByte(0);
           fs.WriteByte(r);
           fs.WriteByte(g);
-          fs.WriteByte(b);
         }
       }
     }
