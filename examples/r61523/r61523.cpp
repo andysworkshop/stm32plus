@@ -81,7 +81,8 @@ class R61523Test {
       // you may need to adjust these to uit the characteristics of your particular panel.
 
 #if defined(STM32PLUS_F4)
-      Fsmc8080LcdTiming fsmcTiming(3,6);
+      Fsmc8080LcdTiming fsmcReadTiming(0,20);
+      Fsmc8080LcdTiming fsmcWriteTiming(0,4);
 #elif defined(STM32PLUS_F1)
       Fsmc8080LcdTiming fsmcReadTiming(0,20);
       Fsmc8080LcdTiming fsmcWriteTiming(0,4);
