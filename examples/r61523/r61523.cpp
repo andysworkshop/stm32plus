@@ -104,7 +104,7 @@ class R61523Test {
       R61523Gamma gamma(levels);
       _gl->applyGamma(gamma);
 
-      // clear to black
+      // clear to black while the lights are out
 
       _gl->setBackground(0);
       _gl->clearScreen();
