@@ -44,7 +44,7 @@ namespace FontConv {
     override protected void WriteHeader() {
       
       _headerWriter.Write("#pragma once\n\n");
-      _headerWriter.Write("#include \"Font.h\"\n\n");
+      _headerWriter.Write("#include \"gl/Font.h\"\n\n");
       _headerWriter.Write("namespace lcd {\n\n");
     }
 
@@ -55,7 +55,7 @@ namespace FontConv {
 
     protected override void WriteSourceHeader() {
       _sourceWriter.Write("#include <avr/pgmspace.h>\n");
-      _sourceWriter.Write("#include \"Font.h\"\n\n");
+      _sourceWriter.Write("#include \"gl/Font.h\"\n\n");
       _sourceWriter.Write("namespace lcd {\n\n");
     }
 

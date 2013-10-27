@@ -116,16 +116,16 @@ namespace stm32plus {
       _accessMode.writeCommand(r61523::SLEEP_OUT);
       MillisecondTimer::delay(120);
 
+      // set the orientation and colour depth
+
+      this->setOrientation();
+      this->setColourDepth();
+
       // clear to black
 
       this->unpackColour(0,uc);
       this->moveTo(0,0,this->getWidth()-1,this->getHeight()-1);
       this->fillPixels(static_cast<uint32_t>(this->getWidth())*static_cast<uint32_t>(this->getHeight()),uc);
-
-      // set the orientation and colour depth
-
-      this->setOrientation();
-      this->setColourDepth();
 
       // display on
 
