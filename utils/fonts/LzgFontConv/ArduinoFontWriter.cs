@@ -25,7 +25,7 @@ namespace LzgFontConv {
     protected override void WriteHeaderStart(TextWriter writer) {
       
       writer.Write("#pragma once\n\n");
-      writer.Write("#include \"Font.h\"\n\n");
+      writer.Write("#include \"gl/Font.h\"\n\n");
       writer.Write("namespace lcd {\n\n");
     }
 
@@ -46,7 +46,7 @@ namespace LzgFontConv {
     protected override void WriteSourceStart(TextWriter writer) {
       
       writer.Write("#include <avr/pgmspace.h>\n");
-      writer.Write("#include \"Font.h\"\n\n");
+      writer.Write("#include \"gl/Font.h\"\n\n");
       writer.Write("namespace lcd {\n\n");
     }
 
