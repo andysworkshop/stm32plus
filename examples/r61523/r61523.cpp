@@ -82,7 +82,7 @@ class R61523Test {
 
 #if defined(STM32PLUS_F4)
       Fsmc8080LcdTiming fsmcReadTiming(0,20);
-      Fsmc8080LcdTiming fsmcWriteTiming(0,4);
+      Fsmc8080LcdTiming fsmcWriteTiming(0,5);
 #elif defined(STM32PLUS_F1)
       Fsmc8080LcdTiming fsmcReadTiming(0,20);
       Fsmc8080LcdTiming fsmcWriteTiming(0,4);
@@ -117,6 +117,9 @@ class R61523Test {
       // fade up the backlight to 100% using the hardware to do the smooth fade
 
       backlight.setPercentage(100);
+
+      _gl->readDeviceCode();
+      for(;;);
 
       // Create a font. A wide range of sample fonts are available. See the
       // "lib/include/display/graphic/fonts" directory for a full list and

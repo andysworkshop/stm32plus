@@ -1,5 +1,12 @@
-#Sat Dec 22 10:44:36 GMT 2012
 eclipse.preferences.version=1
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/CPATH/delimiter=;
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/CPATH/operation=remove
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/CPLUS_INCLUDE_PATH/delimiter=;
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/CPLUS_INCLUDE_PATH/operation=remove
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/C_INCLUDE_PATH/delimiter=;
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/C_INCLUDE_PATH/operation=remove
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/append=true
+environment/buildEnvironmentInclude/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/appendContributed=true
 environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000.655972281/CPATH/delimiter=\:
 environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000.655972281/CPATH/operation=remove
 environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000.655972281/CPLUS_INCLUDE_PATH/delimiter=\:
@@ -16,6 +23,10 @@ environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windo
 environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000/C_INCLUDE_PATH/operation=remove
 environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000/append=true
 environment/buildEnvironmentInclude/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000/appendContributed=true
+environment/buildEnvironmentLibrary/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/LIBRARY_PATH/delimiter=;
+environment/buildEnvironmentLibrary/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/LIBRARY_PATH/operation=remove
+environment/buildEnvironmentLibrary/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/append=true
+environment/buildEnvironmentLibrary/ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764/appendContributed=true
 environment/buildEnvironmentLibrary/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000.655972281/LIBRARY_PATH/delimiter=\:
 environment/buildEnvironmentLibrary/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000.655972281/LIBRARY_PATH/operation=remove
 environment/buildEnvironmentLibrary/org.eclipse.cdt.cross.arm.gnu.sourcery.windows.elf.debug.1371854000.655972281/append=true
