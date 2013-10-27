@@ -118,9 +118,6 @@ class R61523Test {
 
       backlight.setPercentage(100);
 
-      _gl->readDeviceCode();
-      for(;;);
-
       // Create a font. A wide range of sample fonts are available. See the
       // "lib/include/display/graphic/fonts" directory for a full list and
       // you can always download and convert your own using the FontConv utility.
