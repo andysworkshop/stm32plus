@@ -154,7 +154,7 @@ namespace stm32plus {
 
       _accessMode.writeCommand(command);
 
-      // positive
+      // positive and negative
 
       for(i=0;i<2;i++) {
         _accessMode.writeData(gamma[0]);
