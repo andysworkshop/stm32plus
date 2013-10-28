@@ -122,6 +122,10 @@ namespace stm32plus {
       _accessMode.writeData(dutyCycle);                 // BDCV=duty cycle
       _accessMode.writeData(TFrequency);                // 13.7kHz
       _accessMode.writeData(0x18 | dim | polarity);     // PWMWM=1, LEDPWME=1
+
+      // remember current setting
+
+      _currentPercentage=newPercentage;
     }
   }
 }
