@@ -50,6 +50,9 @@
 #include "flash/spi/devices/w25q16dw/EraseResume.h"
 #include "flash/spi/devices/w25q16dw/W25Q16DW.h"
 
+#include "flash/spi/devices/s25fl208k/Commands.h"
+#include "flash/spi/devices/s25fl208k/S25FL208K.h"
+
 // include the stream class
 
 #include "flash/spi/SpiFlashInputStream.h"
