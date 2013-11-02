@@ -141,7 +141,7 @@ namespace stm32plus {
     inline void LGDP453xOrientation<PORTRAIT,TAccessMode>::moveY(int16_t ystart,int16_t yend) const {
       _accessMode.writeCommand(lgdp453x::VerticalRAMPositionStartCmd::Opcode,ystart);
       _accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
-      _accessMode.writeCommand(lgdp453x::VerticalRAMPositionEndCmd::Opcode,yend);
+      _accessMode.writeCommand(lgdp453x::VerticalAddressCmd::Opcode,ystart);
     }
 
 
