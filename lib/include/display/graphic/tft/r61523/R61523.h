@@ -11,7 +11,7 @@
 #include "display/graphic/tft/r61523/R61523Colour.h"
 #include "display/graphic/tft/r61523/R61523Orientation.h"
 #include "display/graphic/tft/r61523/R61523Gamma.h"
-#include "display/graphic/tft/r61523/R61523Backlight.h"
+#include "display/graphic/tft/r61523/R61523PwmBacklight.h"
 
 
 namespace stm32plus {
