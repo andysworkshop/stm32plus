@@ -31,8 +31,8 @@ using namespace stm32plus::display;
  *
  * PE1  => RESET
  * PD11 => RS (D/CX)
- * PD7  => CS
- * PD4  => RD
+ * PD7  => CS (or tie to GND)
+ * PD4  => RD (or tie to GND)
  * PD5  => WR
  * PD14 => D0    PE11 => D8
  * PD15 => D1    PE12 => D9
@@ -66,6 +66,7 @@ class R61523Test {
 
     LcdAccessMode *_accessMode;
     LcdPanel *_gl;
+    LcdBacklight *_backlight;
     Font *_font;
 
   public:
@@ -112,11 +113,11 @@ class R61523Test {
 
       // create the backlight using default template parameters
 
-      LcdBacklight backlight(*_accessMode);
+      _backlight=new LcdBacklight(*_accessMode);
 
       // fade up the backlight to 100% using the hardware to do the smooth fade
 
-      backlight.setPercentage(100);
+      _backlight->setPercentage(100);
 
       // Create a font. A wide range of sample fonts are available. See the
       // "lib/include/display/graphic/fonts" directory for a full list and
@@ -129,6 +130,7 @@ class R61523Test {
         lzgTest();
         jpegTest();
         basicColoursTest();
+        backlightTest();
         gradientTest();
         textTest();
         rectTest();
@@ -450,6 +452,92 @@ class R61523Test {
       doGradientFills(HORIZONTAL);
       doGradientFills(VERTICAL);
     }
+
+
+    void backlightTest() {
+
+      prompt("Backlight test");
+
+      Rectangle rc;
+      uint16_t i;
+      static uint32_t colours[8]={
+        ColourNames::RED,
+        ColourNames::GREEN,
+        ColourNames::BLUE,
+        ColourNames::CYAN,
+        ColourNames::MAGENTA,
+        ColourNames::YELLOW,
+        ColourNames::WHITE,
+        ColourNames::BLACK,
+      };
+
+      // draw a row of solid colours
+
+      rc.X=0;
+      rc.Y=0;
+      rc.Height=_gl->getHeight()/2;
+      rc.Width=_gl->getWidth()/(sizeof(colours)/sizeof(colours[0]));
+
+      for(i=0;i<sizeof(colours)/sizeof(colours[0]);i++) {
+
+        _gl->setForeground(colours[i]);
+        _gl->fillRectangle(rc);
+
+        rc.X+=rc.Width;
+      }
+
+      // draw a greyscale
+
+      rc.X=0;
+      rc.Y=rc.Height;
+      rc.Height=rc.Height/4;
+      rc.Width=_gl->getWidth()/256;
+
+      for(i=0;i<256;i++) {
+        _gl->setForeground(i | (i << 8) | (i << 16));
+        _gl->fillRectangle(rc);
+        rc.X+=rc.Width;
+      }
+
+      for(i=100;i>0;i-=5) {
+
+        // set the level
+
+        _backlight->setPercentage(i);
+
+        // show the indicator
+
+        rc.X=_gl->getWidth()/4;
+        rc.Y=(_gl->getHeight()*6)/8;
+        rc.Height=_gl->getHeight()/8;
+
+        // fill
+
+        rc.Width=(_gl->getWidth()/2*i)/100;
+        _gl->gradientFillRectangle(rc,Direction::HORIZONTAL,0x008000,0x00ff00);
+
+        // remainder
+
+        rc.X+=rc.Width;
+        rc.Width=_gl->getWidth()/2-rc.Width;
+        _gl->setForeground(ColourNames::BLACK);
+        _gl->fillRectangle(rc);
+
+        // show the percentage
+
+        _gl->setForeground(ColourNames::WHITE);
+        *_gl << Point(0,_gl->getHeight()-_font->getHeight()) << "Backlight level: " << i << "%  ";
+
+        // pause
+
+        MillisecondTimer::delay(750);
+      }
+
+      // restore backlight
+
+      _backlight->setPercentage(100);
+    }
+
 
     void prompt(const char *prompt) {
 
