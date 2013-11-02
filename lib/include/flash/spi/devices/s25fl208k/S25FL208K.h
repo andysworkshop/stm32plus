@@ -30,7 +30,8 @@ namespace stm32plus {
                       BlockErase          <TSpi,s25fl208k::CMD_BLOCK_ERASE>,
                       ChipErase           <TSpi>,
                       DeepPowerDown       <TSpi>,
-                      ReleaseDeepPowerDown<TSpi> {
+                      ReleaseDeepPowerDown<TSpi>,
+                      ReadJedecId         <TSpi> {
 
       /**
        * Various constants required by the base class
