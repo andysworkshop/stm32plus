@@ -17,18 +17,26 @@ namespace stm32plus {
      * to hold the index of the current curve
      */
 
-    class SSD1963Gamma : public DisplayDeviceGamma {
+    struct SSD1963Gamma : DisplayDeviceGamma<SSD1963Gamma,uint16_t> {
 
-      public:
+    /**
+     * Constructor. The SSD1963 takes 1 gamma value index. The constructor must be supplied with that value
+     * that can be 1,2,4 or 8
+     */
+
+
+      SSD1963Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
+        _gamma[0]=gammaIndex;
+      }
+
 
       /**
-       * Constructor. The SSD1963 takes 1 gamma value index. The constructor must be supplied with that value
-       * that can be 1,2,4 or 8
+       * Not applicable
        */
 
-        SSD1963Gamma(uint16_t gammaIndex) : DisplayDeviceGamma(1) {
-          _gamma[0]=gammaIndex;
-        }
+      static constexpr uint8_t getMaximumValue(uint16_t /* index */) {
+        return 0;
+      }
     };
   }
 }

@@ -9,98 +9,98 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
-		/**
-		 * Constructor
-		 */
+    /**
+     * Constructor
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
-		inline GraphicsLibrary<TDevice,TDeviceAccessMode>::GraphicsLibrary(TDeviceAccessMode& accessMode)
-			: TDevice(accessMode) {
+    template<class TDevice,typename TDeviceAccessMode>
+    inline GraphicsLibrary<TDevice,TDeviceAccessMode>::GraphicsLibrary(TDeviceAccessMode& accessMode)
+      : TDevice(accessMode) {
 
-			_fontFilledBackground=true;
+      _fontFilledBackground=true;
 
-			// initialise the panel
+      // initialise the panel
 
-			this->initialise();
-		}
-
-
-		/**
-		 * set the foreground
-		 */
-
-		template<class TDevice,typename TDeviceAccessMode>
-		inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::setForeground(tCOLOUR cr) {
-			this->unpackColour(cr,_foreground);
-		}
-
-		/**
-		 * set the background
-		 */
-
-		template<class TDevice,typename TDeviceAccessMode>
-		inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::setBackground(tCOLOUR cr) {
-			this->unpackColour(cr,_background);
-		}
+      this->initialise();
+    }
 
 
-		/**
-		 * Get a full-screen rectangle
-		 */
+    /**
+     * set the foreground
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
-		inline Rectangle GraphicsLibrary<TDevice,TDeviceAccessMode>::getFullScreenRectangle() const {
-			return Rectangle(0,0,this->getWidth(),this->getHeight());
-		}
+    template<class TDevice,typename TDeviceAccessMode>
+    inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::setForeground(tCOLOUR cr) {
+      this->unpackColour(cr,_foreground);
+    }
 
-		/**
-		 * Get the panel maximum x-coord
-		 */
+    /**
+     * set the background
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
-		inline int16_t GraphicsLibrary<TDevice,TDeviceAccessMode>::getXmax() const {
-			return this->getWidth()-1;
-		}
-
-		/**
-		 * Get the panel maximum y-coord
-		 */
-
-		template<class TDevice,typename TDeviceAccessMode>
-		inline int16_t GraphicsLibrary<TDevice,TDeviceAccessMode>::getYmax() const {
-			return this->getHeight()-1;
-		}
-
-		/**
-		 * clear screen to the background colour
-		 */
-
-		template<class TDevice,typename TDeviceAccessMode>
-		inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::clearScreen() {
-
-			this->moveTo(
-					Rectangle(
-							0,
-							0,
-							this->getWidth(),
-							this->getHeight()
-					)
-			);
-
-			this->fillPixels((uint32_t)this->getWidth()*(uint32_t)this->getHeight(),_background);
-		}
+    template<class TDevice,typename TDeviceAccessMode>
+    inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::setBackground(tCOLOUR cr) {
+      this->unpackColour(cr,_background);
+    }
 
 
-		/**
-		 * Convenience helper to move to a point extending to the
-		 * end of the display
-		 */
+    /**
+     * Get a full-screen rectangle
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
-		inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::moveToPoint(const Point& pt) const {
-		  this->moveTo(Rectangle(pt.X,pt.Y,this->getWidth()-pt.X,this->getHeight()-pt.Y));
-		}
-	}
+    template<class TDevice,typename TDeviceAccessMode>
+    inline Rectangle GraphicsLibrary<TDevice,TDeviceAccessMode>::getFullScreenRectangle() const {
+      return Rectangle(0,0,this->getWidth(),this->getHeight());
+    }
+
+    /**
+     * Get the panel maximum x-coord
+     */
+
+    template<class TDevice,typename TDeviceAccessMode>
+    inline int16_t GraphicsLibrary<TDevice,TDeviceAccessMode>::getXmax() const {
+      return this->getWidth()-1;
+    }
+
+    /**
+     * Get the panel maximum y-coord
+     */
+
+    template<class TDevice,typename TDeviceAccessMode>
+    inline int16_t GraphicsLibrary<TDevice,TDeviceAccessMode>::getYmax() const {
+      return this->getHeight()-1;
+    }
+
+    /**
+     * clear screen to the background colour
+     */
+
+    template<class TDevice,typename TDeviceAccessMode>
+    inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::clearScreen() {
+
+      this->moveTo(
+          Rectangle(
+              0,
+              0,
+              this->getWidth(),
+              this->getHeight()
+          )
+      );
+
+      this->fillPixels((uint32_t)this->getWidth()*(uint32_t)this->getHeight(),_background);
+    }
+
+
+    /**
+     * Convenience helper to move to a point extending to the
+     * end of the display
+     */
+
+    template<class TDevice,typename TDeviceAccessMode>
+    inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::moveToPoint(const Point& pt) const {
+      this->moveTo(Rectangle(pt.X,pt.Y,this->getWidth()-pt.X,this->getHeight()-pt.Y));
+    }
+  }
 }

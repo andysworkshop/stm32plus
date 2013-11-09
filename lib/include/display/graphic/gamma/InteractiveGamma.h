@@ -33,6 +33,7 @@ namespace stm32plus {
 
     template<class TGraphicsLibrary,class TGamma>
     class InteractiveGamma {
+
       protected:
         TGraphicsLibrary& _gl;
         TGamma& _gamma;
@@ -40,6 +41,10 @@ namespace stm32plus {
         int _activeIndex;
         int _count;
         int _fontHeight;
+
+        enum {
+          CONSOLE_LINES = 4
+        };
 
       protected:
         void drawBoxes();
@@ -66,7 +71,9 @@ namespace stm32plus {
 
     template<class TGraphicsLibrary,class TGamma>
     InteractiveGamma<TGraphicsLibrary,TGamma>::InteractiveGamma(TGraphicsLibrary& gl,TGamma& gamma,InputStream& is) :
-        _gl(gl), _gamma(gamma), _inputStream(is) {
+        _gl(gl),
+        _gamma(gamma),
+        _inputStream(is) {
 
       _activeIndex=0;
       _count=_gamma.getGammaCount();
@@ -82,6 +89,7 @@ namespace stm32plus {
 
       uint16_t width,height;
       uint32_t i;
+      Rectangle rc;
 
       width=_gl.getWidth() / 4;
       height=(_gl.getHeight() - (_fontHeight * 2)) / 3;
@@ -99,9 +107,19 @@ namespace stm32plus {
       drawBox(width * 2,height,ColourNames::YELLOW);
       drawBox(width * 3,height,0x808080); // mid grey
 
-      for(i=0;i < 255;i++) {
+      if((width=_gl.getWidth()/256)==0)
+        width=1;
+
+      rc.X=0;
+      rc.Y=height*2;
+      rc.Width=width;
+      rc.Height=height;
+
+      for(i=0;i<255;i++) {
         _gl.setForeground(i << 16 | i << 8 | i);
-        _gl.fillRectangle(Rectangle(i,height * 2,1,height));
+        _gl.fillRectangle(rc);
+
+        rc.X+=width;
       }
 
       drawConsole();
@@ -130,26 +148,40 @@ namespace stm32plus {
 
     template<class TGraphicsLibrary,class TGamma>
     void InteractiveGamma<TGraphicsLibrary,TGamma>::drawConsole() {
-      char value[10];
-      int16_t i;
+
+      char value[100];
+      int16_t i,conh;
       Point p;
+      const Font& font=*_gl.getStreamSelectedFont();
+
+      conh=CONSOLE_LINES*_fontHeight;
 
       // clear out
 
       _gl.setForeground(0);
-      _gl.fillRectangle(Rectangle(0,_gl.getHeight() - _fontHeight * 2,_gl.getWidth(),_fontHeight * 2));
+      _gl.fillRectangle(Rectangle(0,_gl.getHeight()-conh,_gl.getWidth(),conh));
 
       // draw console
 
-      _gl << Point(0,_gl.getHeight() - (_fontHeight * 2));
-      _gl.setForeground(ColourNames::WHITE);
+      p.X=0;
+      p.Y=_gl.getHeight()-conh;
 
-      for(i=0;i < _count;i++) {
+      for(i=0;i<_count;i++) {
 
-        if(i == _count / 2)
-          _gl << Point(0,_gl.getHeight() - _fontHeight);
+        StringUtil::itoa(i+1,value,10);
+        strcat(value,"=");
+        StringUtil::itoa(_gamma[i],value+strlen(value),16);
+        strcat(value," ");
 
-        _gl << StringUtil::itoa(i + 1,value,10) << "=" << StringUtil::itoa(_gamma[i],value,16) << " ";
+        _gl.setForeground(i==_activeIndex ? ColourNames::YELLOW : ColourNames::WHITE);
+
+        p.X+=_gl.writeString(p,font,value).Width;
+
+        if(p.X>_gl.getWidth()) {
+          p.X=0;
+          p.Y+=_fontHeight;
+          _gl.writeString(p,font,value);
+        }
       }
     }
 
@@ -165,6 +197,8 @@ namespace stm32plus {
         _activeIndex=0;
       else if(_activeIndex >= _count)
         _activeIndex=_count - 1;
+
+      drawConsole();
     }
 
     /**
@@ -173,9 +207,27 @@ namespace stm32plus {
 
     template<class TGraphicsLibrary,class TGamma>
     void InteractiveGamma<TGraphicsLibrary,TGamma>::changeValue(int howMuch) {
-      _gamma[_activeIndex]+=howMuch;
-      _gl.applyGamma(_gamma);
 
+      uint16_t maxValue=TGamma::getMaximumValue(_activeIndex);
+
+      if(howMuch>0) {
+
+        if(_gamma[_activeIndex]==maxValue)
+          _gamma[_activeIndex]=0;
+        else if(maxValue-_gamma[_activeIndex]>=howMuch)
+          _gamma[_activeIndex]+=howMuch;
+        else
+          _gamma[_activeIndex]=maxValue;
+      }
+      else {
+
+        if(_gamma[_activeIndex]>=-howMuch)
+          _gamma[_activeIndex]+=howMuch;
+        else
+          _gamma[_activeIndex]=maxValue;
+      }
+
+      _gl.applyGamma(_gamma);
       drawConsole();
     }
 
@@ -185,6 +237,7 @@ namespace stm32plus {
 
     template<class TGraphicsLibrary,class TGamma>
     void InteractiveGamma<TGraphicsLibrary,TGamma>::bitset(uint16_t bit) {
+
       uint16_t value=_gamma[_activeIndex];
 
       if((value & (1 << bit)) == 0)
@@ -192,8 +245,10 @@ namespace stm32plus {
       else
         value&=~(1 << bit);
 
-      _gamma[_activeIndex]=value;
-      drawConsole();
+      if(value<=TGamma::getMaximumValue(_activeIndex)) {
+        _gamma[_activeIndex]=value;
+        drawConsole();
+      }
     }
 
     /**

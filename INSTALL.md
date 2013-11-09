@@ -15,7 +15,7 @@ If you're happy with building from the `master` branch then you can just go righ
 Prerequisites
 -------------
 
-* Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_. Download the most recent version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
+* Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_. Download the most recent EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
 
 		$ arm-none-eabi-g++
 		arm-none-eabi-g++.exe: no input files

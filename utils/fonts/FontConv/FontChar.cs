@@ -2,6 +2,7 @@
 using System.Windows.Forms;
 using System.Drawing.Imaging;
 using System.Drawing.Text;
+using System;
 
 
 namespace FontConv
@@ -17,7 +18,9 @@ namespace FontConv
    */
     
     private bool _hover=false;
+    private ToolTip _tooltip;
    
+
   /*
    * properties
    */
@@ -29,10 +32,11 @@ namespace FontConv
    * constructor
    */
     
-    public FontChar()
+    public FontChar(ToolTip tooltip)
     {
       InitializeComponent();
 
+      _tooltip=tooltip;
       SetStyle(ControlStyles.AllPaintingInWmPaint | ControlStyles.OptimizedDoubleBuffer,true);
     }
 
@@ -78,6 +82,8 @@ namespace FontConv
     private void FontChar_MouseEnter(object sender,System.EventArgs e)
     {
       _hover=true;
+      _tooltip.SetToolTip(this,Convert.ToInt32(this.Text[0]).ToString());
+
       Invalidate();
     }
 

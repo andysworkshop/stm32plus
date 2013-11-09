@@ -43,6 +43,7 @@ namespace stm32plus {
         void sleep() const;
         void wake() const;
         void beginWriting() const;
+        void beginReading() const;
     };
 
 
@@ -148,6 +149,16 @@ namespace stm32plus {
     template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
     inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::beginWriting() const {
       _accessMode.writeCommand(ssd1289::GRAM_WRITE_DATA);
+    }
+
+
+    /**
+     * Issue the command that allows graphics ram reading to commence
+     */
+
+    template<Orientation TOrientation,ColourDepth TColourDepth,class TAccessMode>
+    inline void SSD1289<TOrientation,TColourDepth,TAccessMode>::beginReading() const {
+      _accessMode.writeCommand(ssd1289::GRAM_WRITE_DATA);   // yes it's the same as for writing
     }
   }
 }

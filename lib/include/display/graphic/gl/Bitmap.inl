@@ -10,19 +10,19 @@
 
 
 namespace stm32plus {
-	namespace display {
+  namespace display {
 
 
-		/**
-		 * Draw a bitmap on to the display. The size and position of the bitmap on the display must match the source. There is
-		 * no stretch or shrink operation here. The CPU is used to copy data.
-		 *
-		 * @param rect The size and position of the rectangle on the display.
-		 * @param source The input stream supplying the source data
-		 * @return false if there was a failure (e.g. stream failure)
-		 */
+    /**
+     * Draw a bitmap on to the display. The size and position of the bitmap on the display must match the source. There is
+     * no stretch or shrink operation here. The CPU is used to copy data.
+     *
+     * @param rect The size and position of the rectangle on the display.
+     * @param source The input stream supplying the source data
+     * @return false if there was a failure (e.g. stream failure)
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
+    template<class TDevice,typename TDeviceAccessMode>
     inline bool GraphicsLibrary<TDevice,TDeviceAccessMode>::drawBitmap(const Rectangle& rect,InputStream& source) {
 
       int16_t vpos;
@@ -56,7 +56,7 @@ namespace stm32plus {
 
         // draw it
 
-       	this->rawTransfer(buffer,rect.Width);
+        this->rawTransfer(buffer,rect.Width);
       }
 
       // succeeded
@@ -73,23 +73,23 @@ namespace stm32plus {
     }
 
 
-		/**
-		 * Draw a bitmap on to the display. The size and position of the bitmap on the display must match the source. There is
-		 * no stretch or shrink operation here. The DMA channel is used to transfer data to the FSMC. That implies that the
-		 * access mode being used is the FSMC. Compilation will fail for other access modes.
-		 *
-		 * @param rect The size and position of the rectangle on the display.
-		 * @param source The input stream supplying the source data
-		 * @param dma The DMA class used to transfer the data. Note that there may be limits (e.g. on the F4) on which DMA peripherals can perform memory to memory transfers.
-		 * @param priority The dma priority constant
-		 * @return false if there was a failure (e.g. stream failure)
-		 */
+    /**
+     * Draw a bitmap on to the display. The size and position of the bitmap on the display must match the source. There is
+     * no stretch or shrink operation here. The DMA channel is used to transfer data to the FSMC. That implies that the
+     * access mode being used is the FSMC. Compilation will fail for other access modes.
+     *
+     * @param rect The size and position of the rectangle on the display.
+     * @param source The input stream supplying the source data
+     * @param dma The DMA class used to transfer the data. Note that there may be limits (e.g. on the F4) on which DMA peripherals can perform memory to memory transfers.
+     * @param priority The dma priority constant
+     * @return false if there was a failure (e.g. stream failure)
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
+    template<class TDevice,typename TDeviceAccessMode>
     inline bool GraphicsLibrary<TDevice,TDeviceAccessMode>::drawBitmap(const Rectangle& rect,
-    																																	 InputStream& source,
-    																																	 DmaFsmcLcdMemoryCopyFeature<TDeviceAccessMode>& dma,
-    																																	 uint32_t priority) {
+                                                                       InputStream& source,
+                                                                       DmaFsmcLcdMemoryCopyFeature<TDeviceAccessMode>& dma,
+                                                                       uint32_t priority) {
 
       int16_t vpos;
       uint8_t *evenLines,*oddLines,*buffer;
@@ -128,7 +128,7 @@ namespace stm32plus {
         // wait for the last line to complete
 
         if(vpos>0 && !((Dma&)dma).waitUntilComplete())
-        	goto finished;
+          goto finished;
 
         // transfer the scan line of bytes
 
@@ -155,22 +155,22 @@ namespace stm32plus {
     }
 
 
-		/**
-		 * Draw a JPEG on the display. The rectangle size must match the JPEG size. The source
-		 * should supply the compressed data in the form of a JPEG file. Progressive JPEGs are
-		 * not supported. This function will cost you about 2Kb of SRAM to call.
-		 *
-		 * @param rc The rectangle to draw the image at.
-		 * @param source The source of compressed data.
-		 */
+    /**
+     * Draw a JPEG on the display. The rectangle size must match the JPEG size. The source
+     * should supply the compressed data in the form of a JPEG file. Progressive JPEGs are
+     * not supported. This function will cost you about 2Kb of SRAM to call.
+     *
+     * @param rc The rectangle to draw the image at.
+     * @param source The source of compressed data.
+     */
 
-		template<class TDevice,typename TDeviceAccessMode>
+    template<class TDevice,typename TDeviceAccessMode>
     inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::drawJpeg(const Rectangle& rc,InputStream& source) {
 
-			// call a decoder typed for this graphics library
+      // call a decoder typed for this graphics library
 
-			JpegDecoder<GraphicsLibrary<TDevice,TDeviceAccessMode>> jpeg;
-			jpeg.decode(rc.getTopLeft(),source,*this);
-		}
-	}
+      JpegDecoder<GraphicsLibrary<TDevice,TDeviceAccessMode>> jpeg;
+      jpeg.decode(rc.getTopLeft(),source,*this);
+    }
+  }
 }

@@ -43,17 +43,17 @@ class Blink {
 
       // initialise the pin for output
 
-      GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioD<DefaultDigitalOutputFeature<13> > pd;
 
       // loop forever switching it on and off with a 1 second
       // delay in between each cycle
 
       for(;;) {
 
-        pf[6].set();
+        pd[13].set();
         MillisecondTimer::delay(1000);
 
-        pf[6].reset();
+        pd[13].reset();
         MillisecondTimer::delay(1000);
       }
     }

@@ -93,7 +93,7 @@ class SSD1963Test {
       // the reset sequence is complete but the SSD1963 is special in that the reset sequence is
       // done at a slow speed so now we have to speed up the FSMC to get optimum performance
 
-      _accessMode->initialiseTiming(fsmcTiming);
+      _accessMode->initialiseTiming(fsmcTiming,fsmcTiming);
 
       // apply gamma settings (zero = no curve selected)
 
@@ -113,7 +113,9 @@ class SSD1963Test {
 
       backlight.fadeTo(100,4);
 
-      // create a font
+      // Create a font. A wide range of sample fonts are available. See the
+      // "lib/include/display/graphic/fonts" directory for a full list and
+      // you can always download and convert your own using the FontConv utility.
 
       _font=new Font_VOLTER__28GOLDFISH_299;
       *_gl << *_font;

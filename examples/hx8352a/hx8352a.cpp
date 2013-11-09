@@ -6,7 +6,6 @@
 
 #include "config/stm32plus.h"
 #include "config/display/tft.h"
-#include "config/usart.h"
 
 
 extern uint32_t BulbPixelsSize,BulbPixels;
@@ -108,7 +107,9 @@ class HX8352ATest {
 
       backlight.fadeTo(100,4);
 
-      // create a font
+      // Create a font. A wide range of sample fonts are available. See the
+      // "lib/include/display/graphic/fonts" directory for a full list and
+      // you can always download and convert your own using the FontConv utility.
 
       _font=new Font_VOLTER__28GOLDFISH_299;
       *_gl << *_font;

@@ -93,7 +93,9 @@ class LDS285Test {
       _gl->setBackground(0);
       _gl->clearScreen();
 
-      // create a font
+      // Create a font. A wide range of sample fonts are available. See the
+      // "lib/include/display/graphic/fonts" directory for a full list and
+      // you can always download and convert your own using the FontConv utility.
 
       _font=new Font_VOLTER__28GOLDFISH_299;
       *_gl << *_font;

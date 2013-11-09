@@ -28,8 +28,12 @@ namespace stm32plus {
         volatile uint8_t *_registerAddress;
         GpioPinRef _resetPin;
 
+      protected:
+        void initialise(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine);
+
       public:
         Fsmc8BitAccessMode(const Fsmc8080LcdTiming& timing,uint16_t registerAddressLine,const GpioPinRef& resetPin);
+        Fsmc8BitAccessMode(const Fsmc8080LcdTiming& readTiming,const Fsmc8080LcdTiming& writeTiming,uint16_t registerAddressLine,const GpioPinRef& resetPin);
 
         void enable(bool enable);
 
@@ -132,7 +136,7 @@ namespace stm32plus {
 
     /**
      * Constructor. Initialises the AFIO GPIO pins for the FSMC used to control an 8080 LCD.
-     * @param[in] timing The timing structure for this LCD panel
+     * @param[in] timing The timing structure for this LCD panel in both read and write mode
      * @param[in] registerAddressLine The address line index used to switch between data and register select. e.g. 16 = A16.
      * @param[in] resetPin The GPIO pin that corresponds to the TFT reset line.
      */
@@ -141,6 +145,39 @@ namespace stm32plus {
     inline Fsmc8BitAccessMode<TFsmc>::Fsmc8BitAccessMode(const Fsmc8080LcdTiming& timing,
                                                          uint16_t registerAddressLine,
                                                          const GpioPinRef& resetPin) : _resetPin(resetPin) {
+      initialise(timing,timing,registerAddressLine);
+    }
+
+
+    /**
+     * Constructor. Initialises the AFIO GPIO pins for the FSMC used to control an 8080 LCD.
+     * @param[in] readTiming The timing structure for this LCD panel in read mode
+     * @param[in] writeTiming The timing structure for this LCD panel in write mode
+     * @param[in] registerAddressLine The address line index used to switch between data and register select. e.g. 16 = A16.
+     * @param[in] resetPin The GPIO pin that corresponds to the TFT reset line.
+     */
+
+    template<class TFsmc>
+    inline Fsmc8BitAccessMode<TFsmc>::Fsmc8BitAccessMode(const Fsmc8080LcdTiming& readTiming,
+                                                         const Fsmc8080LcdTiming& writeTiming,
+                                                         uint16_t registerAddressLine,
+                                                         const GpioPinRef& resetPin) : _resetPin(resetPin) {
+      initialise(readTiming,writeTiming,registerAddressLine);
+    }
+
+
+    /**
+     * Main initialiser. Initialises the AFIO GPIO pins for the FSMC used to control an 8080 LCD.
+     * @param[in] readTiming The timing structure for this LCD panel in read mode
+     * @param[in] writeTiming The timing structure for this LCD panel in write mode
+     * @param[in] registerAddressLine The address line index used to switch between data and register select. e.g. 16 = A16.
+     * @param[in] resetPin The GPIO pin that corresponds to the TFT reset line.
+     */
+
+    template<class TFsmc>
+    inline void Fsmc8BitAccessMode<TFsmc>::initialise(const Fsmc8080LcdTiming& readTiming,
+                                                      const Fsmc8080LcdTiming& writeTiming,
+                                                      uint16_t registerAddressLine) {
 
       // initialise the FSMC and the NE line (different for each bank)
 
@@ -186,11 +223,22 @@ namespace stm32plus {
       FSMC_WaitSignalActive=FSMC_WaitSignalActive_BeforeWaitState;
       FSMC_WriteOperation=FSMC_WriteOperation_Enable;
       FSMC_WaitSignal=FSMC_WaitSignal_Disable;
-      FSMC_ExtendedMode=FSMC_ExtendedMode_Disable;
       FSMC_WriteBurst=FSMC_WriteBurst_Disable;
-      FSMC_ReadWriteTimingStruct=const_cast<Fsmc8080LcdTiming *> (&timing);
-      FSMC_WriteTimingStruct=const_cast<Fsmc8080LcdTiming *> (&timing);
       FSMC_AsynchronousWait=FSMC_AsynchronousWait_Disable;
+
+      // extended mode is required only if the user has provided separate
+      // timings for read and write
+
+      if(&readTiming==&writeTiming) {
+        FSMC_ExtendedMode=FSMC_ExtendedMode_Disable;
+        FSMC_ReadWriteTimingStruct=const_cast<Fsmc8080LcdTiming *>(&writeTiming);
+        FSMC_WriteTimingStruct=nullptr;
+      }
+      else {
+        FSMC_ExtendedMode=FSMC_ExtendedMode_Enable;
+        FSMC_ReadWriteTimingStruct=const_cast<Fsmc8080LcdTiming *>(&readTiming);
+        FSMC_WriteTimingStruct=const_cast<Fsmc8080LcdTiming *>(&writeTiming);
+      }
 
       // initialise the FSMC and then enable it
 
