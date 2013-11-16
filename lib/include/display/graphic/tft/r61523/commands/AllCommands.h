@@ -46,7 +46,7 @@ namespace stm32plus {
         GAMMA_SET_A             = 0xc8,
         GAMMA_SET_B             = 0xc9,
         POWER_SETTING_COMMON    = 0xd0,
-        GAMMA_SET_C             = 0xca,
+        GAMMA_SET_C             = 0xca
       };
     }
   }
