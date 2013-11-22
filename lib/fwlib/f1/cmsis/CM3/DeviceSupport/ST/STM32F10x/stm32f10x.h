@@ -62,7 +62,11 @@
   #define STM32F10X_HD
 #else
   #if (defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F1_CL_E)) && !defined(STM32F10X_CL)
-  #define STM32F10X_CL
+    #define STM32F10X_CL
+  #else
+    #if defined(STM32PLUS_F1_MD_VL) && !defined(STM32F10X_MD_VL)
+      #define STM32F10X_MD_VL
+    #endif
   #endif
 #endif
 
