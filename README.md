@@ -48,14 +48,16 @@ Contributions to stm32plus are welcome. Please follow these steps to ensure a sm
 
 Working in Eclipse
 ------------------
-I do all my development in Eclipse Indigo using the CDT and the GNU ARM Eclipse plugin. The `.project` and `.cproject` files for the main library and all the examples are included. You can use Eclipse's import option on the root checkout directory to bring them all into your workspace in one go. I recommend that you create a _working set_ to contain all the stm32plus projects because there's a lot of them.
+I do all my development in Eclipse Kepler using the CDT and the [GNU ARM Eclipse plugin](http://gnuarmeclipse.livius.net/blog/). The `.project` and `.cproject` files for the main library and all the examples are included. You can use Eclipse's import option on the root checkout directory to bring them all into your workspace in one go. I recommend that you create a _working set_ to contain all the stm32plus projects because there's a lot of them.
 
-The projects are configured to use the external `cs-make` builder. Linux users should change this to 'Internal builder' in the 'C/C++ Build' project properties page.  
+I recommend version *1.1.2.201310221203* of the GNU ARM Eclipse plugin with Eclipse Kepler. That's the combination that I use in day-to-day development and the `.project` and `.cproject` will work with that version.
+
+The example projects are configured to use the external `cs-make` builder. Linux users should change this to 'Internal builder' in the 'C/C++ Build' project properties page.    
 
 How do I report a bug?
 ======================
 
-If you think that you've found a bug then please enter a bug report at [my bugzilla installation](http://www.andybrown.me.uk/bugs). It really helps if you can give me enough information to reproduce the bug myself.
+If you think that you've found a bug then please enter an issue against the project on github. It really helps if you can give me enough information to reproduce the bug myself.
 
 Alternatively you can fix it yourself and send me a pull-request.
 

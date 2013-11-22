@@ -17,3 +17,4 @@
 #include "display/graphic/tft/st7783/TftInterfaces.h"
 #include "display/graphic/tft/lgdp453x/TftInterfaces.h"
 #include "display/graphic/tft/hx8352a/TftInterfaces.h"
+#include "display/graphic/tft/r61523/TftInterfaces.h"

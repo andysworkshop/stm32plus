@@ -48,7 +48,7 @@ namespace FontConv
               char c;
               int width;
 
-              fc=new FontChar();
+              fc=new FontChar(_tooltip);
               c=Convert.ToChar(code);
 
               // special case for space which we map to the width of a "-"
