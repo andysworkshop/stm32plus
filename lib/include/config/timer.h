@@ -76,6 +76,9 @@
 #define USE_TIM1_UP_INTERRUPT
 #define USE_TIM1_TRG_COM_INTERRUPT
 #define USE_TIM1_CC_INTERRUPT
+#define USE_TIM1_UP_TIM16_INTERRUPT
+#define USE_TIM1_BRK_TIM15_INTERRUPT
+#define USE_TIM1_TRG_COM_TIM17_INTERRUPT
 
 #define USE_TIM8_BRK_INTERRUPT
 #define USE_TIM8_UP_INTERRUPT
@@ -97,9 +100,18 @@
 
 // device-specific feature includes
 
+#if defined(STM32PLUS_F1_HD)
+  #include "timer/features/f1/hd/TimerInterruptFeature.h"
+#elif defined(STM32PLUS_F1_CL)
+  #include "timer/features/f1/cl/TimerInterruptFeature.h"
+#elif defined(STM32PLUS_F1_MD_VL)
+  #include "timer/features/f1/mdvl/TimerInterruptFeature.h"
+#elif defined(STM32PLUS_F1_XL)
+  #include "timer/features/f1/xl/TimerInterruptFeature.h"
+#endif
+
 #if defined(STM32PLUS_F1)
 
-  #include "timer/features/f1/TimerInterruptFeature.h"
   #include "timer/features/f1/Timer1GpioFeature.h"
   #include "timer/features/f1/Timer2GpioFeature.h"
   #include "timer/features/f1/Timer3GpioFeature.h"

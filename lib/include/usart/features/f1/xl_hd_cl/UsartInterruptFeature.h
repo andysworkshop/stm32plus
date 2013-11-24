@@ -8,8 +8,8 @@
 
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F1
-#error This class can only be used with the STM32F1 series
+#if !defined(STM32PLUS_F1_HD) && !defined(STM32PLUS_F1_XL) && !defined(STM32PLUS_F1_CL)
+#error This class can only be used with the STM32F1 XL/HD/CL series
 #endif
 
 
@@ -147,7 +147,7 @@ namespace stm32plus {
   }
 
   /**
-   * Enabler specialisation, Usart 1
+   * Enabler specialisation, Usart 2
    */
 
   template<>
@@ -157,7 +157,7 @@ namespace stm32plus {
   }
 
   /**
-   * Enabler specialisation, Usart 1
+   * Enabler specialisation, Usart 3
    */
 
   template<>
@@ -167,7 +167,7 @@ namespace stm32plus {
   }
 
   /**
-   * Enabler specialisation, Usart 1
+   * Enabler specialisation, Uart 4
    */
 
   template<>
@@ -177,7 +177,7 @@ namespace stm32plus {
   }
 
   /**
-   * Enabler specialisation, Usart 1
+   * Enabler specialisation, Uart 5
    */
 
   template<>

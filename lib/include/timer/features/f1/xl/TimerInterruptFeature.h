@@ -7,8 +7,8 @@
 #pragma once
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F1
-#error This class can only be used with the STM32F1 series
+#ifndef STM32PLUS_F1_XL
+#error This class can only be used with the STM32F1 XL series
 #endif
 
 
@@ -266,7 +266,6 @@ namespace stm32plus {
     }
   }
 
-#if !defined(STM32PLUS_F1_CL)
 
   /**
    * Enabler specialisation, timer 8
@@ -297,10 +296,6 @@ namespace stm32plus {
     }
   }
 
-#endif
-
-
-#ifdef STM32PLUS_F1_XL
 
   /**
    * Enabler specialisation, timer 9
@@ -384,5 +379,4 @@ namespace stm32plus {
       Nvic::configureIrq(TIM8_TRG_COM_TIM14_IRQn,ENABLE,priority,subPriority);
     }
   }
-#endif // STM32PLUS_F1_XL
 }

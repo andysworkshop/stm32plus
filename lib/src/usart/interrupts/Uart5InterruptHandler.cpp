@@ -7,6 +7,7 @@
 #include "config/stm32plus.h"
 #include "config/usart.h"
 
+#if !defined(STM32PLUS_MD_VL)
 
 using namespace stm32plus;
 
@@ -55,3 +56,6 @@ extern "C" {
 
   #endif
 } // extern "C"
+
+
+#endif

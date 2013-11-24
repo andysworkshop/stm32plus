@@ -60,7 +60,14 @@
   #include "dma/f1/Dma2Channel4.h"
   #include "dma/f1/Dma2Channel5.h"
 
-  #include "dma/features/f1/DmaInterruptFeature.h"
+  #if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_FL_XL)
+    #include "dma/features/f1/xl_hd/DmaInterruptFeature.h"
+  #elif defined(STM32PLUS_F1_CL)
+    #include "dma/features/f1/cl/DmaInterruptFeature.h"
+  #elif defined(STM32PLUS_F1_MD_VL)
+    #include "dma/features/f1/mdvl/DmaInterruptFeature.h"
+  #endif
+
   #include "dma/features/f1/Dma1Channel1InterruptFeature.h"
   #include "dma/features/f1/Dma1Channel2InterruptFeature.h"
   #include "dma/features/f1/Dma1Channel3InterruptFeature.h"

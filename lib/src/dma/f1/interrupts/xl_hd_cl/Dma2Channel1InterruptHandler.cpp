@@ -8,9 +8,9 @@
 #include "config/dma.h"
 
 
-// this is only for the F1
+// this is only for the F1 XL/HD/CL
 
-#ifdef STM32PLUS_F1
+#if defined(STM32PLUS_F1_XL) || defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL)
 
 using namespace stm32plus;
 

@@ -6,7 +6,7 @@
 
 #include "config/stm32plus.h"
 
-#if defined(STM32PLUS_F1) && !defined(STM32PLUS_F1_CL)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_XL)
 
 #include "config/dma.h"
 

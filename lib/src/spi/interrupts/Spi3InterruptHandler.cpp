@@ -9,6 +9,9 @@
 #include "config/i2s.h"
 
 
+#if !defined(STM32PLUS_F1_MD_VL)
+
+
 using namespace stm32plus;
 
 
@@ -36,3 +39,5 @@ extern "C" {
 
 #endif
 } // extern "C"
+
+#endif
