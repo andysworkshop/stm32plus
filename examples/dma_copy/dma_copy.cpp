@@ -24,12 +24,18 @@ using namespace stm32plus;
  * PD13 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
+ * If this example is to be run on the STM32VLDISCOVERY
+ * board then change the LED configuration from PF6 to
+ * PC8 and invert the set() / reset() logic because
+ * that LED is active HIGH.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
  *   STM32F103ZET6
+ *   STM32F100RBT6
  *   STM32F407VGT6
  */
 
@@ -69,14 +75,14 @@ class DmaCopyTest {
 
 #if defined(STM32PLUS_F1)
 
-      Dma2Channel1<
-        Dma2Channel1InterruptFeature,   // interrupts on DMA2, channel 1
+      Dma1Channel1<
+        Dma1Channel1InterruptFeature,   // interrupts on DMA1, channel 1
         DmaMemoryCopyFeature<>          // memory copy with default transfer size (bytes)
       > dma;
 
-      // enable the completion interrupt for DMA2, channel 1.
+      // enable the completion interrupt for DMA1, channel 1.
 
-      dma.enableInterrupts(Dma2Channel1InterruptFeature::COMPLETE);
+      dma.enableInterrupts(Dma1Channel1InterruptFeature::COMPLETE);
 
 #elif defined(STM32PLUS_F4)
 
