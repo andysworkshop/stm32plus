@@ -38,14 +38,14 @@ using namespace stm32plus;
  *   returning to you.
  *
  * Little endian mode:
- *   No transformations at all are performed on the
- *   data.
+ *   No transformations at all are performed on the data.
  *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
