@@ -18,7 +18,7 @@ using namespace stm32plus::display;
  * application using an ILI9325 LCD.
  *
  * Compatible MCU:
- *   STM32F1
+ *   STM32F1 HD
  *   STM32F4
  *
  * Tested on devices:

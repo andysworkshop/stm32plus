@@ -78,7 +78,7 @@ namespace stm32plus {
     }
   };
 
-#if !defined(STM32PLUS_F1_CL)     // the 105/107 do not have the FSMC
+#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
 
   /**
    * FSMC
@@ -313,7 +313,7 @@ namespace stm32plus {
     }
   };
 
-#if !defined(STM32PLUS_F1_CL)     // the 105/107 do not have SDIO
+#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
 
   /**
    * SDIO

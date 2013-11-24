@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F1)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
 /**
   ******************************************************************************
   * @file    misc.h

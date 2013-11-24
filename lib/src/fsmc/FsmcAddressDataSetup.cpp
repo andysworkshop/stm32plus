@@ -6,7 +6,7 @@
 
 #include "config/stm32plus.h"
 
-#if !defined(STM32PLUS_F1_CL)     // the 105/107 do not have the FSMC
+#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)     // the 100/105/107 do not have the FSMC
 
 #include "config/fsmc.h"
 

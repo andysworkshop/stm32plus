@@ -16,7 +16,7 @@
 
 #include "config/gpio.h"
 
-#if !defined(STM32PLUS_F1_CL)
+#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
   #include "config/fsmc.h"
 #endif
 
@@ -50,7 +50,7 @@
 #include "display/graphic/gamma/DisplayDeviceGamma.h"
 #include "display/graphic/gamma/NullDisplayDeviceGamma.h"
 
-#if !defined(STM32PLUS_F1_CL)
+#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
   #include "display/graphic/access/Fsmc16BitAccessMode.h"
   #include "display/graphic/access/Fsmc8BitAccessMode.h"
 #endif
