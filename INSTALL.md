@@ -45,7 +45,11 @@ You can build all of the above combinations side-by-side if you so wish by execu
 		mode
 			debug/fast/small. Debug = -O0, Fast = -O3, Small = -Os
 	    mcu
-			f1hd/f1cle/f4. f1hd = STM32F103HD. f1cle = STM32F107. f4 = STM32F4xx.
+			f1hd/f1cle/f1mdvl/f4 
+              f1hd   = STM32F103 HD
+              f1cle  = STM32F107
+              f1mdvl = STM32F100 MD VL
+              f4     = STM32F4xx
 		hse: 
 			Your external oscillator speed in Hz. Some of the ST standard peripheral library code uses the HSE_VALUE #define
 			that we set here.
@@ -53,6 +57,7 @@ You can build all of the above combinations side-by-side if you so wish by execu
 ### Examples ###
 	scons mode=debug mcu=f1hd hse=8000000
 	scons mode=fast mcu=f1hd hse=8000000 install
+	scons mode=fast mcu=f1mdvl hse=8000000 install
 	scons mode=debug mcu=f1cle hse=25000000
 	scons mode=small mcu=f4 hse=8000000 install
 	scons mode=debug mcu=f4 hse=8000000 -j4 install
@@ -63,7 +68,7 @@ The `install` option will install the library and the examples into subdirectori
 
 #### A note on the example projects ####
 
-The example projects are designed to run on either the 512/64Kb/72MHz STM32F103, the 256/64Kb/72Mhz STM32F107 and the 1024Kb/128Kb/168Mhz STM32F4.
+The example projects are designed to run on either the 512/64Kb/72MHz STM32F103, the 256/64Kb/72Mhz STM32F107, the 128/8Kb/24MHz STM32F100 and the 1024Kb/128Kb/168Mhz STM32F4.
 
 It is the linker script (`Linker.ld`) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent.
 

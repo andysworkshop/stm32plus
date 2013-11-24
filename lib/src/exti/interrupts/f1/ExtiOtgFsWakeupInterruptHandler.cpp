@@ -6,7 +6,7 @@
 
 #include "config/stm32plus.h"
 
-#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_CL)
 
 #include "config/exti.h"
 

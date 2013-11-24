@@ -47,8 +47,8 @@ if not (mode in ['debug', 'fast', 'small']):
 	print "ERROR: mode must be debug/fast/small"
 	Exit(1)
 
-if not (mcu in ['f1hd', 'f1cle', 'f4']):
-	print "ERROR: mcu must be f1hd/f1cle/f4"
+if not (mcu in ['f1hd', 'f1cle', 'f4', 'f1mdvl']):
+	print "ERROR: mcu must be f1hd/f1cle/f1mdvl/f4"
 	Exit(1)
 
 if not hse or not hse.isdigit():
@@ -86,6 +86,10 @@ if mcu=="f1hd":
 	env.Append(LINKFLAGS="-mcpu=cortex-m3")
 elif mcu=="f1cle":
 	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_CL_E"])
+	env.Append(ASFLAGS="-mcpu=cortex-m3")
+	env.Append(LINKFLAGS="-mcpu=cortex-m3")
+elif mcu=="f1mdvl":
+	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_MD_VL"])
 	env.Append(ASFLAGS="-mcpu=cortex-m3")
 	env.Append(LINKFLAGS="-mcpu=cortex-m3")
 elif mcu=="f4":

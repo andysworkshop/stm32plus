@@ -1,6 +1,6 @@
 Introduction
 ============
-Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F103, STM32F107 and STM32F4 devices.
+Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F100, STM32F103, STM32F107 and STM32F4 devices.
 
 The main introduction and getting started guide can be found at [my website](http://www.andybrown.me.uk).
 
@@ -16,7 +16,7 @@ Releases
 
 After cloning this repo you are going to have a choice of what to build based on the branches and tags that have been created. Your options are:
 
-* Checkout a numbered tag and build from that.This is the safe option. Every now and then I will create a tag from the current master branch that represents a release. You can be sure that a release will be fully tested against all the supported MCUs.
+* Download a [release](https://github.com/andysworkshop/stm32plus/releases) and build from that. This is the safe option. Every now and then I will create a tag from the current master branch that represents a release. You can be sure that a release will be fully tested against all the supported MCUs.
 
 * Checkout the `master` branch (the default) and build from that. This is the quite-safe option. The `master` branch is guaranteed to build on all MCUs but the examples may not have been fully regression tested.
 
@@ -27,8 +27,17 @@ Where are the examples?
 
 In the _examples_ subdirectory you will find dozens of examples nearly all of which will work without modification on the F1 and F4 devices. The examples are heavily commented to help you understand what's going on.
 
-The examples are designed to work on the F103 devices at 72MHz with an 8MHz HSE, the F107 devices at 72Mhz with a 25Mhz HSE and on the F4 at 168MHz with either an 8MHz or a 25MHz HSE. If your board has a different oscillator or core clock speed then you may need to adjust `System.c` in the `system` subdirectory
-of the example that you are looking at. 
+The examples are configured to run out-of-the-box on the following MCUs:
+
+| Device | Flash | SRAM | CPU Clock | External Oscillator |
+|--------|-------|------|-----------|---------------------|
+| F40x | 1024Kb | 192Kb | 168Mhz | 8 MHz |
+| F103 HD | 512Kb | 64Kb | 72 MHz | 8 MHz |
+| F107 | 256Kb | 64Kb | 72 MHz | 8 MHz |
+| F100 MD VL | 128Kb | 8Kb | 24 MHz | 8 MHz |
+
+If your device is listed but your board has a different oscillator or core clock speed then you may need to adjust `System.c` in the `system` subdirectory
+of the example that you are looking at. If your memory configuration is different then you will need to adjust `Linker.ld` in the `system` subdirectory. 
 
 Documentation
 =============
@@ -87,7 +96,7 @@ A short walk around the directories
 A quick guide to flashing using OpenOCD
 =======================================
 
-At the time of writing the lastest version of openocd is 0.6.1 and it contains full support for the STM32 connected via JTAG and also via ST-Link (e.g. the STM32F4DISCOVERY board). The following guide assumes that you are using either Linux or Windows with a Unix-like shell (cygwin or mingw) and that you have built the binaries.
+At the time of writing the lastest version of openocd is 0.6.1 and it contains full support for the STM32 connected via JTAG and also via ST-Link (e.g. the STM32F4DISCOVERY  and STM32VLDISCOVERY boards). The following guide assumes that you are using either Linux or Windows with a Unix-like shell (cygwin or mingw) and that you have built the binaries.
 
 Flashing the stm32f4discovery board
 -----------------------------------
@@ -197,5 +206,54 @@ Reset the MCU to start the program:
 	> reset
 	JTAG tap: stm32.cpu tap/device found: 0x3ba00477 (mfg: 0x23b, part: 0xba00, ver: 0x3)
 	JTAG tap: stm32.bs tap/device found: 0x06414041 (mfg: 0x020, part: 0x6414, ver: 0x0)
+
+Flashing the stm32vldiscovery board
+-----------------------------------
+
+Windows users need to ensure that they can connect to the ST-Link V1 debugger on the VL discovery board using OpenOCD. If the instructions below fail then you probably need to replace the default mass storage USB drivers with the WinUSB or libusb drivers using the [zadig](https://sourceforge.net/projects/libwdi/files/zadig) utility.
+
+`cd` into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
+
+	$ bin-x64/openocd-x64-0.6.1.exe -f scripts/board/stm32vldiscovery.cfg 
+	Open On-Chip Debugger 0.6.1 (2012-10-07-10:39)
+	Licensed under GNU GPL v2
+	For bug reports, read
+	        http://openocd.sourceforge.net/doc/doxygen/bugs.html
+	adapter speed: 1000 kHz
+	Info : clock speed 1000 kHz
+	libusbx: info [cache_config_descriptors] could not access configuration descriptor (dummy) for '\\.\USB#VID_0424&PID_2504#6&3734C893&0&1': [31] A device attached to the system is not functioning.
+	Info : stm32f1x.cpu: hardware has 6 breakpoints, 4 watchpoints
+
+openocd is now up and running waiting for you to do something. Don't worry about the libusb 'errors', they are harmless.
+
+Now telnet to openocd and flash your hex image:
+
+	$ telnet localhost 4444
+	Trying 127.0.0.1...
+	Connected to localhost.
+	Escape character is '^]'.
+	Open On-Chip Debugger
+
+Reset the device and halt it:
+
+	> reset init
+	target state: halted
+	target halted due to debug-request, current mode: Thread 
+	xPSR: 0x01000000 pc: 0x08000b84 msp: 0x20002000
+
+Flash your hex image:
+
+	> flash write_image erase p:/blink.hex
+	auto erase enabled
+	device id = 0x10016420
+	flash size = 128kbytes
+	target state: halted
+	target halted due to breakpoint, current mode: Thread 
+	xPSR: 0x61000000 pc: 0x2000003a msp: 0x20002000
+	wrote 3072 bytes from file p:/blink.hex in 0.653037s (4.594 KiB/s)
+
+Reset the device to run the program:
+
+	> reset
 
 That's all, I hope my experience with OpenOCD can help you get started.
