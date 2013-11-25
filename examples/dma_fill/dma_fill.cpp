@@ -27,11 +27,17 @@ using namespace stm32plus;
  * PD13 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
+ * If this example is to be run on the STM32VLDISCOVERY
+ * board then change the LED configuration from PF6 to
+ * PC8 and invert the set() / reset() logic because
+ * that LED is active HIGH.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
@@ -44,7 +50,7 @@ class DmaFillTest {
      * The LED is on PF6
      */
 
-    enum { LED_PIN = 6 };
+    enum { LED_PIN = 8 };
 
   public:
 
@@ -55,7 +61,7 @@ class DmaFillTest {
 
       // initialise the LED pin
 
-      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioC<DefaultDigitalOutputFeature<LED_PIN> > pf;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
