@@ -34,11 +34,21 @@ using namespace stm32plus;
  *  GpioF... to GpioD...
  *  Exti8 to Exit0
  *
+ * To use this demo on the STM32VLDISCOVERY board you
+ * will need to make the following changes to target the
+ * onboard button and LEDs:
+ *
+ *  LED_PIN to 8
+ *  BUTTON_PIN to 0
+ *  GpioF... to GpioC...
+ *  Exti8 to Exit0
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
