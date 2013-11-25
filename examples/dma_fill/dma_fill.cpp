@@ -50,7 +50,7 @@ class DmaFillTest {
      * The LED is on PF6
      */
 
-    enum { LED_PIN = 8 };
+    enum { LED_PIN = 6 };
 
   public:
 
@@ -61,7 +61,7 @@ class DmaFillTest {
 
       // initialise the LED pin
 
-      GpioC<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
