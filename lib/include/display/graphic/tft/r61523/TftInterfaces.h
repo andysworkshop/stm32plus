@@ -49,6 +49,20 @@ namespace stm32plus {
     template<class TAccessMode> using R61523_Portrait_16M_TypeB  = GraphicsLibrary<R61523<PORTRAIT,COLOURS_24BIT,TAccessMode,SonyU5Vivaz_TypeB>,TAccessMode>;
     template<class TAccessMode> using R61523_Landscape_16M_TypeB  = GraphicsLibrary<R61523<LANDSCAPE,COLOURS_24BIT,TAccessMode,SonyU5Vivaz_TypeB>,TAccessMode>;
 
+#if defined(STM32PLUS_F1_MD_VL)
+
+    /**
+     * The optimised GPIO access mode is available for the 64K depths at max 24Mhz HCLK
+     */
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,24,50,50>;
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,24,50,50>;
+
+#endif
+
     /**
      * Graphic terminal modes for the R61523 (no hardware scrolling either orientation)
      */
