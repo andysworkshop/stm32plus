@@ -27,19 +27,23 @@ using namespace stm32plus;
  *
  * The USART protocol is 57600/8/N/1
  *
- * Timer5 channel 4 is used to generate a 100KHz PWM
+ * Timer4 channel 1 is used to generate a PWM
  * signal. This signal is fed to Timer3 channel 3. Each
  * rising edge of the signal causes an interrupt to fire.
  * When two successive edges have been captured we
  * calculate and display the result.
  *
- * You will need to wire PA3 to PB0 to test this demo.
+ * On the F4 and F103 HD the frequency is 100KHz. This is too
+ * fast for the F100 VL so we use 10KHz instead.
+ *
+ * You will need to wire PB6 to PB0 to test this demo.
  *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
@@ -96,24 +100,29 @@ class TimerInputCaptureTest {
       UsartPollingOutputStream outputStream(usart1);
 
       /*
-       * We'll use Timer 5 to generate a PWM signal on its channel 4.
-       * The signal will be output on PA3
+       * We'll use Timer 4 to generate a PWM signal on its channel 1.
+       * The signal will be output on PB6
        */
 
-      Timer5<
-        Timer5InternalClockFeature,     // clocked from the internal clock
-        TimerChannel4Feature,           // we're going to use channel 4
-        Timer5GpioFeature<              // we want to output something to GPIO
+      Timer4<
+        Timer4InternalClockFeature,     // clocked from the internal clock
+        TimerChannel1Feature,           // we're going to use channel 1
+        Timer4GpioFeature<              // we want to output something to GPIO
           TIMER_REMAP_NONE,             // the GPIO output will not (cannot for this timer) be remapped
-          TIM5_CH4_OUT                  // we will output channel 4 to GPIO (PA3)
+          TIM4_CH1_OUT                  // we will output channel 1 to GPIO (PB6)
         >
       > outputTimer;
 
       /*
-       * Set the output timer to 24Mhz with a reload frequency of 100Khz (24Mhz/240).
+       * On the F1HD and F4 we set the output timer to 24Mhz with a reload frequency of 100Khz (24Mhz/240).
+       * On the F1 VL we set it to 10KHz to avoid CPU starvation by the interrupt handler.
        */
 
+#if defined(STM32PLUS_F1_MD_VL)
+      outputTimer.setTimeBaseByFrequency(800000,80-1);
+#else
       outputTimer.setTimeBaseByFrequency(24000000,240-1);
+#endif
 
       /*
        * Initialise the output channel for PWM output with a duty cycle of 50%. This will
