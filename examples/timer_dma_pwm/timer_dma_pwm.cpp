@@ -23,13 +23,16 @@ using namespace stm32plus;
  * time the timer gets an update event.
  *
  * The PWM signal is output on PA[8]. Connect this to
- * a LED to see the fade feature.
+ * a LED to see the fade feature. On the F1VL and F4
+ * discovery boards this means connecting PA8 to PC8
+ * or PD13, respectively.
  *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
