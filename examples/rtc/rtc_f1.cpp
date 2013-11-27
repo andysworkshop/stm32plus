@@ -25,11 +25,15 @@ using namespace stm32plus;
  * The RTC on the F1 is quite different to the F4 so I have elected to provide separate demos
  * for the F1 and F4 (STM32F4DISCOVERY)
  *
+ * If you want to try this on the STM32VLDISCOVERY board then change LED_PIN to 8 and GpioF
+ * to GpioC to use the blue LED on the board.
+ *
  * Compatible MCU:
  *   STM32F1
  *
  * Tested devices:
  *   STM32F103ZET6
+ *   STM32F100RBT6
  */
 
 class RtcTest {
@@ -41,18 +45,22 @@ class RtcTest {
     volatile bool _ticked;
     volatile bool _alarmed;
 
+    enum {
+      LED_PIN = 6
+    };
+
   public:
 
     void run() {
 
       // initialise the LED port
 
-      GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
       _ledState=true;
-      pf[6].set();
+      pf[LED_PIN].set();
 
       // declare an RTC instance customised with just the features we will use.
       // a clock source is mandatory. The interrupt features are optional and
@@ -87,7 +95,7 @@ class RtcTest {
 
         if(_ticked) {
           _ledState^=true;
-          pf[6].setState(_ledState);
+          pf[LED_PIN].setState(_ledState);
 
           // reset for next time
 
@@ -99,15 +107,15 @@ class RtcTest {
         if(_alarmed) {
 
           for(int i=0;i<5;i++) {
-            pf[6].reset();
+            pf[LED_PIN].reset();
             MillisecondTimer::delay(50);
-            pf[6].set();
+            pf[LED_PIN].set();
             MillisecondTimer::delay(50);
           }
 
           // put the LED back where it was
 
-          pf[6].setState(_ledState);
+          pf[LED_PIN].setState(_ledState);
 
           // bump forward the alarm by 10 seconds
 
