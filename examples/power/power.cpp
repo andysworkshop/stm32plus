@@ -38,6 +38,12 @@ using namespace stm32plus;
  * user button. Also change Exti8 to Exti0 to match
  * the button pin number.
  *
+ * To run this example on the STM32VLDISCOVERY board
+ * change the LED pin to PC8 to use the onboard LED
+ * and change the button pin to PA0 to use the onboard
+ * user button. Also change Exti8 to Exti0 to match
+ * the button pin number.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
