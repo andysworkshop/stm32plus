@@ -69,9 +69,14 @@
 
 #include "display/graphic/access/Gpio16BitAccessMode.h"
 #include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"
-#include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"
 #include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"
-#include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"
+
+// includes for the optimised GPIO drivers that only work on the F1
+
+#if defined(STM32PLUS_F1)
+  #include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"
+  #include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"
+#endif
 
 // include the device drivers
 
