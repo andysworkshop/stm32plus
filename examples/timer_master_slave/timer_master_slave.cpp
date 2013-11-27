@@ -38,11 +38,16 @@ using namespace stm32plus;
  * on PF6 so I've wired PA6 to PF6 and enabled PF6 for
  * output in this demo code.
  *
+ * If you're using the F4 Discovery board then wire up
+ * PA6 to PD13. If you're using the F1 VL Discovery board
+ * then wire up PA6 to PC8.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
@@ -55,6 +60,7 @@ class TimerMasterSlaveTest {
 
       /*
        * Enable PF6 for output so we can see the output on the LED that's connected there.
+       * Wire up PA6 to PF6 to see the output.
        */
 
       GpioF<DefaultDigitalOutputFeature<6> > pf;
