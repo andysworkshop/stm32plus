@@ -27,6 +27,10 @@ using namespace stm32plus;
  * STM23F4DISCOVERY board then replace PF6 with PD13 to
  * use the onboard LED.
  *
+ * If you intend to run this example on the
+ * STM23F4DISCOVERY board then replace PF6 with PC8 to
+ * use the onboard LED.
+ *
  * For this demo I'm going to need you to do a little
  * wiring to hook up SPI1 to SPI2 so that we can
  * exchange data over the MOSI pin. Here's the
