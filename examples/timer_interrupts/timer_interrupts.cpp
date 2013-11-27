@@ -26,11 +26,16 @@ using namespace stm32plus;
  * board then you can replace all reference to PF6 with
  * PD13 to use the onboard LED on that board.
  *
+ * If you are running this on the STM32VLDISCOVERY
+ * board then you can replace all reference to PF6 with
+ * PC8 to use the onboard LED on that board.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
@@ -39,13 +44,13 @@ class TimerInterruptsTest  {
 
   protected:
 
-    enum { LED_PIN = 6 };
+    enum { LED_PIN = 8 };
 
     /*
      * We'll need these as member variables so that we can see them from the interrupt handler
      */
 
-    GpioF<DefaultDigitalOutputFeature<LED_PIN> > _pf;
+    GpioC<DefaultDigitalOutputFeature<LED_PIN> > _pf;
     bool _ledState;
 
   public:
