@@ -18,11 +18,15 @@ using namespace stm32plus;
  * increment the duty cycle from 0 to 100% and back down
  * to 0 over 800ms.
  *
+ * Connect up PA0 to a LED pin on your development board
+ * to see the output.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F107VCT6
  *   STM32F407VGT6
