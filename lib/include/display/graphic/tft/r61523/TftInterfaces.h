@@ -52,14 +52,18 @@ namespace stm32plus {
 #if defined(STM32PLUS_F1_MD_VL)
 
     /**
-     * The optimised GPIO access mode is available for the 64K depths at max 24Mhz HCLK
+     * The optimised GPIO access mode is available for the 64K depths at max 24Mhz HCLK. The others will
+     * fall back to a slow GPIO mode.
      */
 
     template<class TPinPackage>
-    using Gpio16BitAccessMode_R61523_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,24,50,50>;
+    using Gpio16BitAccessMode_R61523_64K=Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,24,80,80>;
 
     template<class TPinPackage>
-    using Gpio16BitAccessMode_R61523_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,24,50,50>;
+    using Gpio16BitAccessMode_R61523_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,24,80,80>;
+
+    template<class TPinPackage>
+    using Gpio16BitAccessMode_R61523_16M=Gpio16BitAccessMode<TPinPackage,COLOURS_24BIT,24,80,80>;
 
 #endif
 

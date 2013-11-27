@@ -69,8 +69,9 @@
 
 #include "display/graphic/access/Gpio16BitAccessMode.h"
 #include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"
-#include "display/graphic/access/Gpio16BitAccessMode_64K_24_50_50.h"
+#include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"
 #include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"
+#include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"
 
 // include the device drivers
 
