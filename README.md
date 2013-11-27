@@ -33,7 +33,7 @@ The examples are configured to run out-of-the-box on the following MCUs:
 |--------|-------|------|-----------|---------------------|
 | F40x | 1024Kb | 192Kb | 168Mhz | 8 MHz |
 | F103 HD | 512Kb | 64Kb | 72 MHz | 8 MHz |
-| F107 | 256Kb | 64Kb | 72 MHz | 8 MHz |
+| F107 | 256Kb | 64Kb | 72 MHz | 25 MHz |
 | F100 MD VL | 128Kb | 8Kb | 24 MHz | 8 MHz |
 
 If your device is listed but your board has a different oscillator or core clock speed then you may need to adjust `System.c` in the `system` subdirectory
