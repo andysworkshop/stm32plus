@@ -28,7 +28,7 @@ using namespace stm32plus;
  * use the onboard LED.
  *
  * If you intend to run this example on the
- * STM23F4DISCOVERY board then replace PF6 with PC8 to
+ * STM23VLDISCOVERY board then replace PF6 with PC8 to
  * use the onboard LED.
  *
  * For this demo I'm going to need you to do a little

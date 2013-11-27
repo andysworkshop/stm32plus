@@ -28,6 +28,10 @@ using namespace stm32plus;
  * STM23F4DISCOVERY board then replace PF6 with PD13
  * to use the onboard LED.
  *
+ * If you intend to run this example on the
+ * STM23VLDISCOVERY board then replace PF6 with PC8
+ * to use the onboard LED.
+ *
  * 1MOSI/2MOSI: PA7  => PB15
  * NSS:         PA4 <=> PB12
  * SCLK:        PA5 <=> PB13
@@ -37,6 +41,7 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
@@ -45,7 +50,7 @@ class SpiSendSyncTest {
 
   protected:
 
-    enum { LED_PIN = 6 };
+    enum { LED_PIN = 8 };
 
   public:
 
@@ -57,7 +62,7 @@ class SpiSendSyncTest {
 
       // initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
 
-      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioC<DefaultDigitalOutputFeature<LED_PIN> > pf;
       pf[LED_PIN].set();
 
       /*
