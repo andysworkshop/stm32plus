@@ -213,7 +213,7 @@ typedef enum IRQn
   * @}
   */
 
-#include "core_cm0.h"
+#include "fwlib/f0/cmsis/Include/core_cm0.h"
 #include "system_stm32f0xx.h"
 #include <stdint.h>
 
