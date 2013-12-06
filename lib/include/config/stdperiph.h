@@ -65,6 +65,27 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_wwdg.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_syscfg.h"
 
+#elif defined(STM32PLUS_F0)
+
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_misc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_adc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_crc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_dac.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_dma.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_exti.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_flash.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_gpio.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_i2c.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_rcc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_rtc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_spi.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_pwr.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_spi.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_syscfg.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_tim.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_wwdg.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_usart.h"
+
 #else
 
 #error STM32PLUS_Fn macro has not been defined: check config/stm32plus.h
