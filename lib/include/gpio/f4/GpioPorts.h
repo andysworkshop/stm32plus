@@ -7,6 +7,12 @@
 #pragma once
 
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
+
+
 namespace stm32plus {
 
   /*
@@ -20,11 +26,6 @@ namespace stm32plus {
   template<class... Features> using GpioE=GpioPort<GPIOE_BASE,Features...>;
   template<class... Features> using GpioF=GpioPort<GPIOF_BASE,Features...>;
   template<class... Features> using GpioG=GpioPort<GPIOG_BASE,Features...>;
-
-#if defined(STM32PLUS_F4)
-
   template<class... Features> using GpioH=GpioPort<GPIOH_BASE,Features...>;
   template<class... Features> using GpioI=GpioPort<GPIOI_BASE,Features...>;
-
-#endif
 }

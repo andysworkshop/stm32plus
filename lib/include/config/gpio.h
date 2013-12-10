@@ -17,35 +17,43 @@
 #include "gpio/GpioPortBase.h"
 #include "gpio/GpioAlternateFunctionMapper.h"
 
-#if defined(STM32PLUS_F1)
-  #include "gpio/f1/Gpio.h"
-#elif defined(STM32PLUS_F4)
-  #include "gpio/f4/Gpio.h"
-#endif
-
 // device-specific feature includes
 
 #if defined(STM32PLUS_F1)
 
+  #include "gpio/f1/Gpio.h"
   #include "gpio/f1/GpioPort.h"
   #include "gpio/f1/features/DigitalOutputFeature.h"
   #include "gpio/f1/features/DigitalInputFeature.h"
   #include "gpio/f1/features/AlternateFunctionFeature.h"
   #include "gpio/f1/features/AnalogInputFeature.h"
   #include "gpio/f1/GpioAlternateFunctionMapper.h"
+  #include "gpio/f1/GpioPorts.h"
 
 #elif defined(STM32PLUS_F4)
 
+  #include "gpio/f4/Gpio.h"
   #include "gpio/f4/GpioPort.h"
   #include "gpio/f4/features/DigitalOutputFeature.h"
   #include "gpio/f4/features/DigitalInputFeature.h"
   #include "gpio/f4/features/AlternateFunctionFeature.h"
   #include "gpio/f4/features/AnalogInputFeature.h"
+  #include "gpio/f4/GpioPorts.h"
+
+
+#elif defined(STM32PLUS_F0)
+
+  #include "gpio/f0/Gpio.h"
+  #include "gpio/f0/GpioPort.h"
+  #include "gpio/f0/features/DigitalOutputFeature.h"
+  #include "gpio/f0/features/DigitalInputFeature.h"
+  #include "gpio/f0/features/AlternateFunctionFeature.h"
+  #include "gpio/f0/features/AnalogInputFeature.h"
+  #include "gpio/f0/GpioPorts.h"
 
 #endif
 
 // generic utility includes
 
 #include "gpio/GpioPinInitialiser.h"
-#include "gpio/GpioPorts.h"
 #include "gpio/GpioPinRef.h"
