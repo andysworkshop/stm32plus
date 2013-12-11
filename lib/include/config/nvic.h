@@ -16,4 +16,12 @@
 
 // generic includes for the peripheral
 
-#include "nvic/NvicPeripheral.h"
+#if defined(STM32PLUS_F1)
+  #include "nvic/f1/NvicPeripheral.h"
+#elif defined(STM32PLUS_F4)
+  #include "nvic/f4/NvicPeripheral.h"
+#elif defined(STM32PLUS_F0)
+  #include "nvic/f0/NvicPeripheral.h"
+#else
+  #error Unsupported MCU
+#endif

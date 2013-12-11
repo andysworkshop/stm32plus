@@ -6,11 +6,15 @@
 
 #pragma once
 
+#if !defined(STM32PLUS_F1)
+#error This include file is only for the F1
+#endif
+
 
 namespace stm32plus {
 
   /**
-   * @brief Generic implementation of the NVIC - common to all MCUs
+   * @brief F1 implementation of the NVIC
    *
    * The NVIC methods allow us to configure the number of bits available for priority and subpriority. The default
    * is all 4 bits for priority and none for subpriority. Other methods allow us to enable/disable the IRQ for
