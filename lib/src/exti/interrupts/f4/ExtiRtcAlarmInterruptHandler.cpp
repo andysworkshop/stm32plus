@@ -5,10 +5,10 @@
  */
 
 #include "config/stm32plus.h"
-#include "config/exti.h"
-
 
 #if defined(STM32PLUS_F4)
+
+#include "config/exti.h"
 
 
 using namespace stm32plus;

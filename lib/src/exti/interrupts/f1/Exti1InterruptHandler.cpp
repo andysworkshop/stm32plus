@@ -10,24 +10,25 @@
 
 #include "config/exti.h"
 
+
 using namespace stm32plus;
 
 
 // static initialiser for the hack that forces the IRQ handlers to be linked
 
-template<> ExtiInterruptEnabler<17>::FPTR ExtiInterruptEnabler<17>::_forceLinkage=nullptr;
-template<> ExtiPeripheral<EXTI_Line17> *ExtiPeripheral<EXTI_Line17>::_extiInstance=nullptr;
+template<> ExtiInterruptEnabler<1>::FPTR ExtiInterruptEnabler<1>::_forceLinkage=nullptr;
+template<> ExtiPeripheral<EXTI_Line1> *ExtiPeripheral<EXTI_Line1>::_extiInstance=nullptr;
 
 
-#if defined(USE_EXTI_RTC_ALARM_INTERRUPT)
+#if defined(USE_EXTI1_INTERRUPT)
 
 extern "C" {
 
-  void __attribute__ ((interrupt("IRQ"))) RTCAlarm_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) EXTI1_IRQHandler(void) {
 
-    if(EXTI_GetITStatus(EXTI_Line17)!=RESET) {
-      ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
-      EXTI_ClearITPendingBit(EXTI_Line17);
+    if(EXTI_GetITStatus(EXTI_Line1)!=RESET) {
+        Exti1::_extiInstance->ExtiInterruptEventSender.raiseEvent(1);
+        EXTI_ClearITPendingBit(EXTI_Line1);
     }
     __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }

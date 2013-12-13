@@ -51,7 +51,7 @@ namespace stm32plus {
 
 
   /**
-   * Enabler specialisations for F1 and F4
+   * Enabler specialisations for F1
    */
 
   template<>
@@ -105,7 +105,7 @@ namespace stm32plus {
   }
 
   /**
-   * Non-GPIO EXTI lines common to the F1 and F4
+   * Non-GPIO EXTI lines
    */
 
   template<>
@@ -143,10 +143,10 @@ namespace stm32plus {
 #endif
 
   /**
-   * Ethernet EXTI is available on the F107 and F4
+   * Ethernet EXTI is available on the F107
    */
 
-#if defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F1_CL_E)
 
   template<>
   inline void ExtiInterruptEnabler<19>::enable() {

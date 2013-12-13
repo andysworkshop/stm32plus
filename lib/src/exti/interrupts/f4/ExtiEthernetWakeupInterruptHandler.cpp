@@ -16,19 +16,19 @@ using namespace stm32plus;
 
 // static initialiser for the hack that forces the IRQ handlers to be linked
 
-template<> ExtiInterruptEnabler<20>::FPTR ExtiInterruptEnabler<20>::_forceLinkage=nullptr;
-template<> ExtiPeripheral<EXTI_Line20> *ExtiPeripheral<EXTI_Line20>::_extiInstance=nullptr;
+template<> ExtiInterruptEnabler<19>::FPTR ExtiInterruptEnabler<19>::_forceLinkage=nullptr;
+template<> ExtiPeripheral<EXTI_Line19> *ExtiPeripheral<EXTI_Line19>::_extiInstance=nullptr;
 
 
-#if defined(USE_EXTI_USB_HS_WAKEUP_INTERRUPT)
+#if defined(USE_EXTI_ETH_WAKEUP_INTERRUPT)
 
 extern "C" {
 
-  void __attribute__ ((interrupt("IRQ"))) OTG_HS_WKUP_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) ETH_WKUP_IRQHandler(void) {
 
-    if(EXTI_GetITStatus(EXTI_Line20)!=RESET) {
-        ExtiUsbHsWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(20);
-        EXTI_ClearITPendingBit(EXTI_Line20);
+    if(EXTI_GetITStatus(EXTI_Line19)!=RESET) {
+        ExtiEthernetWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(19);
+        EXTI_ClearITPendingBit(EXTI_Line19);
     }
     __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }

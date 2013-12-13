@@ -6,9 +6,10 @@
 
 #include "config/stm32plus.h"
 
-#if defined(STM32PLUS_F1)
+#if defined(STM32PLUS_F0)
 
 #include "config/exti.h"
+
 
 using namespace stm32plus;
 
@@ -19,15 +20,15 @@ template<> ExtiInterruptEnabler<17>::FPTR ExtiInterruptEnabler<17>::_forceLinkag
 template<> ExtiPeripheral<EXTI_Line17> *ExtiPeripheral<EXTI_Line17>::_extiInstance=nullptr;
 
 
-#if defined(USE_EXTI_RTC_ALARM_INTERRUPT)
+#if defined(USE_EXTI_RTC_INTERRUPT)
 
 extern "C" {
 
-  void __attribute__ ((interrupt("IRQ"))) RTCAlarm_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) RTC_IRQHandler(void) {
 
     if(EXTI_GetITStatus(EXTI_Line17)!=RESET) {
-      ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
-      EXTI_ClearITPendingBit(EXTI_Line17);
+        Exti17::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
+        EXTI_ClearITPendingBit(EXTI_Line17);
     }
     __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }

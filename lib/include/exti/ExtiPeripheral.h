@@ -10,7 +10,7 @@
 namespace stm32plus {
 
   /**
-   * @brief Template implementation for the EXTI lines for the STM32F1
+   * @brief Template implementation for the EXTI lines
    * @tparam Index The index (0..15) of the EXTI line.
    * @tparam Line The EXTI line e.g. EXTI_Line0
    * @tparam Irq The corresponding IRQ for the EXTI line.

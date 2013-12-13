@@ -22,14 +22,18 @@
 // enable all interrupts
 
 #define USE_EXTI0_INTERRUPT
+#define USE_EXTI0_1_INTERRUPT
 #define USE_EXTI1_INTERRUPT
 #define USE_EXTI2_INTERRUPT
+#define USE_EXTI2_3_INTERRUPT
 #define USE_EXTI3_INTERRUPT
 #define USE_EXTI4_INTERRUPT
+#define USE_EXTI4_15_INTERRUPT
 #define USE_EXTI9_5_INTERRUPT
 #define USE_EXTI15_10_INTERRUPT
 #define USE_EXTI_PVD_INTERRUPT
 #define USE_EXTI_RTC_ALARM_INTERRUPT
+#define USE_EXTI_RTC_INTERRUPT
 #define USE_EXTI_USB_FS_WAKEUP_INTERRUPT
 #define USE_EXTI_OTG_FS_WAKEUP_INTERRUPT      // CL only
 #define USE_EXTI_ETH_WAKEUP_INTERRUPT
@@ -40,9 +44,11 @@
 // device-specific includes
 
 #if defined(STM32PLUS_F1)
-#include "exti/f1/ExtiInterruptEnabler.h"
+  #include "exti/f1/ExtiInterruptEnabler.h"
 #elif defined(STM32PLUS_F4)
-#include "exti/f4/ExtiInterruptEnabler.h"
+  #include "exti/f4/ExtiInterruptEnabler.h"
+#elif defined(STM32PLUS_F0)
+  #include "exti/f0/ExtiInterruptEnabler.h"
 #endif
 
 // common peripheral includes

@@ -5,6 +5,9 @@
  */
 
 #include "config/stm32plus.h"
+
+#if defined(STM32PLUS_F4)
+
 #include "config/exti.h"
 
 
@@ -31,4 +34,5 @@ extern "C" {
   }
 }
 
+#endif
 #endif
