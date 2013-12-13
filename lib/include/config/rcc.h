@@ -30,5 +30,9 @@
   #include "include/rcc/f4/ClockControl.h"
   #include "include/rcc/f4/PeripheralBusSpeed.h"
 
+#elif defined(STM32PLUS_F0)
+
+  #include "include/rcc/f0/ClockControl.h"
+
 #endif
 
