@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
+
 
 namespace stm32plus {
 
@@ -269,19 +274,6 @@ namespace stm32plus {
     }
   };
 
-#if defined(STM32PLUS_F1_CL)
-
-  struct ExtiOtgFsWakeup : public ExtiPeripheral<EXTI_Line18> {
-    ExtiOtgFsWakeup(EXTIMode_TypeDef mode,EXTITrigger_TypeDef trigger)
-      : ExtiPeripheral<EXTI_Line18>(mode,trigger) {
-
-      if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<18>::enable();
-    }
-  };
-
-#else
-
   struct ExtiUsbFsWakeup : public ExtiPeripheral<EXTI_Line18> {
     ExtiUsbFsWakeup(EXTIMode_TypeDef mode,EXTITrigger_TypeDef trigger)
       : ExtiPeripheral<EXTI_Line18>(mode,trigger) {
@@ -291,10 +283,6 @@ namespace stm32plus {
     }
   };
 
-#endif
-
-#if defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F4)
-
   struct ExtiEthernetWakeup : public ExtiPeripheral<EXTI_Line19> {
     ExtiEthernetWakeup(EXTIMode_TypeDef mode,EXTITrigger_TypeDef trigger)
       : ExtiPeripheral<EXTI_Line19>(mode,trigger) {
@@ -303,10 +291,6 @@ namespace stm32plus {
         ExtiInterruptEnabler<19>::enable();
     }
   };
-
-#endif
-
-#if defined(STM32PLUS_F4)
 
   struct ExtiUsbHsWakeup : public ExtiPeripheral<EXTI_Line20> {
     ExtiUsbHsWakeup(EXTIMode_TypeDef mode,EXTITrigger_TypeDef trigger)
@@ -334,6 +318,4 @@ namespace stm32plus {
         ExtiInterruptEnabler<22>::enable();
     }
   };
-
-#endif
 }

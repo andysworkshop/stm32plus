@@ -41,17 +41,20 @@
 #define USE_EXTI_TAMP_STAMP_INTERRUPT
 #define USE_EXTI_RTC_WAKEUP_INTERRUPT
 
+// common peripheral includes
+
+#include "exti/ExtiPeripheralBase.h"
+
 // device-specific includes
 
 #if defined(STM32PLUS_F1)
   #include "exti/f1/ExtiInterruptEnabler.h"
+  #include "exti/f1/ExtiPeripheral.h"
 #elif defined(STM32PLUS_F4)
   #include "exti/f4/ExtiInterruptEnabler.h"
+  #include "exti/f4/ExtiPeripheral.h"
 #elif defined(STM32PLUS_F0)
   #include "exti/f0/ExtiInterruptEnabler.h"
+  #include "exti/f0/ExtiPeripheral.h"
 #endif
 
-// common peripheral includes
-
-#include "exti/ExtiPeripheralBase.h"
-#include "exti/ExtiPeripheral.h"
