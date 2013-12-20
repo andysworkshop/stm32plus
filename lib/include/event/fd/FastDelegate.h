@@ -175,8 +175,11 @@ inline OutputClass horrible_cast(const InputClass input){
   // Cause a compile-time error if in, out and u are not the same size.
   // If the compile fails here, it means the compiler has peculiar
   // unions which would prevent the cast from working.
-  typedef int ERROR_CantUseHorrible_cast[sizeof(InputClass)==sizeof(u) 
-    && sizeof(InputClass)==sizeof(OutputClass) ? 1 : -1];
+
+  // stm32plus comment (Andy): this pointer-size comparison hack is not required because gcc/ARM Cortex M*
+  // pointers are the same size
+  //typedef int ERROR_CantUseHorrible_cast[sizeof(InputClass)==sizeof(u)
+  //  && sizeof(InputClass)==sizeof(OutputClass) ? 1 : -1];
   u.in = input;
   return u.out;
 }
@@ -292,7 +295,9 @@ struct SimplifyMemFunc {
     GenericMemFuncType &bound_func) { 
     // Unsupported member function type -- force a compile failure.
       // (it's illegal to have a array with negative size).
-    typedef char ERROR_Unsupported_member_function_pointer_on_this_compiler[N-100];
+    // stm32plus comment (Andy): this pointer-size comparison hack is not required because gcc/ARM Cortex M*
+    // pointers are the same size
+    //typedef char ERROR_Unsupported_member_function_pointer_on_this_compiler[N-100];
     return 0; 
   }
 };
@@ -778,7 +783,12 @@ public:
     // Ensure that there's a compilation failure if function pointers 
     // and data pointers have different sizes.
     // If you get this error, you need to #undef FASTDELEGATE_USESTATICFUNCTIONHACK.
-    typedef int ERROR_CantUseEvilMethod[sizeof(GenericClass *)==sizeof(function_to_bind) ? 1 : -1];
+
+    // stm32plus comment (Andy): this pointer-size comparison hack is not required because gcc/ARM Cortex M*
+    // pointers are the same size
+    //    typedef int ERROR_CantUseEvilMethod[sizeof(GenericClass *)==sizeof(function_to_bind) ? 1 : -1];
+
+
     m_pthis = horrible_cast<GenericClass *>(function_to_bind);
     // MSVC, SunC++ and DMC accept the following (non-standard) code:
 //    m_pthis = static_cast<GenericClass *>(static_cast<void *>(function_to_bind));
@@ -793,7 +803,9 @@ public:
     // Ensure that there's a compilation failure if function pointers 
     // and data pointers have different sizes.
     // If you get this error, you need to #undef FASTDELEGATE_USESTATICFUNCTIONHACK.
-    typedef int ERROR_CantUseEvilMethod[sizeof(UnvoidStaticFuncPtr)==sizeof(this) ? 1 : -1];
+    // stm32plus comment (Andy): this pointer-size comparison hack is not required because gcc/ARM Cortex M*
+    // pointers are the same size
+//    typedef int ERROR_CantUseEvilMethod[sizeof(UnvoidStaticFuncPtr)==sizeof(this) ? 1 : -1];
     return horrible_cast<UnvoidStaticFuncPtr>(this);
   }
 #endif // !defined(FASTDELEGATE_USESTATICFUNCTIONHACK)
