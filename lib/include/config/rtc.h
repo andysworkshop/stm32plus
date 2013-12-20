@@ -23,15 +23,14 @@
 // device-specifc includes
 
 #if defined(STM32PLUS_F1)
-
   #include "rtc/f1/RtcBase.h"
-
 #elif defined(STM32PLUS_F4)
-
   #include "rtc/f4/RtcBase.h"
-
+#elif defined(STM32PLUS_F0)
+  #include "rtc/f0/RtcBase.h"
+#else
+  #error Unsupported MCU
 #endif
-
 
 // generic feature includes
 
@@ -59,6 +58,13 @@
   #include "rtc/features/f4/RtcLsiClockFeature.h"
   #include "rtc/features/f4/RtcSecondInterruptFeature.h"
   #include "rtc/features/f4/RtcMeasuredLsiFrequencyProvider.h"
+
+#elif defined(STM32PLUS_F0)
+
+  #include "rtc/features/f0/RtcAlarmInterruptFeature.h"
+  #include "rtc/features/f0/RtcLseClockFeature.h"
+  #include "rtc/features/f0/RtcLsiClockFeature.h"
+  #include "rtc/features/f0/RtcHseDiv32ClockFeature.h"
 
 #endif
 
