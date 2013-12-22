@@ -87,7 +87,7 @@ namespace stm32plus {
 
     void ADS7843AsyncTouchScreen::getSamples(uint8_t firstCommand,uint8_t lastCommand,uint16_t *values,uint16_t sampleCount) const {
 
-      uint8_t dummy,data[2];
+      uint8_t dummy,data[2] = { 0 };
 
       dummy=0;
 
