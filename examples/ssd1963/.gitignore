@@ -38,7 +38,6 @@ obj/
 [Bb]in
 [Dd]ebug*/
 [Rr]elease*/
-Fast_*
 Ankh.NoLoad
 
 #Tooling
@@ -54,3 +53,7 @@ _ReSharper*/
 
 # Office Temp Files
 ~$*
+
+# eclipse local settings
+
+.settings/

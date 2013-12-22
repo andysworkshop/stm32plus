@@ -250,7 +250,7 @@ class NetTcpServerTest {
 
       // create a TCP server on port 12345
 
-      TcpServer<MyTcpConnection> *tcpServer;
+      TcpServer<MyTcpConnection> *tcpServer(nullptr);
 
       if(!_net->tcpCreateServer(12345,tcpServer))
         error();

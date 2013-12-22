@@ -7,7 +7,6 @@ doc/
 *.class
 #OS junk files
 [Tt]humbs.db
-Fast_F4/
 
 *.a
 *.o
@@ -54,3 +53,7 @@ _ReSharper*/
 
 # Office Temp Files
 ~$*
+
+# eclipse local settings
+
+.settings/

@@ -38,7 +38,7 @@ namespace stm32plus {
         void writeCommand(uint16_t command,uint16_t parameter) const;
         void writeData(uint16_t value) const;
         void writeDataAgain(uint16_t value) const;
-        void writeMultiData(uint32_t howMuch,uint16_t value) const;
+        void writeMultiData(uint32_t howMuch,uint16_t value) const __attribute__((noinline));
 
         void rawTransfer(const void *buffer,uint32_t numWords) const;
     };
@@ -196,7 +196,7 @@ namespace stm32plus {
      */
 
     template<class TPinPackage>
-    inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,24,80,80>::writeMultiData(uint32_t howMuch,uint16_t value) const {
+    __attribute__((noinline)) inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,24,80,80>::writeMultiData(uint32_t howMuch,uint16_t value) const {
 
       __asm volatile(
           "    str  %[value],   [%[data]]                 \n\t"     // port <= value
@@ -295,7 +295,7 @@ namespace stm32plus {
 
           "lastlot%=:                                     \n\t"
           "    ldr %[jump],    =finished%=                \n\t"     // load 'jump' with the address of the end
-          "    lsl %[howmuch], #3                         \n\t"     // multiply remaining by 8 and
+          "    lsl %[howmuch], #2                         \n\t"     // multiply remaining by 4 and
           "    sub %[jump],    %[howmuch]                 \n\t"     // subtract from the 'jump' target
           "    orr %[jump],    #1                         \n\t"     // set thumb mode (bit 0=1)
           "    bx  %[jump]                                \n\t"     // indirect jump forward into the last lot
