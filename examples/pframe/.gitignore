@@ -54,3 +54,6 @@ _ReSharper*/
 # Office Temp Files
 ~$*
 
+# eclipse local settings
+
+.settings/
