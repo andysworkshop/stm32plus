@@ -295,7 +295,7 @@ namespace stm32plus {
 
           "lastlot%=:                                     \n\t"
           "    ldr %[jump],    =finished%=                \n\t"     // load 'jump' with the address of the end
-          "    lsl %[howmuch], #3                         \n\t"     // multiply remaining by 8 and
+          "    lsl %[howmuch], #2                         \n\t"     // multiply remaining by 4 and
           "    sub %[jump],    %[howmuch]                 \n\t"     // subtract from the 'jump' target
           "    orr %[jump],    #1                         \n\t"     // set thumb mode (bit 0=1)
           "    bx  %[jump]                                \n\t"     // indirect jump forward into the last lot
