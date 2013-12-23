@@ -16,7 +16,12 @@
 
 #include "config/timing.h"
 
-#include "concurrent/Mutex.h"
 #include "concurrent/CriticalSection.h"
 #include "concurrent/atomic.h"
 #include "concurrent/IrqSuspend.h"
+
+// mutex only on cortex M3 and above due to the need for strex/ldrex* instructions
+
+#if !defined(STM32PLUS_F0)
+  #include "concurrent/Mutex.h"
+#endif

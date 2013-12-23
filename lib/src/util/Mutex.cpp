@@ -9,6 +9,8 @@
 #include "timing/MillisecondTimer.h"
 
 
+#if !defined(STM32PLUS_F0)
+
 namespace stm32plus {
 
 
@@ -68,3 +70,5 @@ namespace stm32plus {
     _flag=0;
   }
 }
+
+#endif
