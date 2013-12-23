@@ -25,7 +25,7 @@ namespace stm32plus {
     public:
       Mutex();
 
-      bool claim(uint32_t millisToWait);
+      bool claim(uint32_t millisToWait=0);
       void release();
   };
 }
