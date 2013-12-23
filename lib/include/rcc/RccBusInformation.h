@@ -18,6 +18,13 @@ namespace stm32plus {
     public:
 
       /**
+       * Get the value of the APB prescaler
+       * @return
+       */
+
+      static uint16_t getAPBPrescaler();
+
+      /**
        * Get the value of the APB2 prescaler
        * @return
        */

@@ -97,6 +97,7 @@ namespace stm32plus {
   inline TimerInterruptFeature<TTimerNumber>::TimerInterruptFeature(Timer& timer)
     : TimerFeatureBase(timer) {
     _interruptMask=0;
+    _nvicPriority=_nvicSubPriority=0;
     _timerInstance=this;
   }
 

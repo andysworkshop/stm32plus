@@ -97,6 +97,7 @@ namespace stm32plus {
   inline TimerInterruptFeature<TTimerNumber>::TimerInterruptFeature(Timer& timer)
     : TimerFeatureBase(timer) {
     _interruptMask=0;
+    _nvicPriority=_nvicSubPriority=0;
     _timerInstance=this;
   }
 
@@ -167,7 +168,7 @@ namespace stm32plus {
     }
 
     if((interruptMask & TIM_IT_Break)!=0) {
-      _forceLinkage=&TIM1_UP_TIM10_IRQHandler;
+      _forceLinkage=&TIM1_BRK_TIM9_IRQHandler;
       Nvic::configureIrq(TIM1_BRK_TIM9_IRQn,ENABLE,priority,subPriority);
     }
 
