@@ -14,6 +14,23 @@
 
 namespace stm32plus {
 
+  /**
+   * DMA1
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_DMA1> {
+
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,ENABLE);
+    }
+
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_DMA1,DISABLE);
+    }
+  };
+
+
   /*
    * TIM15
    */

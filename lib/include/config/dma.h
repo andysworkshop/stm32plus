@@ -95,6 +95,8 @@
   #include "dma/features/f1/SdioDmaWriterFeature.h"
   #include "dma/features/f1/DmaFsmcLcdMemoryCopyFeature.h"
 
+  #include "dma/features/f1/DmaPeripheralInfo.h"
+
 #elif defined(STM32PLUS_F4)
 
   #define USE_DMA1_0_INTERRUPT
@@ -152,11 +154,46 @@
   #include "dma/features/f4/DmaFsmcLcdMemoryCopyFeature.h"
   #include "dma/features/f4/DacDmaWriterFeature.h"
 
+  #include "dma/features/f4/DmaPeripheralInfo.h"
+
+#elif defined(STM32PLUS_F0)
+
+  #define USE_DMA1_1_INTERRUPT
+  #define USE_DMA1_2_3_INTERRUPT
+  #define USE_DMA1_4_5_INTERRUPT
+
+  #include "dma/f0/Dma.h"
+  #include "dma/features/DmaFeatureBase.h"
+
+  #include "dma/f0/Dma1Channel1.h"
+  #include "dma/f0/Dma1Channel2.h"
+  #include "dma/f0/Dma1Channel3.h"
+  #include "dma/f0/Dma1Channel4.h"
+  #include "dma/f0/Dma1Channel5.h"
+
+   #include "dma/features/f0/DmaInterruptFeature.h"
+
+  #include "dma/features/f0/Dma1Channel1InterruptFeature.h"
+  #include "dma/features/f0/Dma1Channel2InterruptFeature.h"
+  #include "dma/features/f0/Dma1Channel3InterruptFeature.h"
+  #include "dma/features/f0/Dma1Channel4InterruptFeature.h"
+  #include "dma/features/f0/Dma1Channel5InterruptFeature.h"
+
+  #include "dma/features/f0/DmaMemoryCopyBaseFeature.h"
+  #include "dma/features/f0/TimerDmaFeature.h"
+  #include "dma/features/f0/UsartDmaReaderFeature.h"
+  #include "dma/features/f0/UsartDmaWriterFeature.h"
+  #include "dma/features/f0/SpiDmaReaderFeature.h"
+  #include "dma/features/f0/SpiDmaWriterFeature.h"
+  #include "dma/features/f0/I2CDmaReaderFeature.h"
+  #include "dma/features/f0/I2CDmaWriterFeature.h"
+
+  #include "dma/features/f0/DmaPeripheralInfo.h"
+
 #endif
 
 // includes for the features
 
 #include "dma/features/DmaMemoryCopyFeature.h"
 #include "dma/features/DmaMemoryFillFeature.h"
-#include "dma/features/DmaPeripheralInfo.h"
 #include "dma/features/PwmFadeTimerDmaFeature.h"

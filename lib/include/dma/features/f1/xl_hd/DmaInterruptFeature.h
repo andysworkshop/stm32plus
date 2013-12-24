@@ -103,6 +103,8 @@ namespace stm32plus {
   inline DmaInterruptFeature<TDmaNumber,TChannelNumber>::DmaInterruptFeature(Dma& dma)
     : DmaFeatureBase(dma) {
     _interruptMask=0;
+    _nvicPriority=0;
+    _nvicSubPriority=0;
     _dmaInstance=this;
   }
 

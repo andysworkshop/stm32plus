@@ -135,6 +135,8 @@ namespace stm32plus {
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
   using Timer3Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer3Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
 
+#ifndef STM32PLUS_F0
+
   // TIM4
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
@@ -163,20 +165,6 @@ namespace stm32plus {
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
   using Timer5Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer5Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
 
-  // TIM6
-
-  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
-  using Timer6Channel1UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr1DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
-
-  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
-  using Timer6Channel2UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr2DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
-
-  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
-  using Timer6Channel3UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr3DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
-
-  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
-  using Timer6Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
-
   // TIM7
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
@@ -204,4 +192,20 @@ namespace stm32plus {
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
   using Timer8Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer8Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
+
+#endif
+
+  // TIM6
+
+  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
+  using Timer6Channel1UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr1DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
+
+  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
+  using Timer6Channel2UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr2DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
+
+  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
+  using Timer6Channel3UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr3DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
+
+  template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
+  using Timer6Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
 }

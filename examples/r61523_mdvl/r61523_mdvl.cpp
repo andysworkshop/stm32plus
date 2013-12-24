@@ -77,7 +77,7 @@ class R61523Test {
     // declare the access mode carefully so that we pick up the optimised implementation
 
     typedef Gpio16BitAccessMode<R61523Test,COLOURS_16BIT,24,80,80> LcdAccessMode;
-    typedef R61523_Landscape_64K<LcdAccessMode> LcdPanel;
+    typedef R61523_Landscape_64K_TypeB<LcdAccessMode> LcdPanel;
     typedef R61523PwmBacklight<LcdAccessMode> LcdBacklight;
 
     LcdPanel *_gl;
