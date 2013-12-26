@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0)
+#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx_rtc.c
@@ -221,7 +221,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx_rtc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_rtc.h"
 
 /** @addtogroup STM32F0xx_StdPeriph_Driver
   * @{
@@ -309,7 +309,6 @@ static uint8_t RTC_Bcd2ToByte(uint8_t Value);
   */
 ErrorStatus RTC_DeInit(void)
 {
-  __IO uint32_t wutcounter = 0x00;
   ErrorStatus status = ERROR;
   
   /* Disable the write protection for RTC registers */
@@ -1034,7 +1033,9 @@ void RTC_GetDate(uint32_t RTC_Format, RTC_DateTypeDef* RTC_DateStruct)
   *                          contains the alarm configuration parameters.
   * @retval None
   */
-void RTC_SetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm, RTC_AlarmTypeDef* RTC_AlarmStruct)
+void RTC_SetAlarm(uint32_t RTC_Format,
+                  uint32_t RTC_Alarm __attribute__((unused)),
+                  RTC_AlarmTypeDef* RTC_AlarmStruct)
 {
   uint32_t tmpreg = 0;
   
@@ -1167,7 +1168,7 @@ void RTC_AlarmStructInit(RTC_AlarmTypeDef* RTC_AlarmStruct)
   *                          contains the output alarm configuration values.
   * @retval None
   */
-void RTC_GetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm, RTC_AlarmTypeDef* RTC_AlarmStruct)
+void RTC_GetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm __attribute__((unused)), RTC_AlarmTypeDef* RTC_AlarmStruct)
 {
   uint32_t tmpreg = 0;
 
@@ -1306,7 +1307,7 @@ ErrorStatus RTC_AlarmCmd(uint32_t RTC_Alarm, FunctionalState NewState)
   *                                       to activate alarm
   * @retval None
   */
-void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm, uint32_t RTC_AlarmSubSecondValue, uint8_t RTC_AlarmSubSecondMask)
+void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm __attribute__((unused)), uint32_t RTC_AlarmSubSecondValue, uint8_t RTC_AlarmSubSecondMask)
 {
   uint32_t tmpreg = 0;
 
@@ -1338,7 +1339,7 @@ void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm, uint32_t RTC_AlarmSubSecondVal
   * @param  None
   * @retval RTC Alarm Subseconds value.
   */
-uint32_t RTC_GetAlarmSubSecond(uint32_t RTC_Alarm)
+uint32_t RTC_GetAlarmSubSecond(uint32_t RTC_Alarm __attribute__((unused)))
 {
   uint32_t tmpreg = 0;
   

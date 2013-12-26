@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0)
+#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx_i2c.c
@@ -77,8 +77,8 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx_i2c.h"
-#include "stm32f0xx_rcc.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_i2c.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_rcc.h"
 
 /** @addtogroup STM32F0xx_StdPeriph_Driver
   * @{

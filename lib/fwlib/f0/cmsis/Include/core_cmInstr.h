@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0)
+#if defined (STM32PLUS_F0_51)
 /**************************************************************************//**
  * @file     core_cmInstr.h
  * @brief    CMSIS Cortex-M Core Instruction Access Header File

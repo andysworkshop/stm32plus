@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0)
+#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx_syscfg.c
@@ -46,7 +46,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
-#include "stm32f0xx_syscfg.h"
+#include "fwlib/f0/stdperiph/inc/stm32f0xx_syscfg.h"
 
 /** @addtogroup STM32F0xx_StdPeriph_Driver
   * @{
@@ -250,7 +250,7 @@ void SYSCFG_BreakConfig(uint32_t SYSCFG_Break)
   *     @arg SYSCFG_FLAG_PE: SRAM parity error flag.
   * @retval The new state of SYSCFG_Flag (SET or RESET).
   */
-FlagStatus SYSCFG_GetFlagStatus(uint32_t SYSCFG_Flag)
+FlagStatus SYSCFG_GetFlagStatus(uint32_t SYSCFG_Flag __attribute__((unused)))
 {
   FlagStatus bitstatus = RESET;
 
