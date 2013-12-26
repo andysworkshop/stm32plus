@@ -37,6 +37,7 @@
 
   #define SPI_I2S_ReceiveData(a) SPI_I2S_ReceiveData16((a))
   #define SPI_I2S_SendData(a,b) SPI_I2S_SendData16((a),(b))
+  #define SPI_I2S_ClearITPendingBit(a,b)  SPI_I2S_ClearFlag((a),(b))
 
   #include "spi/f0/SpiAlternateFunctionMapper.h"
   #include "spi/f0/SpiPinInitialiser.h"

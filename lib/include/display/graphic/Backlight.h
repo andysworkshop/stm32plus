@@ -70,6 +70,18 @@ namespace stm32plus {
     }
 
 
+#if defined(STM32PLUS_F0)
+
+    /**
+     * On the F0 we'll default the backlight to PA7 (TIM17, CH1)
+     */
+
+    typedef Backlight<Timer17<Timer17InternalClockFeature,
+                             TimerChannel1Feature,
+                             Timer17GpioFeature<TIMER_REMAP_NONE,TIM17_CH1_OUT>
+                             > > DefaultBacklight;
+#else
+
     /**
      * For compatibility with earlier versions, default backlight is
      * Timer4, channel2, remapped GPIO. (PD13)
@@ -79,5 +91,7 @@ namespace stm32plus {
                              TimerChannel2Feature,
                              Timer4GpioFeature<TIMER_REMAP_FULL,TIM4_CH2_OUT>
                              > > DefaultBacklight;
+
+#endif
   }
 }

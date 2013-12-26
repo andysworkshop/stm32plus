@@ -5,6 +5,9 @@
  */
 
 #include "config/stm32plus.h"
+
+#if !defined(STM32PLUS_F0)
+
 #include "config/i2c.h"
 
 
@@ -87,3 +90,6 @@ extern "C" {
 
   #endif
 }
+
+
+#endif

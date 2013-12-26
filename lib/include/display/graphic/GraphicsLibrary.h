@@ -95,7 +95,8 @@ namespace stm32plus {
 
       // bitmap handling
 
-      bool drawBitmap(const Rectangle& rc,InputStream& source,DmaFsmcLcdMemoryCopyFeature<TDeviceAccessMode>& dma,uint32_t priority=DMA_Priority_High);
+      template<class TDmaCopierImpl>
+      bool drawBitmap(const Rectangle& rc,InputStream& source,DmaLcdWriter<TDmaCopierImpl>& dma,uint32_t priority=DMA_Priority_High);
       bool drawBitmap(const Rectangle& rc,InputStream& source);
 
       // jpeg handling
@@ -117,3 +118,13 @@ namespace stm32plus {
 #include "gl/Text.inl"
 #include "gl/LzgText.inl"
 #include "gl/Bitmap.inl"
+
+// the text operations use bitbanding on the f1 and f4. not available on the f0.
+
+#if defined(STM32PLUS_F0)
+  #include "gl/f0/Text.inl"
+#elif defined(STM32PLUS_F1)
+  #include "gl/f1/Text.inl"
+#elif defined(STM32PLUS_F4)
+  #include "gl/f4/Text.inl"
+#endif

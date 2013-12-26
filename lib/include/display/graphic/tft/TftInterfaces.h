@@ -12,9 +12,12 @@
 #include "display/graphic/tft/ili9481/TftInterfaces.h"
 #include "display/graphic/tft/lds285/TftInterfaces.h"
 #include "display/graphic/tft/mc2pa8201/TftInterfaces.h"
-#include "display/graphic/tft/ssd1963/TftInterfaces.h"
 #include "display/graphic/tft/ssd1289/TftInterfaces.h"
 #include "display/graphic/tft/st7783/TftInterfaces.h"
 #include "display/graphic/tft/lgdp453x/TftInterfaces.h"
 #include "display/graphic/tft/hx8352a/TftInterfaces.h"
 #include "display/graphic/tft/r61523/TftInterfaces.h"
+
+#if !defined(STM32PLUS_F0)
+  #include "display/graphic/tft/ssd1963/TftInterfaces.h"
+#endif

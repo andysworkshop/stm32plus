@@ -28,6 +28,9 @@
 #elif defined(STM32PLUS_F4)
   #include "i2s/f4/I2SAlternateFunctionMapper.h"
   #include "i2s/f4/I2SPinInitialiser.h"
+#elif defined(STM32PLUS_F0)
+  #include "i2s/f0/I2SAlternateFunctionMapper.h"
+  #include "i2s/f0/I2SPinInitialiser.h"
 #endif
 
 // generic peripheral includes

@@ -16,7 +16,7 @@
 
 #include "config/gpio.h"
 
-#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F4)
   #include "config/fsmc.h"
 #endif
 
@@ -50,7 +50,7 @@
 #include "display/graphic/gamma/DisplayDeviceGamma.h"
 #include "display/graphic/gamma/NullDisplayDeviceGamma.h"
 
-#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F4)
   #include "display/graphic/access/Fsmc16BitAccessMode.h"
   #include "display/graphic/access/Fsmc8BitAccessMode.h"
 #endif
@@ -63,19 +63,23 @@
 #include "display/graphic/PanelConfiguration.h"
 #include "display/graphic/PicoJpeg.h"
 #include "display/graphic/JpegDecoder.h"
+#include "display/graphic/DmaLcdWriter.h"
 #include "display/graphic/GraphicsLibrary.h"
 
 // include the optimised GPIO drivers in specialisation order
 
 #include "display/graphic/access/Gpio16BitAccessMode.h"
-#include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"
-#include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"
+
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)        // capable of 72MHz operation
+  #include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"      // optimised for 64K colours
+  #include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"          // generic for >64K colours
+#endif
 
 // includes for the optimised GPIO drivers that only work on the F1
 
 #if defined(STM32PLUS_F1)
-  #include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"
-  #include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"
+  #include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"      // optimised for 64K colours
+  #include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"          // generic for >64K colours
 #endif
 
 // include the device drivers
@@ -87,14 +91,17 @@
 #include "display/graphic/tft/hx8347a/HX8347A.h"
 #include "display/graphic/tft/mc2pa8201/MC2PA8201.h"
 #include "display/graphic/tft/lds285/LDS285.h"
-#include "display/graphic/tft/ssd1963/SSD1963.h"
-#include "display/graphic/tft/ssd1963/panelTraits/SSD1963_480x272PanelTraits.h"
 #include "display/graphic/tft/ssd1289/SSD1289.h"
 #include "display/graphic/tft/st7783/ST7783.h"
 #include "display/graphic/tft/lgdp453x/LGDP453x.h"
 #include "display/graphic/tft/hx8352a/HX8352A.h"
 #include "display/graphic/tft/r61523/R61523.h"
 #include "display/graphic/tft/hx8352a/panelTraits/LG_KF700.h"
+
+#if !defined(STM32PLUS_F0)        // there's an FSMC dependency in here
+  #include "display/graphic/tft/ssd1963/SSD1963.h"
+  #include "display/graphic/tft/ssd1963/panelTraits/SSD1963_480x272PanelTraits.h"
+#endif
 
 #include "display/graphic/tft/TftInterfaces.h"
 

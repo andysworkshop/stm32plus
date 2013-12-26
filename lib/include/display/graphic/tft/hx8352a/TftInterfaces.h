@@ -74,8 +74,6 @@ namespace stm32plus {
     template<class TPinPackage>
     using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,168,50,50>;
 
-#else
-#error unsupported MCU
 #endif
   }
 }

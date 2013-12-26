@@ -30,15 +30,15 @@ extern "C" {
     void __attribute__ ((interrupt("IRQ"))) DMA1_Channel1_IRQHandler() {
 
       if(DMA_GetITStatus(DMA1_IT_TC1)!=RESET) {
-        DmaInterruptFeature<1,1>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_COMPLETE);
+        DmaInterruptFeature<1>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_COMPLETE);
         DMA_ClearITPendingBit(DMA1_IT_TC1);
       }
       else if(DMA_GetITStatus(DMA1_IT_HT1)!=RESET) {
-        DmaInterruptFeature<1,1>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_HALF_COMPLETE);
+        DmaInterruptFeature<1>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_HALF_COMPLETE);
         DMA_ClearITPendingBit(DMA1_IT_HT1);
       }
       else if(DMA_GetITStatus(DMA1_IT_TE1)!=RESET) {
-        DmaInterruptFeature<1,1>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_TRANSFER_ERROR);
+        DmaInterruptFeature<1>::_dmaInstance->DmaInterruptEventSender.raiseEvent(DmaEventType::EVENT_TRANSFER_ERROR);
         DMA_ClearITPendingBit(DMA1_IT_TE1);
       }
       __DSB();      // prevent erroneous recall of this handler due to delayed memory write

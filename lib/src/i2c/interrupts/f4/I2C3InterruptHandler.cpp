@@ -5,10 +5,11 @@
  */
 
 #include "config/stm32plus.h"
-#include "config/i2c.h"
-
 
 #if defined(STM32PLUS_F4)
+
+#include "config/i2c.h"
+
 
 using namespace stm32plus;
 

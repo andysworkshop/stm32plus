@@ -27,8 +27,8 @@ extern "C" {
   void __attribute__ ((interrupt("IRQ"))) RTC_IRQHandler(void) {
 
     if(EXTI_GetITStatus(EXTI_Line17)!=RESET) {
-        Exti17::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
-        EXTI_ClearITPendingBit(EXTI_Line17);
+      ExtiRtcAlarm::_extiInstance->ExtiInterruptEventSender.raiseEvent(17);
+      EXTI_ClearITPendingBit(EXTI_Line17);
     }
     __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }

@@ -5,11 +5,11 @@
  */
 
 #include "config/stm32plus.h"
+
+#if !defined(STM32PLUS_F1_MD_VL) && !defined(STM32PLUS_F0)
+
 #include "config/spi.h"
 #include "config/i2s.h"
-
-
-#if !defined(STM32PLUS_F1_MD_VL)
 
 
 using namespace stm32plus;
