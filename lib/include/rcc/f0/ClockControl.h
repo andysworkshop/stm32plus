@@ -15,6 +15,23 @@
 namespace stm32plus {
 
   /**
+   * CRC
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_CRC> {
+
+    static void On() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC,ENABLE);
+    }
+
+    static void Off() {
+      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_CRC,DISABLE);
+    }
+  };
+
+
+  /**
    * DMA1
    */
 
@@ -78,6 +95,39 @@ namespace stm32plus {
 
     static void Off() {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_TIM17,DISABLE);
+    }
+  };
+
+
+  /**
+   * USART1
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_USART1> {
+
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,ENABLE);
+    }
+
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,DISABLE);
+    }
+  };
+
+  /**
+   * USART2
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_USART2> {
+
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
+    }
+
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,DISABLE);
     }
   };
 }

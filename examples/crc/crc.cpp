@@ -15,10 +15,11 @@ using namespace stm32plus;
 
 /**
  * CRC demo. This demo will show how to calculate the
+ *
  * 32-bit CRC of a stream of bytes using the hardware
  * CRC peripheral on the STM32. The calculated CRC
  * will be output to USART1. USART1 is configured as
- * 57600-8-N-1.
+ * 57600-8-N-1. The demo CRC value is 4200624485.
  *
  * Usart1 (non-remapped) is not available on the
  * STM32F4DISCOVERY. If this is your target board then
@@ -41,10 +42,12 @@ using namespace stm32plus;
  *   No transformations at all are performed on the data.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -87,7 +90,6 @@ class CrcTest {
        */
 
       crcOutputStream << testString;      // stream in the data to the CRC unit
-
       crcOutputStream.close();            // close the stream (calls finish() on the CRC)
 
       /*
