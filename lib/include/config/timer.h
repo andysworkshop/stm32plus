@@ -140,7 +140,7 @@
 
 #if defined(STM32PLUS_F1)
 
-  #include "timer/features/TimerInternalClockFeature.h"
+  #include "timer/features/f1/TimerInternalClockFeature.h"
   #include "timer/features/f1/Timer1GpioFeature.h"
   #include "timer/features/f1/Timer2GpioFeature.h"
   #include "timer/features/f1/Timer3GpioFeature.h"
