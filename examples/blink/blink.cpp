@@ -14,23 +14,16 @@ using namespace stm32plus;
 
 /**
  * This is the most basic example that uses GPIO and the
- * Systick timer to blink a LED on PF6 at 1Hz.
+ * Systick timer to blink a LED on PC8 at 1Hz. PC8 is wired
+ * to the blue onboard LED on the F1VL and F0 discovery boards.
  *
  * If the STM32F4DISCOVERY board is your target then
  * change the GPIO declation to...
  *
  *  GpioD<DefaultDigitalOutputFeature<13> > pd
  *
- * ... and change 2 of "pf[6]" to "pd[13]" to blink the
+ * ... and change 2 of "pc[8]" to "pd[13]" to blink the
  * orange led on the discovery board.
- *
- * If the STM32VLDISCOVERY or the STM32F0DISCOVERY board
- * is your target then change the GPIO declaration to...
- *
- * GpioC<DefaultDigitalOutputFeature<8> > pc;
- *
- * ... and change 2 of "pf[6]" to "pc[8]" to blink the
- * blue led on the discovery board.
  *
  * Compatible MCU:
  *   STM32F0
