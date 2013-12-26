@@ -47,7 +47,7 @@ namespace stm32plus {
        */
 
       GPIO_TypeDef *initClock() {
-        RCC_AHB1PeriphClockCmd(gpioHelper::getPeripheral<TPortAddress>(),ENABLE);
+        RCC_AHBPeriphClockCmd(gpioHelper::getPeripheral<TPortAddress>(),ENABLE);
         return (GPIO_TypeDef *)TPortAddress;
       }
 

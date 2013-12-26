@@ -40,6 +40,7 @@
   #define STM32F10X_MD_VL             // for the std peripheral library
 #elif defined(STM32PLUS_F0_51)
   #define STM32PLUS_F0                // enable features common to all F0
+  #define STM32F0XX_MD                // this is a medium density device
 #elif defined(STM32PLUS_F4)
   // no additional defines
 #else

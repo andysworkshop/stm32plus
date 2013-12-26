@@ -24,8 +24,8 @@ using namespace stm32plus;
  * ... and change 2 of "pf[6]" to "pd[13]" to blink the
  * orange led on the discovery board.
  *
- * If the STM32VLDISCOVERY board is your target then change
- * the GPIO declaration to...
+ * If the STM32VLDISCOVERY or the STM32F0DISCOVERY board
+ * is your target then change the GPIO declaration to...
  *
  * GpioC<DefaultDigitalOutputFeature<8> > pc;
  *
@@ -33,10 +33,12 @@ using namespace stm32plus;
  * blue led on the discovery board.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -51,17 +53,17 @@ class Blink {
 
       // initialise the pin for output
 
-      GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioC<DefaultDigitalOutputFeature<8> > pc;
 
       // loop forever switching it on and off with a 1 second
       // delay in between each cycle
 
       for(;;) {
 
-        pf[8].set();
+        pc[8].set();
         MillisecondTimer::delay(1000);
 
-        pf[8].reset();
+        pc[8].reset();
         MillisecondTimer::delay(1000);
       }
     }
