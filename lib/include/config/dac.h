@@ -32,7 +32,10 @@
 
 #include "dac/features/DacFeatureBase.h"
 #include "dac/features/DacDataAlignmentFeature.h"
-#include "dac/features/DacDualChannelFeature.h"
+
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+  #include "dac/features/DacDualChannelFeature.h"
+#endif
 
 // dac channels
 

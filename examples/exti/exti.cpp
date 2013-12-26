@@ -13,41 +13,38 @@ using namespace stm32plus;
 
 
 /**
- * Button demo that uses EXTI interrupts to signal that
- * the button is pressed. EXTI allows you to process
- * input from GPIO pins asynchronously.
+ * Button demo that uses EXTI interrupts to signal that the button is pressed.
+ * EXTI allows you to process input from GPIO pins asynchronously.
  *
- * This demo assumes that you have a button on PA8 and
- * an LED on PF6. The LED will light as long as the
- * button is held down.
+ * This demo assumes that you have a button on PA8 and an LED on PF6. The LED
+ * will light as long as the button is held down.
  *
- * An Exti8 (external interrupt) is attached to PA8 and
- * is configured to trigger on both rising (pressed)
- * and falling (released) edges.
+ * An Exti8 (external interrupt) is attached to PA8 and is configured to trigger
+ * on both rising (pressed) and falling (released) edges.
  *
- * To use this demo on the STM32F4DISCOVERY board you
- * will need to make the following changes to target the
- * onboard button and LEDs:
+ * To use this demo on the STM32F4DISCOVERY board you will need to make the
+ * following changes to target the onboard button and LEDs:
  *
  *  LED_PIN to 13
  *  BUTTON_PIN to 0
  *  GpioF... to GpioD...
  *  Exti8 to Exit0
  *
- * To use this demo on the STM32VLDISCOVERY board you
- * will need to make the following changes to target the
- * onboard button and LEDs:
+ * To use this demo on the STM32VLDISCOVERY board you will need to make the
+ * following changes to target the onboard button and LEDs:
  *
  *  LED_PIN to 8
  *  BUTTON_PIN to 0
  *  GpioF... to GpioC...
- *  Exti8 to Exit0
+ *  Exti8 to Exti0
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
