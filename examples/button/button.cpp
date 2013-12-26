@@ -20,16 +20,18 @@ using namespace stm32plus;
  * configuration of PA0, PD13 and a LOW state when
  * pressed is correct for the STM32F4DISCOVERY board.
  *
- * If you are using this example on the STM32VLDISCOVERY board then
+ * If you are using this example on the F1VL or F0 discovery board then
  * you can replace "GpioD<DefaultDigitalOutputFeature<13> > pd;" with
  * "GpioC<DefaultDigitalOutputFeature<8> > pc;" and also each occurrence
  * of "pd[13]" with "pc[8]" to flash the blue LED on board the discovery.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
