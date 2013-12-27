@@ -13,27 +13,25 @@ using namespace stm32plus;
 
 
 /**
- * Demo of the DMA peripheral used to copy a block of
- * memory. We repeatedly copy a small 256 byte buffer
- * using the completion interrupt to signal the end
- * of each transfer. If all is well then a LED on PF6
- * will blink once per second.
+ * Demo of the DMA peripheral used to copy a block of memory. We repeatedly copy
+ * a small 256 byte buffer using the completion interrupt to signal the end of
+ * each transfer. If all is well then a LED on PF6 will blink once per second.
  *
- * If this example is to be run on the STM32F4DISCOVERY
- * board then change the LED configuration from PF6 to
- * PD13 and invert the set() / reset() logic because
+ * If this example is to be run on the STM32F4DISCOVERY board then change the LED
+ * configuration from PF6 to PD13 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
- * If this example is to be run on the STM32VLDISCOVERY
- * board then change the LED configuration from PF6 to
- * PC8 and invert the set() / reset() logic because
+ * If this example is to be run on the F1 VL or the F0 DISCOVERY board then change
+ * the LED configuration from PF6 to PC8 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F100RBT6
  *   STM32F407VGT6
@@ -47,7 +45,7 @@ class DmaCopyTest {
      * The LED is on PF6
      */
 
-    enum { LED_PIN = 6 };
+    enum { LED_PIN = 8 };
 
     /*
      * The IRQ handler sets this to true when the DMA transfer is complete
@@ -64,16 +62,16 @@ class DmaCopyTest {
 
       // initialise the LED pin
 
-      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioC<DefaultDigitalOutputFeature<LED_PIN> > pc;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
-      pf[LED_PIN].set();
+      pc[LED_PIN].reset();
 
       // declare a DMA channel with interrupts and memory copy features
       // F4 users note that only DMA2 can do memory-to-memory transfers.
 
-#if defined(STM32PLUS_F1)
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F0)
 
       Dma1Channel1<
         Dma1Channel1InterruptFeature,   // interrupts on DMA1, channel 1
@@ -131,9 +129,9 @@ class DmaCopyTest {
 
         // flash the LED for a second
 
-        pf[LED_PIN].reset();
+        pc[LED_PIN].set();
         MillisecondTimer::delay(1000);
-        pf[LED_PIN].set();
+        pc[LED_PIN].reset();
         MillisecondTimer::delay(1000);
       }
     }
