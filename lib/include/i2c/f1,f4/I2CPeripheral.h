@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#if !defined(STM32PLUS_F1) && !defined(STM32PLUS_F4)
+#error This class can only be used with the STM32F1 and F4 series
+#endif
+
 
 namespace stm32plus {
 

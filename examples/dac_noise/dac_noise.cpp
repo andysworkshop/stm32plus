@@ -19,6 +19,7 @@ using namespace stm32plus;
  * to see how it looks on the STM32F103ZET6.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *

@@ -23,7 +23,7 @@ namespace stm32plus {
 
   /**
    * Initialise the pin package that we were parameterised with. The pin modes are the
-   * same on the F1 and F4 - both are AF-OD.
+   * same on the F0, F1 and F4 - both are AF-OD.
    */
 
   template<class TPinPackage,PeripheralName TPeripheralName>

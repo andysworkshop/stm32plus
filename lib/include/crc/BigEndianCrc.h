@@ -107,6 +107,7 @@ namespace stm32plus {
 
     // we can do this with an intrinsic on the cortex m3 or greater
     asm volatile( "rbit %0, %0" :: "g" (data) );
+
 #else
 
     data = (((data & 0xaaaaaaaa) >> 1) | ((data & 0x55555555) << 1));

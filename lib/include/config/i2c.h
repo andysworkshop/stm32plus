@@ -25,8 +25,14 @@
 
 #include "i2c/I2CPinInitialiser.h"
 #include "i2c/I2CEventSource.h"
-#include "i2c/I2C.h"
-#include "i2c/I2CPeripheral.h"
+
+#if defined(STM32PLUS_F0)
+  #include "i2c/f0/I2C.h"
+  #include "i2c/f0/I2CPeripheral.h"
+#elif defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+  #include "i2c/f1,f4/I2C.h"
+  #include "i2c/f1,f4/I2CPeripheral.h"
+#endif
 
 // generic feature includes
 
@@ -40,12 +46,12 @@
 
 #if defined(STM32PLUS_F4)
   #include "i2c/f4/I2CAlternateFunctionMapper.h"
+#elif defined(STM32PLUS_F0)
+  #include "i2c/f0/I2CAlternateFunctionMapper.h"
 #endif
 
 // generic peripheral includes
 
-#include "i2c/I2C.h"
-#include "i2c/I2CPeripheral.h"
 #include "i2c/I2C1.h"
 #include "i2c/I2C2.h"
 

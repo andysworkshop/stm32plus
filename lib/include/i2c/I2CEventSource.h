@@ -27,7 +27,11 @@ namespace stm32plus {
     EVENT_OVERRUN,
     EVENT_ACK_FAILURE,
     EVENT_ARBITRATION_LOSS,
-    EVENT_BUS_ERROR
+    EVENT_BUS_ERROR,
+    EVENT_ERROR,                    // F0
+    EVENT_TRANSFER_COMPLETE,        // F0
+    EVENT_ADDRESS_MATCH,            // F0
+    EVENT_NOT_ACKNOWLEDGE           // F0
   };
 
 

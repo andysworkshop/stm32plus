@@ -7,7 +7,7 @@
 
 #include "config/stm32plus.h"
 
-#if !defined(STM32PLUS_F0)
+#if defined(STM32PLUS_F0)
 
 #include "config/i2c.h"
 
@@ -25,34 +25,99 @@ namespace stm32plus {
 
   bool I2CMasterPollingFeature::readBytes(const uint8_t *address,uint8_t *output,uint32_t count) const {
 
-    // do the protocol up to the actual data read
+    uint32_t blocks,startStopMode;
+    uint8_t readCount,remainder;
+    bool first;
+
+    // send address
 
     if(!prepareRead(address))
       return false;
 
-    // loop reading the bytes from the slave
+    // get number of reload cycles
 
-    while(count--) {
+    blocks=count/255;
+    remainder=count % 255;
 
-      // an ACK is required in between each byte except the last.
-      // the last byte gets a NACK after it and before the STOP
+    if(!checkEvent(I2C_ISR_TC))
+      return false;
 
-      if(!count) {
+    // process whole number of 255 byte transfers
 
-        __disable_irq();
-        I2C_AcknowledgeConfig(_i2c,DISABLE);
-        I2C_GenerateSTOP(_i2c,ENABLE);
-        __enable_irq();
+    if(blocks>0) {
+
+      first=true;
+
+      // wait until all reload cycles are performed
+
+      while(blocks!=0) {
+
+        if(!first && !checkEvent(I2C_ISR_TCR))
+          return false;
+
+        if(blocks==1 && remainder==0)   // last whole block
+          I2C_TransferHandling(_i2c,_slaveAddress,255,I2C_AutoEnd_Mode,first ? I2C_Generate_Start_Read : I2C_No_StartStop);
+        else                            // whole block, not last
+          I2C_TransferHandling(_i2c, _slaveAddress,255,I2C_Reload_Mode,first ? I2C_Generate_Start_Read : I2C_No_StartStop);
+
+        first=false;
+        readCount=0;
+
+        while(readCount!=255) {
+
+          if(!checkEvent(I2C_ISR_RXNE))
+            return false;
+
+          // get a byte
+
+          *output++=I2C_ReceiveData(_i2c);
+
+          readCount++;
+        }
+
+        // processed a 255 byte block
+
+        blocks--;
       }
 
-      if(!checkEvent(I2C_EVENT_MASTER_BYTE_RECEIVED))
-        return false;
+      // set up to process the remainder
 
-      // read the data byte
+      if(remainder>0) {
 
-      *output++=I2C_ReceiveData(_i2c);
+        startStopMode=I2C_No_StartStop;
+
+        if(!checkEvent(I2C_ISR_TCR))
+          return false;
+      }
+    }
+    else
+      startStopMode=I2C_Generate_Start_Read;
+
+    // remaining transfer
+
+    if(remainder>0) {
+
+      I2C_TransferHandling(_i2c,_slaveAddress,remainder,I2C_AutoEnd_Mode,startStopMode);
+
+      while(remainder--) {
+
+        // wait for RXNE flag
+
+        if(!checkEvent(I2C_ISR_RXNE))
+          return false;
+
+        *output++=I2C_ReceiveData(_i2c);
+      }
     }
 
+    // wait for STOPF
+
+    if(!checkEvent(I2C_ISR_STOPF))
+      return false;
+
+    // clear STOPF
+
+    I2C_ClearFlag(_i2c,I2C_ICR_STOPCF);
     return true;
   }
 
@@ -69,26 +134,11 @@ namespace stm32plus {
 
     uint8_t count;
 
-    // enable ACKs for the reads
+    I2C_TransferHandling(_i2c,_slaveAddress,_i2c.getAddressSize(),I2C_SoftEnd_Mode,I2C_Generate_Start_Write);
 
-    I2C_AcknowledgeConfig(_i2c,ENABLE);
+    // wait until TXIS flag is set
 
-    // generate the start condition
-
-    I2C_GenerateSTART(_i2c,ENABLE);
-
-    // Test on I2C EV5 and clear it
-
-    if(!checkEvent(I2C_EVENT_MASTER_MODE_SELECT))
-      return false;
-
-    // send the slave address
-
-    I2C_Send7bitAddress(_i2c,_slaveAddress,I2C_Direction_Transmitter);
-
-    // Test on I2C EV6 and clear it
-
-    if(!checkEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
+    if(!checkEvent(I2C_ISR_TXIS))
       return false;
 
     // send the address
@@ -99,30 +149,11 @@ namespace stm32plus {
 
       // Test on I2C EV8 and clear it
 
-      if(!checkEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+      if(!checkEvent(I2C_ISR_TXIS))
         return false;
     }
 
-    // clear AF flag if arised */
-
-    ((I2C_TypeDef *)_i2c)->SR1=0x0400;
-
-    // generate the start condition again
-
-    I2C_GenerateSTART(_i2c,ENABLE);
-
-    // Test on I2C EV6 and clear it
-
-    if(!checkEvent(I2C_EVENT_MASTER_MODE_SELECT))
-      return false;
-
-    // send the slave address
-
-    I2C_Send7bitAddress(_i2c,_slaveAddress,I2C_Direction_Receiver);
-
-    // Test on I2C EV6 and clear it
-
-    return checkEvent(I2C_EVENT_MASTER_RECEIVER_MODE_SELECTED);
+    return true;
   }
 
 
@@ -136,28 +167,38 @@ namespace stm32plus {
 
   bool I2CMasterPollingFeature::writeBytes(const uint8_t *address,const uint8_t *input,uint32_t count) const {
 
-    // do the protocol up to and including the address transfer
+    // send address
 
     if(!prepareWrite(address))
       return false;
 
-    // now start transferring the data
+    // wait for TCR
+
+    if(!checkEvent(I2C_ISR_TCR))
+      return false;
+
+    I2C_TransferHandling(_i2c,_slaveAddress,count,I2C_AutoEnd_Mode,I2C_No_StartStop);
 
     while(count--) {
 
-      // send data
+      // wait for TXIS
+
+      if(!checkEvent(I2C_ISR_TXIS))
+        return false;
+
+      // write data to TXDR
 
       I2C_SendData(_i2c,*input++);
-
-      // test on I2C EV8 and clear it
-
-      if(!checkEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
-        return false;
     }
 
-    // send STOP condition
+    // wait for STOPF
 
-    I2C_GenerateSTOP(_i2c,ENABLE);
+    if(!checkEvent(I2C_ISR_STOPF))
+      return false;
+
+    // clear STOPF
+
+    I2C_ClearFlag(_i2c,I2C_ICR_STOPCF);
     return true;
   }
 
@@ -175,33 +216,22 @@ namespace stm32plus {
 
     uint8_t count;
 
-    // generate the start condition
+    I2C_TransferHandling(_i2c,_slaveAddress,_i2c.getAddressSize(),I2C_Reload_Mode,I2C_Generate_Start_Write);
 
-    I2C_GenerateSTART(_i2c,ENABLE);
+    // wait until TXIS flag is set
 
-    // Test on I2C EV5 and clear it
-
-    if(!checkEvent(I2C_EVENT_MASTER_MODE_SELECT))
+    if(!checkEvent(I2C_ISR_TXIS))
       return false;
 
-    // send the slave address
-
-    I2C_Send7bitAddress(_i2c,_slaveAddress,I2C_Direction_Transmitter);
-
-    // Test on I2C EV6 and clear it */
-
-    if(!checkEvent(I2C_EVENT_MASTER_TRANSMITTER_MODE_SELECTED))
-      return false;
+    // send the address
 
     for(count=_i2c.getAddressSize();count;count--) {
-
-      // send the address byte
 
       I2C_SendData(_i2c,*address++);
 
       // Test on I2C EV8 and clear it
 
-      if(!checkEvent(I2C_EVENT_MASTER_BYTE_TRANSMITTED))
+      if(!checkEvent(I2C_ISR_TXIS))
         return false;
     }
 
@@ -225,10 +255,9 @@ namespace stm32plus {
 
     // wait for the event to be raised or timeout his hit (should take care of timeout wrap here)
 
-    while(!I2C_CheckEvent(_i2c,eventId)) {
+    while(I2C_GetFlagStatus(_i2c,eventId)==0)
       if(MillisecondTimer::millis()-timeoutStart>_timeout)
         return errorProvider.set(ErrorProvider::ERROR_PROVIDER_I2C,I2C::E_I2C_TIMEOUT);
-    }
 
     return true;
   }
