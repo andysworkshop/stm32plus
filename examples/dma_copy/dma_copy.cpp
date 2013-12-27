@@ -45,7 +45,7 @@ class DmaCopyTest {
      * The LED is on PF6
      */
 
-    enum { LED_PIN = 8 };
+    enum { LED_PIN = 6 };
 
     /*
      * The IRQ handler sets this to true when the DMA transfer is complete
@@ -62,11 +62,11 @@ class DmaCopyTest {
 
       // initialise the LED pin
 
-      GpioC<DefaultDigitalOutputFeature<LED_PIN> > pc;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN>> pf;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
-      pc[LED_PIN].reset();
+      pf[LED_PIN].set();
 
       // declare a DMA channel with interrupts and memory copy features
       // F4 users note that only DMA2 can do memory-to-memory transfers.
@@ -129,9 +129,9 @@ class DmaCopyTest {
 
         // flash the LED for a second
 
-        pc[LED_PIN].set();
+        pf[LED_PIN].reset();
         MillisecondTimer::delay(1000);
-        pc[LED_PIN].reset();
+        pf[LED_PIN].set();
         MillisecondTimer::delay(1000);
       }
     }
