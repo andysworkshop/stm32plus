@@ -13,30 +13,28 @@ using namespace stm32plus;
 
 
 /**
- * Demo of the DMA peripheral used to fill a block of
- * memory with a single byte. We will repeatedly fill a
- * buffer with 0xAA and check that it's done OK. If so
+ * Demo of the DMA peripheral used to fill a block of memory with a single byte.
+ * We will repeatedly fill a buffer with 0xAA and check that it's done OK. If so
  * then a LED on PF6 will blink once per second.
  *
- * DMA1, channel 4 is used for this demo for F1
- * devices and DMA2, channel3, stream 4 is used for
- * F4 devices.
+ * DMA1, channel 4 is used for this demo for F1 and F0 devices and DMA2, channel3,
+ * stream 4 is used for F4 devices.
  *
- * If this example is to be run on the STM32F4DISCOVERY
- * board then change the LED configuration from PF6 to
- * PD13 and invert the set() / reset() logic because
+ * If this example is to be run on the STM32F4DISCOVERY board then change the LED
+ * configuration from PF6 to PD13 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
- * If this example is to be run on the STM32VLDISCOVERY
- * board then change the LED configuration from PF6 to
- * PC8 and invert the set() / reset() logic because
+ * If this example is to be run on the STM32VLDISCOVERY board then change the LED
+ * configuration from PF6 to PC8 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -61,7 +59,7 @@ class DmaFillTest {
 
       // initialise the LED pin
 
-      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN>> pf;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
@@ -70,7 +68,7 @@ class DmaFillTest {
       // declare a DMA channel with the memory fill feature
       // F4 users note that only DMA2 can do memory-to-memory transfers.
 
-#if defined(STM32PLUS_F1)
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F0)
 
       Dma1Channel4<
         DmaMemoryFillFeature<>        // memory fill with default transfer size (bytes)
