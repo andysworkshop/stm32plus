@@ -50,7 +50,7 @@ namespace stm32plus {
                                 public UsartFeatureBase {
 
     protected:
-      uint16_t _interruptMask;
+      uint32_t _interruptMask;
 
     public:
 
@@ -65,8 +65,8 @@ namespace stm32plus {
       UsartInterruptFeature(Usart& usart);
       ~UsartInterruptFeature();
 
-      void enableInterrupts(uint16_t interruptMask);
-      void disableInterrupts(uint16_t interruptMask);
+      void enableInterrupts(uint32_t interruptMask);
+      void disableInterrupts(uint32_t interruptMask);
   };
 
 
@@ -117,7 +117,7 @@ namespace stm32plus {
    */
 
   template<uint8_t TUsartNumber>
-  inline void UsartInterruptFeature<TUsartNumber>::enableInterrupts(uint16_t interruptMask) {
+  inline void UsartInterruptFeature<TUsartNumber>::enableInterrupts(uint32_t interruptMask) {
 
     _interruptMask|=interruptMask;
     UsartInterruptFeatureEnabler<TUsartNumber>::enable();
@@ -131,7 +131,7 @@ namespace stm32plus {
    */
 
   template<uint8_t TUsartNumber>
-  inline void UsartInterruptFeature<TUsartNumber>::disableInterrupts(uint16_t interruptMask) {
+  inline void UsartInterruptFeature<TUsartNumber>::disableInterrupts(uint32_t interruptMask) {
     _interruptMask&=~interruptMask;
     USART_ITConfig(_usart,interruptMask,DISABLE);
   }
