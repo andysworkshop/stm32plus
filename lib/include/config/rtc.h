@@ -65,6 +65,7 @@
   #include "rtc/features/f0/RtcLseClockFeature.h"
   #include "rtc/features/f0/RtcLsiClockFeature.h"
   #include "rtc/features/f0/RtcHseDiv32ClockFeature.h"
+  #include "rtc/features/f0/RtcMeasuredLsiFrequencyProvider.h"
 
 #endif
 

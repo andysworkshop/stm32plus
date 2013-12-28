@@ -28,7 +28,7 @@ extern "C" {
 
 #if defined(USE_TIM17_INTERRUPT)
 
-  void __attribute__ ((interrupt("IRQ"))) TIM4_IRQHandler() {
+  void __attribute__ ((interrupt("IRQ"))) TIM17_IRQHandler() {
 
     if(TIM_GetITStatus(TIM17,TIM_IT_CC1)!=RESET) {
       TimerInterruptFeature<17>::_timerInstance->TimerInterruptEventSender.raiseEvent(TimerEventType::EVENT_COMPARE1,17);
