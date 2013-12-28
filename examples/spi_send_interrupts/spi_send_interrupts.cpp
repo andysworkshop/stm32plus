@@ -33,10 +33,12 @@ using namespace stm32plus;
  * SCLK:        PA5 <=> PB13
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F407VGT6
  *   STM32F100RBT6
