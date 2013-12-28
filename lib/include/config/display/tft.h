@@ -70,17 +70,20 @@
 
 #include "display/graphic/access/Gpio16BitAccessMode.h"
 
-#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)        // capable of 72MHz operation
+// these two are for devices capable of 72MHz and above
+
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
   #include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"      // optimised for 64K colours
   #include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"          // generic for >64K colours
 #endif
 
-// includes for the optimised GPIO drivers that only work on the F1
+// minimum of 24MHz clock required for these
 
-#if defined(STM32PLUS_F1)
-  #include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"      // optimised for 64K colours
-  #include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"          // generic for >64K colours
-#endif
+#include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"      // optimised for 64K colours
+#include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"          // generic for >64K colours
+
+#include "display/graphic/access/Gpio16BitAccessMode_64K_48_42_42.h"      // optimised for 64K colours
+#include "display/graphic/access/Gpio16BitAccessMode_48_42_42.h"          // generic for >64K colours
 
 // include the device drivers
 

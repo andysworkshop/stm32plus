@@ -48,6 +48,40 @@ namespace stm32plus {
   };
 
 
+  /**
+   * POWER
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_POWER> {
+
+    static void On() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR,ENABLE);
+    }
+
+    static void Off() {
+      RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR,DISABLE);
+    }
+  };
+
+
+  /**
+   * SPI1
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_SPI1> {
+
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,ENABLE);
+    }
+
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
+    }
+  };
+
+
   /*
    * TIM15
    */

@@ -14,28 +14,29 @@ using namespace stm32plus;
 
 
 /**
- * The AT24C32 is a 32768kbit (4096kbyte) EEPROM with
- * an I2C serial interface.
+ * The AT24C32 is a 32768kbit (4096kbyte) EEPROM with an I2C serial interface.
  *
- * This test assumes that you've got it connected to
- * I2C#2 with the default pins. These pins are:
+ * This test assumes that you've got it connected to I2C#2 with the default pins.
+ * These pins are:
  *
  * PB10 => I2C2_SCL
  * PB11 => I2C2_SDA
  *
- * The test will repeatedly write and then read back a
- * pattern from the EEPROM. If it all works then a LED
- * on PF6 will flash for one second. If there is a
+ * The test will repeatedly write and then read back a pattern from the EEPROM.
+ * If it all works then a LED on PF6 will flash for one second. If there is a
  * failure then the LED will flash rapidly forever.
  *
- * To run this example on the STM32F4DISCOVERY board
- * change the LED pin to PD13 to use the onboard LED.
+ * To run this example on the F4 DISCOVERY board change the LED pin to PD13 to
+ * use the onboard LED. To run on the F1VL or F0 discovery board change the LED
+ * pin to PC8 to use the onboard LED.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */

@@ -136,21 +136,16 @@ namespace stm32plus {
 
     I2C_TransferHandling(_i2c,_slaveAddress,_i2c.getAddressSize(),I2C_SoftEnd_Mode,I2C_Generate_Start_Write);
 
-    // wait until TXIS flag is set
-
-    if(!checkEvent(I2C_ISR_TXIS))
-      return false;
-
     // send the address
 
     for(count=_i2c.getAddressSize();count;count--) {
 
-      I2C_SendData(_i2c,*address++);
-
-      // Test on I2C EV8 and clear it
+      // wait until TXIS flag is set
 
       if(!checkEvent(I2C_ISR_TXIS))
         return false;
+
+      I2C_SendData(_i2c,*address++);
     }
 
     return true;
@@ -218,21 +213,16 @@ namespace stm32plus {
 
     I2C_TransferHandling(_i2c,_slaveAddress,_i2c.getAddressSize(),I2C_Reload_Mode,I2C_Generate_Start_Write);
 
-    // wait until TXIS flag is set
-
-    if(!checkEvent(I2C_ISR_TXIS))
-      return false;
-
     // send the address
 
     for(count=_i2c.getAddressSize();count;count--) {
 
-      I2C_SendData(_i2c,*address++);
-
-      // Test on I2C EV8 and clear it
+      // wait until TXIS flag is set
 
       if(!checkEvent(I2C_ISR_TXIS))
         return false;
+
+      I2C_SendData(_i2c,*address++);
     }
 
     return true;
