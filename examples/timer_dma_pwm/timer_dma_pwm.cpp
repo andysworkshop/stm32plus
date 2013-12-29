@@ -13,25 +13,25 @@ using namespace stm32plus;
 
 
 /**
- * Timer demo that illustrates how to use a DMA channel
- * to automatically reload the PWM duty cycle.
+ * Timer demo that illustrates how to use a DMA channel to automatically reload
+ * the PWM duty cycle.
  *
- * In this example timer 1 is configured to output a
- * PWM signal on channel 1. The timer's DMA channel for
- * update events is used to automatically reload the
- * PWM duty cycle from a sequence that we supply each
- * time the timer gets an update event.
+ * In this example timer 1 is configured to output a PWM signal on channel 1.
+ * The timer's DMA channel for update events is used to automatically reload the
+ * PWM duty cycle from a sequence that we supply each time the timer gets an
+ * update event.
  *
- * The PWM signal is output on PA[8]. Connect this to
- * a LED to see the fade feature. On the F1VL and F4
- * discovery boards this means connecting PA8 to PC8
- * or PD13, respectively.
+ * The PWM signal is output on PA[8]. Connect this to a LED to see the fade feature.
+ * On the F1VL and F4 discovery boards this means connecting PA8 to PC8
+ * or PD13, respectively. The F0 discovery board is also PC8.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6

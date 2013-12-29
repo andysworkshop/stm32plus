@@ -136,7 +136,8 @@ class SpiSendInterruptsTest {
         _sender->setNss(false);
 
         /*
-         * Send the block of data from SPI2 to SPI1
+         * Send the block of data from SPI2 to SPI1. Note the lack of flow control. Don't built a
+         * real system like this.
          */
 
         for(i=0;i<12;i++) {
