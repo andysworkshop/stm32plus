@@ -3,21 +3,30 @@
 # 'mode', 'mcu' and 'hse' are required variables:
 #
 # mode:
-#   debug/fast/small. Debug = -O0, Fast = -O3, Small = -Os
+#   debug/fast/small.
+#     Debug = -O0, Fast = -O3, Small = -Os
 #
 # mcu:
-#   f1hd/f4. f1hd = STM32F103HD series. f4 = STM32F4xx series.
+#   f1hd/f1cle/f1mdvl/f051/f4.
+#     f1hd   = STM32F103HD series.
+#     f1cle  = STM32F107 series.
+#     f1mdvl = STM32100 Medium Density Value Line series.
+#     f4     = STM32F4xx series.
+#     f051   = STM32F051 series.
 #
 # hse:
 #   Your external oscillator speed in Hz. Some of the ST standard peripheral library
-#   code uses the HSE_VALUE #define that we set here. 
+#   code uses the HSE_VALUE #define that we set here. If you're using the HSI and
+#   don't have an HSE connected then just supply a default of 8000000.
 #
 # Examples:
-#   scons mode=debug mcu=f1hd hse=8000000              // debug / f1hd / 8MHz
-#   scons mode=debug mcu=f1cle hse=25000000            // debug / f1cle / 25MHz
-#   scons mode=fast mcu=f1hd hse=8000000 install       // fast / f1hd / 8MHz
-#   scons mode=small mcu=f4 hse=8000000 install        // small / f4 / 8Mhz
-#   scons mode=debug mcu=f4 hse=8000000 -j4 install    // debug / f4 / 8Mhz
+#   scons mode=debug mcu=f1hd hse=8000000                // debug / f1hd / 8MHz
+#   scons mode=debug mcu=f1cle hse=25000000              // debug / f1cle / 25MHz
+#   scons mode=debug mcu=f1mdvl hse=8000000              // debug / f1mdvl / 8MHz
+#   scons mode=fast mcu=f1hd hse=8000000 install         // fast / f1hd / 8MHz
+#   scons mode=small mcu=f4 hse=8000000 install          // small / f4 / 8Mhz
+#   scons mode=debug mcu=f4 hse=8000000 -j4 install      // debug / f4 / 8Mhz
+#   scons mode=debug mcu=f051 hse=8000000 -j4 install    // debug / f051 / 8Mhz
 #
 # The -j<N> option can be passed to scons to do a parallel build. On a multicore
 # CPU this can greatly accelerate the build. Set <N> to approximately the number
@@ -47,12 +56,12 @@ if not (mode in ['debug', 'fast', 'small']):
 	print "ERROR: mode must be debug/fast/small"
 	Exit(1)
 
-if not (mcu in ['f1hd', 'f1cle', 'f4', 'f1mdvl']):
+if not (mcu in ['f1hd', 'f1cle', 'f4', 'f1mdvl', 'f051']):
 	print "ERROR: mcu must be f1hd/f1cle/f1mdvl/f4"
 	Exit(1)
 
 if not hse or not hse.isdigit():
-	print "ERROR: hse must be an integer oscillator speed in Hz"
+	print "ERROR: hse must be an integer oscillator speed in Hz (even if you are clocking your MCU from the HSI)"
 	Exit(1)
 
 # set up build environment and pull in OS environment variables
@@ -96,6 +105,10 @@ elif mcu=="f4":
 	env.Append(CCFLAGS=["-mcpu=cortex-m4","-DSTM32PLUS_F4"])
 	env.Append(ASFLAGS="-mcpu=cortex-m4")
 	env.Append(LINKFLAGS="-mcpu=cortex-m4")
+elif mcu=="f051":
+	env.Append(CCFLAGS=["-mcpu=cortex-m0","-DSTM32PLUS_F0_51"])
+	env.Append(ASFLAGS="-mcpu=cortex-m0")
+	env.Append(LINKFLAGS="-mcpu=cortex-m0")
 
 # add on the mode=specific optimisation definitions
 

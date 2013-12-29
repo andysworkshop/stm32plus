@@ -60,6 +60,11 @@ if supported:
                 matches.append("system/f1mdvl/System.c")
                 linkerscript="examples/"+example+"/system/f1mdvl/Linker.ld"
 
+        elif mcu=="f051":
+                matches.append("system/f051/Startup.asm")
+                matches.append("system/f051/System.c")
+                linkerscript="examples/"+example+"/system/f051/Linker.ld"
+
         buildoutdir="examples/"+example+"/build/"+systemprefix
 	
         # set the additional linker flags
