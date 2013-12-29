@@ -10,7 +10,6 @@
 
 extern uint32_t BulbPixelsSize,BulbPixels;
 extern uint32_t AudioPixelsSize,AudioPixels;
-extern uint32_t FlagPixelsSize,FlagPixels;
 
 
 using namespace stm32plus;
@@ -148,7 +147,6 @@ class R61523Test {
 
       drawCompressedBitmap((uint8_t *)&BulbPixels,(uint32_t)&BulbPixelsSize,89,148);
       drawCompressedBitmap((uint8_t *)&AudioPixels,(uint32_t)&AudioPixelsSize,150,161);
-      drawCompressedBitmap((uint8_t *)&FlagPixels,(uint32_t)&FlagPixelsSize,144,220);
     }
 
 

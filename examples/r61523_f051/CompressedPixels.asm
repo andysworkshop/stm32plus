@@ -11,9 +11,6 @@
 	.global AudioPixels
 	.global AudioPixelsSize
 
-  .global FlagPixels
-  .global FlagPixelsSize
-
 BulbPixels:
 	.incbin "lzg/r61523/bulb.r61523.64.lzg"
 	BulbPixelsSize=.-BulbPixels
@@ -21,7 +18,3 @@ BulbPixels:
 AudioPixels:
 	.incbin "lzg/r61523/audio.r61523.64.lzg"
 	AudioPixelsSize=.-AudioPixels
-
-FlagPixels:
-  .incbin "lzg/r61523/flag.r61523.64.lzg"
-  FlagPixelsSize=.-FlagPixels

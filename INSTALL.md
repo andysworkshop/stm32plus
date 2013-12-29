@@ -20,7 +20,7 @@ Prerequisites
 		$ arm-none-eabi-g++
 		arm-none-eabi-g++.exe: no input files
 
-* `scons`. Writing Makefiles to cope with all the variant builds was driving me crazy so I switched to 'scons' and have never looked back. If you don't already have it then google it and download and install it on to your system from the official website.
+* `scons`. Writing Makefiles to cope with all the variant builds was driving me crazy so I switched to _scons_ and have never looked back. If you don't already have it then google it and download and install it on to your system from the official website. Linux users can get it using their official package management interface (e.g. `apt-get`)
 
 ### Additional prerequisites for Windows systems ###
    
@@ -36,31 +36,40 @@ How to build
 
 * Change directory to the top-level directory containing the `SConstruct` file.
 
-* stm32plus supports the STM32F103 HD, STM32F107 CL and STM32F4 series MCUs. Decide which one you want to build for. You also need to know your external oscillator (HSE) speed and you need to decide on whether you want to build a debug (-O0), small (-Os) or fast (-O3) library.
+* stm32plus supports the F0, F100 MDVL, F103 HD, F107 CL and F4 series MCUs. Decide which one you want to build for. You also need to know your external oscillator (HSE) speed and you need to decide on whether you want to build a debug (-O0), small (-Os) or fast (-O3) library. If you're using a device that does not have an external oscillator (e.g. the F0 discovery board) then just use 8000000 as a default.
 
 You can build all of the above combinations side-by-side if you so wish by executing `scons` multiple times.
 
 * Execute `scons` with the parameters that define the build:
 
-		mode
-			debug/fast/small. Debug = -O0, Fast = -O3, Small = -Os
-	    mcu
-			f1hd/f1cle/f1mdvl/f4 
-              f1hd   = STM32F103 HD
-              f1cle  = STM32F107
-              f1mdvl = STM32F100 MD VL
-              f4     = STM32F4xx
-		hse: 
-			Your external oscillator speed in Hz. Some of the ST standard peripheral library code uses the HSE_VALUE #define
-			that we set here.
-
-### Examples ###
-	scons mode=debug mcu=f1hd hse=8000000
-	scons mode=fast mcu=f1hd hse=8000000 install
-	scons mode=fast mcu=f1mdvl hse=8000000 install
-	scons mode=debug mcu=f1cle hse=25000000
-	scons mode=small mcu=f4 hse=8000000 install
-	scons mode=debug mcu=f4 hse=8000000 -j4 install
+		Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE>
+		
+		  <MODE>: debug/fast/small.
+		    debug = -O0
+		    fast  = -O3
+		    small = -Os
+		
+		  <MCU>: f1hd/f1cle/f1mdvl/f051/f4.
+		    f1hd   = STM32F103HD series.
+		    f1cle  = STM32F107 series.
+		    f1mdvl = STM32100 Medium Density Value Line series.
+		    f4     = STM32F4xx series.
+		    f051   = STM32F051 series.
+		
+		  <HSE>:
+		    Your external oscillator speed in Hz. Some of the ST standard peripheral
+		    library code uses the HSE_VALUE #define that we set here. If you're using
+		    the HSI and don't have an HSE connected then just supply a default
+		    of 8000000.
+		
+		  Examples:
+		    scons mode=debug mcu=f1hd hse=8000000            // debug / f1hd / 8MHz
+		    scons mode=debug mcu=f1cle hse=25000000          // debug / f1cle / 25MHz
+		    scons mode=debug mcu=f1mdvl hse=8000000          // debug / f1mdvl / 8MHz
+		    scons mode=fast mcu=f1hd hse=8000000 install     // fast / f1hd / 8MHz
+		    scons mode=small mcu=f4 hse=8000000 install        // small / f4 / 8Mhz
+		    scons mode=debug mcu=f4 hse=8000000 -j4 install    // debug / f4 / 8Mhz
+		    scons mode=debug mcu=f051 hse=8000000 -j4 install  // debug / f051 / 8Mhz
 
 The `-j<N>` option can be passed to scons to do a parallel build. On a multicore CPU this can greatly accelerate the build. Set <N> to approximately the number of cores that you have.
 
@@ -68,7 +77,7 @@ The `install` option will install the library and the examples into subdirectori
 
 #### A note on the example projects ####
 
-The example projects are designed to run on either the 512/64Kb/72MHz STM32F103, the 256/64Kb/72Mhz STM32F107, the 128/8Kb/24MHz STM32F100 and the 1024Kb/128Kb/168Mhz STM32F4.
+The example projects are designed to run on either the 512/64Kb/72MHz STM32F103, the 256/64Kb/72Mhz STM32F107, the 128/8Kb/24MHz STM32F100, the 1024Kb/128Kb/168Mhz STM32F4 and the 64/8Kb/48MHz F051.
 
 It is the linker script (`Linker.ld`) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent.
 

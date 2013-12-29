@@ -121,12 +121,12 @@ namespace stm32plus {
         " str  %[rs],    [%[creset], #0]    \n\t"     // [rs] = 0
         " str  %[wr],    [%[creset], #0]    \n\t"     // [wr] = 0
         " str  %[wr],    [%[cset], #0]      \n\t"     // [wr] = 1
-        :: [creset]   "r" (_controlResetAddress),     // the control reset address
-           [cset]     "r" (_controlSetAddress),       // the control set address
-           [data]     "r" (_portOutputRegister),      // the data port
-           [wr]       "r" (_wr),                      // WR pin bit
-           [rs]       "r" (_rs),                      // RS pin bit
-           [value]    "r" (command)                   // input value
+        :: [creset]   "l" (_controlResetAddress),     // the control reset address
+           [cset]     "l" (_controlSetAddress),       // the control set address
+           [data]     "l" (_portOutputRegister),      // the data port
+           [wr]       "l" (_wr),                      // WR pin bit
+           [rs]       "l" (_rs),                      // RS pin bit
+           [value]    "l" (command)                   // input value
       );
     }
 
@@ -157,12 +157,12 @@ namespace stm32plus {
         " str  %[rs],    [%[cset], #0]      \n\t"     // [rs] = 1
         " str  %[wr],    [%[creset], #0]    \n\t"     // [wr] = 0
         " str  %[wr],    [%[cset], #0]      \n\t"     // [wr] = 1
-        :: [creset]   "r" (_controlResetAddress),     // the control reset address
-           [cset]     "r" (_controlSetAddress),       // the control set address
-           [data]     "r" (_portOutputRegister),      // the data port
-           [wr]       "r" (TPinPackage::Pin_WR),      // WR pin bit
-           [rs]       "r" (TPinPackage::Pin_RS),      // RS pin bit
-           [value]    "r" (value)                     // input value
+        :: [creset]   "l" (_controlResetAddress),     // the control reset address
+           [cset]     "l" (_controlSetAddress),       // the control set address
+           [data]     "l" (_portOutputRegister),      // the data port
+           [wr]       "l" (TPinPackage::Pin_WR),      // WR pin bit
+           [rs]       "l" (TPinPackage::Pin_RS),      // RS pin bit
+           [value]    "l" (value)                     // input value
       );
     }
 
@@ -179,9 +179,9 @@ namespace stm32plus {
       __asm volatile(
         " str  %[wr], [%[creset], #0]   \n\t"       // [wr] = 0
         " str  %[wr], [%[cset], #0]     \n\t"       // [wr] = 1
-        :: [creset]   "r" (_controlResetAddress),   // the control reset address
-           [cset]     "r" (_controlSetAddress),     // the control set address
-           [wr]       "r" (TPinPackage::Pin_WR)     // WR pin bit
+        :: [creset]   "l" (_controlResetAddress),   // the control reset address
+           [cset]     "l" (_controlSetAddress),     // the control set address
+           [wr]       "l" (TPinPackage::Pin_WR)     // WR pin bit
       );
     }
 
@@ -204,10 +204,10 @@ namespace stm32plus {
       __asm volatile(
         "str  %[value], [%[data]]                       \n\t"     // port <= value
         "str  %[rs],    [%[cset], #0]                   \n\t"     // [rs] = 1
-        :: [rs]       "r" (TPinPackage::Pin_RS),      // RS pin bit
-           [value]    "r" (value),                    // input value
-           [cset]     "r" (_controlSetAddress),       // the control set address
-           [data]     "r" (_portOutputRegister)       // the data port
+        :: [rs]       "l" (TPinPackage::Pin_RS),      // RS pin bit
+           [value]    "l" (value),                    // input value
+           [cset]     "l" (_controlSetAddress),       // the control set address
+           [data]     "l" (_portOutputRegister)       // the data port
       );
 
       // this is the main block
@@ -395,11 +395,11 @@ namespace stm32plus {
 
           "finished%=:                                    \n\t"
 
-          :: [creset]   "r" (_controlResetAddress),     // the control reset address
-             [cset]     "r" (_controlSetAddress),       // the control set address
-             [wr]       "r" (TPinPackage::Pin_WR),      // WR pin bit
-             [jump]     "r" (_jump),                    // holds calculated indirect jump target
-             [howmuch]  "r" (howMuch)                   // number of pixels to write
+          :: [creset]   "l" (_controlResetAddress),     // the control reset address
+             [cset]     "l" (_controlSetAddress),       // the control set address
+             [wr]       "l" (TPinPackage::Pin_WR),      // WR pin bit
+             [jump]     "l" (_jump),                    // holds calculated indirect jump target
+             [howmuch]  "l" (howMuch)                   // number of pixels to write
       );
     }
 
