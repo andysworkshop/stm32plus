@@ -41,9 +41,11 @@
 
 import os
 
-# set the installation root. you can customise this
+# set the installation root. you can customise this. the default attempts to read the
+# current release version from the stm32plus.h configuration header file.
 
-VERSION="master"
+VERSION=os.popen('egrep "#define\s+STM32PLUS_BUILD" lib/include/config/stm32plus.h  | sed "s/^.*0x//g"').read()
+VERSION=VERSION.rstrip()
 INSTALLDIR="/usr/lib/stm32plus/"+VERSION
 
 # get the required args and validate
@@ -63,6 +65,8 @@ if not (mcu in ['f1hd', 'f1cle', 'f4', 'f1mdvl', 'f051']):
 if not hse or not hse.isdigit():
 	print "ERROR: hse must be an integer oscillator speed in Hz (even if you are clocking your MCU from the HSI)"
 	Exit(1)
+
+print "stm32plus build version is "+VERSION
 
 # set up build environment and pull in OS environment variables
 
