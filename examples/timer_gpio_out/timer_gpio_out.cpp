@@ -12,24 +12,27 @@ using namespace stm32plus;
 
 
 /**
- * Timer demonstration: Output a 1Hz toggle on/off signal
- * on PA0.
+ * Timer demonstration: Output a 1Hz toggle on/off signal on PA0.
  *
- * To achieve the alternating 1Hz signal on PA0 (TIM2_CH1)
- * we first set up Timer2 to tick at 10kHz with its auto-
- * reload register set to 9999. It will take 2 seconds
- * for the timer to tick up to 9999 at which point it
+ * To achieve the alternating 1Hz signal on PA0 (TIM2_CH1) we first
+ * set up Timer2 to tick at 10kHz with its auto-reload register set to 9999.
+ * It will take 2 seconds for the timer to tick up to 9999 at which point it
  * will reset back to zero.
  *
- * We configure the channel 1 compare value to be 9999
- * with an action of "toggle" and we enable GPIO output
- * for channel 1 on its default port of PA0.
+ * We configure the channel 1 compare value to be 9999 with an action of
+ * "toggle" and we enable GPIO output for channel 1 on its default port of PA0.
+ *
+ * To see the output, connect PA0 to a LED. e.g. on the F0 and F1 VL discovery
+ * boards you can connect PA0 to PC8.
+ *
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F407VGT6
  */
