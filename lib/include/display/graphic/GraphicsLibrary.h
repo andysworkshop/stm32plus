@@ -63,8 +63,8 @@ namespace stm32plus {
 
       // text output methods - LZG fonts
 
-      Size writeString(const Point& p,const LzgFont& font,const char *str) const;
-      void writeCharacter(const Point& p,const LzgFont& font,const FontChar& fc) const;
+      Size writeString(const Point& p,const LzgFont& font,const char *str);
+      void writeCharacter(const Point& p,const LzgFont& font,const FontChar& fc);
 
       // can't do these as a template with specialisation because you can't specialise
       // members in a template class that isn't also fully specialised

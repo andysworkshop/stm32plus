@@ -16,7 +16,7 @@ namespace stm32plus {
      */
 
     template<class TDevice,class TAccessMode>
-    inline Size GraphicsLibrary<TDevice,TAccessMode>::writeString(const Point& p,const LzgFont& font,const char *str) const {
+    inline Size GraphicsLibrary<TDevice,TAccessMode>::writeString(const Point& p,const LzgFont& font,const char *str) {
 
       const char *ptr;
       Point pos(p);
@@ -50,15 +50,15 @@ namespace stm32plus {
      */
 
     template<class TDevice,class TAccessMode>
-    inline void GraphicsLibrary<TDevice,TAccessMode>::writeCharacter(const Point& p,const LzgFont& font,const FontChar& fc) const {
+    inline void GraphicsLibrary<TDevice,TAccessMode>::writeCharacter(const Point& p,const LzgFont& font,const FontChar& fc) {
 
       uint16_t lsb,msb,dataSize;
-      const uint8_t *ptr;
+      uint8_t *ptr;
       Point charLocation(p);
 
       // extract the data size and data ptr
 
-      ptr=fc.Data;
+      ptr=const_cast<uint8_t *>(fc.Data);
       lsb=*ptr++;
       msb=*ptr++;
 
