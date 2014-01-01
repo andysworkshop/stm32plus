@@ -93,6 +93,6 @@ namespace stm32plus {
     // disable and clocks off
 
     disablePeripheral();
-    ClockControl<TPeripheralName>::On();
+    ClockControl<TPeripheralName>::Off();
   }
 }

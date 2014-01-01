@@ -106,6 +106,6 @@ namespace stm32plus {
 
     // clocks off
 
-    ClockControl<TPeripheralName>::On();
+    ClockControl<TPeripheralName>::Off();
   }
 }
