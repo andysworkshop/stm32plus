@@ -17,9 +17,12 @@ namespace stm32plus {
   /**
    * DMA feature to enable reading via DMA
    * @tparam TSpi The type of the Spi peripheral (Spi1<...>, Spi2<...>, Spi3<...>)
+   * @tparam TPriority The DMA relative priority level
+   * @tparam TFifoMode Whether or not to use the FIFO
+   * @tparam TByteSize true if the SPI is running in byte mode, false for half-word mode
    */
 
-  template<class TSpi,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Enable>
+  template<class TSpi,uint32_t TPriority=DMA_Priority_High,bool TByteSize=true,uint32_t TFifoMode=DMA_FIFOMode_Enable>
   class SpiDmaReaderFeature : public DmaFeatureBase {
 
     public:
@@ -33,21 +36,28 @@ namespace stm32plus {
    * @param dma the base class reference
    */
 
-  template<class TSpi,uint32_t TPriority,uint32_t TFifoMode>
-  inline SpiDmaReaderFeature<TSpi,TPriority,TFifoMode>::SpiDmaReaderFeature(Dma& dma)
+  template<class TSpi,uint32_t TPriority,bool TByteSize,uint32_t TFifoMode>
+  inline SpiDmaReaderFeature<TSpi,TPriority,TByteSize,TFifoMode>::SpiDmaReaderFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     SPI_TypeDef *spi;
 
     spi=(SPI_TypeDef *)TSpi::PERIPHERAL_BASE;
 
+    if(TByteSize) {
+      _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Byte; // transferring bytes
+      _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Byte;         // transferring bytes
+    }
+    else {
+      _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_HalfWord; // transferring half words
+      _init.DMA_MemoryDataSize=DMA_MemoryDataSize_HalfWord;         // transferring half words
+    }
+
     _init.DMA_Channel=dma.getChannelNumber();                 // channel id
     _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(spi->DR));
     _init.DMA_DIR=DMA_DIR_PeripheralToMemory;                 // 'peripheral' is source
     _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;        // 'peripheral' does not increment
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
-    _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Byte; // transferring bytes
-    _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Byte;         // transferring bytes
     _init.DMA_Mode=DMA_Mode_Normal;                           // not a circular buffer
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_MemoryBurst=DMA_MemoryBurst_Single;             // burst size
@@ -68,8 +78,8 @@ namespace stm32plus {
    * @param[in] count The number of bytes to transfer.
    */
 
-  template<class TSpi,uint32_t TPriority,uint32_t TFifoMode>
-  inline void SpiDmaReaderFeature<TSpi,TPriority,TFifoMode>::beginRead(void *dest,uint32_t count) {
+  template<class TSpi,uint32_t TPriority,bool TByteSize,uint32_t TFifoMode>
+  inline void SpiDmaReaderFeature<TSpi,TPriority,TByteSize,TFifoMode>::beginRead(void *dest,uint32_t count) {
 
     DMA_Stream_TypeDef *peripheralAddress;
 

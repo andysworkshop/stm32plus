@@ -9,8 +9,11 @@
 
 namespace stm32plus {
 
+
   /**
-   * Base class for all SPI peripherals
+   * Base class for all SPI peripherals. Supports synchronous sending and receiving of
+   * data encoded into 8 or 16-bit values. The SPI peripheral on the F0 can be initialised
+   * to send/receive bit streams that are no a multiple of 8.
    */
 
   class Spi {
@@ -34,11 +37,15 @@ namespace stm32plus {
 
     public:
       bool readyToReceive() const;
+
       bool receive(uint8_t& byte) const;
       bool receive(uint8_t *data,uint32_t numBytes);
+      bool receive(uint16_t& byte) const;
+      bool receive(uint16_t *data,uint32_t numBytes);
 
       bool readyToSend() const;
       bool send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived=nullptr) const;
+      bool send(const uint16_t *dataToSend,uint32_t numBytes,uint16_t *dataReceived=nullptr) const;
 
       void setNss(bool value);
       operator SPI_TypeDef *() const;
@@ -152,6 +159,26 @@ namespace stm32plus {
 
 
   /**
+   * Read a half-word from the peripheral
+   * @param hword[out] The half-word that was read out
+   */
+
+  inline bool Spi::receive(uint16_t& hword) const {
+
+    // wait until ready to receive or there's an error
+
+    while(!readyToReceive())
+      if(hasError())
+        return false;
+
+    // read the word
+
+    hword=SPI_I2S_ReceiveData(_peripheralAddress);
+    return true;
+  }
+
+
+  /**
    * This overload reads a number of bytes from the peripheral. It transmits dummy zero bytes to
    * cause the clock to tick and data to be received.
    * @param data The data buffer
@@ -189,6 +216,43 @@ namespace stm32plus {
 
 
   /**
+   * This overload reads a number of half-words from the peripheral. It transmits dummy zero bits to
+   * cause the clock to tick and data to be received.
+   * @param data The data buffer
+   * @param numHalfWords The number of half-words to read
+   * @return true if it worked
+   */
+
+  inline bool Spi::receive(uint16_t *data,uint32_t numHalfWords) {
+
+    static const uint16_t zero=0;
+
+    while(numHalfWords--) {
+
+      // wait for ready to send
+
+      while(!readyToSend())
+        if(hasError())
+          return false;
+
+      // send the dummy byte, i.e. cause the SPI clock to tick
+
+      SPI_I2S_SendData(_peripheralAddress,zero);
+
+      while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_RXNE)==RESET)
+        if(hasError())
+          return false;
+
+      // read the byte to clear RXNE and save/discard
+
+      *data++=SPI_I2S_ReceiveData(_peripheralAddress);
+    }
+
+    return true;
+  }
+
+
+  /**
    * Check for TXE
    * @return true if ready to send
    */
@@ -199,7 +263,10 @@ namespace stm32plus {
 
 
   /**
-   * Send a block of bytes, blocking.
+   * Send a block of bytes, blocking. Optionally receive data at the same time
+   * @param dataToSend The buffer of bytes to send
+   * @param numBytes The number of bytes to send
+   * @param[out] dataReceived Where to store the data received. Set to nullptr if you're not receiving any data.
    */
 
   inline bool Spi::send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived) const {
@@ -213,6 +280,48 @@ namespace stm32plus {
           return false;
 
       // send the byte
+
+      SPI_I2S_SendData(_peripheralAddress,*dataToSend++);
+
+      if(_direction==SPI_Direction_2Lines_FullDuplex) {
+
+        // in duplex mode and we want data, wait for it to come
+
+        while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_RXNE)==RESET)
+          if(hasError())
+            return false;
+
+        // read the byte to clear RXNE and save/discard
+
+        if(dataReceived!=nullptr)
+          *dataReceived++=SPI_I2S_ReceiveData(_peripheralAddress);
+        else
+          SPI_I2S_ReceiveData(_peripheralAddress);
+      }
+    }
+
+    return true;
+  }
+
+
+  /**
+   * Send a block of half-words, blocking. Optionally receive data at the same time
+   * @param dataToSend The buffer of half-words to send
+   * @param numHalfWords The number of half-words to send
+   * @param[out] dataReceived Where to store the data received. Set to nullptr if you're not receiving any data.
+   */
+
+  inline bool Spi::send(const uint16_t *dataToSend,uint32_t numHalfWords,uint16_t *dataReceived) const {
+
+    while(numHalfWords--) {
+
+      // wait for ready to send
+
+      while(!readyToSend())
+        if(hasError())
+          return false;
+
+      // send the half-word
 
       SPI_I2S_SendData(_peripheralAddress,*dataToSend++);
 
