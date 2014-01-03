@@ -18,5 +18,8 @@
 
 // generic includes for the peripheral
 
-#include "pwr/LowPowerModes.h"
-
+#if defined(STM32PLUS_F0)
+  #include "pwr/f0/LowPowerModes.h"
+#elif defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+  #include "pwr/f1,f4/LowPowerModes.h"
+#endif

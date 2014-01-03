@@ -14,41 +14,34 @@ using namespace stm32plus;
 
 
 /**
- * Low power modes test. This example requires a
- * pushbutton wired to PA8 and an indicator LED wired
- * to PF6.
+ * Low power modes test. This example requires a pushbutton wired to PA8 and an
+ * indicator LED wired to PF6.
  *
- * The LED will continually flash as 250ms intervals
- * until the button is pressed at which point the MCU
- * will go into STOP mode pending an interrupt to wake
- * it up. Press the button again will cause the EXTI
- * interrupt that will wake it up.
+ * The LED will continually flash as 250ms intervals until the button is pressed
+ * at which point the MCU will go into STOP mode pending an interrupt to wake
+ * it up. Press the button again will cause the EXTI interrupt that will wake it up.
  *
- * The commented out line _lpm.standby() can be
- * substituted for the stopInterruptWakeup() call to
- * cause the MCU to enter STANDBY mode. STANDBY can be
- * exited by WAKEUP, IWDG, RTC alarm and of course
- * external reset. STANDBY mode clears SRAM therefore
- * execution after wakeup is back at the start of your
- * program (the reset handler).
+ * The commented out line _lpm.standby() can be substituted for the stopInterruptWakeup()
+ * call to cause the MCU to enter STANDBY mode. STANDBY can be exited by WAKEUP,
+ * IWDG, RTC alarm and of course external reset. STANDBY mode clears SRAM therefore
+ * execution after wakeup is back at the start of your program (the reset handler).
  *
- * To run this example on the STM32F4DISCOVERY board
- * change the LED pin to PD13 to use the onboard LED
- * and change the button pin to PA0 to use the onboard
- * user button. Also change Exti8 to Exti0 to match
- * the button pin number.
+ * To run this example on the STM32F4DISCOVERY board change the LED pin to PD13 to use
+ * the onboard LED and change the button pin to PA0 to use the onboard user button.
+ * Also change Exti8 to Exti0 to match the button pin number.
  *
- * To run this example on the STM32VLDISCOVERY board
- * change the LED pin to PC8 to use the onboard LED
- * and change the button pin to PA0 to use the onboard
+ * To run this example on the STM32VLDISCOVERY board change the LED pin to PC8 to
+ * use the onboard LED and change the button pin to PA0 to use the onboard
  * user button. Also change Exti8 to Exti0 to match
  * the button pin number.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6

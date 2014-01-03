@@ -22,6 +22,6 @@ namespace stm32plus {
       static FPTR _forceLinkage;
 
     public:
-      static void enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority);
+      static void enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority=0);
   };
 }

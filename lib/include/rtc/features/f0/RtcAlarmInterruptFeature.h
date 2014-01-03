@@ -66,7 +66,7 @@ namespace stm32plus {
 
     // alarm register is RO while enabled
 
-    RTC_AlarmCmd(RTC_IT_ALRA,DISABLE);
+    RTC_AlarmCmd(RTC_Alarm_A,DISABLE);
 
     // set up the time component
 
@@ -83,12 +83,12 @@ namespace stm32plus {
 
     // set the alarm and enable the interrupt
 
-    RTC_SetAlarm(RTC_Format_BIN,RTC_IT_ALRA,&alarm);
+    RTC_SetAlarm(RTC_Format_BIN,RTC_Alarm_A,&alarm);
     RTC_ITConfig(RTC_IT_ALRA,ENABLE);
 
     // enable the alarm
 
-    RTC_AlarmCmd(RTC_IT_ALRA,ENABLE);
+    RTC_AlarmCmd(RTC_Alarm_A,ENABLE);
   }
 
 
@@ -97,7 +97,7 @@ namespace stm32plus {
    */
 
   inline void RtcAlarmInterruptFeature::cancelAlarm() const {
-    RTC_AlarmCmd(RTC_IT_ALRA,DISABLE);
+    RTC_AlarmCmd(RTC_Alarm_A,DISABLE);
     RTC_ITConfig(RTC_IT_ALRA,DISABLE);
   }
 }

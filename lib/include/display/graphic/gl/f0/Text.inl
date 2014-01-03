@@ -54,7 +54,7 @@ namespace stm32plus {
           this->writePixel(_background);
 
         if(mask==0x80) {
-          mask=0;
+          mask=1;
           fontData++;
         }
         else
@@ -126,7 +126,7 @@ namespace stm32plus {
         }
 
         if(mask==0x80) {
-          mask=0;
+          mask=1;
           fontData++;
         }
         else

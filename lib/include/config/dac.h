@@ -34,7 +34,7 @@
 #include "dac/features/DacDataAlignmentFeature.h"
 
 #if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
-  #include "dac/features/DacDualChannelFeature.h"
+  #include "dac/features/f1,f4/DacDualChannelFeature.h"
 #endif
 
 // dac channels

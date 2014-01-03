@@ -31,6 +31,7 @@ using namespace stm32plus::display;
  * reaches the end of the display.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *

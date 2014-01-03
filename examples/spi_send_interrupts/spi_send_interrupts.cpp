@@ -13,38 +13,32 @@ using namespace stm32plus;
 
 
 /**
- * This demo illustrates sending and receiving using the
- * SPI peripherals. A block of test data is sent from
- * SPI1 to SPI2 and, if successfully received, then a LED
- * on PF6 is flashed for 1 second. The test repeats
- * continuously.
+ * This demo illustrates sending and receiving using the SPI peripherals. A block of test
+ * data is sent from SPI2 to SPI1 and, if successfully received, then a LED on PF6 is
+ * flashed for 1 second. The test repeats continuously.
  *
- * The SPI interrupts are used to send and receive the
- * data. Note the code that adjusts the relative
- * interrupt priorities.
+ * SPI2 is used to send the data and it's received by the SPI1 interrupt.
  *
- * If you intend to run this example on the
- * STM23F4DISCOVERY board then replace PF6 with PD13 to
+ * If you intend to run this example on the F4 DISCOVERY board then replace PF6 with PD13
+ * to use the onboard LED.
+ *
+ * If you intend to run this example on the VL or F0 DISCOVERY board then replace PF6 with PC8 to
  * use the onboard LED.
  *
- * If you intend to run this example on the
- * STM23VLDISCOVERY board then replace PF6 with PC8 to
- * use the onboard LED.
- *
- * For this demo I'm going to need you to do a little
- * wiring to hook up SPI1 to SPI2 so that we can
- * exchange data over the MOSI pin. Here's the
- * connections that you need to make.
+ * For this demo I'm going to need you to do a little wiring to hook up SPI1 to SPI2 so that
+ * we can exchange data over the MOSI pin. Here are the connections that you need to make.
  *
  * 1MOSI/2MOSI: PA7  => PB15
  * NSS:         PA4 <=> PB12
  * SCLK:        PA5 <=> PB13
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F407VGT6
  *   STM32F100RBT6
@@ -65,18 +59,16 @@ class SpiSendInterruptsTest {
      * co-ordinate the send and receive process.
      */
 
-    volatile bool _completed;
     uint8_t _receiveBuffer[12];
-    uint8_t _receiveIndex;
+    volatile uint8_t _receiveIndex;
     uint8_t _sendIndex;
-
 
     /*
      * Declare the SPI sender/receiver.
      */
 
-    typedef Spi1<Spi1InterruptFeature> MySender;
-    typedef Spi2<Spi2InterruptFeature> MyReceiver;
+    typedef Spi2<> MySender;
+    typedef Spi1<Spi1InterruptFeature> MyReceiver;
 
     MySender *_sender;
     MyReceiver *_receiver;
@@ -97,7 +89,7 @@ class SpiSendInterruptsTest {
       Nvic::initialise();
 
       /**
-       * Create the sender and receiver objects with default parameters
+       * Create the sender and receiver objects as master and slave
        */
 
       MySender::Parameters senderParams;
@@ -110,24 +102,8 @@ class SpiSendInterruptsTest {
       _receiver=new MyReceiver(receiverParams);
 
       /*
-       * We need to adjust the priority of the interrupts so that the receiver is higher (lower number)
-       * than the sender. If this is not done then the TXE interrupt (sender) will always pre-empt the
-       * receiver with the undesirable result that all the bytes will be transmitted but only the first
-       * will be received because the receiver IRQ will fire on the first byte transmission and then get
-       * queued until transmission of all bytes finish by which time all but the queued receiver interrupt
-       * have been missed.
+       * register ourselves as an observer of the SPI receive interrupt
        */
-
-      _sender->setNvicPriorities(1);
-      _receiver->setNvicPriorities(0);
-
-      /*
-       * register ourselves as an observer of the SPI interrupts
-       */
-
-      _sender->SpiInterruptEventSender.insertSubscriber(
-          SpiInterruptEventSourceSlot::bind(this,&SpiSendInterruptsTest::onInterrupt)
-        );
 
       _receiver->SpiInterruptEventSender.insertSubscriber(
           SpiInterruptEventSourceSlot::bind(this,&SpiSendInterruptsTest::onInterrupt)
@@ -135,15 +111,22 @@ class SpiSendInterruptsTest {
 
       for(;;) {
 
+        uint8_t i;
+
         /*
          * Reset the instance variables
          */
 
         _sendIndex=0;
         _receiveIndex=0;
-        _completed=false;
 
         memset(_receiveBuffer,0,sizeof(_receiveBuffer));
+
+        /*
+         * Enable the receive interrupt
+         */
+
+        _receiver->enableInterrupts(SPI_I2S_IT_RXNE);
 
         /*
          * NSS (slave select) is active LOW. ST made such a mess of the hardware implementation of NSS
@@ -153,17 +136,25 @@ class SpiSendInterruptsTest {
         _sender->setNss(false);
 
         /*
-         * Enable them now. TXE will be raised immediately
+         * Send the block of data from SPI2 to SPI1. Note the lack of flow control. Don't built a
+         * real system like this.
          */
 
-        _receiver->enableInterrupts(SPI_I2S_IT_RXNE);
-        _sender->enableInterrupts(SPI_I2S_IT_TXE);
+        for(i=0;i<12;i++) {
+
+          /*
+           * Wait for the sender to signal it's ready and then send a byte
+           */
+
+          while(!_sender->readyToSend());
+          _sender->send(&dataToSend[i],1);
+        }
 
         /*
-         * Wait for the interrupts to signal completion
+         * Wait for the receive interrupt handler to signal that it's finished
          */
 
-        while(!_completed);
+        while(_receiveIndex!=12);
 
         /*
          * De-select NSS
@@ -197,19 +188,7 @@ class SpiSendInterruptsTest {
 
     void onInterrupt(SpiEventType set) {
 
-      if(set==SpiEventType::EVENT_READY_TO_TRANSMIT) {
-
-        // send a byte and increment send position
-
-        _sender->send(&dataToSend[_sendIndex],1);
-        _sendIndex++;
-
-        // if all is sent, disable further send interrupts
-
-        if(_sendIndex==sizeof(_receiveBuffer))
-          _sender->disableInterrupts(SPI_I2S_IT_TXE);
-      }
-      else if(set==SpiEventType::EVENT_RECEIVE) {
+      if(set==SpiEventType::EVENT_RECEIVE) {
 
         // receive a byte
 
@@ -218,10 +197,8 @@ class SpiSendInterruptsTest {
 
         // if all is received, disable interrupts and signal finished
 
-        if(_receiveIndex==sizeof(_receiveBuffer)) {
+        if(_receiveIndex==sizeof(_receiveBuffer))
           _receiver->disableInterrupts(SPI_I2S_IT_RXNE);
-          _completed=true;
-        }
       }
     }
 };

@@ -53,6 +53,7 @@ namespace stm32plus {
     init.RTC_AsynchPrediv=0x7F;
     init.RTC_SynchPrediv=0xFF;        // LSI freq (Hz / 128)-1 = (32768 / 128 ) -1 = 255
     init.RTC_HourFormat=_rtc.getHourFormat();
+
     RTC_Init(&init);
   }
 }

@@ -17,32 +17,31 @@ using namespace stm32plus;
 /**
  * Timer input capture demo.
  *
- * This demonstration will calculate the frequency of a
- * PWM signal and write it out to USART1 every 3 seconds.
+ * This demonstration will calculate the frequency of a PWM signal and write it out
+ * to USART1 every 3 seconds.
  *
- * Note that if you are using the STM32F4DISCOVERY board
- * then you cannot use Usart1 since the pins clash with
- * onboard peripherals. I have tested this code on that
- * board using Uart4.
+ * Note that if you are using the STM32F4DISCOVERY board then you cannot use USART1
+ * since the pins clash with onboard peripherals. I have tested this code on that
+ * board using UART4.
  *
  * The USART protocol is 57600/8/N/1
  *
- * Timer4 channel 1 is used to generate a PWM
- * signal. This signal is fed to Timer3 channel 3. Each
- * rising edge of the signal causes an interrupt to fire.
- * When two successive edges have been captured we
- * calculate and display the result.
+ * Timer2 channel 2 is used to generate a PWM signal. This signal is fed to Timer3
+ * channel 3. Each rising edge of the signal causes an interrupt to fire. When two
+ * successive edges have been captured we calculate and display the result.
  *
  * On the F4 and F103 HD the frequency is 100KHz. This is too
- * fast for the F100 VL so we use 10KHz instead.
+ * fast for the F0 and F100 VL so we use 10KHz instead.
  *
- * You will need to wire PB6 to PB0 to test this demo.
+ * You will need to wire PA1 (TIM2_CH2) to PB0 (TIM3_CH3) to test this demo.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -100,25 +99,25 @@ class TimerInputCaptureTest {
       UsartPollingOutputStream outputStream(usart1);
 
       /*
-       * We'll use Timer 4 to generate a PWM signal on its channel 1.
-       * The signal will be output on PB6
+       * We'll use Timer 2 to generate a PWM signal on its channel 2.
+       * The signal will be output on PA1
        */
 
-      Timer4<
-        Timer4InternalClockFeature,     // clocked from the internal clock
-        TimerChannel1Feature,           // we're going to use channel 1
-        Timer4GpioFeature<              // we want to output something to GPIO
+      Timer2<
+        Timer2InternalClockFeature,     // clocked from the internal clock
+        TimerChannel2Feature,           // we're going to use channel 1
+        Timer2GpioFeature<              // we want to output something to GPIO
           TIMER_REMAP_NONE,             // the GPIO output will not (cannot for this timer) be remapped
-          TIM4_CH1_OUT                  // we will output channel 1 to GPIO (PB6)
+          TIM2_CH2_OUT                  // we will output channel 1 to GPIO (PB6)
         >
       > outputTimer;
 
       /*
        * On the F1HD and F4 we set the output timer to 24Mhz with a reload frequency of 100Khz (24Mhz/240).
-       * On the F1 VL we set it to 10KHz to avoid CPU starvation by the interrupt handler.
+       * On the F0 and F1 VL we set it to 10KHz to avoid CPU starvation by the interrupt handler.
        */
 
-#if defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_MD_VL) || defined(STM32PLUS_F0)
       outputTimer.setTimeBaseByFrequency(800000,80-1);
 #else
       outputTimer.setTimeBaseByFrequency(24000000,240-1);

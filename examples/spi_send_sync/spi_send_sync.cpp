@@ -13,23 +13,17 @@ using namespace stm32plus;
 
 
 /**
- * This demo illustrates sending and receiving using the
- * SPI peripherals. A block of test data is sent from
- * SPI1 to SPI2 and, if successfully received, then a
- * LED on PF6 is flashed for 1 second. The test repeats
- * continuously.
+ * This demo illustrates sending and receiving using the SPI peripherals. A block of test data
+ * is sent from SPI1 to SPI2 and, if successfully received, then a LED on PF6 is flashed for
+ * one second. The test repeats continuously.
  *
- * For this demo I'm going to need you to do a little
- * wiring to hook up SPI1 to SPI2 so that we can
- * exchange data over the MOSI pin. Here's the
- * connections that you need to make.
+ * For this demo I'm going to need you to do a little wiring to hook up SPI1 to SPI2 so that we can
+ * exchange data over the MOSI pin. Here are the connections that you need to make.
  *
- * If you intend to run this example on the
- * STM23F4DISCOVERY board then replace PF6 with PD13
- * to use the onboard LED.
+ * If you intend to run this example on the F4 DISCOVERY board then replace PF6 with PD13 to use
+ * the onboard LED.
  *
- * If you intend to run this example on the
- * STM23VLDISCOVERY board then replace PF6 with PC8
+ * If you intend to run this example on the VL or F0 DISCOVERY board then replace PF6 with PC8
  * to use the onboard LED.
  *
  * 1MOSI/2MOSI: PA7  => PB15
@@ -37,10 +31,12 @@ using namespace stm32plus;
  * SCLK:        PA5 <=> PB13
  * *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -50,7 +46,7 @@ class SpiSendSyncTest {
 
   protected:
 
-    enum { LED_PIN = 8 };
+    enum { LED_PIN = 6 };
 
   public:
 
@@ -62,7 +58,7 @@ class SpiSendSyncTest {
 
       // initialise the LED on PF6. It's active LOW so we set it HIGH to turn it off
 
-      GpioC<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
       pf[LED_PIN].set();
 
       /*

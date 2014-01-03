@@ -1,6 +1,6 @@
 Introduction
 ============
-Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F100, STM32F103, STM32F107 and STM32F4 devices.
+Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F051, F100, F103, F107 and F4 devices.
 
 The main introduction and getting started guide can be found at [my website](http://www.andybrown.me.uk).
 
@@ -25,7 +25,7 @@ After cloning this repo you are going to have a choice of what to build based on
 Where are the examples?
 =======================
 
-In the _examples_ subdirectory you will find dozens of examples nearly all of which will work without modification on the F1 and F4 devices. The examples are heavily commented to help you understand what's going on.
+In the _examples_ subdirectory you will find dozens of examples nearly all of which will work without modification on the F0, F1 and F4 devices. The examples are heavily commented to help you understand what's going on.
 
 The examples are configured to run out-of-the-box on the following MCUs:
 
@@ -35,6 +35,7 @@ The examples are configured to run out-of-the-box on the following MCUs:
 | F103 HD | 512Kb | 64Kb | 72 MHz | 8 MHz |
 | F107 | 256Kb | 64Kb | 72 MHz | 25 MHz |
 | F100 MD VL | 128Kb | 8Kb | 24 MHz | 8 MHz |
+| F051 | 64Kb | 8Kb | 48 MHz | none (uses 8MHz internal) |
 
 If your device is listed but your board has a different oscillator or core clock speed then you may need to adjust `System.c` in the `system` subdirectory
 of the example that you are looking at. If your memory configuration is different then you will need to adjust `Linker.ld` in the `system` subdirectory. 
@@ -83,9 +84,9 @@ A short walk around the directories
 
 `lib/src`: The C++ source files that make up the library. Everything in here is considered internal.
 
-`lib/fwlib`: Source code to the ST Microelectronics standard peripheral libraries for the F1 and F4 processors.
+`lib/fwlib`: Source code to the ST Microelectronics standard peripheral libraries for the F0, F1 and F4 processors.
 
-`examples/`: The examples that demonstrate the features of the library. There is one subdirectory for each example. All the examples follow the same general format. There is the main example source code and a `system` subdirectory. The `system` subdirectory is the same for every example and contains the startup and initialisation code required for the F1 and F4 MCU. The `SConscript` file takes care of selecting the appropriate code for your target MCU. To build modified example, run `scons` again from the root directory. scons is smart enough to only build changed files and their dependents.
+`examples/`: The examples that demonstrate the features of the library. There is one subdirectory for each example. All the examples follow the same general format. There is the main example source code and a `system` subdirectory. The `system` subdirectory is the same for every example and contains the startup and initialisation code required for the F0, F1 and F4 MCUs. The `SConscript` file takes care of selecting the appropriate code for your target MCU. To build modified example, run `scons` again from the root directory. scons is smart enough to only build changed files and their dependents.
 
 `utils/bm2rgbi`: This PC utility is for converting graphics files (jpeg, png, gif etc.) into an internal format suitable for efficient transfer to a TFT. It also supports compression using the LZG format that results in files roughly the same size as a PNG. You'll need this utility if you decide to use the bitmap functions in the graphics library.
 
@@ -251,6 +252,52 @@ Flash your hex image:
 	target halted due to breakpoint, current mode: Thread 
 	xPSR: 0x61000000 pc: 0x2000003a msp: 0x20002000
 	wrote 3072 bytes from file p:/blink.hex in 0.653037s (4.594 KiB/s)
+
+Reset the device to run the program:
+
+	> reset
+
+Flashing the stm32f0discovery board
+--
+This is one of the more recent _discovery_ boards from ST and as such it comes equipped with version 2 of the ST-Link debugger on board. Using it with OpenOCD is a very similar procedure to the F4.
+
+`cd` into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
+
+	$ bin-x64/openocd-x64-0.7.0.exe -f scripts/board/stm32f0discovery.cfg
+	Open On-Chip Debugger 0.7.0 (2013-05-05-10:44)
+	Licensed under GNU GPL v2
+	For bug reports, read
+	        http://openocd.sourceforge.net/doc/doxygen/bugs.html
+	srst_only separate srst_nogate srst_open_drain connect_deassert_srst
+	Info : This adapter doesn't support configurable speed
+	Info : STLINK v2 JTAG v14 API v2 SWIM v0 VID 0x0483 PID 0x3748
+	Info : Target voltage: 2.886506
+	Info : stm32f0x.cpu: hardware has 4 breakpoints, 2 watchpoints
+
+openocd is now up and running waiting for you to do something.
+
+Now telnet to openocd and flash your hex image:
+
+	$ telnet localhost 4444
+	Trying 127.0.0.1...
+	Connected to localhost.
+	Escape character is '^]'.
+	Open On-Chip Debugger
+
+Reset the device and halt it:
+
+	> reset init
+	target state: halted
+	target halted due to debug-request, current mode: Thread 
+	xPSR: 0xc1000000 pc: 0x080009b8 msp: 0x20002000
+
+Flash your hex image:
+
+	> flash write_image erase p:/blink.hex
+	auto erase enabled
+	device id = 0x20006440
+	flash size = 64kbytes
+	wrote 2048 bytes from file p:/blink.hex in 0.423024s (4.728 KiB/s)
 
 Reset the device to run the program:
 
