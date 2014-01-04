@@ -10,7 +10,7 @@
 namespace stm32plus {
 
   /**
-   * SPI peripheral class
+   * SPI peripheral base class
    */
 
   template<class TPinPackage,PeripheralName TPeripheralName>
@@ -18,16 +18,27 @@ namespace stm32plus {
 
     public:
 
+      /**
+       * Parameters class
+       */
+
       struct Parameters {
-        uint16_t spi_direction;
-        uint16_t spi_mode;
-        uint16_t spi_baudRatePrescaler;
-        uint16_t spi_firstBit;
-        uint16_t spi_cpol;
-        uint16_t spi_cpha;
-        uint16_t spi_polynomial;
+        uint16_t spi_direction;             ///< (SPI_Direction_2Lines_FullDuplex) / SPI_Direction_2Lines_RxOnly / SPI_Direction_1Line_Rx / SPI_Direction_1Line_Tx
+        uint16_t spi_mode;                  ///< (SPI_Mode_Master) / SPI_Mode_Slave
+        uint16_t spi_baudRatePrescaler;     ///< SPI_BaudRatePrescaler_2 / 4 / 8 / (16) / 32 / 64 / 128 / 256
+        uint16_t spi_firstBit;              ///< (SPI_FirstBit_MSB) / SPI_FirstBit_LSB
+        uint16_t spi_cpol;                  ///< (SPI_CPOL_High) SPI_CPOL_Low
+        uint16_t spi_cpha;                  ///< (SPI_CPHA_2Edge) / SPI_CPHA_1Edge
+        uint16_t spi_polynomial;            ///< default is 7
+        uint16_t spi_dataSize;              ///< (SPI_DataSize_8b) / SPI_DataSize_16b (more available on the F0)
+
+        /**
+         * Constructor, set suitable defaults for master mode. Generally you'll want to set at
+         * least spi_baudRatePrescaler to a suitable speed and check that the other defaults are OK.
+         */
 
         Parameters() {
+          spi_dataSize=SPI_DataSize_8b;
           spi_direction=SPI_Direction_2Lines_FullDuplex;
           spi_mode=SPI_Mode_Master;
           spi_baudRatePrescaler=SPI_BaudRatePrescaler_16;
@@ -39,7 +50,6 @@ namespace stm32plus {
       };
 
     protected:
-
       SpiPeripheral(const Parameters& params);
       ~SpiPeripheral();
   };
@@ -73,7 +83,7 @@ namespace stm32plus {
 
     init.SPI_Direction=params.spi_direction;
     init.SPI_Mode=params.spi_mode;
-    init.SPI_DataSize=SPI_DataSize_8b;
+    init.SPI_DataSize=params.spi_dataSize;
     init.SPI_CPOL=params.spi_cpol;
     init.SPI_CPHA=params.spi_cpha;
     init.SPI_NSS=SPI_NSS_Soft;
