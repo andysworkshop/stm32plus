@@ -8,6 +8,7 @@
 #include "config/flash/spi.h"
 #include "config/sdcard.h"
 #include "config/usart.h"
+#include "config/crc.h"
 #include "config/filesystem.h"
 #include "memory/scoped_ptr.h"
 #include <vector>
@@ -207,7 +208,9 @@ class FlashSpiProgram {
 
       uint8_t page[MyFlash::PAGE_SIZE];
       scoped_ptr<File> file;
-      uint32_t remaining,actuallyRead,address;
+      uint32_t i,remaining,actuallyRead,address;
+      CrcBigEndian::Parameters params;
+      CrcBigEndian crc(params);
 
       *_usartStream << "Programming " << fe.filename << "\r\n";
 
@@ -246,10 +249,17 @@ class FlashSpiProgram {
         if(!_flash->pageProgram(address,page,actuallyRead))
           error("Failed to program the page");
 
+        // add to CRC
+
+        for(i=0;i<actuallyRead;i++)
+          crc.addNewData(page[i]);
+
         // update for next
 
         address+=actuallyRead;
       }
+
+      *_usartStream << "Programmed " << fe.filename <<  " OK. CRC = " << StringUtil::Ascii(crc.finish()) << "\r\n";
     }
 
 
@@ -261,7 +271,9 @@ class FlashSpiProgram {
 
       uint8_t filePage[MyFlash::PAGE_SIZE],flashPage[MyFlash::PAGE_SIZE];
       scoped_ptr<File> file;
-      uint32_t remaining,actuallyRead,address;
+      uint32_t i,remaining,actuallyRead,address;
+      CrcBigEndian::Parameters params;
+      CrcBigEndian crc(params);
 
       *_usartStream << "Verifying " << fe.filename << "\r\n";
 
@@ -292,10 +304,17 @@ class FlashSpiProgram {
         if(memcmp(filePage,flashPage,actuallyRead)!=0)
           error("Verify error: programming failed");
 
+        // add to CRC
+
+        for(i=0;i<actuallyRead;i++)
+          crc.addNewData(flashPage[i]);
+
         // update for next
 
         address+=actuallyRead;
       }
+
+      *_usartStream << "Verified " << fe.filename << " OK. CRC = " << StringUtil::Ascii(crc.finish()) << "\r\n";
     }
 
 
