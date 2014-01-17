@@ -74,7 +74,7 @@
   #include "timer/f1/Timer12.h"
   #include "timer/f1/Timer13.h"
 
-#elif defined(STM32PLUS_F1)
+#elif defined(STM32PLUS_F4)
 
   #include "timer/f4/Timer4.h"
   #include "timer/f4/Timer5.h"
