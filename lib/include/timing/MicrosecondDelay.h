@@ -72,7 +72,7 @@ namespace stm32plus {
 
     // enable the timer
 
-    _timer->enableTimer(true);
+    _timer->enablePeripheral();
 
     // remember the counter register
 
