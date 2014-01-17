@@ -89,7 +89,7 @@ namespace stm32plus {
   template<uint8_t... TPins> using DefaultSpi3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SPI3,TPins...>;
 
   template<uint8_t... TPins> using DefaultUsart1AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART1,TPins...>;
-  template<uint8_t... TPins> using DefaultUsart2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART1,TPins...>;
+  template<uint8_t... TPins> using DefaultUsart2AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART2,TPins...>;
   template<uint8_t... TPins> using DefaultUsart3AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART3,TPins...>;
   template<uint8_t... TPins> using DefaultUart4AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART4,TPins...>;
   template<uint8_t... TPins> using DefaultUart5AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART5,TPins...>;
