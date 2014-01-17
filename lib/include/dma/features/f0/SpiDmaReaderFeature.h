@@ -69,7 +69,7 @@ namespace stm32plus {
    * Start a transfer of data to the destination
    *
    * @param[in] dest The destination of the transfer.
-   * @param[in] count The number of bytes to transfer.
+   * @param[in] count The number of units (bytes or halfwords) to transfer.
    */
 
   template<class TSpi,uint32_t TPriority,bool TByteSize>
