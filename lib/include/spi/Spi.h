@@ -40,12 +40,12 @@ namespace stm32plus {
 
       bool receive(uint8_t& byte) const;
       bool receive(uint8_t *data,uint32_t numBytes);
-      bool receive(uint16_t& byte) const;
-      bool receive(uint16_t *data,uint32_t numBytes);
+      bool receive(uint16_t& halfWord) const;
+      bool receive(uint16_t *data,uint32_t numHalfWords);
 
       bool readyToSend() const;
       bool send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived=nullptr) const;
-      bool send(const uint16_t *dataToSend,uint32_t numBytes,uint16_t *dataReceived=nullptr) const;
+      bool send(const uint16_t *dataToSend,uint32_t numHalfWords,uint16_t *dataReceived=nullptr) const;
 
       void setNss(bool value);
       operator SPI_TypeDef *() const;
@@ -291,7 +291,7 @@ namespace stm32plus {
           if(hasError())
             return false;
 
-        // read the byte to clear RXNE and save/discard
+        // read the byte to clear RXNE and save
 
         if(dataReceived!=nullptr)
           *dataReceived++=SPI_I2S_ReceiveData(_peripheralAddress);
@@ -333,7 +333,7 @@ namespace stm32plus {
           if(hasError())
             return false;
 
-        // read the byte to clear RXNE and save/discard
+        // read the byte to clear RXNE and save it
 
         if(dataReceived!=nullptr)
           *dataReceived++=SPI_I2S_ReceiveData(_peripheralAddress);
