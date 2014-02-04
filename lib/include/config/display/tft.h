@@ -63,7 +63,6 @@
 #include "display/graphic/PanelConfiguration.h"
 #include "display/graphic/PicoJpeg.h"
 #include "display/graphic/JpegDecoder.h"
-#include "display/graphic/DmaLcdWriter.h"
 #include "display/graphic/GraphicsLibrary.h"
 
 // include the optimised GPIO drivers in specialisation order

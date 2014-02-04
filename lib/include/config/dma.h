@@ -25,6 +25,7 @@
 // generic includes
 
 #include "dma/DmaEventSource.h"
+#include "dma/features/DmaLcdWriter.h"
 
 // device-specific peripheral includes
 
