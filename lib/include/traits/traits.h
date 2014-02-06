@@ -20,6 +20,30 @@ namespace stm32plus {
   struct PeripheralTraits;
 
   template<>
+  struct PeripheralTraits<PERIPHERAL_ADC1> {
+    enum {
+      PERIPHERAL_BASE = ADC1_BASE
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_ADC2> {
+    enum {
+      PERIPHERAL_BASE = ADC2_BASE
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC2> Adc2PeripheralTraits;
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_ADC3> {
+    enum {
+      PERIPHERAL_BASE = ADC3_BASE
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC3> Adc3PeripheralTraits;
+
+  template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
     enum {
       CHANNEL_NUMBER = DAC_Channel_1
