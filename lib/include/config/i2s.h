@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -28,6 +28,9 @@
 #elif defined(STM32PLUS_F4)
   #include "i2s/f4/I2SAlternateFunctionMapper.h"
   #include "i2s/f4/I2SPinInitialiser.h"
+#elif defined(STM32PLUS_F0)
+  #include "i2s/f0/I2SAlternateFunctionMapper.h"
+  #include "i2s/f0/I2SPinInitialiser.h"
 #endif
 
 // generic peripheral includes

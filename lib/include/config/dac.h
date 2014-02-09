@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -32,7 +32,10 @@
 
 #include "dac/features/DacFeatureBase.h"
 #include "dac/features/DacDataAlignmentFeature.h"
-#include "dac/features/DacDualChannelFeature.h"
+
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+  #include "dac/features/f1,f4/DacDualChannelFeature.h"
+#endif
 
 // dac channels
 

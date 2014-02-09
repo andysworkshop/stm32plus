@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -27,7 +27,11 @@ namespace stm32plus {
     EVENT_OVERRUN,
     EVENT_ACK_FAILURE,
     EVENT_ARBITRATION_LOSS,
-    EVENT_BUS_ERROR
+    EVENT_BUS_ERROR,
+    EVENT_ERROR,                    // F0
+    EVENT_TRANSFER_COMPLETE,        // F0
+    EVENT_ADDRESS_MATCH,            // F0
+    EVENT_NOT_ACKNOWLEDGE           // F0
   };
 
 

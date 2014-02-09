@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -13,6 +13,7 @@
 
 extern "C" void I2C1_EV_IRQHandler();
 extern "C" void I2C2_EV_IRQHandler();
+extern "C" void I2C1_IRQHandler();        // F0
 
 
 namespace stm32plus {
@@ -144,6 +145,8 @@ namespace stm32plus {
   }
 
 
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+
   /**
    * Enabler specialisation, I2C 1
    */
@@ -165,4 +168,18 @@ namespace stm32plus {
     Nvic::configureIrq(I2C2_EV_IRQn,ENABLE,priority,subPriority);
     Nvic::configureIrq(I2C2_ER_IRQn,ENABLE,priority,subPriority);
   }
+
+#elif defined(STM32PLUS_F0)
+
+  /**
+   * Enabler specialisation, I2C 1
+   */
+
+  template<>
+  inline void I2CInterruptFeatureEnabler<1>::enable(uint8_t priority,uint8_t /* subPriority */) {
+    _forceLinkage=&I2C1_EV_IRQHandler;
+    Nvic::configureIrq(I2C1_IRQn,ENABLE,priority);
+  }
+
+#endif
 }

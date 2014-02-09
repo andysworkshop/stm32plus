@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -17,15 +17,18 @@ namespace stm32plus {
   /**
    * @brief Copy data to an LCD display connected via an 8080 interface.
    *
-   * Custom DMA configuration to bulk copy data into the lcd data register
-   * through the FSMC. This can free the CPU to do other things while data
-   * is transferred to the display.
+   * Custom DMA configuration to bulk copy data into the lcd data register through the FSMC.
+   * This can free the CPU to do other things while data is transferred to the display. Access
+   * to this class from the graphics library is done via the DmaLcdWriter template base class
+   * because the graphics library cannot assume that the FSMC is the peripheral being used to
+   * access the LCD behind the scenes.
    *
    * @tparam TFsmcAccessMode The access mode class (Fsmc8BitAccessMode/Fsmc16BitAccessMode)
    */
 
   template<class TFsmcAccessMode>
-  class DmaFsmcLcdMemoryCopyFeature : public DmaFeatureBase {
+  class DmaFsmcLcdMemoryCopyFeature : public DmaFeatureBase,
+                                      public DmaLcdWriter<DmaFsmcLcdMemoryCopyFeature<TFsmcAccessMode>> {
 
     private:
       uint32_t _byteSize;
@@ -42,7 +45,8 @@ namespace stm32plus {
 
   template<class TFsmcAccessMode>
   inline DmaFsmcLcdMemoryCopyFeature<TFsmcAccessMode>::DmaFsmcLcdMemoryCopyFeature(Dma& dma)
-    : DmaFeatureBase(dma) {
+    : DmaFeatureBase(dma),
+      DmaLcdWriter<DmaFsmcLcdMemoryCopyFeature<TFsmcAccessMode>>(*this) {
 
     DMA_StructInit(&_init);
 

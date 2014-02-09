@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -30,6 +30,17 @@
 
   #include "spi/f4/SpiAlternateFunctionMapper.h"
   #include "spi/f4/SpiPinInitialiser.h"
+
+#elif defined(STM32PLUS_F0)
+
+  // some unhelpful renaming went on inside the std peripheral library
+
+  #define SPI_I2S_ReceiveData(a) SPI_I2S_ReceiveData16((a))
+  #define SPI_I2S_SendData(a,b) SPI_I2S_SendData16((a),(b))
+  #define SPI_I2S_ClearITPendingBit(a,b)  SPI_I2S_ClearFlag((a),(b))
+
+  #include "spi/f0/SpiAlternateFunctionMapper.h"
+  #include "spi/f0/SpiPinInitialiser.h"
 
 #endif
 

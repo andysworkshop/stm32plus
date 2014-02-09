@@ -1,33 +1,33 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash_md5.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file provides high level functions to compute the HASH MD5 and
   *          HMAC MD5 Digest of an input message.
   *          It uses the stm32f4xx_hash.c/.h drivers to access the STM32F4xx HASH
   *          peripheral.
   *
-  *  @verbatim
-  *    
-  *          ===================================================================
-  *                                   How to use this driver
-  *          ===================================================================
-  *          1. Enable The HASH controller clock using 
-  *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_HASH, ENABLE); function.
-  *
-  *          2. Calculate the HASH MD5 Digest using HASH_MD5() function.
-  *
-  *          3. Calculate the HMAC MD5 Digest using HMAC_MD5() function.
-  *
-  *  @endverbatim
+@verbatim
+ ===================================================================
+                  ##### How to use this driver #####
+ ===================================================================
+ [..]
+   (#) Enable The HASH controller clock using 
+       RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_HASH, ENABLE); function.
+  
+   (#) Calculate the HASH MD5 Digest using HASH_MD5() function.
+  
+   (#) Calculate the HMAC MD5 Digest using HMAC_MD5() function.
+  
+@endverbatim
   *
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -74,7 +74,7 @@
  *
 @verbatim   
  ===============================================================================
-                          High Level MD5 Hash and HMAC functions
+              ##### High Level MD5 Hash and HMAC functions #####
  ===============================================================================
 
 

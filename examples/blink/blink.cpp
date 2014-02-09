@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -14,29 +14,24 @@ using namespace stm32plus;
 
 /**
  * This is the most basic example that uses GPIO and the
- * Systick timer to blink a LED on PF6 at 1Hz.
+ * Systick timer to blink a LED on PC8 at 1Hz. PC8 is wired
+ * to the blue onboard LED on the F1VL and F0 discovery boards.
  *
  * If the STM32F4DISCOVERY board is your target then
  * change the GPIO declation to...
  *
  *  GpioD<DefaultDigitalOutputFeature<13> > pd
  *
- * ... and change 2 of "pf[6]" to "pd[13]" to blink the
+ * ... and change 2 of "pc[8]" to "pd[13]" to blink the
  * orange led on the discovery board.
  *
- * If the STM32VLDISCOVERY board is your target then change
- * the GPIO declaration to...
- *
- * GpioC<DefaultDigitalOutputFeature<8> > pc;
- *
- * ... and change 2 of "pf[6]" to "pc[8]" to blink the
- * blue led on the discovery board.
- *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -51,17 +46,17 @@ class Blink {
 
       // initialise the pin for output
 
-      GpioF<DefaultDigitalOutputFeature<6> > pf;
+      GpioC<DefaultDigitalOutputFeature<8> > pc;
 
       // loop forever switching it on and off with a 1 second
       // delay in between each cycle
 
       for(;;) {
 
-        pf[8].set();
+        pc[8].set();
         MillisecondTimer::delay(1000);
 
-        pf[8].reset();
+        pc[8].reset();
         MillisecondTimer::delay(1000);
       }
     }

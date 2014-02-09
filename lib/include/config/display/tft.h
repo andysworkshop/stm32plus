@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -16,7 +16,7 @@
 
 #include "config/gpio.h"
 
-#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F4)
   #include "config/fsmc.h"
 #endif
 
@@ -50,7 +50,7 @@
 #include "display/graphic/gamma/DisplayDeviceGamma.h"
 #include "display/graphic/gamma/NullDisplayDeviceGamma.h"
 
-#if !defined(STM32PLUS_F1_CL) && !defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F4)
   #include "display/graphic/access/Fsmc16BitAccessMode.h"
   #include "display/graphic/access/Fsmc8BitAccessMode.h"
 #endif
@@ -68,15 +68,21 @@
 // include the optimised GPIO drivers in specialisation order
 
 #include "display/graphic/access/Gpio16BitAccessMode.h"
-#include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"
-#include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"
 
-// includes for the optimised GPIO drivers that only work on the F1
+// these two are for devices capable of 72MHz and above
 
-#if defined(STM32PLUS_F1)
-  #include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"
-  #include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+  #include "display/graphic/access/Gpio16BitAccessMode_64K_72_50_50.h"      // optimised for 64K colours
+  #include "display/graphic/access/Gpio16BitAccessMode_72_50_50.h"          // generic for >64K colours
 #endif
+
+// minimum of 24MHz clock required for these
+
+#include "display/graphic/access/Gpio16BitAccessMode_64K_24_80_80.h"      // optimised for 64K colours
+#include "display/graphic/access/Gpio16BitAccessMode_24_80_80.h"          // generic for >64K colours
+
+#include "display/graphic/access/Gpio16BitAccessMode_64K_48_42_42.h"      // optimised for 64K colours
+#include "display/graphic/access/Gpio16BitAccessMode_48_42_42.h"          // generic for >64K colours
 
 // include the device drivers
 
@@ -87,14 +93,17 @@
 #include "display/graphic/tft/hx8347a/HX8347A.h"
 #include "display/graphic/tft/mc2pa8201/MC2PA8201.h"
 #include "display/graphic/tft/lds285/LDS285.h"
-#include "display/graphic/tft/ssd1963/SSD1963.h"
-#include "display/graphic/tft/ssd1963/panelTraits/SSD1963_480x272PanelTraits.h"
 #include "display/graphic/tft/ssd1289/SSD1289.h"
 #include "display/graphic/tft/st7783/ST7783.h"
 #include "display/graphic/tft/lgdp453x/LGDP453x.h"
 #include "display/graphic/tft/hx8352a/HX8352A.h"
 #include "display/graphic/tft/r61523/R61523.h"
 #include "display/graphic/tft/hx8352a/panelTraits/LG_KF700.h"
+
+#if !defined(STM32PLUS_F0)        // there's an FSMC dependency in here
+  #include "display/graphic/tft/ssd1963/SSD1963.h"
+  #include "display/graphic/tft/ssd1963/panelTraits/SSD1963_480x272PanelTraits.h"
+#endif
 
 #include "display/graphic/tft/TftInterfaces.h"
 

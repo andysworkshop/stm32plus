@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -53,7 +53,7 @@ namespace stm32plus {
 
 
   /**
-   * Enabler specialisations for F1 and F4
+   * Enabler specialisations for the F4
    */
 
   template<>
@@ -107,7 +107,7 @@ namespace stm32plus {
   }
 
   /**
-   * Non-GPIO EXTI lines common to the F1 and F4
+   * Non-GPIO EXTI lines
    */
 
   template<>
@@ -129,7 +129,7 @@ namespace stm32plus {
   }
 
   /**
-   * Ethernet EXTI is available on the F1/CL and F4
+   * Ethernet EXTI is available
    */
 
 

@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -12,25 +12,27 @@ using namespace stm32plus;
 
 
 /**
- * Timer demonstration: Output a 1Hz toggle on/off signal
- * on PA0 and another 1Hz signal 500ms ahead of the first
- * one, output on PA1.
+ * Timer demonstration: Output a 1Hz toggle on/off signal on PA0 and another 1Hz
+ * signal 500ms ahead of the first one, output on PA1.
  *
- * The timer is configured to tick at 4000Hz with an auto-
- * reload value of 3999. Channel 1 is configured to output
- * an alternating signal on PA0 when the counter reaches
- * 3999. Similarly, channel 2 is configured to output an
- * alternating signal on PA1 when the counter reaches 1000.
+ * The timer is configured to tick at 4000Hz with an auto-reload value of 3999.
+ * Channel 1 is configured to output an alternating signal on PA0 when the counter
+ * reaches 3999. Similarly, channel 2 is configured to output an alternating signal
+ * on PA1 when the counter reaches 1000.
  *
- * We configure the channel 1 compare value to be 3999
- * with an action of "toggle" and we enable GPIO output
- * for channel 1 on its default port of PA0.
+ * We configure the channel 1 compare value to be 3999 with an action of "toggle"
+ * and we enable GPIO output for channel 1 on its default port of PA0.
+ *
+ * To see the output, connect PA0 and PA1 to LEDs. e.g. on the F0 and F1 VL discovery
+ * boards you can connect PA0 => PC8 and PA1 => PC9.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -43,13 +45,13 @@ class TimerDualGpioOutTest {
     void run() {
 
       /*
-       * Initialise timer2 running from the internal APB1 clock with channel-1, channel-2
-       * and GPIO output features. The GPIO output feature is itself configured with
+       * Initialise timer2 running from the internal APB1 (APB on the F0) clock with channel-1,
+       * channel-2 and GPIO output features. The GPIO output feature is itself configured with
        * channel-1 and channel-2 output features.
        */
 
       Timer2<
-        Timer2InternalClockFeature,       // the timer clock source is APB1
+        Timer2InternalClockFeature,       // the timer clock source is APB1 (APB on the F0)
         TimerChannel1Feature,             // we're going to use channel 1...
         TimerChannel2Feature,             // ...and we're going to use channel 2
         Timer2GpioFeature<                // we want to output something to GPIO

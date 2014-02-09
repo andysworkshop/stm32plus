@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -12,29 +12,25 @@ using namespace stm32plus;
 
 
 /**
- * Timer demonstration: This demo uses the advanced
- * control timer Timer1 to do something not very
- * advanced at all. We set the timer to count up and
- * down, basically it oscillates between 0 and 5000 at
- * 1Khz. Each time one of the limits is hit the system
- * raises an 'Update' interrupt. We handle this
- * interrupt by toggling a LED on PF6. The net result
- * of this is that the LED flashes on and off for a
- * second in each of those states.
+ * Timer demonstration: This demo uses the advanced control timer Timer1 to do something
+ * not very advanced at all. We set the timer to count up and down, basically it oscillates
+ * between 0 and 5000 at 1Khz. Each time one of the limits is hit the system raises an
+ * 'Update' interrupt. We handle this interrupt by toggling a LED on PF6. The net result
+ * of this is that the LED flashes on and off for a second in each of those states.
  *
- * If you are running this on the STM32F4DISCOVERY
- * board then you can replace all reference to PF6 with
- * PD13 to use the onboard LED on that board.
+ * If you are running this on the STM32F4DISCOVERY board then you can replace all reference
+ * to PF6 with PD13 to use the onboard LED on that board.
  *
- * If you are running this on the STM32VLDISCOVERY
- * board then you can replace all reference to PF6 with
- * PC8 to use the onboard LED on that board.
+ * If you are running this on the VL or F0 DISCOVERY boards then you can replace all reference
+ * to PF6 with PC8 to use the onboard LED on that board.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -44,13 +40,13 @@ class TimerInterruptsTest  {
 
   protected:
 
-    enum { LED_PIN = 8 };
+    enum { LED_PIN = 6 };
 
     /*
      * We'll need these as member variables so that we can see them from the interrupt handler
      */
 
-    GpioC<DefaultDigitalOutputFeature<LED_PIN> > _pf;
+    GpioF<DefaultDigitalOutputFeature<LED_PIN> > _pf;
     bool _ledState;
 
   public:
@@ -58,12 +54,12 @@ class TimerInterruptsTest  {
     void run() {
 
       /*
-       * Initialise timer1 running from the high speed internal APB2
+       * Initialise timer1 running from the high speed internal APB2 (APB on the F0)
        * clock with an interrupt feature
        */
 
       Timer1<
-        Timer1InternalClockFeature,       // the timer clock source is APB2
+        Timer1InternalClockFeature,       // the timer clock source is APB2 (APB on the F0)
         Timer1InterruptFeature            // gain access to interrupt functionality
       > timer;
 

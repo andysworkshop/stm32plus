@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -13,19 +13,18 @@ using namespace stm32plus;
 
 
 /**
- * Timer demonstration: Use timer 2 to output a 1MHz PWM
- * wave on channel 1 (PA0). The demo will repeatedly
- * increment the duty cycle from 0 to 100% and back down
- * to 0 over 800ms.
+ * Timer demonstration: Use timer 2 to output a 1MHz PWM wave on channel 1 (PA0). The demo
+ * will repeatedly increment the duty cycle from 0 to 100% and back down to 0 over 800ms.
  *
- * Connect up PA0 to a LED pin on your development board
- * to see the output.
+ * Connect up PA0 to a LED pin on your development board to see the output.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F107VCT6

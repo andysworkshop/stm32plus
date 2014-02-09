@@ -1,16 +1,16 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_dma.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file contains all the functions prototypes for the DMA firmware 
   *          library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
-  ******************************************************************************
+  ******************************************************************************  
   */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -400,7 +400,7 @@ typedef struct
 #define DMA_FLAG_TCIF7                    ((uint32_t)0x28000000)
 
 #define IS_DMA_CLEAR_FLAG(FLAG) ((((FLAG) & 0x30000000) != 0x30000000) && (((FLAG) & 0x30000000) != 0) && \
-                                 (((FLAG) & 0xC082F082) == 0x00) && ((FLAG) != 0x00))
+                                 (((FLAG) & 0xC002F082) == 0x00) && ((FLAG) != 0x00))
 
 #define IS_DMA_GET_FLAG(FLAG) (((FLAG) == DMA_FLAG_TCIF0)  || ((FLAG) == DMA_FLAG_HTIF0)  || \
                                ((FLAG) == DMA_FLAG_TEIF0)  || ((FLAG) == DMA_FLAG_DMEIF0) || \

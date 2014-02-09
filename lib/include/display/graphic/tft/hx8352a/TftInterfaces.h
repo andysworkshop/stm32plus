@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -74,8 +74,6 @@ namespace stm32plus {
     template<class TPinPackage>
     using Gpio16BitAccessMode_HX8352A_262K=Gpio16BitAccessMode<TPinPackage,COLOURS_18BIT,168,50,50>;
 
-#else
-#error unsupported MCU
 #endif
   }
 }

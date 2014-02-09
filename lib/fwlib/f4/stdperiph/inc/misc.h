@@ -1,16 +1,16 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    misc.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file contains all the functions prototypes for the miscellaneous
   *          firmware library functions (add-on to CMSIS functions).
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -57,7 +57,7 @@ typedef struct
   uint8_t NVIC_IRQChannel;                    /*!< Specifies the IRQ channel to be enabled or disabled.
                                                    This parameter can be an enumerator of @ref IRQn_Type 
                                                    enumeration (For the complete STM32 Devices IRQ Channels
-                                                   list, please refer to fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h file) */
+                                                   list, please refer to stm32f4xx.h file) */
 
   uint8_t NVIC_IRQChannelPreemptionPriority;  /*!< Specifies the pre-emption priority for the IRQ channel
                                                    specified in NVIC_IRQChannel. This parameter can be a value

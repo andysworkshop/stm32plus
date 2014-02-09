@@ -1,16 +1,16 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_gpio.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file contains all the functions prototypes for the GPIO firmware
-  *          library.
+  *          library.  
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -56,8 +56,10 @@
                                     ((PERIPH) == GPIOF) || \
                                     ((PERIPH) == GPIOG) || \
                                     ((PERIPH) == GPIOH) || \
-                                    ((PERIPH) == GPIOI))
-                                                                
+                                    ((PERIPH) == GPIOI) || \
+                                    ((PERIPH) == GPIOJ) || \
+                                    ((PERIPH) == GPIOK))
+                                                                                             
 /** 
   * @brief  GPIO Configuration Mode enumeration 
   */   
@@ -87,13 +89,20 @@ typedef enum
   */  
 typedef enum
 { 
-  GPIO_Speed_2MHz   = 0x00, /*!< Low speed */
-  GPIO_Speed_25MHz  = 0x01, /*!< Medium speed */
-  GPIO_Speed_50MHz  = 0x02, /*!< Fast speed */
-  GPIO_Speed_100MHz = 0x03  /*!< High speed on 30 pF (80 MHz Output max speed on 15 pF) */
+  GPIO_Low_Speed     = 0x00, /*!< Low speed    */
+  GPIO_Medium_Speed  = 0x01, /*!< Medium speed */
+  GPIO_Fast_Speed    = 0x02, /*!< Fast speed   */
+  GPIO_High_Speed    = 0x03  /*!< High speed   */
 }GPIOSpeed_TypeDef;
-#define IS_GPIO_SPEED(SPEED) (((SPEED) == GPIO_Speed_2MHz) || ((SPEED) == GPIO_Speed_25MHz) || \
-                              ((SPEED) == GPIO_Speed_50MHz)||  ((SPEED) == GPIO_Speed_100MHz)) 
+
+/* Add legacy definition */
+#define  GPIO_Speed_2MHz    GPIO_Low_Speed    
+#define  GPIO_Speed_25MHz   GPIO_Medium_Speed 
+#define  GPIO_Speed_50MHz   GPIO_Fast_Speed 
+#define  GPIO_Speed_100MHz  GPIO_High_Speed  
+  
+#define IS_GPIO_SPEED(SPEED) (((SPEED) == GPIO_Low_Speed) || ((SPEED) == GPIO_Medium_Speed) || \
+                              ((SPEED) == GPIO_Fast_Speed)||  ((SPEED) == GPIO_High_Speed)) 
 
 /** 
   * @brief  GPIO Configuration PullUp PullDown enumeration 
@@ -148,23 +157,23 @@ typedef struct
 /** @defgroup GPIO_pins_define 
   * @{
   */ 
-#define GPIO_Pin_0                 (0x0001)  /* Pin 0 selected */
-#define GPIO_Pin_1                 (0x0002)  /* Pin 1 selected */
-#define GPIO_Pin_2                 (0x0004)  /* Pin 2 selected */
-#define GPIO_Pin_3                 (0x0008)  /* Pin 3 selected */
-#define GPIO_Pin_4                 (0x0010)  /* Pin 4 selected */
-#define GPIO_Pin_5                 (0x0020)  /* Pin 5 selected */
-#define GPIO_Pin_6                 (0x0040)  /* Pin 6 selected */
-#define GPIO_Pin_7                 (0x0080)  /* Pin 7 selected */
-#define GPIO_Pin_8                 (0x0100)  /* Pin 8 selected */
-#define GPIO_Pin_9                 (0x0200)  /* Pin 9 selected */
-#define GPIO_Pin_10                (0x0400)  /* Pin 10 selected */
-#define GPIO_Pin_11                (0x0800)  /* Pin 11 selected */
-#define GPIO_Pin_12                (0x1000)  /* Pin 12 selected */
-#define GPIO_Pin_13                (0x2000)  /* Pin 13 selected */
-#define GPIO_Pin_14                (0x4000)  /* Pin 14 selected */
-#define GPIO_Pin_15                (0x8000)  /* Pin 15 selected */
-#define GPIO_Pin_All               (0xFFFF)  /* All pins selected */
+#define GPIO_Pin_0                 0x0001  /* Pin 0 selected */
+#define GPIO_Pin_1                 0x0002  /* Pin 1 selected */
+#define GPIO_Pin_2                 0x0004  /* Pin 2 selected */
+#define GPIO_Pin_3                 0x0008  /* Pin 3 selected */
+#define GPIO_Pin_4                 0x0010  /* Pin 4 selected */
+#define GPIO_Pin_5                 0x0020  /* Pin 5 selected */
+#define GPIO_Pin_6                 0x0040  /* Pin 6 selected */
+#define GPIO_Pin_7                 0x0080  /* Pin 7 selected */
+#define GPIO_Pin_8                 0x0100  /* Pin 8 selected */
+#define GPIO_Pin_9                 0x0200  /* Pin 9 selected */
+#define GPIO_Pin_10                0x0400  /* Pin 10 selected */
+#define GPIO_Pin_11                0x0800  /* Pin 11 selected */
+#define GPIO_Pin_12                0x1000  /* Pin 12 selected */
+#define GPIO_Pin_13                0x2000  /* Pin 13 selected */
+#define GPIO_Pin_14                0x4000  /* Pin 14 selected */
+#define GPIO_Pin_15                0x8000  /* Pin 15 selected */
+#define GPIO_Pin_All               0xFFFF  /* All pins selected */
 
 #define IS_GPIO_PIN(PIN) ((((PIN) & (uint16_t)0x00) == 0x00) && ((PIN) != (uint16_t)0x00))
 #define IS_GET_GPIO_PIN(PIN) (((PIN) == GPIO_Pin_0) || \
@@ -271,37 +280,47 @@ typedef struct
 /** 
   * @brief   AF 5 selection  
   */ 
-#define GPIO_AF_SPI1          ((uint8_t)0x05)  /* SPI1 Alternate Function mapping */
+#define GPIO_AF_SPI1          ((uint8_t)0x05)  /* SPI1 Alternate Function mapping      */
 #define GPIO_AF_SPI2          ((uint8_t)0x05)  /* SPI2/I2S2 Alternate Function mapping */
+#define GPIO_AF_SPI4          ((uint8_t)0x05)  /* SPI4 Alternate Function mapping      */
+#define GPIO_AF_SPI5          ((uint8_t)0x05)  /* SPI5 Alternate Function mapping      */
+#define GPIO_AF_SPI6          ((uint8_t)0x05)  /* SPI6 Alternate Function mapping      */
 
 /** 
   * @brief   AF 6 selection  
   */ 
 #define GPIO_AF_SPI3          ((uint8_t)0x06)  /* SPI3/I2S3 Alternate Function mapping */
 
+#define GPIO_AF_SAI1          ((uint8_t)0x06)  /* SAI1 Alternate Function mapping      */
+
 /** 
   * @brief   AF 7 selection  
   */ 
-#define GPIO_AF_USART1        ((uint8_t)0x07)  /* USART1 Alternate Function mapping */
-#define GPIO_AF_USART2        ((uint8_t)0x07)  /* USART2 Alternate Function mapping */
-#define GPIO_AF_USART3        ((uint8_t)0x07)  /* USART3 Alternate Function mapping */
+#define GPIO_AF_USART1        ((uint8_t)0x07)  /* USART1 Alternate Function mapping  */
+#define GPIO_AF_USART2        ((uint8_t)0x07)  /* USART2 Alternate Function mapping  */
+#define GPIO_AF_USART3        ((uint8_t)0x07)  /* USART3 Alternate Function mapping  */
 #define GPIO_AF_I2S3ext       ((uint8_t)0x07)  /* I2S3ext Alternate Function mapping */
 
 /** 
   * @brief   AF 8 selection  
   */ 
-#define GPIO_AF_UART4         ((uint8_t)0x08)  /* UART4 Alternate Function mapping */
-#define GPIO_AF_UART5         ((uint8_t)0x08)  /* UART5 Alternate Function mapping */
+#define GPIO_AF_UART4         ((uint8_t)0x08)  /* UART4 Alternate Function mapping  */
+#define GPIO_AF_UART5         ((uint8_t)0x08)  /* UART5 Alternate Function mapping  */
 #define GPIO_AF_USART6        ((uint8_t)0x08)  /* USART6 Alternate Function mapping */
+#define GPIO_AF_UART7         ((uint8_t)0x08)  /* UART7 Alternate Function mapping  */
+#define GPIO_AF_UART8         ((uint8_t)0x08)  /* UART8 Alternate Function mapping  */
 
 /** 
   * @brief   AF 9 selection 
   */ 
-#define GPIO_AF_CAN1          ((uint8_t)0x09)  /* CAN1 Alternate Function mapping */
-#define GPIO_AF_CAN2          ((uint8_t)0x09)  /* CAN2 Alternate Function mapping */
+#define GPIO_AF_CAN1          ((uint8_t)0x09)  /* CAN1 Alternate Function mapping  */
+#define GPIO_AF_CAN2          ((uint8_t)0x09)  /* CAN2 Alternate Function mapping  */
 #define GPIO_AF_TIM12         ((uint8_t)0x09)  /* TIM12 Alternate Function mapping */
 #define GPIO_AF_TIM13         ((uint8_t)0x09)  /* TIM13 Alternate Function mapping */
 #define GPIO_AF_TIM14         ((uint8_t)0x09)  /* TIM14 Alternate Function mapping */
+
+#define GPIO_AF9_I2C2          ((uint8_t)0x09)  /* I2C2 Alternate Function mapping (Only for STM32F401xx Devices) */
+#define GPIO_AF9_I2C3          ((uint8_t)0x09)  /* I2C3 Alternate Function mapping (Only for STM32F401xx Devices) */
 
 /** 
   * @brief   AF 10 selection  
@@ -317,9 +336,16 @@ typedef struct
 /** 
   * @brief   AF 12 selection  
   */ 
-#define GPIO_AF_FSMC            ((uint8_t)0xC)  /* FSMC Alternate Function mapping */
-#define GPIO_AF_OTG_HS_FS       ((uint8_t)0xC)  /* OTG HS configured in FS, Alternate Function mapping */
-#define GPIO_AF_SDIO            ((uint8_t)0xC)  /* SDIO Alternate Function mapping */
+#if defined (STM32F40_41xxx)
+#define GPIO_AF_FSMC             ((uint8_t)0xC)  /* FSMC Alternate Function mapping                     */
+#endif /* STM32F40_41xxx */
+
+#if defined (STM32F427_437xx) || defined (STM32F429_439xx)
+#define GPIO_AF_FMC              ((uint8_t)0xC)  /* FMC Alternate Function mapping                      */
+#endif /* STM32F427_437xx ||  STM32F429_439xx */
+
+#define GPIO_AF_OTG_HS_FS        ((uint8_t)0xC)  /* OTG HS configured in FS, Alternate Function mapping */
+#define GPIO_AF_SDIO             ((uint8_t)0xC)  /* SDIO Alternate Function mapping                     */
 
 /** 
   * @brief   AF 13 selection  
@@ -327,28 +353,79 @@ typedef struct
 #define GPIO_AF_DCMI          ((uint8_t)0x0D)  /* DCMI Alternate Function mapping */
 
 /** 
+  * @brief   AF 14 selection  
+  */
+
+#define GPIO_AF_LTDC          ((uint8_t)0x0E)  /* LCD-TFT Alternate Function mapping */
+
+/** 
   * @brief   AF 15 selection  
   */ 
 #define GPIO_AF_EVENTOUT      ((uint8_t)0x0F)  /* EVENTOUT Alternate Function mapping */
 
-#define IS_GPIO_AF(AF)   (((AF) == GPIO_AF_RTC_50Hz)  || ((AF) == GPIO_AF_TIM14)  || \
-                          ((AF) == GPIO_AF_MCO)       || ((AF) == GPIO_AF_TAMPER) || \
-                          ((AF) == GPIO_AF_SWJ)       || ((AF) == GPIO_AF_TRACE)  || \
-                          ((AF) == GPIO_AF_TIM1)      || ((AF) == GPIO_AF_TIM2)   || \
-                          ((AF) == GPIO_AF_TIM3)      || ((AF) == GPIO_AF_TIM4)   || \
-                          ((AF) == GPIO_AF_TIM5)      || ((AF) == GPIO_AF_TIM8)   || \
-                          ((AF) == GPIO_AF_I2C1)      || ((AF) == GPIO_AF_I2C2)   || \
-                          ((AF) == GPIO_AF_I2C3)      || ((AF) == GPIO_AF_SPI1)   || \
-                          ((AF) == GPIO_AF_SPI2)      || ((AF) == GPIO_AF_TIM13)  || \
-                          ((AF) == GPIO_AF_SPI3)      || ((AF) == GPIO_AF_TIM14)  || \
-                          ((AF) == GPIO_AF_USART1)    || ((AF) == GPIO_AF_USART2) || \
-                          ((AF) == GPIO_AF_USART3)    || ((AF) == GPIO_AF_UART4)  || \
-                          ((AF) == GPIO_AF_UART5)     || ((AF) == GPIO_AF_USART6) || \
-                          ((AF) == GPIO_AF_CAN1)      || ((AF) == GPIO_AF_CAN2)   || \
-                          ((AF) == GPIO_AF_OTG_FS)    || ((AF) == GPIO_AF_OTG_HS) || \
-                          ((AF) == GPIO_AF_ETH)       || ((AF) == GPIO_AF_FSMC)   || \
-                          ((AF) == GPIO_AF_OTG_HS_FS) || ((AF) == GPIO_AF_SDIO)   || \
-                          ((AF) == GPIO_AF_DCMI)      || ((AF) == GPIO_AF_EVENTOUT))
+#if defined (STM32F40_41xxx)
+#define IS_GPIO_AF(AF)   (((AF) == GPIO_AF_RTC_50Hz)  || ((AF) == GPIO_AF_TIM14)     || \
+                          ((AF) == GPIO_AF_MCO)       || ((AF) == GPIO_AF_TAMPER)    || \
+                          ((AF) == GPIO_AF_SWJ)       || ((AF) == GPIO_AF_TRACE)     || \
+                          ((AF) == GPIO_AF_TIM1)      || ((AF) == GPIO_AF_TIM2)      || \
+                          ((AF) == GPIO_AF_TIM3)      || ((AF) == GPIO_AF_TIM4)      || \
+                          ((AF) == GPIO_AF_TIM5)      || ((AF) == GPIO_AF_TIM8)      || \
+                          ((AF) == GPIO_AF_I2C1)      || ((AF) == GPIO_AF_I2C2)      || \
+                          ((AF) == GPIO_AF_I2C3)      || ((AF) == GPIO_AF_SPI1)      || \
+                          ((AF) == GPIO_AF_SPI2)      || ((AF) == GPIO_AF_TIM13)     || \
+                          ((AF) == GPIO_AF_SPI3)      || ((AF) == GPIO_AF_TIM14)     || \
+                          ((AF) == GPIO_AF_USART1)    || ((AF) == GPIO_AF_USART2)    || \
+                          ((AF) == GPIO_AF_USART3)    || ((AF) == GPIO_AF_UART4)     || \
+                          ((AF) == GPIO_AF_UART5)     || ((AF) == GPIO_AF_USART6)    || \
+                          ((AF) == GPIO_AF_CAN1)      || ((AF) == GPIO_AF_CAN2)      || \
+                          ((AF) == GPIO_AF_OTG_FS)    || ((AF) == GPIO_AF_OTG_HS)    || \
+                          ((AF) == GPIO_AF_ETH)       || ((AF) == GPIO_AF_OTG_HS_FS) || \
+                          ((AF) == GPIO_AF_SDIO)      || ((AF) == GPIO_AF_DCMI)      || \
+                          ((AF) == GPIO_AF_EVENTOUT)  || ((AF) == GPIO_AF_FSMC))
+#endif /* STM32F40_41xxx */
+
+#if defined (STM32F401xx)
+#define IS_GPIO_AF(AF)   (((AF) == GPIO_AF_RTC_50Hz)  || ((AF) == GPIO_AF_TIM14)     || \
+                          ((AF) == GPIO_AF_MCO)       || ((AF) == GPIO_AF_TAMPER)    || \
+                          ((AF) == GPIO_AF_SWJ)       || ((AF) == GPIO_AF_TRACE)     || \
+                          ((AF) == GPIO_AF_TIM1)      || ((AF) == GPIO_AF_TIM2)      || \
+                          ((AF) == GPIO_AF_TIM3)      || ((AF) == GPIO_AF_TIM4)      || \
+                          ((AF) == GPIO_AF_TIM5)      || ((AF) == GPIO_AF_TIM8)      || \
+                          ((AF) == GPIO_AF_I2C1)      || ((AF) == GPIO_AF_I2C2)      || \
+                          ((AF) == GPIO_AF_I2C3)      || ((AF) == GPIO_AF_SPI1)      || \
+                          ((AF) == GPIO_AF_SPI2)      || ((AF) == GPIO_AF_TIM13)     || \
+                          ((AF) == GPIO_AF_SPI3)      || ((AF) == GPIO_AF_TIM14)     || \
+                          ((AF) == GPIO_AF_USART1)    || ((AF) == GPIO_AF_USART2)    || \
+                          ((AF) == GPIO_AF_SDIO)      || ((AF) == GPIO_AF_USART6)    || \
+                          ((AF) == GPIO_AF_OTG_FS)    || ((AF) == GPIO_AF_OTG_HS)    || \
+                          ((AF) == GPIO_AF_EVENTOUT)  || ((AF) == GPIO_AF_SPI4))
+#endif /* STM32F401xx */
+
+#if defined (STM32F427_437xx) || defined (STM32F429_439xx)
+#define IS_GPIO_AF(AF)   (((AF) == GPIO_AF_RTC_50Hz)  || ((AF) == GPIO_AF_TIM14)     || \
+                          ((AF) == GPIO_AF_MCO)       || ((AF) == GPIO_AF_TAMPER)    || \
+                          ((AF) == GPIO_AF_SWJ)       || ((AF) == GPIO_AF_TRACE)     || \
+                          ((AF) == GPIO_AF_TIM1)      || ((AF) == GPIO_AF_TIM2)      || \
+                          ((AF) == GPIO_AF_TIM3)      || ((AF) == GPIO_AF_TIM4)      || \
+                          ((AF) == GPIO_AF_TIM5)      || ((AF) == GPIO_AF_TIM8)      || \
+                          ((AF) == GPIO_AF_I2C1)      || ((AF) == GPIO_AF_I2C2)      || \
+                          ((AF) == GPIO_AF_I2C3)      || ((AF) == GPIO_AF_SPI1)      || \
+                          ((AF) == GPIO_AF_SPI2)      || ((AF) == GPIO_AF_TIM13)     || \
+                          ((AF) == GPIO_AF_SPI3)      || ((AF) == GPIO_AF_TIM14)     || \
+                          ((AF) == GPIO_AF_USART1)    || ((AF) == GPIO_AF_USART2)    || \
+                          ((AF) == GPIO_AF_USART3)    || ((AF) == GPIO_AF_UART4)     || \
+                          ((AF) == GPIO_AF_UART5)     || ((AF) == GPIO_AF_USART6)    || \
+                          ((AF) == GPIO_AF_CAN1)      || ((AF) == GPIO_AF_CAN2)      || \
+                          ((AF) == GPIO_AF_OTG_FS)    || ((AF) == GPIO_AF_OTG_HS)    || \
+                          ((AF) == GPIO_AF_ETH)       || ((AF) == GPIO_AF_OTG_HS_FS) || \
+                          ((AF) == GPIO_AF_SDIO)      || ((AF) == GPIO_AF_DCMI)      || \
+                          ((AF) == GPIO_AF_EVENTOUT)  || ((AF) == GPIO_AF_SPI4)      || \
+                          ((AF) == GPIO_AF_SPI5)      || ((AF) == GPIO_AF_SPI6)      || \
+                          ((AF) == GPIO_AF_UART7)     || ((AF) == GPIO_AF_UART8)     || \
+                          ((AF) == GPIO_AF_FMC)       ||  ((AF) == GPIO_AF_SAI1)     || \
+                          ((AF) == GPIO_AF_LTDC))
+#endif /* STM32F427_437xx ||  STM32F429_439xx */
+                          
 /**
   * @}
   */ 

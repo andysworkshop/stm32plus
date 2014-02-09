@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -16,4 +16,12 @@
 
 // generic includes for the peripheral
 
-#include "nvic/NvicPeripheral.h"
+#if defined(STM32PLUS_F1)
+  #include "nvic/f1/NvicPeripheral.h"
+#elif defined(STM32PLUS_F4)
+  #include "nvic/f4/NvicPeripheral.h"
+#elif defined(STM32PLUS_F0)
+  #include "nvic/f0/NvicPeripheral.h"
+#else
+  #error Unsupported MCU
+#endif

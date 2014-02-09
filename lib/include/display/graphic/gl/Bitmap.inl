@@ -86,9 +86,10 @@ namespace stm32plus {
      */
 
     template<class TDevice,typename TDeviceAccessMode>
+    template<class TDmaCopierImpl>
     inline bool GraphicsLibrary<TDevice,TDeviceAccessMode>::drawBitmap(const Rectangle& rect,
                                                                        InputStream& source,
-                                                                       DmaFsmcLcdMemoryCopyFeature<TDeviceAccessMode>& dma,
+                                                                       DmaLcdWriter<TDmaCopierImpl>& dma,
                                                                        uint32_t priority) {
 
       int16_t vpos;

@@ -41,7 +41,7 @@
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createflash.1610476738" name="Create flash image" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createflash" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting.1184655056" name="Create extended listing" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.printsize.1276224000" name="Print size" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.printsize" value="true" valueType="boolean"/>
-							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path.518161293" name="Path" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path" value="C:\Program Files (x86)\CodeSourcery\arm-2013.05\bin" valueType="string"/>
+							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path.518161293" name="Path" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path" value="P:\docs\cyghome\andy\codesourcery\arm-2013.11\bin" valueType="string"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.extrawarn.1006271210" name="Enable extra warnings (-Wextra)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.extrawarn" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.toerrors.1496623316" name="Generate errors instead of warnings (-Werror)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.toerrors" value="true" valueType="boolean"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform.1299403033" isAbstract="false" osList="all" superClass="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform"/>
@@ -52,7 +52,7 @@
 									<listOptionValue builtIn="false" value="STM32PLUS_F1_HD"/>
 									<listOptionValue builtIn="false" value="HSE_VALUE=8000000"/>
 								</option>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.includepaths.498432771" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.includepaths" valueType="includePath">
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.498432771" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
@@ -64,7 +64,7 @@
 									<listOptionValue builtIn="false" value="HSE_VALUE=8000000"/>
 									<listOptionValue builtIn="false" value="STM32PLUS_F1_HD"/>
 								</option>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.includepaths.234403765" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.includepaths" valueType="includePath">
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.234403765" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
@@ -80,7 +80,7 @@
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.noexceptions.803509193" name="Do not use exceptions (-fno-exceptions)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.noexceptions" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nortti.1075418949" name="Do not use RTTI (-fno-rtti)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nortti" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std.2100042246" name="Language standard" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std" value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std.gnucpp0x" valueType="enumerated"/>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.includepaths.727630419" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.includepaths" valueType="includePath">
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.paths.727630419" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include/stl}&quot;"/>
@@ -169,7 +169,7 @@
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createflash.464475893" name="Create flash image" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createflash" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting.825026491" name="Create extended listing" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.createlisting" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.printsize.1879176874" name="Print size" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.addtools.printsize" value="true" valueType="boolean"/>
-							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path.1648215162" name="Path" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path" value="C:\Program Files (x86)\CodeSourcery\arm-2013.05\bin" valueType="string"/>
+							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path.1648215162" name="Path" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.toolchain.path" value="P:\docs\cyghome\andy\codesourcery\arm-2013.11\bin" valueType="string"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.extrawarn.504527079" name="Enable extra warnings (-Wextra)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.extrawarn" value="true" valueType="boolean"/>
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.toerrors.952462684" name="Generate errors instead of warnings (-Werror)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.warnings.toerrors" value="true" valueType="boolean"/>
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform.2139064637" isAbstract="false" osList="all" superClass="ilg.gnuarmeclipse.managedbuild.cross.targetPlatform"/>
@@ -180,7 +180,7 @@
 									<listOptionValue builtIn="false" value="STM32PLUS_F1_CL_E"/>
 									<listOptionValue builtIn="false" value="HSE_VALUE=25000000"/>
 								</option>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.includepaths.983209877" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.includepaths" valueType="includePath">
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths.983209877" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.assembler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
@@ -192,7 +192,7 @@
 									<listOptionValue builtIn="false" value="HSE_VALUE=25000000"/>
 									<listOptionValue builtIn="false" value="STM32PLUS_F1_CL_E"/>
 								</option>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.includepaths.1992947168" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.includepaths" valueType="includePath">
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths.1992947168" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.c.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
@@ -208,7 +208,7 @@
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.noexceptions.713200668" name="Do not use exceptions (-fno-exceptions)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.noexceptions" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nortti.1617455206" name="Do not use RTTI (-fno-rtti)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.nortti" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std.849936129" name="Language standard" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std" value="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.std.gnucpp0x" valueType="enumerated"/>
-								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.includepaths.576409718" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.includepaths" valueType="includePath">
+								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.paths.576409718" name="Include paths (-I)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.compiler.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/include/stl}&quot;"/>

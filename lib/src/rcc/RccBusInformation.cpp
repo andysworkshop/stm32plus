@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -10,6 +10,8 @@
 
 namespace stm32plus {
 
+
+  #if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
 
   /*
    * Get the APB1 prescaler value
@@ -63,6 +65,39 @@ namespace stm32plus {
         return 16;
     }
   }
+
+
+#elif defined (STM32PLUS_F0)
+
+
+  /*
+   * Get the APB2 prescaler value
+   */
+
+  uint16_t RccBusInformation::getAPBPrescaler() {
+
+    switch(RCC->CFGR & RCC_CFGR_PPRE) {
+
+      case RCC_CFGR_PPRE_DIV1:
+        return 1;
+
+      case RCC_CFGR_PPRE_DIV2:
+        return 2;
+
+      case RCC_CFGR_PPRE_DIV4:
+        return 4;
+
+      case RCC_CFGR_PPRE_DIV8:
+        return 8;
+
+      case RCC_CFGR_PPRE_DIV16:
+      default:
+        return 16;
+    }
+  }
+
+
+#endif
 
 
   /*

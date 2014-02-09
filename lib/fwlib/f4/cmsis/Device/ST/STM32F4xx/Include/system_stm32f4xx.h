@@ -1,15 +1,15 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    system_stm32f4xx.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
-  * @brief   CMSIS Cortex-M4 Device System Source File for STM32F4xx devices.  
-  ******************************************************************************
+  * @version V1.3.0
+  * @date    08-November-2013
+  * @brief   CMSIS Cortex-M4 Device System Source File for STM32F4xx devices.       
+  ******************************************************************************  
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -23,8 +23,8 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
-  ******************************************************************************
-  */
+  ******************************************************************************  
+  */ 
 
 /** @addtogroup CMSIS
   * @{

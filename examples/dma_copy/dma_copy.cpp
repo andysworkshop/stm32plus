@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -13,27 +13,25 @@ using namespace stm32plus;
 
 
 /**
- * Demo of the DMA peripheral used to copy a block of
- * memory. We repeatedly copy a small 256 byte buffer
- * using the completion interrupt to signal the end
- * of each transfer. If all is well then a LED on PF6
- * will blink once per second.
+ * Demo of the DMA peripheral used to copy a block of memory. We repeatedly copy
+ * a small 256 byte buffer using the completion interrupt to signal the end of
+ * each transfer. If all is well then a LED on PF6 will blink once per second.
  *
- * If this example is to be run on the STM32F4DISCOVERY
- * board then change the LED configuration from PF6 to
- * PD13 and invert the set() / reset() logic because
+ * If this example is to be run on the STM32F4DISCOVERY board then change the LED
+ * configuration from PF6 to PD13 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
- * If this example is to be run on the STM32VLDISCOVERY
- * board then change the LED configuration from PF6 to
- * PC8 and invert the set() / reset() logic because
+ * If this example is to be run on the F1 VL or the F0 DISCOVERY board then change
+ * the LED configuration from PF6 to PC8 and invert the set() / reset() logic because
  * that LED is active HIGH.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F100RBT6
  *   STM32F407VGT6
@@ -64,7 +62,7 @@ class DmaCopyTest {
 
       // initialise the LED pin
 
-      GpioF<DefaultDigitalOutputFeature<LED_PIN> > pf;
+      GpioF<DefaultDigitalOutputFeature<LED_PIN>> pf;
 
       // lights off (this LED is active low, i.e. PF6 is a sink)
 
@@ -73,7 +71,7 @@ class DmaCopyTest {
       // declare a DMA channel with interrupts and memory copy features
       // F4 users note that only DMA2 can do memory-to-memory transfers.
 
-#if defined(STM32PLUS_F1)
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F0)
 
       Dma1Channel1<
         Dma1Channel1InterruptFeature,   // interrupts on DMA1, channel 1

@@ -1,13 +1,13 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
 #include "config/stm32plus.h"
 #include "config/usart.h"
 
-#if !defined(STM32PLUS_MD_VL)
+#if !defined(STM32PLUS_MD_VL) && !defined(STM32PLUS_F0)
 
 using namespace stm32plus;
 

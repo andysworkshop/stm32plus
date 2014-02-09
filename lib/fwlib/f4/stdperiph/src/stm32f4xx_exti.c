@@ -1,53 +1,54 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_exti.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the EXTI peripheral:           
-  *           - Initialization and Configuration
-  *           - Interrupts and flags management
+  *           + Initialization and Configuration
+  *           + Interrupts and flags management
   *
-  *  @verbatim  
-  *  
-  *          ===================================================================
-  *                                     EXTI features
-  *          ===================================================================
-  *    
-  *          External interrupt/event lines are mapped as following:
-  *            1- All available GPIO pins are connected to the 16 external 
-  *               interrupt/event lines from EXTI0 to EXTI15.
-  *            2- EXTI line 16 is connected to the PVD Output
-  *            3- EXTI line 17 is connected to the RTC Alarm event
-  *            4- EXTI line 18 is connected to the USB OTG FS Wakeup from suspend event                                    
-  *            5- EXTI line 19 is connected to the Ethernet Wakeup event
-  *            6- EXTI line 20 is connected to the USB OTG HS (configured in FS) Wakeup event 
-  *            7- EXTI line 21 is connected to the RTC Tamper and Time Stamp events                                               
-  *            8- EXTI line 22 is connected to the RTC Wakeup event
-  *        
-  *          ===================================================================
-  *                                 How to use this driver
-  *          ===================================================================  
-  *              
-  *          In order to use an I/O pin as an external interrupt source, follow
-  *          steps below:
-  *            1- Configure the I/O in input mode using GPIO_Init()
-  *            2- Select the input source pin for the EXTI line using SYSCFG_EXTILineConfig()
-  *            3- Select the mode(interrupt, event) and configure the trigger 
-  *               selection (Rising, falling or both) using EXTI_Init()
-  *            4- Configure NVIC IRQ channel mapped to the EXTI line using NVIC_Init()
-  *   
-  *  @note  SYSCFG APB clock must be enabled to get write access to SYSCFG_EXTICRx
-  *         registers using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
-  *          
-  *  @endverbatim                  
+@verbatim  
+
+ ===================================================================
+                       ##### EXTI features #####
+ ===================================================================
+
+ [..] External interrupt/event lines are mapped as following:
+   (#) All available GPIO pins are connected to the 16 external 
+       interrupt/event lines from EXTI0 to EXTI15.
+   (#) EXTI line 16 is connected to the PVD Output
+   (#) EXTI line 17 is connected to the RTC Alarm event
+   (#) EXTI line 18 is connected to the USB OTG FS Wakeup from suspend event                                    
+   (#) EXTI line 19 is connected to the Ethernet Wakeup event
+   (#) EXTI line 20 is connected to the USB OTG HS (configured in FS) Wakeup event 
+   (#) EXTI line 21 is connected to the RTC Tamper and Time Stamp events                                               
+   (#) EXTI line 22 is connected to the RTC Wakeup event
+          
+          
+                ##### How to use this driver #####
+ ===================================================================  
+ 
+ [..] In order to use an I/O pin as an external interrupt source, follow steps 
+      below:
+   (#) Configure the I/O in input mode using GPIO_Init()
+   (#) Select the input source pin for the EXTI line using SYSCFG_EXTILineConfig()
+   (#) Select the mode(interrupt, event) and configure the trigger 
+       selection (Rising, falling or both) using EXTI_Init()
+   (#) Configure NVIC IRQ channel mapped to the EXTI line using NVIC_Init()
+
+ [..]     
+   (@) SYSCFG APB clock must be enabled to get write access to SYSCFG_EXTICRx
+       registers using RCC_APB2PeriphClockCmd(RCC_APB2Periph_SYSCFG, ENABLE);
+            
+@endverbatim                  
   *
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -95,7 +96,7 @@
  *
 @verbatim   
  ===============================================================================
-                  Initialization and Configuration functions
+             ##### Initialization and Configuration functions #####
  ===============================================================================  
 
 @endverbatim
@@ -211,7 +212,7 @@ void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
  *
 @verbatim   
  ===============================================================================
-                  Interrupts and flags management functions
+             ##### Interrupts and flags management functions #####
  ===============================================================================  
 
 @endverbatim
@@ -263,13 +264,11 @@ void EXTI_ClearFlag(uint32_t EXTI_Line)
   */
 ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
 {
-  ITStatus bitstatus = RESET;
-  uint32_t enablestatus = 0;
+  FlagStatus bitstatus = RESET;
   /* Check the parameters */
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
   
-  enablestatus =  EXTI->IMR & EXTI_Line;
-  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+  if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET)
   {
     bitstatus = SET;
   }
@@ -278,6 +277,7 @@ ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
     bitstatus = RESET;
   }
   return bitstatus;
+  
 }
 
 /**

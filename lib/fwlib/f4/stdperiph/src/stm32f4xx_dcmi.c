@@ -1,74 +1,72 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_dcmi.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the DCMI peripheral:           
-  *           - Initialization and Configuration
-  *           - Image capture functions  
-  *           - Interrupts and flags management
+  *           + Initialization and Configuration
+  *           + Image capture functions  
+  *           + Interrupts and flags management
   *
-  *  @verbatim  
-  *  
-  *        
-  *          ===================================================================
-  *                                 How to use this driver
-  *          ===================================================================  
-  *         
-  *         The sequence below describes how to use this driver to capture image
-  *         from a camera module connected to the DCMI Interface.
-  *         This sequence does not take into account the configuration of the  
-  *         camera module, which should be made before to configure and enable
-  *         the DCMI to capture images.
-  *           
-  *          1. Enable the clock for the DCMI and associated GPIOs using the following functions:
-  *                 RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
-  *                 RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
-  *
-  *          2. DCMI pins configuration 
-  *             - Connect the involved DCMI pins to AF13 using the following function 
-  *                 GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_DCMI); 
-  *             - Configure these DCMI pins in alternate function mode by calling the function
-  *                 GPIO_Init();
-  *    
-  *          3. Declare a DCMI_InitTypeDef structure, for example:
-  *                 DCMI_InitTypeDef  DCMI_InitStructure;
-  *             and fill the DCMI_InitStructure variable with the allowed values
-  *             of the structure member.
-  *  
-  *          4. Initialize the DCMI interface by calling the function
-  *                 DCMI_Init(&DCMI_InitStructure); 
-  *  
-  *          5. Configure the DMA2_Stream1 channel1 to transfer Data from DCMI DR
-  *             register to the destination memory buffer.
-  *  
-  *          6. Enable DCMI interface using the function
-  *                 DCMI_Cmd(ENABLE);
-  *                 
-  *         7. Start the image capture using the function
-  *                 DCMI_CaptureCmd(ENABLE);
-  *                 
-  *         8. At this stage the DCMI interface waits for the first start of frame,
-  *            then a DMA request is generated continuously/once (depending on the
-  *            mode used, Continuous/Snapshot) to transfer the received data into
-  *            the destination memory. 
-  *   
-  *  @note  If you need to capture only a rectangular window from the received
-  *         image, you have to use the DCMI_CROPConfig() function to configure 
-  *         the coordinates and size of the window to be captured, then enable 
-  *         the Crop feature using DCMI_CROPCmd(ENABLE);  
-  *         In this case, the Crop configuration should be made before to enable
-  *         and start the DCMI interface. 
-  *        
-  *  @endverbatim   
-  *  
+ @verbatim          
+ ===============================================================================
+                        ##### How to use this driver #####
+ ===============================================================================  
+    [..]       
+      The sequence below describes how to use this driver to capture image
+      from a camera module connected to the DCMI Interface.
+      This sequence does not take into account the configuration of the  
+      camera module, which should be made before to configure and enable
+      the DCMI to capture images.
+             
+      (#) Enable the clock for the DCMI and associated GPIOs using the following 
+          functions:
+          RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_DCMI, ENABLE);
+          RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_GPIOx, ENABLE);
+  
+      (#) DCMI pins configuration 
+        (++) Connect the involved DCMI pins to AF13 using the following function 
+            GPIO_PinAFConfig(GPIOx, GPIO_PinSourcex, GPIO_AF_DCMI); 
+        (++) Configure these DCMI pins in alternate function mode by calling 
+            the function GPIO_Init();
+      
+      (#) Declare a DCMI_InitTypeDef structure, for example:
+          DCMI_InitTypeDef  DCMI_InitStructure;
+          and fill the DCMI_InitStructure variable with the allowed values
+          of the structure member.
+    
+      (#) Initialize the DCMI interface by calling the function
+          DCMI_Init(&DCMI_InitStructure); 
+    
+      (#) Configure the DMA2_Stream1 channel1 to transfer Data from DCMI DR
+          register to the destination memory buffer.
+    
+      (#) Enable DCMI interface using the function
+          DCMI_Cmd(ENABLE);
+                   
+      (#) Start the image capture using the function
+          DCMI_CaptureCmd(ENABLE);
+                   
+      (#) At this stage the DCMI interface waits for the first start of frame,
+          then a DMA request is generated continuously/once (depending on the
+          mode used, Continuous/Snapshot) to transfer the received data into
+          the destination memory. 
+     
+      -@-  If you need to capture only a rectangular window from the received
+           image, you have to use the DCMI_CROPConfig() function to configure 
+           the coordinates and size of the window to be captured, then enable 
+           the Crop feature using DCMI_CROPCmd(ENABLE);  
+           In this case, the Crop configuration should be made before to enable
+           and start the DCMI interface. 
+          
+ @endverbatim     
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -114,7 +112,7 @@
  *
 @verbatim   
  ===============================================================================
-                  Initialization and Configuration functions
+              ##### Initialization and Configuration functions #####
  ===============================================================================  
 
 @endverbatim
@@ -286,7 +284,7 @@ void DCMI_JPEGCmd(FunctionalState NewState)
  *
 @verbatim   
  ===============================================================================
-                                 Image capture functions
+                    ##### Image capture functions #####
  ===============================================================================  
 
 @endverbatim
@@ -357,7 +355,7 @@ uint32_t DCMI_ReadData(void)
  *
 @verbatim   
  ===============================================================================
-                  Interrupts and flags management functions
+             ##### Interrupts and flags management functions #####
  ===============================================================================  
 
 @endverbatim

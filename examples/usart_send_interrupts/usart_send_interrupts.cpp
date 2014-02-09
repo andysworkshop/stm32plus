@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -14,30 +14,27 @@ using namespace stm32plus;
 /**
  * USART test: asynchronous sending data using interrupts
  *
- * This example will send the string "Hello World" using
- * USART1. Connect an RS232 cable from USART1 to your PC
- * and run a terminal program (there are many free
- * terminal programs) to see the data. The default
- * (unremapped) USART1 pins are used.
+ * This example will send the string "Hello World" using USART1. Connect an RS232
+ * cable from USART1 to your PC and run a terminal program (there are many free
+ * terminal programs) to see the data. The default (unremapped) USART1 pins are used.
  *
- * We use interrupts to send the data. The hardware
- * raises a TXE interrupt when it's ready to send a
- * character and we do just that. When we get to the end
- * of the string we disable the TXE interrupt so it
- * doesn't fire again.
+ * We use interrupts to send the data. The hardware raises a TXE interrupt when it's
+ * ready to send a character and we do just that. When we get to the end of the string
+ * we disable the TXE interrupt so it doesn't fire again.
  *
- * Note that if you are using the STM32F4DISCOVERY
- * board then you cannot use Usart1 since the pins clash
- * with onboard peripherals. I have tested this code on
- * that board using Usart2.
+ * Note that if you are using the STM32F4DISCOVERY board then you cannot use USARRT1
+ * since the pins clash with onboard peripherals. I have tested this code on
+ * that board using USART2.
  *
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103VET6
  *   STM32F407VGT6

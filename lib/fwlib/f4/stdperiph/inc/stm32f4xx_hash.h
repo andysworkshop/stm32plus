@@ -1,16 +1,16 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
-  * @file    fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.hash.h
+  * @file    stm32f4xx_hash.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file contains all the functions prototypes for the HASH 
   *          firmware library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -53,12 +53,12 @@
   */ 
 typedef struct
 {
-  uint32_t HASH_AlgoSelection; /*!< SHA-1 or MD5. This parameter can be a value 
-                                    of @ref HASH_Algo_Selection */
+  uint32_t HASH_AlgoSelection; /*!< SHA-1, SHA-224, SHA-256 or MD5. This parameter
+                                    can be a value of @ref HASH_Algo_Selection */
   uint32_t HASH_AlgoMode;      /*!< HASH or HMAC. This parameter can be a value 
                                     of @ref HASH_processor_Algorithm_Mode */
   uint32_t HASH_DataType;      /*!< 32-bit data, 16-bit data, 8-bit data or 
-                                    bit-string. This parameter can be a value of
+                                    bit string. This parameter can be a value of
                                     @ref HASH_Data_Type */
   uint32_t HASH_HMACKeyType;   /*!< HMAC Short key or HMAC Long Key. This parameter
                                     can be a value of @ref HASH_HMAC_Long_key_only_for_HMAC_mode */
@@ -69,7 +69,9 @@ typedef struct
   */ 
 typedef struct
 {
-  uint32_t Data[5];      /*!< Message digest result : 5x 32bit words for SHA1 or 
+  uint32_t Data[8];      /*!< Message digest result : 8x 32bit wors for SHA-256,
+                                                      7x 32bit wors for SHA-224,
+                                                      5x 32bit words for SHA-1 or
                                                       4x 32bit words for MD5  */
 } HASH_MsgDigest; 
 
@@ -81,7 +83,7 @@ typedef struct
   uint32_t HASH_IMR; 
   uint32_t HASH_STR;      
   uint32_t HASH_CR;     
-  uint32_t HASH_CSR[51];       
+  uint32_t HASH_CSR[54];       
 }HASH_Context;
 
 /* Exported constants --------------------------------------------------------*/
@@ -93,10 +95,14 @@ typedef struct
 /** @defgroup HASH_Algo_Selection 
   * @{
   */ 
-#define HASH_AlgoSelection_SHA1    ((uint16_t)0x0000) /*!< HASH function is SHA1 */
-#define HASH_AlgoSelection_MD5     ((uint16_t)0x0080) /*!< HASH function is MD5 */
+#define HASH_AlgoSelection_SHA1      ((uint32_t)0x0000) /*!< HASH function is SHA1   */
+#define HASH_AlgoSelection_SHA224    HASH_CR_ALGO_1     /*!< HASH function is SHA224 */
+#define HASH_AlgoSelection_SHA256    HASH_CR_ALGO       /*!< HASH function is SHA256 */
+#define HASH_AlgoSelection_MD5       HASH_CR_ALGO_0     /*!< HASH function is MD5    */
 
 #define IS_HASH_ALGOSELECTION(ALGOSELECTION) (((ALGOSELECTION) == HASH_AlgoSelection_SHA1) || \
+                                              ((ALGOSELECTION) == HASH_AlgoSelection_SHA224) || \
+                                              ((ALGOSELECTION) == HASH_AlgoSelection_SHA256) || \
                                               ((ALGOSELECTION) == HASH_AlgoSelection_MD5))
 /**
   * @}
@@ -105,8 +111,8 @@ typedef struct
 /** @defgroup HASH_processor_Algorithm_Mode 
   * @{
   */ 
-#define HASH_AlgoMode_HASH         ((uint16_t)0x0000) /*!< Algorithm is HASH */ 
-#define HASH_AlgoMode_HMAC         ((uint16_t)0x0040) /*!< Algorithm is HMAC */
+#define HASH_AlgoMode_HASH         ((uint32_t)0x00000000) /*!< Algorithm is HASH */ 
+#define HASH_AlgoMode_HMAC         HASH_CR_MODE           /*!< Algorithm is HMAC */
 
 #define IS_HASH_ALGOMODE(ALGOMODE) (((ALGOMODE) == HASH_AlgoMode_HASH) || \
                                     ((ALGOMODE) == HASH_AlgoMode_HMAC))
@@ -117,14 +123,14 @@ typedef struct
 /** @defgroup HASH_Data_Type  
   * @{
   */  
-#define HASH_DataType_32b          ((uint16_t)0x0000)
-#define HASH_DataType_16b          ((uint16_t)0x0010)
-#define HASH_DataType_8b           ((uint16_t)0x0020)
-#define HASH_DataType_1b           ((uint16_t)0x0030)
+#define HASH_DataType_32b          ((uint32_t)0x0000) /*!< 32-bit data. No swapping                     */
+#define HASH_DataType_16b          HASH_CR_DATATYPE_0 /*!< 16-bit data. Each half word is swapped       */
+#define HASH_DataType_8b           HASH_CR_DATATYPE_1 /*!< 8-bit data. All bytes are swapped            */
+#define HASH_DataType_1b           HASH_CR_DATATYPE   /*!< 1-bit data. In the word all bits are swapped */
 
 #define IS_HASH_DATATYPE(DATATYPE) (((DATATYPE) == HASH_DataType_32b)|| \
                                     ((DATATYPE) == HASH_DataType_16b)|| \
-                                    ((DATATYPE) == HASH_DataType_8b)|| \
+                                    ((DATATYPE) == HASH_DataType_8b) || \
                                     ((DATATYPE) == HASH_DataType_1b))
 /**
   * @}
@@ -134,10 +140,10 @@ typedef struct
   * @{
   */ 
 #define HASH_HMACKeyType_ShortKey      ((uint32_t)0x00000000) /*!< HMAC Key is <= 64 bytes */
-#define HASH_HMACKeyType_LongKey       ((uint32_t)0x00010000) /*!< HMAC Key is > 64 bytes */
+#define HASH_HMACKeyType_LongKey       HASH_CR_LKEY           /*!< HMAC Key is > 64 bytes  */
 
 #define IS_HASH_HMAC_KEYTYPE(KEYTYPE) (((KEYTYPE) == HASH_HMACKeyType_ShortKey) || \
-                                  ((KEYTYPE) == HASH_HMACKeyType_LongKey))
+                                       ((KEYTYPE) == HASH_HMACKeyType_LongKey))
 /**
   * @}
   */
@@ -154,12 +160,12 @@ typedef struct
 /** @defgroup HASH_interrupts_definition   
   * @{
   */  
-#define HASH_IT_DINI               ((uint8_t)0x01)  /*!< A new block can be entered into the input buffer (DIN)*/
-#define HASH_IT_DCI                ((uint8_t)0x02)  /*!< Digest calculation complete */
+#define HASH_IT_DINI               HASH_IMR_DINIM  /*!< A new block can be entered into the input buffer (DIN) */
+#define HASH_IT_DCI                HASH_IMR_DCIM   /*!< Digest calculation complete                            */
 
-#define IS_HASH_IT(IT) ((((IT) & (uint8_t)0xFC) == 0x00) && ((IT) != 0x00))
+#define IS_HASH_IT(IT) ((((IT) & (uint32_t)0xFFFFFFFC) == 0x00000000) && ((IT) != 0x00000000))
 #define IS_HASH_GET_IT(IT) (((IT) == HASH_IT_DINI) || ((IT) == HASH_IT_DCI))
-           
+				   
 /**
   * @}
   */
@@ -167,11 +173,11 @@ typedef struct
 /** @defgroup HASH_flags_definition   
   * @{
   */  
-#define HASH_FLAG_DINIS            ((uint16_t)0x0001)  /*!< 16 locations are free in the DIN : A new block can be entered into the input buffer.*/
-#define HASH_FLAG_DCIS             ((uint16_t)0x0002)  /*!< Digest calculation complete */
-#define HASH_FLAG_DMAS             ((uint16_t)0x0004)  /*!< DMA interface is enabled (DMAE=1) or a transfer is ongoing */
-#define HASH_FLAG_BUSY             ((uint16_t)0x0008)  /*!< The hash core is Busy : processing a block of data */
-#define HASH_FLAG_DINNE            ((uint16_t)0x1000)  /*!< DIN not empty : The input buffer contains at least one word of data */
+#define HASH_FLAG_DINIS            HASH_SR_DINIS  /*!< 16 locations are free in the DIN : A new block can be entered into the input buffer */
+#define HASH_FLAG_DCIS             HASH_SR_DCIS   /*!< Digest calculation complete                                                         */
+#define HASH_FLAG_DMAS             HASH_SR_DMAS   /*!< DMA interface is enabled (DMAE=1) or a transfer is ongoing                          */
+#define HASH_FLAG_BUSY             HASH_SR_BUSY   /*!< The hash core is Busy : processing a block of data                                  */
+#define HASH_FLAG_DINNE            HASH_CR_DINNE  /*!< DIN not empty : The input buffer contains at least one word of data                 */
 
 #define IS_HASH_GET_FLAG(FLAG) (((FLAG) == HASH_FLAG_DINIS) || \
                                 ((FLAG) == HASH_FLAG_DCIS)  || \
@@ -206,21 +212,22 @@ void HASH_DataIn(uint32_t Data);
 uint8_t HASH_GetInFIFOWordsNbr(void);
 void HASH_SetLastWordValidBitsNbr(uint16_t ValidNumber);
 void HASH_StartDigest(void);
+void HASH_AutoStartDigest(FunctionalState NewState);
 void HASH_GetDigest(HASH_MsgDigest* HASH_MessageDigest);
 
 /* HASH Context swapping functions ********************************************/
 void HASH_SaveContext(HASH_Context* HASH_ContextSave);
 void HASH_RestoreContext(HASH_Context* HASH_ContextRestore);
 
-/* HASH's DMA interface function **********************************************/
+/* HASH DMA interface function ************************************************/
 void HASH_DMACmd(FunctionalState NewState);
 
 /* HASH Interrupts and flags management functions *****************************/
-void HASH_ITConfig(uint8_t HASH_IT, FunctionalState NewState);
-FlagStatus HASH_GetFlagStatus(uint16_t HASH_FLAG);
-void HASH_ClearFlag(uint16_t HASH_FLAG);
-ITStatus HASH_GetITStatus(uint8_t HASH_IT);
-void HASH_ClearITPendingBit(uint8_t HASH_IT);
+void HASH_ITConfig(uint32_t HASH_IT, FunctionalState NewState);
+FlagStatus HASH_GetFlagStatus(uint32_t HASH_FLAG);
+void HASH_ClearFlag(uint32_t HASH_FLAG);
+ITStatus HASH_GetITStatus(uint32_t HASH_IT);
+void HASH_ClearITPendingBit(uint32_t HASH_IT);
 
 /* High Level SHA1 functions **************************************************/
 ErrorStatus HASH_SHA1(uint8_t *Input, uint32_t Ilen, uint8_t Output[20]);

@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -14,22 +14,21 @@ using namespace stm32plus;
 /**
  * USART test: sending data using the DMA peripheral
  *
- * This example will send the string "Hello World"
- * using the DMA peripheral assigned to USART1. USART1
+ * This example will send the string "Hello World" using the DMA peripheral assigned to USART1. USART1
  * is using standard, unremapped pins.
  *
- * Note that if you are using the STM32F4DISCOVERY
- * board then you cannot use Usart1 since the pins
- * clash with onboard peripherals. I have tested this
- * code on that board using Usart2.
+ * Note that if you are using the STM32F4DISCOVERY board then you cannot use USART1 since the pins
+ * clash with onboard peripherals. I have tested this code on that board using USART2.
  *
  * The protocol is 57600/8/N/1
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F103VET6
  *   STM32F407VGT6
  */

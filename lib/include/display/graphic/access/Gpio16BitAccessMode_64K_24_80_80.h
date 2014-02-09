@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -58,8 +58,15 @@ namespace stm32plus {
 
       // these are the addresses of the reset/set registers in the normal peripheral region.
 
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F0)
       _controlResetAddress=TPinPackage::Port_CONTROL+offsetof(GPIO_TypeDef,BRR);
       _controlSetAddress=TPinPackage::Port_CONTROL+offsetof(GPIO_TypeDef,BSRR);
+#elif defined(STM32PLUS_F4)
+      _controlResetAddress=TPinPackage::Port_CONTROL+offsetof(GPIO_TypeDef,BSRRH);
+      _controlSetAddress=TPinPackage::Port_CONTROL+offsetof(GPIO_TypeDef,BSRRL);
+#else
+#error Unsupported MCU
+#endif
 
       // this is the address of the data output ODR register in the normal peripheral region.
 

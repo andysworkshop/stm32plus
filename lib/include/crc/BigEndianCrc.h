@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -102,7 +102,22 @@ namespace stm32plus {
    */
 
   inline uint32_t CrcPeripheral<BIG_ENDIAN>::reverse(register uint32_t data) {
+
+#if(__CORTEX_M >= 0x03)
+
+    // we can do this with an intrinsic on the cortex m3 or greater
     asm volatile( "rbit %0, %0" :: "g" (data) );
+
+#else
+
+    data = (((data & 0xaaaaaaaa) >> 1) | ((data & 0x55555555) << 1));
+        data = (((data & 0xcccccccc) >> 2) | ((data & 0x33333333) << 2));
+        data = (((data & 0xf0f0f0f0) >> 4) | ((data & 0x0f0f0f0f) << 4));
+        data = (((data & 0xff00ff00) >> 8) | ((data & 0x00ff00ff) << 8));
+        return ((data >> 16) | (data << 16));
+
+#endif
+
     return data;
   }
 

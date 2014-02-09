@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -22,6 +22,6 @@ namespace stm32plus {
       static FPTR _forceLinkage;
 
     public:
-      static void enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority);
+      static void enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority=0);
   };
 }

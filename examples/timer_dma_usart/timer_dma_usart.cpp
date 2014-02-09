@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -14,29 +14,27 @@ using namespace stm32plus;
 
 
 /**
- * This example shows how to use a timer linked to a DMA
- * channel to transmit data automatically
- * to the USART peripheral.
+ * This example shows how to use a timer linked to a DMA channel to transmit data
+ * automatically to the USART peripheral.
  *
- * Timer1's update event is configured to fire once per
- * second. That update event is linked to a DMA channel
- * that targets the USART1 peripheral's TX register. For
- * our demo purposes we transmit a sample text string
- * continuously at a rate of 1 character per second.
+ * Timer1's update event is configured to fire once per second. That update event
+ * is linked to a DMA channel that targets the USART1 peripheral's TX register. For
+ * our demo purposes we transmit a sample text string continuously at a rate of 1
+ * character per second.
  *
- * USART1 is used in default (unremapped) configuration:
- * 4800-8-N-1
+ * USART1 is used in default (unremapped) configuration: 4800-8-N-1
  *
- * Note that if you are using the STM32F4DISCOVERY board
- * then you cannot use Usart1 since the pins clash with
- * onboard peripherals. I have tested this code on that
- * board using Usart2.
+ * Note that if you are using the STM32F4DISCOVERY board then you cannot use USART1
+ * since the pins clash with onboard peripherals. I have tested this code on that
+ * board using USART2.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -63,7 +61,7 @@ class TimerDmaUsartTest {
        */
 
       Timer1<
-        Timer1InternalClockFeature        // the timer bus is APB2
+        Timer1InternalClockFeature        // the timer bus is APB2 (APB on the F0)
       > timer;
 
       /*

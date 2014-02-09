@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -13,17 +13,20 @@ using namespace stm32plus;
 
 
 /**
- * Timer demonstration: Use timer 2 to output a 1Mhz PWM
- * wave on channel 1 (PA0) and channel 2 (PA1). The demo
- * will repeatedly increment the duty cycle on each
- * channel from 0 to 100% and back down to 0 over 800ms.
- * Channel 1 fades up while channel 2 fades down.
+ * Timer demonstration: Use timer 2 to output a 1Mhz PWM wave on channel 1 (PA0) and channel 2 (PA1).
+ * The demo will repeatedly increment the duty cycle on each channel from 0 to 100% and back down to
+ * 0 over 800ms. Channel 1 fades up while channel 2 fades down.
+ *
+ * To see the output, connect PA0 and PA1 to LEDs. e.g. on the F0 and F1 VL discovery
+ * boards you can connect PA0 => PC8 and PA1 => PC9.
  *
  * Compatible MCU:
+ *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -36,13 +39,13 @@ class TimerDualPwmGpioOutTest {
     void run() {
 
       /*
-       * Initialise timer2 running from the internal APB1 clock with channel-1, channel-2
-       * and GPIO output features. The GPIO output feature is itself configured with
-       * channel-1 and channel-2 output features.
+       * Initialise timer2 running from the internal APB1 (APB on the F0) clock with
+       * channel-1, channel-2 and GPIO output features. The GPIO output feature is
+       * itself configured with channel-1 and channel-2 output features.
        */
 
       Timer2<
-        Timer2InternalClockFeature,       // the timer clock source is APB1
+        Timer2InternalClockFeature,       // the timer clock source is APB1 (APB on the F0)
         TimerChannel1Feature,             // we're going to use channel 1...
         TimerChannel2Feature,             // ...and we're going to use channel 2
         Timer2GpioFeature<                // we want to output something to GPIO

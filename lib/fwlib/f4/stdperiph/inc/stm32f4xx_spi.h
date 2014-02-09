@@ -1,16 +1,16 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_spi.h
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file contains all the functions prototypes for the SPI 
-  *          firmware library.
+  *          firmware library. 
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -24,7 +24,7 @@
   * See the License for the specific language governing permissions and
   * limitations under the License.
   *
-  ******************************************************************************
+  ******************************************************************************  
   */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -119,19 +119,25 @@ typedef struct
 
 #define IS_SPI_ALL_PERIPH(PERIPH) (((PERIPH) == SPI1) || \
                                    ((PERIPH) == SPI2) || \
-                                   ((PERIPH) == SPI3))
+                                   ((PERIPH) == SPI3) || \
+                                   ((PERIPH) == SPI4) || \
+                                   ((PERIPH) == SPI5) || \
+                                   ((PERIPH) == SPI6))
 
-#define IS_SPI_ALL_PERIPH_EXT(PERIPH) (((PERIPH) == SPI1) || \
-                                       ((PERIPH) == SPI2) || \
-                                       ((PERIPH) == SPI3) || \
+#define IS_SPI_ALL_PERIPH_EXT(PERIPH) (((PERIPH) == SPI1)    || \
+                                       ((PERIPH) == SPI2)    || \
+                                       ((PERIPH) == SPI3)    || \
+                                       ((PERIPH) == SPI4)    || \
+                                       ((PERIPH) == SPI5)    || \
+                                       ((PERIPH) == SPI6)    || \
                                        ((PERIPH) == I2S2ext) || \
                                        ((PERIPH) == I2S3ext))
 
 #define IS_SPI_23_PERIPH(PERIPH)  (((PERIPH) == SPI2) || \
                                    ((PERIPH) == SPI3))
 
-#define IS_SPI_23_PERIPH_EXT(PERIPH)  (((PERIPH) == SPI2) || \
-                                       ((PERIPH) == SPI3) || \
+#define IS_SPI_23_PERIPH_EXT(PERIPH)  (((PERIPH) == SPI2)    || \
+                                       ((PERIPH) == SPI3)    || \
                                        ((PERIPH) == I2S2ext) || \
                                        ((PERIPH) == I2S3ext))
 

@@ -1,6 +1,6 @@
 /*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  */
 
@@ -103,6 +103,8 @@ namespace stm32plus {
   inline DmaInterruptFeature<TDmaNumber,TChannelNumber>::DmaInterruptFeature(Dma& dma)
     : DmaFeatureBase(dma) {
     _interruptMask=0;
+    _nvicPriority=0;
+    _nvicSubPriority=0;
     _dmaInstance=this;
   }
 
