@@ -43,17 +43,15 @@ class AdcSingle {
 
     void run() {
 
-      GpioA<AnalogInputFeature<0>> pa;
-
       /*
        * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
        * 12 bits. We will use 3-cycle conversions on ADC channel 0.
        */
 
       Adc1<
-        AdcClockPrescalerFeature<2>,
-        AdcResolutionFeature<12>,
-        Adc3CycleRegularChannelFeature<0>
+        AdcClockPrescalerFeature<2>,              // prescaler of 2
+        AdcResolutionFeature<12>,                 // 12 bit resolution
+        Adc1Cycle3RegularChannelFeature<0>        // using channel 0 on ADC1 with 3-cycle latency
         > adc;
 
       /*

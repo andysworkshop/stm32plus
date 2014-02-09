@@ -25,6 +25,7 @@
 
 // feature includes
 
+#include "adc/features/AdcChannelGpioInitialiser.h"
 #include "adc/features/AdcFeatureBase.h"
 #include "adc/features/AdcRegularChannelFeature.h"
 #include "adc/features/AdcClockPrescalerFeature.h"
