@@ -27,6 +27,15 @@ namespace stm32plus {
       void enablePeripheral() const;
       void disablePeripheral() const;
 
+      // injected channel start/check functionality is in a feature class due to lack of support on all MCUs
+
+      void startRegularConversion() const;
+      bool hasRegularConversionStarted() const;
+      bool hasRegularConversionFinished() const;
+      uint16_t getRegularConversionValue() const;
+
+      // cast operators
+
       operator ADC_TypeDef *();
       operator ADC_CommonInitTypeDef *();
       operator ADC_InitTypeDef *();
@@ -110,5 +119,45 @@ namespace stm32plus {
 
   inline void Adc::disablePeripheral() const {
     ADC_Cmd(_peripheralAddress,DISABLE);
+  }
+
+
+  /**
+   * Start the conversion by software command. This will set SWSTART in CR2.
+   */
+
+  inline void Adc::startRegularConversion() const {
+    ADC_SoftwareStartConv(_peripheralAddress);
+  }
+
+
+  /**
+   * Return true if a software conversion has started. SWSTART in CR2 is cleared
+   * by the MCU when the conversion starts
+   * @return true if the conversion has started.
+   */
+
+  inline bool Adc::hasRegularConversionStarted() const {
+    return ADC_GetSoftwareStartConvStatus(_peripheralAddress)==RESET;
+  }
+
+
+  /**
+   * Return true if a conversion has finished. Returns the status of the EOC flag
+   * @return true if the conversion has finished.
+   */
+
+  inline bool Adc::hasRegularConversionFinished() const {
+    return ADC_GetFlagStatus(_peripheralAddress,ADC_FLAG_EOC)==SET;
+  }
+
+
+  /**
+   * Get the result of a regular conversion
+   * @return The conversion result
+   */
+
+  inline uint16_t Adc::getRegularConversionValue() const {
+    return ADC_GetConversionValue(_peripheralAddress);
   }
 }

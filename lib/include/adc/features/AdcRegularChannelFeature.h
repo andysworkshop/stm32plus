@@ -77,7 +77,7 @@ namespace stm32plus {
 
 
   /**
-   * Base case init
+   * Recursive init
    * @param head
    * @param tail
    */
@@ -87,6 +87,6 @@ namespace stm32plus {
   inline void AdcRegularChannelFeature<TSampleCycles,TChannelNumbers...>::init(uint8_t rank) {
 
     ADC_RegularChannelConfig(_adc,TFirst,rank,TSampleCycles);
-    init<TNext,TRest...>(rank);
+    init<TNext,TRest...>(rank+1);
   }
 }
