@@ -42,7 +42,7 @@
   #define STM32PLUS_F0                // enable features common to all F0
   #define STM32F0XX_MD                // this is a medium density device
 #elif defined(STM32PLUS_F4)
-  // no additional defines
+  #define STM32F40_41xxx
 #else
   #error "You must define an MCU type. See config/stm32plus.h"
 #endif

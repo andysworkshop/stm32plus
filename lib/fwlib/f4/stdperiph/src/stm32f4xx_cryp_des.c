@@ -1,35 +1,34 @@
-#if defined (STM32PLUS_F4)
+#if defined(STM32PLUS_F4)
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp_des.c
   * @author  MCD Application Team
-  * @version V1.0.2
-  * @date    05-March-2012
+  * @version V1.3.0
+  * @date    08-November-2013
   * @brief   This file provides high level functions to encrypt and decrypt an 
   *          input message using DES in ECB/CBC modes.
   *          It uses the stm32f4xx_cryp.c/.h drivers to access the STM32F4xx CRYP
   *          peripheral.
   *
-  *  @verbatim
-  *
-  *          ===================================================================
-  *                                   How to use this driver
-  *          ===================================================================
-  *          1. Enable The CRYP controller clock using 
-  *            RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
-  *
-  *          2. Encrypt and decrypt using DES in ECB Mode using CRYP_DES_ECB()
-  *             function.
-  *
-  *          3. Encrypt and decrypt using DES in CBC Mode using CRYP_DES_CBC()
-  *             function.
-  *
-  *  @endverbatim
+@verbatim
+  
+ ===================================================================
+                  ##### How to use this driver #####
+ ===================================================================
+ [..] 
+   (#) Enable The CRYP controller clock using 
+       RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
+  
+   (#) Encrypt and decrypt using DES in ECB Mode using CRYP_DES_ECB() function.
+  
+   (#) Encrypt and decrypt using DES in CBC Mode using CRYP_DES_CBC() function.
+  
+@endverbatim
   *
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -78,7 +77,7 @@
  *
 @verbatim   
  ===============================================================================
-                          High Level DES functions
+                       ##### High Level DES functions #####
  ===============================================================================
 @endverbatim
   * @{
@@ -140,6 +139,12 @@ ErrorStatus CRYP_DES_ECB(uint8_t Mode, uint8_t Key[8], uint8_t *Input,
   /* Enable Crypto processor */
   CRYP_Cmd(ENABLE);
 
+  if(CRYP_GetCmdStatus() == DISABLE)
+  {
+    /* The CRYP peripheral clock is not enabled or the device doesn't embedd 
+       the CRYP peripheral (please check the device sales type. */
+    return(ERROR);
+  }
   for(i=0; ((i<Ilength) && (status != ERROR)); i+=8)
   {
 
@@ -243,6 +248,12 @@ ErrorStatus CRYP_DES_CBC(uint8_t Mode, uint8_t Key[8], uint8_t InitVectors[8],
   /* Enable Crypto processor */
   CRYP_Cmd(ENABLE);
 
+  if(CRYP_GetCmdStatus() == DISABLE)
+  {
+    /* The CRYP peripheral clock is not enabled or the device doesn't embedd 
+       the CRYP peripheral (please check the device sales type. */
+    return(ERROR);
+  }
   for(i=0; ((i<Ilength) && (status != ERROR)); i+=8)
   {
     /* Write the Input block in the Input FIFO */
