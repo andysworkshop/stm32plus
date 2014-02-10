@@ -15,11 +15,11 @@ using namespace stm32plus;
 
 
 /**
- * This example illustrates the most basic of all uses of the ADC. A 12-bit conversion is performed
- * of a single channel. The conversion is done synchronously, on-demand and the result is written to
- * USART1.
+ * This example illustrates the use of interrupts to signal the end of a conversion. Using an interrupt
+ * can be a more efficient way to manage the flow of converted data if your MCU has other things to do
+ * such as being responsive to the actions going on in a user interface.
  *
- * ADC1 is configured with 12-bit resolution and an APB2 clock prescaler of 2 and a 3-cycle
+ * ADC1 is configured with 12-bit resolution and an APB2 clock prescaler of 2 and a 56-cycle
  * conversion time. We will use channel #0. USART1 is configured with 57600/8/N/1 parameters.
  *
  * To run this example you can connect PA0 (ADC123_IN0) to see a conversion value of 0 or you can
