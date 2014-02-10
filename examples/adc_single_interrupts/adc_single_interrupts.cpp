@@ -75,6 +75,12 @@ class AdcSingleInterrupts {
       Usart1<> usart(57600);
       UsartPollingOutputStream outputStream(usart);
 
+      /**
+       * Enable the ADC interrupt
+       */
+
+      adc.enableInterrupts(ADC_IT_EOC);
+
       /*
        * Go into an infinite loop converting
        */
