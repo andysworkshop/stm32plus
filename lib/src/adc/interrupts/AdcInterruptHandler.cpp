@@ -29,61 +29,61 @@ extern "C" {
       // the most likely are checked first and optimise slightly by not repeatedly calling
       // the inefficient ADC_GetITStatus call
 
-      raised1=ADC1->SR & 0x27;
-      raised2=ADC2->SR & 0x27;
-      raised3=ADC3->SR & 0x27;
+      raised1=ADC1->SR & (ADC_SR_EOC | ADC_SR_JEOC | ADC_SR_AWD | ADC_SR_OVR);
+      raised2=ADC2->SR & (ADC_SR_EOC | ADC_SR_JEOC | ADC_SR_AWD | ADC_SR_OVR);
+      raised3=ADC3->SR & (ADC_SR_EOC | ADC_SR_JEOC | ADC_SR_AWD | ADC_SR_OVR);
 
-      if((raised1 & 0x2)!=0) {
+      if((raised1 & ADC_SR_EOC)!=0 && (ADC1->CR1 & ADC_CR1_EOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_REGULAR_END_OF_CONVERSION,1);
         ADC_ClearITPendingBit(ADC1,ADC_IT_EOC);
       }
-      else if((raised1 & 0x4)!=0) {
+      else if((raised1 & ADC_SR_JEOC)!=0 && (ADC1->CR1 & ADC_CR1_JEOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_INJECTED_END_OF_CONVERSION,1);
         ADC_ClearITPendingBit(ADC1,ADC_IT_JEOC);
       }
-      else if((raised1 & 0x1)!=0) {
+      else if((raised1 & ADC_SR_AWD)!=0 && (ADC1->CR1 & ADC_CR1_AWDIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_ANALOG_WATCHDOG,1);
         ADC_ClearITPendingBit(ADC1,ADC_IT_AWD);
       }
-      else if((raised1 & 0x20)) {
+      else if((raised1 & ADC_SR_OVR && (ADC1->CR1 & ADC_CR1_OVRIE)!=0)) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_OVERFLOW,1);
         ADC_ClearITPendingBit(ADC1,ADC_IT_OVR);
       }
 
       // ADC2 interrupts
 
-      else if((raised2 & 0x2)!=0) {
+      else if((raised2 & ADC_SR_EOC)!=0 && (ADC2->CR1 & ADC_CR1_EOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_REGULAR_END_OF_CONVERSION,2);
         ADC_ClearITPendingBit(ADC2,ADC_IT_EOC);
       }
-      else if((raised2 & 0x4)!=0) {
+      else if((raised2 & ADC_SR_JEOC)!=0 && (ADC2->CR1 & ADC_CR1_JEOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_INJECTED_END_OF_CONVERSION,2);
         ADC_ClearITPendingBit(ADC2,ADC_IT_JEOC);
       }
-      else if((raised2 & 0x1)!=0) {
+      else if((raised2 & ADC_SR_AWD)!=0 && (ADC2->CR1 & ADC_CR1_AWDIE) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_ANALOG_WATCHDOG,2);
         ADC_ClearITPendingBit(ADC2,ADC_IT_AWD);
       }
-      else if((raised2 & 0x20)) {
+      else if((raised2 & ADC_SR_OVR && (ADC2->CR1 & ADC_CR1_OVRIE)!=0)) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_OVERFLOW,2);
         ADC_ClearITPendingBit(ADC2,ADC_IT_OVR);
       }
 
       // ADC3 interrupts
 
-      else if((raised3 & 0x2)!=0) {
+      else if((raised3 & ADC_SR_EOC)!=0 && (ADC3->CR1 & ADC_CR1_EOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_REGULAR_END_OF_CONVERSION,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_EOC);
       }
-      else if((raised3 & 0x4)!=0) {
+      else if((raised3 & ADC_SR_JEOC)!=0 && (ADC3->CR1 & ADC_CR1_JEOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_INJECTED_END_OF_CONVERSION,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_JEOC);
       }
-      else if((raised3 & 0x1)!=0) {
+      else if((raised3 & ADC_SR_AWD)!=0 && (ADC3->CR1 & ADC_CR1_AWDIE) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_ANALOG_WATCHDOG,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_AWD);
       }
-      else if((raised3 & 0x20)) {
+      else if((raised3 & ADC_SR_OVR && (ADC3->CR1 & ADC_CR1_OVRIE)!=0)) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_OVERFLOW,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_OVR);
       }
