@@ -60,7 +60,7 @@ extern "C" {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_INJECTED_END_OF_CONVERSION,2);
         ADC_ClearITPendingBit(ADC2,ADC_IT_JEOC);
       }
-      else if((raised2 & ADC_SR_AWD)!=0 && (ADC2->CR1 & ADC_CR1_AWDIE) {
+      else if((raised2 & ADC_SR_AWD)!=0 && (ADC2->CR1 & ADC_CR1_AWDIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_ANALOG_WATCHDOG,2);
         ADC_ClearITPendingBit(ADC2,ADC_IT_AWD);
       }
@@ -79,7 +79,7 @@ extern "C" {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_INJECTED_END_OF_CONVERSION,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_JEOC);
       }
-      else if((raised3 & ADC_SR_AWD)!=0 && (ADC3->CR1 & ADC_CR1_AWDIE) {
+      else if((raised3 & ADC_SR_AWD)!=0 && (ADC3->CR1 & ADC_CR1_AWDIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_ANALOG_WATCHDOG,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_AWD);
       }
