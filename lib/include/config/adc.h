@@ -30,6 +30,8 @@
 #include "adc/features/AdcRegularChannelFeature.h"
 #include "adc/features/AdcClockPrescalerFeature.h"
 #include "adc/features/AdcResolutionFeature.h"
+#include "adc/features/AdcContinuousModeFeature.h"
+#include "adc/features/AdcScanModeFeature.h"
 
 // device specific feature includes
 
