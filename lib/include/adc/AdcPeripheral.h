@@ -29,6 +29,9 @@ namespace stm32plus {
 
       };
 
+    protected:
+      void initialisePeripheral();
+
     public:
       AdcPeripheral(const Parameters& params);
       ~AdcPeripheral();
@@ -43,6 +46,16 @@ namespace stm32plus {
   template<PeripheralName TPeripheralName>
   inline AdcPeripheral<TPeripheralName>::AdcPeripheral(const Parameters& /* params */)
     : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE) {
+  }
+
+
+  /**
+   * Called from the derived class constructor after the features have been constructed
+   * and performed any customisation of the init and commoninit values.
+   */
+
+  template<PeripheralName TPeripheralName>
+  inline void AdcPeripheral<TPeripheralName>::initialisePeripheral() {
 
     // clocks on first
 

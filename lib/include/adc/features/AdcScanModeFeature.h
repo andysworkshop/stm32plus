@@ -29,7 +29,7 @@ namespace stm32plus {
    * @tparam TEndType The desired condition for raising the EOC flag
    */
 
-  template<AdcScanModeEndType TEndType>
+  template<AdcScanModeEndType TEndType=AdcScanModeEndType::END_AFTER_WHOLE_GROUP>
   struct AdcScanModeFeature : AdcFeatureBase {
 
     AdcScanModeFeature(Adc& adc)

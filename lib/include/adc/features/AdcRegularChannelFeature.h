@@ -59,6 +59,10 @@ namespace stm32plus {
   inline AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::AdcRegularChannelFeature(Adc& adc)
     : AdcFeatureBase(adc) {
 
+    // customise the number of channels being converted
+
+    ((ADC_InitTypeDef *)adc)->ADC_NbrOfConversion=sizeof...(TChannelNumbers);
+
     // expand and initialise
 
     init<TChannelNumbers...>(1);

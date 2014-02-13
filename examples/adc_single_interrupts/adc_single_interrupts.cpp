@@ -41,12 +41,13 @@ class AdcSingleInterrupts {
 
   protected:
     volatile bool _ready;           // set by the interrupt callback when data is ready (EOC)
+    volatile bool _error;           // set by the interrupt callback if there's an overflow error (OVR)
 
   public:
 
     void run() {
 
-      _ready=false;
+      _ready=_error=false;
 
       /*
        * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
@@ -76,10 +77,11 @@ class AdcSingleInterrupts {
       UsartPollingOutputStream outputStream(usart);
 
       /**
-       * Enable the ADC interrupt
+       * Enable the ADC interrupts
        */
 
       adc.enableInterrupts(ADC_IT_EOC);
+      adc.enableInterrupts(ADC_IT_OVR);
 
       /*
        * Go into an infinite loop converting
@@ -96,7 +98,10 @@ class AdcSingleInterrupts {
         // wait for the interrupt handler to tell us that the conversion is done
         // then reset the ready flag
 
-        while(!_ready);
+        while(!_ready) {
+          if(_error)
+            for(;;);            // lock up on error
+        }
         _ready=false;
 
         // get the result
@@ -124,8 +129,13 @@ class AdcSingleInterrupts {
 
     void onInterrupt(AdcEventType eventType,uint8_t adcNumber) {
 
-      if(eventType==AdcEventType::EVENT_REGULAR_END_OF_CONVERSION && adcNumber==1)
-        _ready=true;      // it's as simple as that :)
+      if(adcNumber==1) {
+
+        if(eventType==AdcEventType::EVENT_REGULAR_END_OF_CONVERSION)
+          _ready=true;
+        else if(eventType==AdcEventType::EVENT_OVERFLOW)
+          _error=true;
+      }
     }
 };
 
@@ -135,6 +145,10 @@ class AdcSingleInterrupts {
  */
 
 int main() {
+
+  // we're using interrupts, initialise NVIC
+
+  Nvic::initialise();
 
   MillisecondTimer::initialise();
 

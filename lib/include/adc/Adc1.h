@@ -27,6 +27,11 @@ namespace stm32plus {
     Adc1(const Parameters& params=Parameters())
         : AdcPeripheral<PERIPHERAL_ADC1>(params),
           Features(static_cast<Adc&>(*this))... {
+
+      // this is the most-derived class and construction is now complete
+      // so we can initialise the peripheral
+
+      initialisePeripheral();
     }
   };
 }

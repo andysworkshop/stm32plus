@@ -23,7 +23,7 @@ namespace stm32plus {
    * after the constructor has completed.
    */
 
-  template<class TAdc,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Enable>
+  template<class TAdc,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
   class AdcDmaFeature : public DmaFeatureBase {
 
     public:

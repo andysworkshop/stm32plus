@@ -46,12 +46,13 @@ class AdcSingleDmaMultiChan {
 
   private:
     volatile bool _ready;
+    volatile bool _error;           // set by the interrupt callback if there's an overflow error (OVR)
 
   public:
 
     void run() {
 
-      _ready=false;
+      _ready=_error=false;
 
       /*
        * We're converting 3 channels in circular buffer mode so we need exactly 3 16-bit words
@@ -67,11 +68,11 @@ class AdcSingleDmaMultiChan {
        */
 
       Adc1<
-        AdcClockPrescalerFeature<2>,              // prescaler of 2
-        AdcResolutionFeature<12>,                 // 12 bit resolution
-        Adc1Cycle3RegularChannelFeature<0,1,2>,   // using channels 0,1 and 2 on ADC1 with 3-cycle latency
-        AdcScanModeFeature<AdcScanModeEndType::END_AFTER_WHOLE_GROUP>,    // scan mode with end interrupt after each group
-        Adc1InterruptFeature                      // enable interrupt handling on this ADC
+        AdcClockPrescalerFeature<2>,               // prescaler of 2
+        AdcResolutionFeature<12>,                  // 12 bit resolution
+        Adc1Cycle15RegularChannelFeature<0,1,2>,   // using channels 0,1 and 2 on ADC1 with 15-cycle latency
+        AdcScanModeFeature<>,                      // scan mode with end interrupt after each group
+        Adc1InterruptFeature                       // enable interrupt handling on this ADC
       > adc;
 
       /*
@@ -89,7 +90,15 @@ class AdcSingleDmaMultiChan {
        * to the DMA peripheral.
        */
 
-      Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>> dma;
+      ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);       // make this a feature
+      Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
+
+
+      dma.DmaInterruptEventSender.insertSubscriber(
+            DmaInterruptEventSourceSlot::bind(this,&AdcSingleDmaMultiChan::onComplete)
+          );
+
+  //    dma.enableInterrupts(Dma2Stream0InterruptFeature::COMPLETE);
 
       /*
        * Declare an instance of USART that we'll use to write out the conversion results.
@@ -103,7 +112,8 @@ class AdcSingleDmaMultiChan {
        */
 
       adc.enableInterrupts(ADC_IT_EOC);
-      dma.beginRead(readBuffer,sizeof(readBuffer));
+      adc.enableInterrupts(ADC_IT_OVR);
+      dma.beginRead(readBuffer,3);
 
       /*
        * Go into an infinite loop converting
@@ -125,7 +135,10 @@ class AdcSingleDmaMultiChan {
 
         adc.startRegularConversion();
 
-        while(!_ready);
+        while(!_ready) {
+          if(_error)
+            for(;;);            // lock up on error
+        }
         _ready=false;
 
         /*
@@ -152,10 +165,19 @@ class AdcSingleDmaMultiChan {
 
     void onInterrupt(AdcEventType eventType,uint8_t adcNumber) {
 
-      if(eventType==AdcEventType::EVENT_REGULAR_END_OF_CONVERSION && adcNumber==1) {
-        _ready=true;
+      if(adcNumber==1) {
+
+        if(eventType==AdcEventType::EVENT_REGULAR_END_OF_CONVERSION)
+          _ready=true;
+        else if(eventType==AdcEventType::EVENT_OVERFLOW)
+          _error=true;
       }
     }
+
+    void onComplete(DmaEventType det) {
+         if(det==DmaEventType::EVENT_COMPLETE)
+           _ready=true;
+       }
 };
 
 
@@ -164,6 +186,10 @@ class AdcSingleDmaMultiChan {
  */
 
 int main() {
+
+  // we're using interrupts, initialise NVIC
+
+  Nvic::initialise();
 
   MillisecondTimer::initialise();
 
