@@ -22,14 +22,13 @@ namespace stm32plus {
    */
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
-  class AdcRegularChannelFeature : public AdcFeatureBase {
+  class AdcRegularChannelFeature : public AdcRegularChannelFeatureBase {
 
-    protected:
       template<uint8_t TChannelNumber>
-      void init(uint8_t rank);
+      void init();
 
       template<uint8_t TFirst,uint8_t TNext,uint8_t... TRest>
-      void init(uint8_t rank);
+      void init();
 
     public:
       AdcRegularChannelFeature(Adc& adc);
@@ -49,6 +48,24 @@ namespace stm32plus {
   template<uint8_t... TChannelNumbers> using Adc1Cycle144RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_144Cycles,TChannelNumbers...>;
   template<uint8_t... TChannelNumbers> using Adc1Cycle480RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_480Cycles,TChannelNumbers...>;
 
+  template<uint8_t... TChannelNumbers> using Adc2Cycle3RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_3Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle15RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_15Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle28RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_28Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle56RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_56Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle84RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_84Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle112RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_112Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle144RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_144Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc2Cycle480RegularChannelFeature = AdcRegularChannelFeature<2,ADC_SampleTime_480Cycles,TChannelNumbers...>;
+
+  template<uint8_t... TChannelNumbers> using Adc3Cycle3RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_3Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle15RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_15Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle28RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_28Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle56RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_56Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle84RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_84Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle112RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_112Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle144RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_144Cycles,TChannelNumbers...>;
+  template<uint8_t... TChannelNumbers> using Adc3Cycle480RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_480Cycles,TChannelNumbers...>;
+
 
   /**
    * Constructor
@@ -57,7 +74,7 @@ namespace stm32plus {
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
   inline AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::AdcRegularChannelFeature(Adc& adc)
-    : AdcFeatureBase(adc) {
+    : AdcRegularChannelFeatureBase(adc) {
 
     // customise the number of channels being converted
 
@@ -65,7 +82,7 @@ namespace stm32plus {
 
     // expand and initialise
 
-    init<TChannelNumbers...>(1);
+    init<TChannelNumbers...>();
   }
 
 
@@ -76,10 +93,10 @@ namespace stm32plus {
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
   template<uint8_t TChannelNumber>
-  inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init(uint8_t rank) {
+  inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
     AdcChannelGpioInitiaiser<TAdcNumber,TChannelNumber>::initialiseGpioPin();
-    ADC_RegularChannelConfig(_adc,TChannelNumber,rank,TSampleCycles);
+    ADC_RegularChannelConfig(_adc,TChannelNumber,_rank++,TSampleCycles);
   }
 
 
@@ -90,10 +107,10 @@ namespace stm32plus {
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
   template<uint8_t TFirst,uint8_t TNext,uint8_t... TRest>
-  inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init(uint8_t rank) {
+  inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
     AdcChannelGpioInitiaiser<TAdcNumber,TFirst>::initialiseGpioPin();
-    ADC_RegularChannelConfig(_adc,TFirst,rank,TSampleCycles);
-    init<TNext,TRest...>(rank+1);
+    ADC_RegularChannelConfig(_adc,TFirst,_rank++,TSampleCycles);
+    init<TNext,TRest...>();
   }
 }

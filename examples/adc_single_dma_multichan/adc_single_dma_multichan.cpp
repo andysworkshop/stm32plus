@@ -22,7 +22,7 @@ using namespace stm32plus;
  * The ADC is configured in 'scan mode' which means that it will convert all the configured
  * channels and, because we are not using continuous mode, it will stop at the end of the
  * group. The DMA channel for ADC1 is used to move the converted channel data out to SRAM.
- * We configure the end-of-conversion interrupt (EOC) to fire when the complete group has
+ * We configure the 'complete' DMA interrupt to fire when the complete group has
  * finished converting. The converted data is written to the USART, we pause for a second
  * and then do it all again, ad infinitum.
  *
@@ -46,13 +46,12 @@ class AdcSingleDmaMultiChan {
 
   private:
     volatile bool _ready;
-    volatile bool _error;           // set by the interrupt callback if there's an overflow error (OVR)
 
   public:
 
     void run() {
 
-      _ready=_error=false;
+      _ready=false;
 
       /*
        * We're converting 3 channels in circular buffer mode so we need exactly 3 16-bit words
@@ -71,17 +70,8 @@ class AdcSingleDmaMultiChan {
         AdcClockPrescalerFeature<2>,               // prescaler of 2
         AdcResolutionFeature<12>,                  // 12 bit resolution
         Adc1Cycle15RegularChannelFeature<0,1,2>,   // using channels 0,1 and 2 on ADC1 with 15-cycle latency
-        AdcScanModeFeature<>,                      // scan mode with end interrupt after each group
-        Adc1InterruptFeature                       // enable interrupt handling on this ADC
+        AdcScanModeFeature<>                       // scan mode with end interrupt after each group
       > adc;
-
-      /*
-       * Subscribe to the interrupts raised by the ADC
-       */
-
-      adc.AdcInterruptEventSender.insertSubscriber(
-          AdcInterruptEventSourceSlot::bind(this,&AdcSingleDmaMultiChan::onInterrupt)
-        );
 
       /*
        * Declare the ADC1 DMA channel. The default is circular mode for the AdcDmaFeature
@@ -90,15 +80,24 @@ class AdcSingleDmaMultiChan {
        * to the DMA peripheral.
        */
 
-      ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);       // make this a feature
+//      ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);       // make this a feature
       Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
+
+      /*
+       * Subscribe to the DMA complete interrupt
+       */
 
       dma.DmaInterruptEventSender.insertSubscriber(
             DmaInterruptEventSourceSlot::bind(this,&AdcSingleDmaMultiChan::onComplete)
           );
 
-  //    dma.enableInterrupts(Dma2Stream0InterruptFeature::COMPLETE);
+
+      /*
+       * Enable the DMA interrupt
+       */
+
+      dma.enableInterrupts(Dma2Stream0InterruptFeature::COMPLETE);
 
       /*
        * Declare an instance of USART that we'll use to write out the conversion results.
@@ -108,11 +107,9 @@ class AdcSingleDmaMultiChan {
       UsartPollingOutputStream outputStream(usart);
 
       /**
-       * Enable the ADC interrupt and start the DMA
+       * start the DMA (i.e. make it read to receive requests from the ADC peripheral)
        */
 
-      adc.enableInterrupts(ADC_IT_EOC);
-      adc.enableInterrupts(ADC_IT_OVR);
       dma.beginRead(readBuffer,3);
 
       /*
@@ -135,10 +132,7 @@ class AdcSingleDmaMultiChan {
 
         adc.startRegularConversion();
 
-        while(!_ready) {
-          if(_error)
-            for(;;);            // lock up on error
-        }
+        while(!_ready);
         _ready=false;
 
         /*
@@ -158,26 +152,14 @@ class AdcSingleDmaMultiChan {
 
 
     /**
-     * Interrupt handler for the EOC event. If the event and the ADC number
-     * match then we set the ready flag. This will release the main code
-     * that's waiting on it.
+     * Interrupt handler for the DMA complete event. Set the ready flag
+     * when it's received.
      */
 
-    void onInterrupt(AdcEventType eventType,uint8_t adcNumber) {
-
-      if(adcNumber==1) {
-
-        if(eventType==AdcEventType::EVENT_REGULAR_END_OF_CONVERSION)
-          _ready=true;
-        else if(eventType==AdcEventType::EVENT_OVERFLOW)
-          _error=true;
-      }
-    }
-
     void onComplete(DmaEventType det) {
-         if(det==DmaEventType::EVENT_COMPLETE)
-           _ready=true;
-       }
+      if(det==DmaEventType::EVENT_COMPLETE)
+        _ready=true;
+    }
 };
 
 

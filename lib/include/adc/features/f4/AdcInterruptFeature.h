@@ -40,6 +40,13 @@ namespace stm32plus {
       uint16_t _interruptMask;
 
     public:
+      enum {
+        END_OF_CONVERSION           = 0x01,
+        INJECTED_END_OF_CONVERSION  = 0x02,
+        OVERFLOW                    = 0x04,
+        ANALOG_WATCHDOG             = 0x08
+      };
+
       static AdcEventSource *_adcInstance;
 
     public:
@@ -86,7 +93,7 @@ namespace stm32plus {
 
   /**
    * Enable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. ADC_IT_EOC/_AWD/_JEOC/_OVR
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
    */
 
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
@@ -95,17 +102,33 @@ namespace stm32plus {
     _forceLinkage=&ADC_IRQHandler;
 
     Nvic::configureIrq(ADC_IRQn);
-    ADC_ITConfig(_adc,interruptMask,ENABLE);
+
+    if((interruptMask & END_OF_CONVERSION)!=0)
+      ADC_ITConfig(_adc,ADC_IT_EOC,ENABLE);
+    if((interruptMask & INJECTED_END_OF_CONVERSION)!=0)
+      ADC_ITConfig(_adc,ADC_IT_JEOC,ENABLE);
+    if((interruptMask & ANALOG_WATCHDOG)!=0)
+      ADC_ITConfig(_adc,ADC_IT_AWD,ENABLE);
+    if((interruptMask & OVERFLOW)!=0)
+      ADC_ITConfig(_adc,ADC_IT_OVR,ENABLE);
   }
 
 
   /**
    * Disable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. ADC_IT_EOC/_AWD/_JEOC/_OVR
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
    */
 
   inline void AdcInterruptFeature::disableInterrupts(uint16_t interruptMask) {
     _interruptMask&=~interruptMask;
-    ADC_ITConfig(_adc,interruptMask,DISABLE);
+
+    if((interruptMask & END_OF_CONVERSION)!=0)
+      ADC_ITConfig(_adc,ADC_IT_EOC,DISABLE);
+    if((interruptMask & INJECTED_END_OF_CONVERSION)!=0)
+      ADC_ITConfig(_adc,ADC_IT_JEOC,DISABLE);
+    if((interruptMask & ANALOG_WATCHDOG)!=0)
+      ADC_ITConfig(_adc,ADC_IT_AWD,DISABLE);
+    if((interruptMask & OVERFLOW)!=0)
+      ADC_ITConfig(_adc,ADC_IT_OVR,DISABLE);
   }
 }

@@ -27,7 +27,11 @@
 
 #include "adc/features/AdcChannelGpioInitialiser.h"
 #include "adc/features/AdcFeatureBase.h"
+#include "adc/features/AdcRegularChannelFeatureBase.h"
 #include "adc/features/AdcRegularChannelFeature.h"
+#include "adc/features/AdcBatteryVoltageFeature.h"
+#include "adc/features/AdcInternalReferenceVoltageFeature.h"
+#include "adc/features/AdcTemperatureSensorFeature.h"
 #include "adc/features/AdcClockPrescalerFeature.h"
 #include "adc/features/AdcResolutionFeature.h"
 #include "adc/features/AdcContinuousModeFeature.h"
