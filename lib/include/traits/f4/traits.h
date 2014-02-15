@@ -22,7 +22,11 @@ namespace stm32plus {
   template<>
   struct PeripheralTraits<PERIPHERAL_ADC1> {
     enum {
-      PERIPHERAL_BASE = ADC1_BASE
+      PERIPHERAL_BASE = ADC1_BASE,
+#if defined(STM32PLUS_F4)
+      V25       = 760,      // temperature sensor constants for this MCU
+      AVG_SLOPE = 2500
+#endif
     };
   };
   typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;

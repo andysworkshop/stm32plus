@@ -15,17 +15,24 @@ namespace stm32plus {
    * configuration
    */
 
-  template<uint8_t TAdcNumber,uint8_t TSampleCycles>
-  struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<TAdcNumber,TSampleCycles,ADC_Channel_TempSensor> {
+  template<uint8_t TSampleCycles>
+  struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<1,TSampleCycles,ADC_Channel_TempSensor> {
+
+    /**
+     * Constants used by the conversion function
+     */
+
+    enum {
+      SCALER = 1000
+    };
+
 
     /**
      * Constructor, initialise upwards then enable the sensor feature
      */
 
     AdcTemperatureSensorFeature(Adc& adc)
-      : AdcRegularChannelFeature<TAdcNumber,TSampleCycles,ADC_Channel_TempSensor>(adc) {
-
-      ADC_TempSensorVrefintCmd(ENABLE);
+      : AdcRegularChannelFeature<1,TSampleCycles,ADC_Channel_TempSensor>(adc) {
     }
 
 
@@ -34,38 +41,39 @@ namespace stm32plus {
      */
 
     void initialise() {
+      ADC_TempSensorVrefintCmd(ENABLE);
+    }
+
+
+    /**
+     * Convert the value read from the ADC to a temperature in centigrade. We scale up the
+     * necessary constants for the calculation to avoid floating point numbers.
+     * @param vsense The value read from the ADC
+     * @return The temperature in degrees C
+     */
+
+    uint8_t getTemperature(uint16_t vsense) const {
+
+      uint32_t value;
+
+      value=(vsense*3300) & 0xfff;
+
+      // scale up the sensed value by 1000
+
+      value=value*SCALER;
+      value=((value-Adc1PeripheralTraits::V25)/Adc1PeripheralTraits::AVG_SLOPE)+(25*SCALER);
+
+      return value/SCALER;
     }
   };
 
 
   /*
-   * Typedefs for the difference cycles on each ADC
+   * Typedefs for the difference cycles on ADC1. There's a minimum conversion time for the
+   * temperature so the lower-cycle values are not present.
    */
 
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_3Cycles> Adc1Cycle3TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_15Cycles> Adc1Cycle15TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_28Cycles> Adc1Cycle28TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_56Cycles> Adc1Cycle56TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_84Cycles> Adc1Cycle84TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_112Cycles> Adc1Cycle112TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_144Cycles> Adc1Cycle144TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<1,ADC_SampleTime_480Cycles> Adc1Cycle480TemperatureSensorFeature;
-
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_3Cycles> Adc2Cycle3TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_15Cycles> Adc2Cycle15TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_28Cycles> Adc2Cycle28TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_56Cycles> Adc2Cycle56TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_84Cycles> Adc2Cycle84TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_112Cycles> Adc2Cycle112TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_144Cycles> Adc2Cycle144TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<2,ADC_SampleTime_480Cycles> Adc2Cycle480TemperatureSensorFeature;
-
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_3Cycles> Adc3Cycle3TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_15Cycles> Adc3Cycle15TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_28Cycles> Adc3Cycle28TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_56Cycles> Adc3Cycle56TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_84Cycles> Adc3Cycle84TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_112Cycles> Adc3Cycle112TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_144Cycles> Adc3Cycle144TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<3,ADC_SampleTime_480Cycles> Adc3Cycle480TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_112Cycles> Adc1Cycle112TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_144Cycles> Adc1Cycle144TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_480Cycles> Adc1Cycle480TemperatureSensorFeature;
 }

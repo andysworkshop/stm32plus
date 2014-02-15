@@ -16,8 +16,8 @@ using namespace stm32plus;
 
 /**
  * This example adds DMA and multi-channel conversion to the mix. We'll use ADC1 to convert
- * three channels automatically and in sequence and we'll write out the results to the
- * USART for you to see.
+ * three channels plus the internal temperature automatically and in sequence and we'll
+ * write out the results to the USART for you to see.
  *
  * The ADC is configured in 'scan mode' which means that it will convert all the configured
  * channels and, because we are not using continuous mode, it will stop at the end of the
@@ -55,11 +55,11 @@ class AdcSingleDmaMultiChan {
       _ready=false;
 
       /*
-       * We're converting 3 channels in circular buffer mode so we need exactly 3 16-bit words
+       * We're converting 4 channels in circular buffer mode so we need exactly 4 16-bit words
        * for that circular buffer
        */
 
-      volatile uint16_t readBuffer[3];
+      volatile uint16_t readBuffer[4];
 
       /*
        * Declare the ADC1 DMA channel. The default is circular mode for the AdcDmaFeature
@@ -78,11 +78,12 @@ class AdcSingleDmaMultiChan {
        */
 
       Adc1<
-        AdcClockPrescalerFeature<2>,               // prescaler of 2
-        AdcResolutionFeature<12>,                  // 12 bit resolution
-        Adc1Cycle144RegularChannelFeature<0,1>,    // using channels 0,1 on ADC1 with 144-cycle latency
-        Adc1Cycle480RegularChannelFeature<2>,      // using channel 2 on ADC1 with 480-cycle latency
-        AdcScanModeFeature<>                       // scan mode with EOC after each group
+        AdcClockPrescalerFeature<2>,                // prescaler of 2
+        AdcResolutionFeature<12>,                   // 12 bit resolution
+        Adc1Cycle144RegularChannelFeature<0,1>,     // using channels 0,1 on ADC1 with 144-cycle latency
+        Adc1Cycle480RegularChannelFeature<2>,       // using channel 2 on ADC1 with 480-cycle latency
+        Adc1Cycle480TemperatureSensorFeature,       // using the temperature sensor channel
+        AdcScanModeFeature<>                        // scan mode with EOC after each group
       > adc;
 
       /*
@@ -103,14 +104,14 @@ class AdcSingleDmaMultiChan {
        * Declare an instance of USART that we'll use to write out the conversion results.
        */
 
-      Usart3_Remap2<> usart(57600);
+      Usart1<> usart(57600);
       UsartPollingOutputStream outputStream(usart);
 
       /**
        * start the DMA (i.e. make it read to receive requests from the ADC peripheral)
        */
 
-      dma.beginRead(readBuffer,3);
+      dma.beginRead(readBuffer,4);
 
       /*
        * Go into an infinite loop converting
@@ -119,11 +120,11 @@ class AdcSingleDmaMultiChan {
       for(;;) {
 
         /*
-         * For this test code we set the 3 words to a known pattern so we can tell if they
+         * For this test code we set the 4 words to a known pattern so we can tell if they
          * get properly overwritten by the DMA during conversion
          */
 
-        readBuffer[0]=readBuffer[1]=readBuffer[2]=0xAAAA;
+        readBuffer[0]=readBuffer[1]=readBuffer[2]=readBuffer[3]=0xAAAA;
 
         /*
          * Start a conversion and wait until the interrupt handler tells us
@@ -136,13 +137,14 @@ class AdcSingleDmaMultiChan {
         _ready=false;
 
         /*
-         * write the 3 values to the USART
+         * write the values to the USART
          */
 
         outputStream << "Converted values are "
                      << StringUtil::Ascii(readBuffer[0]) << ", "
                      << StringUtil::Ascii(readBuffer[1]) << ", "
-                     << StringUtil::Ascii(readBuffer[2]) << "\r\n";
+                     << StringUtil::Ascii(readBuffer[2]) << ", temperature="
+                     << StringUtil::Ascii(adc.getTemperature(readBuffer[3])) << "\r\n";
 
         // wait for a second before converting the next set of values
 
