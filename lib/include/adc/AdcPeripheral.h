@@ -71,10 +71,6 @@ namespace stm32plus {
 
     ADC_Init(_peripheralAddress,_init);
     delete _init;
-
-    // enable it
-
-    enablePeripheral();
   }
 
 

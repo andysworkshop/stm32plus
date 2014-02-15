@@ -27,6 +27,14 @@ namespace stm32plus {
 
       ADC_VBATCmd(ENABLE);
     }
+
+
+    /**
+     * Post ADC_Init() initialisation
+     */
+
+    void initialise() {
+    }
   };
 
 
@@ -34,30 +42,30 @@ namespace stm32plus {
    * Typedefs for the difference cycles on each ADC
    */
 
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_3Cycles,TChannelNumbers> Adc1Cycle3BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_15Cycles,TChannelNumbers> Adc1Cycle15BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_28Cycles,TChannelNumbers> Adc1Cycle28BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_56Cycles,TChannelNumbers> Adc1Cycle56BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_84Cycles,TChannelNumbers> Adc1Cycle84BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_112Cycles,TChannelNumbers> Adc1Cycle112BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_144Cycles,TChannelNumbers> Adc1Cycle144BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_480Cycles,TChannelNumbers> Adc1Cycle480BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_3Cycles> Adc1Cycle3BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_15Cycles> Adc1Cycle15BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_28Cycles> Adc1Cycle28BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_56Cycles> Adc1Cycle56BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_84Cycles> Adc1Cycle84BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_112Cycles> Adc1Cycle112BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_144Cycles> Adc1Cycle144BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<1,ADC_SampleTime_480Cycles> Adc1Cycle480BatteryVoltageFeature;
 
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_3Cycles,TChannelNumbers> Adc2Cycle3BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_15Cycles,TChannelNumbers> Adc2Cycle15BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_28Cycles,TChannelNumbers> Adc2Cycle28BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_56Cycles,TChannelNumbers> Adc2Cycle56BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_84Cycles,TChannelNumbers> Adc2Cycle84BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_112Cycles,TChannelNumbers> Adc2Cycle112BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_144Cycles,TChannelNumbers> Adc2Cycle144BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_480Cycles,TChannelNumbers> Adc2Cycle480BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_3Cycles> Adc2Cycle3BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_15Cycles> Adc2Cycle15BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_28Cycles> Adc2Cycle28BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_56Cycles> Adc2Cycle56BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_84Cycles> Adc2Cycle84BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_112Cycles> Adc2Cycle112BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_144Cycles> Adc2Cycle144BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<2,ADC_SampleTime_480Cycles> Adc2Cycle480BatteryVoltageFeature;
 
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_3Cycles,TChannelNumbers> Adc3Cycle3BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_15Cycles,TChannelNumbers> Adc3Cycle15BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_28Cycles,TChannelNumbers> Adc3Cycle28BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_56Cycles,TChannelNumbers> Adc3Cycle56BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_84Cycles,TChannelNumbers> Adc3Cycle84BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_112Cycles,TChannelNumbers> Adc3Cycle112BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_144Cycles,TChannelNumbers> Adc3Cycle144BatteryVoltageFeature;
-  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_480Cycles,TChannelNumbers> Adc3Cycle480BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_3Cycles> Adc3Cycle3BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_15Cycles> Adc3Cycle15BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_28Cycles> Adc3Cycle28BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_56Cycles> Adc3Cycle56BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_84Cycles> Adc3Cycle84BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_112Cycles> Adc3Cycle112BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_144Cycles> Adc3Cycle144BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<3,ADC_SampleTime_480Cycles> Adc3Cycle480BatteryVoltageFeature;
 }

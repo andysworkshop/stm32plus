@@ -15,9 +15,22 @@ namespace stm32plus {
 
   struct AdcContinuousModeFeature : AdcFeatureBase {
 
+    /**
+     * Constructor
+     * @param adc
+     */
+
     AdcContinuousModeFeature(Adc& adc)
       : AdcFeatureBase(adc) {
       ((ADC_InitTypeDef *)adc)->ADC_ContinuousConvMode=ENABLE;
+    }
+
+
+    /**
+     * Post ADC_Init() initialisation
+     */
+
+    void initialise() {
     }
   };
 }

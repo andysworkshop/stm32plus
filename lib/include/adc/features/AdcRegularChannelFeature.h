@@ -22,7 +22,9 @@ namespace stm32plus {
    */
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
-  class AdcRegularChannelFeature : public AdcRegularChannelFeatureBase {
+  class AdcRegularChannelFeature : public AdcFeatureBase {
+
+    protected:
 
       template<uint8_t TChannelNumber>
       void init();
@@ -32,6 +34,7 @@ namespace stm32plus {
 
     public:
       AdcRegularChannelFeature(Adc& adc);
+      void initialise();
   };
 
 
@@ -74,11 +77,20 @@ namespace stm32plus {
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
   inline AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::AdcRegularChannelFeature(Adc& adc)
-    : AdcRegularChannelFeatureBase(adc) {
+    : AdcFeatureBase(adc) {
 
-    // customise the number of channels being converted
+    // increase the number of channels being converted
 
-    ((ADC_InitTypeDef *)adc)->ADC_NbrOfConversion=sizeof...(TChannelNumbers);
+    ((ADC_InitTypeDef *)adc)->ADC_NbrOfConversion+=sizeof...(TChannelNumbers);
+  }
+
+
+  /**
+   * Initialise after ADC_Init
+   */
+
+  template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
+  inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::initialise() {
 
     // expand and initialise
 
@@ -96,7 +108,7 @@ namespace stm32plus {
   inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
     AdcChannelGpioInitiaiser<TAdcNumber,TChannelNumber>::initialiseGpioPin();
-    ADC_RegularChannelConfig(_adc,TChannelNumber,_rank++,TSampleCycles);
+    ADC_RegularChannelConfig(_adc,TChannelNumber,_adc.getAndIncrementRegularChannelRank(TAdcNumber),TSampleCycles);
   }
 
 
@@ -110,7 +122,7 @@ namespace stm32plus {
   inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
     AdcChannelGpioInitiaiser<TAdcNumber,TFirst>::initialiseGpioPin();
-    ADC_RegularChannelConfig(_adc,TFirst,_rank++,TSampleCycles);
+    ADC_RegularChannelConfig(_adc,TFirst,_adc.getAndIncrementRegularChannelRank(TAdcNumber),TSampleCycles);
     init<TNext,TRest...>();
   }
 }

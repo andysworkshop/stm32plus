@@ -32,6 +32,12 @@ namespace stm32plus {
       // so we can initialise the peripheral
 
       initialisePeripheral();
+
+      RecursiveVoidInit<Adc1,Features...>::tinit(this);
+
+      // enable it
+
+      enablePeripheral();
     }
   };
 }

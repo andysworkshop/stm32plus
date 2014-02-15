@@ -11,10 +11,11 @@
  * This file gets you access to the STM32 ADC peripheral.
  */
 
-// adc depends on rcc, dma
+// adc depends on rcc, dma, meta-programming utils
 
 #include "config/rcc.h"
 #include "config/dma.h"
+#include "util/Meta.h"
 
 // peripheral includes
 
@@ -27,7 +28,6 @@
 
 #include "adc/features/AdcChannelGpioInitialiser.h"
 #include "adc/features/AdcFeatureBase.h"
-#include "adc/features/AdcRegularChannelFeatureBase.h"
 #include "adc/features/AdcRegularChannelFeature.h"
 #include "adc/features/AdcBatteryVoltageFeature.h"
 #include "adc/features/AdcInternalReferenceVoltageFeature.h"

@@ -43,5 +43,13 @@ namespace stm32plus {
       ADC_EOCOnEachRegularChannelCmd(adc,TEndType==AdcScanModeEndType::END_AFTER_EACH_CHANNEL ? ENABLE : DISABLE);
       ((ADC_InitTypeDef *)adc)->ADC_ScanConvMode=ENABLE;
     }
+
+
+    /**
+     * Post ADC_Init() initialisation
+     */
+
+    void initialise() {
+    }
   };
 }

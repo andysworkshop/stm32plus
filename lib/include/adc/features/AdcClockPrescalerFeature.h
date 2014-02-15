@@ -45,5 +45,13 @@ namespace stm32plus {
           break;
       }
     }
+
+
+    /**
+     * Post ADC_Init() initialisation
+     */
+
+    void initialise() {
+    }
   };
 }

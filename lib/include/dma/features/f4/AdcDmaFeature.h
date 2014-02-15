@@ -23,12 +23,12 @@ namespace stm32plus {
    * after the constructor has completed.
    */
 
-  template<class TAdc,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
+  template<class TAdc,bool TRequestAfterLastTransfer=true,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
   class AdcDmaFeature : public DmaFeatureBase {
 
     public:
       AdcDmaFeature(Dma& dma);
-      void beginRead(void *dest,uint32_t count);
+      void beginRead(volatile void *dest,uint32_t count);
   };
 
 
@@ -37,8 +37,8 @@ namespace stm32plus {
    * @param dma the base class reference
    */
 
-  template<class TAdc,uint32_t TPriority,uint32_t TFifoMode>
-  inline AdcDmaFeature<TAdc,TPriority,TFifoMode>::AdcDmaFeature(Dma& dma)
+  template<class TAdc,bool TRequestAfterLastTransfer,uint32_t TPriority,uint32_t TFifoMode>
+  inline AdcDmaFeature<TAdc,TRequestAfterLastTransfer,TPriority,TFifoMode>::AdcDmaFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     ADC_TypeDef *adc;
@@ -60,8 +60,6 @@ namespace stm32plus {
 
     if(TFifoMode==DMA_FIFOMode_Enable)
       _init.DMA_FIFOThreshold=DMA_FIFOThreshold_HalfFull;     // flush on half-full
-
-    ADC_DMACmd(adc,ENABLE);
   }
 
 
@@ -72,8 +70,8 @@ namespace stm32plus {
    * @param[in] count The number of bytes to transfer.
    */
 
-  template<class TAdc,uint32_t TPriority,uint32_t TFifoMode>
-  inline void AdcDmaFeature<TAdc,TPriority,TFifoMode>::beginRead(void *dest,uint32_t count) {
+  template<class TAdc,bool TRequestAfterLastTransfer,uint32_t TPriority,uint32_t TFifoMode>
+  inline void AdcDmaFeature<TAdc,TRequestAfterLastTransfer,TPriority,TFifoMode>::beginRead(volatile void *dest,uint32_t count) {
 
     DMA_Stream_TypeDef *peripheralAddress;
 
@@ -91,5 +89,8 @@ namespace stm32plus {
     DMA_Cmd(peripheralAddress,DISABLE);
     DMA_Init(peripheralAddress,&_init);
     DMA_Cmd(peripheralAddress,ENABLE);
+
+    ADC_DMARequestAfterLastTransferCmd((ADC_TypeDef *)TAdc::PERIPHERAL_BASE,TRequestAfterLastTransfer ? ENABLE : DISABLE);
+    ADC_DMACmd((ADC_TypeDef *)TAdc::PERIPHERAL_BASE,ENABLE);
   }
 }

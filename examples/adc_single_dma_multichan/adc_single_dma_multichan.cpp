@@ -42,6 +42,7 @@ using namespace stm32plus;
  *   STM32F107VCT6
  */
 
+
 class AdcSingleDmaMultiChan {
 
   private:
@@ -58,20 +59,7 @@ class AdcSingleDmaMultiChan {
        * for that circular buffer
        */
 
-      uint16_t readBuffer[3];
-
-      /*
-       * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
-       * 12 bits. We will use 3-cycle conversions on ADC channel 0. We will use interrupts
-       * to tell us when the conversion is complete.
-       */
-
-      Adc1<
-        AdcClockPrescalerFeature<2>,               // prescaler of 2
-        AdcResolutionFeature<12>,                  // 12 bit resolution
-        Adc1Cycle15RegularChannelFeature<0,1,2>,   // using channels 0,1 and 2 on ADC1 with 15-cycle latency
-        AdcScanModeFeature<>                       // scan mode with end interrupt after each group
-      > adc;
+      volatile uint16_t readBuffer[3];
 
       /*
        * Declare the ADC1 DMA channel. The default is circular mode for the AdcDmaFeature
@@ -80,18 +68,30 @@ class AdcSingleDmaMultiChan {
        * to the DMA peripheral.
        */
 
-//      ADC_DMARequestAfterLastTransferCmd(ADC1, ENABLE);       // make this a feature
       Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
+      /*
+       * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
+       * 12 bits. We will use 144-cycle conversions on ADC channels 0,1 and a 480-cycle
+       * conversion on ADC channel 2. Scan mode is used with the default template parameter
+       * that causes EOC to be raised at the end of a complete conversion group.
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<2>,               // prescaler of 2
+        AdcResolutionFeature<12>,                  // 12 bit resolution
+        Adc1Cycle144RegularChannelFeature<0,1>,    // using channels 0,1 on ADC1 with 144-cycle latency
+        Adc1Cycle480RegularChannelFeature<2>,      // using channel 2 on ADC1 with 480-cycle latency
+        AdcScanModeFeature<>                       // scan mode with EOC after each group
+      > adc;
 
       /*
        * Subscribe to the DMA complete interrupt
        */
 
       dma.DmaInterruptEventSender.insertSubscriber(
-            DmaInterruptEventSourceSlot::bind(this,&AdcSingleDmaMultiChan::onComplete)
-          );
-
+          DmaInterruptEventSourceSlot::bind(this,&AdcSingleDmaMultiChan::onComplete)
+      );
 
       /*
        * Enable the DMA interrupt
@@ -103,7 +103,7 @@ class AdcSingleDmaMultiChan {
        * Declare an instance of USART that we'll use to write out the conversion results.
        */
 
-      Usart1<> usart(57600);
+      Usart3_Remap2<> usart(57600);
       UsartPollingOutputStream outputStream(usart);
 
       /**
@@ -161,11 +161,6 @@ class AdcSingleDmaMultiChan {
         _ready=true;
     }
 };
-
-
-/*
- * Main entry point
- */
 
 int main() {
 
