@@ -53,6 +53,8 @@ namespace stm32plus {
       AdcInterruptFeature(Adc& adc);
       ~AdcInterruptFeature();
 
+      void initialise() {}
+
       void enableInterrupts(uint16_t interruptMask);
       void disableInterrupts(uint16_t interruptMask);
   };
