@@ -87,7 +87,7 @@ namespace stm32plus {
        */
 
       void set(uint16_t pinIds) const {
-        GPIO_SetBits(*this,pinIds);
+        GPIO_SetBits((GPIO_TypeDef *)TPortAddress,pinIds);
       }
 
 
@@ -97,7 +97,7 @@ namespace stm32plus {
        */
 
       void reset(uint16_t pinIds) const {
-        GPIO_ResetBits(*this,pinIds);
+        GPIO_ResetBits((GPIO_TypeDef *)TPortAddress,pinIds);
       }
 
 
@@ -107,7 +107,7 @@ namespace stm32plus {
        */
 
       void write(uint16_t value) const {
-        GPIO_Write(*this,value);
+        GPIO_Write((GPIO_TypeDef *)TPortAddress,value);
       }
   };
 }

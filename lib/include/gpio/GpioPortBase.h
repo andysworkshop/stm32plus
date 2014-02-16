@@ -27,7 +27,7 @@ namespace stm32plus {
       GpioPortBase(GPIO_TypeDef *peripheralAddress);
 
       void setPinHandler(uint8_t index,Gpio *pinHandler);
-      GPIO_TypeDef * getPeripheralAddress() const;
+      GPIO_TypeDef *getPeripheralAddress() const;
   };
 
 
