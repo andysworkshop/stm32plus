@@ -20,8 +20,10 @@ namespace stm32plus {
      ADC_TypeDef *_peripheralAddress;
      ADC_CommonInitTypeDef *_commonInit;
      ADC_InitTypeDef *_init;
+     uint8_t _injectedChannelCount;
 
      static uint8_t _regularChannelRank[3];        // we can have multiple channel feature instances and multiple ADCs
+     static uint8_t _injectedChannelRank[3];
 
     public:
       Adc(ADC_TypeDef *peripheralAddress);
@@ -32,8 +34,11 @@ namespace stm32plus {
       // get and increment the rank for an ADC
 
       uint8_t getAndIncrementRegularChannelRank(uint8_t adcNumber);
+      uint8_t getAndIncrementInjectedChannelRank(uint8_t adcNumber);
 
-      // injected channel start/check functionality is in a feature class due to lack of support on all MCUs
+      void incrementInjectedChannelCount(uint8_t amountToAdd);
+
+      // regular conversion data access functions
 
       void startRegularConversion() const;
       bool hasRegularConversionStarted() const;
@@ -59,6 +64,8 @@ namespace stm32plus {
     // initialise the ranks back to 1 so that the channel features are ready
 
     _regularChannelRank[0]=_regularChannelRank[1]=_regularChannelRank[2]=1;
+    _injectedChannelRank[0]=_injectedChannelRank[1]=_injectedChannelRank[2]=1;
+    _injectedChannelCount=0;
 
     // set up the default init values
     // the features can customise this before the AdcPeripheral class uses
@@ -95,6 +102,17 @@ namespace stm32plus {
 
   inline uint8_t Adc::getAndIncrementRegularChannelRank(uint8_t adcNumber) {
     return _regularChannelRank[adcNumber-1]++;
+  }
+
+
+  /**
+   * Get the rank (order) number for an injected channel
+   * @param adcNumber The ADC number (1..3)
+   * @return the current rank number
+   */
+
+  inline uint8_t Adc::getAndIncrementInjectedChannelRank(uint8_t adcNumber) {
+    return _injectedChannelRank[adcNumber-1]++;
   }
 
 
@@ -180,5 +198,14 @@ namespace stm32plus {
 
   inline uint16_t Adc::getRegularConversionValue() const {
     return ADC_GetConversionValue(_peripheralAddress);
+  }
+
+
+  /**
+   * Increase the number of injected channels
+   */
+
+  inline void Adc::incrementInjectedChannelCount(uint8_t amountToAdd) {
+    _injectedChannelCount+=amountToAdd;
   }
 }

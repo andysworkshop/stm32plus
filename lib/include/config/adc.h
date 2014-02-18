@@ -45,5 +45,7 @@
 #define USE_ADC_INTERRUPT
 
 #include "adc/features/f4/AdcInterruptFeature.h"
+#include "adc/features/f4/AdcInjectedChannelFeatureBase.h"
+#include "adc/features/f4/AdcInjectedChannelFeature.h"
 
 #endif

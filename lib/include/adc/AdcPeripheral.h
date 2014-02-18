@@ -71,6 +71,11 @@ namespace stm32plus {
 
     ADC_Init(_peripheralAddress,_init);
     delete _init;
+
+    // if there are any injected channels then set the count
+
+    if(_injectedChannelCount)
+      ADC_InjectedSequencerLengthConfig(_peripheralAddress,_injectedChannelCount);
   }
 
 
