@@ -23,6 +23,8 @@
 #include "adc/Adc.h"
 #include "adc/AdcPeripheral.h"
 #include "adc/Adc1.h"
+#include "adc/Adc2.h"
+#include "adc/Adc3.h"
 
 // feature includes
 
@@ -45,5 +47,7 @@
 #define USE_ADC_INTERRUPT
 
 #include "adc/features/f4/AdcInterruptFeature.h"
+#include "adc/features/f4/AdcInjectedChannelFeatureBase.h"
+#include "adc/features/f4/AdcInjectedChannelFeature.h"
 
 #endif

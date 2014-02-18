@@ -100,7 +100,6 @@ namespace stm32plus {
 
   /**
    * Base case initialiser for when parameter pack expansion gets to the last one
-   * @param rank The rank order of the channel (1..16)
    */
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
@@ -114,7 +113,6 @@ namespace stm32plus {
 
   /**
    * Recursive initialise for the template parameter pack.
-   * @param rank The rank order of the channel (1..16)
    */
 
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
