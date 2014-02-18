@@ -23,6 +23,8 @@
 #include "adc/Adc.h"
 #include "adc/AdcPeripheral.h"
 #include "adc/Adc1.h"
+#include "adc/Adc2.h"
+#include "adc/Adc3.h"
 
 // feature includes
 
