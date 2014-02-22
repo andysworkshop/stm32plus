@@ -30,6 +30,12 @@ namespace stm32plus {
 
       void setInjectedChannelOffset(uint8_t channelIndex,uint16_t offset);
 
+      void enableAutoInjectedMode() const;
+      void disableAutoInjectedMode() const;
+
+      void enableDiscontinuousInjectedMode() const;
+      void disableDiscontinuousInjectedMode() const;
+
       void startInjectedConversion() const;
       bool hasInjectedConversionStarted() const;
       bool hasInjectedConversionFinished() const;
@@ -47,7 +53,9 @@ namespace stm32plus {
 
 
   /**
-   * Set the 12-bit offset for the conversion values of an injected channel
+   * Set the 12-bit offset for the conversion values of an injected channel. This value is subtracted
+   * from the converted value for the specified channel. This means that the converted values can
+   * be negative.
    * @param channel The channel number (0..3)
    * @param offset The 12-bit offset
    */
@@ -111,5 +119,41 @@ namespace stm32plus {
 
   inline uint16_t AdcInjectedChannelFeatureBase::getInjectedConversionValue(uint8_t channelIndex) const {
     return ADC_GetInjectedConversionValue(_adc,channelIndexToChannelNumber(channelIndex));
+  }
+
+
+  /**
+   * Enable auto-injected mode (injected channels converted after regular)
+   */
+
+  inline void AdcInjectedChannelFeatureBase::enableAutoInjectedMode() const {
+    ADC_AutoInjectedConvCmd(_adc,ENABLE);
+  }
+
+
+  /**
+   * Disable auto-injected mode (injected channels converted after regular)
+   */
+
+  inline void AdcInjectedChannelFeatureBase::disableAutoInjectedMode() const {
+    ADC_AutoInjectedConvCmd(_adc,DISABLE);
+  }
+
+
+  /**
+   * Enable discontinuous injected mode (one-by-one conversion of a group)
+   */
+
+  inline void AdcInjectedChannelFeatureBase::enableDiscontinuousInjectedMode() const {
+    ADC_InjectedDiscModeCmd(_adc,ENABLE);
+  }
+
+
+  /**
+   * Disable discontinuous injected mode (one-by-one conversion of a group)
+   */
+
+  inline void AdcInjectedChannelFeatureBase::disableDiscontinuousInjectedMode() const {
+    ADC_InjectedDiscModeCmd(_adc,DISABLE);
   }
 }

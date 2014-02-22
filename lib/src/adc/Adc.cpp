@@ -12,4 +12,5 @@
 namespace stm32plus {
 
   uint8_t Adc::_regularChannelRank[3];
+  uint8_t Adc::_injectedChannelRank[3];
 }

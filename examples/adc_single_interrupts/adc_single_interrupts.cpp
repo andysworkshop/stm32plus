@@ -80,8 +80,7 @@ class AdcSingleInterrupts {
        * Enable the ADC interrupts
        */
 
-      adc.enableInterrupts(ADC_IT_EOC);
-      adc.enableInterrupts(ADC_IT_OVR);
+      adc.enableInterrupts(Adc1InterruptFeature::END_OF_CONVERSION | Adc1InterruptFeature::OVERFLOW);
 
       /*
        * Go into an infinite loop converting

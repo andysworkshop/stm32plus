@@ -50,5 +50,6 @@
 #include "adc/features/f4/AdcInterruptFeature.h"
 #include "adc/features/f4/AdcInjectedChannelFeatureBase.h"
 #include "adc/features/f4/AdcInjectedChannelFeature.h"
+#include "adc/features/f4/AdcInjectedTriggerFeature.h"
 
 #endif

@@ -107,7 +107,7 @@ class AdcSingleTimerInterrupts {
        * Enable the ADC interrupts
        */
 
-      adc.enableInterrupts(ADC_IT_EOC);
+      adc.enableInterrupts(Adc1InterruptFeature::END_OF_CONVERSION);
 
       /*
        * Start the timer
