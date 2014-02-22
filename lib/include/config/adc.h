@@ -39,6 +39,7 @@
 #include "adc/features/AdcContinuousModeFeature.h"
 #include "adc/features/AdcScanModeFeature.h"
 #include "adc/features/AdcTriggerFeature.h"
+#include "adc/features/AdcMultiFeature.h"
 
 // device specific feature includes
 

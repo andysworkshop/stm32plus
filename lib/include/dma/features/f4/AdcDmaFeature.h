@@ -91,6 +91,8 @@ namespace stm32plus {
     DMA_Cmd(peripheralAddress,ENABLE);
 
     ADC_DMARequestAfterLastTransferCmd((ADC_TypeDef *)TAdc::PERIPHERAL_BASE,TRequestAfterLastTransfer ? ENABLE : DISABLE);
+    ADC_MultiModeDMARequestAfterLastTransferCmd(TRequestAfterLastTransfer ? ENABLE : DISABLE);
+
     ADC_DMACmd((ADC_TypeDef *)TAdc::PERIPHERAL_BASE,ENABLE);
   }
 }
