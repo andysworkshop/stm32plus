@@ -119,7 +119,7 @@ namespace stm32plus {
 
         // point to the appropriate buffer
 
-        buffer=(vpos & 1) == 0 ? evenLines : oddLines;
+        buffer=(vpos & 1)==0 ? evenLines : oddLines;
 
         // read a line
 
@@ -128,7 +128,7 @@ namespace stm32plus {
 
         // wait for the last line to complete
 
-        if(vpos>0 && !((Dma&)dma).waitUntilComplete())
+        if(vpos>0 && !dma.waitUntilComplete())
           goto finished;
 
         // transfer the scan line of bytes
@@ -150,7 +150,7 @@ namespace stm32plus {
       // wait for the last scan line to transfer
 
       if(retval)
-        retval=((Dma&)dma).waitUntilComplete();
+        retval=dma.waitUntilComplete();
 
       return retval;
     }

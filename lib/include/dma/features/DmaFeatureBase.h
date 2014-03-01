@@ -32,6 +32,8 @@ namespace stm32plus {
 
       operator Dma&();
       operator DMA_InitTypeDef&();
+
+      Dma& getDma();
   };
 
 
@@ -50,6 +52,16 @@ namespace stm32plus {
    */
 
   inline DmaFeatureBase::operator Dma&() {
+    return _dma;
+  }
+
+
+  /*
+   * Alternative to the cast operator
+   * @return The DMA object
+   */
+
+  inline Dma& DmaFeatureBase::getDma() {
     return _dma;
   }
 

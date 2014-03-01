@@ -9,6 +9,7 @@
 
 namespace stm32plus {
 
+
   /**
    * Simple carrier class for an implementation of a DMA copier. Used to ensure that we're not restricted
    * to just the common case of the FSMC implementation. i.e. one day DMA-to-GPIO may be implemented
@@ -23,7 +24,7 @@ namespace stm32plus {
     public:
       DmaLcdWriter(TDmaCopierImpl& impl);
 
-      void waitUntilComplete();
+      bool waitUntilComplete();
       void beginCopyToLcd(void *dest,void *source,uint32_t byteCount,uint32_t priority);
   };
 
@@ -41,11 +42,12 @@ namespace stm32plus {
 
   /**
    * Wait until the last transfer completes
+   * @return false if the DMA peripheral reports an error
    */
 
   template<class TDmaCopierImpl>
-  inline void DmaLcdWriter<TDmaCopierImpl>::waitUntilComplete() {
-    _impl.waitUntilComplete();
+  inline bool DmaLcdWriter<TDmaCopierImpl>::waitUntilComplete() {
+   return _impl.getDma().waitUntilComplete();
   }
 
 
