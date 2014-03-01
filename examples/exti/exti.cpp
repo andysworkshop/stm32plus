@@ -30,8 +30,8 @@ using namespace stm32plus;
  *  GpioF... to GpioD...
  *  Exti8 to Exit0
  *
- * To use this demo on the STM32VLDISCOVERY board you will need to make the
- * following changes to target the onboard button and LEDs:
+ * To use this demo on the STM32VLDISCOVERY or the STM32F0DISCOVERY board you
+ * will need to make the following changes to target the onboard button and LEDs:
  *
  *  LED_PIN to 8
  *  BUTTON_PIN to 0
