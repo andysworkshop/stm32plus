@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_i2c.c
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Inter-Integrated circuit (I2C):
   *           + Initialization and Configuration
@@ -59,7 +59,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -95,6 +95,8 @@
 #define CR1_CLEAR_MASK          ((uint32_t)0x00CFE0FF)  /*<! I2C CR1 clear register Mask */
 #define CR2_CLEAR_MASK          ((uint32_t)0x07FF7FFF)  /*<! I2C CR2 clear register Mask */
 #define TIMING_CLEAR_MASK       ((uint32_t)0xF0FFFFFF)  /*<! I2C TIMING clear register Mask */
+#define ERROR_IT_MASK           ((uint32_t)0x00003F00)  /*<! I2C Error interrupt register Mask */
+#define TC_IT_MASK              ((uint32_t)0x000000C0)  /*<! I2C TC interrupt register Mask */
 
 /* Private macro -------------------------------------------------------------*/
 /* Private variables ---------------------------------------------------------*/
@@ -272,7 +274,7 @@ void I2C_StructInit(I2C_InitTypeDef* I2C_InitStruct)
   * @brief  Enables or disables the specified I2C peripheral.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx peripheral. 
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -295,41 +297,38 @@ void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
 /**
   * @brief  Enables or disables the specified I2C software reset.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
-  * @param  NewState: new state of the I2C software reset.
-  *   This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
-void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
+void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx)
 {
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
-  assert_param(IS_FUNCTIONAL_STATE(NewState));
-  if (NewState != DISABLE)
-  {
-    /* Peripheral under reset */
-    I2Cx->CR1 |= I2C_CR1_SWRST;
-  }
-  else
-  {
-    /* Peripheral not under reset */
-    I2Cx->CR1 &= (uint32_t)~((uint32_t)I2C_CR1_SWRST);
-  }
+
+  /* Disable peripheral */
+  I2Cx->CR1 &= (uint32_t)~((uint32_t)I2C_CR1_PE);
+
+  /* Perform a dummy read to delay the disable of peripheral for minimum
+     3 APB clock cycles to perform the software reset functionality */
+  *(__IO uint32_t *)(uint32_t)I2Cx; 
+
+  /* Enable peripheral */
+  I2Cx->CR1 |= I2C_CR1_PE;
 }
 
 /**
   * @brief  Enables or disables the specified I2C interrupts.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_IT: specifies the I2C interrupts sources to be enabled or disabled. 
-  *   This parameter can be any combination of the following values:
-  *     @arg I2C_IT_ERRI: Error interrupt mask
-  *     @arg I2C_IT_TCI: Transfer Complete interrupt mask
-  *     @arg I2C_IT_STOPI: Stop Detection interrupt mask
-  *     @arg I2C_IT_NACKI: Not Acknowledge received interrupt mask
-  *     @arg I2C_IT_ADDRI: Address Match interrupt mask  
-  *     @arg I2C_IT_RXI: RX interrupt mask
-  *     @arg I2C_IT_TXI: TX interrupt mask
+  *          This parameter can be any combination of the following values:
+  *            @arg I2C_IT_ERRI: Error interrupt mask
+  *            @arg I2C_IT_TCI: Transfer Complete interrupt mask
+  *            @arg I2C_IT_STOPI: Stop Detection interrupt mask
+  *            @arg I2C_IT_NACKI: Not Acknowledge received interrupt mask
+  *            @arg I2C_IT_ADDRI: Address Match interrupt mask  
+  *            @arg I2C_IT_RXI: RX interrupt mask
+  *            @arg I2C_IT_TXI: TX interrupt mask
   * @param  NewState: new state of the specified I2C interrupts.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_ITConfig(I2C_TypeDef* I2Cx, uint32_t I2C_IT, FunctionalState NewState)
@@ -355,7 +354,7 @@ void I2C_ITConfig(I2C_TypeDef* I2Cx, uint32_t I2C_IT, FunctionalState NewState)
   * @brief  Enables or disables the I2C Clock stretching.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx Clock stretching.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_StretchClockCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -378,9 +377,10 @@ void I2C_StretchClockCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables I2C wakeup from stop mode.
+  *         This function is not applicable for  STM32F030 devices.  
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx stop mode.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_StopModeCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -405,7 +405,7 @@ void I2C_StopModeCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the I2C own address 2.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C own address 2.
-  *   This parameter can be: ENABLE or DISABLE.  
+  *          This parameter can be: ENABLE or DISABLE.  
   * @retval None
   */
 void I2C_DualAddressCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -431,15 +431,15 @@ void I2C_DualAddressCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  Address: specifies the slave address to be programmed.
   * @param  Mask: specifies own address 2 mask to be programmed.
-  *   This parameter can be one of the following values:
-  *     @arg I2C_OA2_NoMask: no mask.
-  *     @arg I2C_OA2_Mask01: OA2[1] is masked and don't care.
-  *     @arg I2C_OA2_Mask02: OA2[2:1] are masked and don't care.
-  *     @arg I2C_OA2_Mask03: OA2[3:1] are masked and don't care.
-  *     @arg I2C_OA2_Mask04: OA2[4:1] are masked and don't care.
-  *     @arg I2C_OA2_Mask05: OA2[5:1] are masked and don't care.
-  *     @arg I2C_OA2_Mask06: OA2[6:1] are masked and don't care.
-  *     @arg I2C_OA2_Mask07: OA2[7:1] are masked and don't care.
+  *          This parameter can be one of the following values:
+  *            @arg I2C_OA2_NoMask: no mask.
+  *            @arg I2C_OA2_Mask01: OA2[1] is masked and don't care.
+  *            @arg I2C_OA2_Mask02: OA2[2:1] are masked and don't care.
+  *            @arg I2C_OA2_Mask03: OA2[3:1] are masked and don't care.
+  *            @arg I2C_OA2_Mask04: OA2[4:1] are masked and don't care.
+  *            @arg I2C_OA2_Mask05: OA2[5:1] are masked and don't care.
+  *            @arg I2C_OA2_Mask06: OA2[6:1] are masked and don't care.
+  *            @arg I2C_OA2_Mask07: OA2[7:1] are masked and don't care.
   * @retval None
   */
 void I2C_OwnAddress2Config(I2C_TypeDef* I2Cx, uint16_t Address, uint8_t Mask)
@@ -469,7 +469,7 @@ void I2C_OwnAddress2Config(I2C_TypeDef* I2Cx, uint16_t Address, uint8_t Mask)
   * @brief  Enables or disables the I2C general call mode.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C general call mode.
-  *   This parameter can be: ENABLE or DISABLE.  
+  *          This parameter can be: ENABLE or DISABLE.  
   * @retval None
   */
 void I2C_GeneralCallCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -494,7 +494,7 @@ void I2C_GeneralCallCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the I2C slave byte control.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C slave byte control.
-  *   This parameter can be: ENABLE or DISABLE.  
+  *          This parameter can be: ENABLE or DISABLE.  
   * @retval None
   */
 void I2C_SlaveByteControlCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -547,7 +547,7 @@ void I2C_SlaveAddressConfig(I2C_TypeDef* I2Cx, uint16_t Address)
   * @brief  Enables or disables the I2C 10-bit addressing mode for the master.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C 10-bit addressing mode.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @note   This function should be called before generating start condition.
   * @retval None
   */
@@ -612,7 +612,7 @@ void I2C_10BitAddressingModeCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   *         automatically sent when nbytes data are transferred).
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C automatic end mode.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @note   This function has effect if Reload mode is disabled.
   * @retval None
   */
@@ -638,7 +638,7 @@ void I2C_AutoEndCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the I2C nbytes reload mode.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the nbytes reload mode.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_ReloadCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -689,9 +689,9 @@ void I2C_NumberOfBytesConfig(I2C_TypeDef* I2Cx, uint8_t Number_Bytes)
   * @brief  Configures the type of transfer request for the master.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_Direction: specifies the transfer request direction to be programmed.
-  *    This parameter can be one of the following values:
-  *     @arg I2C_Direction_Transmitter: Master request a write transfer
-  *     @arg I2C_Direction_Receiver: Master request a read transfer  
+  *          This parameter can be one of the following values:
+  *            @arg I2C_Direction_Transmitter: Master request a write transfer
+  *            @arg I2C_Direction_Receiver: Master request a read transfer  
   * @retval None
   */
 void I2C_MasterRequestConfig(I2C_TypeDef* I2Cx, uint16_t I2C_Direction)
@@ -717,7 +717,7 @@ void I2C_MasterRequestConfig(I2C_TypeDef* I2Cx, uint16_t I2C_Direction)
   * @brief  Generates I2Cx communication START condition.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C START condition generation.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -742,7 +742,7 @@ void I2C_GenerateSTART(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Generates I2Cx communication STOP condition.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C STOP condition generation.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -767,7 +767,7 @@ void I2C_GenerateSTOP(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables the I2C 10-bit header only mode with read direction.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the I2C 10-bit header only mode.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @note   This mode can be used only when switching from master transmitter mode 
   *         to master receiver mode.
   * @retval None
@@ -794,7 +794,7 @@ void I2C_10BitAddressHeaderCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Generates I2C communication Acknowledge.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  NewState: new state of the Acknowledge.
-  *   This parameter can be: ENABLE or DISABLE.  
+  *          This parameter can be: ENABLE or DISABLE.  
   * @retval None
   */
 void I2C_AcknowledgeConfig(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -864,18 +864,18 @@ uint16_t I2C_GetTransferDirection(I2C_TypeDef* I2Cx)
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  Address: specifies the slave address to be programmed.
   * @param  Number_Bytes: specifies the number of bytes to be programmed.
-  *   This parameter must be a value between 0 and 255.
+  *          This parameter must be a value between 0 and 255.
   * @param  ReloadEndMode: new state of the I2C START condition generation.
-  *   This parameter can be one of the following values:
-  *     @arg I2C_Reload_Mode: Enable Reload mode .
-  *     @arg I2C_AutoEnd_Mode: Enable Automatic end mode.
-  *     @arg I2C_SoftEnd_Mode: Enable Software end mode.
+  *          This parameter can be one of the following values:
+  *            @arg I2C_Reload_Mode: Enable Reload mode .
+  *            @arg I2C_AutoEnd_Mode: Enable Automatic end mode.
+  *            @arg I2C_SoftEnd_Mode: Enable Software end mode.
   * @param  StartStopMode: new state of the I2C START condition generation.
-  *   This parameter can be one of the following values:
-  *     @arg I2C_No_StartStop: Don't Generate stop and start condition.
-  *     @arg I2C_Generate_Stop: Generate stop condition (Number_Bytes should be set to 0).
-  *     @arg I2C_Generate_Start_Read: Generate Restart for read request.
-  *     @arg I2C_Generate_Start_Write: Generate Restart for write request.
+  *          This parameter can be one of the following values:
+  *            @arg I2C_No_StartStop: Don't Generate stop and start condition.
+  *            @arg I2C_Generate_Stop: Generate stop condition (Number_Bytes should be set to 0).
+  *            @arg I2C_Generate_Start_Read: Generate Restart for read request.
+  *            @arg I2C_Generate_Start_Write: Generate Restart for write request.
   * @retval None
   */
 void I2C_TransferHandling(I2C_TypeDef* I2Cx, uint16_t Address, uint8_t Number_Bytes, uint32_t ReloadEndMode, uint32_t StartStopMode)
@@ -946,7 +946,7 @@ void I2C_TransferHandling(I2C_TypeDef* I2Cx, uint16_t Address, uint8_t Number_By
   * @brief  Enables or disables I2C SMBus alert.
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx SMBus alert.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_SMBusAlertCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -971,7 +971,7 @@ void I2C_SMBusAlertCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables I2C Clock Timeout (SCL Timeout detection).
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx clock Timeout.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_ClockTimeoutCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -996,7 +996,7 @@ void I2C_ClockTimeoutCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables I2C Extended Clock Timeout (SCL cumulative Timeout detection).
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx Extended clock Timeout.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_ExtendedClockTimeoutCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -1022,7 +1022,7 @@ void I2C_ExtendedClockTimeoutCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   *         high detection).
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx Idle clock Timeout.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_IdleClockTimeoutCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -1045,7 +1045,7 @@ void I2C_IdleClockTimeoutCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
 
 /**
   * @brief  Configures the I2C Bus Timeout A (SCL Timeout when TIDLE = 0 or Bus 
-  *   idle SCL and SDA high when TIDLE = 1).
+  *         idle SCL and SDA high when TIDLE = 1).
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  Timeout: specifies the TimeoutA to be programmed. 
   * @retval None
@@ -1102,7 +1102,7 @@ void I2C_TimeoutBConfig(I2C_TypeDef* I2Cx, uint16_t Timeout)
   * @brief  Enables or disables I2C PEC calculation.
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx PEC calculation.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_CalculatePEC(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -1127,7 +1127,7 @@ void I2C_CalculatePEC(I2C_TypeDef* I2Cx, FunctionalState NewState)
   * @brief  Enables or disables I2C PEC transmission/reception request.
   * @param  I2Cx: where x can be 1 to select the I2C peripheral.
   * @param  NewState: new state of the I2Cx PEC request.
-  *   This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_PECRequestCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
@@ -1185,18 +1185,18 @@ uint8_t I2C_GetPEC(I2C_TypeDef* I2Cx)
   * @brief  Reads the specified I2C register and returns its value.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_Register: specifies the register to read.
-  *   This parameter can be one of the following values:
-  *     @arg I2C_Register_CR1: CR1 register.
-  *     @arg I2C_Register_CR2: CR2 register.
-  *     @arg I2C_Register_OAR1: OAR1 register.
-  *     @arg I2C_Register_OAR2: OAR2 register.
-  *     @arg I2C_Register_TIMINGR: TIMING register.
-  *     @arg I2C_Register_TIMEOUTR: TIMEOUTR register.
-  *     @arg I2C_Register_ISR: ISR register.
-  *     @arg I2C_Register_ICR: ICR register.
-  *     @arg I2C_Register_PECR: PECR register.
-  *     @arg I2C_Register_RXDR: RXDR register.
-  *     @arg I2C_Register_TXDR: TXDR register.
+  *          This parameter can be one of the following values:
+  *            @arg I2C_Register_CR1: CR1 register.
+  *            @arg I2C_Register_CR2: CR2 register.
+  *            @arg I2C_Register_OAR1: OAR1 register.
+  *            @arg I2C_Register_OAR2: OAR2 register.
+  *            @arg I2C_Register_TIMINGR: TIMING register.
+  *            @arg I2C_Register_TIMEOUTR: TIMEOUTR register.
+  *            @arg I2C_Register_ISR: ISR register.
+  *            @arg I2C_Register_ICR: ICR register.
+  *            @arg I2C_Register_PECR: PECR register.
+  *            @arg I2C_Register_RXDR: RXDR register.
+  *            @arg I2C_Register_TXDR: TXDR register.
   * @retval The value of the read register.
   */
 uint32_t I2C_ReadRegister(I2C_TypeDef* I2Cx, uint8_t I2C_Register)
@@ -1292,11 +1292,11 @@ uint8_t I2C_ReceiveData(I2C_TypeDef* I2Cx)
   * @brief  Enables or disables the I2C DMA interface.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_DMAReq: specifies the I2C DMA transfer request to be enabled or disabled. 
-  *   This parameter can be any combination of the following values:
-  *     @arg I2C_DMAReq_Tx: Tx DMA transfer request
-  *     @arg I2C_DMAReq_Rx: Rx DMA transfer request
+  *          This parameter can be any combination of the following values:
+  *            @arg I2C_DMAReq_Tx: Tx DMA transfer request
+  *            @arg I2C_DMAReq_Rx: Rx DMA transfer request
   * @param  NewState: new state of the selected I2C DMA transfer request.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void I2C_DMACmd(I2C_TypeDef* I2Cx, uint32_t I2C_DMAReq, FunctionalState NewState)
@@ -1401,22 +1401,22 @@ void I2C_DMACmd(I2C_TypeDef* I2Cx, uint32_t I2C_DMAReq, FunctionalState NewState
   * @brief  Checks whether the specified I2C flag is set or not.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_FLAG: specifies the flag to check. 
-  *   This parameter can be one of the following values:
-  *     @arg I2C_FLAG_TXE: Transmit data register empty
-  *     @arg I2C_FLAG_TXIS: Transmit interrupt status
-  *     @arg I2C_FLAG_RXNE: Receive data register not empty
-  *     @arg I2C_FLAG_ADDR: Address matched (slave mode)
-  *     @arg I2C_FLAG_NACKF: NACK received flag
-  *     @arg I2C_FLAG_STOPF: STOP detection flag
-  *     @arg I2C_FLAG_TC: Transfer complete (master mode)
-  *     @arg I2C_FLAG_TCR: Transfer complete reload
-  *     @arg I2C_FLAG_BERR: Bus error
-  *     @arg I2C_FLAG_ARLO: Arbitration lost
-  *     @arg I2C_FLAG_OVR: Overrun/Underrun
-  *     @arg I2C_FLAG_PECERR: PEC error in reception
-  *     @arg I2C_FLAG_TIMEOUT: Timeout or Tlow detection flag
-  *     @arg I2C_FLAG_ALERT: SMBus Alert
-  *     @arg I2C_FLAG_BUSY: Bus busy
+  *          This parameter can be one of the following values:
+  *            @arg I2C_FLAG_TXE: Transmit data register empty
+  *            @arg I2C_FLAG_TXIS: Transmit interrupt status
+  *            @arg I2C_FLAG_RXNE: Receive data register not empty
+  *            @arg I2C_FLAG_ADDR: Address matched (slave mode)
+  *            @arg I2C_FLAG_NACKF: NACK received flag
+  *            @arg I2C_FLAG_STOPF: STOP detection flag
+  *            @arg I2C_FLAG_TC: Transfer complete (master mode)
+  *            @arg I2C_FLAG_TCR: Transfer complete reload
+  *            @arg I2C_FLAG_BERR: Bus error
+  *            @arg I2C_FLAG_ARLO: Arbitration lost
+  *            @arg I2C_FLAG_OVR: Overrun/Underrun
+  *            @arg I2C_FLAG_PECERR: PEC error in reception
+  *            @arg I2C_FLAG_TIMEOUT: Timeout or Tlow detection flag
+  *            @arg I2C_FLAG_ALERT: SMBus Alert
+  *            @arg I2C_FLAG_BUSY: Bus busy
   * @retval The new state of I2C_FLAG (SET or RESET).
   */
 FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
@@ -1451,16 +1451,16 @@ FlagStatus I2C_GetFlagStatus(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
   * @brief  Clears the I2Cx's pending flags.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_FLAG: specifies the flag to clear. 
-  *   This parameter can be any combination of the following values:
-  *     @arg I2C_FLAG_ADDR: Address matched (slave mode)
-  *     @arg I2C_FLAG_NACKF: NACK received flag
-  *     @arg I2C_FLAG_STOPF: STOP detection flag
-  *     @arg I2C_FLAG_BERR: Bus error
-  *     @arg I2C_FLAG_ARLO: Arbitration lost
-  *     @arg I2C_FLAG_OVR: Overrun/Underrun
-  *     @arg I2C_FLAG_PECERR: PEC error in reception
-  *     @arg I2C_FLAG_TIMEOUT: Timeout or Tlow detection flag
-  *     @arg I2C_FLAG_ALERT: SMBus Alert
+  *          This parameter can be any combination of the following values:
+  *            @arg I2C_FLAG_ADDR: Address matched (slave mode)
+  *            @arg I2C_FLAG_NACKF: NACK received flag
+  *            @arg I2C_FLAG_STOPF: STOP detection flag
+  *            @arg I2C_FLAG_BERR: Bus error
+  *            @arg I2C_FLAG_ARLO: Arbitration lost
+  *            @arg I2C_FLAG_OVR: Overrun/Underrun
+  *            @arg I2C_FLAG_PECERR: PEC error in reception
+  *            @arg I2C_FLAG_TIMEOUT: Timeout or Tlow detection flag
+  *            @arg I2C_FLAG_ALERT: SMBus Alert
   * @retval The new state of I2C_FLAG (SET or RESET).
   */
 void I2C_ClearFlag(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
@@ -1477,38 +1477,56 @@ void I2C_ClearFlag(I2C_TypeDef* I2Cx, uint32_t I2C_FLAG)
   * @brief  Checks whether the specified I2C interrupt has occurred or not.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_IT: specifies the interrupt source to check.
-  *   This parameter can be one of the following values:
-  *     @arg I2C_IT_TXIS: Transmit interrupt status
-  *     @arg I2C_IT_RXNE: Receive data register not empty
-  *     @arg I2C_IT_ADDR: Address matched (slave mode)
-  *     @arg I2C_IT_NACKF: NACK received flag
-  *     @arg I2C_IT_STOPF: STOP detection flag
-  *     @arg I2C_IT_TC: Transfer complete (master mode)
-  *     @arg I2C_IT_TCR: Transfer complete reload
-  *     @arg I2C_IT_BERR: Bus error
-  *     @arg I2C_IT_ARLO: Arbitration lost
-  *     @arg I2C_IT_OVR: Overrun/Underrun
-  *     @arg I2C_IT_PECERR: PEC error in reception
-  *     @arg I2C_IT_TIMEOUT: Timeout or Tlow detection flag
-  *     @arg I2C_IT_ALERT: SMBus Alert
+  *          This parameter can be one of the following values:
+  *            @arg I2C_IT_TXIS: Transmit interrupt status
+  *            @arg I2C_IT_RXNE: Receive data register not empty
+  *            @arg I2C_IT_ADDR: Address matched (slave mode)
+  *            @arg I2C_IT_NACKF: NACK received flag
+  *            @arg I2C_IT_STOPF: STOP detection flag
+  *            @arg I2C_IT_TC: Transfer complete (master mode)
+  *            @arg I2C_IT_TCR: Transfer complete reload
+  *            @arg I2C_IT_BERR: Bus error
+  *            @arg I2C_IT_ARLO: Arbitration lost
+  *            @arg I2C_IT_OVR: Overrun/Underrun
+  *            @arg I2C_IT_PECERR: PEC error in reception
+  *            @arg I2C_IT_TIMEOUT: Timeout or Tlow detection flag
+  *            @arg I2C_IT_ALERT: SMBus Alert
   * @retval The new state of I2C_IT (SET or RESET).
   */
 ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
 {
   uint32_t tmpreg = 0;
   ITStatus bitstatus = RESET;
-  
+  uint32_t enablestatus = 0;
+
   /* Check the parameters */
   assert_param(IS_I2C_ALL_PERIPH(I2Cx));
   assert_param(IS_I2C_GET_IT(I2C_IT));
+
+  /* Check if the interrupt source is enabled or not */
+  /* If Error interrupt */
+  if ((uint32_t)(I2C_IT & ERROR_IT_MASK))
+  {
+    enablestatus = (uint32_t)((I2C_CR1_ERRIE) & (I2Cx->CR1));
+  }
+  /* If TC interrupt */
+  else if ((uint32_t)(I2C_IT & TC_IT_MASK))
+  {
+    enablestatus = (uint32_t)((I2C_CR1_TCIE) & (I2Cx->CR1));
+  }
+  else
+  {
+    enablestatus = (uint32_t)((I2C_IT) & (I2Cx->CR1));
+  }
   
   /* Get the ISR register value */
   tmpreg = I2Cx->ISR;
-  
+
   /* Get flag status */
   tmpreg &= I2C_IT;
-  
-  if(tmpreg != 0)
+
+  /* Check the status of the specified I2C flag */
+  if((tmpreg != RESET) && enablestatus)
   {
     /* I2C_IT is set */
     bitstatus = SET;
@@ -1518,23 +1536,25 @@ ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
     /* I2C_IT is reset */
     bitstatus = RESET;
   }
+
+  /* Return the I2C_IT status */
   return bitstatus;
-} 
+}
 
 /**
   * @brief  Clears the I2Cx's interrupt pending bits.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_IT: specifies the interrupt pending bit to clear.
-  *   This parameter can be any combination of the following values:
-  *     @arg I2C_IT_ADDR: Address matched (slave mode)
-  *     @arg I2C_IT_NACKF: NACK received flag
-  *     @arg I2C_IT_STOPF: STOP detection flag
-  *     @arg I2C_IT_BERR: Bus error
-  *     @arg I2C_IT_ARLO: Arbitration lost
-  *     @arg I2C_IT_OVR: Overrun/Underrun
-  *     @arg I2C_IT_PECERR: PEC error in reception
-  *     @arg I2C_IT_TIMEOUT: Timeout or Tlow detection flag
-  *     @arg I2C_IT_ALERT: SMBus Alert
+  *          This parameter can be any combination of the following values:
+  *            @arg I2C_IT_ADDR: Address matched (slave mode)
+  *            @arg I2C_IT_NACKF: NACK received flag
+  *            @arg I2C_IT_STOPF: STOP detection flag
+  *            @arg I2C_IT_BERR: Bus error
+  *            @arg I2C_IT_ARLO: Arbitration lost
+  *            @arg I2C_IT_OVR: Overrun/Underrun
+  *            @arg I2C_IT_PECERR: PEC error in reception
+  *            @arg I2C_IT_TIMEOUT: Timeout or Tlow detection flag
+  *            @arg I2C_IT_ALERT: SMBus Alert
   * @retval The new state of I2C_IT (SET or RESET).
   */
 void I2C_ClearITPendingBit(I2C_TypeDef* I2Cx, uint32_t I2C_IT)

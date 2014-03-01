@@ -3,10 +3,11 @@
   ******************************************************************************
   * @file    stm32f0xx_comp.c
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file provides firmware functions to manage the following 
-  *          functionalities of the comparators (COMP1 and COMP2) peripheral: 
+  *          functionalities of the comparators (COMP1 and COMP2) peripheral
+  *          applicable only on STM32F051 and STM32F072 devices: 
   *           + Comparators configuration
   *           + Window mode control
   *
@@ -21,7 +22,7 @@
          (+) The non inverting input is set to PA1 for COMP1 and to PA3
              for COMP2.
   
-         (+) The inverting input can be selected among: DAC_OUT1, 
+         (+) The inverting input can be selected among: DAC1_OUT, DAC2_OUT 
              1/4 VREFINT, 1/2 VERFINT, 3/4 VREFINT, VREFINT,
              I/O (PA0 for COMP1 and PA2 for COMP2)
   
@@ -78,7 +79,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -153,12 +154,11 @@ void COMP_DeInit(void)
   * @note   By default, PA1 is selected as COMP1 non inverting input.
   *         To use PA4 as COMP1 non inverting input call COMP_SwitchCmd() after COMP_Init()
   * @param  COMP_Selection: the selected comparator. 
-  *   This parameter can be one of the following values:
-  *     @arg COMP_Selection_COMP1: COMP1 selected
-  *     @arg COMP_Selection_COMP2: COMP2 selected
+  *          This parameter can be one of the following values:
+  *            @arg COMP_Selection_COMP1: COMP1 selected
+  *            @arg COMP_Selection_COMP2: COMP2 selected
   * @param  COMP_InitStruct: pointer to an COMP_InitTypeDef structure that contains 
   *         the configuration information for the specified COMP peripheral.
-  *
   * @retval None
   */
 void COMP_Init(uint32_t COMP_Selection, COMP_InitTypeDef* COMP_InitStruct)
@@ -213,16 +213,15 @@ void COMP_StructInit(COMP_InitTypeDef* COMP_InitStruct)
   * @note   If the selected comparator is locked, enable/disable can't be performed.
   *         To unlock the configuration, perform a system reset.
   * @param  COMP_Selection: the selected comparator.
-  *   This parameter can be one of the following values:
-  *     @arg COMP_Selection_COMP1: COMP1 selected
-  *     @arg COMP_Selection_COMP2: COMP2 selected
+  *          This parameter can be one of the following values:
+  *            @arg COMP_Selection_COMP1: COMP1 selected
+  *            @arg COMP_Selection_COMP2: COMP2 selected
   * @param  NewState: new state of the COMP peripheral.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @note   When enabled, the comparator compares the non inverting input with 
-  *                       the inverting input and the comparison result is available
-  *                       on comparator output.
+  *         the inverting input and the comparison result is available on comparator output.
   * @note   When disabled, the comparator doesn't perform comparison and the 
-  *                        output level is low.
+  *         output level is low.
   * @retval None
   */
 void COMP_Cmd(uint32_t COMP_Selection, FunctionalState NewState)
@@ -248,7 +247,7 @@ void COMP_Cmd(uint32_t COMP_Selection, FunctionalState NewState)
   * @note   This switch is solely intended to redirect signals onto high
   *         impedance input, such as COMP1 non-inverting input (highly resistive switch)
   * @param  NewState: New state of the analog switch.
-  *   This parameter can be: ENABLE or DISABLE. 
+  *          This parameter can be: ENABLE or DISABLE. 
   * @note   When enabled, the SW1 is closed; PA1 is connected to PA4
   * @note   When disabled, the SW1 switch is open; PA1 is disconnected from PA4
   * @retval None
@@ -273,20 +272,20 @@ void COMP_SwitchCmd(FunctionalState NewState)
 /**
   * @brief  Return the output level (high or low) of the selected comparator. 
   * @note   The output level depends on the selected polarity.
-  *         If the polarity is not inverted:
-  * @note     -Comparator output is low when the non-inverting input is at a lower
+  * @note   If the polarity is not inverted:
+  *          - Comparator output is low when the non-inverting input is at a lower
   *            voltage than the inverting input
-  * @note     -Comparator output is high when the non-inverting input is at a higher
+  *          - Comparator output is high when the non-inverting input is at a higher
   *            voltage than the inverting input
   * @note   If the polarity is inverted:
-  * @note     -Comparator output is high when the non-inverting input is at a lower
+  *          - Comparator output is high when the non-inverting input is at a lower
   *            voltage than the inverting input
-  * @note     -Comparator output is low when the non-inverting input is at a higher
+  *          - Comparator output is low when the non-inverting input is at a higher
   *            voltage than the inverting input
   * @param  COMP_Selection: the selected comparator. 
-  *   This parameter can be one of the following values:
-  *     @arg COMP_Selection_COMP1: COMP1 selected
-  *     @arg COMP_Selection_COMP2: COMP2 selected  
+  *          This parameter can be one of the following values:
+  *            @arg COMP_Selection_COMP1: COMP1 selected
+  *            @arg COMP_Selection_COMP2: COMP2 selected  
   * @retval Returns the selected comparator output level: low or high.
   *       
   */
@@ -329,10 +328,10 @@ uint32_t COMP_GetOutputLevel(uint32_t COMP_Selection)
 
 /**
   * @brief  Enables or disables the window mode.
-  *         In window mode, COMP1 and COMP2 non inverting inputs are connected
+  * @note   In window mode, COMP1 and COMP2 non inverting inputs are connected
   *         together and only COMP1 non inverting input (PA1) can be used.
-  * param   NewState: new state of the window mode.
-  *   This parameter can be :
+  * @param  NewState: new state of the window mode.
+  *          This parameter can be :
   *           @arg ENABLE: COMP1 and COMP2 non inverting inputs are connected together.
   *           @arg DISABLE: OMP1 and COMP2 non inverting inputs are disconnected.
   * @retval None
@@ -377,9 +376,9 @@ void COMP_WindowCmd(FunctionalState NewState)
   * @note   Locking the configuration means that all control bits are read-only.
   *         To unlock the comparator configuration, perform a system reset.
   * @param  COMP_Selection: selects the comparator to be locked 
-  *   This parameter can be a value of the following values:
-  *     @arg COMP_Selection_COMP1: COMP1 configuration is locked.
-  *     @arg COMP_Selection_COMP2: COMP2 configuration is locked.  
+  *          This parameter can be a value of the following values:
+  *            @arg COMP_Selection_COMP1: COMP1 configuration is locked.
+  *            @arg COMP_Selection_COMP2: COMP2 configuration is locked.  
   * @retval None
   */
 void COMP_LockConfig(uint32_t COMP_Selection)

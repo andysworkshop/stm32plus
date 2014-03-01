@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_wwdg.c
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Window watchdog (WWDG) peripheral:
   *           + Prescaler, Refresh window and Counter configuration
@@ -66,7 +66,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -139,11 +139,11 @@ void WWDG_DeInit(void)
 /**
   * @brief  Sets the WWDG Prescaler.
   * @param  WWDG_Prescaler: specifies the WWDG Prescaler.
-  *   This parameter can be one of the following values:
-  *     @arg WWDG_Prescaler_1: WWDG counter clock = (PCLK1/4096)/1
-  *     @arg WWDG_Prescaler_2: WWDG counter clock = (PCLK1/4096)/2
-  *     @arg WWDG_Prescaler_4: WWDG counter clock = (PCLK1/4096)/4
-  *     @arg WWDG_Prescaler_8: WWDG counter clock = (PCLK1/4096)/8
+  *          This parameter can be one of the following values:
+  *            @arg WWDG_Prescaler_1: WWDG counter clock = (PCLK1/4096)/1
+  *            @arg WWDG_Prescaler_2: WWDG counter clock = (PCLK1/4096)/2
+  *            @arg WWDG_Prescaler_4: WWDG counter clock = (PCLK1/4096)/4
+  *            @arg WWDG_Prescaler_8: WWDG counter clock = (PCLK1/4096)/8
   * @retval None
   */
 void WWDG_SetPrescaler(uint32_t WWDG_Prescaler)
@@ -162,7 +162,7 @@ void WWDG_SetPrescaler(uint32_t WWDG_Prescaler)
 /**
   * @brief  Sets the WWDG window value.
   * @param  WindowValue: specifies the window value to be compared to the downcounter.
-  *   This parameter value must be lower than 0x80.
+  *          This parameter value must be lower than 0x80.
   * @retval None
   */
 void WWDG_SetWindowValue(uint8_t WindowValue)
@@ -196,8 +196,8 @@ void WWDG_EnableIT(void)
 /**
   * @brief  Sets the WWDG counter value.
   * @param  Counter: specifies the watchdog counter value.
-  *   This parameter must be a number between 0x40 and 0x7F (to prevent generating
-  *   an immediate reset).
+  *          This parameter must be a number between 0x40 and 0x7F (to prevent 
+  *          generating an immediate reset).
   * @retval None
   */
 void WWDG_SetCounter(uint8_t Counter)
@@ -228,8 +228,8 @@ void WWDG_SetCounter(uint8_t Counter)
 /**
   * @brief  Enables WWDG and load the counter value.                  
   * @param  Counter: specifies the watchdog counter value.
-  *   This parameter must be a number between 0x40 and 0x7F (to prevent generating
-  *   an immediate reset).
+  *          This parameter must be a number between 0x40 and 0x7F (to prevent 
+  *          generating an immediate reset).
   * @retval None
   */
 void WWDG_Enable(uint8_t Counter)

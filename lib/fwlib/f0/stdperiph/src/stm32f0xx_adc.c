@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_adc.c
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Analog to Digital Convertor (ADC) peripheral:
   *           + Initialization and Configuration
@@ -56,7 +56,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -225,7 +225,7 @@ void ADC_StructInit(ADC_InitTypeDef* ADC_InitStruct)
   * @brief  Enables or disables the specified ADC peripheral.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the ADCx peripheral. 
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -247,14 +247,39 @@ void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState)
 }
 
 /**
+  * @brief  Configure the ADC to either be clocked by the asynchronous clock(which is
+  *         independent, the dedicated 14MHz clock) or the synchronous clock derived from
+  *         the APB clock of the ADC bus interface divided by 2 or 4
+  * @note   This function can be called only when ADC is disabled.
+  * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
+  * @param  ADC_ClockMode: This parameter can be :
+  *            @arg ADC_ClockMode_AsynClk: ADC clocked by the dedicated 14MHz clock
+  *            @arg ADC_ClockMode_SynClkDiv2: ADC clocked by PCLK/2
+  *            @arg ADC_ClockMode_SynClkDiv4: ADC clocked by PCLK/4  
+  * @retval None
+  */
+void ADC_ClockModeConfig(ADC_TypeDef* ADCx, uint32_t ADC_ClockMode)
+{
+  /* Check the parameters */
+  assert_param(IS_ADC_ALL_PERIPH(ADCx));
+  assert_param(IS_ADC_CLOCKMODE(ADC_ClockMode));
+
+    /* Configure the ADC Clock mode according to ADC_ClockMode */
+    ADCx->CFGR2 = (uint32_t)ADC_ClockMode;
+
+}
+
+/**
   * @brief  Enables or disables the jitter when the ADC is clocked by PCLK div2
   *         or div4
+  * @note   This function is obsolete and maintained for legacy purpose only. ADC_ClockModeConfig()
+  *         function should be used instead.  
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  ADC_JitterOff: This parameter can be :
-  *     @arg ADC_JitterOff_PCLKDiv2: Remove jitter when ADC is clocked by PLCK divided by 2
-  *     @arg ADC_JitterOff_PCLKDiv4: Remove jitter when ADC is clocked by PLCK divided by 4
+  *            @arg ADC_JitterOff_PCLKDiv2: Remove jitter when ADC is clocked by PLCK divided by 2
+  *            @arg ADC_JitterOff_PCLKDiv4: Remove jitter when ADC is clocked by PLCK divided by 4
   * @param  NewState: new state of the ADCx jitter. 
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_JitterCmd(ADC_TypeDef* ADCx, uint32_t ADC_JitterOff, FunctionalState NewState)
@@ -305,14 +330,12 @@ void ADC_JitterCmd(ADC_TypeDef* ADCx, uint32_t ADC_JitterOff, FunctionalState Ne
   *         consumption when the ADC is not converting. 
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @note   The ADC can be powered down: 
-  *         - During the Auto delay phase 
-  *           => The ADC is powered on again at the end of the delay (until the 
-  *              previous data is read from the ADC data register). 
-  *         - During the ADC is waiting for a trigger event 
-  *           => The ADC is powered up at the next trigger event (when the 
-  *              conversion is started).
+  *         - During the Auto delay phase:  The ADC is powered on again at the end
+  *           of the delay (until the previous data is read from the ADC data register). 
+  *         - During the ADC is waiting for a trigger event: The ADC is powered up
+  *           at the next trigger event (when the conversion is started).
   * @param  NewState: new state of the ADCx power Off. 
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_AutoPowerOffCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -338,16 +361,15 @@ void ADC_AutoPowerOffCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @note   When the CPU clock is not fast enough to manage the data rate, a 
   *         Hardware delay can be introduced between ADC conversions to reduce 
   *         this data rate. 
-  * @note   The Hardware delay is inserted after :
-  *         - after each conversions and until the previous data is read from the 
-  *           ADC data register
+  * @note   The Hardware delay is inserted after each conversions and until the
+  *         previous data is read from the ADC data register
   * @note   This is a way to automatically adapt the speed of the ADC to the speed 
   *         of the system which will read the data.
   * @note   Any hardware triggers wich occur while a conversion is on going or 
   *         while the automatic Delay is applied are ignored 
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the ADCx Auto-Delay.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_WaitModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -399,7 +421,7 @@ void ADC_WaitModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Enables or disables the analog watchdog 
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the ADCx Analog Watchdog.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_AnalogWatchdogCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -424,9 +446,9 @@ void ADC_AnalogWatchdogCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Configures the high and low thresholds of the analog watchdog. 
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  HighThreshold: the ADC analog watchdog High threshold value.
-  *         This parameter must be a 12bit value.
+  *          This parameter must be a 12bit value.
   * @param  LowThreshold: the ADC analog watchdog Low threshold value.
-  *         This parameter must be a 12bit value.
+  *          This parameter must be a 12bit value.
   * @retval None
   */
 void ADC_AnalogWatchdogThresholdsConfig(ADC_TypeDef* ADCx, uint16_t HighThreshold,
@@ -446,26 +468,26 @@ void ADC_AnalogWatchdogThresholdsConfig(ADC_TypeDef* ADCx, uint16_t HighThreshol
   * @brief  Configures the analog watchdog guarded single channel
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  ADC_AnalogWatchdog_Channel: the ADC channel to configure for the analog watchdog.
-  *   This parameter can be one of the following values:
-  *     @arg ADC_AnalogWatchdog_Channel_0: ADC Channel0 selected
-  *     @arg ADC_AnalogWatchdog_Channel_1: ADC Channel1 selected
-  *     @arg ADC_AnalogWatchdog_Channel_2: ADC Channel2 selected
-  *     @arg ADC_AnalogWatchdog_Channel_3: ADC Channel3 selected
-  *     @arg ADC_AnalogWatchdog_Channel_4: ADC Channel4 selected
-  *     @arg ADC_AnalogWatchdog_Channel_5: ADC Channel5 selected
-  *     @arg ADC_AnalogWatchdog_Channel_6: ADC Channel6 selected
-  *     @arg ADC_AnalogWatchdog_Channel_7: ADC Channel7 selected
-  *     @arg ADC_AnalogWatchdog_Channel_8: ADC Channel8 selected
-  *     @arg ADC_AnalogWatchdog_Channel_9: ADC Channel9 selected
-  *     @arg ADC_AnalogWatchdog_Channel_10: ADC Channel10 selected
-  *     @arg ADC_AnalogWatchdog_Channel_11: ADC Channel11 selected
-  *     @arg ADC_AnalogWatchdog_Channel_12: ADC Channel12 selected
-  *     @arg ADC_AnalogWatchdog_Channel_13: ADC Channel13 selected
-  *     @arg ADC_AnalogWatchdog_Channel_14: ADC Channel14 selected
-  *     @arg ADC_AnalogWatchdog_Channel_15: ADC Channel15 selected
-  *     @arg ADC_AnalogWatchdog_Channel_16: ADC Channel16 selected
-  *     @arg ADC_AnalogWatchdog_Channel_17: ADC Channel17 selected
-  *     @arg ADC_AnalogWatchdog_Channel_18: ADC Channel18 selected
+  *          This parameter can be one of the following values:
+  *            @arg ADC_AnalogWatchdog_Channel_0: ADC Channel0 selected
+  *            @arg ADC_AnalogWatchdog_Channel_1: ADC Channel1 selected
+  *            @arg ADC_AnalogWatchdog_Channel_2: ADC Channel2 selected
+  *            @arg ADC_AnalogWatchdog_Channel_3: ADC Channel3 selected
+  *            @arg ADC_AnalogWatchdog_Channel_4: ADC Channel4 selected
+  *            @arg ADC_AnalogWatchdog_Channel_5: ADC Channel5 selected
+  *            @arg ADC_AnalogWatchdog_Channel_6: ADC Channel6 selected
+  *            @arg ADC_AnalogWatchdog_Channel_7: ADC Channel7 selected
+  *            @arg ADC_AnalogWatchdog_Channel_8: ADC Channel8 selected
+  *            @arg ADC_AnalogWatchdog_Channel_9: ADC Channel9 selected
+  *            @arg ADC_AnalogWatchdog_Channel_10: ADC Channel10 selected, not available for STM32F031 devices
+  *            @arg ADC_AnalogWatchdog_Channel_11: ADC Channel11 selected, not available for STM32F031 devices
+  *            @arg ADC_AnalogWatchdog_Channel_12: ADC Channel12 selected, not available for STM32F031 devices
+  *            @arg ADC_AnalogWatchdog_Channel_13: ADC Channel13 selected, not available for STM32F031 devices
+  *            @arg ADC_AnalogWatchdog_Channel_14: ADC Channel14 selected, not available for STM32F031 devices
+  *            @arg ADC_AnalogWatchdog_Channel_15: ADC Channel15 selected, not available for STM32F031 devices
+  *            @arg ADC_AnalogWatchdog_Channel_16: ADC Channel16 selected
+  *            @arg ADC_AnalogWatchdog_Channel_17: ADC Channel17 selected
+  *            @arg ADC_AnalogWatchdog_Channel_18: ADC Channel18 selected, not available for STM32F030 devices
   * @note   The channel selected on the AWDCH must be also set into the CHSELR 
   *         register 
   * @retval None
@@ -495,7 +517,7 @@ void ADC_AnalogWatchdogSingleChannelConfig(ADC_TypeDef* ADCx, uint32_t ADC_Analo
   * @brief  Enables or disables the ADC Analog Watchdog Single Channel.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the ADCx ADC Analog Watchdog Single Channel.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_AnalogWatchdogSingleChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -547,7 +569,7 @@ void ADC_AnalogWatchdogSingleChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewSt
 /**
   * @brief  Enables or disables the temperature sensor channel.
   * @param  NewState: new state of the temperature sensor input channel.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_TempSensorCmd(FunctionalState NewState)
@@ -570,7 +592,7 @@ void ADC_TempSensorCmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the Vrefint channel.
   * @param  NewState: new state of the Vref input channel.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_VrefintCmd(FunctionalState NewState)
@@ -591,9 +613,10 @@ void ADC_VrefintCmd(FunctionalState NewState)
 }
 
 /**
-  * @brief  Enables or disables the Vbat channel.
+  * @brief  Enables or disables the Vbat channel. 
+  * @note   This feature is not applicable for STM32F030 devices. 
   * @param  NewState: new state of the Vbat input channel.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_VbatCmd(FunctionalState NewState)
@@ -657,37 +680,36 @@ void ADC_VbatCmd(FunctionalState NewState)
   * @brief  Configures for the selected ADC and its sampling time.
   * @param  ADCx: where x can be 1 to select the ADC peripheral.
   * @param  ADC_Channel: the ADC channel to configure. 
-  *   This parameter can be any combination of the following values:
-  *     @arg ADC_Channel_0: ADC Channel0 selected
-  *     @arg ADC_Channel_1: ADC Channel1 selected
-  *     @arg ADC_Channel_2: ADC Channel2 selected
-  *     @arg ADC_Channel_3: ADC Channel3 selected
-  *     @arg ADC_Channel_4: ADC Channel4 selected
-  *     @arg ADC_Channel_5: ADC Channel5 selected
-  *     @arg ADC_Channel_6: ADC Channel6 selected
-  *     @arg ADC_Channel_7: ADC Channel7 selected
-  *     @arg ADC_Channel_8: ADC Channel8 selected
-  *     @arg ADC_Channel_9: ADC Channel9 selected
-  *     @arg ADC_Channel_10: ADC Channel10 selected
-  *     @arg ADC_Channel_11: ADC Channel11 selected
-  *     @arg ADC_Channel_12: ADC Channel12 selected
-  *     @arg ADC_Channel_13: ADC Channel13 selected
-  *     @arg ADC_Channel_14: ADC Channel14 selected
-  *     @arg ADC_Channel_15: ADC Channel15 selected
-  *     @arg ADC_Channel_16: ADC Channel16 selected
-  *     @arg ADC_Channel_17: ADC Channel17 selected
-  *     @arg ADC_Channel_18: ADC Channel18 selected    
-  * @param  ADC_SampleTime: The sample time value to be set for the selected 
-  *         channel. 
-  *   This parameter can be one of the following values:
-  *     @arg ADC_SampleTime_1_5Cycles: Sample time equal to 1.5 cycles  
-  *     @arg ADC_SampleTime_7_5Cycles: Sample time equal to 7.5 cycles
-  *     @arg ADC_SampleTime_13_5Cycles: Sample time equal to 13.5 cycles
-  *     @arg ADC_SampleTime_28_5Cycles: Sample time equal to 28.5 cycles
-  *     @arg ADC_SampleTime_41_5Cycles: Sample time equal to 41.5 cycles
-  *     @arg ADC_SampleTime_55_5Cycles: Sample time equal to 55.5 cycles
-  *     @arg ADC_SampleTime_71_5Cycles: Sample time equal to 71.5 cycles
-  *     @arg ADC_SampleTime_239_5Cycles: Sample time equal to 239.5 cycles
+  *          This parameter can be any combination of the following values:
+  *            @arg ADC_Channel_0: ADC Channel0 selected
+  *            @arg ADC_Channel_1: ADC Channel1 selected
+  *            @arg ADC_Channel_2: ADC Channel2 selected
+  *            @arg ADC_Channel_3: ADC Channel3 selected
+  *            @arg ADC_Channel_4: ADC Channel4 selected
+  *            @arg ADC_Channel_5: ADC Channel5 selected
+  *            @arg ADC_Channel_6: ADC Channel6 selected
+  *            @arg ADC_Channel_7: ADC Channel7 selected
+  *            @arg ADC_Channel_8: ADC Channel8 selected
+  *            @arg ADC_Channel_9: ADC Channel9 selected
+  *            @arg ADC_Channel_10: ADC Channel10 selected, not available for STM32F031 devices
+  *            @arg ADC_Channel_11: ADC Channel11 selected, not available for STM32F031 devices
+  *            @arg ADC_Channel_12: ADC Channel12 selected, not available for STM32F031 devices
+  *            @arg ADC_Channel_13: ADC Channel13 selected, not available for STM32F031 devices
+  *            @arg ADC_Channel_14: ADC Channel14 selected, not available for STM32F031 devices
+  *            @arg ADC_Channel_15: ADC Channel15 selected, not available for STM32F031 devices
+  *            @arg ADC_Channel_16: ADC Channel16 selected
+  *            @arg ADC_Channel_17: ADC Channel17 selected
+  *            @arg ADC_Channel_18: ADC Channel18 selected, not available for STM32F030 devices
+  * @param  ADC_SampleTime: The sample time value to be set for the selected channel. 
+  *          This parameter can be one of the following values:
+  *            @arg ADC_SampleTime_1_5Cycles: Sample time equal to 1.5 cycles  
+  *            @arg ADC_SampleTime_7_5Cycles: Sample time equal to 7.5 cycles
+  *            @arg ADC_SampleTime_13_5Cycles: Sample time equal to 13.5 cycles
+  *            @arg ADC_SampleTime_28_5Cycles: Sample time equal to 28.5 cycles
+  *            @arg ADC_SampleTime_41_5Cycles: Sample time equal to 41.5 cycles
+  *            @arg ADC_SampleTime_55_5Cycles: Sample time equal to 55.5 cycles
+  *            @arg ADC_SampleTime_71_5Cycles: Sample time equal to 71.5 cycles
+  *            @arg ADC_SampleTime_239_5Cycles: Sample time equal to 239.5 cycles
   * @retval None
   */
 void ADC_ChannelConfig(ADC_TypeDef* ADCx, uint32_t ADC_Channel, uint32_t ADC_SampleTime)
@@ -716,7 +738,7 @@ void ADC_ChannelConfig(ADC_TypeDef* ADCx, uint32_t ADC_Channel, uint32_t ADC_Sam
   * @brief  Enable the Continuous mode for the selected ADCx channels.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the Continuous mode.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @note   It is not possible to have both discontinuous mode and continuous mode
   *         enabled. In this case (If DISCEN and CONT are Set), the ADC behaves 
   *         as if continuous mode was disabled
@@ -744,7 +766,7 @@ void ADC_ContinuousModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Enable the discontinuous mode for the selected ADC channels.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the discontinuous mode.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @note   It is not possible to have both discontinuous mode and continuous mode
   *         enabled. In this case (If DISCEN and CONT are Set), the ADC behaves 
   *         as if continuous mode was disabled
@@ -772,7 +794,7 @@ void ADC_DiscModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Enable the Overrun mode for the selected ADC channels.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the Overrun mode.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_OverrunModeCmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -906,7 +928,7 @@ uint16_t ADC_GetConversionValue(ADC_TypeDef* ADCx)
   * @brief  Enables or disables the specified ADC DMA request.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  NewState: new state of the selected ADC DMA transfer.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
@@ -931,9 +953,9 @@ void ADC_DMACmd(ADC_TypeDef* ADCx, FunctionalState NewState)
   * @brief  Enables or disables the ADC DMA request after last transfer (Single-ADC mode)
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  ADC_DMARequestMode: the ADC channel to configure. 
-  *   This parameter can be one of the following values:
-  *     @arg ADC_DMAMode_OneShot  : DMA One Shot Mode 
-  *     @arg ADC_DMAMode_Circular : DMA Circular Mode  
+  *          This parameter can be one of the following values:
+  *            @arg ADC_DMAMode_OneShot: DMA One Shot Mode 
+  *            @arg ADC_DMAMode_Circular: DMA Circular Mode  
   *  @retval None
   */
 void ADC_DMARequestModeConfig(ADC_TypeDef* ADCx, uint32_t ADC_DMARequestMode)
@@ -1033,15 +1055,15 @@ void ADC_DMARequestModeConfig(ADC_TypeDef* ADCx, uint32_t ADC_DMARequestMode)
   * @brief  Enables or disables the specified ADC interrupts.
   * @param  ADCx: where x can be 1 to select the ADC peripheral.
   * @param  ADC_IT: specifies the ADC interrupt sources to be enabled or disabled.
-  *   This parameter can be one of the following values:
-  *     @arg ADC_IT_ADRDY: ADC ready interrupt 
-  *     @arg ADC_IT_EOSMP: End of sampling interrupt
-  *     @arg ADC_IT_EOC: End of conversion interrupt 
-  *     @arg ADC_IT_EOSEQ: End of sequence of conversion interrupt
-  *     @arg ADC_IT_OVR: overrun interrupt
-  *     @arg ADC_IT_AWD: Analog watchdog interrupt
+  *          This parameter can be one of the following values:
+  *            @arg ADC_IT_ADRDY: ADC ready interrupt 
+  *            @arg ADC_IT_EOSMP: End of sampling interrupt
+  *            @arg ADC_IT_EOC: End of conversion interrupt 
+  *            @arg ADC_IT_EOSEQ: End of sequence of conversion interrupt
+  *            @arg ADC_IT_OVR: overrun interrupt
+  *            @arg ADC_IT_AWD: Analog watchdog interrupt
   * @param  NewState: new state of the specified ADC interrupts.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void ADC_ITConfig(ADC_TypeDef* ADCx, uint32_t ADC_IT, FunctionalState NewState)
@@ -1067,18 +1089,18 @@ void ADC_ITConfig(ADC_TypeDef* ADCx, uint32_t ADC_IT, FunctionalState NewState)
   * @brief  Checks whether the specified ADC flag is set or not.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  ADC_FLAG: specifies the flag to check. 
-  *   This parameter can be one of the following values:
-  *     @arg ADC_FLAG_AWD: Analog watchdog flag
-  *     @arg ADC_FLAG_OVR: Overrun flag 
-  *     @arg ADC_FLAG_EOSEQ: End of Sequence flag
-  *     @arg ADC_FLAG_EOC: End of conversion flag
-  *     @arg ADC_FLAG_EOSMP: End of sampling flag
-  *     @arg ADC_FLAG_ADRDY: ADC Ready flag
-  *     @arg ADC_FLAG_ADEN: ADC enable flag 
-  *     @arg ADC_FLAG_ADDIS: ADC disable flag 
-  *     @arg ADC_FLAG_ADSTART: ADC start flag 
-  *     @arg ADC_FLAG_ADSTP: ADC stop flag
-  *     @arg ADC_FLAG_ADCAL: ADC Calibration flag
+  *          This parameter can be one of the following values:
+  *            @arg ADC_FLAG_AWD: Analog watchdog flag
+  *            @arg ADC_FLAG_OVR: Overrun flag 
+  *            @arg ADC_FLAG_EOSEQ: End of Sequence flag
+  *            @arg ADC_FLAG_EOC: End of conversion flag
+  *            @arg ADC_FLAG_EOSMP: End of sampling flag
+  *            @arg ADC_FLAG_ADRDY: ADC Ready flag
+  *            @arg ADC_FLAG_ADEN: ADC enable flag 
+  *            @arg ADC_FLAG_ADDIS: ADC disable flag 
+  *            @arg ADC_FLAG_ADSTART: ADC start flag 
+  *            @arg ADC_FLAG_ADSTP: ADC stop flag
+  *            @arg ADC_FLAG_ADCAL: ADC Calibration flag
   * @retval The new state of ADC_FLAG (SET or RESET).
   */
 FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint32_t ADC_FLAG)
@@ -1118,13 +1140,13 @@ FlagStatus ADC_GetFlagStatus(ADC_TypeDef* ADCx, uint32_t ADC_FLAG)
   * @brief  Clears the ADCx's pending flags.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  ADC_FLAG: specifies the flag to clear. 
-  *   This parameter can be any combination of the following values:
-  *     @arg ADC_FLAG_AWD: Analog watchdog flag
-  *     @arg ADC_FLAG_EOC: End of conversion flag
-  *     @arg ADC_FLAG_ADRDY: ADC Ready flag
-  *     @arg ADC_FLAG_EOSMP: End of sampling flag
-  *     @arg ADC_FLAG_EOSEQ: End of Sequence flag
-  *     @arg ADC_FLAG_OVR: Overrun flag 
+  *          This parameter can be any combination of the following values:
+  *            @arg ADC_FLAG_AWD: Analog watchdog flag
+  *            @arg ADC_FLAG_EOC: End of conversion flag
+  *            @arg ADC_FLAG_ADRDY: ADC Ready flag
+  *            @arg ADC_FLAG_EOSMP: End of sampling flag
+  *            @arg ADC_FLAG_EOSEQ: End of Sequence flag
+  *            @arg ADC_FLAG_OVR: Overrun flag 
   * @retval None
   */
 void ADC_ClearFlag(ADC_TypeDef* ADCx, uint32_t ADC_FLAG)
@@ -1141,13 +1163,13 @@ void ADC_ClearFlag(ADC_TypeDef* ADCx, uint32_t ADC_FLAG)
   * @brief  Checks whether the specified ADC interrupt has occurred or not.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral
   * @param  ADC_IT: specifies the ADC interrupt source to check.
-  *   This parameter can be one of the following values:
-  *     @arg ADC_IT_ADRDY: ADC ready interrupt 
-  *     @arg ADC_IT_EOSMP: End of sampling interrupt
-  *     @arg ADC_IT_EOC: End of conversion interrupt 
-  *     @arg ADC_IT_EOSEQ: End of sequence of conversion interrupt
-  *     @arg ADC_IT_OVR: overrun interrupt
-  *     @arg ADC_IT_AWD: Analog watchdog interrupt
+  *          This parameter can be one of the following values:
+  *            @arg ADC_IT_ADRDY: ADC ready interrupt 
+  *            @arg ADC_IT_EOSMP: End of sampling interrupt
+  *            @arg ADC_IT_EOC: End of conversion interrupt 
+  *            @arg ADC_IT_EOSEQ: End of sequence of conversion interrupt
+  *            @arg ADC_IT_OVR: overrun interrupt
+  *            @arg ADC_IT_AWD: Analog watchdog interrupt
   * @retval The new state of ADC_IT (SET or RESET).
   */
 ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint32_t ADC_IT)
@@ -1181,13 +1203,13 @@ ITStatus ADC_GetITStatus(ADC_TypeDef* ADCx, uint32_t ADC_IT)
   * @brief  Clears the ADCx's interrupt pending bits.
   * @param  ADCx: where x can be 1 to select the ADC1 peripheral.
   * @param  ADC_IT: specifies the ADC interrupt pending bit to clear.
-  *   This parameter can be one of the following values:
-  *     @arg ADC_IT_ADRDY: ADC ready interrupt
-  *     @arg ADC_IT_EOSMP: End of sampling interrupt
-  *     @arg ADC_IT_EOC: End of conversion interrupt
-  *     @arg ADC_IT_EOSEQ: End of sequence of conversion interrupt
-  *     @arg ADC_IT_OVR: overrun interrupt
-  *     @arg ADC_IT_AWD: Analog watchdog interrupt
+  *          This parameter can be one of the following values:
+  *            @arg ADC_IT_ADRDY: ADC ready interrupt
+  *            @arg ADC_IT_EOSMP: End of sampling interrupt
+  *            @arg ADC_IT_EOC: End of conversion interrupt
+  *            @arg ADC_IT_EOSEQ: End of sequence of conversion interrupt
+  *            @arg ADC_IT_OVR: overrun interrupt
+  *            @arg ADC_IT_AWD: Analog watchdog interrupt
   * @retval None
   */
 void ADC_ClearITPendingBit(ADC_TypeDef* ADCx, uint32_t ADC_IT)

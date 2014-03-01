@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_gpio.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the GPIO 
   *          firmware library. 
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -51,6 +51,7 @@
                                     ((PERIPH) == GPIOB) || \
                                     ((PERIPH) == GPIOC) || \
                                     ((PERIPH) == GPIOD) || \
+                                    ((PERIPH) == GPIOE) || \
                                     ((PERIPH) == GPIOF))
 
 #define IS_GPIO_LIST_PERIPH(PERIPH) (((PERIPH) == GPIOA) || \
@@ -93,9 +94,9 @@ typedef enum
   */
 typedef enum
 {
-  GPIO_Speed_Level_1  = 0x01, /*!< Medium Speed */
-  GPIO_Speed_Level_2  = 0x02, /*!< Fast Speed   */
-  GPIO_Speed_Level_3  = 0x03  /*!< High Speed   */
+  GPIO_Speed_Level_1  = 0x00, /*!< I/O output speed: Low 2 MHz */
+  GPIO_Speed_Level_2  = 0x01, /*!< I/O output speed: Medium 10 MHz */
+  GPIO_Speed_Level_3  = 0x03  /*!< I/O output speed: High 50 MHz */
 }GPIOSpeed_TypeDef;
 
 #define IS_GPIO_SPEED(SPEED) (((SPEED) == GPIO_Speed_Level_1) || ((SPEED) == GPIO_Speed_Level_2) || \
@@ -254,16 +255,20 @@ typedef struct
   */
 #define GPIO_AF_0            ((uint8_t)0x00) /* WKUP, EVENTOUT, TIM15, SPI1, TIM17,
                                                 MCO, SWDAT, SWCLK, TIM14, BOOT,
-                                                USART1, CEC, IR_OUT, SPI2 */
+                                                USART1, CEC, IR_OUT, SPI2, TS, TIM3,
+                                                USART4, CAN, TIM3, USART2, USART3, 
+                                                CRS, TIM16, TIM1 */
 /** 
   * @brief  AF 1 selection
   */
-#define GPIO_AF_1            ((uint8_t)0x01) /* USART2, CEC, Tim3, USART1, USART2,
-                                                EVENTOUT, I2C1, I2C2, TIM15 */
+#define GPIO_AF_1            ((uint8_t)0x01) /* USART2, CEC, TIM3, USART1, IR,
+                                                EVENTOUT, I2C1, I2C2, TIM15, SPI2,
+                                                USART3, TS, SPI1 */
 /** 
   * @brief  AF 2 selection
   */
-#define GPIO_AF_2            ((uint8_t)0x02) /* TIM2, TIM1, EVENTOUT, TIM16, TIM17 */
+#define GPIO_AF_2            ((uint8_t)0x02) /* TIM2, TIM1, EVENTOUT, TIM16, TIM17,
+                                                USB */
 /** 
   * @brief  AF 3 selection
   */
@@ -272,11 +277,14 @@ typedef struct
 /** 
   * @brief  AF 4 selection
   */
-#define GPIO_AF_4            ((uint8_t)0x04) /* TIM14 */
+#define GPIO_AF_4            ((uint8_t)0x04) /* TIM14, USART4, USART3, CRS, CAN,
+                                                I2C1 */
+
 /** 
   * @brief  AF 5 selection
   */
-#define GPIO_AF_5            ((uint8_t)0x05) /* TIM16, TIM17 */
+#define GPIO_AF_5            ((uint8_t)0x05) /* TIM16, TIM17, TIM15, SPI2, I2C2, 
+                                                MCO, I2C1, USB */
 
 /** 
   * @brief  AF 6 selection
@@ -300,10 +308,10 @@ typedef struct
   * @{
   */
 
-#define GPIO_Speed_10MHz GPIO_Speed_Level_1   /*!< Fast Speed:10MHz   */
-#define GPIO_Speed_2MHz  GPIO_Speed_Level_2   /*!< Medium Speed:2MHz  */
-#define GPIO_Speed_50MHz GPIO_Speed_Level_3   /*!< High Speed:50MHz   */
-
+#define GPIO_Speed_2MHz  GPIO_Speed_Level_1   /*!< I/O output speed: Low 2 MHz  */
+#define GPIO_Speed_10MHz GPIO_Speed_Level_2   /*!< I/O output speed: Medium 10 MHz */
+#define GPIO_Speed_50MHz GPIO_Speed_Level_3   /*!< I/O output speed: High 50 MHz */
+  
 /**
   * @}
   */

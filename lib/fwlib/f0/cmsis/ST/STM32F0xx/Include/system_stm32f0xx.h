@@ -1,15 +1,14 @@
-#if defined (STM32PLUS_F0)
 /**
   ******************************************************************************
   * @file    system_stm32f0xx.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.1
+  * @date    17-January-2014
   * @brief   CMSIS Cortex-M0 Device Peripheral Access Layer System Header File.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -103,4 +102,3 @@ extern void SystemCoreClockUpdate(void);
   * @}
   */  
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif
