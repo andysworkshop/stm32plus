@@ -11,10 +11,11 @@
  * This file gets you access to the STM32 ADC peripheral.
  */
 
-// adc depends on rcc, dma, meta-programming utils
+// adc depends on rcc, dma, meta-programming utils, smart ptr
 
 #include "config/rcc.h"
 #include "config/dma.h"
+#include "config/smartptr.h"
 #include "util/Meta.h"
 
 // peripheral includes
@@ -40,6 +41,8 @@
 #include "adc/features/AdcScanModeFeature.h"
 #include "adc/features/AdcTriggerFeature.h"
 #include "adc/features/AdcMultiFeature.h"
+#include "adc/features/AdcDualFeature.h"
+#include "adc/features/AdcTripleFeature.h"
 
 // device specific feature includes
 

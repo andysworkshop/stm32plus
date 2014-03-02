@@ -155,6 +155,7 @@
   #include "dma/features/f4/DmaFsmcLcdMemoryCopyFeature.h"
   #include "dma/features/f4/DacDmaWriterFeature.h"
   #include "dma/features/f4/AdcDmaFeature.h"
+  #include "dma/features/f4/MultiAdcDmaFeature.h"
 
   #include "dma/features/f4/DmaPeripheralInfo.h"
 

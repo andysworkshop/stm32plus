@@ -11,6 +11,17 @@ namespace stm32plus {
 
 
   /**
+   * ADC operating mode. One of these gets passed to the Adc constructor so that we
+   * know not to call the common-init function for slave ADCs in multi-mode
+   */
+
+  enum class AdcOperatingMode : uint8_t {
+    SINGLE_ADC,   //!< SINGLE_ADC
+    MULTI_ADC     //!< MULTI_ADC
+  };
+
+
+  /**
    * Non-template base class for the ADC peripheral
    */
 
@@ -21,12 +32,13 @@ namespace stm32plus {
      ADC_CommonInitTypeDef *_commonInit;
      ADC_InitTypeDef *_init;
      uint8_t _injectedChannelCount;
+     AdcOperatingMode _operatingMode;
 
      static uint8_t _regularChannelRank[3];        // we can have multiple channel feature instances and multiple ADCs
      static uint8_t _injectedChannelRank[3];
 
     public:
-      Adc(ADC_TypeDef *peripheralAddress);
+      Adc(ADC_TypeDef *peripheralAddress,AdcOperatingMode operatingMode);
 
       void enablePeripheral() const;
       void disablePeripheral() const;
@@ -58,8 +70,9 @@ namespace stm32plus {
    * @param peripheralAddress The peripheral address
    */
 
-  inline Adc::Adc(ADC_TypeDef *peripheralAddress)
-    : _peripheralAddress(peripheralAddress) {
+  inline Adc::Adc(ADC_TypeDef *peripheralAddress,AdcOperatingMode operatingMode)
+    : _peripheralAddress(peripheralAddress),
+      _operatingMode(operatingMode) {
 
     // initialise the ranks back to 1 so that the channel features are ready
 

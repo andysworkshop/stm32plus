@@ -15,35 +15,24 @@ using namespace stm32plus;
 
 
 /**
- * This example adds DMA and multi-channel conversion to the mix. We'll use ADC1 to convert
- * three channels plus the internal temperature automatically and in sequence and we'll
- * write out the results to the USART for you to see.
- *
- * The ADC is configured in 'scan mode' which means that it will convert all the configured
- * channels and, because we are not using continuous mode, it will stop at the end of the
- * group. The DMA channel for ADC1 is used to move the converted channel data out to SRAM.
- * We configure the 'complete' DMA interrupt to fire when the complete group has
- * finished converting. The converted data is written to the USART, we pause for a second
- * and then do it all again, ad infinitum.
+ * This example shows how to use two ADC peripherals simultaneously. ADC1 and ADC2 are used
+ * to convert channels 0,1 (ADC1) and 2,3 (ADC2) simultaneously. That is, channels 0 and 2
+ * are converted at the same time followed by channels 1 and 3. The order of the values in
+ * the 4-value output buffer will be channel [0,2,1,3].
  *
  * USART1 is configured with protocol settings of 57600/8/N/1. The ADC channels are read
  * from PA[0], PA[1], PA[2]. You will need to connect these GPIO inputs to valid levels
  * between GND and VREF to see conversion values.
  *
  * Compatible MCU:
- *   STM32F0
- *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
- *   STM32F100RBT6
- *   STM32F103ZET6
  *   STM32F407VGT6
- *   STM32F107VCT6
  */
 
 
-class AdcSingleDmaMultiChan {
+class AdcMultiDmaMultiChan {
 
   private:
     volatile bool _ready;
@@ -62,28 +51,38 @@ class AdcSingleDmaMultiChan {
       volatile uint16_t readBuffer[4];
 
       /*
-       * Declare the ADC1 DMA channel. The default is circular mode for the AdcDmaFeature
+       * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
        * which means that it wil automatically refill our buffer on each conversion because
        * one conversion exactly matches the size of the memory buffer that we will give
        * to the DMA peripheral.
        */
 
-      Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
+      Adc1DmaChannel<MultiAdcDmaMode1Feature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
       /*
-       * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
-       * 12 bits. We will use 144-cycle conversions on ADC channels 0,1 and a 480-cycle
-       * conversion on ADC channel 2. Scan mode is used with the default template parameter
-       * that causes EOC to be raised at the end of a complete conversion group.
+       * Declare the ADC1 peripheral with an APB2 clock prescaler of 2, a resolution of 12 bits.
+       * We will use 144-cycle conversions on ADC channels 0,1. Scan mode is used with the default
+       * template parameter that causes EOC to be raised at the end of a complete conversion group.
+       * ADC1 is the master so it must be the one that declares multi-mode. We're using
+       * 'regular-simultaneous' multi-mode with DMA mode 1 and a 5-cycle min delay between 2 conversions.
+       * The slave ADC (ADC2) is given as a type parameter to the dual ADC feature. This feature will
+       * take care of instantiating it as a slave at the appropriate time.
        */
 
       Adc1<
-        AdcClockPrescalerFeature<2>,                // prescaler of 2
-        AdcResolutionFeature<12>,                   // 12 bit resolution
-        Adc1Cycle144RegularChannelFeature<0,1>,     // using channels 0,1 on ADC1 with 144-cycle latency
-        Adc1Cycle480RegularChannelFeature<2>,       // using channel 2 on ADC1 with 480-cycle latency
-        Adc1Cycle480TemperatureSensorFeature,       // using the temperature sensor channel
-        AdcScanModeFeature<>                        // scan mode with EOC after each group
+        AdcClockPrescalerFeature<2>,                    // prescaler of 2
+        AdcResolutionFeature<12>,                       // 12 bit resolution
+        Adc1Cycle144RegularChannelFeature<0,1>,         // using channels 0,1 on ADC1 with 144-cycle latency
+        AdcScanModeFeature<>,                           // scan mode with EOC after each group
+        DualAdcRegularSimultaneousDmaMode1Feature<      // regular simultaneous multi mode
+          Adc2<                                         // the second ADC
+            AdcClockPrescalerFeature<2>,                // prescaler of 2
+            AdcResolutionFeature<12>,                   // 12 bit resolution
+            Adc2Cycle144RegularChannelFeature<2,3>,     // using channels 0,1 on ADC1 with 144-cycle latency
+            AdcScanModeFeature<>                        // scan mode with EOC after each group
+          >,
+          5                                             // 5 cycle min delay
+        >
       > adc;
 
       /*
@@ -91,7 +90,7 @@ class AdcSingleDmaMultiChan {
        */
 
       dma.DmaInterruptEventSender.insertSubscriber(
-          DmaInterruptEventSourceSlot::bind(this,&AdcSingleDmaMultiChan::onComplete)
+          DmaInterruptEventSourceSlot::bind(this,&AdcMultiDmaMultiChan::onComplete)
       );
 
       /*
@@ -143,8 +142,8 @@ class AdcSingleDmaMultiChan {
         outputStream << "Converted values are "
                      << StringUtil::Ascii(readBuffer[0]) << ", "
                      << StringUtil::Ascii(readBuffer[1]) << ", "
-                     << StringUtil::Ascii(readBuffer[2]) << ", temperature="
-                     << StringUtil::Ascii(adc.getTemperature(readBuffer[3])) << "\r\n";
+                     << StringUtil::Ascii(readBuffer[2]) << ", "
+                     << StringUtil::Ascii(readBuffer[3]) << "\r\n";
 
         // wait for a second before converting the next set of values
 
@@ -172,7 +171,7 @@ int main() {
 
   MillisecondTimer::initialise();
 
-  AdcSingleDmaMultiChan adc;
+  AdcMultiDmaMultiChan adc;
   adc.run();
 
   // not reached

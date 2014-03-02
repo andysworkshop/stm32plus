@@ -19,21 +19,11 @@ namespace stm32plus {
   template<PeripheralName TPeripheralName>
   class AdcPeripheral : public Adc {
 
-    public:
-
-      /**
-       * ADC parameters class
-       */
-
-      struct Parameters {
-
-      };
-
     protected:
       void initialisePeripheral();
 
     public:
-      AdcPeripheral(const Parameters& params);
+      AdcPeripheral(AdcOperatingMode operatingMode);
       ~AdcPeripheral();
   };
 
@@ -44,8 +34,8 @@ namespace stm32plus {
    */
 
   template<PeripheralName TPeripheralName>
-  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(const Parameters& /* params */)
-    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE) {
+  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(AdcOperatingMode operatingMode)
+    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE,operatingMode) {
   }
 
 
@@ -64,7 +54,9 @@ namespace stm32plus {
     // the features have been constructed and the common init structure customised
     // initialise it and free the memory it was using
 
-    ADC_CommonInit(_commonInit);
+    if(_operatingMode==AdcOperatingMode::SINGLE_ADC)
+      ADC_CommonInit(_commonInit);
+
     delete _commonInit;
 
     // and now the other init call

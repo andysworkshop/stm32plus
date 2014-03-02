@@ -24,8 +24,8 @@ namespace stm32plus {
      * @param params Initialisation parameters
      */
 
-    Adc1(const Parameters& params=Parameters())
-        : AdcPeripheral<PERIPHERAL_ADC1>(params),
+    Adc1(AdcOperatingMode operatingMode=AdcOperatingMode::SINGLE_ADC)
+        : AdcPeripheral<PERIPHERAL_ADC1>(operatingMode),
           Features(static_cast<Adc&>(*this))... {
 
       // this is the most-derived class and construction is now complete
