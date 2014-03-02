@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_exti.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the EXTI 
   *          firmware library
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -118,30 +118,49 @@ typedef struct
 #define EXTI_Line14      ((uint32_t)0x00004000)  /*!< External interrupt line 14 */
 #define EXTI_Line15      ((uint32_t)0x00008000)  /*!< External interrupt line 15 */
 #define EXTI_Line16      ((uint32_t)0x00010000)  /*!< External interrupt line 16 
-                                                      Connected to the PVD Output */
+                                                      Connected to the PVD Output, 
+                                                      not applicable for STM32F030 devices */
 #define EXTI_Line17      ((uint32_t)0x00020000)  /*!< Internal interrupt line 17 
                                                       Connected to the RTC Alarm 
                                                       event */
+#define EXTI_Line18      ((uint32_t)0x00040000)  /*!< Internal interrupt line 18 
+                                                      Connected to the USB
+                                                      event, only applicable for 
+                                                      STM32F072 devices */
 #define EXTI_Line19      ((uint32_t)0x00080000)  /*!< Internal interrupt line 19
                                                       Connected to the RTC Tamper
                                                       and Time Stamp events */
+#define EXTI_Line20      ((uint32_t)0x00100000)   /*!< Internal interrupt line 20
+                                                      Connected to the RTC wakeup
+                                                      event, only applicable for 
+                                                      STM32F072 devices  */ 
 #define EXTI_Line21      ((uint32_t)0x00200000)  /*!< Internal interrupt line 21
                                                       Connected to the Comparator 1
-                                                      event */
+                                                      event, only applicable for STM32F051
+                                                      ans STM32F072 devices */
 #define EXTI_Line22      ((uint32_t)0x00400000)  /*!< Internal interrupt line 22
                                                       Connected to the Comparator 2
-                                                      event */
+                                                      event, only applicable for STM32F051
+                                                      and STM32F072 devices */
 #define EXTI_Line23      ((uint32_t)0x00800000)  /*!< Internal interrupt line 23
                                                       Connected to the I2C1 wakeup
-                                                      event */
+                                                      event, not applicable for STM32F030 devices */
 #define EXTI_Line25      ((uint32_t)0x02000000)  /*!< Internal interrupt line 25
                                                       Connected to the USART1 wakeup
-                                                      event */
+                                                      event, not applicable for STM32F030 devices */
+#define EXTI_Line26      ((uint32_t)0x04000000)  /*!< Internal interrupt line 26
+                                                      Connected to the USART2 wakeup
+                                                      event, applicable only for 
+                                                      STM32F072 devices */
 #define EXTI_Line27      ((uint32_t)0x08000000)  /*!< Internal interrupt line 27
                                                       Connected to the CEC wakeup
-                                                      event */
-
-#define IS_EXTI_LINE(LINE) ((((LINE) & (uint32_t)0xF5140000) == 0x00) && ((LINE) != (uint16_t)0x00))
+                                                      event, applicable only for STM32F051
+                                                      and STM32F072 devices */
+#define EXTI_Line31      ((uint32_t)0x80000000)  /*!< Internal interrupt line 31
+                                                      Connected to the VDD USB monitor
+                                                      event, applicable only for 
+                                                      STM32F072 devices */
+#define IS_EXTI_LINE(LINE) ((((LINE) & (uint32_t)0x71000000) == 0x00) && ((LINE) != (uint16_t)0x00))
 
 #define IS_GET_EXTI_LINE(LINE) (((LINE) == EXTI_Line0) || ((LINE) == EXTI_Line1) || \
                                 ((LINE) == EXTI_Line2) || ((LINE) == EXTI_Line3) || \
@@ -152,8 +171,11 @@ typedef struct
                                 ((LINE) == EXTI_Line12) || ((LINE) == EXTI_Line13) || \
                                 ((LINE) == EXTI_Line14) || ((LINE) == EXTI_Line15) || \
                                 ((LINE) == EXTI_Line16) || ((LINE) == EXTI_Line17) || \
-                                ((LINE) == EXTI_Line19) || ((LINE) == EXTI_Line21) || \
-                                ((LINE) == EXTI_Line22))
+                                ((LINE) == EXTI_Line18) || ((LINE) == EXTI_Line19) || \
+                                ((LINE) == EXTI_Line20) || ((LINE) == EXTI_Line21) || \
+                                ((LINE) == EXTI_Line22) || ((LINE) == EXTI_Line23) || \
+                                ((LINE) == EXTI_Line25) || ((LINE) == EXTI_Line26) || \
+                                ((LINE) == EXTI_Line27) || ((LINE) == EXTI_Line31))
 
 /**
   * @}

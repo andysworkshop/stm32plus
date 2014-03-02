@@ -60,7 +60,7 @@ Working in Eclipse
 ------------------
 I do all my development in Eclipse Kepler using the CDT and the [GNU ARM Eclipse plugin](http://gnuarmeclipse.livius.net/blog/). The `.project` and `.cproject` files for the main library and all the examples are included. You can use Eclipse's import option on the root checkout directory to bring them all into your workspace in one go. I recommend that you create a _working set_ to contain all the stm32plus projects because there's a lot of them.
 
-I recommend version *1.7.1.20141111229* of the GNU ARM Eclipse plugin with Eclipse Kepler. That's the combination that I use in day-to-day development and the `.project` and `.cproject` will work with that version.
+I recommend version *1.8.1-201401111229* of the GNU ARM Eclipse plugin with Eclipse Kepler. That's the combination that I use in day-to-day development and the `.project` and `.cproject` will work with that version.
 
 The example projects are configured to use the external `cs-make` builder. Linux users should change this to 'Internal builder' in the 'C/C++ Build' project properties page.    
 

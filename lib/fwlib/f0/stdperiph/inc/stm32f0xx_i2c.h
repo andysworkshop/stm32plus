@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_i2c.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the I2C firmware
   *          library
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -410,10 +410,10 @@ void I2C_DeInit(I2C_TypeDef* I2Cx);
 void I2C_Init(I2C_TypeDef* I2Cx, I2C_InitTypeDef* I2C_InitStruct);
 void I2C_StructInit(I2C_InitTypeDef* I2C_InitStruct);
 void I2C_Cmd(I2C_TypeDef* I2Cx, FunctionalState NewState);
-void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx, FunctionalState NewState);
+void I2C_SoftwareResetCmd(I2C_TypeDef* I2Cx);
 void I2C_ITConfig(I2C_TypeDef* I2Cx, uint32_t I2C_IT, FunctionalState NewState);
 void I2C_StretchClockCmd(I2C_TypeDef* I2Cx, FunctionalState NewState);
-void I2C_StopModeCmd(I2C_TypeDef* I2Cx, FunctionalState NewState);
+void I2C_StopModeCmd(I2C_TypeDef* I2Cx, FunctionalState NewState); /*!< not applicable for STM32F030 devices */
 void I2C_DualAddressCmd(I2C_TypeDef* I2Cx, FunctionalState NewState);
 void I2C_OwnAddress2Config(I2C_TypeDef* I2Cx, uint16_t Address, uint8_t Mask);
 void I2C_GeneralCallCmd(I2C_TypeDef* I2Cx, FunctionalState NewState);

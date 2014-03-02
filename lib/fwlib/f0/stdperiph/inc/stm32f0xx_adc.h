@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_adc.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the ADC firmware 
   *          library
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -88,10 +88,25 @@ typedef struct
 /** @defgroup ADC_JitterOff
   * @{
   */ 
+/* These defines are obsolete and maintained for legacy purpose only. They are replaced  by the ADC_ClockMode */  
 #define ADC_JitterOff_PCLKDiv2                    ADC_CFGR2_JITOFFDIV2
 #define ADC_JitterOff_PCLKDiv4                    ADC_CFGR2_JITOFFDIV4
 
 #define IS_ADC_JITTEROFF(JITTEROFF) (((JITTEROFF) & 0x3FFFFFFF) == (uint32_t)RESET)
+
+/**
+  * @}
+  */
+  
+/** @defgroup ADC_ClockMode
+  * @{
+  */ 
+#define ADC_ClockMode_AsynClk                  ((uint32_t)0x00000000)   /*!< ADC Asynchronous clock mode */
+#define ADC_ClockMode_SynClkDiv2               ADC_CFGR2_CKMODE_0   /*!<  Synchronous clock mode divided by 2 */
+#define ADC_ClockMode_SynClkDiv4               ADC_CFGR2_CKMODE_1   /*!<  Synchronous clock mode divided by 4 */
+#define IS_ADC_CLOCKMODE(CLOCK) (((CLOCK) == ADC_ClockMode_AsynClk) ||\
+				                        ((CLOCK) == ADC_ClockMode_SynClkDiv2) ||\
+				                        ((CLOCK) == ADC_ClockMode_SynClkDiv4))
 
 /**
   * @}
@@ -182,7 +197,7 @@ typedef struct
   * @}
   */ 
 
-/** @defgroup ADC_Scan_Direction 
+/** @defgroup ADC_DMA_Mode 
   * @{
   */ 
   
@@ -209,12 +224,12 @@ typedef struct
 #define ADC_AnalogWatchdog_Channel_7                 ((uint32_t)0x1C000000)
 #define ADC_AnalogWatchdog_Channel_8                 ((uint32_t)0x20000000)
 #define ADC_AnalogWatchdog_Channel_9                 ((uint32_t)0x24000000)
-#define ADC_AnalogWatchdog_Channel_10                ((uint32_t)0x28000000)
-#define ADC_AnalogWatchdog_Channel_11                ((uint32_t)0x2C000000)
-#define ADC_AnalogWatchdog_Channel_12                ((uint32_t)0x30000000)
-#define ADC_AnalogWatchdog_Channel_13                ((uint32_t)0x34000000)
-#define ADC_AnalogWatchdog_Channel_14                ((uint32_t)0x38000000)
-#define ADC_AnalogWatchdog_Channel_15                ((uint32_t)0x3C000000)
+#define ADC_AnalogWatchdog_Channel_10                ((uint32_t)0x28000000) /*!< Not available for STM32F031 devices */
+#define ADC_AnalogWatchdog_Channel_11                ((uint32_t)0x2C000000) /*!< Not available for STM32F031 devices */
+#define ADC_AnalogWatchdog_Channel_12                ((uint32_t)0x30000000) /*!< Not available for STM32F031 devices */
+#define ADC_AnalogWatchdog_Channel_13                ((uint32_t)0x34000000) /*!< Not available for STM32F031 devices */
+#define ADC_AnalogWatchdog_Channel_14                ((uint32_t)0x38000000) /*!< Not available for STM32F031 devices */
+#define ADC_AnalogWatchdog_Channel_15                ((uint32_t)0x3C000000) /*!< Not available for STM32F031 devices */
 #define ADC_AnalogWatchdog_Channel_16                ((uint32_t)0x40000000)
 #define ADC_AnalogWatchdog_Channel_17                ((uint32_t)0x44000000)
 #define ADC_AnalogWatchdog_Channel_18                ((uint32_t)0x48000000)
@@ -292,19 +307,19 @@ typedef struct
 #define ADC_Channel_7                              ADC_CHSELR_CHSEL7
 #define ADC_Channel_8                              ADC_CHSELR_CHSEL8
 #define ADC_Channel_9                              ADC_CHSELR_CHSEL9
-#define ADC_Channel_10                             ADC_CHSELR_CHSEL10
-#define ADC_Channel_11                             ADC_CHSELR_CHSEL11
-#define ADC_Channel_12                             ADC_CHSELR_CHSEL12
-#define ADC_Channel_13                             ADC_CHSELR_CHSEL13
-#define ADC_Channel_14                             ADC_CHSELR_CHSEL14
-#define ADC_Channel_15                             ADC_CHSELR_CHSEL15
+#define ADC_Channel_10                             ADC_CHSELR_CHSEL10 /*!< Not available for STM32F031 devices */
+#define ADC_Channel_11                             ADC_CHSELR_CHSEL11 /*!< Not available for STM32F031 devices */
+#define ADC_Channel_12                             ADC_CHSELR_CHSEL12 /*!< Not available for STM32F031 devices */
+#define ADC_Channel_13                             ADC_CHSELR_CHSEL13 /*!< Not available for STM32F031 devices */
+#define ADC_Channel_14                             ADC_CHSELR_CHSEL14 /*!< Not available for STM32F031 devices */
+#define ADC_Channel_15                             ADC_CHSELR_CHSEL15 /*!< Not available for STM32F031 devices */
 #define ADC_Channel_16                             ADC_CHSELR_CHSEL16
 #define ADC_Channel_17                             ADC_CHSELR_CHSEL17
-#define ADC_Channel_18                             ADC_CHSELR_CHSEL18
+#define ADC_Channel_18                             ADC_CHSELR_CHSEL18 /*!< Not available for STM32F030 devices */
 
 #define ADC_Channel_TempSensor                     ((uint32_t)ADC_Channel_16)
 #define ADC_Channel_Vrefint                        ((uint32_t)ADC_Channel_17)
-#define ADC_Channel_Vbat                           ((uint32_t)ADC_Channel_18)
+#define ADC_Channel_Vbat                           ((uint32_t)ADC_Channel_18) /*!< Not available for STM32F030 devices */
 
 #define IS_ADC_CHANNEL(CHANNEL) (((CHANNEL) != (uint32_t)RESET) && (((CHANNEL) & 0xFFF80000) == (uint32_t)RESET))
 
@@ -349,16 +364,16 @@ typedef struct
 #define ADC_FLAG_ADEN                              ((uint32_t)0x01000001)
 #define ADC_FLAG_ADDIS                             ((uint32_t)0x01000002)
 #define ADC_FLAG_ADSTART                           ((uint32_t)0x01000004)
-#define ADC_FLAG_ADSTP                             ((uint32_t)0x01000008)
-#define ADC_FLAG_ADCAL                             ((uint32_t)0x11000000)
+#define ADC_FLAG_ADSTP                             ((uint32_t)0x01000010)
+#define ADC_FLAG_ADCAL                             ((uint32_t)0x81000000) 
 
-#define IS_ADC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET) && (((FLAG) & 0xEFFFFF60) == (uint32_t)RESET))
+#define IS_ADC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET) && (((FLAG) & 0xFFFFFF60) == (uint32_t)RESET))
 
 #define IS_ADC_GET_FLAG(FLAG) (((FLAG) == ADC_FLAG_ADRDY)   || ((FLAG) == ADC_FLAG_EOSMP) || \
-                               ((FLAG) == ADC_FLAG_EOC)     || ((FLAG)== ADC_FLAG_EOSEQ) || \
-                               ((FLAG) == ADC_FLAG_AWD)     || ((FLAG)== ADC_FLAG_OVR) || \
-                               ((FLAG) == ADC_FLAG_ADEN)    || ((FLAG)== ADC_FLAG_ADDIS) || \
-                               ((FLAG) == ADC_FLAG_ADSTART) || ((FLAG)== ADC_FLAG_ADSTP) || \
+                               ((FLAG) == ADC_FLAG_EOC)     || ((FLAG) == ADC_FLAG_EOSEQ) || \
+                               ((FLAG) == ADC_FLAG_AWD)     || ((FLAG) == ADC_FLAG_OVR)   || \
+                               ((FLAG) == ADC_FLAG_ADEN)    || ((FLAG) == ADC_FLAG_ADDIS) || \
+                               ((FLAG) == ADC_FLAG_ADSTART) || ((FLAG) == ADC_FLAG_ADSTP) || \
                                ((FLAG) == ADC_FLAG_ADCAL))
 /**
   * @}
@@ -377,8 +392,11 @@ void ADC_DeInit(ADC_TypeDef* ADCx);
 /* Initialization and Configuration functions *********************************/ 
 void ADC_Init(ADC_TypeDef* ADCx, ADC_InitTypeDef* ADC_InitStruct);
 void ADC_StructInit(ADC_InitTypeDef* ADC_InitStruct);
-void ADC_JitterCmd(ADC_TypeDef* ADCx, uint32_t ADC_JitterOff, FunctionalState NewState);
+void ADC_ClockModeConfig(ADC_TypeDef* ADCx, uint32_t ADC_ClockMode);
 void ADC_Cmd(ADC_TypeDef* ADCx, FunctionalState NewState);
+/* This Function is obsolete and maintained for legacy purpose only.
+   ADC_ClockModeConfig() function should be used instead */
+void ADC_JitterCmd(ADC_TypeDef* ADCx, uint32_t ADC_JitterOff, FunctionalState NewState);
 
 /* Power saving functions *****************************************************/
 void ADC_AutoPowerOffCmd(ADC_TypeDef* ADCx, FunctionalState NewState);
@@ -393,7 +411,7 @@ void ADC_AnalogWatchdogSingleChannelCmd(ADC_TypeDef* ADCx, FunctionalState NewSt
 /* Temperature Sensor , Vrefint and Vbat management function ******************/
 void ADC_TempSensorCmd(FunctionalState NewState);
 void ADC_VrefintCmd(FunctionalState NewState);
-void ADC_VbatCmd(FunctionalState NewState);
+void ADC_VbatCmd(FunctionalState NewState); /*!< Not applicable for STM32F030 devices */
 
 /* Channels Configuration functions *******************************************/
 void ADC_ChannelConfig(ADC_TypeDef* ADCx, uint32_t ADC_Channel, uint32_t ADC_SampleTime);

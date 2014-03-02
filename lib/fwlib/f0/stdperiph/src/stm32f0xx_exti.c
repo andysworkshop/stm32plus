@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_exti.c
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the EXTI peripheral:
   *           + Initialization and Configuration
@@ -17,14 +17,18 @@
     [..] External interrupt/event lines are mapped as following:
          (#) All available GPIO pins are connected to the 16 external 
              interrupt/event lines from EXTI0 to EXTI15.
-         (#) EXTI line 16 is connected to the PVD output.
+         (#) EXTI line 16 is connected to the PVD output, not applicable for STM32F030 devices.
          (#) EXTI line 17 is connected to the RTC Alarm event.
-         (#) EXTI line 19 is connected to the RTC Tamper and TimeStamp events
-         (#) EXTI line 21 is connected to the Comparator 1 wakeup event 
-         (#) EXTI line 22 is connected to the Comparator 2 wakeup event
-         (#) EXTI line 23 is connected to the I2C1 wakeup event
-         (#) EXTI line 25 is connected to the USART1 wakeup event
-         (#) EXTI line 27 is connected to the CEC wakeup event
+         (#) EXTI line 18 is connected to the RTC Alarm event, applicable only for STM32F072 devices.
+         (#) EXTI line 19 is connected to the RTC Tamper and TimeStamp events.
+         (#) EXTI line 20 is connected to the RTC wakeup event, applicable only for STM32F072 devices.
+         (#) EXTI line 21 is connected to the Comparator 1 wakeup event, applicable only for STM32F051 and STM32F072 devices. 
+         (#) EXTI line 22 is connected to the Comparator 2 wakeup event, applicable only for STM32F051 and STM32F072 devices.
+         (#) EXTI line 23 is connected to the I2C1 wakeup event, not applicable for STM32F030 devices.
+         (#) EXTI line 25 is connected to the USART1 wakeup event, not applicable for STM32F030 devices.
+         (#) EXTI line 26 is connected to the USART2 wakeup event, applicable only for STM32F072 devices.
+         (#) EXTI line 27 is connected to the CEC wakeup event, applicable only for STM32F051 and STM32F072 devices.
+         (#) EXTI line 31 is connected to the VDD USB monitor event, applicable only for STM32F072 devices.
 
                        ##### How to use this driver ##### 
   ==============================================================================
@@ -46,7 +50,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -118,11 +122,6 @@ void EXTI_DeInit(void)
 /**
   * @brief  Initializes the EXTI peripheral according to the specified
   *         parameters in the EXTI_InitStruct.
-  *    EXTI_Line specifies the EXTI line (EXTI0....EXTI27).
-  *    EXTI_Mode specifies which EXTI line is used as interrupt or an event.
-  *    EXTI_Trigger selects the trigger. When the trigger occurs, interrupt
-  *                 pending bit will be set.
-  *    EXTI_LineCmd controls (Enable/Disable) the EXTI line.
   * @param  EXTI_InitStruct: pointer to a EXTI_InitTypeDef structure that 
   *         contains the configuration information for the EXTI peripheral.
   * @retval None
@@ -195,7 +194,7 @@ void EXTI_StructInit(EXTI_InitTypeDef* EXTI_InitStruct)
   * @brief  Generates a Software interrupt on selected EXTI line.
   * @param  EXTI_Line: specifies the EXTI line on which the software interrupt
   *         will be generated.
-  *   This parameter can be any combination of EXTI_Linex where x can be (0..19)
+  *          This parameter can be any combination of EXTI_Linex where x can be (0..27).
   * @retval None
   */
 void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
@@ -225,8 +224,7 @@ void EXTI_GenerateSWInterrupt(uint32_t EXTI_Line)
 /**
   * @brief  Checks whether the specified EXTI line flag is set or not.
   * @param  EXTI_Line: specifies the EXTI line flag to check.
-  *   This parameter can be:
-  *   EXTI_Linex: External interrupt line x where x(0..19).
+  *          This parameter can be EXTI_Linex where x can be (0..27).
   * @retval The new state of EXTI_Line (SET or RESET).
   */
 FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line)
@@ -249,7 +247,7 @@ FlagStatus EXTI_GetFlagStatus(uint32_t EXTI_Line)
 /**
   * @brief  Clears the EXTI's line pending flags.
   * @param  EXTI_Line: specifies the EXTI lines flags to clear.
-  *   This parameter can be any combination of EXTI_Linex where x can be (0..19)
+  *          This parameter can be any combination of EXTI_Linex where x can be (0..27).
   * @retval None
   */
 void EXTI_ClearFlag(uint32_t EXTI_Line)
@@ -263,19 +261,17 @@ void EXTI_ClearFlag(uint32_t EXTI_Line)
 /**
   * @brief  Checks whether the specified EXTI line is asserted or not.
   * @param  EXTI_Line: specifies the EXTI line to check.
-  *   This parameter can be:
-  *   EXTI_Linex: External interrupt line x where x(0..19).
+  *          This parameter can be EXTI_Linex where x can be (0..27).
   * @retval The new state of EXTI_Line (SET or RESET).
   */
 ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
 {
   ITStatus bitstatus = RESET;
-  uint32_t enablestatus = 0;
+
   /* Check the parameters */
   assert_param(IS_GET_EXTI_LINE(EXTI_Line));
 
-  enablestatus =  EXTI->IMR & EXTI_Line;
-  if (((EXTI->PR & EXTI_Line) != (uint32_t)RESET) && (enablestatus != (uint32_t)RESET))
+  if ((EXTI->PR & EXTI_Line) != (uint32_t)RESET)
   {
     bitstatus = SET;
   }
@@ -284,13 +280,12 @@ ITStatus EXTI_GetITStatus(uint32_t EXTI_Line)
     bitstatus = RESET;
   }
   return bitstatus;
-  
 }
 
 /**
   * @brief  Clears the EXTI's line pending bits.
   * @param  EXTI_Line: specifies the EXTI lines to clear.
-  *   This parameter can be any combination of EXTI_Linex where x can be (0..19).
+  *          This parameter can be any combination of EXTI_Linex where x can be (0..27).
   * @retval None
   */
 void EXTI_ClearITPendingBit(uint32_t EXTI_Line)

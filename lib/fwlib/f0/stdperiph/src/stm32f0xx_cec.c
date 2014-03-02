@@ -3,10 +3,11 @@
   ******************************************************************************
   * @file    stm32f0xx_cec.c
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file provides firmware functions to manage the following 
-  *          functionalities of the Consumer Electronics Control (CEC) peripheral:
+  *          functionalities of the Consumer Electronics Control (CEC) peripheral
+  *          applicable only on STM32F051, STM32F042 and STM32F072 devices:
   *            + Initialization and Configuration
   *            + Data transfers functions
   *            + Interrupts and flags management
@@ -72,7 +73,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -205,7 +206,7 @@ void CEC_StructInit(CEC_InitTypeDef* CEC_InitStruct)
 /**
   * @brief  Enables or disables the CEC peripheral.
   * @param  NewState: new state of the CEC peripheral.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void CEC_Cmd(FunctionalState NewState)
@@ -227,7 +228,7 @@ void CEC_Cmd(FunctionalState NewState)
 /**
   * @brief  Enables or disables the CEC Listen Mode.
   * @param  NewState: new state of the Listen Mode.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void CEC_ListenModeCmd(FunctionalState NewState)
@@ -326,7 +327,7 @@ void CEC_StartOfMessage(void)
 
 /**
   * @brief  Transmits message with an EOM bit.
-  * @param  None.
+  * @param  None
   * @retval None
   */
 void CEC_EndOfMessage(void)
@@ -411,22 +412,22 @@ void CEC_EndOfMessage(void)
 /**
   * @brief  Enables or disables the selected CEC interrupts.
   * @param  CEC_IT: specifies the CEC interrupt source to be enabled.
-  *         This parameter can be any combination of the following values:
-  *     @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
-  *     @arg CEC_IT_TXERR: Tx Error.
-  *     @arg CEC_IT_TXUDR: Tx-Buffer Underrun.
-  *     @arg CEC_IT_TXEND: End of Transmission (successful transmission of the last byte).
-  *     @arg CEC_IT_TXBR: Tx-Byte Request.
-  *     @arg CEC_IT_ARBLST: Arbitration Lost
-  *     @arg CEC_IT_RXACKE: Rx-Missing Acknowledge
-  *     @arg CEC_IT_LBPE: Rx Long period Error
-  *     @arg CEC_IT_SBPE: Rx Short period Error
-  *     @arg CEC_IT_BRE: Rx Bit Rising Error
-  *     @arg CEC_IT_RXOVR: Rx Overrun.
-  *     @arg CEC_IT_RXEND: End Of Reception
-  *     @arg CEC_IT_RXBR: Rx-Byte Received
+  *          This parameter can be any combination of the following values:
+  *            @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
+  *            @arg CEC_IT_TXERR: Tx Error.
+  *            @arg CEC_IT_TXUDR: Tx-Buffer Underrun.
+  *            @arg CEC_IT_TXEND: End of Transmission (successful transmission of the last byte).
+  *            @arg CEC_IT_TXBR: Tx-Byte Request.
+  *            @arg CEC_IT_ARBLST: Arbitration Lost
+  *            @arg CEC_IT_RXACKE: Rx-Missing Acknowledge
+  *            @arg CEC_IT_LBPE: Rx Long period Error
+  *            @arg CEC_IT_SBPE: Rx Short period Error
+  *            @arg CEC_IT_BRE: Rx Bit Rising Error
+  *            @arg CEC_IT_RXOVR: Rx Overrun.
+  *            @arg CEC_IT_RXEND: End Of Reception
+  *            @arg CEC_IT_RXBR: Rx-Byte Received
   * @param  NewState: new state of the selected CEC interrupts.
-  *         This parameter can be: ENABLE or DISABLE.
+  *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
 void CEC_ITConfig(uint16_t CEC_IT, FunctionalState NewState)
@@ -451,19 +452,19 @@ void CEC_ITConfig(uint16_t CEC_IT, FunctionalState NewState)
   * @brief  Gets the CEC flag status.
   * @param  CEC_FLAG: specifies the CEC flag to check.
   *     This parameter can be one of the following values:
-  *     @arg CEC_FLAG_TXACKE: Tx Missing acknowledge Error
-  *     @arg CEC_FLAG_TXERR: Tx Error.
-  *     @arg CEC_FLAG_TXUDR: Tx-Buffer Underrun.
-  *     @arg CEC_FLAG_TXEND: End of transmission (successful transmission of the last byte).
-  *     @arg CEC_FLAG_TXBR: Tx-Byte Request.
-  *     @arg CEC_FLAG_ARBLST: Arbitration Lost
-  *     @arg CEC_FLAG_RXACKE: Rx-Missing Acknowledge 
-  *     @arg CEC_FLAG_LBPE: Rx Long period Error
-  *     @arg CEC_FLAG_SBPE: Rx Short period Error
-  *     @arg CEC_FLAG_BRE: Rx Bit Rissing Error
-  *     @arg CEC_FLAG_RXOVR: Rx Overrun.
-  *     @arg CEC_FLAG_RXEND: End Of Reception.
-  *     @arg CEC_FLAG_RXBR: Rx-Byte Received.
+  *            @arg CEC_FLAG_TXACKE: Tx Missing acknowledge Error
+  *            @arg CEC_FLAG_TXERR: Tx Error.
+  *            @arg CEC_FLAG_TXUDR: Tx-Buffer Underrun.
+  *            @arg CEC_FLAG_TXEND: End of transmission (successful transmission of the last byte).
+  *            @arg CEC_FLAG_TXBR: Tx-Byte Request.
+  *            @arg CEC_FLAG_ARBLST: Arbitration Lost
+  *            @arg CEC_FLAG_RXACKE: Rx-Missing Acknowledge 
+  *            @arg CEC_FLAG_LBPE: Rx Long period Error
+  *            @arg CEC_FLAG_SBPE: Rx Short period Error
+  *            @arg CEC_FLAG_BRE: Rx Bit Rissing Error
+  *            @arg CEC_FLAG_RXOVR: Rx Overrun.
+  *            @arg CEC_FLAG_RXEND: End Of Reception.
+  *            @arg CEC_FLAG_RXBR: Rx-Byte Received.
   * @retval The new state of CEC_FLAG (SET or RESET)
   */
 FlagStatus CEC_GetFlagStatus(uint16_t CEC_FLAG) 
@@ -491,20 +492,20 @@ FlagStatus CEC_GetFlagStatus(uint16_t CEC_FLAG)
 /**
   * @brief  Clears the CEC's pending flags.
   * @param  CEC_FLAG: specifies the flag to clear. 
-  *   This parameter can be any combination of the following values:
-  *     @arg CEC_FLAG_TXACKE: Tx Missing acknowledge Error
-  *     @arg CEC_FLAG_TXERR: Tx Error
-  *     @arg CEC_FLAG_TXUDR: Tx-Buffer Underrun
-  *     @arg CEC_FLAG_TXEND: End of transmission (successful transmission of the last byte).
-  *     @arg CEC_FLAG_TXBR: Tx-Byte Request
-  *     @arg CEC_FLAG_ARBLST: Arbitration Lost
-  *     @arg CEC_FLAG_RXACKE: Rx Missing Acknowledge 
-  *     @arg CEC_FLAG_LBPE: Rx Long period Error
-  *     @arg CEC_FLAG_SBPE: Rx Short period Error
-  *     @arg CEC_FLAG_BRE: Rx Bit Rising Error
-  *     @arg CEC_FLAG_RXOVR: Rx Overrun
-  *     @arg CEC_FLAG_RXEND: End Of Reception
-  *     @arg CEC_FLAG_RXBR: Rx-Byte Received
+  *          This parameter can be any combination of the following values:
+  *            @arg CEC_FLAG_TXACKE: Tx Missing acknowledge Error
+  *            @arg CEC_FLAG_TXERR: Tx Error
+  *            @arg CEC_FLAG_TXUDR: Tx-Buffer Underrun
+  *            @arg CEC_FLAG_TXEND: End of transmission (successful transmission of the last byte).
+  *            @arg CEC_FLAG_TXBR: Tx-Byte Request
+  *            @arg CEC_FLAG_ARBLST: Arbitration Lost
+  *            @arg CEC_FLAG_RXACKE: Rx Missing Acknowledge 
+  *            @arg CEC_FLAG_LBPE: Rx Long period Error
+  *            @arg CEC_FLAG_SBPE: Rx Short period Error
+  *            @arg CEC_FLAG_BRE: Rx Bit Rising Error
+  *            @arg CEC_FLAG_RXOVR: Rx Overrun
+  *            @arg CEC_FLAG_RXEND: End Of Reception
+  *            @arg CEC_FLAG_RXBR: Rx-Byte Received
   * @retval None
   */
 void CEC_ClearFlag(uint32_t CEC_FLAG)
@@ -518,20 +519,20 @@ void CEC_ClearFlag(uint32_t CEC_FLAG)
 /**
   * @brief  Checks whether the specified CEC interrupt has occurred or not.
   * @param  CEC_IT: specifies the CEC interrupt source to check. 
-  *   This parameter can be one of the following values:
-  *     @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
-  *     @arg CEC_IT_TXERR: Tx Error.
-  *     @arg CEC_IT_TXUDR: Tx-Buffer Underrun.
-  *     @arg CEC_IT_TXEND: End of transmission (successful transmission of the last byte).
-  *     @arg CEC_IT_TXBR: Tx-Byte Request.
-  *     @arg CEC_IT_ARBLST: Arbitration Lost.
-  *     @arg CEC_IT_RXACKE: Rx-Missing Acknowledge.
-  *     @arg CEC_IT_LBPE: Rx Long period Error.
-  *     @arg CEC_IT_SBPE: Rx Short period Error.
-  *     @arg CEC_IT_BRE: Rx Bit Rising Error.
-  *     @arg CEC_IT_RXOVR: Rx Overrun.
-  *     @arg CEC_IT_RXEND: End Of Reception.
-  *     @arg CEC_IT_RXBR: Rx-Byte Received 
+  *          This parameter can be one of the following values:
+  *            @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
+  *            @arg CEC_IT_TXERR: Tx Error.
+  *            @arg CEC_IT_TXUDR: Tx-Buffer Underrun.
+  *            @arg CEC_IT_TXEND: End of transmission (successful transmission of the last byte).
+  *            @arg CEC_IT_TXBR: Tx-Byte Request.
+  *            @arg CEC_IT_ARBLST: Arbitration Lost.
+  *            @arg CEC_IT_RXACKE: Rx-Missing Acknowledge.
+  *            @arg CEC_IT_LBPE: Rx Long period Error.
+  *            @arg CEC_IT_SBPE: Rx Short period Error.
+  *            @arg CEC_IT_BRE: Rx Bit Rising Error.
+  *            @arg CEC_IT_RXOVR: Rx Overrun.
+  *            @arg CEC_IT_RXEND: End Of Reception.
+  *            @arg CEC_IT_RXBR: Rx-Byte Received 
   * @retval The new state of CEC_IT (SET or RESET).
   */
 ITStatus CEC_GetITStatus(uint16_t CEC_IT)
@@ -564,20 +565,20 @@ ITStatus CEC_GetITStatus(uint16_t CEC_IT)
 /**
   * @brief  Clears the CEC's interrupt pending bits.
   * @param  CEC_IT: specifies the CEC interrupt pending bit to clear.
-  *   This parameter can be any combination of the following values:
-  *     @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
-  *     @arg CEC_IT_TXERR: Tx Error
-  *     @arg CEC_IT_TXUDR: Tx-Buffer Underrun
-  *     @arg CEC_IT_TXEND: End of Transmission
-  *     @arg CEC_IT_TXBR: Tx-Byte Request
-  *     @arg CEC_IT_ARBLST: Arbitration Lost
-  *     @arg CEC_IT_RXACKE: Rx-Missing Acknowledge
-  *     @arg CEC_IT_LBPE: Rx Long period Error
-  *     @arg CEC_IT_SBPE: Rx Short period Error
-  *     @arg CEC_IT_BRE: Rx Bit Rising Error
-  *     @arg CEC_IT_RXOVR: Rx Overrun
-  *     @arg CEC_IT_RXEND: End Of Reception
-  *     @arg CEC_IT_RXBR: Rx-Byte Received
+  *          This parameter can be any combination of the following values:
+  *            @arg CEC_IT_TXACKE: Tx Missing acknowledge Error
+  *            @arg CEC_IT_TXERR: Tx Error
+  *            @arg CEC_IT_TXUDR: Tx-Buffer Underrun
+  *            @arg CEC_IT_TXEND: End of Transmission
+  *            @arg CEC_IT_TXBR: Tx-Byte Request
+  *            @arg CEC_IT_ARBLST: Arbitration Lost
+  *            @arg CEC_IT_RXACKE: Rx-Missing Acknowledge
+  *            @arg CEC_IT_LBPE: Rx Long period Error
+  *            @arg CEC_IT_SBPE: Rx Short period Error
+  *            @arg CEC_IT_BRE: Rx Bit Rising Error
+  *            @arg CEC_IT_RXOVR: Rx Overrun
+  *            @arg CEC_IT_RXEND: End Of Reception
+  *            @arg CEC_IT_RXBR: Rx-Byte Received
   * @retval None
   */
 void CEC_ClearITPendingBit(uint16_t CEC_IT)

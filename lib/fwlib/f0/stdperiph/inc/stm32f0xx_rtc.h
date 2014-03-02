@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_rtc.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the RTC firmware 
   *          library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -358,6 +358,27 @@ typedef struct
   * @}
   */ 
 
+/** @defgroup RTC_Wakeup_Timer_Definitions 
+  * @brief    These parameters are only available for STM32F072 devices
+  * @{
+  */
+#define RTC_WakeUpClock_RTCCLK_Div16        ((uint32_t)0x00000000)
+#define RTC_WakeUpClock_RTCCLK_Div8         ((uint32_t)0x00000001)
+#define RTC_WakeUpClock_RTCCLK_Div4         ((uint32_t)0x00000002)
+#define RTC_WakeUpClock_RTCCLK_Div2         ((uint32_t)0x00000003)
+#define RTC_WakeUpClock_CK_SPRE_16bits      ((uint32_t)0x00000004)
+#define RTC_WakeUpClock_CK_SPRE_17bits      ((uint32_t)0x00000006)
+#define IS_RTC_WAKEUP_CLOCK(CLOCK) (((CLOCK) == RTC_WakeUpClock_RTCCLK_Div16) || \
+                                    ((CLOCK) == RTC_WakeUpClock_RTCCLK_Div8) || \
+                                    ((CLOCK) == RTC_WakeUpClock_RTCCLK_Div4) || \
+                                    ((CLOCK) == RTC_WakeUpClock_RTCCLK_Div2) || \
+                                    ((CLOCK) == RTC_WakeUpClock_CK_SPRE_16bits) || \
+                                    ((CLOCK) == RTC_WakeUpClock_CK_SPRE_17bits))
+#define IS_RTC_WAKEUP_COUNTER(COUNTER)  ((COUNTER) <= 0xFFFF)
+/**
+  * @}
+  */ 
+
 /** @defgroup RTC_Time_Stamp_Edges_definitions 
   * @{
   */ 
@@ -374,9 +395,11 @@ typedef struct
   */ 
 #define RTC_Output_Disable             ((uint32_t)0x00000000)
 #define RTC_Output_AlarmA              ((uint32_t)0x00200000)
+#define RTC_Output_WakeUp              ((uint32_t)0x00600000) /*!< available only for STM32F072 devices */
  
 #define IS_RTC_OUTPUT(OUTPUT) (((OUTPUT) == RTC_Output_Disable) || \
-                               ((OUTPUT) == RTC_Output_AlarmA))
+                               ((OUTPUT) == RTC_Output_AlarmA)  || \
+                               ((OUTPUT) == RTC_Output_WakeUp))
 
 /**
   * @}
@@ -557,8 +580,8 @@ typedef struct
 #define RTC_Tamper_2            RTC_TAFCR_TAMP2E /*!< Tamper detection enable for 
                                                  input tamper 2 */
 #define RTC_Tamper_3            RTC_TAFCR_TAMP3E /*!< Tamper detection enable for 
-                                                 input tamper 3 */
-
+                                                 input tamper 3, available only 
+                                                 for STM32F072 devices */
 #define IS_RTC_TAMPER(TAMPER) ((((TAMPER) & (uint32_t)0xFFFFFFD6) == 0x00) && ((TAMPER) != (uint32_t)RESET))
 
 /**
@@ -629,25 +652,29 @@ typedef struct
 /** @defgroup RTC_Flags_Definitions 
   * @{
   */ 
-#define RTC_FLAG_RECALPF                  ((uint32_t)0x00010000)
-#define RTC_FLAG_TAMP3F                   ((uint32_t)0x00008000)
-#define RTC_FLAG_TAMP2F                   ((uint32_t)0x00004000)
-#define RTC_FLAG_TAMP1F                   ((uint32_t)0x00002000)
-#define RTC_FLAG_TSOVF                    ((uint32_t)0x00001000)
-#define RTC_FLAG_TSF                      ((uint32_t)0x00000800)
-#define RTC_FLAG_ALRAF                    ((uint32_t)0x00000100)
-#define RTC_FLAG_INITF                    ((uint32_t)0x00000040)
-#define RTC_FLAG_RSF                      ((uint32_t)0x00000020)
-#define RTC_FLAG_INITS                    ((uint32_t)0x00000010)
-#define RTC_FLAG_SHPF                     ((uint32_t)0x00000008)
+#define RTC_FLAG_RECALPF                  RTC_ISR_RECALPF
+#define RTC_FLAG_TAMP3F                   RTC_ISR_TAMP3F /*!< Only available for STM32F072 devices */
+#define RTC_FLAG_TAMP2F                   RTC_ISR_TAMP2F
+#define RTC_FLAG_TAMP1F                   RTC_ISR_TAMP1F
+#define RTC_FLAG_TSOVF                    RTC_ISR_TSOVF
+#define RTC_FLAG_TSF                      RTC_ISR_TSF
+#define RTC_FLAG_WUTF                     RTC_ISR_WUTF /*!< Only available for STM32F072 devices */
+#define RTC_FLAG_ALRAF                    RTC_ISR_ALRAF
+#define RTC_FLAG_INITF                    RTC_ISR_INITF
+#define RTC_FLAG_RSF                      RTC_ISR_RSF
+#define RTC_FLAG_INITS                    RTC_ISR_INITS
+#define RTC_FLAG_SHPF                     RTC_ISR_SHPF
+#define RTC_FLAG_WUTWF                    RTC_ISR_WUTWF /*!< Only available for STM32F072 devices */
+#define RTC_FLAG_ALRAWF                   RTC_ISR_ALRAWF 
 
-#define IS_RTC_GET_FLAG(FLAG) (((FLAG) == RTC_FLAG_RECALPF) || ((FLAG) == RTC_FLAG_TAMP3F) || \
-                               ((FLAG) == RTC_FLAG_TAMP2F)  || ((FLAG) == RTC_FLAG_TAMP1F) || \
-                               ((FLAG) == RTC_FLAG_TSOVF)   || ((FLAG) == RTC_FLAG_TSF)    || \
-                               ((FLAG) == RTC_FLAG_ALRAF)   || ((FLAG) == RTC_FLAG_INITF)  || \
-                               ((FLAG) == RTC_FLAG_RSF)     || ((FLAG) == RTC_FLAG_INITS)  || \
+#define IS_RTC_GET_FLAG(FLAG) (((FLAG) == RTC_FLAG_TSOVF)  || ((FLAG) == RTC_FLAG_TSF)     || \
+                               ((FLAG) == RTC_FLAG_WUTF)   || ((FLAG) == RTC_FLAG_ALRAWF)  || \
+                               ((FLAG) == RTC_FLAG_ALRAF)  || ((FLAG) == RTC_FLAG_INITF)   || \
+                               ((FLAG) == RTC_FLAG_RSF)    || ((FLAG) == RTC_FLAG_WUTWF)   || \
+                               ((FLAG) == RTC_FLAG_TAMP1F) || ((FLAG) == RTC_FLAG_TAMP2F)  || \
+                               ((FLAG) == RTC_FLAG_TAMP3F) || ((FLAG) == RTC_FLAG_RECALPF) || \
                                ((FLAG) == RTC_FLAG_SHPF))
-#define IS_RTC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET) && (((FLAG) & 0xFFFF06DF) == (uint32_t)RESET))
+#define IS_RTC_CLEAR_FLAG(FLAG) (((FLAG) != (uint32_t)RESET) && (((FLAG) & 0xFFFF02DF) == (uint32_t)RESET))
 
 /**
   * @}
@@ -657,17 +684,19 @@ typedef struct
   * @{
   */ 
 #define RTC_IT_TS                         ((uint32_t)0x00008000)
+#define RTC_IT_WUT                        ((uint32_t)0x00004000) /* Available only for STM32F072 devices */
 #define RTC_IT_ALRA                       ((uint32_t)0x00001000)
 #define RTC_IT_TAMP                       ((uint32_t)0x00000004) /* Used only to Enable the Tamper Interrupt */
 #define RTC_IT_TAMP1                      ((uint32_t)0x00020000)
 #define RTC_IT_TAMP2                      ((uint32_t)0x00040000)
-#define RTC_IT_TAMP3                      ((uint32_t)0x00080000)
+#define RTC_IT_TAMP3                      ((uint32_t)0x00080000) /* Available only for STM32F072 devices */
 
-#define IS_RTC_CONFIG_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFFF6FFB) == (uint32_t)RESET))
+#define IS_RTC_CONFIG_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFFF2FFB) == (uint32_t)RESET))
 #define IS_RTC_GET_IT(IT) (((IT) == RTC_IT_TS)    || ((IT) == RTC_IT_ALRA)  || \
-                           ((IT) == RTC_IT_TAMP1) || ((IT) == RTC_IT_TAMP2) || \
-                           ((IT) == RTC_IT_TAMP3))                           
-#define IS_RTC_CLEAR_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFF16FFF) == (uint32_t)RESET))
+                           ((IT) == RTC_IT_TAMP1) || ((IT) == RTC_IT_WUT)   || \
+                           ((IT) == RTC_IT_TAMP2) || ((IT) == RTC_IT_TAMP3))                           
+
+#define IS_RTC_CLEAR_IT(IT) (((IT) != (uint32_t)RESET) && (((IT) & 0xFFF12FFF) == (uint32_t)RESET))
 
 /**
   * @}
@@ -710,6 +739,12 @@ void RTC_GetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm, RTC_AlarmTypeDef* RTC
 ErrorStatus RTC_AlarmCmd(uint32_t RTC_Alarm, FunctionalState NewState);
 void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm, uint32_t RTC_AlarmSubSecondValue, uint8_t RTC_AlarmSubSecondMask);
 uint32_t RTC_GetAlarmSubSecond(uint32_t RTC_Alarm);
+
+/* WakeUp Timer configuration functions ***************************************/ 
+void RTC_WakeUpClockConfig(uint32_t RTC_WakeUpClock); /*!< available only for STM32F072 devices */ 
+void RTC_SetWakeUpCounter(uint32_t RTC_WakeUpCounter); /*!< available only for STM32F072 devices */ 
+uint32_t RTC_GetWakeUpCounter(void); /*!< available only for STM32F072 devices */ 
+ErrorStatus RTC_WakeUpCmd(FunctionalState NewState); /*!< available only for STM32F072 devices */ 
 
 /* Daylight Saving configuration functions ************************************/
 void RTC_DayLightSavingConfig(uint32_t RTC_DayLightSaving, uint32_t RTC_StoreOperation);

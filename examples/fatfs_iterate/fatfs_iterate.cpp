@@ -23,21 +23,16 @@ using namespace stm32plus::display;
 /**
  * FAT file system iterator demo.
  *
- * This example will recursively iterate over the
- * directories and files on a FAT16/32 file system
- * on an SD card connected via SDIO. The SD card
- * must be inserted and ready when this application
- * runs. This demo was tested on a 4Gb class 10
+ * This example will recursively iterate over the directories and files on a
+ * FAT16/32 file system on an SD card connected via SDIO. The SD card must be inserted
+ * and ready when this application runs. This demo was tested on a 4Gb class 10
  * SDHC microSD card.
  *
- * The output of the program is sent to a graphical
- * LCD, in this case an ILI9325 panel connected via
- * the FSMC. Other LCD drivers can be used by
- * changing the device driver name and ensuring that
- * the correct access mode is selected (8 or 16 bit).
+ * The output of the program is sent to a graphical LCD, in this case an ILI9325
+ * panel connected via the FSMC. Other LCD drivers can be used by changing the device
+ * driver name and ensuring that the correct access mode is selected (8 or 16 bit).
  *
- * Because I use the STL string I have added
- * include/stl to the compile-time include path.
+ * Because I use the STL string I have added include/stl to the compile-time include path.
  *
  * Compatible MCU:
  *   STM32F1

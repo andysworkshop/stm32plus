@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_syscfg.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the SYSCFG firmware 
   *          library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -58,13 +58,15 @@
 #define EXTI_PortSourceGPIOA       ((uint8_t)0x00)
 #define EXTI_PortSourceGPIOB       ((uint8_t)0x01)
 #define EXTI_PortSourceGPIOC       ((uint8_t)0x02)
-#define EXTI_PortSourceGPIOD       ((uint8_t)0x03)
+#define EXTI_PortSourceGPIOD       ((uint8_t)0x03) /*!< not available for STM32F031 devices */
+#define EXTI_PortSourceGPIOE       ((uint8_t)0x04) /*!< only available for STM32F072 devices */
 #define EXTI_PortSourceGPIOF       ((uint8_t)0x05)
 
 #define IS_EXTI_PORT_SOURCE(PORTSOURCE) (((PORTSOURCE) == EXTI_PortSourceGPIOA) || \
                                          ((PORTSOURCE) == EXTI_PortSourceGPIOB) || \
                                          ((PORTSOURCE) == EXTI_PortSourceGPIOC) || \
                                          ((PORTSOURCE) == EXTI_PortSourceGPIOD) || \
+                                         ((PORTSOURCE) == EXTI_PortSourceGPIOE) || \
                                          ((PORTSOURCE) == EXTI_PortSourceGPIOF)) 
 /**
   * @}
@@ -129,6 +131,24 @@
 /** @defgroup SYSCFG_DMA_Remap_Config 
   * @{
   */ 
+#define SYSCFG_DMARemap_TIM3        SYSCFG_CFGR1_TIM3_DMA_RMP      /* Remap TIM3 DMA requests from channel4 to channel6, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_TIM2        SYSCFG_CFGR1_TIM2_DMA_RMP      /* Remap TIM2 DMA requests from channel3/4 to channel7, 
+                                                                      available only for STM32F072 devices */ 
+#define SYSCFG_DMARemap_TIM1        SYSCFG_CFGR1_TIM1_DMA_RMP      /* Remap TIM1 DMA requests from channel2/3/4 to channel6, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_I2C1        SYSCFG_CFGR1_I2C1_DMA_RMP      /* Remap I2C1 DMA requests from channel3/2 to channel7/6, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_USART3      SYSCFG_CFGR1_USART3_DMA_RMP    /* Remap USART3 DMA requests from channel6/7 to channel3/2, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_USART2      SYSCFG_CFGR1_USART2_DMA_RMP    /* Remap USART2 DMA requests from channel4/5 to channel6/7, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_SPI2        SYSCFG_CFGR1_SPI2_DMA_RMP      /* Remap SPI2 DMA requests from channel4/5 to channel6/7, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_TIM17_2     SYSCFG_CFGR1_TIM17_DMA_RMP2    /* Remap TIM17 DMA requests from channel1/2 to channel7, 
+                                                                      available only for STM32F072 devices */
+#define SYSCFG_DMARemap_TIM16_2     SYSCFG_CFGR1_TIM16_DMA_RMP2    /* Remap TIM16 DMA requests from channel3/4 to channel6, 
+                                                                      available only for STM32F072 devices */
 #define SYSCFG_DMARemap_TIM17       SYSCFG_CFGR1_TIM17_DMA_RMP    /* Remap TIM17 DMA requests from channel1 to channel2 */
 #define SYSCFG_DMARemap_TIM16       SYSCFG_CFGR1_TIM16_DMA_RMP    /* Remap TIM16 DMA requests from channel3 to channel4 */
 #define SYSCFG_DMARemap_USART1Rx    SYSCFG_CFGR1_USART1RX_DMA_RMP /* Remap USART1 Rx DMA requests from channel3 to channel5 */
@@ -139,6 +159,15 @@
                                     ((REMAP) == SYSCFG_DMARemap_TIM16) || \
                                     ((REMAP) == SYSCFG_DMARemap_USART1Rx) || \
                                     ((REMAP) == SYSCFG_DMARemap_USART1Tx) || \
+                                    ((REMAP) == SYSCFG_CFGR1_TIM3_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_TIM2_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_TIM1_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_I2C1_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_USART3_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_USART2_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_SPI2_DMA_RMP) || \
+                                    ((REMAP) == SYSCFG_CFGR1_TIM17_DMA_RMP2) || \
+                                    ((REMAP) == SYSCFG_CFGR1_TIM16_DMA_RMP2) || \
                                     ((REMAP) == SYSCFG_DMARemap_ADC1))
 
 /**
@@ -152,11 +181,20 @@
 #define SYSCFG_I2CFastModePlus_PB7       SYSCFG_CFGR1_I2C_FMP_PB7 /* Enable Fast Mode Plus on PB7 */
 #define SYSCFG_I2CFastModePlus_PB8       SYSCFG_CFGR1_I2C_FMP_PB8 /* Enable Fast Mode Plus on PB8 */
 #define SYSCFG_I2CFastModePlus_PB9       SYSCFG_CFGR1_I2C_FMP_PB9 /* Enable Fast Mode Plus on PB9 */
+#define SYSCFG_I2CFastModePlus_I2C1      SYSCFG_CFGR1_I2C_FMP_I2C1 /* Enable Fast Mode Plus on PB10, PB11, PF6 and PF7(only for STM32F0031 and STM32F030 devices) */
+#define SYSCFG_I2CFastModePlus_I2C2      SYSCFG_CFGR1_I2C_FMP_I2C2 /* Enable Fast Mode Plus on I2C2 pins, available only for STM32F072 devices */
+#define SYSCFG_I2CFastModePlus_PA9       SYSCFG_CFGR1_I2C_FMP_PA9 /* Enable Fast Mode Plus on PA9 (only for STM32F031 and STM32F030 devices) */
+#define SYSCFG_I2CFastModePlus_PA10      SYSCFG_CFGR1_I2C_FMP_PA10/* Enable Fast Mode Plus on PA10(only for STM32F031 and STM32F030 devices) */
 
-#define IS_SYSCFG_I2C_FMP(PIN) (((PIN) == SYSCFG_I2CFastModePlus_PB6) || \
-                                ((PIN) == SYSCFG_I2CFastModePlus_PB7) || \
-                                ((PIN) == SYSCFG_I2CFastModePlus_PB8) || \
-                                ((PIN) == SYSCFG_I2CFastModePlus_PB9))
+#define IS_SYSCFG_I2C_FMP(PIN) (((PIN) == SYSCFG_I2CFastModePlus_PB6)  || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_PB7)  || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_PB8)  || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_PB9)  || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_I2C1) || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_I2C2) || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_PA9)  || \
+                                ((PIN) == SYSCFG_I2CFastModePlus_PA10))
+
 
 /**
   * @}
@@ -165,7 +203,7 @@
 /** @defgroup SYSCFG_Lock_Config 
   * @{
   */ 
-#define SYSCFG_Break_PVD                     SYSCFG_CFGR2_PVD_LOCK       /*!< Connects the PVD event to the Break Input of TIM1 */
+#define SYSCFG_Break_PVD                     SYSCFG_CFGR2_PVD_LOCK       /*!< Connects the PVD event to the Break Input of TIM1, not available for STM32F030 devices */
 #define SYSCFG_Break_SRAMParity              SYSCFG_CFGR2_SRAM_PARITY_LOCK  /*!< Connects the SRAM_PARITY error signal to the Break Input of TIM1 */
 #define SYSCFG_Break_Lockup                  SYSCFG_CFGR2_LOCKUP_LOCK       /*!< Connects Lockup output of CortexM0 to the break input of TIM1 */
 

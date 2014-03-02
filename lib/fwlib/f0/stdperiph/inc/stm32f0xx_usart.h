@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_usart.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the USART 
   *          firmware library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -109,18 +109,23 @@ typedef struct
   */ 
 
 #define IS_USART_ALL_PERIPH(PERIPH) (((PERIPH) == USART1) || \
-                                     ((PERIPH) == USART2))
+                                     ((PERIPH) == USART2) || \
+                                     ((PERIPH) == USART3) || \
+                                     ((PERIPH) == USART4))
 
-#define IS_USART_1_PERIPH(PERIPH) (((PERIPH) == USART1))
+#define IS_USART_12_PERIPH(PERIPH) (((PERIPH) == USART1) || \
+                                    ((PERIPH) == USART2))
 
 /** @defgroup USART_Word_Length 
   * @{
   */ 
 
 #define USART_WordLength_8b                  ((uint32_t)0x00000000)
-#define USART_WordLength_9b                  USART_CR1_M
+#define USART_WordLength_9b                  USART_CR1_M /* should be ((uint32_t)0x00001000) */
+#define USART_WordLength_7b                  ((uint32_t)0x10001000) /*!< only available for STM32F072 and STM32F030 devices */
 #define IS_USART_WORD_LENGTH(LENGTH) (((LENGTH) == USART_WordLength_8b) || \
-                                      ((LENGTH) == USART_WordLength_9b))
+                                      ((LENGTH) == USART_WordLength_9b) || \
+                                      ((LENGTH) == USART_WordLength_7b))
 /**
   * @}
   */ 
@@ -130,8 +135,8 @@ typedef struct
   */ 
 
 #define USART_StopBits_1                     ((uint32_t)0x00000000)
-#define USART_StopBits_2                     ((uint32_t)USART_CR2_STOP_1)
-#define USART_StopBits_1_5                   ((uint32_t)USART_CR2_STOP_0 | USART_CR2_STOP_1)
+#define USART_StopBits_2                     USART_CR2_STOP_1
+#define USART_StopBits_1_5                   (USART_CR2_STOP_0 | USART_CR2_STOP_1)
 #define IS_USART_STOPBITS(STOPBITS) (((STOPBITS) == USART_StopBits_1) || \
                                      ((STOPBITS) == USART_StopBits_2) || \
                                      ((STOPBITS) == USART_StopBits_1_5))
@@ -144,8 +149,8 @@ typedef struct
   */ 
 
 #define USART_Parity_No                      ((uint32_t)0x00000000)
-#define USART_Parity_Even                    ((uint32_t)USART_CR1_PCE)
-#define USART_Parity_Odd                     ((uint32_t)USART_CR1_PCE | USART_CR1_PS) 
+#define USART_Parity_Even                    USART_CR1_PCE
+#define USART_Parity_Odd                     (USART_CR1_PCE | USART_CR1_PS) 
 #define IS_USART_PARITY(PARITY) (((PARITY) == USART_Parity_No) || \
                                  ((PARITY) == USART_Parity_Even) || \
                                  ((PARITY) == USART_Parity_Odd))
@@ -170,9 +175,9 @@ typedef struct
   */ 
 
 #define USART_HardwareFlowControl_None       ((uint32_t)0x00000000)
-#define USART_HardwareFlowControl_RTS        ((uint32_t)USART_CR3_RTSE)
-#define USART_HardwareFlowControl_CTS        ((uint32_t)USART_CR3_CTSE)
-#define USART_HardwareFlowControl_RTS_CTS    ((uint32_t)USART_CR3_RTSE | USART_CR3_CTSE)
+#define USART_HardwareFlowControl_RTS        USART_CR3_RTSE
+#define USART_HardwareFlowControl_CTS        USART_CR3_CTSE
+#define USART_HardwareFlowControl_RTS_CTS    (USART_CR3_RTSE | USART_CR3_CTSE)
 #define IS_USART_HARDWARE_FLOW_CONTROL(CONTROL)\
                               (((CONTROL) == USART_HardwareFlowControl_None) || \
                                ((CONTROL) == USART_HardwareFlowControl_RTS) || \
@@ -279,13 +284,14 @@ typedef struct
   * @}
   */ 
 
-/** @defgroup USART_StopMode_WakeUp_methods 
+/** @defgroup USART_StopMode_WakeUp_methods
+  * @note     These parameters are only available for STM32F051 and STM32F072 devices 
   * @{
   */ 
 
 #define USART_WakeUpSource_AddressMatch      ((uint32_t)0x00000000)
-#define USART_WakeUpSource_StartBit          ((uint32_t)USART_CR3_WUS_1)
-#define USART_WakeUpSource_RXNE              ((uint32_t)USART_CR3_WUS_0 | USART_CR3_WUS_1)
+#define USART_WakeUpSource_StartBit          USART_CR3_WUS_1
+#define USART_WakeUpSource_RXNE              (USART_CR3_WUS_0 | USART_CR3_WUS_1)
 #define IS_USART_STOPMODE_WAKEUPSOURCE(SOURCE) (((SOURCE) == USART_WakeUpSource_AddressMatch) || \
                                                 ((SOURCE) == USART_WakeUpSource_StartBit) || \
                                                 ((SOURCE) == USART_WakeUpSource_RXNE))
@@ -390,18 +396,18 @@ typedef struct
   */
 #define USART_FLAG_REACK                     USART_ISR_REACK
 #define USART_FLAG_TEACK                     USART_ISR_TEACK
-#define USART_FLAG_WU                        USART_ISR_WUF
-#define USART_FLAG_RWU                       USART_ISR_RWU
+#define USART_FLAG_WU                        USART_ISR_WUF /*!< Not available for  STM32F030 devices */
+#define USART_FLAG_RWU                       USART_ISR_RWU /*!< Not available for  STM32F030 devices */
 #define USART_FLAG_SBK                       USART_ISR_SBKF
 #define USART_FLAG_CM                        USART_ISR_CMF
 #define USART_FLAG_BUSY                      USART_ISR_BUSY
 #define USART_FLAG_ABRF                      USART_ISR_ABRF
 #define USART_FLAG_ABRE                      USART_ISR_ABRE
-#define USART_FLAG_EOB                       USART_ISR_EOBF
+#define USART_FLAG_EOB                       USART_ISR_EOBF /*!< Not available for  STM32F030 devices */
 #define USART_FLAG_RTO                       USART_ISR_RTOF
 #define USART_FLAG_nCTSS                     USART_ISR_CTS 
 #define USART_FLAG_CTS                       USART_ISR_CTSIF
-#define USART_FLAG_LBD                       USART_ISR_LBD
+#define USART_FLAG_LBD                       USART_ISR_LBD /*!< Not available for  STM32F030 devices */
 #define USART_FLAG_TXE                       USART_ISR_TXE
 #define USART_FLAG_TC                        USART_ISR_TC
 #define USART_FLAG_RXNE                      USART_ISR_RXNE
@@ -442,16 +448,16 @@ typedef struct
   * @{
   */
 
-#define USART_IT_WU                          ((uint32_t)0x00140316)
+#define USART_IT_WU                          ((uint32_t)0x00140316) /*!< Not available for  STM32F030 devices */
 #define USART_IT_CM                          ((uint32_t)0x0011010E)
-#define USART_IT_EOB                         ((uint32_t)0x000C011B)
+#define USART_IT_EOB                         ((uint32_t)0x000C011B) /*!< Not available for  STM32F030 devices */
 #define USART_IT_RTO                         ((uint32_t)0x000B011A)
 #define USART_IT_PE                          ((uint32_t)0x00000108)
 #define USART_IT_TXE                         ((uint32_t)0x00070107)
 #define USART_IT_TC                          ((uint32_t)0x00060106)
 #define USART_IT_RXNE                        ((uint32_t)0x00050105)
 #define USART_IT_IDLE                        ((uint32_t)0x00040104)
-#define USART_IT_LBD                         ((uint32_t)0x00080206)
+#define USART_IT_LBD                         ((uint32_t)0x00080206) /*!< Not available for  STM32F030 devices */
 #define USART_IT_CTS                         ((uint32_t)0x0009030A) 
 #define USART_IT_ERR                         ((uint32_t)0x00000300)
 #define USART_IT_ORE                         ((uint32_t)0x00030300)
@@ -512,7 +518,7 @@ void USART_ClockInit(USART_TypeDef* USARTx, USART_ClockInitTypeDef* USART_ClockI
 void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct);
 void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState);
 void USART_DirectionModeCmd(USART_TypeDef* USARTx, uint32_t USART_DirectionMode, FunctionalState NewState);
-void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler);
+void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler); /* Not available for STM32F030 devices */
 void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState);
 void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState);
 void USART_MSBFirstCmd(USART_TypeDef* USARTx, FunctionalState NewState);
@@ -524,12 +530,11 @@ void USART_SetReceiverTimeOut(USART_TypeDef* USARTx, uint32_t USART_ReceiverTime
 
 /* STOP Mode functions ********************************************************/
 void USART_STOPModeCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_StopModeWakeUpSourceConfig(USART_TypeDef* USARTx, uint32_t USART_WakeUpSource);
+void USART_StopModeWakeUpSourceConfig(USART_TypeDef* USARTx, uint32_t USART_WakeUpSource); /* Not available for STM32F030 devices */
 
 /* AutoBaudRate functions *****************************************************/
 void USART_AutoBaudRateCmd(USART_TypeDef* USARTx, FunctionalState NewState);
 void USART_AutoBaudRateConfig(USART_TypeDef* USARTx, uint32_t USART_AutoBaudRate);
-void USART_AutoBaudRateNewRequest(USART_TypeDef* USARTx);
 
 /* Data transfers functions ***************************************************/
 void USART_SendData(USART_TypeDef* USARTx, uint16_t Data);
@@ -540,23 +545,24 @@ void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address);
 void USART_MuteModeWakeUpConfig(USART_TypeDef* USARTx, uint32_t USART_WakeUp);
 void USART_MuteModeCmd(USART_TypeDef* USARTx, FunctionalState NewState);
 void USART_AddressDetectionConfig(USART_TypeDef* USARTx, uint32_t USART_AddressLength);
+
 /* LIN mode functions *********************************************************/
-void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint32_t USART_LINBreakDetectLength);
-void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint32_t USART_LINBreakDetectLength); /* Not available for STM32F030 devices */
+void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState); /* Not available for STM32F030 devices */
 
 /* Half-duplex mode function **************************************************/
 void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState);
 
 /* Smartcard mode functions ***************************************************/
-void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState);
-void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime);
-void USART_SetAutoRetryCount(USART_TypeDef* USARTx, uint8_t USART_AutoCount);
-void USART_SetBlockLength(USART_TypeDef* USARTx, uint8_t USART_BlockLength);
+void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState); /* Not available for STM32F030 devices */
+void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState); /* Not available for STM32F030 devices */
+void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime); /* Not available for STM32F030 devices */
+void USART_SetAutoRetryCount(USART_TypeDef* USARTx, uint8_t USART_AutoCount); /* Not available for STM32F030 devices */
+void USART_SetBlockLength(USART_TypeDef* USARTx, uint8_t USART_BlockLength); /* Not available for STM32F030 devices */
 
 /* IrDA mode functions ********************************************************/
-void USART_IrDAConfig(USART_TypeDef* USARTx, uint32_t USART_IrDAMode);
-void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState);
+void USART_IrDAConfig(USART_TypeDef* USARTx, uint32_t USART_IrDAMode); /* Not available for STM32F030 devices */
+void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState); /* Not available for STM32F030 devices */
 
 /* RS485 mode functions *******************************************************/
 void USART_DECmd(USART_TypeDef* USARTx, FunctionalState NewState);

@@ -19,21 +19,17 @@ using namespace stm32plus;
 /**
  * FAT file system reader demo.
  *
- * Tihs example will open a text file from a subdirectory
- * of the SD card and write the contents to USART1. The
- * filename is /files/test.txt. To run this demo you must
- * have USART1 wired to a terminal program on the PC that
- * is set up to receive at 57600-8-N-1 mode. I recommend
- * the free "RealTerm" program.
+ * This example will open a text file from a subdirectory of the SD card and write
+ * the contents to USART1. The filename is /files/test.txt. To run this demo you must
+ * have USART1 wired to a terminal program on the PC that is set up to receive at
+ * 57600-8-N-1 mode. I recommend the free "RealTerm" program.
  *
- * Note that if you are using the STM32F4DISCOVERY board
- * then you cannot use Usart1 since the pins clash with
- * onboard peripherals. I have tested this code on that
+ * Note that if you are using the STM32F4DISCOVERY board then you cannot use Usart1
+ * since the pins clash with onboard peripherals. I have tested this code on that
  * board using Usart2.
  *
- * The SD card must be inserted and ready when this
- * application runs. This demo was tested on a 4Gb class
- * 10 SDHC microSD card.
+ * The SD card must be inserted and ready when this application runs. This demo was
+ * tested on a 4Gb class 10 SDHC microSD card.
  *
  * Compatible MCU:
  *   STM32F1

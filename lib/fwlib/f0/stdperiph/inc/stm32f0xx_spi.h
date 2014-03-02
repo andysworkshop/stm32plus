@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_spi.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the SPI 
   *          firmware library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -87,7 +87,8 @@ typedef struct
 
 
 /** 
-  * @brief  I2S Init structure definition  
+  * @brief  I2S Init structure definition
+  * @note   These parameters are not available for STM32F030 devices.    
   */
 
 typedef struct
@@ -119,7 +120,7 @@ typedef struct
 
 #define IS_SPI_ALL_PERIPH(PERIPH) (((PERIPH) == SPI1) || \
                                    ((PERIPH) == SPI2))
-
+                                   
 #define IS_SPI_1_PERIPH(PERIPH) (((PERIPH) == SPI1))
 
 /** @defgroup SPI_data_direction 
@@ -533,13 +534,13 @@ typedef struct
 /* Initialization and Configuration functions *********************************/
 void SPI_I2S_DeInit(SPI_TypeDef* SPIx);
 void SPI_Init(SPI_TypeDef* SPIx, SPI_InitTypeDef* SPI_InitStruct);
-void I2S_Init(SPI_TypeDef* SPIx, I2S_InitTypeDef* I2S_InitStruct);
+void I2S_Init(SPI_TypeDef* SPIx, I2S_InitTypeDef* I2S_InitStruct); /*!< Not applicable for STM32F030 devices */
 void SPI_StructInit(SPI_InitTypeDef* SPI_InitStruct);
-void I2S_StructInit(I2S_InitTypeDef* I2S_InitStruct);
+void I2S_StructInit(I2S_InitTypeDef* I2S_InitStruct); /*!< Not applicable for STM32F030 devices */
 void SPI_TIModeCmd(SPI_TypeDef* SPIx, FunctionalState NewState);
 void SPI_NSSPulseModeCmd(SPI_TypeDef* SPIx, FunctionalState NewState);
 void SPI_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState);
-void I2S_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState);
+void I2S_Cmd(SPI_TypeDef* SPIx, FunctionalState NewState); /*!< Not applicable for STM32F030 devices */
 void SPI_DataSizeConfig(SPI_TypeDef* SPIx, uint16_t SPI_DataSize);
 void SPI_RxFIFOThresholdConfig(SPI_TypeDef* SPIx, uint16_t SPI_RxFIFOThreshold);
 void SPI_BiDirectionalLineConfig(SPI_TypeDef* SPIx, uint16_t SPI_Direction);

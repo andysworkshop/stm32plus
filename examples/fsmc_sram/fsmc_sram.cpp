@@ -14,13 +14,12 @@ using namespace stm32plus;
 
 
 /**
- * Demo of an SRAM chip connected to the FSMC on an
- * STM32F103ZET6 (LQFP144). In this case it's an ISSI
- * IS61LV25616 256K x 16 (4Mbit) SRAM on bank #3.
+ * Demo of an SRAM chip connected to the FSMC on an STM32F103ZET6 (LQFP144).
+ * In this case it's an ISSI IS61LV25616 256K x 16 (4Mbit) SRAM on bank #3.
  *
- * This demo will write a repeating pattern to the SRAM
- * and read it back afterwards. If it is successful
- * then a LED attached to PF6 will be flashed for 500ms.
+ * This demo will write a repeating pattern to the SRAM and read it back
+ * afterwards. If it is successful then a LED attached to PF6 will be
+ * flashed for 500ms.
  *
  * Compatible MCU:
  *   STM32F1

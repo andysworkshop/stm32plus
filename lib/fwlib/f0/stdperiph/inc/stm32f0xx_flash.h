@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_flash.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the FLASH 
   *          firmware library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -92,9 +92,11 @@ typedef enum
 /** @defgroup FLASH_Address 
   * @{
   */
-  
-#define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x0800FFFF))
-
+#ifndef STM32F072
+ #define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x0800FFFF))
+#else
+ #define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x0801FFFF))
+#endif /* STM32F072 */
 /**
   * @}
   */
@@ -112,6 +114,7 @@ typedef enum
   * @{
   */
   
+#ifndef STM32F072
 
 #define OB_WRP_Pages0to3               ((uint32_t)0x00000001) /* Write protection of page 0 to 3 */
 #define OB_WRP_Pages4to7               ((uint32_t)0x00000002) /* Write protection of page 4 to 7 */
@@ -133,6 +136,47 @@ typedef enum
 #define OB_WRP_AllPages                ((uint32_t)0x0000FFFF) /*!< Write protection of all Sectors */
 
 #define IS_OB_WRP(PAGE) (((PAGE) != 0x0000000))
+
+#else
+
+#define OB_WRP_Pages0to1               ((uint32_t)0x00000001) /* Write protection of page 0 to 1 */
+#define OB_WRP_Pages2to3               ((uint32_t)0x00000002) /* Write protection of page 2 to 3 */
+#define OB_WRP_Pages4to5               ((uint32_t)0x00000004) /* Write protection of page 4 to 5 */
+#define OB_WRP_Pages6to7               ((uint32_t)0x00000008) /* Write protection of page 6 to 7 */
+#define OB_WRP_Pages8to9               ((uint32_t)0x00000010) /* Write protection of page 8 to 9 */
+#define OB_WRP_Pages10to11             ((uint32_t)0x00000020) /* Write protection of page 10 to 11 */
+#define OB_WRP_Pages12to13             ((uint32_t)0x00000040) /* Write protection of page 12 to 13 */
+#define OB_WRP_Pages14to15             ((uint32_t)0x00000080) /* Write protection of page 14 to 15 */
+#define OB_WRP_Pages16to17             ((uint32_t)0x00000100) /* Write protection of page 16 to 17 */
+#define OB_WRP_Pages18to19             ((uint32_t)0x00000200) /* Write protection of page 18 to 19 */
+#define OB_WRP_Pages20to21             ((uint32_t)0x00000400) /* Write protection of page 20 to 21 */
+#define OB_WRP_Pages22to23             ((uint32_t)0x00000800) /* Write protection of page 22 to 23 */
+#define OB_WRP_Pages24to25             ((uint32_t)0x00001000) /* Write protection of page 24 to 25 */
+#define OB_WRP_Pages26to27             ((uint32_t)0x00002000) /* Write protection of page 26 to 27 */
+#define OB_WRP_Pages28to29             ((uint32_t)0x00004000) /* Write protection of page 28 to 29 */
+#define OB_WRP_Pages30to31             ((uint32_t)0x00008000) /* Write protection of page 30 to 31 */
+#define OB_WRP_Pages32to33             ((uint32_t)0x00010000) /* Write protection of page 32 to 33 */
+#define OB_WRP_Pages34to35             ((uint32_t)0x00020000) /* Write protection of page 34 to 35 */
+#define OB_WRP_Pages36to37             ((uint32_t)0x00040000) /* Write protection of page 36 to 37 */
+#define OB_WRP_Pages38to39             ((uint32_t)0x00080000) /* Write protection of page 38 to 39 */
+#define OB_WRP_Pages40to41             ((uint32_t)0x00100000) /* Write protection of page 40 to 41 */
+#define OB_WRP_Pages42to43             ((uint32_t)0x00200000) /* Write protection of page 42 to 43 */
+#define OB_WRP_Pages44to45             ((uint32_t)0x00400000) /* Write protection of page 44 to 45 */
+#define OB_WRP_Pages46to47             ((uint32_t)0x00800000) /* Write protection of page 46 to 47 */
+#define OB_WRP_Pages48to49             ((uint32_t)0x01000000) /* Write protection of page 48 to 49 */
+#define OB_WRP_Pages50to51             ((uint32_t)0x02000000) /* Write protection of page 50 to 51 */
+#define OB_WRP_Pages52to53             ((uint32_t)0x04000000) /* Write protection of page 52 to 53 */
+#define OB_WRP_Pages54to55             ((uint32_t)0x08000000) /* Write protection of page 54 to 55 */
+#define OB_WRP_Pages56to57             ((uint32_t)0x10000000) /* Write protection of page 56 to 57 */
+#define OB_WRP_Pages58to59             ((uint32_t)0x20000000) /* Write protection of page 58 to 59 */
+#define OB_WRP_Pages60to61             ((uint32_t)0x40000000) /* Write protection of page 60 to 61 */
+#define OB_WRP_Pages62to63             ((uint32_t)0x80000000) /* Write protection of page 62 to 63 */
+
+#define OB_WRP_AllPages                ((uint32_t)0xFFFFFFFF) /*!< Write protection of all Sectors */
+
+#define IS_OB_WRP(PAGE) (((PAGE) != 0x0000000))
+
+#endif /* STM32F072 */
 
 /**
   * @}
@@ -205,12 +249,36 @@ typedef enum
   * @}
   */
 
+/** @defgroup FLASH_Option_Bytes_BOOT0
+  * @{
+  */
+
+#define OB_BOOT0_RESET                 ((uint8_t)0x00) /*!< BOOT0 Reset */
+#define OB_BOOT0_SET                   ((uint8_t)0x08) /*!< BOOT0 Set */
+#define IS_OB_BOOT0(BOOT0) (((BOOT0) == OB_BOOT0_RESET) || ((BOOT0) == OB_BOOT0_SET))
+
+/**
+  * @}
+  */
+
+/** @defgroup FLASH_Option_Bytes_BOOT0SW
+  * @{
+  */
+
+#define OB_BOOT0_SW                   ((uint8_t)0x00) /*!< BOOT0 pin disabled */  
+#define OB_BOOT0_HW                   ((uint8_t)0x80) /*!< BOOT0 pin bonded with GPIO */
+#define IS_OB_BOOT0SW(BOOT0) (((BOOT0) == OB_BOOT0_SW) || ((BOOT0) == OB_BOOT0_HW))
+
+/**
+  * @}
+  */
+  
 /** @defgroup FLASH_Option_Bytes_VDDA_Analog_Monitoring
   * @{
   */
 
-#define OB_VDDA_ANALOG_ON              ((uint8_t)0x00) /*!< Analog monitoring on VDDA Power source ON */
-#define OB_VDDA_ANALOG_OFF             ((uint8_t)0x20) /*!< Analog monitoring on VDDA Power source OFF */
+#define OB_VDDA_ANALOG_ON              ((uint8_t)0x20) /*!< Analog monitoring on VDDA Power source ON */
+#define OB_VDDA_ANALOG_OFF             ((uint8_t)0x00) /*!< Analog monitoring on VDDA Power source OFF */
 
 #define IS_OB_VDDA_ANALOG(ANALOG) (((ANALOG) == OB_VDDA_ANALOG_ON) || ((ANALOG) == OB_VDDA_ANALOG_OFF))
 
@@ -240,7 +308,7 @@ typedef enum
 #define FLASH_FLAG_WRPERR              FLASH_SR_WRPERR  /*!< FLASH Write protected error flag */
 #define FLASH_FLAG_EOP                 FLASH_SR_EOP     /*!< FLASH End of Programming flag */
  
-#define IS_FLASH_CLEAR_FLAG(FLAG) ((((FLAG) & (uint32_t)0xFFFFFFC3) == 0x00000000) && ((FLAG) != 0x00000000))
+#define IS_FLASH_CLEAR_FLAG(FLAG) ((((FLAG) & (uint32_t)0xFFFFFFCB) == 0x00000000) && ((FLAG) != 0x00000000))
 
 #define IS_FLASH_GET_FLAG(FLAG)  (((FLAG) == FLASH_FLAG_BSY) || ((FLAG) == FLASH_FLAG_PGERR) || \
                                   ((FLAG) == FLASH_FLAG_WRPERR) || ((FLAG) == FLASH_FLAG_EOP))
@@ -256,6 +324,32 @@ typedef enum
 /**
   * @}
   */ 
+
+/** @defgroup FLASH_Legacy 
+  * @{
+  */
+#define FLASH_WRProt_Pages0to3	       OB_WRP_Pages0to3
+#define FLASH_WRProt_Pages4to7	       OB_WRP_Pages4to7
+#define FLASH_WRProt_Pages8to11	       OB_WRP_Pages8to11
+#define FLASH_WRProt_Pages12to15	   OB_WRP_Pages12to15
+#define FLASH_WRProt_Pages16to19	   OB_WRP_Pages16to19
+#define FLASH_WRProt_Pages20to23	   OB_WRP_Pages20to23
+#define FLASH_WRProt_Pages24to27	   OB_WRP_Pages24to27
+#define FLASH_WRProt_Pages28to31	   OB_WRP_Pages28to31
+#define FLASH_WRProt_Pages32to35	   OB_WRP_Pages32to35
+#define FLASH_WRProt_Pages36to39	   OB_WRP_Pages36to39
+#define FLASH_WRProt_Pages40to43	   OB_WRP_Pages40to21
+#define FLASH_WRProt_Pages44to47	   OB_WRP_Pages44to23
+#define FLASH_WRProt_Pages48to51	   OB_WRP_Pages48to51
+#define FLASH_WRProt_Pages52to55	   OB_WRP_Pages52to55
+#define FLASH_WRProt_Pages56to59	   OB_WRP_Pages56to59
+#define FLASH_WRProt_Pages60to63	   OB_WRP_Pages60to63
+
+
+#define FLASH_WRProt_AllPages          OB_WRP_AllPages
+/**
+  * @}
+  */
 
 /**
   * @}
@@ -289,10 +383,12 @@ FLASH_Status FLASH_OB_EnableWRP(uint32_t OB_WRP);
 FLASH_Status FLASH_OB_RDPConfig(uint8_t OB_RDP);
 FLASH_Status FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY);
 FLASH_Status FLASH_OB_BOOTConfig(uint8_t OB_BOOT1);
+FLASH_Status FLASH_OB_BOOT0Config(uint8_t OB_BOOT0);
+FLASH_Status FLASH_OB_BOOT0SWConfig(uint8_t OB_BOOT0SW);
 FLASH_Status FLASH_OB_VDDAConfig(uint8_t OB_VDDA_ANALOG);
 FLASH_Status FLASH_OB_SRAMParityConfig(uint8_t OB_SRAM_Parity);
 FLASH_Status FLASH_OB_WriteUser(uint8_t OB_USER);
-FLASH_Status FLASH_ProgramOptionByteData(uint32_t Address, uint8_t Data);
+FLASH_Status FLASH_OB_ProgramData(uint32_t Address, uint8_t Data);
 uint8_t FLASH_OB_GetUser(void);
 uint32_t FLASH_OB_GetWRP(void);
 FlagStatus FLASH_OB_GetRDP(void);
@@ -304,6 +400,20 @@ void FLASH_ClearFlag(uint32_t FLASH_FLAG);
 FLASH_Status FLASH_GetStatus(void);
 FLASH_Status FLASH_WaitForLastOperation(uint32_t Timeout);
 
+/** @defgroup FLASH_Legacy 
+  * @{
+  */
+#define FLASH_EraseOptionBytes               FLASH_OB_Erase
+#define FLASH_EnableWriteProtection	         FLASH_OB_EnableWRP
+#define FLASH_UserOptionByteConfig	         FLASH_OB_UserConfig
+#define FLASH_ProgramOptionByteData          FLASH_OB_ProgramData
+#define FLASH_GetUserOptionByte	             FLASH_OB_GetUser
+#define FLASH_GetWriteProtectionOptionByte   FLASH_OB_GetWRP
+
+/**
+  * @}
+  */
+  
 #ifdef __cplusplus
 }
 #endif

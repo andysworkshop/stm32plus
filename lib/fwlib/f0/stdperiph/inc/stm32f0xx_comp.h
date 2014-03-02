@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_comp.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the COMP firmware 
-  *          library.
+  *          library, applicable only for STM32F051 and STM32F072 devices.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -98,10 +98,11 @@ typedef struct
   */
 
 #define COMP_InvertingInput_1_4VREFINT          ((uint32_t)0x00000000) /*!< 1/4 VREFINT connected to comparator inverting input */
-#define COMP_InvertingInput_1_2VREFINT          COMP_CSR_COMP1INSEL_0 /*!< 1/2 VREFINT connected to comparator inverting input */
-#define COMP_InvertingInput_3_4VREFINT          COMP_CSR_COMP1INSEL_1 /*!< 3/4 VREFINT connected to comparator inverting input */
+#define COMP_InvertingInput_1_2VREFINT          COMP_CSR_COMP1INSEL_0  /*!< 1/2 VREFINT connected to comparator inverting input */
+#define COMP_InvertingInput_3_4VREFINT          COMP_CSR_COMP1INSEL_1  /*!< 3/4 VREFINT connected to comparator inverting input */
 #define COMP_InvertingInput_VREFINT             ((uint32_t)0x00000030) /*!< VREFINT connected to comparator inverting input */
-#define COMP_InvertingInput_DAC1                COMP_CSR_COMP1INSEL_2 /*!< DAC1_OUT connected to comparator inverting input */
+#define COMP_InvertingInput_DAC1                COMP_CSR_COMP1INSEL_2  /*!< DAC1_OUT (PA4) connected to comparator inverting input */
+#define COMP_InvertingInput_DAC2                ((uint32_t)0x00000050) /*!< DAC2_OUT (PA5) connected to comparator inverting input, applicable only for STM32F072 devices */
 #define COMP_InvertingInput_IO                  ((uint32_t)0x00000060) /*!< I/O (PA0 for COMP1 and PA2 for COMP2) connected to comparator inverting input */
 
 #define IS_COMP_INVERTING_INPUT(INPUT) (((INPUT) == COMP_InvertingInput_1_4VREFINT) || \
@@ -109,6 +110,7 @@ typedef struct
                                         ((INPUT) == COMP_InvertingInput_3_4VREFINT) || \
                                         ((INPUT) == COMP_InvertingInput_VREFINT)    || \
                                         ((INPUT) == COMP_InvertingInput_DAC1)       || \
+                                        ((INPUT) == COMP_InvertingInput_DAC2)       || \
                                         ((INPUT) == COMP_InvertingInput_1_4VREFINT) || \
                                         ((INPUT) == COMP_InvertingInput_IO))
 /**

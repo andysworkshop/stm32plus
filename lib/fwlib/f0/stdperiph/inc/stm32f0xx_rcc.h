@@ -3,14 +3,14 @@
   ******************************************************************************
   * @file    stm32f0xx_rcc.h
   * @author  MCD Application Team
-  * @version V1.0.0
-  * @date    23-March-2012
+  * @version V1.3.0
+  * @date    16-January-2014
   * @brief   This file contains all the functions prototypes for the RCC 
   *          firmware library.
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2012 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -57,6 +57,8 @@ typedef struct
   uint32_t CECCLK_Frequency;
   uint32_t I2C1CLK_Frequency;
   uint32_t USART1CLK_Frequency;
+  uint32_t USART2CLK_Frequency; /*!< Only applicable for STM32F072 devices */
+  uint32_t USBCLK_Frequency; /*!< Only applicable for STM32F072 devices */
 }RCC_ClocksTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
@@ -84,9 +86,15 @@ typedef struct
   */
 
 #define RCC_PLLSource_HSI_Div2           RCC_CFGR_PLLSRC_HSI_Div2
-#define RCC_PLLSource_PREDIV1            RCC_CFGR_PLLSRC_PREDIV1
- 
+#define RCC_PLLSource_PREDIV1            RCC_CFGR_PLLSRC_HSE_PREDIV /* Old HSEPREDIV1 bit definition, maintained for legacy purpose */
+#define RCC_PLLSource_HSE                RCC_CFGR_PLLSRC_HSE_PREDIV /*!< Only applicable for STM32F072 devices */
+#define RCC_PLLSource_HSI48              RCC_CFGR_PLLSRC_HSI48_PREDIV /*!< Only applicable for STM32F072 devices */
+#define RCC_PLLSource_HSI                RCC_CFGR_PLLSRC_HSI_PREDIV /*!< Only applicable for STM32F072 devices */
+
 #define IS_RCC_PLL_SOURCE(SOURCE) (((SOURCE) == RCC_PLLSource_HSI_Div2) || \
+                                   ((SOURCE) == RCC_PLLSource_HSI48)    || \
+                                   ((SOURCE) == RCC_PLLSource_HSI)      || \
+                                   ((SOURCE) == RCC_PLLSource_HSE)      || \
                                    ((SOURCE) == RCC_PLLSource_PREDIV1))
 /**
   * @}
@@ -162,8 +170,11 @@ typedef struct
 #define RCC_SYSCLKSource_HSI             RCC_CFGR_SW_HSI
 #define RCC_SYSCLKSource_HSE             RCC_CFGR_SW_HSE
 #define RCC_SYSCLKSource_PLLCLK          RCC_CFGR_SW_PLL
-#define IS_RCC_SYSCLK_SOURCE(SOURCE) (((SOURCE) == RCC_SYSCLKSource_HSI) || \
-                                      ((SOURCE) == RCC_SYSCLKSource_HSE) || \
+#define RCC_SYSCLKSource_HSI48           RCC_CFGR_SW_HSI48 /*!< Only applicable for STM32F072 devices */
+
+#define IS_RCC_SYSCLK_SOURCE(SOURCE) (((SOURCE) == RCC_SYSCLKSource_HSI)   || \
+                                      ((SOURCE) == RCC_SYSCLKSource_HSE)   || \
+                                      ((SOURCE) == RCC_SYSCLKSource_HSI48) || \
                                       ((SOURCE) == RCC_SYSCLKSource_PLLCLK))
 /**
   * @}
@@ -210,7 +221,8 @@ typedef struct
 /** @defgroup RCC_ADC_clock_source 
   * @{
   */
-
+/* These defines are obsolete and kept for legacy purpose only.
+Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockModeConfig() function */
 #define RCC_ADCCLK_HSI14                 ((uint32_t)0x00000000)
 #define RCC_ADCCLK_PCLK_Div2             ((uint32_t)0x01000000)
 #define RCC_ADCCLK_PCLK_Div4             ((uint32_t)0x01004000)
@@ -248,22 +260,47 @@ typedef struct
   * @}
   */
 
-/** @defgroup RCC_USART_clock_source 
+/** @defgroup RCC_USB_clock_source
+  * @brief    Applicable only for STM32F072 devices
   * @{
   */
 
-#define RCC_USART1CLK_PCLK                 ((uint32_t)0x00000000)
-#define RCC_USART1CLK_SYSCLK               RCC_CFGR3_USART1SW_0
-#define RCC_USART1CLK_LSE                  RCC_CFGR3_USART1SW_1
-#define RCC_USART1CLK_HSI                  RCC_CFGR3_USART1SW
+#define RCC_USBCLK_HSI48                 ((uint32_t)0x00000000)
+#define RCC_USBCLK_PLLCLK                RCC_CFGR3_USBSW
 
-#define IS_RCC_USARTCLK(USARTCLK) (((USARTCLK) == RCC_USART1CLK_PCLK) || ((USARTCLK) == RCC_USART1CLK_SYSCLK) || \
-                                   ((USARTCLK) == RCC_USART1CLK_LSE) || ((USARTCLK) == RCC_USART1CLK_HSI))
+#define IS_RCC_USBCLK(USBCLK) (((USBCLK) == RCC_USBCLK_HSI48) || ((USBCLK) == RCC_USBCLK_PLLCLK))
 
 /**
   * @}
   */
-       
+
+/** @defgroup RCC_USART_clock_source 
+  * @{
+  */
+
+#define RCC_USART1CLK_PCLK                  ((uint32_t)0x10000000)
+#define RCC_USART1CLK_SYSCLK                ((uint32_t)0x10000001)
+#define RCC_USART1CLK_LSE                   ((uint32_t)0x10000002)
+#define RCC_USART1CLK_HSI                   ((uint32_t)0x10000003)
+
+#define RCC_USART2CLK_PCLK                  ((uint32_t)0x20000000) /*!< Only applicable for STM32F072 devices */
+#define RCC_USART2CLK_SYSCLK                ((uint32_t)0x20010000) /*!< Only applicable for STM32F072 devices */
+#define RCC_USART2CLK_LSE                   ((uint32_t)0x20020000) /*!< Only applicable for STM32F072 devices */
+#define RCC_USART2CLK_HSI                   ((uint32_t)0x20030000) /*!< Only applicable for STM32F072 devices */
+
+#define IS_RCC_USARTCLK(USARTCLK) (((USARTCLK) == RCC_USART1CLK_PCLK)   || \
+                                   ((USARTCLK) == RCC_USART1CLK_SYSCLK) || \
+                                   ((USARTCLK) == RCC_USART1CLK_LSE)    || \
+                                   ((USARTCLK) == RCC_USART1CLK_HSI)    || \
+                                   ((USARTCLK) == RCC_USART2CLK_PCLK)   || \
+                                   ((USARTCLK) == RCC_USART2CLK_SYSCLK) || \
+                                   ((USARTCLK) == RCC_USART2CLK_LSE)    || \
+                                   ((USARTCLK) == RCC_USART2CLK_HSI))
+
+/**
+  * @}
+  */
+         
 /** @defgroup RCC_Interrupt_Source 
   * @{
   */
@@ -274,16 +311,17 @@ typedef struct
 #define RCC_IT_HSERDY                    ((uint8_t)0x08)
 #define RCC_IT_PLLRDY                    ((uint8_t)0x10)
 #define RCC_IT_HSI14RDY                  ((uint8_t)0x20)
+#define RCC_IT_HSI48RDY                  ((uint8_t)0x40) /*!< Only applicable for STM32F072 devices */
 #define RCC_IT_CSS                       ((uint8_t)0x80)
 
-#define IS_RCC_IT(IT) ((((IT) & (uint8_t)0xC0) == 0x00) && ((IT) != 0x00))
+#define IS_RCC_IT(IT) ((((IT) & (uint8_t)0x80) == 0x00) && ((IT) != 0x00))
 
 #define IS_RCC_GET_IT(IT) (((IT) == RCC_IT_LSIRDY) || ((IT) == RCC_IT_LSERDY) || \
                            ((IT) == RCC_IT_HSIRDY) || ((IT) == RCC_IT_HSERDY) || \
                            ((IT) == RCC_IT_PLLRDY) || ((IT) == RCC_IT_HSI14RDY) || \
-                           ((IT) == RCC_IT_CSS))
+                           ((IT) == RCC_IT_CSS)    || ((IT) == RCC_IT_HSI48RDY))
 
-#define IS_RCC_CLEAR_IT(IT) ((((IT) & (uint8_t)0x40) == 0x00) && ((IT) != 0x00))
+#define IS_RCC_CLEAR_IT(IT) ((IT) != 0x00)
 
 /**
   * @}
@@ -339,6 +377,7 @@ typedef struct
 #define RCC_AHBPeriph_GPIOB               RCC_AHBENR_GPIOBEN
 #define RCC_AHBPeriph_GPIOC               RCC_AHBENR_GPIOCEN
 #define RCC_AHBPeriph_GPIOD               RCC_AHBENR_GPIODEN
+#define RCC_AHBPeriph_GPIOE               RCC_AHBENR_GPIOEEN /*!< Only applicable for STM32F072 devices */
 #define RCC_AHBPeriph_GPIOF               RCC_AHBENR_GPIOFEN
 #define RCC_AHBPeriph_TS                  RCC_AHBENR_TSEN
 #define RCC_AHBPeriph_CRC                 RCC_AHBENR_CRCEN
@@ -346,8 +385,8 @@ typedef struct
 #define RCC_AHBPeriph_SRAM                RCC_AHBENR_SRAMEN
 #define RCC_AHBPeriph_DMA1                RCC_AHBENR_DMA1EN
 
-#define IS_RCC_AHB_PERIPH(PERIPH) ((((PERIPH) & 0xFEA1FFAA) == 0x00) && ((PERIPH) != 0x00))
-#define IS_RCC_AHB_RST_PERIPH(PERIPH) ((((PERIPH) & 0xFEA1FFFF) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_AHB_PERIPH(PERIPH) ((((PERIPH) & 0xFE81FFAA) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_AHB_RST_PERIPH(PERIPH) ((((PERIPH) & 0xFE81FFFF) == 0x00) && ((PERIPH) != 0x00))
 
 /**
   * @}
@@ -377,20 +416,26 @@ typedef struct
   * @{
   */
 
-#define RCC_APB1Periph_TIM2              RCC_APB1ENR_TIM2EN
+#define RCC_APB1Periph_TIM2              RCC_APB1ENR_TIM2EN    /*!< Only applicable for STM32F051 and STM32F072 devices */
 #define RCC_APB1Periph_TIM3              RCC_APB1ENR_TIM3EN
 #define RCC_APB1Periph_TIM6              RCC_APB1ENR_TIM6EN
+#define RCC_APB1Periph_TIM7              RCC_APB1ENR_TIM7EN    /*!< Only applicable for STM32F072 devices */
 #define RCC_APB1Periph_TIM14             RCC_APB1ENR_TIM14EN
 #define RCC_APB1Periph_WWDG              RCC_APB1ENR_WWDGEN
 #define RCC_APB1Periph_SPI2              RCC_APB1ENR_SPI2EN
 #define RCC_APB1Periph_USART2            RCC_APB1ENR_USART2EN
+#define RCC_APB1Periph_USART3            RCC_APB1ENR_USART3EN  /*!< Only applicable for STM32F072 devices */
+#define RCC_APB1Periph_USART4            RCC_APB1ENR_USART4EN  /*!< Only applicable for STM32F072 devices */
 #define RCC_APB1Periph_I2C1              RCC_APB1ENR_I2C1EN
 #define RCC_APB1Periph_I2C2              RCC_APB1ENR_I2C2EN
+#define RCC_APB1Periph_USB               RCC_APB1ENR_USBEN     /*!< Only applicable for STM32F072 and STM32F042 devices */
+#define RCC_APB1Periph_CAN               RCC_APB1ENR_CANEN    /*!< Only applicable for STM32F072 and STM32F042 devices */
+#define RCC_APB1Periph_CRS               RCC_APB1ENR_CRSEN     /*!< Only applicable for STM32F072 and STM32F042 devices*/
 #define RCC_APB1Periph_PWR               RCC_APB1ENR_PWREN
-#define RCC_APB1Periph_DAC               RCC_APB1ENR_DACEN
-#define RCC_APB1Periph_CEC               RCC_APB1ENR_CECEN
+#define RCC_APB1Periph_DAC               RCC_APB1ENR_DACEN     /*!< Only applicable for STM32F051 and STM32F072 devices */
+#define RCC_APB1Periph_CEC               RCC_APB1ENR_CECEN     /*!< Only applicable for STM32F051, STM32F042 and STM32F072 devices */
 
-#define IS_RCC_APB1_PERIPH(PERIPH) ((((PERIPH) & 0x8F9DB6EC) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_APB1_PERIPH(PERIPH) ((((PERIPH) & 0x8511B6CC) == 0x00) && ((PERIPH) != 0x00))
 /**
   * @}
   */
@@ -407,11 +452,40 @@ typedef struct
 #define RCC_MCOSource_HSI                ((uint8_t)0x05)
 #define RCC_MCOSource_HSE                ((uint8_t)0x06)
 #define RCC_MCOSource_PLLCLK_Div2        ((uint8_t)0x07)
+#define RCC_MCOSource_HSI48              ((uint8_t)0x08)  /*!< Only applicable for STM32F072 devices */
+#define RCC_MCOSource_PLLCLK             ((uint8_t)0x87)
 
-#define IS_RCC_MCO_SOURCE(SOURCE) (((SOURCE) == RCC_MCOSource_NoClock) || ((SOURCE) == RCC_MCOSource_HSI14) || \
-                                   ((SOURCE) == RCC_MCOSource_SYSCLK)  || ((SOURCE) == RCC_MCOSource_HSI)  || \
-                                   ((SOURCE) == RCC_MCOSource_HSE) || ((SOURCE) == RCC_MCOSource_PLLCLK_Div2)|| \
-                                   ((SOURCE) == RCC_MCOSource_LSI) || ((SOURCE) == RCC_MCOSource_LSE))
+#define IS_RCC_MCO_SOURCE(SOURCE) (((SOURCE) == RCC_MCOSource_NoClock) || ((SOURCE) == RCC_MCOSource_HSI14)      || \
+                                   ((SOURCE) == RCC_MCOSource_SYSCLK)  || ((SOURCE) == RCC_MCOSource_HSI)        || \
+                                   ((SOURCE) == RCC_MCOSource_HSE)     || ((SOURCE) == RCC_MCOSource_PLLCLK_Div2)|| \
+                                   ((SOURCE) == RCC_MCOSource_LSI)     || ((SOURCE) == RCC_MCOSource_HSI48)      || \
+                                   ((SOURCE) == RCC_MCOSource_PLLCLK)  || ((SOURCE) == RCC_MCOSource_LSE))
+/**
+  * @}
+  */ 
+
+/** @defgroup RCC_MCOPrescaler
+  * @{
+  */
+#if !defined (STM32F051)
+#define RCC_MCOPrescaler_1            RCC_CFGR_MCO_PRE_1
+#define RCC_MCOPrescaler_2            RCC_CFGR_MCO_PRE_2
+#define RCC_MCOPrescaler_4            RCC_CFGR_MCO_PRE_4
+#define RCC_MCOPrescaler_8            RCC_CFGR_MCO_PRE_8
+#define RCC_MCOPrescaler_16           RCC_CFGR_MCO_PRE_16
+#define RCC_MCOPrescaler_32           RCC_CFGR_MCO_PRE_32
+#define RCC_MCOPrescaler_64           RCC_CFGR_MCO_PRE_64
+#define RCC_MCOPrescaler_128          RCC_CFGR_MCO_PRE_128
+
+#define IS_RCC_MCO_PRESCALER(PRESCALER) (((PRESCALER) == RCC_MCOPrescaler_1)  || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_2)  || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_4)  || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_8)  || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_16) || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_32) || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_64) || \
+                                         ((PRESCALER) == RCC_MCOPrescaler_128))
+#endif /* STM32F051 */                                         
 /**
   * @}
   */ 
@@ -433,14 +507,16 @@ typedef struct
 #define RCC_FLAG_WWDGRST                 ((uint8_t)0x5E)
 #define RCC_FLAG_LPWRRST                 ((uint8_t)0x5F)
 #define RCC_FLAG_HSI14RDY                ((uint8_t)0x61)
+#define RCC_FLAG_HSI48RDY                ((uint8_t)0x71) /*!< Only applicable for STM32F072 devices */ 
 
-#define IS_RCC_FLAG(FLAG) (((FLAG) == RCC_FLAG_HSIRDY)  || ((FLAG) == RCC_FLAG_HSERDY) || \
-                           ((FLAG) == RCC_FLAG_PLLRDY)  || ((FLAG) == RCC_FLAG_LSERDY) || \
-                           ((FLAG) == RCC_FLAG_LSIRDY)  || ((FLAG) == RCC_FLAG_OBLRST) || \
-                           ((FLAG) == RCC_FLAG_PINRST)  || ((FLAG) == RCC_FLAG_PORRST) || \
-                           ((FLAG) == RCC_FLAG_SFTRST)  || ((FLAG) == RCC_FLAG_IWDGRST)|| \
-                           ((FLAG) == RCC_FLAG_WWDGRST) || ((FLAG) == RCC_FLAG_LPWRRST)|| \
-                           ((FLAG) == RCC_FLAG_HSI14RDY)|| ((FLAG) == RCC_FLAG_V18PWRRSTF))
+#define IS_RCC_FLAG(FLAG) (((FLAG) == RCC_FLAG_HSIRDY)  || ((FLAG) == RCC_FLAG_HSERDY)  || \
+                           ((FLAG) == RCC_FLAG_PLLRDY)  || ((FLAG) == RCC_FLAG_LSERDY)  || \
+                           ((FLAG) == RCC_FLAG_LSIRDY)  || ((FLAG) == RCC_FLAG_OBLRST)  || \
+                           ((FLAG) == RCC_FLAG_PINRST)  || ((FLAG) == RCC_FLAG_PORRST)  || \
+                           ((FLAG) == RCC_FLAG_SFTRST)  || ((FLAG) == RCC_FLAG_IWDGRST) || \
+                           ((FLAG) == RCC_FLAG_WWDGRST) || ((FLAG) == RCC_FLAG_LPWRRST) || \
+                           ((FLAG) == RCC_FLAG_HSI14RDY)|| ((FLAG) == RCC_FLAG_HSI48RDY)|| \
+                           ((FLAG) == RCC_FLAG_V18PWRRSTF))
 
 #define IS_RCC_HSI_CALIBRATION_VALUE(VALUE) ((VALUE) <= 0x1F)
 #define IS_RCC_HSI14_CALIBRATION_VALUE(VALUE) ((VALUE) <= 0x1F)
@@ -472,19 +548,28 @@ void RCC_LSEDriveConfig(uint32_t RCC_LSEDrive);
 void RCC_LSICmd(FunctionalState NewState);
 void RCC_PLLConfig(uint32_t RCC_PLLSource, uint32_t RCC_PLLMul);
 void RCC_PLLCmd(FunctionalState NewState);
+void RCC_HSI48Cmd(FunctionalState NewState); /*!< Only applicable for STM32F072 devices */
+uint32_t RCC_GetHSI48CalibrationValue(void); /*!< Only applicable for STM32F072 devices */
 void RCC_PREDIV1Config(uint32_t RCC_PREDIV1_Div);
 void RCC_ClockSecuritySystemCmd(FunctionalState NewState);
+#ifdef STM32F051
 void RCC_MCOConfig(uint8_t RCC_MCOSource);
+#else
+void RCC_MCOConfig(uint8_t RCC_MCOSource,uint32_t RCC_MCOPrescaler);
+#endif /* STM32F051 */
 
 /* System, AHB and APB busses clocks configuration functions ******************/
 void RCC_SYSCLKConfig(uint32_t RCC_SYSCLKSource);
 uint8_t RCC_GetSYSCLKSource(void);
 void RCC_HCLKConfig(uint32_t RCC_SYSCLK);
 void RCC_PCLKConfig(uint32_t RCC_HCLK);
-void RCC_ADCCLKConfig(uint32_t RCC_ADCCLK);
+void RCC_ADCCLKConfig(uint32_t RCC_ADCCLK); /* This function is obsolete.
+                                               For proper ADC clock selection, refer to
+                                               ADC_ClockModeConfig() in the ADC driver */
 void RCC_CECCLKConfig(uint32_t RCC_CECCLK);
 void RCC_I2CCLKConfig(uint32_t RCC_I2CCLK);
 void RCC_USARTCLKConfig(uint32_t RCC_USARTCLK);
+void RCC_USBCLKConfig(uint32_t RCC_USBCLK); /*!< Only applicable for STM32F042 and STM32F072 devices */
 void RCC_GetClocksFreq(RCC_ClocksTypeDef* RCC_Clocks);
 
 /* Peripheral clocks configuration functions **********************************/
