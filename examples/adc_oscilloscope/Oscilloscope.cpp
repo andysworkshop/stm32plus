@@ -13,10 +13,16 @@
 
 void Oscilloscope::run() {
 
+  // reset the flags
+
+  _halfTime=_fullTime=false;
+
   // create the main objects
 
   _display.reset(new Display);
+
   createAdc();
+  createBuffers();
 
   for(;;);
 }
@@ -32,4 +38,17 @@ void Oscilloscope::createAdc() {
     _adc.reset(new AdcContinuous);
   else
     _adc.reset(new AdcTriggered);
+}
+
+
+/*
+ * Create the sample buffers
+ */
+
+void Oscilloscope::createBuffers() {
+
+  // each buffer is 2x the width of the screen
+
+  _channel1.reset(new uint8_t[LcdPanel::LONG_SIDE*2]);
+  _channel2.reset(new uint8_t[LcdPanel::LONG_SIDE*2]);
 }

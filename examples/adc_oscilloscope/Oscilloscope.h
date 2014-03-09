@@ -13,12 +13,20 @@
 
 class Oscilloscope {
 
+  public:
+    volatile bool _halfTime;
+    volatile bool _fullTime;
+
   protected:
     scoped_ptr<Display> _display;
     scoped_ptr<Adc> _adc;
 
+    scoped_array<uint8_t> _channel1;
+    scoped_array<uint8_t> _channel2;
+
   protected:
     void createAdc();
+    void createBuffers();
 
   public:
     void run();
