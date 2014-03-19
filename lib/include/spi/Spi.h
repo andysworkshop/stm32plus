@@ -14,9 +14,12 @@ namespace stm32plus {
    * Base class for all SPI peripherals. Supports synchronous sending and receiving of
    * data encoded into 8 or 16-bit values. The SPI peripheral on the F0 can be initialised
    * to send/receive bit streams that are no a multiple of 8.
+   *
+   * This class inherits from the very small device specifc IO class that handles the differences
+   * in the ST peripheral library between devices.
    */
 
-  class Spi {
+  class Spi : public SpiDeviceIo {
 
     protected:
       SPI_TypeDef *_peripheralAddress;
@@ -153,7 +156,7 @@ namespace stm32plus {
       if(hasError())
         return false;
 
-    byte=SPI_I2S_ReceiveData(_peripheralAddress);
+    byte=receiveData8(_peripheralAddress);
     return true;
   }
 
@@ -173,7 +176,7 @@ namespace stm32plus {
 
     // read the word
 
-    hword=SPI_I2S_ReceiveData(_peripheralAddress);
+    hword=receiveData16(_peripheralAddress);
     return true;
   }
 
@@ -200,7 +203,7 @@ namespace stm32plus {
 
       // send the dummy byte, i.e. cause the SPI clock to tick
 
-      SPI_I2S_SendData(_peripheralAddress,zero);
+      sendData8(_peripheralAddress,zero);
 
       while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_RXNE)==RESET)
         if(hasError())
@@ -208,7 +211,7 @@ namespace stm32plus {
 
       // read the byte to clear RXNE and save/discard
 
-      *data++=SPI_I2S_ReceiveData(_peripheralAddress);
+      *data++=receiveData8(_peripheralAddress);
     }
 
     return true;
@@ -237,7 +240,7 @@ namespace stm32plus {
 
       // send the dummy byte, i.e. cause the SPI clock to tick
 
-      SPI_I2S_SendData(_peripheralAddress,zero);
+      sendData16(_peripheralAddress,zero);
 
       while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_RXNE)==RESET)
         if(hasError())
@@ -245,7 +248,7 @@ namespace stm32plus {
 
       // read the byte to clear RXNE and save/discard
 
-      *data++=SPI_I2S_ReceiveData(_peripheralAddress);
+      *data++=receiveData16(_peripheralAddress);
     }
 
     return true;
@@ -281,7 +284,7 @@ namespace stm32plus {
 
       // send the byte
 
-      SPI_I2S_SendData(_peripheralAddress,*dataToSend++);
+      sendData8(_peripheralAddress,*dataToSend++);
 
       if(_direction==SPI_Direction_2Lines_FullDuplex) {
 
@@ -294,9 +297,9 @@ namespace stm32plus {
         // read the byte to clear RXNE and save
 
         if(dataReceived!=nullptr)
-          *dataReceived++=SPI_I2S_ReceiveData(_peripheralAddress);
+          *dataReceived++=receiveData8(_peripheralAddress);
         else
-          SPI_I2S_ReceiveData(_peripheralAddress);
+          receiveData8(_peripheralAddress);
       }
     }
 
@@ -323,7 +326,7 @@ namespace stm32plus {
 
       // send the half-word
 
-      SPI_I2S_SendData(_peripheralAddress,*dataToSend++);
+      sendData16(_peripheralAddress,*dataToSend++);
 
       if(_direction==SPI_Direction_2Lines_FullDuplex) {
 
@@ -336,9 +339,9 @@ namespace stm32plus {
         // read the byte to clear RXNE and save it
 
         if(dataReceived!=nullptr)
-          *dataReceived++=SPI_I2S_ReceiveData(_peripheralAddress);
+          *dataReceived++=receiveData16(_peripheralAddress);
         else
-          SPI_I2S_ReceiveData(_peripheralAddress);
+          receiveData16(_peripheralAddress);
       }
     }
 
