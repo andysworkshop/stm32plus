@@ -50,7 +50,7 @@ namespace stm32plus {
       bool send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived=nullptr) const;
       bool send(const uint16_t *dataToSend,uint32_t numHalfWords,uint16_t *dataReceived=nullptr) const;
 
-      void setNss(bool value);
+      void setNss(bool value) const;
       operator SPI_TypeDef *() const;
       bool hasError() const;
 
@@ -127,7 +127,7 @@ namespace stm32plus {
    * @param value true = high, false = low
    */
 
-  inline void Spi::setNss(bool value) {
+  inline void Spi::setNss(bool value) const {
     if(value)
       GPIO_SetBits(_nssPort,_nssPin);
     else
