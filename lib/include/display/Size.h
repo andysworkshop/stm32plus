@@ -22,23 +22,65 @@ namespace stm32plus {
 
     struct Size {
 
-        /// The width
-        int16_t Width;
+      /// The width
+      int16_t Width;
 
-        /// The height
-        int16_t Height;
+      /// The height
+      int16_t Height;
 
-        Size() {}
+      Size() {}
 
-        /**
-         * Constructor
-         * @param[in] width The width parameter.
-         * @param[in] height The height parameter.
-         */
+      /**
+       * Constructor
+       * @param[in] width The width parameter.
+       * @param[in] height The height parameter.
+       */
 
-        Size(int16_t width,int16_t height) :
-          Width(width), Height(height) {
-        }
+      Size(int16_t width,int16_t height) :
+        Width(width), Height(height) {
+      }
+
+
+      /**
+       * Copy constructor
+       */
+
+      Size(const Size& src) {
+        assign(src);
+      }
+
+
+      /**
+       * Assignment operator
+       */
+
+      Size& operator=(const Size& src) {
+        assign(src);
+        return *this;
+      }
+
+
+      /*
+       * Assign src to this
+       */
+
+      void assign(const Size& src) {
+        Width=src.Width;
+        Height=src.Height;
+      }
+
+
+      /*
+       * Equality operators
+       */
+
+      bool operator==(const Size& rhs) const {
+        return Width==rhs.Width && Height==rhs.Height;
+      }
+
+      bool operator!=(const Size& rhs) const {
+        return Width!=rhs.Width || Height!=rhs.Height;
+      }
     };
   }
 }
