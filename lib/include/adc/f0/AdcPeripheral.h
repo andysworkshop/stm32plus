@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
+
 
 namespace stm32plus {
 
@@ -34,8 +39,7 @@ namespace stm32plus {
    */
 
   template<PeripheralName TPeripheralName>
-  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(AdcOperatingMode operatingMode)
-    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE,operatingMode) {
+  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(AdcOperatingMode /* operatingMode */) {
   }
 
 
@@ -51,23 +55,11 @@ namespace stm32plus {
 
     ClockControl<TPeripheralName>::On();
 
-    // the features have been constructed and the common init structure customised
-    // initialise it and free the memory it was using
-
-    if(_operatingMode==AdcOperatingMode::SINGLE_ADC)
-      ADC_CommonInit(_commonInit);
-
-    delete _commonInit;
-
-    // and now the other init call
+    // the features have been constructed, initialise it and
+    // free the memory it was using
 
     ADC_Init(_peripheralAddress,_init);
     delete _init;
-
-    // if there are any injected channels then set the count
-
-    if(_injectedChannelCount)
-      ADC_InjectedSequencerLengthConfig(_peripheralAddress,_injectedChannelCount);
   }
 
 
