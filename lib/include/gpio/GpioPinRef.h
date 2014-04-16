@@ -28,6 +28,7 @@ namespace stm32plus {
     public:
       GpioPinRef() {}
       GpioPinRef(const Gpio& gpio);
+      GpioPinRef(GPIO_TypeDef *peripheralAddress,uint16_t pin);
 
       void set() const;
       void reset() const;
@@ -47,6 +48,18 @@ namespace stm32plus {
   inline GpioPinRef::GpioPinRef(const Gpio& gpio) {
     _peripheralAddress=gpio.getPeripheralAddress();
     _pin=gpio.getSelectedPin();
+  }
+
+
+  /**
+   * Constructor
+   * @param peripheralAddress GPIO port base
+   * @param pin peripheral library compatible pin number
+   */
+
+  inline GpioPinRef::GpioPinRef(GPIO_TypeDef *peripheralAddress,uint16_t pin)
+    : _peripheralAddress(peripheralAddress),
+      _pin(pin) {
   }
 
 

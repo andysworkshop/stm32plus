@@ -80,8 +80,8 @@ class TimerInterruptsTest  {
 
 
       /*
-       * Set an up-down-timer up to tick at 5000Hz with an auto-reload value of 5000
-       * The timer will count from 0 to 5000 inclusive, raise an Update interrupt and
+       * Set an up-down-timer up to tick at 5000Hz with an auto-reload value of 4999
+       * The timer will count from 0 to 4999 inclusive, raise an Update interrupt and
        * then go backwards back down to 0 where it'll raise another Update interrupt
        * and start again. Each journey from one end to the other takes 1 second.
        *
