@@ -25,22 +25,23 @@
 #if defined(STM32PLUS_F1)
 
   #include "spi/f1/SpiPinInitialiser.h"
+  #include "spi/f1/SpiDeviceIo.h"
 
 #elif defined(STM32PLUS_F4)
 
   #include "spi/f4/SpiAlternateFunctionMapper.h"
   #include "spi/f4/SpiPinInitialiser.h"
+  #include "spi/f4/SpiDeviceIo.h"
 
 #elif defined(STM32PLUS_F0)
 
-  // some unhelpful renaming went on inside the std peripheral library
-
-  #define SPI_I2S_ReceiveData(a) SPI_I2S_ReceiveData16((a))
-  #define SPI_I2S_SendData(a,b) SPI_I2S_SendData16((a),(b))
-  #define SPI_I2S_ClearITPendingBit(a,b)  SPI_I2S_ClearFlag((a),(b))
-
   #include "spi/f0/SpiAlternateFunctionMapper.h"
   #include "spi/f0/SpiPinInitialiser.h"
+  #include "spi/f0/SpiDeviceIo.h"
+
+  // got renamed in the F0 SDK
+
+  #define SPI_I2S_ClearITPendingBit(a,b)  SPI_I2S_ClearFlag((a),(b))
 
 #endif
 
@@ -54,6 +55,14 @@
 
 #include "spi/features/SpiFeatureBase.h"
 #include "spi/features/SpiInterruptFeature.h"
+
+// device specific includes
+
+#if defined(STM32PLUS_F0)
+
+  #include "spi/features/f0/SpiFifoNotifyFeature.h"
+
+#endif
 
 // general includes for the peripheral
 

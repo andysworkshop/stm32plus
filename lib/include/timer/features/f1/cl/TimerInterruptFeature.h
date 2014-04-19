@@ -56,6 +56,8 @@ namespace stm32plus {
 
       void enableInterrupts(uint16_t interruptMask);
       void disableInterrupts(uint16_t interruptMask);
+
+      void clearPendingInterruptsFlag(uint16_t interruptMask) const;
   };
 
   /*
@@ -141,6 +143,17 @@ namespace stm32plus {
   inline void TimerInterruptFeature<TTimerNumber>::disableInterrupts(uint16_t interruptMask) {
     _interruptMask&=~interruptMask;
     TIM_ITConfig(_timer,interruptMask,DISABLE);
+  }
+
+
+  /**
+   * Clear the selected pending interrupt flags
+   * @param interruptMask The bitmask of interrupts, e.g. TIM_IT_UPDATE, TIM_IT_CC1..4
+   */
+
+  template<uint8_t TTimerNumber>
+  inline void TimerInterruptFeature<TTimerNumber>::clearPendingInterruptsFlag(uint16_t interruptMask) const {
+    TIM_ClearITPendingBit(_timer,interruptMask);
   }
 
 

@@ -13,7 +13,7 @@ namespace stm32plus {
    * Base class for all I2S peripherals
    */
 
-  class I2S {
+  class I2S : public SpiDeviceIo {
 
     protected:
       SPI_TypeDef *_peripheralAddress;
@@ -119,7 +119,7 @@ namespace stm32plus {
 
       // send the 16-bit halfword
 
-      SPI_I2S_SendData(_peripheralAddress,*dataToSend++);
+      sendData16(_peripheralAddress,*dataToSend++);
     }
 
     return true;

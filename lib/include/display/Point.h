@@ -14,35 +14,74 @@ namespace stm32plus {
      * @brief A point co-ordinate structure
      */
 
-    class Point {
+    struct Point {
 
-      public:
-        /// X co-ordinate
-        int16_t X;
+      /// X co-ordinate
+      int16_t X;
 
-        /// Y co-ordinate
-        int16_t Y;
+      /// Y co-ordinate
+      int16_t Y;
 
-      public:
+      /**
+       * Return a (0,0) point.
+       */
 
-        /**
-         * Return a (0,0) point.
-         */
+      static const Point Origin;
 
-        static const Point Origin;
+      Point() {}
 
-        Point() {}
+      /**
+       * Constructor with parameters
+       * @param[in] x The x-co-ord
+       * @param[in] y The y-co-ord
+       */
 
-        /**
-         * Constructor with parameters
-         * @param[in] x The x-co-ord
-         * @param[in] y The y-co-ord
-         */
+      Point(int16_t x,int16_t y) {
+        X=x;
+        Y=y;
+      }
 
-        Point(int16_t x,int16_t y) {
-          X=x;
-          Y=y;
-        }
+
+      /**
+       * Copy constructor
+       */
+
+      Point(const Point& p) {
+        assign(p);
+      }
+
+
+      /*
+       * Assignment operator
+       */
+
+      Point& operator=(const Point& p) {
+        assign(p);
+        return *this;
+      }
+
+
+      /*
+       * Assign src to this
+       */
+
+      void assign(const Point& p) {
+        X=p.X;
+        Y=p.Y;
+      }
+
+
+      /*
+       * Equality operators
+       */
+
+      bool operator==(const Point& rhs) const {
+        return rhs.X==X && rhs.Y==Y;
+      }
+
+      bool operator!=(const Point& rhs) const {
+        return rhs.X!=X || rhs.Y!=Y;
+      }
     };
   }
 }

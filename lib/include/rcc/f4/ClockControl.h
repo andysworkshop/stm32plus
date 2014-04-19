@@ -15,22 +15,6 @@
 namespace stm32plus {
 
   /**
-   * ADC1
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_ADC1> {
-
-    static void On() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC1,DISABLE);
-    }
-  };
-
-  /**
    * ADC2
    */
 

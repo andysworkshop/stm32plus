@@ -14,93 +14,134 @@ namespace stm32plus {
      * @brief A rectangle class
      */
 
-    class Rectangle {
+    struct Rectangle {
 
-      public:
       /// X co-ordinate
-        int16_t X;
+      int16_t X;
 
-        /// Y co-ordinate
-        int16_t Y;
+      /// Y co-ordinate
+      int16_t Y;
 
-        /// Width
-        int16_t Width;
+      /// Width
+      int16_t Width;
 
-        /// Height
-        int16_t Height;
-
-
-      public:
-
-        Rectangle() {}
-
-        /**
-         * Constructor. Set up the parameters.
-         * @param[in] x The x-coord
-         * @param[in] y The y-coord
-         * @param[in] width The width (cannot be negative)
-         * @param[in] height The height (cannot be negative)
-         */
-
-        Rectangle(int16_t x,int16_t y,int16_t width,int16_t height) {
-          X=x;
-          Y=y;
-          Width=width;
-          Height=height;
-        }
+      /// Height
+      int16_t Height;
 
 
-        /**
-         * Constructor with top-left co-ord and size
-         * @param[in] p The top-left co-ord
-         * @param[in] size The rectangle width and height
-         */
+      Rectangle() {}
 
-        Rectangle(const Point& p,const Size& size) {
-          X=p.X;
-          Y=p.Y;
-          Width=size.Width;
-          Height=size.Height;
-        }
+      /**
+       * Constructor. Set up the parameters.
+       * @param[in] x The x-coord
+       * @param[in] y The y-coord
+       * @param[in] width The width (cannot be negative)
+       * @param[in] height The height (cannot be negative)
+       */
 
-        /**
-         * Get the size of the rectangle
-         * @return the size structure
-         */
-
-        Size getSize() const {
-          Size s;
-
-          s.Width=Width;
-          s.Height=Height;
-
-          return s;
-        }
+      Rectangle(int16_t x,int16_t y,int16_t width,int16_t height) {
+        X=x;
+        Y=y;
+        Width=width;
+        Height=height;
+      }
 
 
-        /**
-         * Get the top-left corner
-         * @return the top-left
-         */
+      /**
+       * Constructor with top-left co-ord and size
+       * @param[in] p The top-left co-ord
+       * @param[in] size The rectangle width and height
+       */
 
-        Point getTopLeft() const {
-          Point p;
-
-          p.X=X;
-          p.Y=Y;
-
-          return p;
-        }
+      Rectangle(const Point& p,const Size& size) {
+        X=p.X;
+        Y=p.Y;
+        Width=size.Width;
+        Height=size.Height;
+      }
 
 
-        /**
-         * Check if the given point is contained in this rectangle
-         * @return true if is contained
-         */
+      /**
+       * Copy constructor
+       */
 
-        bool containsPoint(const Point& p) const {
-          return p.X>=X && p.X<=X+Width && p.Y>=Y && p.Y<=Y+Height;
-        }
+      Rectangle(const Rectangle& src) {
+        assign(src);
+      }
+
+
+      /**
+       * Assignment operator
+       */
+
+      Rectangle& operator=(const Rectangle& src) {
+        assign(src);
+        return *this;
+      }
+
+
+      /**
+       * Assign src to this
+       */
+
+      void assign(const Rectangle& src) {
+        X=src.X;
+        Y=src.Y;
+        Width=src.Width;
+        Height=src.Height;
+      }
+
+
+      /**
+       * Equality operators
+       */
+
+      bool operator==(const Rectangle& rhs) const {
+        return X==rhs.X && Y==rhs.Y && Width==rhs.Width && Height==rhs.Height;
+      }
+
+      bool operator!=(const Rectangle& rhs) const {
+        return X!=rhs.X || Y!=rhs.Y || Width!=rhs.Width || Height!=rhs.Height;
+      }
+
+      /**
+       * Get the size of the rectangle
+       * @return the size structure
+       */
+
+      Size getSize() const {
+        Size s;
+
+        s.Width=Width;
+        s.Height=Height;
+
+        return s;
+      }
+
+
+      /**
+       * Get the top-left corner
+       * @return the top-left
+       */
+
+      Point getTopLeft() const {
+        Point p;
+
+        p.X=X;
+        p.Y=Y;
+
+        return p;
+      }
+
+
+      /**
+       * Check if the given point is contained in this rectangle
+       * @return true if is contained
+       */
+
+      bool containsPoint(const Point& p) const {
+        return p.X>=X && p.X<=X+Width && p.Y>=Y && p.Y<=Y+Height;
+      }
     };
 
 
@@ -109,9 +150,7 @@ namespace stm32plus {
      * converts them to positive values while keeping the rect at the same position
      */
 
-    struct NormalizedRectangle : public Rectangle {
-
-    public:
+    struct NormalizedRectangle : Rectangle {
 
       /**
        * Constructor
