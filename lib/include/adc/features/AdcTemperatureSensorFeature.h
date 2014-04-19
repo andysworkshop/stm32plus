@@ -68,6 +68,8 @@ namespace stm32plus {
   };
 
 
+#if defined(STM32PLUS_F4)
+
   /*
    * Typedefs for the difference cycles on ADC1. There's a minimum conversion time for the
    * temperature so the lower-cycle values are not present.
@@ -76,4 +78,23 @@ namespace stm32plus {
   typedef AdcTemperatureSensorFeature<ADC_SampleTime_112Cycles> Adc1Cycle112TemperatureSensorFeature;
   typedef AdcTemperatureSensorFeature<ADC_SampleTime_144Cycles> Adc1Cycle144TemperatureSensorFeature;
   typedef AdcTemperatureSensorFeature<ADC_SampleTime_480Cycles> Adc1Cycle480TemperatureSensorFeature;
+
+#elif defined(STM32PLUS_F0)
+
+  /*
+   * Note the sampling time must be greater than 2.2uS
+   */
+
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_1_5Cycles> Adc1Cycle1TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_7_5Cycles> Adc1Cycle7TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_13_5Cycles> Adc1Cycle13TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_28_5Cycles> Adc1Cycle28TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_41_5Cycles> Adc1Cycle41TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_55_5Cycles> Adc1Cycle55TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_71_5Cycles> Adc1Cycle71TemperatureSensorFeature;
+  typedef AdcTemperatureSensorFeature<ADC_SampleTime_239_5Cycles> Adc1Cycle239TemperatureSensorFeature;
+
+#else
+#error "Unsupported MCU"
+#endif
 }

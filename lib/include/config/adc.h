@@ -38,37 +38,40 @@
 
 #endif
 
-// feature includes
+#define USE_ADC_INTERRUPT
 
 #include "adc/features/AdcChannelGpioInitialiser.h"
 #include "adc/features/AdcFeatureBase.h"
-#include "adc/features/AdcRegularChannelFeature.h"
-#include "adc/features/AdcBatteryVoltageFeature.h"
-#include "adc/features/AdcInternalReferenceVoltageFeature.h"
-#include "adc/features/AdcTemperatureSensorFeature.h"
-#include "adc/features/AdcResolutionFeature.h"
-#include "adc/features/AdcContinuousModeFeature.h"
-#include "adc/features/AdcScanModeFeature.h"
-#include "adc/features/AdcTriggerFeature.h"
 
 // device specific feature includes
 
 #if defined(STM32PLUS_F0)
 
+  #include "adc/features/f0/AdcRegularChannelFeature.h"
   #include "adc/features/f0/AdcDownwardChannelOrderFeature.h"
 
-#if defined(STM32PLUS_F4)
-
-#define USE_ADC_INTERRUPT
+#elif defined(STM32PLUS_F4)
 
   #include "adc/features/AdcClockPrescalerFeature.h"
   #include "adc/features/AdcMultiFeature.h"
   #include "adc/features/AdcDualFeature.h"
   #include "adc/features/AdcTripleFeature.h"
 
+  #include "adc/features/f4/AdcRegularChannelFeature.h"
+  #include "adc/features/f4/AdcScanModeFeature.h"
   #include "adc/features/f4/AdcInterruptFeature.h"
   #include "adc/features/f4/AdcInjectedChannelFeatureBase.h"
   #include "adc/features/f4/AdcInjectedChannelFeature.h"
   #include "adc/features/f4/AdcInjectedTriggerFeature.h"
 
 #endif
+
+// feature includes
+
+#include "adc/features/AdcBatteryVoltageFeature.h"
+#include "adc/features/AdcInternalReferenceVoltageFeature.h"
+#include "adc/features/AdcTemperatureSensorFeature.h"
+#include "adc/features/AdcResolutionFeature.h"
+#include "adc/features/AdcContinuousModeFeature.h"
+#include "adc/features/AdcTriggerFeature.h"
+

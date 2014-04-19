@@ -93,7 +93,7 @@ namespace stm32plus {
    */
 
   inline void Adc::enablePeripheral() const {
-    ADC_Cmd(_peripheralAddress,ENABLE);
+    ADC_Cmd(ADC1,ENABLE);
   }
 
 
@@ -102,7 +102,7 @@ namespace stm32plus {
    */
 
   inline void Adc::disablePeripheral() const {
-    ADC_Cmd(_peripheralAddress,DISABLE);
+    ADC_Cmd(ADC1,DISABLE);
   }
 
 
@@ -111,7 +111,7 @@ namespace stm32plus {
    */
 
   inline void Adc::startRegularConversion() const {
-    ADC_StartOfConversion(_peripheralAddress);
+    ADC_StartOfConversion(ADC1);
   }
 
 
@@ -120,7 +120,7 @@ namespace stm32plus {
    */
 
   inline void Adc::stopRegularConversion() const {
-    ADC_StopOfConversion(_peripheralAddress);
+    ADC_StopOfConversion(ADC1);
   }
 
 

@@ -41,6 +41,8 @@ namespace stm32plus {
    * Typedefs for the difference cycles on each ADC
    */
 
+#if defined(STM32PLUS_F4)
+
   typedef AdcBatteryVoltageFeature<ADC_SampleTime_3Cycles> Adc1Cycle3BatteryVoltageFeature;
   typedef AdcBatteryVoltageFeature<ADC_SampleTime_15Cycles> Adc1Cycle15BatteryVoltageFeature;
   typedef AdcBatteryVoltageFeature<ADC_SampleTime_28Cycles> Adc1Cycle28BatteryVoltageFeature;
@@ -49,4 +51,20 @@ namespace stm32plus {
   typedef AdcBatteryVoltageFeature<ADC_SampleTime_112Cycles> Adc1Cycle112BatteryVoltageFeature;
   typedef AdcBatteryVoltageFeature<ADC_SampleTime_144Cycles> Adc1Cycle144BatteryVoltageFeature;
   typedef AdcBatteryVoltageFeature<ADC_SampleTime_480Cycles> Adc1Cycle480BatteryVoltageFeature;
+
+#elif defined(STM32PLUS_F0)
+
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_1_5Cycles> Adc1Cycle1BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_7_5Cycles> Adc1Cycle7BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_13_5Cycles> Adc1Cycle13BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_28_5Cycles> Adc1Cycle28BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_41_5Cycles> Adc1Cycle41BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_55_5Cycles> Adc1Cycle55BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_71_5Cycles> Adc1Cycle71BatteryVoltageFeature;
+  typedef AdcBatteryVoltageFeature<ADC_SampleTime_239_5Cycles> Adc1Cycle239BatteryVoltageFeature;
+
+#else
+#error "Unsupported MCU"
+#endif
+
 }

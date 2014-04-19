@@ -8,6 +8,8 @@
 #include "config/adc.h"
 
 
+#if defined(STM32PLUS_F4)
+
 using namespace stm32plus;
 
 
@@ -93,3 +95,4 @@ extern "C" {
 
   #endif
 }
+#endif

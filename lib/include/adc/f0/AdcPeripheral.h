@@ -58,7 +58,7 @@ namespace stm32plus {
     // the features have been constructed, initialise it and
     // free the memory it was using
 
-    ADC_Init(_peripheralAddress,_init);
+    ADC_Init(ADC1,_init);
     delete _init;
   }
 

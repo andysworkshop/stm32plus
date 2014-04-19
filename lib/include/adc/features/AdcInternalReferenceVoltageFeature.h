@@ -41,6 +41,9 @@ namespace stm32plus {
    * Typedefs for the difference cycles on ADC1
    */
 
+
+#if defined(STM32PLUS_F4)
+
   typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_3Cycles> Adc1Cycle3InternalReferenceVoltageFeature;
   typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_15Cycles> Adc1Cycle15InternalReferenceVoltageFeature;
   typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_28Cycles> Adc1Cycle28InternalReferenceVoltageFeature;
@@ -49,4 +52,20 @@ namespace stm32plus {
   typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_112Cycles> Adc1Cycle112InternalReferenceVoltageFeature;
   typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_144Cycles> Adc1Cycle144InternalReferenceVoltageFeature;
   typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_480Cycles> Adc1Cycle480InternalReferenceVoltageFeature;
+
+#elif defined(STM32PLUS_F0)
+
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_1_5Cycles> Adc1Cycle1InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_7_5Cycles> Adc1Cycle7InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_13_5Cycles> Adc1Cycle13InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_28_5Cycles> Adc1Cycle28InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_41_5Cycles> Adc1Cycle41InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_55_5Cycles> Adc1Cycle55InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_71_5Cycles> Adc1Cycle71InternalReferenceVoltageFeature;
+  typedef AdcInternalReferenceVoltageFeature<ADC_SampleTime_239_5Cycles> Adc1Cycle239InternalReferenceVoltageFeature;
+
+#else
+#error "Unsupported MCU"
+#endif
+
 }
