@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
+
 
 namespace stm32plus {
 
@@ -30,7 +35,8 @@ namespace stm32plus {
       GPIO_TypeDef *port;
       uint16_t pin;
 
-      static_assert(TAdcNumber>=1 && TAdcNumber<=3 && TChannelNumber>=0 && TChannelNumber<=15,"TAdcNumber out of range");
+      static_assert(TAdcNumber>=1 && TAdcNumber<=3,"TAdcNumber out of range");
+      static_assert(TChannelNumber>=0 && TChannelNumber<=15,"TChannelNumber out of range");
 
       if(TAdcNumber==1) {
         switch(TChannelNumber) {

@@ -42,7 +42,6 @@
 
 // feature includes
 
-#include "adc/features/AdcChannelGpioInitialiser.h"
 #include "adc/features/AdcFeatureBase.h"
 
 #include "adc/features/AdcResolutionFeature.h"
@@ -53,6 +52,9 @@
 
 #if defined(STM32PLUS_F0)
 
+  #include "adc/features/f0/AdcChannelGpioInitialiser.h"
+
+  #include "adc/features/f0/AdcClockModeFeature.h"
   #include "adc/features/f0/AdcRegularChannelFeature.h"
   #include "adc/features/f0/AdcDownwardChannelOrderFeature.h"
   #include "adc/features/f0/AdcBatteryVoltageFeature.h"
@@ -62,10 +64,12 @@
 
 #elif defined(STM32PLUS_F4)
 
-  #include "adc/features/AdcClockPrescalerFeature.h"
-  #include "adc/features/AdcMultiFeature.h"
-  #include "adc/features/AdcDualFeature.h"
-  #include "adc/features/AdcTripleFeature.h"
+  #include "adc/features/f4/AdcChannelGpioInitialiser.h"
+
+  #include "adc/features/f4/AdcClockPrescalerFeature.h"
+  #include "adc/features/f4/AdcMultiFeature.h"
+  #include "adc/features/f4/AdcDualFeature.h"
+  #include "adc/features/f4/AdcTripleFeature.h"
 
   #include "adc/features/f4/AdcRegularChannelFeature.h"
   #include "adc/features/f4/AdcScanModeFeature.h"
