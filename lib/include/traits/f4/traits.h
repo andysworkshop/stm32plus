@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
+
 
 namespace stm32plus {
 
@@ -23,10 +28,8 @@ namespace stm32plus {
   struct PeripheralTraits<PERIPHERAL_ADC1> {
     enum {
       PERIPHERAL_BASE = ADC1_BASE,
-#if defined(STM32PLUS_F4)
       V25       = 760,      // temperature sensor constants for this MCU
       AVG_SLOPE = 2500
-#endif
     };
   };
   typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
@@ -105,8 +108,6 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_I2C2> I2C2PeripheralTraits;
 
-#if defined(STM32PLUS_F4)
-
   template<>
   struct PeripheralTraits<PERIPHERAL_I2C3> {
     enum {
@@ -115,8 +116,6 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_I2C3> I2C3PeripheralTraits;
-
-#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_I2S2> {
@@ -335,8 +334,6 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_UART5> Uart5PeripheralTraits;
 
-#if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL_E)
-
   template<>
   struct PeripheralTraits<PERIPHERAL_MAC> {
     enum {
@@ -346,10 +343,6 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_MAC> MacPeripheralTraits;
 
-  #endif
-
-#if defined(STM32PLUS_F4)
-
   template<>
   struct PeripheralTraits<PERIPHERAL_USART6> {
     enum {
@@ -358,7 +351,4 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_USART6> Usart6PeripheralTraits;
-
-#endif
-
 }

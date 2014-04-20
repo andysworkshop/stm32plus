@@ -7,8 +7,8 @@
 #pragma once
 
 
-#if !defined(STM32PLUS_F0_51)
-#error This include file is not for your MCU
+#if !defined(STM32PLUS_F0)
+#error This class can only be used with the STM32F0 series
 #endif
 
 
@@ -23,6 +23,14 @@ namespace stm32plus {
 
   template<PeripheralName TPeripheralName>
   struct PeripheralTraits;
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_ADC1> {
+    enum {
+      PERIPHERAL_BASE = ADC1_BASE
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
 
   template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {

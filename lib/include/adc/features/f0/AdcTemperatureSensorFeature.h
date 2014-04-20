@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
+
 
 namespace stm32plus {
 
@@ -16,7 +21,7 @@ namespace stm32plus {
    */
 
   template<uint8_t TSampleCycles>
-  struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<1,TSampleCycles,ADC_Channel_TempSensor> {
+  struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<1,TSampleCycles,16> {
 
     /**
      * Constants used by the conversion function
@@ -32,7 +37,7 @@ namespace stm32plus {
      */
 
     AdcTemperatureSensorFeature(Adc& adc)
-      : AdcRegularChannelFeature<1,TSampleCycles,ADC_Channel_TempSensor>(adc) {
+      : AdcRegularChannelFeature<1,TSampleCycles,16>(adc) {
     }
 
 
@@ -41,7 +46,7 @@ namespace stm32plus {
      */
 
     void initialise() {
-      ADC_TempSensorVrefintCmd(ENABLE);
+      ADC_TempSensorCmd(ENABLE);
     }
 
 
@@ -52,34 +57,21 @@ namespace stm32plus {
      * @return The temperature in degrees C
      */
 
-    uint8_t getTemperature(uint16_t vsense) const {
+    uint8_t getTemperature(int16_t vsense) const {
 
-      uint32_t value;
+      int16_t vsense30,vsense110,perdegree;
 
-      value=(vsense*3300) & 0xfff;
+      // get the values for 30 and 110 degrees stored by ST in system memory
 
-      // scale up the sensed value by 1000
+      vsense30=*reinterpret_cast<const int16_t *>(0x1FFFF7B8);
+      vsense110=*reinterpret_cast<const int16_t *>(0x1FFFF7C2);
 
-      value=value*SCALER;
-      value=((value-Adc1PeripheralTraits::V25)/Adc1PeripheralTraits::AVG_SLOPE)+(25*SCALER);
+      perdegree=(vsense110-vsense30)/80;
 
-      return value/SCALER;
+      return 30+((vsense-vsense30)/perdegree);
     }
   };
 
-
-#if defined(STM32PLUS_F4)
-
-  /*
-   * Typedefs for the difference cycles on ADC1. There's a minimum conversion time for the
-   * temperature so the lower-cycle values are not present.
-   */
-
-  typedef AdcTemperatureSensorFeature<ADC_SampleTime_112Cycles> Adc1Cycle112TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<ADC_SampleTime_144Cycles> Adc1Cycle144TemperatureSensorFeature;
-  typedef AdcTemperatureSensorFeature<ADC_SampleTime_480Cycles> Adc1Cycle480TemperatureSensorFeature;
-
-#elif defined(STM32PLUS_F0)
 
   /*
    * Note the sampling time must be greater than 2.2uS
@@ -93,8 +85,4 @@ namespace stm32plus {
   typedef AdcTemperatureSensorFeature<ADC_SampleTime_55_5Cycles> Adc1Cycle55TemperatureSensorFeature;
   typedef AdcTemperatureSensorFeature<ADC_SampleTime_71_5Cycles> Adc1Cycle71TemperatureSensorFeature;
   typedef AdcTemperatureSensorFeature<ADC_SampleTime_239_5Cycles> Adc1Cycle239TemperatureSensorFeature;
-
-#else
-#error "Unsupported MCU"
-#endif
 }

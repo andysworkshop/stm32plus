@@ -40,8 +40,14 @@
 
 #define USE_ADC_INTERRUPT
 
+// feature includes
+
 #include "adc/features/AdcChannelGpioInitialiser.h"
 #include "adc/features/AdcFeatureBase.h"
+
+#include "adc/features/AdcResolutionFeature.h"
+#include "adc/features/AdcContinuousModeFeature.h"
+#include "adc/features/AdcTriggerFeature.h"
 
 // device specific feature includes
 
@@ -49,6 +55,10 @@
 
   #include "adc/features/f0/AdcRegularChannelFeature.h"
   #include "adc/features/f0/AdcDownwardChannelOrderFeature.h"
+  #include "adc/features/f0/AdcBatteryVoltageFeature.h"
+  #include "adc/features/f0/AdcInternalReferenceVoltageFeature.h"
+  #include "adc/features/f0/AdcTemperatureSensorFeature.h"
+  #include "adc/features/f0/AdcInterruptFeature.h"
 
 #elif defined(STM32PLUS_F4)
 
@@ -63,15 +73,9 @@
   #include "adc/features/f4/AdcInjectedChannelFeatureBase.h"
   #include "adc/features/f4/AdcInjectedChannelFeature.h"
   #include "adc/features/f4/AdcInjectedTriggerFeature.h"
+  #include "adc/features/f4/AdcBatteryVoltageFeature.h"
+  #include "adc/features/f4/AdcInternalReferenceVoltageFeature.h"
+  #include "adc/features/f4/AdcTemperatureSensorFeature.h"
 
 #endif
-
-// feature includes
-
-#include "adc/features/AdcBatteryVoltageFeature.h"
-#include "adc/features/AdcInternalReferenceVoltageFeature.h"
-#include "adc/features/AdcTemperatureSensorFeature.h"
-#include "adc/features/AdcResolutionFeature.h"
-#include "adc/features/AdcContinuousModeFeature.h"
-#include "adc/features/AdcTriggerFeature.h"
 
