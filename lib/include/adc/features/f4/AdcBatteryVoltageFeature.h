@@ -37,6 +37,7 @@ namespace stm32plus {
      */
 
     void initialise() {
+      AdcRegularChannelFeature<1,TSampleCycles,18>::initialise();
       ADC_VBATCmd(ENABLE);
     }
   };

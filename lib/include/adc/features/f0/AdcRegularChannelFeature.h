@@ -89,7 +89,9 @@ namespace stm32plus {
   template<uint8_t TChannelNumber>
   inline void AdcRegularChannelFeature<TSampleCycles,TChannelNumbers...>::init() {
 
-    AdcChannelGpioInitiaiser<TChannelNumber>::initialiseGpioPin();
+    if(TChannelNumber<=15)
+      AdcChannelGpioInitiaiser<TChannelNumber>::initialiseGpioPin();
+
     ADC_ChannelConfig(_adc,1 << TChannelNumber,TSampleCycles);
   }
 
@@ -102,7 +104,9 @@ namespace stm32plus {
   template<uint8_t TFirst,uint8_t TNext,uint8_t... TRest>
   inline void AdcRegularChannelFeature<TSampleCycles,TChannelNumbers...>::init() {
 
-    AdcChannelGpioInitiaiser<TFirst>::initialiseGpioPin();
+    if(TFirst<=15)
+      AdcChannelGpioInitiaiser<TFirst>::initialiseGpioPin();
+
     ADC_ChannelConfig(_adc,1 << TFirst,TSampleCycles);
     init<TNext,TRest...>();
   }

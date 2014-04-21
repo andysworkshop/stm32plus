@@ -19,9 +19,11 @@ using namespace stm32plus;
  * three channels plus the internal temperature automatically and in sequence and we'll
  * write out the results to the USART for you to see.
  *
- * The ADC is configured in 'scan mode' which means that it will convert all the configured
- * channels and, because we are not using continuous mode, it will stop at the end of the
- * group. The DMA channel for ADC1 is used to move the converted channel data out to SRAM.
+ * On the F4 the ADC is configured in 'scan mode' which means that it will convert all the
+ * configured channels and, because we are not using continuous mode, it will stop at the end
+ * of the group.
+ *
+ * The DMA channel for ADC1 is used to move the converted channel data out to SRAM.
  * We configure the 'complete' DMA interrupt to fire when the complete group has
  * finished converting. The converted data is written to the USART, we pause for a second
  * and then do it all again, ad infinitum.
@@ -77,6 +79,18 @@ class AdcSingleDmaMultiChan {
        * that causes EOC to be raised at the end of a complete conversion group.
        */
 
+#if defined(STM32PLUS_F0)
+
+      Adc1<
+        AdcAsynchronousClockModeFeature,            // the free-running 14MHz HSI
+        AdcResolutionFeature<12>,                   // 12 bit resolution
+        Adc1Cycle28RegularChannelFeature<0,1>,      // using channels 0,1 on ADC1 with 28.5-cycle latency
+        Adc1Cycle55RegularChannelFeature<2>,        // using channel 2 on ADC1 with 55-cycle latency
+        Adc1Cycle239TemperatureSensorFeature        // using the temperature sensor channel
+      > adc;
+
+#elif defined(STM32PLUS_F4)
+
       Adc1<
         AdcClockPrescalerFeature<2>,                // prescaler of 2
         AdcResolutionFeature<12>,                   // 12 bit resolution
@@ -85,6 +99,8 @@ class AdcSingleDmaMultiChan {
         Adc1Cycle480TemperatureSensorFeature,       // using the temperature sensor channel
         AdcScanModeFeature<>                        // scan mode with EOC after each group
       > adc;
+
+#endif
 
       /*
        * Subscribe to the DMA complete interrupt

@@ -34,8 +34,6 @@ namespace stm32plus {
       GPIO_TypeDef *port;
       uint16_t pin;
 
-      static_assert(TChannelNumber>=0 && TChannelNumber<=15,"TChannelNumber out of range");
-
       switch(TChannelNumber) {
         case 0: port=GPIOA; pin=GPIO_Pin_0; break;
         case 1: port=GPIOA; pin=GPIO_Pin_1; break;

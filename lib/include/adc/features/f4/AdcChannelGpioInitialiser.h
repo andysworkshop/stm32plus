@@ -36,7 +36,6 @@ namespace stm32plus {
       uint16_t pin;
 
       static_assert(TAdcNumber>=1 && TAdcNumber<=3,"TAdcNumber out of range");
-      static_assert(TChannelNumber>=0 && TChannelNumber<=15,"TChannelNumber out of range");
 
       if(TAdcNumber==1) {
         switch(TChannelNumber) {

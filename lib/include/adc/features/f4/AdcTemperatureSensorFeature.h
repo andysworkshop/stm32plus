@@ -20,11 +20,12 @@ namespace stm32plus {
    * configuration
    */
 
-  template<uint8_t TSampleCycles>
+  template<uint8_t TSampleCycles,uint16_t TV25=760,uint16_t TAvgSlope=2500>   // from the datasheet (scaled)
   struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<1,TSampleCycles,16> {
 
     /**
-     * Constants used by the conversion function
+     * Constants used by the conversion function to get good accuracy from
+     * the integer calculation
      */
 
     enum {
@@ -46,6 +47,7 @@ namespace stm32plus {
      */
 
     void initialise() {
+      AdcRegularChannelFeature<1,TSampleCycles,16>::initialise();
       ADC_TempSensorVrefintCmd(ENABLE);
     }
 
@@ -66,7 +68,7 @@ namespace stm32plus {
       // scale up the sensed value by 1000
 
       value=value*SCALER;
-      value=((value-Adc1PeripheralTraits::V25)/Adc1PeripheralTraits::AVG_SLOPE)+(25*SCALER);
+      value=((value-TV25)/TAvgSlope)+(25*SCALER);
 
       return value/SCALER;
     }

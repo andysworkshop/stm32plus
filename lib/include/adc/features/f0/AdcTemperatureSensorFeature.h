@@ -16,15 +16,15 @@ namespace stm32plus {
 
 
   /**
-   * Support for the temp sensor ADC channel is a simple extension of the regular channel
-   * configuration
+   * Support for the temp sensor ADC channel
    */
 
-  template<uint8_t TSampleCycles>
-  struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<1,TSampleCycles,16> {
+  template<uint8_t TSampleCycles,uint16_t TV25=1963>        // default to 1.43V at 3.0V
+  struct AdcTemperatureSensorFeature : AdcFeatureBase {
 
     /**
-     * Constants used by the conversion function
+     * Constant used by the conversion function to improve accuracy
+     * of the integer calculations.
      */
 
     enum {
@@ -37,7 +37,7 @@ namespace stm32plus {
      */
 
     AdcTemperatureSensorFeature(Adc& adc)
-      : AdcRegularChannelFeature<1,TSampleCycles,16>(adc) {
+      : AdcFeatureBase(adc) {
     }
 
 
@@ -46,6 +46,7 @@ namespace stm32plus {
      */
 
     void initialise() {
+      ADC_ChannelConfig(_adc,ADC_Channel_16,TSampleCycles);
       ADC_TempSensorCmd(ENABLE);
     }
 
@@ -59,16 +60,18 @@ namespace stm32plus {
 
     uint8_t getTemperature(int16_t vsense) const {
 
-      int16_t vsense30,vsense110,perdegree;
+      int32_t vsense30,vsense110,slope;
 
       // get the values for 30 and 110 degrees stored by ST in system memory
+      // the scaled calculations get us decent accuracy without having to resort
+      // to expensive floating point calculations.
 
-      vsense30=*reinterpret_cast<const int16_t *>(0x1FFFF7B8);
-      vsense110=*reinterpret_cast<const int16_t *>(0x1FFFF7C2);
+      vsense30=*reinterpret_cast<const int16_t *>(0x1FFFF7B8)*SCALER;
+      vsense110=*reinterpret_cast<const int16_t *>(0x1FFFF7C2)*SCALER;
 
-      perdegree=(vsense110-vsense30)/80;
+      slope=(vsense30-vsense110)/80;
 
-      return 30+((vsense-vsense30)/perdegree);
+      return ((((TV25*SCALER)-(vsense*SCALER))/slope)/SCALER)+25;
     }
   };
 

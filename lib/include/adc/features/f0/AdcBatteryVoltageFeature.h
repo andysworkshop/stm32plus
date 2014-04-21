@@ -21,14 +21,14 @@ namespace stm32plus {
    */
 
   template<uint8_t TSampleCycles>
-  struct AdcBatteryVoltageFeature : AdcRegularChannelFeature<1,TSampleCycles,18> {
+  struct AdcBatteryVoltageFeature : AdcFeatureBase {
 
     /**
      * Constructor, initialise upwards then enable the VBAT feature
      */
 
     AdcBatteryVoltageFeature(Adc& adc)
-      : AdcRegularChannelFeature<1,TSampleCycles,18>(adc) {
+      : AdcFeatureBase(adc) {
     }
 
 
@@ -37,6 +37,7 @@ namespace stm32plus {
      */
 
     void initialise() {
+      ADC_ChannelConfig(_adc,ADC_Channel_18,TSampleCycles);
       ADC_VbatCmd(ENABLE);
     }
   };

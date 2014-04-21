@@ -16,19 +16,18 @@ namespace stm32plus {
 
 
   /**
-   * Support for the Vrefint ADC channel is a simple extension of the regular channel
-   * configuration
+   * Support for the Vrefint ADC channel
    */
 
   template<uint8_t TSampleCycles>
-  struct AdcInternalReferenceVoltageFeature : AdcRegularChannelFeature<1,TSampleCycles,17> {
+  struct AdcInternalReferenceVoltageFeature : AdcFeatureBase {
 
     /**
      * Constructor, initialise upwards then enable the vrefint feature
      */
 
     AdcInternalReferenceVoltageFeature(Adc& adc)
-      : AdcRegularChannelFeature<1,TSampleCycles,17>(adc) {
+      : AdcFeatureBase(adc) {
     }
 
 
@@ -37,6 +36,7 @@ namespace stm32plus {
      */
 
     void initialise() {
+      ADC_ChannelConfig(_adc,ADC_Channel_17,TSampleCycles);
       ADC_VrefintCmd(ENABLE);
     }
   };

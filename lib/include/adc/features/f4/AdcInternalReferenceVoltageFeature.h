@@ -37,6 +37,7 @@ namespace stm32plus {
      */
 
     void initialise() {
+      AdcRegularChannelFeature<1,TSampleCycles,17>::initialise();
       ADC_TempSensorVrefintCmd(ENABLE);
     }
   };
