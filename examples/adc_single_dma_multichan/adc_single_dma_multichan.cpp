@@ -72,14 +72,13 @@ class AdcSingleDmaMultiChan {
 
       Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
-      /*
-       * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
-       * 12 bits. We will use 144-cycle conversions on ADC channels 0,1 and a 480-cycle
-       * conversion on ADC channel 2. Scan mode is used with the default template parameter
-       * that causes EOC to be raised at the end of a complete conversion group.
-       */
-
 #if defined(STM32PLUS_F0)
+
+      /*
+       * Declare the ADC peripheral with the asynchronous 14MHz clock, a resolution of
+       * 12 bits. We will use 28.5-cycle conversions on ADC channels 0,1 and a 55.5-cycle
+       * conversion on ADC channel 2.
+       */
 
       Adc1<
         AdcAsynchronousClockModeFeature,            // the free-running 14MHz HSI
@@ -90,6 +89,13 @@ class AdcSingleDmaMultiChan {
       > adc;
 
 #elif defined(STM32PLUS_F4)
+
+      /*
+       * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
+       * 12 bits. We will use 144-cycle conversions on ADC channels 0,1 and a 480-cycle
+       * conversion on ADC channel 2. Scan mode is used with the default template parameter
+       * that causes EOC to be raised at the end of a complete conversion group.
+       */
 
       Adc1<
         AdcClockPrescalerFeature<2>,                // prescaler of 2

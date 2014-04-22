@@ -53,6 +53,11 @@ class AdcSingle {
 
 #if defined(STM32PLUS_F0)
 
+      /*
+       * Declare the ADC peripheral with the 14MHz dedicated clock, a resolution of
+       * 12 bits. We will use 28.5-cycle conversions on ADC channel 0.
+       */
+
       Adc1<
         AdcAsynchronousClockModeFeature,          // the free-running 14MHz HSI
         AdcResolutionFeature<12>,                 // 12 bit resolution

@@ -19,8 +19,9 @@ using namespace stm32plus;
  * can be a more efficient way to manage the flow of converted data if your MCU has other things to do
  * such as being responsive to the actions going on in a user interface.
  *
- * ADC1 is configured with 12-bit resolution and an APB2 clock prescaler of 2 and a 56-cycle
- * conversion time. We will use channel #0. USART1 is configured with 57600/8/N/1 parameters.
+ * ADC1 is configured with 12-bit resolution and, on the F4, an APB2 clock prescaler of 2 and a 56-cycle
+ * conversion time. On the F0 we use a 7.5 cycle conversion time against PCLK/2.
+ * We will use channel #0. USART1 is configured with 57600/8/N/1 parameters.
  *
  * To run this example you can connect PA0 (ADC123_IN0) to see a conversion value of 0 or you can
  * connect PA0 to the VREF level (probably 3.3V or 3V) to see a conversion value of 4095. The actual
@@ -49,6 +50,22 @@ class AdcSingleInterrupts {
 
       _ready=_error=false;
 
+#if defined(STM32PLUS_F0)
+
+      /*
+       * Declare the ADC peripheral using PCLK with a prescaler of 2, a resolution of
+       * 12 bits. We will use 55.5-cycle conversions on ADC channel 0.
+       */
+
+      Adc1<
+        AdcPclk2ClockModeFeature,                 // prescaler of 2
+        AdcResolutionFeature<12>,                 // 12 bit resolution
+        Adc1Cycle7RegularChannelFeature<0>,       // using channel 0 on ADC1 with 7.5-cycle latency
+        Adc1InterruptFeature                      // enable interrupt handling on this ADC
+        > adc;
+
+#elif defined(STM32PLUS_F4)
+
       /*
        * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
        * 12 bits. We will use 3-cycle conversions on ADC channel 0.
@@ -60,6 +77,8 @@ class AdcSingleInterrupts {
         Adc1Cycle56RegularChannelFeature<0>,      // using channel 0 on ADC1 with 56-cycle latency
         Adc1InterruptFeature                      // enable interrupt handling on this ADC
         > adc;
+
+#endif
 
       /*
        * Subscribe to the interrupts raised by the ADC
