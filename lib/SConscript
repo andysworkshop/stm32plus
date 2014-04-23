@@ -40,6 +40,8 @@ libstm32plus=env.Library("stm32plus-"+VERSION+"-"+mcu+"-"+mode+".a",matches)
 # install the library if the user gave the install option
 
 env.Install(INSTALLDIR,libstm32plus)
+env.Install(INSTALLDIR,Dir("#lib/include"))
+env.Install(INSTALLDIR,Dir("#lib/fwlib"))
 env.Alias("install",INSTALLDIR)
 
 Return("libstm32plus")
