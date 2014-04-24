@@ -23,7 +23,7 @@ def RecursiveGlob(directory):
 	for root, dirs, files in os.walk(node.abspath):
 		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.cpp"))
 		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.c"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.s"))
+		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.asm"))
 
 	return result
 
