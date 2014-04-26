@@ -56,30 +56,30 @@ namespace stm32plus {
 
       // both channels
 
-      if(TDacAlignmentFeature::getAlignment==DAC_Align_12b_R)
+      if(TDacAlignmentFeature::getAlignment()==DAC_Align_12b_R)
         _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR12RD));
-      else if(TDacAlignmentFeature::getAlignment==DAC_Align_12b_L)
+      else if(TDacAlignmentFeature::getAlignment()==DAC_Align_12b_L)
         _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR12LD));
-      else if(TDacAlignmentFeature::getAlignment==DAC_Align_8b_R)
+      else if(TDacAlignmentFeature::getAlignment()==DAC_Align_8b_R)
         _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR8RD));
     }
     else {
       if(TDacAlignmentFeature::getChannel()==DAC_Channel_1) {
 
-        if(TDacAlignmentFeature::getAlignment==DAC_Align_12b_R)
+        if(TDacAlignmentFeature::getAlignment()==DAC_Align_12b_R)
           _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR12R1));
-        else if(TDacAlignmentFeature::getAlignment==DAC_Align_12b_L)
+        else if(TDacAlignmentFeature::getAlignment()==DAC_Align_12b_L)
           _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR12L1));
-        else if(TDacAlignmentFeature::getAlignment==DAC_Align_8b_R)
+        else if(TDacAlignmentFeature::getAlignment()==DAC_Align_8b_R)
           _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR8R1));
       }
       else if(TDacAlignmentFeature::getChannel()==DAC_Channel_2) {
 
-        if(TDacAlignmentFeature::getAlignment==DAC_Align_12b_R)
+        if(TDacAlignmentFeature::getAlignment()==DAC_Align_12b_R)
           _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR12R2));
-        else if(TDacAlignmentFeature::getAlignment==DAC_Align_12b_L)
+        else if(TDacAlignmentFeature::getAlignment()==DAC_Align_12b_L)
           _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR12L2));
-        else if(TDacAlignmentFeature::getAlignment==DAC_Align_8b_R)
+        else if(TDacAlignmentFeature::getAlignment()==DAC_Align_8b_R)
           _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(DAC->DHR8R2));
       }
     }
