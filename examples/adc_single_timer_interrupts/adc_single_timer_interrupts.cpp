@@ -73,6 +73,25 @@ class AdcSingleTimerInterrupts {
 
       timer.setTimeBaseByFrequency(10000,9999);
 
+#if defined(STM32PLUS_F0)
+
+      /*
+       * Declare the ADC peripheral with the 14MHz dedicated clock and a resolution of
+       * 12 bits. We will use 144-cycle conversions on ADC channel 0. We trigger the conversion
+       * using the rising edge of Timer 2's trigger signal and we want the trigger to be linked
+       * to the timer's update event.
+       */
+
+      Adc1<
+        AdcAsynchronousClockModeFeature,                          // the free-running 14MHz HSI
+        AdcResolutionFeature<12>,                                 // 12 bit resolution
+        Adc1Cycle28RegularChannelFeature<0>,                      // using channel 0 (PA0) on ADC1 with 28.5 cycle latency
+        AdcTimer2TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer2 trigger-on-update
+        Adc1InterruptFeature
+      > adc;
+
+#elif defined(STM32PLUS_F4)
+
       /*
        * Declare the ADC peripheral with an APB2 clock prescaler of 2 and a resolution of
        * 12 bits. We will use 144-cycle conversions on ADC channel 0. We trigger the conversion
@@ -87,6 +106,8 @@ class AdcSingleTimerInterrupts {
         AdcTimer2TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer2 trigger-on-update
         Adc1InterruptFeature
       > adc;
+
+#endif
 
       /*
        * Subscribe to the interrupts raised by the ADC
