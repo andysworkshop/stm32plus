@@ -55,6 +55,15 @@ namespace stm32plus {
 
     ClockControl<TPeripheralName>::On();
 
+    // the peripheral must be disabled for auto-calibration to work
+
+    ADC_Cmd(ADC1,DISABLE);
+    ADC_DeInit(ADC1);
+
+    // start the calibration
+
+    ADC_GetCalibrationFactor(ADC1);
+
     // the features have been constructed, initialise it and
     // free the memory it was using
 
