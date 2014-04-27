@@ -179,7 +179,7 @@ systemprefix=mode+"-"+mcu+"-"+hse
 # launch SConscript for the main library
 
 libstm32plus=SConscript("lib/SConscript",
-												exports=["mode","mcu","float","hse","env","systemprefix","INSTALLDIR","VERSION"],
+												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"],
 												variant_dir="lib/build/"+systemprefix,
 												duplicate=0)
 
@@ -187,5 +187,5 @@ env.Append(LIBS=[libstm32plus])
 
 # launch SConscript for the examples
 
-SConscript("examples/SConscript",exports=["mode","mcu","float","hse","env","systemprefix","INSTALLDIR","VERSION"])
+SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"])
 

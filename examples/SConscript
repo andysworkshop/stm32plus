@@ -11,6 +11,6 @@ Import('*')
 for example in Glob("*",strings=True):
 	if os.path.isdir(example):
 		SConscript(example+"/SConscript",
-							 exports=["mode","mcu","float","hse","env","systemprefix","INSTALLDIR","VERSION","example"],
+							 exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION","example"],
 							 variant_dir=example+"/build/"+mode+"-"+mcu+"-"+hse,
 							 duplicate=0)
