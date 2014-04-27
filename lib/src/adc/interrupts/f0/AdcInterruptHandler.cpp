@@ -23,7 +23,7 @@ extern "C" {
 
   #if defined(USE_ADC_INTERRUPT)
 
-    void __attribute__ ((interrupt("IRQ"))) ADC_IRQHandler(void) {
+    void __attribute__ ((interrupt("IRQ"))) ADC1_COMP_IRQHandler(void) {
 
       uint16_t raised1;
 

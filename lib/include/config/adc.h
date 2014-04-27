@@ -38,6 +38,8 @@
 
 #endif
 
+// enable our handling of the ADC interrupt
+
 #define USE_ADC_INTERRUPT
 
 // feature includes
@@ -46,7 +48,6 @@
 
 #include "adc/features/AdcResolutionFeature.h"
 #include "adc/features/AdcContinuousModeFeature.h"
-#include "adc/features/AdcTriggerFeature.h"
 
 // device specific feature includes
 
@@ -54,6 +55,7 @@
 
   #include "adc/features/f0/AdcChannelGpioInitialiser.h"
 
+  #include "adc/features/f0/AdcTriggerFeature.h"
   #include "adc/features/f0/AdcClockModeFeature.h"
   #include "adc/features/f0/AdcRegularChannelFeature.h"
   #include "adc/features/f0/AdcDownwardChannelOrderFeature.h"
@@ -66,6 +68,7 @@
 
   #include "adc/features/f4/AdcChannelGpioInitialiser.h"
 
+  #include "adc/features/f4/AdcTriggerFeature.h"
   #include "adc/features/f4/AdcClockPrescalerFeature.h"
   #include "adc/features/f4/AdcMultiFeature.h"
   #include "adc/features/f4/AdcDualFeature.h"

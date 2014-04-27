@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
+
 
 namespace stm32plus {
 
@@ -30,8 +35,6 @@ namespace stm32plus {
     }
   };
 
-
-#if defined(STM32PLUS_F4)
 
   /*
    * Typedef for the trigger on EXTI 11
@@ -86,16 +89,6 @@ namespace stm32plus {
   typedef AdcTriggerFeature<ADC_ExternalTrigConv_T8_CC1,ADC_ExternalTrigConvEdge_Falling> AdcTimer8Channel1FallingTriggerFeature;
   typedef AdcTriggerFeature<ADC_ExternalTrigConv_T8_CC1,ADC_ExternalTrigConvEdge_RisingFalling> AdcTimer8Channel1RisingFallingTriggerFeature;
 
-#elif defined(STM32PLUS_F0)
-
-  typedef AdcTriggerFeature<ADC_ExternalTrigConv_T1_CC4,ADC_ExternalTrigConvEdge_Rising> AdcTimer1Channel4RisingTriggerFeature;
-  typedef AdcTriggerFeature<ADC_ExternalTrigConv_T1_CC4,ADC_ExternalTrigConvEdge_Falling> AdcTimer1Channel4FallingTriggerFeature;
-  typedef AdcTriggerFeature<ADC_ExternalTrigConv_T1_CC4,ADC_ExternalTrigConvEdge_RisingFalling> AdcTimer1Channel4RisingFallingTriggerFeature;
-
-#else
-#error "Unsupported MCU"
-#endif
-
 
   /**
    * Timer trigger outputs need you to define the trigger source. Here's
@@ -107,14 +100,14 @@ namespace stm32plus {
    */
 
   enum class AdcTriggerSource {
-    Reset,           //!< Reset
-    Enable,          //!< Enable
-    Update,          //!< Update
-    CaptureCompare1, //!< CaptureCompare1
-    OutputReference1,//!< OutputReference1
-    OutputReference2,//!< OutputReference2
-    OutputReference3,//!< OutputReference3
-    OutputReference4,//!< OutputReference4
+    Reset,              //!< Reset
+    Enable,             //!< Enable
+    Update,             //!< Update
+    CaptureCompare1,    //!< CaptureCompare1
+    OutputReference1,   //!< OutputReference1
+    OutputReference2,   //!< OutputReference2
+    OutputReference3,   //!< OutputReference3
+    OutputReference4,   //!< OutputReference4
   };
 
   template<PeripheralName TTimerPeripheral,AdcTriggerSource TSource,uint32_t TEvent,uint32_t TEdge>
@@ -171,8 +164,6 @@ namespace stm32plus {
   template<AdcTriggerSource TSource>
   using AdcTimer3TriggerRisingFallingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER3,TSource,ADC_ExternalTrigConv_T3_TRGO,ADC_ExternalTrigConvEdge_RisingFalling>;
 
-#if defined(STM32PLUS_F4)
-
   /*
    * Timer 8
    */
@@ -185,37 +176,4 @@ namespace stm32plus {
 
   template<AdcTriggerSource TSource>
   using AdcTimer8TriggerRisingFallingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER8,TSource,ADC_ExternalTrigConv_T8_TRGO,ADC_ExternalTrigConvEdge_RisingFalling>;
-
-#elif defined(STM32PLUS_F0)
-
-  /*
-   * Timer 1
-   */
-
-  template<AdcTriggerSource TSource>
-  using AdcTimer1TriggerRisingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER1,TSource,ADC_ExternalTrigConv_T1_TRGO,ADC_ExternalTrigConvEdge_Rising>;
-
-  template<AdcTriggerSource TSource>
-  using AdcTimer1TriggerFallingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER1,TSource,ADC_ExternalTrigConv_T1_TRGO,ADC_ExternalTrigConvEdge_Falling>;
-
-  template<AdcTriggerSource TSource>
-  using AdcTimer1TriggerRisingFallingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER1,TSource,ADC_ExternalTrigConv_T1_TRGO,ADC_ExternalTrigConvEdge_RisingFalling>;
-
-  /*
-   * Timer 15
-   */
-
-  template<AdcTriggerSource TSource>
-  using AdcTimer15TriggerRisingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER15,TSource,ADC_ExternalTrigConv_T15_TRGO,ADC_ExternalTrigConvEdge_Rising>;
-
-  template<AdcTriggerSource TSource>
-  using AdcTimer15TriggerFallingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER15,TSource,ADC_ExternalTrigConv_T15_TRGO,ADC_ExternalTrigConvEdge_Falling>;
-
-  template<AdcTriggerSource TSource>
-  using AdcTimer15TriggerRisingFallingFeature=AdcTimerTriggerFeature<PERIPHERAL_TIMER15,TSource,ADC_ExternalTrigConv_T15_TRGO,ADC_ExternalTrigConvEdge_RisingFalling>;
-
-#else
-#error "Unsupported MCU"
-#endif
-
 }

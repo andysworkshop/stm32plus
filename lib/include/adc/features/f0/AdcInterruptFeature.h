@@ -16,7 +16,7 @@
  * Forward declare the IRQ handler name. There is a single IRQ handler for ADC 1 on the F0
  */
 
-extern "C" void ADC_IRQHandler();
+extern "C" void ADC1_COMP_IRQHandler();
 
 
 namespace stm32plus {
@@ -99,7 +99,7 @@ namespace stm32plus {
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
 
     _interruptMask|=interruptMask;
-    _forceLinkage=&ADC_IRQHandler;
+    _forceLinkage=&ADC1_COMP_IRQHandler;
 
     Nvic::configureIrq(ADC1_COMP_IRQn);
 

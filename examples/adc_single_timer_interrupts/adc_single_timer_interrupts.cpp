@@ -43,8 +43,6 @@ class AdcSingleTimerInterrupts {
 
     void run() {
 
-      uint32_t last,now;
-
       /*
        * Reset the interrupt ready flag
        */
@@ -61,13 +59,13 @@ class AdcSingleTimerInterrupts {
       > timer;
 
       /*
-       * Set an up-timer up to tick at 1000Hz with an auto-reload value of 9999
-       * The timer will count from 0 to 9999 inclusive then reset back to 0.
+       * Set an up-timer up to tick at 8kHz with an auto-reload value of 7999
+       * The timer will count from 0 to 7999 inclusive then reset back to 0.
        * It will take exactly 1 second to do this. The timer generates its update
        * event when it wraps around to zero.
        */
 
-      timer.setTimeBaseByFrequency(10000,9999);
+      timer.setTimeBaseByFrequency(8000,7999);
 
 #if defined(STM32PLUS_F0)
 
@@ -137,16 +135,20 @@ class AdcSingleTimerInterrupts {
        * value and the time since the last conversion
        */
 
-      for(last=MillisecondTimer::millis();;) {
+      uint32_t now;
+      uint16_t value;
+
+      for(;;) {
 
         while(!_ready);
         _ready=false;
 
+        value=adc.getRegularConversionValue();
+
         now=MillisecondTimer::millis();
 
-        outputStream << "Converted value is " << StringUtil::Ascii(adc.getRegularConversionValue())
-                     << " after " << StringUtil::Ascii(now-last) << "ms.\r\n";
-
+        outputStream << "Converted value is " << StringUtil::Ascii(value)
+                     << " at " << StringUtil::Ascii(now) << "ms.\r\n";
       }
     }
 
