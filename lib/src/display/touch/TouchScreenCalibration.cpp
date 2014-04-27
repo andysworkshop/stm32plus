@@ -24,7 +24,7 @@ namespace stm32plus {
      * Can't serialise
      */
 
-    bool PassThroughTouchScreenCalibration::serialise(OutputStream& ostream __attribute__((unused))) {
+    bool PassThroughTouchScreenCalibration::serialise(OutputStream& /* ostream */) {
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_TOUCH_SCREEN_CALIBRATION,E_SERIALISATION_NOT_SUPPORTED);
     }
 
@@ -33,7 +33,7 @@ namespace stm32plus {
      * Can't deserialise
      */
 
-    bool PassThroughTouchScreenCalibration::deserialise(InputStream& istream __attribute__((unused))) {
+    bool PassThroughTouchScreenCalibration::deserialise(InputStream& /* istream */) {
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_TOUCH_SCREEN_CALIBRATION,E_SERIALISATION_NOT_SUPPORTED);
     }
   }
