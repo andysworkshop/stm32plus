@@ -1,0 +1,16 @@
+language: cpp
+compiler: gcc
+cache: apt
+env:
+  - MODE=small MCU=f1mdvl HSE=8000000
+  - MODE=small MCU=f1hd HSE=8000000
+  - MODE=small MCU=f1cle HSE=25000000
+  - MODE=small MCU=f051 HSE=8000000
+  - MODE=small MCU=f4 HSE=8000000
+before_install:
+  - sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded -y
+  - sudo apt-get update
+install:
+  - sudo apt-get install gcc-arm-none-eabi
+script:
+  - scons mode=$MODE mcu=$MCU hse=$HSE
