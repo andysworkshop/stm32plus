@@ -62,7 +62,7 @@
  */
 
 #undef STM32PLUS_BUILD
-#define STM32PLUS_BUILD 0x030200
+#define STM32PLUS_BUILD 0x030300
 
 
 /**
@@ -97,6 +97,9 @@ namespace stm32plus {
    */
 
   enum PeripheralName {
+    PERIPHERAL_ADC1,                //!< PERIPHERAL_ADC1
+    PERIPHERAL_ADC2,                //!< PERIPHERAL_ADC1
+    PERIPHERAL_ADC3,                //!< PERIPHERAL_ADC1
     PERIPHERAL_BACKUP,              //!< PERIPHERAL_BACKUP
     PERIPHERAL_CRC,                 //!< PERIPHERAL_CRC
     PERIPHERAL_DAC1,                //!< PERIPHERAL_DAC1
