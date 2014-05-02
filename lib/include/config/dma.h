@@ -95,6 +95,7 @@
   #include "dma/features/f1/SdioDmaReaderFeature.h"
   #include "dma/features/f1/SdioDmaWriterFeature.h"
   #include "dma/features/f1/DmaFsmcLcdMemoryCopyFeature.h"
+  #include "dma/features/f1/AdcDmaFeature.h"
 
   #include "dma/features/f1/DmaPeripheralInfo.h"
 

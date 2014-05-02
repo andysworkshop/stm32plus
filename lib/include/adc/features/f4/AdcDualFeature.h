@@ -29,8 +29,10 @@ namespace stm32plus {
     public:
       AdcDualFeature(Adc& adc);
 
-      TAdc2& getAdc2() const;
       void initialise();
+
+      TAdc2& getAdc2() const;
+      uint32_t getDualConversionValue() const;
   };
 
 
@@ -42,6 +44,17 @@ namespace stm32plus {
   template<class TAdc2,uint32_t TDmaModeType,uint32_t TAdcMultiModeType,uint8_t TTwoSamplingDelay>
   inline AdcDualFeature<TAdc2,TDmaModeType,TAdcMultiModeType,TTwoSamplingDelay>::AdcDualFeature(Adc& adc)
     : AdcMultiFeature<TDmaModeType,TAdcMultiModeType,TTwoSamplingDelay>(adc) {
+  }
+
+
+  /**
+   * Get the results of a dual-conversion
+   * @return The results of the conversion
+   */
+
+  template<class TAdc2,uint32_t TDmaModeType,uint32_t TAdcMultiModeType,uint8_t TTwoSamplingDelay>
+  inline uint32_t AdcDualFeature<TAdc2,TDmaModeType,TAdcMultiModeType,TTwoSamplingDelay>::getDualConversionValue() const {
+    return ADC_GetMultiModeConversionValue();
   }
 
 

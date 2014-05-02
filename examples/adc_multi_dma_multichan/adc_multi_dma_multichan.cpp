@@ -25,6 +25,7 @@ using namespace stm32plus;
  * between GND and VREF to see conversion values.
  *
  * Compatible MCU:
+ *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
@@ -49,6 +50,38 @@ class AdcMultiDmaMultiChan {
        */
 
       volatile uint16_t readBuffer[4];
+
+      /*
+       * Unfortunately the ADC is quite different across the MCU series so we have to
+       * be MCU-specific when declaring this instance
+       */
+
+
+#if defined(STM32PLUS_F1)
+
+      /*
+       * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
+       * which means that it wil automatically refill our buffer on each conversion because
+       * one conversion exactly matches the size of the memory buffer that we will give
+       * to the DMA peripheral.
+       */
+
+      Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
+
+      Adc1<
+        AdcClockPrescalerFeature<6>,                    // PCLK2/6
+        Adc1Cycle55RegularChannelFeature<0,1>,          // using channels 0,1 on ADC1 with 55.5-cycle latency
+        AdcScanModeFeature,                             // scan mode
+        DualAdcRegularSimultaneousFeature<              // regular simultaneous multi mode
+          Adc2<                                         // the second ADC
+            AdcClockPrescalerFeature<6>,                // PCLK2/6
+            Adc2Cycle55RegularChannelFeature<2,3>,      // using channels 2,3 on ADC2 with 55.5-cycle latency
+            AdcScanModeFeature                          // scan mode
+          >
+        >
+      > adc;
+
+#elif defined(STM32PLUS_F4)
 
       /*
        * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
@@ -78,12 +111,14 @@ class AdcMultiDmaMultiChan {
           Adc2<                                         // the second ADC
             AdcClockPrescalerFeature<2>,                // prescaler of 2
             AdcResolutionFeature<12>,                   // 12 bit resolution
-            Adc2Cycle144RegularChannelFeature<2,3>,     // using channels 0,1 on ADC1 with 144-cycle latency
+            Adc2Cycle144RegularChannelFeature<2,3>,     // using channels 2,3 on ADC2 with 144-cycle latency
             AdcScanModeFeature<>                        // scan mode with EOC after each group
           >,
           5                                             // 5 cycle min delay
         >
       > adc;
+
+#endif
 
       /*
        * Subscribe to the DMA complete interrupt

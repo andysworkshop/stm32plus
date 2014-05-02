@@ -46,6 +46,16 @@ namespace stm32plus {
 
 
     /**
+     * Simple initialiser for analog input pins
+     */
+
+    void initialise(GPIO_TypeDef *port,uint16_t pins) {
+
+      initialise(port,pins,Gpio::ANALOG,GPIO_Speed_50MHz,Gpio::PUPD_NONE,Gpio::PUSH_PULL);
+    }
+
+
+    /**
      * Simple pin initialiser when you don't need or want the template support offered by GpioPort
      * and its features.
      * @param port

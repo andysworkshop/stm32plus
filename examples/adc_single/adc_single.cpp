@@ -19,9 +19,15 @@ using namespace stm32plus;
  * of a single channel. The conversion is done synchronously, on-demand and the result is written to
  * USART1.
  *
- * On the F4, ADC1 is configured with 12-bit resolution and an APB2 clock prescaler of 2 and a 3-cycle
- * conversion time. On the F0, ADC1 is configured to use the 14MHz dedicated internal oscillator with
- * a latency of 28.5 cycles.
+ * On the F0:
+ *   ADC1 is configured to use the 14MHz dedicated internal oscillator with a latency of 28.5 cycles.
+ *
+ * On the F1:
+ *   ADC1 is configured to use a PCLK2/6 (e.g. 72/6=12MHz) clock. The latency is 7.5 cycles.
+ *
+ * On the F4:
+ *   ADC1 is configured with 12-bit resolution and an APB2 clock prescaler of 2 and a 3-cycle
+ *   conversion time.
  *
  * We will use channel 0 which is connected to PA0. USART1 is configured with 57600/8/N/1 parameters.
  *
@@ -66,6 +72,18 @@ class AdcSingle {
         Adc1Cycle28RegularChannelFeature<0>       // using channel 0 (PA0) on ADC1 with 28.5 cycle latency
         > adc;
 
+#elif defined(STM32PLUS_F1)
+
+      /*
+       * Declare the ADC peripheral with a PCLK2 clock prescaler of 6. The ADC clock cannot exceed 14MHz so
+       * if PCLK2 is 72MHz then we're operating it at 12MHz here.
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<6>,              // PCLK2/6
+        Adc1Cycle7RegularChannelFeature<0>        // using channel 0 (PA0) on ADC1 with 7.5-cycle latency
+        > adc;
+
 #elif defined(STM32PLUS_F4)
 
       /*
@@ -78,6 +96,7 @@ class AdcSingle {
         AdcResolutionFeature<12>,                 // 12 bit resolution
         Adc1Cycle3RegularChannelFeature<0>        // using channel 0 (PA0) on ADC1 with 3-cycle latency
         > adc;
+
 #endif
 
       /*

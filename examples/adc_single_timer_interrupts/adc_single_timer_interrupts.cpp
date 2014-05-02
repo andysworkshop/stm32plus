@@ -16,7 +16,7 @@ using namespace stm32plus;
 
 
 /**
- * This example shows how to use a timer to trigger the ADC conversion. We set up Timer 2 to generate an
+ * This example shows how to use a timer to trigger the ADC conversion. We set up Timer 3 to generate an
  * update event once per second. We use this update event to trigger a single channel conversion on ADC1.
  * We use the ADC1 end-of-conversion (EOC) interrupt to tell us when the conversion is ready. We then log
  * that converted value to the USART where you can see it using normal PC terminal software.
@@ -50,11 +50,11 @@ class AdcSingleTimerInterrupts {
       _ready=false;
 
       /*
-       * Declare Timer2
+       * Declare Timer3
        */
 
-      Timer2<
-        Timer2InternalClockFeature,       // the timer clock source is HCLK/2
+      Timer3<
+        Timer3InternalClockFeature,       // the timer clock source is HCLK/2
         TimerChannel1Feature              // we're going to use channel 1
       > timer;
 
@@ -72,7 +72,7 @@ class AdcSingleTimerInterrupts {
       /*
        * Declare the ADC peripheral with the 14MHz dedicated clock and a resolution of
        * 12 bits. We will use 144-cycle conversions on ADC channel 0. We trigger the conversion
-       * using the rising edge of Timer 2's trigger signal and we want the trigger to be linked
+       * using the rising edge of Timer 3's trigger signal and we want the trigger to be linked
        * to the timer's update event.
        */
 
@@ -80,7 +80,23 @@ class AdcSingleTimerInterrupts {
         AdcAsynchronousClockModeFeature,                          // the free-running 14MHz HSI
         AdcResolutionFeature<12>,                                 // 12 bit resolution
         Adc1Cycle28RegularChannelFeature<0>,                      // using channel 0 (PA0) on ADC1 with 28.5 cycle latency
-        AdcTimer2TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer2 trigger-on-update
+        AdcTimer3TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer 3 trigger-on-update
+        Adc1InterruptFeature
+      > adc;
+
+#elif defined(STM32PLUS_F1)
+
+      /*
+       * Declare the ADC peripheral with an APB2 clock prescaler of 2 and a resolution of
+       * 12 bits. We will use 144-cycle conversions on ADC channel 0. We trigger the conversion
+       * using the rising edge of Timer 3's trigger signal and we want the trigger to be linked
+       * to the timer's update event.
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<6>,                              // PCLK2/6
+        Adc1Cycle55RegularChannelFeature<0>,                      // using channel 0 on ADC1 with 55.5-cycle latency
+        AdcTimer3TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer 3 trigger-on-update
         Adc1InterruptFeature
       > adc;
 
@@ -89,7 +105,7 @@ class AdcSingleTimerInterrupts {
       /*
        * Declare the ADC peripheral with an APB2 clock prescaler of 2 and a resolution of
        * 12 bits. We will use 144-cycle conversions on ADC channel 0. We trigger the conversion
-       * using the rising edge of Timer 2's trigger signal and we want the trigger to be linked
+       * using the rising edge of Timer 3's trigger signal and we want the trigger to be linked
        * to the timer's update event.
        */
 
@@ -97,7 +113,7 @@ class AdcSingleTimerInterrupts {
         AdcClockPrescalerFeature<2>,                              // prescaler of 2
         AdcResolutionFeature<12>,                                 // 12 bit resolution
         Adc1Cycle144RegularChannelFeature<0>,                     // using channel 0 on ADC1 with 144-cycle latency
-        AdcTimer2TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer2 trigger-on-update
+        AdcTimer3TriggerRisingFeature<AdcTriggerSource::Update>,  // using timer 3 trigger-on-update
         Adc1InterruptFeature
       > adc;
 

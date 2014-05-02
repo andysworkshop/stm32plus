@@ -18,9 +18,9 @@ namespace stm32plus {
    * Handle the ADC regular channels (0..18 on the F4). ST's ADC_Channel_XX constants are simple
    * numbers 0..18 so we can use this feature easily, for example...
    *
-   * Adc3CycleRegularChannelFeature<1,2,6,7>
+   * Adc1Cycle3RegularChannelFeature<1,2,6,7>
    *
-   * ...will initialise channels 1,2,6 and 7 with 3 cycle sample time.
+   * ...will initialise channels 1,2,6 and 7 with 3 cycle sample time on ADC1.
    * @tparam TAdcNumber The ADC number (1..3)
    * @tparam The peripheral library constant for the number of conversion cycles, e.g. ADC_SampleTime_3Cycles
    * @tparam TChannelNumbers List of channel numbers, 0..15.
@@ -46,8 +46,6 @@ namespace stm32plus {
   /*
    * Typedefs for the difference cycles on each ADC
    */
-
-#if defined(STM32PLUS_F4)
 
   template<uint8_t... TChannelNumbers> using Adc1Cycle3RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_3Cycles,TChannelNumbers...>;
   template<uint8_t... TChannelNumbers> using Adc1Cycle15RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_15Cycles,TChannelNumbers...>;
@@ -75,21 +73,6 @@ namespace stm32plus {
   template<uint8_t... TChannelNumbers> using Adc3Cycle112RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_112Cycles,TChannelNumbers...>;
   template<uint8_t... TChannelNumbers> using Adc3Cycle144RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_144Cycles,TChannelNumbers...>;
   template<uint8_t... TChannelNumbers> using Adc3Cycle480RegularChannelFeature = AdcRegularChannelFeature<3,ADC_SampleTime_480Cycles,TChannelNumbers...>;
-
-#elif defined(STM32PLUS_F0)
-
-  template<uint8_t... TChannelNumbers> using Adc1Cycle1RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_1_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle7RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_7_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle13RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_13_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle28RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_28_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle41RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_41_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle55RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_55_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle71RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_71_5Cycles,TChannelNumbers...>;
-  template<uint8_t... TChannelNumbers> using Adc1Cycle239RegularChannelFeature = AdcRegularChannelFeature<1,ADC_SampleTime_239_5Cycles,TChannelNumbers...>;
-
-#else
-#error "Unsupported MCU"
-#endif
 
 
   /**

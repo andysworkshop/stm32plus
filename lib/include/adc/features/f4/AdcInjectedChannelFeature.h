@@ -18,9 +18,9 @@ namespace stm32plus {
    * Handle the ADC injected channels (0..3 on the F4). ST's ADC_Channel_XX constants are simple
    * numbers 0..18 so we can use this feature easily, for example...
    *
-   * Adc3CycleInjectedChannelFeature<1,2,6,7>
+   * Adc1Cycle3InjectedChannelFeature<1,2,6,7>
    *
-   * ...will initialise channels 1,2,6 and 7 with 3 cycle sample time.
+   * ...will initialise channels 1,2,6 and 7 with 3 cycle sample time on ADC1.
    * @tparam TAdcNumber The ADC number (1..3)
    * @tparam The peripheral library constant for the number of conversion cycles, e.g. ADC_SampleTime_3Cycles
    * @tparam TChannelNumbers List of channel numbers, 0..15.
@@ -83,6 +83,8 @@ namespace stm32plus {
   template<uint8_t TAdcNumber,uint8_t TSampleCycles,uint8_t... TChannelNumbers>
   inline AdcInjectedChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::AdcInjectedChannelFeature(Adc& adc)
     : AdcInjectedChannelFeatureBase(adc) {
+
+    static_assert(TAdcNumber>=1 && TAdcNumber<=3,"Invalid ADC number, expecting 1/2/3");
 
     // increase the number of channels being converted
 

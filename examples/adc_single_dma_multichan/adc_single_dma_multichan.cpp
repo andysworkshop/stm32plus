@@ -19,9 +19,16 @@ using namespace stm32plus;
  * three channels plus the internal temperature automatically and in sequence and we'll
  * write out the results to the USART for you to see.
  *
- * On the F4 the ADC is configured in 'scan mode' which means that it will convert all the
- * configured channels and, because we are not using continuous mode, it will stop at the end
- * of the group.
+ * On the F0:
+ *   The ADC uses the asynchronous 14MHz clock with channel latencies of 28,55,239.
+ *
+ * On the F1:
+ *   The ADC uses PCLK2/6 (e.g. 72MHz/6 = 12MHz) with channel latencies of 7.5,13.5,55.5.
+ *
+ * On the F4:
+ *   The ADC is configured in 'scan mode' which means that it will convert all the
+ *   configured channels and, because we are not using continuous mode, it will stop at the end
+ *   of the group.
  *
  * The DMA channel for ADC1 is used to move the converted channel data out to SRAM.
  * We configure the 'complete' DMA interrupt to fire when the complete group has
@@ -87,6 +94,21 @@ class AdcSingleDmaMultiChan {
         Adc1Cycle28RegularChannelFeature<0,1>,      // using channels 0,1 on ADC1 with 28.5-cycle latency
         Adc1Cycle55RegularChannelFeature<2>,        // using channel 2 on ADC1 with 55-cycle latency
         Adc1Cycle239TemperatureSensorFeature        // using the temperature sensor channel
+      > adc;
+
+#elif defined(STM32PLUS_F1)
+
+      /*
+       * Declare the ADC peripheral with a PCLK2 clock prescaler of 6. The ADC clock cannot exceed 14MHz so
+       * if PCLK2 is 72MHz then we're operating it at 12MHz here.
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<6>,                // PCLK2/6
+        Adc1Cycle7RegularChannelFeature<0,1>,       // using channels 0,1 on ADC1 with 7-cycle latency
+        Adc1Cycle13RegularChannelFeature<2>,        // using channel 2 on ADC1 with 13-cycle latency
+        Adc1Cycle55TemperatureSensorFeature,        // using the temperature sensor channel
+        AdcScanModeFeature                          // scan mode feature
       > adc;
 
 #elif defined(STM32PLUS_F4)

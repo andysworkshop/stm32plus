@@ -16,10 +16,12 @@ using namespace stm32plus;
 
 /**
  * This example shows how "injected" channels can be combined with regular channels using
- * scan mode. We will use ADC2 to convert channel 1 (regular) and channel 2 (injected) in
- * scan mode using the ADC2 interrupt to tell us when all the data is ready.
+ * scan mode.
  *
- * When the values have been converted the ADC2 peripheral will raise an interrupt and we will
+ * We will use ADC1 to convert channel 1 (regular) and channel 2 (injected) in
+ * scan mode using the ADC1 interrupt to tell us when all the data is ready.
+ *
+ * When the values have been converted the ADC1 peripheral will raise an interrupt and we will
  * write out the values to a USART. The USART is configured as 56000/8/N/1.
  *
  * If you want to see some real values then you'll need to wire PA0 (ADC123_IN0) and
@@ -40,20 +42,44 @@ class AdcSingleInjected {
     uint16_t _values[2];
 
     /*
+     * Unfortunately the ADC is quite different across the MCU series so we have to
+     * be MCU-specific when declaring this instance
+     */
+
+#if defined(STM32PLUS_F1)
+
+      /*
+       * Declare the ADC peripheral with a PCLK2 clock prescaler of 6. The ADC clock cannot exceed 14MHz so
+       * if PCLK2 is 72MHz then we're operating it at 12MHz here.
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<6>,              // PCLK2/6
+        Adc1Cycle71RegularChannelFeature<0>,
+        Adc1Cycle71InjectedChannelFeature<1>,
+        Adc1InterruptFeature,
+        AdcScanModeFeature
+      > _adc;
+
+#elif defined(STM32PLUS_F4)
+
+    /*
      * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
      * 12 bits. We will use 144-cycle conversions on ADC channels 0,1 and a 480-cycle
      * conversion on ADC channel 2. Scan mode is used with the default template parameter
      * that causes EOC to be raised at the end of a complete conversion group.
      */
 
-    Adc2<
+    Adc1<
       AdcClockPrescalerFeature<2>,                // prescaler of 2
       AdcResolutionFeature<12>,                   // 12 bit resolution
-      Adc2Cycle144RegularChannelFeature<0>,       // using regular channel 0 on ADC2 with 144-cycle latency
-      Adc2Cycle144InjectedChannelFeature<1>,      // using injected channel 1 on ADC2 with 144-cycle latency
-      Adc2InterruptFeature,                       // using interrupts to signal end of conversion
+      Adc1Cycle144RegularChannelFeature<0>,       // using regular channel 0 on ADC1 with 144-cycle latency
+      Adc1Cycle144InjectedChannelFeature<1>,      // using injected channel 1 on ADC1 with 144-cycle latency
+      Adc1InterruptFeature,                       // using interrupts to signal end of conversion
       AdcScanModeFeature<>                        // scan mode with EOC after each group
     > _adc;
+
+#endif
 
   public:
 
@@ -129,7 +155,7 @@ class AdcSingleInjected {
 
     void onInterrupt(AdcEventType eventType,uint8_t adcNumber) {
 
-      if(adcNumber==2 && eventType==AdcEventType::EVENT_INJECTED_END_OF_CONVERSION) {
+      if(adcNumber==1 && eventType==AdcEventType::EVENT_INJECTED_END_OF_CONVERSION) {
 
         _values[0]=_adc.getRegularConversionValue();
         _values[1]=_adc.getInjectedConversionValue(0);

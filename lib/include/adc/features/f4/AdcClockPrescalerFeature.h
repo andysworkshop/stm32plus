@@ -32,6 +32,8 @@ namespace stm32plus {
     AdcClockPrescalerFeature(Adc& adc)
       : AdcFeatureBase(adc) {
 
+      static_assert(TPrescaler==2 || TPrescaler==4 || TPrescaler==8,"Invalid ADC prescaler: 2,4,8 only");
+
       // this is a switch on a constant - the optimiser will eliminate everything except
       // the selected assignment
 

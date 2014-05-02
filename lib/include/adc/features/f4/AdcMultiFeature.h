@@ -54,5 +54,15 @@ namespace stm32plus {
           TTwoSamplingDelay==19 ? ADC_TwoSamplingDelay_19Cycles :
           ADC_TwoSamplingDelay_20Cycles;
     }
+
+
+    /**
+     * Get the results of a multi-conversion
+     * @return The results of the conversion
+     */
+
+    uint32_t getMultiConversionValue() const {
+      return ADC_GetMultiModeConversionValue();
+    }
   };
 }

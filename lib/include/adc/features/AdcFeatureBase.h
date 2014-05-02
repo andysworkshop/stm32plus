@@ -19,7 +19,7 @@ namespace stm32plus {
       Adc& _adc;
 
     public:
-      AdcFeatureBase(Adc& usart);
+      AdcFeatureBase(Adc& adc);
       operator Adc&();
   };
 

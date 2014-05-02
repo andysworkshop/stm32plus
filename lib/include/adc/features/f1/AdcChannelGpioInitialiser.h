@@ -7,8 +7,8 @@
 #pragma once
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F4
-#error This class can only be used with the STM32F4 series
+#ifndef STM32PLUS_F1
+#error This class can only be used with the STM32F1 series
 #endif
 
 
@@ -78,7 +78,7 @@ namespace stm32plus {
         }
       }
       else if(TAdcNumber==3) {
-        switch(TChannelNumber) {
+        switch(TChannelNumber) {                        // not all channels are available on ADC3
           case 0: port=GPIOA; pin=GPIO_Pin_0; break;
           case 1: port=GPIOA; pin=GPIO_Pin_1; break;
           case 2: port=GPIOA; pin=GPIO_Pin_2; break;
@@ -88,13 +88,10 @@ namespace stm32plus {
           case 6: port=GPIOF; pin=GPIO_Pin_8; break;
           case 7: port=GPIOF; pin=GPIO_Pin_9; break;
           case 8: port=GPIOF; pin=GPIO_Pin_10; break;
-          case 9: port=GPIOF; pin=GPIO_Pin_3; break;
           case 10: port=GPIOC; pin=GPIO_Pin_0; break;
           case 11: port=GPIOC; pin=GPIO_Pin_1; break;
           case 12: port=GPIOC; pin=GPIO_Pin_2; break;
           case 13: port=GPIOC; pin=GPIO_Pin_3; break;
-          case 14: port=GPIOF; pin=GPIO_Pin_4; break;
-          case 15: port=GPIOF; pin=GPIO_Pin_5; break;
         }
       }
 

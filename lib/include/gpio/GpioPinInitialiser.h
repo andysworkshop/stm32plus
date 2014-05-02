@@ -51,5 +51,11 @@ namespace stm32plus {
                     Gpio::GpioPullUpDownType pupdType,
                     Gpio::GpioOutputType outputType,
                     uint8_t afSelection);
+
+    /**
+     * Initialiser for analog input pins
+     */
+
+    void initialise(GPIO_TypeDef *port,uint16_t pins);
   }
 }

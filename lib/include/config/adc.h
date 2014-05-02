@@ -28,6 +28,24 @@
   #include "adc/f0/AdcPeripheral.h"
   #include "adc/Adc1.h"
 
+#elif defined(STM32PLUS_F1)
+
+  // all F1 includes
+
+  #include "adc/f1/Adc.h"
+  #include "adc/f1/AdcPeripheral.h"
+  #include "adc/Adc1.h"
+
+  // additional includes for the HD range
+
+  #if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
+    #include "adc/Adc2.h"
+  #endif
+
+  #if defined(STM32PLUS_F1_HD)
+    #include "adc/Adc3.h"
+  #endif
+
 #elif defined(STM32PLUS_F4)
 
   #include "adc/f4/Adc.h"
@@ -46,7 +64,6 @@
 
 #include "adc/features/AdcFeatureBase.h"
 
-#include "adc/features/AdcResolutionFeature.h"
 #include "adc/features/AdcContinuousModeFeature.h"
 
 // device specific feature includes
@@ -55,6 +72,7 @@
 
   #include "adc/features/f0/AdcChannelGpioInitialiser.h"
 
+  #include "adc/features/f0/AdcResolutionFeature.h"
   #include "adc/features/f0/AdcTriggerFeature.h"
   #include "adc/features/f0/AdcClockModeFeature.h"
   #include "adc/features/f0/AdcRegularChannelFeature.h"
@@ -64,10 +82,27 @@
   #include "adc/features/f0/AdcTemperatureSensorFeature.h"
   #include "adc/features/f0/AdcInterruptFeature.h"
 
+#elif defined(STM32PLUS_F1)
+
+  #include "adc/features/f1/AdcChannelGpioInitialiser.h"
+
+  #include "adc/features/f1/AdcClockPrescalerFeature.h"
+  #include "adc/features/f1/AdcTriggerFeature.h"
+  #include "adc/features/f1/AdcDualFeature.h"
+  #include "adc/features/f1/AdcRegularChannelFeature.h"
+  #include "adc/features/f1/AdcScanModeFeature.h"
+  #include "adc/features/f1/AdcInterruptFeature.h"
+  #include "adc/features/f1/AdcTemperatureSensorFeature.h"
+  #include "adc/features/f1/AdcInternalReferenceVoltageFeature.h"
+  #include "adc/features/f1/AdcInjectedChannelFeatureBase.h"
+  #include "adc/features/f1/AdcInjectedChannelFeature.h"
+  #include "adc/features/f1/AdcInjectedTriggerFeature.h"
+
 #elif defined(STM32PLUS_F4)
 
   #include "adc/features/f4/AdcChannelGpioInitialiser.h"
 
+  #include "adc/features/f4/AdcResolutionFeature.h"
   #include "adc/features/f4/AdcTriggerFeature.h"
   #include "adc/features/f4/AdcClockPrescalerFeature.h"
   #include "adc/features/f4/AdcMultiFeature.h"
