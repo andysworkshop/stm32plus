@@ -37,6 +37,7 @@ namespace stm32plus {
      ADC_InitTypeDef *_init;
      uint8_t _injectedChannelCount;
      AdcOperatingMode _operatingMode;
+     bool _calibrated;
 
      static uint8_t _regularChannelRank[3];        // we can have multiple channel feature instances and multiple ADCs
      static uint8_t _injectedChannelRank[3];
@@ -46,6 +47,8 @@ namespace stm32plus {
 
       void enablePeripheral() const;
       void disablePeripheral() const;
+
+      void calibrate() const;
 
       // get and increment the rank for an ADC
 
@@ -77,6 +80,10 @@ namespace stm32plus {
     : _peripheralAddress(peripheralAddress),
       _operatingMode(operatingMode) {
 
+    // not calibrated yet
+
+    _calibrated=false;
+
     // initialise the ranks back to 1 so that the channel features are ready
 
     _regularChannelRank[0]=_regularChannelRank[1]=_regularChannelRank[2]=1;
@@ -91,6 +98,23 @@ namespace stm32plus {
 
     ADC_StructInit(_init);
     _init->ADC_NbrOfChannel=0;      // nothing yet - the features will increment this as required
+  }
+
+
+  /*
+   * (re-)calibrate the ADC. This happens automatically on the first call to enablePeripheral()
+   */
+
+  inline void Adc::calibrate() const {
+
+    // reset calibration - this internal operation can take a few cycles
+
+    ADC_ResetCalibration(_peripheralAddress);
+    while(ADC_GetResetCalibrationStatus(_peripheralAddress));
+
+    // start the calibration and wait until it's done
+    ADC_StartCalibration(_peripheralAddress);
+    while(ADC_GetCalibrationStatus(_peripheralAddress));
   }
 
 
@@ -139,7 +163,11 @@ namespace stm32plus {
    */
 
   inline void Adc::enablePeripheral() const {
+
     ADC_Cmd(_peripheralAddress,ENABLE);
+
+    if(!_calibrated)
+      calibrate();
   }
 
 
