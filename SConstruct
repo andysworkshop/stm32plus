@@ -89,7 +89,7 @@ if len(VERSION) != 6:
   print "Unexpected error getting the library version"
   Exit(1)
 
-INSTALLDIR="/usr/lib/stm32plus/"+VERSION
+INSTALLDIR = ARGUMENTS.get('INSTALLDIR') or "/usr/arm-none-eabi/local"+VERSION
 
 # get the required args and validate
 
@@ -189,3 +189,8 @@ env.Append(LIBS=[libstm32plus])
 
 SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"])
 
+# build the CMake helper
+
+SConscript("cmake/SConscript",
+           exports=["env","systemprefix","libstm32plus","INSTALLDIR","VERSION"],
+           variant_dir="lib/build/"+systemprefix+"/cmake")

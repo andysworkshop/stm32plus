@@ -11,7 +11,7 @@ Import('*')
 
 # we'll need this to find source files in a variant_dir environment
 
-def RecursiveGlob(directory):
+def RecursiveGlob(directory, patterns):
 
 	node = Dir(directory)
 	build_dir = node.abspath
@@ -21,27 +21,42 @@ def RecursiveGlob(directory):
 
 	result = []
 	for root, dirs, files in os.walk(node.abspath):
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.cpp"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.c"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.asm"))
+		for pattern in patterns:
+			result += Glob(os.path.join(root.replace(node.abspath, build_dir), pattern))
 
 	return result
 
 # get all the sources
 
 matches=[]
-matches.append(RecursiveGlob("src"))
-matches.append(RecursiveGlob("fwlib"))
+matches.append(RecursiveGlob("src", ("*.c", "*.cpp", "*.asm")))
+matches.append(RecursiveGlob("fwlib", ("*.c", "*.cpp", "*.asm")))
 
 # trigger a build with the correct library name
 
 libstm32plus=env.Library("stm32plus-"+VERSION+"-"+mcu+"-"+mode+".a",matches)
 
-# install the library if the user gave the install option
+# install the library and headers if the user gave the install option
 
-env.Install(INSTALLDIR,libstm32plus)
-env.Install(INSTALLDIR,Dir("#lib/include"))
-env.Install(INSTALLDIR,Dir("#lib/fwlib"))
+env.Install(INSTALLDIR+"/lib",libstm32plus)
+env.InstallAs(INSTALLDIR+"/include/stm32plus",Dir("#lib/include"))
+
+# install the headers associated with the vendor's firmware library
+
+fwlib_header_paths = [
+  '/f0/cmsis/Include',
+  '/f0/cmsis/ST/STM32F0xx/Include',
+  '/f0/stdperiph/inc',
+  '/f1/cmsis/CM3/CoreSupport/',
+  '/f1/cmsis/CM3/DeviceSupport/ST/STM32F10x',
+  '/f1/stdperiph/inc',
+  '/f4/cmsis/Include',
+  '/f4/cmsis/Device/ST/STM32F4xx/Include',
+  '/f4/stdperiph/inc'
+]
+for path in fwlib_header_paths:
+  env.InstallAs(INSTALLDIR+"/include/stm32plus/fwlib"+path,Dir("#lib/fwlib"+path))
+
 env.Alias("install",INSTALLDIR)
 
 Return("libstm32plus")

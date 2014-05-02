@@ -1,0 +1,18 @@
+
+import os.path
+
+Import('*')
+
+def cmake_config_build(target, source, env):
+  list_names = ('CCFLAGS', 'CXXFLAGS', 'ASFLAGS', 'LINKFLAGS') 
+  env_dict = env.Dictionary().copy()
+  env_dict.update({ k: ' '.join(env_dict[k]) for k in list_names })
+  env_dict['LIBSTM32PLUS'] = os.path.basename(str(libstm32plus[0])) 
+  
+  for target_file, source_file in zip(target, source):
+    with open(str(source_file), "r") as s, open(str(target_file), "w") as t:
+      t.write(s.read() % env_dict)
+
+
+cmake_config = env.AlwaysBuild(env.Command('stm32plus-' + systemprefix + '-config.cmake', 'stm32plus-config.cmake.in', cmake_config_build))
+env.Install(INSTALLDIR+"/share/cmake/", cmake_config)
