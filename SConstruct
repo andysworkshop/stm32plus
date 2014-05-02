@@ -89,7 +89,7 @@ if len(VERSION) != 6:
   print "Unexpected error getting the library version"
   Exit(1)
 
-INSTALLDIR = ARGUMENTS.get('INSTALLDIR') or "/usr/arm-none-eabi/local"+VERSION
+INSTALLDIR = ARGUMENTS.get('INSTALLDIR') or "/usr/arm-none-eabi/local/stm32plus/" + VERSION
 
 # get the required args and validate
 
