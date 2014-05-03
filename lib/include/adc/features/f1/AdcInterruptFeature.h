@@ -6,18 +6,19 @@
 
 #pragma once
 
-// ensure the MCU series is correct
-#ifndef STM32PLUS_F1
-#error This class can only be used with the STM32F1 series
-#endif
-
-
 /*
- * Forward declare the IRQ handler name. There is a single IRQ handler
- * for ADC 1,2,3 on the F4
+ * Forward declare the IRQ handler name. There is a single IRQ handler for all available ADCs
  */
 
-extern "C" void ADC_IRQHandler();
+// ensure the MCU series is correct
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
+  extern "C" void ADC1_2_IRQHandler();
+#elif defined(STM32PLUS_F1_MD_VL)
+  extern "C" void ADC1_IRQHandler();
+#else
+  #error Unsupported MCU
+#endif
+
 
 
 namespace stm32plus {
@@ -33,7 +34,7 @@ namespace stm32plus {
                               public AdcFeatureBase {
 
     private:
-      typedef void (*FPTR)();         // this trick will force the linker to include the ISR
+      typedef void (*FPTR)();            // this trick will force the linker to include the ISR
       static FPTR _forceLinkage;
 
     protected:
@@ -100,12 +101,13 @@ namespace stm32plus {
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
 
     _interruptMask|=interruptMask;
-    _forceLinkage=&ADC_IRQHandler;
 
 #if defined(STM32PLUS_F1_MD_VL)
     Nvic::configureIrq(ADC1_IRQn);
+    _forceLinkage=ADC1_IRQHandler;
 #else
     Nvic::configureIrq(ADC1_2_IRQn);
+    _forceLinkage=ADC1_2_IRQHandler;
 #endif
 
     if((interruptMask & END_OF_CONVERSION)!=0)
