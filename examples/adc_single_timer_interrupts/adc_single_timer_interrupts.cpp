@@ -53,10 +53,7 @@ class AdcSingleTimerInterrupts {
        * Declare Timer3
        */
 
-      Timer3<
-        Timer3InternalClockFeature,       // the timer clock source is HCLK/2
-        TimerChannel1Feature              // we're going to use channel 1
-      > timer;
+      Timer3<Timer3InternalClockFeature> timer;
 
       /*
        * Set an up-timer up to tick at 8kHz with an auto-reload value of 7999
