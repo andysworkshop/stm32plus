@@ -32,6 +32,7 @@ namespace stm32plus {
     }
 
     void initialise() {
+      ADC_ExternalTrigConvCmd(_adc,ENABLE);
     }
   };
 
