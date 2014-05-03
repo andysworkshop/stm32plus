@@ -26,7 +26,9 @@ namespace stm32plus {
   template<>
   struct PeripheralTraits<PERIPHERAL_ADC1> {
     enum {
-      PERIPHERAL_BASE = ADC1_BASE
+      PERIPHERAL_BASE = ADC1_BASE,
+      V25 = 1430,         // from the datasheet, scaled by 1000
+      AVG_SLOPE = 4300
     };
   };
   typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;

@@ -17,10 +17,10 @@ namespace stm32plus {
 
   /**
    * Support for the temp sensor ADC channel is a simple extension of the regular channel
-   * configuration
+   * configuration.
    */
 
-  template<uint8_t TSampleCycles,uint16_t TV25=760,uint16_t TAvgSlope=2500>   // from the datasheet (scaled)
+  template<uint8_t TSampleCycles,uint16_t TV25=Adc1PeripheralTraits::V25,uint16_t TAvgSlope=Adc1PeripheralTraits::AVG_SLOPE>   // from the datasheet (scaled)
   struct AdcTemperatureSensorFeature : AdcRegularChannelFeature<1,TSampleCycles,16> {
 
     /**
