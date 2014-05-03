@@ -97,7 +97,9 @@ namespace stm32plus {
     _init=new ADC_InitTypeDef;
 
     ADC_StructInit(_init);
+
     _init->ADC_NbrOfChannel=0;      // nothing yet - the features will increment this as required
+    _init->ADC_ExternalTrigConv=ADC_ExternalTrigConv_None;  // software trigger (features override this)
   }
 
 
