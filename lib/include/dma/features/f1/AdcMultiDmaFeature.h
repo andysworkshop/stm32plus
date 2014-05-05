@@ -15,7 +15,9 @@
 namespace stm32plus {
 
   /**
-   * DMA feature to enable ADC data to be written to memory
+   * DMA feature to enable ADC data to be written to memory when in multi mode.
+   * In multi-mode the DMA transfers 32-bits at a time.
+   *
    * @tparam TAdc The type of the ADC peripheral (Adc1<...>, Adc2<...> ... )
    *
    * The default configuration is to run in circular buffer mode with half-word
@@ -24,10 +26,10 @@ namespace stm32plus {
    */
 
   template<class TAdc,uint32_t TPriority=DMA_Priority_High>
-  class AdcDmaFeature : public DmaFeatureBase {
+  class AdcMultiDmaFeature : public DmaFeatureBase {
 
     public:
-      AdcDmaFeature(Dma& dma);
+      AdcMultiDmaFeature(Dma& dma);
       void beginRead(volatile void *dest,uint32_t count);
   };
 
@@ -38,7 +40,7 @@ namespace stm32plus {
    */
 
   template<class TAdc,uint32_t TPriority>
-  inline AdcDmaFeature<TAdc,TPriority>::AdcDmaFeature(Dma& dma)
+  inline AdcMultiDmaFeature<TAdc,TPriority>::AdcMultiDmaFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     ADC_TypeDef *adc;
@@ -46,14 +48,14 @@ namespace stm32plus {
     adc=(ADC_TypeDef *)TAdc::PERIPHERAL_BASE;
 
     _init.DMA_PeripheralBaseAddr=reinterpret_cast<uint32_t>(&(adc->DR));
-    _init.DMA_DIR=DMA_DIR_PeripheralSRC;                      // 'peripheral' is source
-    _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;        // 'peripheral' does not increment
-    _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
-    _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_HalfWord; // transferring 16-bits
-    _init.DMA_MemoryDataSize=DMA_MemoryDataSize_HalfWord;         // transferring 16-bits
-    _init.DMA_Mode=DMA_Mode_Circular;                         // is a circular buffer
-    _init.DMA_Priority=TPriority;                             // user-configurable priority
-    _init.DMA_M2M=DMA_M2M_Disable;                            // memory->peripheral configuration
+    _init.DMA_DIR=DMA_DIR_PeripheralSRC;                       // 'peripheral' is source
+    _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;         // 'peripheral' does not increment
+    _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                  // memory is incremented
+    _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Word;  // transferring 32-bits
+    _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Word;          // transferring 32-bits
+    _init.DMA_Mode=DMA_Mode_Normal;                           // is a circular buffer
+    _init.DMA_Priority=TPriority;                              // user-configurable priority
+    _init.DMA_M2M=DMA_M2M_Disable;                             // memory->peripheral configuration
   }
 
 
@@ -61,11 +63,11 @@ namespace stm32plus {
    * Start a transfer of data to the destination.
    *
    * @param[in] dest The destination of the transfer.
-   * @param[in] count The number of half-words to transfer.
+   * @param[in] count The number of words to transfer.
    */
 
   template<class TAdc,uint32_t TPriority>
-  inline void AdcDmaFeature<TAdc,TPriority>::beginRead(volatile void *dest,uint32_t count) {
+  inline void AdcMultiDmaFeature<TAdc,TPriority>::beginRead(volatile void *dest,uint32_t count) {
 
     DMA_Channel_TypeDef *peripheralAddress;
 

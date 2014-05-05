@@ -16,22 +16,13 @@ namespace stm32plus {
 
 
   /**
-   * ADC operating mode. Only single ADC is supported on the F0
-   */
-
-  enum class AdcOperatingMode : uint8_t {
-    SINGLE_ADC,   //!< SINGLE_ADC
-  };
-
-
-  /**
    * Non-template base class for the ADC peripheral
    */
 
   class Adc {
 
     protected:
-     ADC_InitTypeDef *_init;
+      ADC_InitTypeDef *_init;
 
     public:
       Adc();

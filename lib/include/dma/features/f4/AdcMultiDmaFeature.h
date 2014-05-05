@@ -32,10 +32,10 @@ namespace stm32plus {
            bool TRequestAfterLastTransfer=true,
            uint32_t TPriority=DMA_Priority_High,
            uint32_t TFifoMode=DMA_FIFOMode_Disable>
-  class MultiAdcDmaFeature : public DmaFeatureBase {
+  class AdcMultiDmaFeature : public DmaFeatureBase {
 
     public:
-      MultiAdcDmaFeature(Dma& dma);
+      AdcMultiDmaFeature(Dma& dma);
       void beginRead(volatile void *dest,uint32_t count);
   };
 
@@ -44,13 +44,13 @@ namespace stm32plus {
    */
 
   template<class TAdc,bool TRequestAfterLastTransfer=true,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
-  using MultiAdcDmaMode1Feature=MultiAdcDmaFeature<TAdc,DMA_PeripheralDataSize_HalfWord,DMA_MemoryDataSize_HalfWord,TRequestAfterLastTransfer,TPriority,TFifoMode>;
+  using AdcMultiDmaMode1Feature=AdcMultiDmaFeature<TAdc,DMA_PeripheralDataSize_HalfWord,DMA_MemoryDataSize_HalfWord,TRequestAfterLastTransfer,TPriority,TFifoMode>;
 
   template<class TAdc,bool TRequestAfterLastTransfer=true,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
-  using MultiAdcDmaMode2Feature=MultiAdcDmaFeature<TAdc,DMA_PeripheralDataSize_Word,DMA_MemoryDataSize_Word,TRequestAfterLastTransfer,TPriority,TFifoMode>;
+  using AdcMultiDmaMode2Feature=AdcMultiDmaFeature<TAdc,DMA_PeripheralDataSize_Word,DMA_MemoryDataSize_Word,TRequestAfterLastTransfer,TPriority,TFifoMode>;
 
   template<class TAdc,bool TRequestAfterLastTransfer=true,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
-  using MultiAdcDmaMode3Feature=MultiAdcDmaFeature<TAdc,DMA_PeripheralDataSize_HalfWord,DMA_MemoryDataSize_HalfWord,TRequestAfterLastTransfer,TPriority,TFifoMode>;
+  using AdcMultiDmaMode3Feature=AdcMultiDmaFeature<TAdc,DMA_PeripheralDataSize_HalfWord,DMA_MemoryDataSize_HalfWord,TRequestAfterLastTransfer,TPriority,TFifoMode>;
 
 
   /**
@@ -59,7 +59,7 @@ namespace stm32plus {
    */
 
   template<class TAdc,uint32_t TPeripheralDataSize,uint32_t TMemoryDataSize,bool TRequestAfterLastTransfer,uint32_t TPriority,uint32_t TFifoMode>
-  inline MultiAdcDmaFeature<TAdc,TPeripheralDataSize,TMemoryDataSize,TRequestAfterLastTransfer,TPriority,TFifoMode>::MultiAdcDmaFeature(Dma& dma)
+  inline AdcMultiDmaFeature<TAdc,TPeripheralDataSize,TMemoryDataSize,TRequestAfterLastTransfer,TPriority,TFifoMode>::AdcMultiDmaFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     _init.DMA_Channel=dma.getChannelNumber();                 // channel id
@@ -88,7 +88,7 @@ namespace stm32plus {
    */
 
   template<class TAdc,uint32_t TPeripheralDataSize,uint32_t TMemoryDataSize,bool TRequestAfterLastTransfer,uint32_t TPriority,uint32_t TFifoMode>
-  inline void MultiAdcDmaFeature<TAdc,TPeripheralDataSize,TMemoryDataSize,TRequestAfterLastTransfer,TPriority,TFifoMode>::beginRead(volatile void *dest,uint32_t count) {
+  inline void AdcMultiDmaFeature<TAdc,TPeripheralDataSize,TMemoryDataSize,TRequestAfterLastTransfer,TPriority,TFifoMode>::beginRead(volatile void *dest,uint32_t count) {
 
     DMA_Stream_TypeDef *peripheralAddress;
 

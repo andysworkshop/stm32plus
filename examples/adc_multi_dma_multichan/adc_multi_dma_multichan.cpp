@@ -21,7 +21,7 @@ using namespace stm32plus;
  * the 4-value output buffer will be channel [0,2,1,3].
  *
  * USART1 is configured with protocol settings of 57600/8/N/1. The ADC channels are read
- * from PA[0], PA[1], PA[2]. You will need to connect these GPIO inputs to valid levels
+ * from PA[0], PA[1], PA[2], PA[3]. You will need to connect these GPIO inputs to valid levels
  * between GND and VREF to see conversion values.
  *
  * Compatible MCU:
@@ -29,6 +29,7 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F103VET6
  *   STM32F407VGT6
  */
 
@@ -66,17 +67,18 @@ class AdcMultiDmaMultiChan {
        * to the DMA peripheral.
        */
 
-      Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
+      Adc1DmaChannel<AdcMultiDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
       Adc1<
         AdcClockPrescalerFeature<6>,                    // PCLK2/6
         Adc1Cycle55RegularChannelFeature<0,1>,          // using channels 0,1 on ADC1 with 55.5-cycle latency
         AdcScanModeFeature,                             // scan mode
-        DualAdcRegularSimultaneousFeature<              // regular simultaneous multi mode
+        AdcContinuousModeFeature,
+        AdcDualRegularSimultaneousFeature<              // regular simultaneous multi mode
           Adc2<                                         // the second ADC
-            AdcClockPrescalerFeature<6>,                // PCLK2/6
             Adc2Cycle55RegularChannelFeature<2,3>,      // using channels 2,3 on ADC2 with 55.5-cycle latency
-            AdcScanModeFeature                          // scan mode
+            AdcScanModeFeature,                          // scan mode
+            AdcContinuousModeFeature
           >
         >
       > adc;
@@ -90,7 +92,7 @@ class AdcMultiDmaMultiChan {
        * to the DMA peripheral.
        */
 
-      Adc1DmaChannel<MultiAdcDmaMode1Feature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
+      Adc1DmaChannel<AdcMultiDmaMode1Feature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
       /*
        * Declare the ADC1 peripheral with an APB2 clock prescaler of 2, a resolution of 12 bits.
@@ -107,7 +109,7 @@ class AdcMultiDmaMultiChan {
         AdcResolutionFeature<12>,                       // 12 bit resolution
         Adc1Cycle144RegularChannelFeature<0,1>,         // using channels 0,1 on ADC1 with 144-cycle latency
         AdcScanModeFeature<>,                           // scan mode with EOC after each group
-        DualAdcRegularSimultaneousDmaMode1Feature<      // regular simultaneous multi mode
+        AdcDualRegularSimultaneousDmaMode1Feature<      // regular simultaneous multi mode
           Adc2<                                         // the second ADC
             AdcClockPrescalerFeature<2>,                // prescaler of 2
             AdcResolutionFeature<12>,                   // 12 bit resolution
@@ -145,7 +147,7 @@ class AdcMultiDmaMultiChan {
        * start the DMA (i.e. make it ready to receive requests from the ADC peripheral)
        */
 
-      dma.beginRead(readBuffer,4);
+      dma.beginRead(readBuffer,2);
 
       /*
        * Go into an infinite loop converting
@@ -154,7 +156,7 @@ class AdcMultiDmaMultiChan {
       for(;;) {
 
         /*
-         * For this test code we set the 4 words to a known pattern so we can tell if they
+         * For this test code we set the 4 16-bit words to a known pattern so we can tell if they
          * get properly overwritten by the DMA during conversion
          */
 

@@ -28,7 +28,7 @@ namespace stm32plus {
       void initialisePeripheral();
 
     public:
-      AdcPeripheral(AdcOperatingMode operatingMode);
+      AdcPeripheral(Adc *master);
       ~AdcPeripheral();
   };
 
@@ -39,8 +39,8 @@ namespace stm32plus {
    */
 
   template<PeripheralName TPeripheralName>
-  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(AdcOperatingMode operatingMode)
-    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE,operatingMode) {
+  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(Adc *master)
+    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE,master) {
   }
 
 
@@ -59,15 +59,14 @@ namespace stm32plus {
     // the features have been constructed and the common init structure customised
     // initialise it and free the memory it was using
 
-    if(_operatingMode==AdcOperatingMode::SINGLE_ADC)
+    if(_master==nullptr)
       ADC_CommonInit(_commonInit);
 
     delete _commonInit;
 
     // and now the other init call
 
-    ADC_Init(_peripheralAddress,_init);
-    delete _init;
+    ADC_Init(_peripheralAddress,&_init);
 
     // if there are any injected channels then set the count
 

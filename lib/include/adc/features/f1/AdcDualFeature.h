@@ -77,7 +77,10 @@ namespace stm32plus {
 
   template<class TAdc2,uint32_t TAdcMultiModeType>
   inline void AdcDualFeature<TAdc2,TAdcMultiModeType>::initialise() {
-    _adc2.reset(new TAdc2(AdcOperatingMode::MULTI_ADC));
+
+    // create the ADC2 instance with this as the master
+
+    _adc2.reset(new TAdc2(&_adc));
   }
 
 
@@ -85,14 +88,14 @@ namespace stm32plus {
    * 2 ADC, Independent mode
    */
 
-  template<class TAdc2> using DualAdcIndependentFeature=AdcDualFeature<TAdc2,ADC_Mode_Independent>;
-  template<class TAdc2> using DualAdcRegularInjectedSimultaneousFeature=AdcDualFeature<TAdc2,ADC_Mode_RegInjecSimult>;
-  template<class TAdc2> using DualAdcRegularSimultaneousAlternateTriggerFeature=AdcDualFeature<TAdc2,ADC_Mode_RegSimult_AlterTrig>;
-  template<class TAdc2> using DualAdcInjectedSimultaneousFastInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_InjecSimult_FastInterl>;
-  template<class TAdc2> using DualAdcInjectedSimultaneousSlowInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_InjecSimult_SlowInterl>;
-  template<class TAdc2> using DualAdcInjectedSimultaneousFeature=AdcDualFeature<TAdc2,ADC_Mode_InjecSimult>;
-  template<class TAdc2> using DualAdcRegularSimultaneousFeature=AdcDualFeature<TAdc2,ADC_Mode_RegSimult>;
-  template<class TAdc2> using DualAdcFastInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_FastInterl>;
-  template<class TAdc2> using DualAdcSlowInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_SlowInterl>;
-  template<class TAdc2> using DualAdcAlternateTriggerFeature=AdcDualFeature<TAdc2,ADC_Mode_AlterTrig>;
+  template<class TAdc2> using AdcDualIndependentFeature=AdcDualFeature<TAdc2,ADC_Mode_Independent>;
+  template<class TAdc2> using AdcDualRegularInjectedSimultaneousFeature=AdcDualFeature<TAdc2,ADC_Mode_RegInjecSimult>;
+  template<class TAdc2> using AdcDualRegularSimultaneousAlternateTriggerFeature=AdcDualFeature<TAdc2,ADC_Mode_RegSimult_AlterTrig>;
+  template<class TAdc2> using AdcDualInjectedSimultaneousFastInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_InjecSimult_FastInterl>;
+  template<class TAdc2> using AdcDualInjectedSimultaneousSlowInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_InjecSimult_SlowInterl>;
+  template<class TAdc2> using AdcDualInjectedSimultaneousFeature=AdcDualFeature<TAdc2,ADC_Mode_InjecSimult>;
+  template<class TAdc2> using AdcDualRegularSimultaneousFeature=AdcDualFeature<TAdc2,ADC_Mode_RegSimult>;
+  template<class TAdc2> using AdcDualFastInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_FastInterl>;
+  template<class TAdc2> using AdcDualSlowInterleavedFeature=AdcDualFeature<TAdc2,ADC_Mode_SlowInterl>;
+  template<class TAdc2> using AdcDualAlternateTriggerFeature=AdcDualFeature<TAdc2,ADC_Mode_AlterTrig>;
 }
