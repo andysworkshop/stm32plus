@@ -24,11 +24,11 @@ namespace stm32plus {
     public:
       TimerChannelFeature(Timer& timer);
 
-      uint16_t getCapture() const;
+      uint32_t getCapture() const;
       void initCompareForPwmOutput(uint8_t initialDutyCycle=0,uint16_t ocMode=TIM_OCMode_PWM1,uint16_t ocPolarity=TIM_OCPolarity_High);
-      void initCompare(uint16_t compareValue,uint16_t ocMode=TIM_OCMode_Toggle,uint16_t polarity=TIM_OCPolarity_Low,uint16_t preload=TIM_OCPreload_Disable);
+      void initCompare(uint32_t compareValue,uint16_t ocMode=TIM_OCMode_Toggle,uint16_t polarity=TIM_OCPolarity_Low,uint16_t preload=TIM_OCPreload_Disable);
       void initCapture(uint16_t polarity=TIM_ICPolarity_Rising,uint16_t selection=TIM_ICSelection_DirectTI,uint16_t prescaler=TIM_ICPSC_DIV1,uint16_t filter=0,uint16_t timerPrescaler=1);
-      void setCompare(uint16_t compare) const;
+      void setCompare(uint32_t compare) const;
       void setDutyCycle(uint8_t dutyCycle);
   };
 
@@ -54,7 +54,7 @@ namespace stm32plus {
    * Get the capture value for this channel
    */
 
-  inline uint16_t TimerChannelFeature<1>::getCapture() const {
+  inline uint32_t TimerChannelFeature<1>::getCapture() const {
     return TIM_GetCapture1(_timer);
   }
 
@@ -63,7 +63,7 @@ namespace stm32plus {
    * Set the compare value for this channel
    */
 
-  inline void TimerChannelFeature<1>::setCompare(uint16_t compareValue) const {
+  inline void TimerChannelFeature<1>::setCompare(uint32_t compareValue) const {
     return TIM_SetCompare1(_timer,compareValue);
   }
 
@@ -76,7 +76,7 @@ namespace stm32plus {
    * @param preload The preload enable/disable flag. Default is TIM_OCPreload_Disable.
    */
 
-  inline void TimerChannelFeature<1>::initCompare(uint16_t compareValue,uint16_t ocMode,uint16_t polarity,uint16_t preload) {
+  inline void TimerChannelFeature<1>::initCompare(uint32_t compareValue,uint16_t ocMode,uint16_t polarity,uint16_t preload) {
 
     TIM_OCInitTypeDef oci;
 
@@ -115,8 +115,7 @@ namespace stm32plus {
 
   inline void TimerChannelFeature<1>::setDutyCycle(uint8_t dutyCycle) {
 
-    uint16_t compareValue;
-    uint32_t period;
+    uint32_t compareValue,period;
 
     // remember the setting
 
@@ -129,7 +128,7 @@ namespace stm32plus {
     // watch out for overflow
 
     if(period<0xFFFFFFFF/100)
-      compareValue=static_cast<uint16_t>((period*static_cast<uint32_t>(dutyCycle))/100L);
+      compareValue=(period*static_cast<uint32_t>(dutyCycle))/100L;
     else
       compareValue=(period/100L)*static_cast<uint32_t>(dutyCycle);
 

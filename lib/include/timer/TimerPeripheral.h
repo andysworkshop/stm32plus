@@ -49,6 +49,10 @@ namespace stm32plus {
   inline TimerPeripheral<TTimer,TPeripheralName>::TimerPeripheral(TIM_TypeDef *peripheralAddress)
     : Timer(peripheralAddress) {
 
+    // set the counter max (32 or 16-bit)
+
+    _counterMax=PeripheralTraits<TPeripheralName>::COUNTER_MAX;
+
     // enable the clock before the feature constructors are called
 
     ClockControl<TPeripheralName>::On();

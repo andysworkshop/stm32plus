@@ -21,6 +21,7 @@ namespace stm32plus {
       TIM_TypeDef *_peripheralAddress;
       TIM_TimeBaseInitTypeDef _timeBase;
       uint32_t _clock;
+      uint32_t _counterMax;
 
     protected:
       Timer(TIM_TypeDef *peripheralAddress);
@@ -32,13 +33,14 @@ namespace stm32plus {
       void enablePeripheral() const;
       void disablePeripheral() const;
 
-      uint16_t getPeriod() const;
+      uint32_t getPeriod() const;
       uint32_t getClock() const;
+      uint32_t getCounterMax() const;
       void setClock(uint32_t clock);
 
       void setPrescaler(uint16_t prescaler,uint16_t reloadMode=TIM_PSCReloadMode_Immediate) const;
-      void initialiseTimeBase(uint16_t period,uint16_t prescaler,uint16_t clockDivision,uint16_t counterMode);
-      void setTimeBaseByFrequency(uint32_t frequency,uint16_t arr,uint16_t counterMode=TIM_CounterMode_Up);
+      void initialiseTimeBase(uint32_t period,uint16_t prescaler,uint16_t clockDivision,uint16_t counterMode);
+      void setTimeBaseByFrequency(uint32_t frequency,uint32_t arr,uint16_t counterMode=TIM_CounterMode_Up);
       void deinitialise();
   };
 
@@ -64,7 +66,7 @@ namespace stm32plus {
    * @param counterMode TIM_CounterMode_Up/Down
    */
 
-  inline void Timer::initialiseTimeBase(uint16_t period,uint16_t prescaler,uint16_t clockDivision,uint16_t counterMode) {
+  inline void Timer::initialiseTimeBase(uint32_t period,uint16_t prescaler,uint16_t clockDivision,uint16_t counterMode) {
 
     _timeBase.TIM_Period=period;
     _timeBase.TIM_Prescaler=prescaler;
@@ -80,13 +82,24 @@ namespace stm32plus {
    * be an up counter (by default) with a period equal to the arr (auto-reload) value. The lowest
    * frequency that can be set is TIMxCLK / 65536. For a 72Mhz core clock this is 1098 Hz.
    * @param frequency The frequency in Hz.
-   * @param arr The auto reload value (0..65535). The timer counter reverses/resets at this value.
+   * @param arr The auto reload value (0..0xFFFF/0xFFFFFFFF). The timer counter reverses/resets at this value.
    * @param counterMode TIM_CounterMode_* value
    */
 
-  inline void Timer::setTimeBaseByFrequency(uint32_t frequency,uint16_t arr,uint16_t counterMode) {
+  inline void Timer::setTimeBaseByFrequency(uint32_t frequency,uint32_t arr,uint16_t counterMode) {
 
     initialiseTimeBase(arr,(_clock/frequency)-1,0,counterMode);
+  }
+
+
+  /**
+   * Get the maximum value of the timer counter. For 32-bit timers (TIM2/5 on the F4 and TIM2
+   * on the F0) this will be 0xFFFFFFFF and for all others it's 0xFFFF
+   * @return The maximum counter value
+   */
+
+  inline uint32_t Timer::getCounterMax() const {
+    return _counterMax;
   }
 
 
@@ -95,7 +108,7 @@ namespace stm32plus {
    * @return The period
    */
 
-  inline uint16_t Timer::getPeriod() const {
+  inline uint32_t Timer::getPeriod() const {
     return _timeBase.TIM_Period;
   }
 
