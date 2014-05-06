@@ -35,6 +35,7 @@ namespace stm32plus {
       uint16_t getPeriod() const;
       uint32_t getClock() const;
       void setClock(uint32_t clock);
+      void setCounter(uint32_t counter) const;
 
       void setPrescaler(uint16_t prescaler,uint16_t reloadMode=TIM_PSCReloadMode_Immediate) const;
       void initialiseTimeBase(uint16_t period,uint16_t prescaler,uint16_t clockDivision,uint16_t counterMode);
@@ -119,6 +120,17 @@ namespace stm32plus {
 
   inline void Timer::setClock(uint32_t clock) {
     _clock=clock;
+  }
+
+
+  /**
+   * Reset the counter to a known value. Useful when not counting automatically, e.g.
+   * on an external input.
+   * @param counter The new value for the counter
+   */
+
+  inline void Timer::setCounter(uint32_t counter) const {
+    TIM_SetCounter(_peripheralAddress,counter);
   }
 
 

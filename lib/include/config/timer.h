@@ -17,12 +17,13 @@
  * what you can do.
  */
 
-// timer depends on gpio, event, interrupts, nvic, rtc
+// timer depends on gpio, event, interrupts, nvic, rtc, exti
 
 #include "config/gpio.h"
 #include "config/nvic.h"
 #include "config/rtc.h"
 #include "config/event.h"
+#include "config/exti.h"
 
 // generic peripheral and feature includes
 
@@ -176,6 +177,7 @@
   #include "timer/features/f4/Timer5RemapRtcFeature.h"
   #include "timer/features/f4/Timer11RemapHseFeature.h"
   #include "timer/features/f4/TimerInternalClockFeature.h"
+  #include "timer/features/f4/TimerEncoderFeature.h"
 
 #elif defined(STM32PLUS_F0)
 
