@@ -19,7 +19,7 @@ namespace stm32plus {
     public:
       TimerChannelFeatureBase(Timer& timer);
 
-      uint32_t calculateFrequency(uint16_t capture1,uint16_t capture2) const;
+      uint32_t calculateFrequency(uint32_t capture1,uint32_t capture2) const;
   };
 
 
@@ -40,14 +40,14 @@ namespace stm32plus {
    * @return The calculated frequency. Note that it my need to be divided by 2 depending on the value of your APB prescaler.
    */
 
-  inline uint32_t TimerChannelFeatureBase::calculateFrequency(uint16_t capture1,uint16_t capture2) const {
+  inline uint32_t TimerChannelFeatureBase::calculateFrequency(uint32_t capture1,uint32_t capture2) const {
 
     uint32_t frequency;
 
     if(capture2>capture1)
       frequency=_timer.getClock()/(capture2-capture1);
     else
-      frequency=_timer.getClock()/(65535-capture1+capture2);
+      frequency=_timer.getClock()/(_timer.getCounterMax()-capture1+capture2);
 
     return frequency;
   }
