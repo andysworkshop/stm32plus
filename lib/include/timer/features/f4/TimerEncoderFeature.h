@@ -51,8 +51,7 @@ namespace stm32plus {
       TimerEncoderFeature(Timer& timer);
       ~TimerEncoderFeature();
 
-      void initialiseEncoderCounter(uint32_t period,uint32_t initialValue);
-
+      void initialiseEncoderCounter(uint32_t period);
       void manageEncoderReset(ExtiPeripheralBase& exti,uint32_t resetValue);
   };
 
@@ -104,9 +103,8 @@ namespace stm32plus {
    */
 
   template<EncoderCounterEdge TEdge,EncoderPolarity TInput1Polarity,EncoderPolarity TInput2Polarity>
-  inline void TimerEncoderFeature<TEdge,TInput1Polarity,TInput2Polarity>::initialiseEncoderCounter(uint32_t period,uint32_t initialValue) {
+  inline void TimerEncoderFeature<TEdge,TInput1Polarity,TInput2Polarity>::initialiseEncoderCounter(uint32_t period) {
     _timer.initialiseTimeBase(period,0,TIM_CKD_DIV1,TIM_CounterMode_Up);
-    _timer.setCounter(initialValue);
   }
 
 

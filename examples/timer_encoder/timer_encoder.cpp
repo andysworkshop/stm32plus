@@ -26,12 +26,17 @@ using namespace stm32plus;
  * different LEDs depending on the direction that the encoder is turned and we will output the value
  * of the counter to the USART.
  *
+ * We will also cater for the optional "index pin" that resets the counter to a known value when
+ * its triggered. This should be connected to PA0. If you're simulating the encoder then you can
+ * press the blue USER button on the F4 discovery board to trigger this.
+ *
  * Some wiring is obviously required.
  *
  * If you have an encoder then wire the outputs to PA8, PA9 and remove the call to simulateSignals()
  * in the code. simulateSignals() allows you to validate your code before attaching your hardware.
- * To run in simulation mode you must wire PA0 => PA8 and PA1 => PA9. The simulator will pretend to
- * be an encoder and stimulate the encoder TI1 and TI2 inputs according to a known pattern.
+ * To run in simulation mode you must wire PA2 => PA8 and PA3 => PA9. The simulator will pretend to
+ * be an encoder and stimulate the encoder TI1 and TI2 inputs according to a known pattern. See the
+ * file simulation_waveform.png for a logic-analyser capture of the simulation waveform.
  *
  * F4 Discovery board:
  *   This example will work out-of-the-box on the F4 discovery board. LEDs are on PD12, PD13. The
@@ -43,8 +48,8 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
- *   STM32F051R8T6
- *   STM32F103ZET6
+ *   -STM32F051R8T6
+ *   -STM32F103ZET6
  *   STM32F407VGT6
  */
 
@@ -75,7 +80,7 @@ class TimerEncoderTest {
        Timer1GpioFeature<               // TI1/TI2 are CH1_IN and CH2_IN, set them up
          TIMER_REMAP_NONE,              // the GPIO input will not be remapped
          TIM1_CH1_IN,                   // channel 1 = TI1
-         TIM2_CH1_IN                    // channel 2 = TI2
+         TIM1_CH2_IN                    // channel 2 = TI2
        >,
        TimerEncoderFeature<             // we're using the quadrature encoder feature
          EncoderCounterEdge::Input1,    // count on TI1 edges with direction according to TI2
@@ -94,6 +99,14 @@ class TimerEncoderTest {
     UsartPollingOutputStream _outputStream;
 
     /*
+     * Declare the EXTI input (PA0) that should be connected to the encoder's index
+     * pin if it has one. A rising edge on this pin resets the counter to a known value
+     */
+
+    GpioA<DefaultDigitalInputFeature<0> > _indexPin;
+    Exti0 _exti;
+
+    /*
      * The last value received from the counter
      */
 
@@ -107,9 +120,9 @@ class TimerEncoderTest {
 
     TimerEncoderTest() :
       _usart(57600),
-      _outputStream(_usart) {
+      _outputStream(_usart),
+      _exti(EXTI_Mode_Interrupt,EXTI_Trigger_Rising,_indexPin[0]) {
     }
-
 
     /*
      * Run the test
@@ -126,12 +139,12 @@ class TimerEncoderTest {
         );
 
       /*
-       * Initialise the counter for the encoder to have a range of 0..65535 and
-       * an initial value of 32767
+       * Initialise the counter for the encoder to have a range of 0..65535 and arrange
+       * for automatic management of the index pin (resets to 30000)
        */
 
-      _timer.initialiseEncoderCounter(65535,32767);
-      _lastValue=32767;
+      _timer.initialiseEncoderCounter(65535);
+      _timer.manageEncoderReset(_exti,30000);
 
       /*
        * Initialise the capture and subscribe to the interrupts
@@ -140,36 +153,17 @@ class TimerEncoderTest {
       _timer.initCapture();
       _timer.enableInterrupts(TIM_IT_CC1);
 
+      /*
+       * Initialise the starting value for the counter to 30000
+       */
+
+      _timer.setCounter(_lastValue=30000);
 
       /*
        * Enable the timer
        */
 
       _timer.enablePeripheral();
-
-#if 0
-      for(;;) {
-
-        do {
-          currentValue=timer.getCounter();
-        } while(currentValue==_lastValue);
-
-        if(currentValue>_lastValue) {
-          leds[LED1_PIN].set();
-          MillisecondTimer::delay(200);
-          leds[LED1_PIN].reset();
-        }
-        else if(currentValue<_lastValue) {
-          leds[LED2_PIN].set();
-          MillisecondTimer::delay(200);
-          leds[LED2_PIN].reset();
-        }
-
-        outputStream << StringUtil::Ascii(currentValue) << "\r\n";
-
-        _lastValue=currentValue;
-      }
-#endif
 
       /*
        * Go into an infinite loop simulating the encoder signals. If you've got a real
@@ -186,7 +180,7 @@ class TimerEncoderTest {
 
     /*
      * Simulate the signals that an encoder might make. This requires you to make the following
-     * wiring: PA0 => PA8. PA1 => PA9. TI1 and TI2 will be generated on PA0/PA1 following the
+     * wiring: PA2 => PA8. PA3 => PA9. TI1 and TI2 will be generated on PA0/PA1 following the
      * pattern in AN4013 Figure 8. This will simulate 4 up counts and then 4 down counts.
      */
 
@@ -222,7 +216,7 @@ class TimerEncoderTest {
           { false, false }
       };
 
-      enum { TI1 = 0, TI2 = 1 };
+      enum { TI1 = 2, TI2 = 3 };
       GpioA<DefaultDigitalOutputFeature<TI1,TI2> > simpins;
 
       uint8_t i;
@@ -241,7 +235,7 @@ class TimerEncoderTest {
 
     /*
      * Subscriber callback function. This is called when the CC1 interrupt that we've
-     * enabled is fired.
+     * enabled is fired. Don't do much in here and be aware of re-entrancy issues.
      */
 
     void onInterrupt(TimerEventType tet,uint8_t /* timerNumber */) {
@@ -277,6 +271,7 @@ class TimerEncoderTest {
        */
 
       _outputStream << StringUtil::Ascii(currentValue) << "\r\n";
+      _lastValue=currentValue;
     }
 };
 
