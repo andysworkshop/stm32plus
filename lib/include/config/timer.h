@@ -47,6 +47,7 @@
 #include "timer/features/TimerInternalTriggerClockFeature.h"
 #include "timer/features/TimerMasterFeature.h"
 #include "timer/features/TimerSlaveFeature.h"
+#include "timer/features/TimerEncoderFeature.h"
 
 // generic peripheral includes
 
@@ -177,7 +178,6 @@
   #include "timer/features/f4/Timer5RemapRtcFeature.h"
   #include "timer/features/f4/Timer11RemapHseFeature.h"
   #include "timer/features/f4/TimerInternalClockFeature.h"
-  #include "timer/features/f4/TimerEncoderFeature.h"
 
 #elif defined(STM32PLUS_F0)
 

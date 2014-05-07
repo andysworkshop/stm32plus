@@ -33,8 +33,8 @@ namespace stm32plus {
 
   /**
    * Provide support for the timer encoder feature. If the optional Exti instance is provided
-   * then this feature will subscribe to its interrupt and reset the counter to zero when
-   * the interrupt is triggered.
+   * then this feature will subscribe to its interrupt and reset the counter to a known value
+   * when the interrupt is triggered.
    */
 
   template<EncoderCounterEdge TEdge,EncoderPolarity TInput1Polarity,EncoderPolarity TInput2Polarity>
@@ -71,7 +71,7 @@ namespace stm32plus {
     static_assert(TInput1Polarity==EncoderPolarity::Rising || TInput1Polarity==EncoderPolarity::Falling,"Invalid polarity for input 1");
     static_assert(TInput2Polarity==EncoderPolarity::Rising || TInput2Polarity==EncoderPolarity::Falling,"Invalid polarity for input 2");
 
-    // set the encoder mode
+    // set the encoder mode based on the constant parameters
 
     TIM_EncoderInterfaceConfig(
         _timer,
@@ -99,7 +99,6 @@ namespace stm32plus {
   /**
    * Simple counter initialiser specifically for the encoder feature
    * @param period The up-limit (exclusive)
-   * @param initialValue The starting value for the counter
    */
 
   template<EncoderCounterEdge TEdge,EncoderPolarity TInput1Polarity,EncoderPolarity TInput2Polarity>
