@@ -51,6 +51,10 @@ namespace stm32plus {
       TimerEncoderFeature(Timer& timer);
       ~TimerEncoderFeature();
 
+      void initialiseUpCounter(uint32_t period);
+      void initialiseDownCounter(uint32_t period);
+      void initialiseUpDownCounter(uint32_t period);
+
       void manageEncoderReset(ExtiPeripheralBase& exti,uint32_t resetValue);
   };
 
@@ -92,6 +96,39 @@ namespace stm32plus {
         ExtiInterruptEventSourceSlot::bind(this,&TimerEncoderFeature<TEdge,TInput1Polarity,TInput2Polarity>::onExtiInterrupt)
       );
     }
+  }
+
+
+  /**
+   * Simple counter initialiser for counting upwards
+   * @param period The up-limit (exclusive)
+   */
+
+  template<EncoderCounterEdge TEdge,EncoderPolarity TInput1Polarity,EncoderPolarity TInput2Polarity>
+  inline void TimerEncoderFeature<TEdge,TInput1Polarity,TInput2Polarity>::initialiseUpCounter(uint32_t period) {
+    _timer.initialiseTimeBase(period,0,TIM_CKD_DIV1,TIM_CounterMode_Up);
+  }
+
+
+  /**
+   * Simple counter initialiser for counting downwards
+   * @param period The up-limit (exclusive)
+   */
+
+  template<EncoderCounterEdge TEdge,EncoderPolarity TInput1Polarity,EncoderPolarity TInput2Polarity>
+  inline void TimerEncoderFeature<TEdge,TInput1Polarity,TInput2Polarity>::initialiseDownCounter(uint32_t period) {
+    _timer.initialiseTimeBase(period,0,TIM_CKD_DIV1,TIM_CounterMode_Down);
+  }
+
+
+  /**
+   * Simple counter initialiser for counting up and down
+   * @param period The up-limit (exclusive)
+   */
+
+  template<EncoderCounterEdge TEdge,EncoderPolarity TInput1Polarity,EncoderPolarity TInput2Polarity>
+  inline void TimerEncoderFeature<TEdge,TInput1Polarity,TInput2Polarity>::initialiseUpDownCounter(uint32_t period) {
+    _timer.initialiseTimeBase(period,0,TIM_CKD_DIV1,TIM_CounterMode_CenterAligned1);
   }
 
 

@@ -36,6 +36,8 @@ namespace stm32plus {
       uint32_t getPeriod() const;
       uint32_t getClock() const;
       uint32_t getCounterMax() const;
+      uint32_t getCounter() const;
+
       void setClock(uint32_t clock);
       void setCounter(uint32_t counter) const;
 
@@ -122,6 +124,16 @@ namespace stm32plus {
 
   inline uint32_t Timer::getClock() const {
     return _clock;
+  }
+
+
+  /**
+   * Get the current value of the counter
+   * @return The counter value
+   */
+
+  inline uint32_t Timer::getCounter() const {
+    return TIM_GetCounter(_peripheralAddress);
   }
 
 
