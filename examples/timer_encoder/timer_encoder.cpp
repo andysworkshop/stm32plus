@@ -40,7 +40,7 @@ using namespace stm32plus;
  *
  * F4 Discovery board:
  *   This example will work out-of-the-box on the F4 discovery board. LEDs are on PD12, PD13. The
- *   USART TX/RX is PD8/PD9.
+ *   USART TX/RX is PD8/PD9 except on the F0 when it's on PB6/PB7.
  *
  * Compatible MCU:
  *   STM32F0
@@ -92,10 +92,17 @@ class TimerEncoderTest {
     > _timer;
 
     /*
-     * Declare a USART to write out the counter value. TX/RX = PD8/PD9 for this one.
+     * Declare a USART to write out the counter value. TX/RX = PD8/PD9 for Usart3_Remap1 and
+     * PB6/PB7 for Usart1_Remap1. The differences are down to which pins are available on the
+     * F4 and F0 discovery boards.
      */
 
+#if defined(STM32PLUS_F0)
+    Usart1_Remap1<> _usart;
+#else
     Usart3_Remap1<> _usart;
+#endif
+
     UsartPollingOutputStream _outputStream;
 
     /*
