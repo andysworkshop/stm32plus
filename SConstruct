@@ -44,7 +44,7 @@ import os
 def usage():
 
 	print """
-Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE>
+Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
 
   <MODE>: debug/fast/small.
     debug = -O0
@@ -64,14 +64,19 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE>
     the HSI and don't have an HSE connected then just supply a default
     of 8000000.
 
+  [float=hard]:
+  	Optional flag for an F4 build that will cause the hardware FPU to be
+  	used for floating point operations. Requires the "GNU Tools for ARM Embedded
+  	Processors" toolchain. Will not work with Code Sourcery Lite.
+
   Examples:
-    scons mode=debug mcu=f1hd hse=8000000            // debug / f1hd / 8MHz
-    scons mode=debug mcu=f1cle hse=25000000          // debug / f1cle / 25MHz
-    scons mode=debug mcu=f1mdvl hse=8000000          // debug / f1mdvl / 8MHz
-    scons mode=fast mcu=f1hd hse=8000000 install     // fast / f1hd / 8MHz
-    scons mode=small mcu=f4 hse=8000000 install        // small / f4 / 8Mhz
-    scons mode=debug mcu=f4 hse=8000000 -j4 install    // debug / f4 / 8Mhz
-    scons mode=debug mcu=f051 hse=8000000 -j4 install  // debug / f051 / 8Mhz
+    scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
+    scons mode=debug mcu=f1cle hse=25000000                     // debug / f1cle / 25MHz
+    scons mode=debug mcu=f1mdvl hse=8000000                     // debug / f1mdvl / 8MHz
+    scons mode=fast mcu=f1hd hse=8000000 install                // fast / f1hd / 8MHz
+    scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f4 / 8Mhz
+    scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f4 / 8Mhz
+    scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
 """
 
 # set the installation root. you can customise this. the default attempts to read the
@@ -125,7 +130,7 @@ env.Append(CPPPATH=["#lib/include","#lib/include/stl","#lib"])
 # create the C and C++ flags that are needed. We can't use the extra or pedantic errors on the ST library code.
 
 env.Replace(CCFLAGS=["-Wall","-Werror","-ffunction-sections","-fdata-sections","-fno-exceptions","-mthumb","-gdwarf-2","-pipe"])
-env.Replace(CXXFLAGS=["-Wextra","-Werror","-pedantic-errors","-fno-rtti","-std=gnu++0x","-fno-threadsafe-statics","-pipe"])
+env.Replace(CXXFLAGS=["-Wextra","-pedantic-errors","-fno-rtti","-std=gnu++0x","-fno-threadsafe-statics"])
 env.Append(CCFLAGS="-DHSE_VALUE="+hse)
 env.Append(LINKFLAGS=["-Xlinker","--gc-sections","-mthumb","-g3","-gdwarf-2"])
 
@@ -147,6 +152,14 @@ elif mcu=="f4":
 	env.Append(CCFLAGS=["-mcpu=cortex-m4","-DSTM32PLUS_F4"])
 	env.Append(ASFLAGS="-mcpu=cortex-m4")
 	env.Append(LINKFLAGS="-mcpu=cortex-m4")
+
+	# support for the hardware FPU in the F4
+
+	float=ARGUMENTS.get('float')
+	if float=="hard":
+		env.Append(CCFLAGS=["-mfloat-abi=hard"])
+		env.Append(LINKFLAGS=["-mfloat-abi=hard","-mfpu=fpv4-sp-d16"]);
+
 elif mcu=="f051":
 	env.Append(CCFLAGS=["-mcpu=cortex-m0","-DSTM32PLUS_F0_51"])
 	env.Append(ASFLAGS="-mcpu=cortex-m0")
