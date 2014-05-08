@@ -24,7 +24,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_ETR {
 
-    static void initialise() {
+    TIM8_ETR() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_0,0,0,0 };
@@ -42,7 +42,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_BKIN {
 
-    static void initialise() {
+    TIM8_BKIN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_6,0,0,0 };
@@ -60,7 +60,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH1N {
 
-    static void initialise() {
+    TIM8_CH1N() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,0,0 };
@@ -78,7 +78,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH2N {
 
-    static void initialise() {
+    TIM8_CH2N() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_0,0,0,0 };
@@ -96,7 +96,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH3N {
 
-    static void initialise() {
+    TIM8_CH3N() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_1,0,0,0 };
@@ -114,7 +114,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH1_IN {
 
-    static void initialise() {
+    TIM8_CH1_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_6,0,0,0 };
@@ -132,7 +132,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH1_OUT {
 
-    static void initialise() {
+    TIM8_CH1_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_6,0,0,0 };
@@ -150,7 +150,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH2_IN {
 
-    static void initialise() {
+    TIM8_CH2_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,0,0 };
@@ -168,7 +168,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH2_OUT {
 
-    static void initialise() {
+    TIM8_CH2_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,0,0 };
@@ -186,7 +186,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH3_IN {
 
-    static void initialise() {
+    TIM8_CH3_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_8,0,0,0 };
@@ -204,7 +204,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH3_OUT {
 
-    static void initialise() {
+    TIM8_CH3_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_8,0,0,0 };
@@ -222,7 +222,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH4_IN {
 
-    static void initialise() {
+    TIM8_CH4_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_9,0,0,0 };
@@ -240,7 +240,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM8_CH4_OUT {
 
-    static void initialise() {
+    TIM8_CH4_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOC,NULL,NULL,NULL };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_9,0,0,0 };
@@ -256,22 +256,13 @@ namespace stm32plus {
    * Timer8GpioFeature<REMAP_NONE,TIM8_CH1_OUT>
    */
 
-  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class TF0=NullTimerGpio,template<TimerGpioRemapLevel> class TF1=NullTimerGpio,template<TimerGpioRemapLevel> class TF2=NullTimerGpio,template<TimerGpioRemapLevel> class TF3=NullTimerGpio,template<TimerGpioRemapLevel> class TF4=NullTimerGpio,template<TimerGpioRemapLevel> class TF5=NullTimerGpio,template<TimerGpioRemapLevel> class TF6=NullTimerGpio,template<TimerGpioRemapLevel> class TF7=NullTimerGpio,template<TimerGpioRemapLevel> class TF8=NullTimerGpio>
+  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class... Features>
   struct Timer8GpioFeature;
 
 
-  template<template<TimerGpioRemapLevel> class TF0,template<TimerGpioRemapLevel> class TF1,template<TimerGpioRemapLevel> class TF2,template<TimerGpioRemapLevel> class TF3,template<TimerGpioRemapLevel> class TF4,template<TimerGpioRemapLevel> class TF5,template<TimerGpioRemapLevel> class TF6,template<TimerGpioRemapLevel> class TF7,template<TimerGpioRemapLevel> class TF8>
-  struct Timer8GpioFeature<TIMER_REMAP_NONE,TF0,TF1,TF2,TF3,TF4,TF5,TF6,TF7,TF8> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer8GpioFeature<TIMER_REMAP_NONE,Features...> : TimerFeatureBase, Features<TIMER_REMAP_NONE>... {
     Timer8GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
-      TF0<TIMER_REMAP_NONE>::initialise();
-      TF1<TIMER_REMAP_NONE>::initialise();
-      TF2<TIMER_REMAP_NONE>::initialise();
-      TF3<TIMER_REMAP_NONE>::initialise();
-      TF4<TIMER_REMAP_NONE>::initialise();
-      TF5<TIMER_REMAP_NONE>::initialise();
-      TF6<TIMER_REMAP_NONE>::initialise();
-      TF7<TIMER_REMAP_NONE>::initialise();
-      TF8<TIMER_REMAP_NONE>::initialise();
     }
   };
 }
