@@ -33,7 +33,6 @@
 #include "timer/features/TimerFeatureBase.h"
 #include "timer/features/TimerInterruptFeatureEnabler.h"
 #include "timer/features/TimerChannelFeatureBase.h"
-#include "timer/features/NullTimerGpio.h"
 
 // generic feature includes
 
