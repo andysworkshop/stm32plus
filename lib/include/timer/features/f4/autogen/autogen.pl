@@ -80,7 +80,7 @@ sub writeHeader {
 
 		print {$_[0]} qq[/*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  *
  * THIS IS AN AUTOMATICALLY GENERATED FILE - DO NOT EDIT!

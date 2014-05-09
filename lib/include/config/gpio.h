@@ -12,10 +12,11 @@
  * external interface includes this as a dependency so there's little chance that you'll need to include it directly.
  */
 
-// generic pin peripheral includes
+// generic peripheral includes
 
 #include "gpio/GpioPortBase.h"
 #include "gpio/GpioAlternateFunctionMapper.h"
+#include "gpio/GpioPinMap.h"
 
 // device-specific feature includes
 
