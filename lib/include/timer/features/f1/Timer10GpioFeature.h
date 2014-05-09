@@ -23,7 +23,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM10_CH1_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOF };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_8,0,0,GPIO_Pin_6 };
@@ -40,7 +40,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM10_CH1_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOF };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_8,0,0,GPIO_Pin_6 };
@@ -56,25 +56,23 @@ namespace stm32plus {
    * Timer10GpioFeature<REMAP_NONE,TIM10_CH1_OUT>
    */
 
-  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class TF0=NullTimerGpio>
+  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class... Features>
   struct Timer10GpioFeature;
 
 
-  template<template<TimerGpioRemapLevel> class TF0>
-  struct Timer10GpioFeature<TIMER_REMAP_NONE,TF0> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer10GpioFeature<TIMER_REMAP_NONE,Features...> : TimerFeatureBase, Features<TIMER_REMAP_NONE>... {
     Timer10GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-      TF0<TIMER_REMAP_NONE>::initialise();
     }
   };
 
 
-  template<template<TimerGpioRemapLevel> class TF0>
-  struct Timer10GpioFeature<TIMER_REMAP_FULL,TF0> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer10GpioFeature<TIMER_REMAP_FULL,Features...> : TimerFeatureBase, Features<TIMER_REMAP_FULL>... {
     Timer10GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
       GPIO_PinRemapConfig(GPIO_Remap_TIM10,ENABLE);
-      TF0<TIMER_REMAP_FULL>::initialise();
     }
   };
 }

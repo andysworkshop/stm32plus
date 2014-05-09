@@ -144,7 +144,7 @@ sub writeFeatureStruct {
   template<TimerGpioRemapLevel TRemapLevel>
   struct ${feature} {
 
-    static void initialise() {
+    ${feature}() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ ${portNone},${port1},${port2},${portf} };
       static constexpr const uint16_t pins[4]={ ${pinNone},${pin1},${pin2},${pinf} };
@@ -199,23 +199,7 @@ sub writeClosing {
 sub writeClosingDef {
 
 		my ($outfile,$timerNumber,$featureCount,$remapLevel,$gpioRemap)=@_;
-		my ($i,$def1,$def2,$def3,$def4,$fulldef);
-
-		for($i=0;$i<9;$i++) {
-				if($i<$featureCount) {
-						if($i>0) {
-								$def1 .= ",";
-								$def2 .= ",";
-								$def3 .= ",";
-								$def4 .= "\n";
-						}
-
-						$def1 .= "template<TimerGpioRemapLevel> class TF${i}=NullTimerGpio";
-						$def2 .= "template<TimerGpioRemapLevel> class TF${i}";
-						$def3 .= "TF${i}";
-						$def4 .= "      TF${i}<${remapLevel}>::initialise();";
-				}
-		}
+		my ($fulldef);
 
 		# generic definition if this is the first call
 
@@ -229,19 +213,18 @@ sub writeClosingDef {
    * Timer${timerNumber}GpioFeature<REMAP_NONE,TIM${timerNumber}_CH1_OUT>
    */
 
-  template<TimerGpioRemapLevel TRemapLevel,${def1}>
+  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class... Features>
   struct Timer${timerNumber}GpioFeature;
 ~;
 		}
 		
 		$fulldef.=qq~
 
-  template<${def2}>
-  struct Timer${timerNumber}GpioFeature<${remapLevel},${def3}> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer${timerNumber}GpioFeature<${remapLevel},Features...> : TimerFeatureBase, Features<${remapLevel}>... {
     Timer${timerNumber}GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
-${def4}
     }
   };
 ~;
-		print ${outfile} $fulldef;
+    print ${outfile} $fulldef;
 }
