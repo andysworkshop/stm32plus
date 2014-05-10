@@ -48,7 +48,7 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
- *   -STM32F051R8T6
+ *   STM32F051R8T6
  *   -STM32F103ZET6
  *   STM32F407VGT6
  */
