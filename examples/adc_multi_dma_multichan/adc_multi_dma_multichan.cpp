@@ -55,6 +55,13 @@ class AdcMultiDmaMultiChan {
       volatile uint16_t readBuffer[4];
 
       /*
+       * Unfortunately the ADC is quite different across the MCU series so we have to
+       * be MCU-specific when declaring this instance
+       */
+
+#if defined(STM32PLUS_F1)
+
+      /*
        * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
        * which means that it wil automatically refill our buffer on each conversion because
        * one conversion exactly matches the size of the memory buffer that we will give
@@ -62,13 +69,6 @@ class AdcMultiDmaMultiChan {
        */
 
       Adc1DmaChannel<AdcMultiDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
-
-      /*
-       * Unfortunately the ADC is quite different across the MCU series so we have to
-       * be MCU-specific when declaring this instance
-       */
-
-#if defined(STM32PLUS_F1)
 
       Adc1<
         AdcClockPrescalerFeature<6>,                    // PCLK2/6
@@ -89,6 +89,15 @@ class AdcMultiDmaMultiChan {
       dmaTransfers=2;
 
 #elif defined(STM32PLUS_F4)
+
+      /*
+       * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
+       * which means that it wil automatically refill our buffer on each conversion because
+       * one conversion exactly matches the size of the memory buffer that we will give
+       * to the DMA peripheral.
+       */
+
+      Adc1DmaChannel<AdcMultiDmaMode1Feature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
       /*
        * Declare the ADC1 peripheral with an APB2 clock prescaler of 2, a resolution of 12 bits.
