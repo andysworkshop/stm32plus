@@ -53,7 +53,7 @@ namespace stm32plus {
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                  // memory is incremented
     _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Word;  // transferring 32-bits
     _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Word;          // transferring 32-bits
-    _init.DMA_Mode=DMA_Mode_Normal;                           // is a circular buffer
+    _init.DMA_Mode=DMA_Mode_Circular;                          // is a circular buffer
     _init.DMA_Priority=TPriority;                              // user-configurable priority
     _init.DMA_M2M=DMA_M2M_Disable;                             // memory->peripheral configuration
   }

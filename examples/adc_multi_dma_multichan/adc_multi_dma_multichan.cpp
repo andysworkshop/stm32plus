@@ -20,7 +20,7 @@ using namespace stm32plus;
  * are converted at the same time followed by channels 1 and 3. The order of the values in
  * the 4-value output buffer will be channel [0,2,1,3].
  *
- * USART1 is configured with protocol settings of 57600/8/N/1. The ADC channels are read
+ * USART3 remap1 is configured with protocol settings of 57600/8/N/1. The ADC channels are read
  * from PA[0], PA[1], PA[2], PA[3]. You will need to connect these GPIO inputs to valid levels
  * between GND and VREF to see conversion values.
  *
@@ -29,7 +29,7 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
- *   STM32F103VET6
+ *   STM32F103ZET6
  *   STM32F407VGT6
  */
 
@@ -43,6 +43,8 @@ class AdcMultiDmaMultiChan {
 
     void run() {
 
+      uint16_t dmaTransfers;
+
       _ready=false;
 
       /*
@@ -53,14 +55,6 @@ class AdcMultiDmaMultiChan {
       volatile uint16_t readBuffer[4];
 
       /*
-       * Unfortunately the ADC is quite different across the MCU series so we have to
-       * be MCU-specific when declaring this instance
-       */
-
-
-#if defined(STM32PLUS_F1)
-
-      /*
        * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
        * which means that it wil automatically refill our buffer on each conversion because
        * one conversion exactly matches the size of the memory buffer that we will give
@@ -68,6 +62,13 @@ class AdcMultiDmaMultiChan {
        */
 
       Adc1DmaChannel<AdcMultiDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
+
+      /*
+       * Unfortunately the ADC is quite different across the MCU series so we have to
+       * be MCU-specific when declaring this instance
+       */
+
+#if defined(STM32PLUS_F1)
 
       Adc1<
         AdcClockPrescalerFeature<6>,                    // PCLK2/6
@@ -77,22 +78,17 @@ class AdcMultiDmaMultiChan {
         AdcDualRegularSimultaneousFeature<              // regular simultaneous multi mode
           Adc2<                                         // the second ADC
             Adc2Cycle55RegularChannelFeature<2,3>,      // using channels 2,3 on ADC2 with 55.5-cycle latency
-            AdcScanModeFeature,                          // scan mode
+            AdcScanModeFeature,                         // scan mode
             AdcContinuousModeFeature
           >
         >
       > adc;
 
+      // word transfers
+
+      dmaTransfers=2;
+
 #elif defined(STM32PLUS_F4)
-
-      /*
-       * Declare the ADC DMA channel. The default is circular mode for the MultiAdcDmaMode1Feature
-       * which means that it wil automatically refill our buffer on each conversion because
-       * one conversion exactly matches the size of the memory buffer that we will give
-       * to the DMA peripheral.
-       */
-
-      Adc1DmaChannel<AdcMultiDmaMode1Feature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> dma;
 
       /*
        * Declare the ADC1 peripheral with an APB2 clock prescaler of 2, a resolution of 12 bits.
@@ -120,6 +116,10 @@ class AdcMultiDmaMultiChan {
         >
       > adc;
 
+      // half-word transfers
+
+      dmaTransfers=4;
+
 #endif
 
       /*
@@ -140,14 +140,14 @@ class AdcMultiDmaMultiChan {
        * Declare an instance of USART that we'll use to write out the conversion results.
        */
 
-      Usart1<> usart(57600);
+      Usart3_Remap1<> usart(57600);
       UsartPollingOutputStream outputStream(usart);
 
       /**
        * start the DMA (i.e. make it ready to receive requests from the ADC peripheral)
        */
 
-      dma.beginRead(readBuffer,2);
+      dma.beginRead(readBuffer,dmaTransfers);
 
       /*
        * Go into an infinite loop converting

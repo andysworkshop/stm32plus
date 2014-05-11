@@ -81,6 +81,10 @@ namespace stm32plus {
     // create the ADC2 instance with this as the master
 
     _adc2.reset(new TAdc2(&_adc));
+
+    // enable this ADC to be triggered externally
+
+    ADC_ExternalTrigConvCmd(ADC2,ENABLE);
   }
 
 
