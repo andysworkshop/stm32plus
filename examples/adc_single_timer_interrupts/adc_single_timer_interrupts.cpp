@@ -21,12 +21,15 @@ using namespace stm32plus;
  * We use the ADC1 end-of-conversion (EOC) interrupt to tell us when the conversion is ready. We then log
  * that converted value to the USART where you can see it using normal PC terminal software.
  *
+ * Connect an analog input to PA0 to see the value of the conversion.
+ *
  * Compatible MCU:
  *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
