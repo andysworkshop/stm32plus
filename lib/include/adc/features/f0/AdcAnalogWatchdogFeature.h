@@ -7,6 +7,12 @@
 #pragma once
 
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
+
+
 namespace stm32plus {
 
 
@@ -49,6 +55,24 @@ namespace stm32plus {
 
     void setWatchdogThresholds(uint16_t low,uint16_t high) {
       ADC_AnalogWatchdogThresholdsConfig(_adc,high,low);
+    }
+
+
+    /**
+     * Enable the analog watchdog
+     */
+
+    void enableAnalogWatchdog() const {
+      ADC_AnalogWatchdogCmd(_adc,ENABLE);
+    }
+
+
+    /**
+     * Disable the analog watchdog
+     */
+
+    void disableAnalogWatchdog() const {
+      ADC_AnalogWatchdogCmd(_adc,DISABLE);
     }
   };
 }

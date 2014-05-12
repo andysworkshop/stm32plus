@@ -43,9 +43,11 @@ namespace stm32plus {
 
         AdcAnalogWatchdogFeature<TLow,THigh>::initialise();
 
-        // set the channel
+        // set the channel and enable single mode. actual guarding will not start
+        // until enableAnalogWatchdog() is called.
 
         ADC_AnalogWatchdogSingleChannelConfig(_adc,getChanelCode());
+        ADC_AnalogWatchdogSingleChannelCmd(_adc,ENABLE);
       }
 
 

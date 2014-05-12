@@ -81,6 +81,9 @@
   #include "adc/features/f0/AdcInternalReferenceVoltageFeature.h"
   #include "adc/features/f0/AdcTemperatureSensorFeature.h"
   #include "adc/features/f0/AdcInterruptFeature.h"
+  #include "adc/features/f0/AdcAnalogWatchdogFeature.h"
+  #include "adc/features/f0/AdcSingleChannelAnalogWatchdogFeature.h"
+  #include "adc/features/f0/AdcAutoPowerOffFeature.h"
 
 #elif defined(STM32PLUS_F1)
 
