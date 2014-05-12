@@ -116,7 +116,7 @@ class AdcSingleInterrupts {
       Usart1<> usart(57600);
       UsartPollingOutputStream outputStream(usart);
 
-      /**
+      /*
        * Enable the ADC interrupts
        */
 
