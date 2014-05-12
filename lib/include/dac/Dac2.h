@@ -30,7 +30,7 @@ namespace stm32plus {
   struct Dac2 : DacPeripheral<Dac2DefaultPinPackage,PERIPHERAL_DAC2>,
                 Features... {
 
-    Dac2(const Parameters& params)
+    Dac2(const Parameters& params=Parameters())
       : DacPeripheral<Dac2DefaultPinPackage,PERIPHERAL_DAC2>(params),
         Features((Dac&)*this)... {
     }
