@@ -41,7 +41,7 @@ namespace stm32plus {
      */
 
     void enableAutoPowerOff() const {
-      ADC_AutoPowerOffCmd(ENABLE);
+      ADC_AutoPowerOffCmd(_adc,ENABLE);
     }
 
 
@@ -50,7 +50,7 @@ namespace stm32plus {
      */
 
     void disableAutoPowerOff() const {
-      ADC_AutoPowerOffCmd(DISABLE);
+      ADC_AutoPowerOffCmd(_adc,DISABLE);
     }
   };
 }

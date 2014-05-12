@@ -83,7 +83,9 @@
   #include "adc/features/f0/AdcInterruptFeature.h"
   #include "adc/features/f0/AdcAnalogWatchdogFeature.h"
   #include "adc/features/f0/AdcSingleChannelAnalogWatchdogFeature.h"
+  #include "adc/features/f0/AdcAllChannelsAnalogWatchdogFeature.h"
   #include "adc/features/f0/AdcAutoPowerOffFeature.h"
+  #include "adc/features/f0/AdcAutoDelayFeature.h"
 
 #elif defined(STM32PLUS_F1)
 

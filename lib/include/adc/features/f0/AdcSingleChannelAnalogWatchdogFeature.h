@@ -13,6 +13,7 @@ namespace stm32plus {
   /**
    * Support for configuring the analog watchdog feature. The AWD allows you to
    * trigger an interrupt if a voltage crosses pre-defined upper or lower bounds.
+   * This feature allows you to configure a single channel for monitoring.
    *
    * This feature would normally be combined with AdcInterruptFeature in your
    * ADC declaration.
@@ -46,8 +47,8 @@ namespace stm32plus {
         // set the channel and enable single mode. actual guarding will not start
         // until enableAnalogWatchdog() is called.
 
-        ADC_AnalogWatchdogSingleChannelConfig(_adc,getChanelCode());
-        ADC_AnalogWatchdogSingleChannelCmd(_adc,ENABLE);
+        ADC_AnalogWatchdogSingleChannelConfig(this->_adc,getChannelCode());
+        ADC_AnalogWatchdogSingleChannelCmd(this->_adc,ENABLE);
       }
 
 
