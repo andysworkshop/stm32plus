@@ -7,8 +7,8 @@
 #pragma once
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F0
-#error This class can only be used with the STM32F0 series
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
 #endif
 
 
@@ -24,7 +24,7 @@ namespace stm32plus {
    * ADC declaration.
    */
 
-  template<uint16_t TLow,uint16_t THigh>
+  template<AdcChannelType TChannelType,uint16_t TLow,uint16_t THigh>
   struct AdcAllChannelsAnalogWatchdogFeature : AdcAnalogWatchdogFeature<TLow,THigh> {
 
     public:
@@ -40,15 +40,21 @@ namespace stm32plus {
 
 
       /**
-       * Post construction initialisation
+       * Enable the watchdog on all channels of the templated type
        */
 
-      void initialise() {
+      void enableAnalogWatchdog() {
 
-        // call the base class
+        static_assert(TChannelType==AdcChannelType::Regular ||
+                      TChannelType==AdcChannelType::Injected ||
+                      TChannelType==AdcChannelType::RegularAndInjected,"Invalid channel type");
 
-        AdcAnalogWatchdogFeature<TLow,THigh>::initialise();
-        ADC_AnalogWatchdogSingleChannelCmd(this->_adc,DISABLE);     // clears AWDSGL
+        ADC_AnalogWatchdogCmd(
+            this->_adc,
+            TChannelType==AdcChannelType::Regular ? ADC_AnalogWatchdog_AllRegEnable :
+            TChannelType==AdcChannelType::Injected ? ADC_AnalogWatchdog_AllInjecEnable :
+            ADC_AnalogWatchdog_AllRegAllInjecEnable);
       }
+
   };
 }
