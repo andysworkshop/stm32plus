@@ -96,14 +96,52 @@ class AdcAnalogWatchdog {
         AdcAsynchronousClockModeFeature,          // the free-running 14MHz HSI
         AdcResolutionFeature<12>,                 // 12 bit resolution
         Adc1Cycle28RegularChannelFeature<0>,      // using channel 0 (PA0) on ADC1 with 28.5 cycle latency
-        AdcSingleChannelAnalogWatchdogFeature<0,750,2500>,    // using the AWD on channel 0 with a guarded range of 1000 to 2000
+        AdcSingleChannelAnalogWatchdogFeature<    // AWD guarding single channel
+          0,                                      // and it's channel 0
+          750,                                    // low threshold
+          2500                                    // high threshold
+        >,
         AdcInterruptFeature                       // interrupts are raised by the AWD
-        > adc;
+      > adc;
 
 #elif defined(STM32PLUS_F1)
 
+      /*
+       * Declare the ADC peripheral with a PCLK2 clock prescaler of 6. The ADC clock cannot exceed 14MHz so
+       * if PCLK2 is 72MHz then we're operating it at 12MHz here.
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<6>,                // PCLK2/6
+        Adc1Cycle7RegularChannelFeature<0,1>,       // using channel 0
+        AdcSingleChannelAnalogWatchdogFeature<      // AWD guarding single channel
+          0,                                        // and it's channel 0
+          AdcChannelType::Regular,                  // it's a regular (non-injected) channel
+          750,                                      // low threshold
+          2500                                      // high threshold
+        >,
+        AdcInterruptFeature                         // interrupts are raised by the AWD
+      > adc;
 
 #elif defined(STM32PLUS_F4)
+
+      /*
+       * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
+       * 12 bits. We will use 144-cycle conversions on ADC channel 0
+       */
+
+      Adc1<
+        AdcClockPrescalerFeature<2>,                // prescaler of 2
+        AdcResolutionFeature<12>,                   // 12 bit resolution
+        Adc1Cycle144RegularChannelFeature<0>,       // using channel 0 on ADC1 with 144-cycle latency
+        AdcSingleChannelAnalogWatchdogFeature<      // AWD guarding single channel
+          0,                                        // and it's channel 0
+          AdcChannelType::Regular,                  // it's a regular (non-injected) channel
+          750,                                      // low threshold
+          2500                                      // high threshold
+        >,
+        AdcInterruptFeature                         // interrupts are raised by the AWD
+      > adc;
 
 #endif
 
