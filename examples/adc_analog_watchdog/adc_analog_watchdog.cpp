@@ -24,7 +24,7 @@ using namespace stm32plus;
  * We will set an acceptable range of 750-2500. We will configure DAC1 to output values of 0,1000,2000,3000,4000.
  * The output of DAC1 (PA4) will be connected to the input of ADC1 channel 0 (PA0).
  *
- * Connect the output of DAC1 (PA4) to the input of ADC channel 0 (PA0). Also connect PA9/PA10 to see the test
+ * Connect the output of DAC1 (PA4) to the input of ADC channel 0 (PA0). Also connect PB6/PB7 to see the test
  * output on USART1.
  *
  * Compatible MCU:
@@ -43,14 +43,15 @@ using namespace stm32plus;
 class AdcAnalogWatchdog {
 
   protected:
+
     /*
-     * Declare an instance of USART1 (TX/RX = PA9/PA10) that we'll use to write out
-     * the results of the test
+     * Declare an instance of USART1 (TX/RX = PB6/PB7) that we'll use to write out
+     * the results of the test. We're using remap1 to avoid a clash of peripherals
+     * on the F4 discovery board. This remap is also OK for the F0 discovery.
      */
 
-    Usart1<> _usart;
+    Usart1_Remap1<> _usart;
     UsartPollingOutputStream _outputStream;
-
 
   public:
 
