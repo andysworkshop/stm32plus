@@ -8,7 +8,7 @@
 #include "config/adc.h"
 
 
-#if defined(STM32PLUS_F1)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
 
 using namespace stm32plus;
 
@@ -23,7 +23,7 @@ extern "C" {
 
   #if defined(USE_ADC_INTERRUPT)
 
-    void __attribute__ ((interrupt("IRQ"))) ADC_IRQHandler(void) {
+    void __attribute__ ((interrupt("IRQ"))) ADC1_2_IRQHandler(void) {
 
       uint16_t raised1,raised2;
 

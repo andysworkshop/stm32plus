@@ -21,12 +21,15 @@ using namespace stm32plus;
  * We use the ADC1 end-of-conversion (EOC) interrupt to tell us when the conversion is ready. We then log
  * that converted value to the USART where you can see it using normal PC terminal software.
  *
+ * Connect an analog input to PA0 to see the value of the conversion.
+ *
  * Compatible MCU:
  *   STM32F0
  *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
  *   STM32F407VGT6
@@ -53,10 +56,7 @@ class AdcSingleTimerInterrupts {
        * Declare Timer3
        */
 
-      Timer3<
-        Timer3InternalClockFeature,       // the timer clock source is HCLK/2
-        TimerChannel1Feature              // we're going to use channel 1
-      > timer;
+      Timer3<Timer3InternalClockFeature> timer;
 
       /*
        * Set an up-timer up to tick at 8kHz with an auto-reload value of 7999

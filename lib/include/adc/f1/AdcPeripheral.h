@@ -28,7 +28,7 @@ namespace stm32plus {
       void initialisePeripheral();
 
     public:
-      AdcPeripheral(AdcOperatingMode operatingMode);
+      AdcPeripheral(Adc *master);
       ~AdcPeripheral();
   };
 
@@ -39,8 +39,8 @@ namespace stm32plus {
    */
 
   template<PeripheralName TPeripheralName>
-  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(AdcOperatingMode operatingMode)
-    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE,operatingMode) {
+  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(Adc *master)
+    : Adc((ADC_TypeDef *)PeripheralTraits<TPeripheralName>::PERIPHERAL_BASE,master) {
   }
 
 
@@ -61,11 +61,15 @@ namespace stm32plus {
     ADC_Cmd(_peripheralAddress,DISABLE);
     ADC_DeInit(_peripheralAddress);
 
+    // if in dual mode and this is the slave then copy over the mode
+
+    if(_master)
+      _init.ADC_Mode=static_cast<ADC_InitTypeDef *>(*_master)->ADC_Mode;
+
     // the features have been constructed and any customisations have been
     // made to the init structure. Initialise and free the memory it was using
 
-    ADC_Init(_peripheralAddress,_init);
-    delete _init;
+    ADC_Init(_peripheralAddress,&_init);
 
     // if there are any injected channels then set the count
 

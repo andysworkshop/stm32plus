@@ -16,17 +16,6 @@ namespace stm32plus {
 
 
   /**
-   * ADC operating mode. One of these gets passed to the Adc constructor so that we
-   * know not to call the common-init function for slave ADCs in multi-mode
-   */
-
-  enum class AdcOperatingMode : uint8_t {
-    SINGLE_ADC,   //!< SINGLE_ADC
-    MULTI_ADC     //!< MULTI_ADC
-  };
-
-
-  /**
    * Non-template base class for the ADC peripheral
    */
 
@@ -35,15 +24,15 @@ namespace stm32plus {
     protected:
      ADC_TypeDef *_peripheralAddress;
      ADC_CommonInitTypeDef *_commonInit;
-     ADC_InitTypeDef *_init;
+     ADC_InitTypeDef _init;
      uint8_t _injectedChannelCount;
-     AdcOperatingMode _operatingMode;
+     Adc *_master;
 
      static uint8_t _regularChannelRank[3];        // we can have multiple channel feature instances and multiple ADCs
      static uint8_t _injectedChannelRank[3];
 
     public:
-      Adc(ADC_TypeDef *peripheralAddress,AdcOperatingMode operatingMode);
+      Adc(ADC_TypeDef *peripheralAddress,Adc *master);
 
       void enablePeripheral() const;
       void disablePeripheral() const;
@@ -75,9 +64,9 @@ namespace stm32plus {
    * @param peripheralAddress The peripheral address
    */
 
-  inline Adc::Adc(ADC_TypeDef *peripheralAddress,AdcOperatingMode operatingMode)
+  inline Adc::Adc(ADC_TypeDef *peripheralAddress,Adc *master)
     : _peripheralAddress(peripheralAddress),
-      _operatingMode(operatingMode) {
+      _master(master) {
 
     // initialise the ranks back to 1 so that the channel features are ready
 
@@ -87,17 +76,14 @@ namespace stm32plus {
 
     // set up the default init values
     // the features can customise this before the AdcPeripheral class uses
-    // it and frees the memory it used
 
-    _init=new ADC_InitTypeDef;
-
-    _init->ADC_Resolution=ADC_Resolution_12b;
-    _init->ADC_ScanConvMode=DISABLE;
-    _init->ADC_ContinuousConvMode=DISABLE;
-    _init->ADC_ExternalTrigConvEdge=ADC_ExternalTrigConvEdge_None;
-    _init->ADC_ExternalTrigConv=ADC_ExternalTrigConv_T1_CC1;
-    _init->ADC_DataAlign=ADC_DataAlign_Right;
-    _init->ADC_NbrOfConversion=0;
+    _init.ADC_Resolution=ADC_Resolution_12b;
+    _init.ADC_ScanConvMode=DISABLE;
+    _init.ADC_ContinuousConvMode=DISABLE;
+    _init.ADC_ExternalTrigConvEdge=ADC_ExternalTrigConvEdge_None;
+    _init.ADC_ExternalTrigConv=ADC_ExternalTrigConv_T1_CC1;
+    _init.ADC_DataAlign=ADC_DataAlign_Right;
+    _init.ADC_NbrOfConversion=0;
 
     // set up the default common init values
     // the features can customise this before the AdcPeripheral class uses
@@ -157,7 +143,7 @@ namespace stm32plus {
    */
 
   inline Adc::operator ADC_InitTypeDef *() {
-    return _init;
+    return &_init;
   }
 
 

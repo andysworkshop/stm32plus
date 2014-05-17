@@ -28,7 +28,7 @@ namespace stm32plus {
       void initialisePeripheral();
 
     public:
-      AdcPeripheral(AdcOperatingMode operatingMode);
+      AdcPeripheral(Adc *master);
       ~AdcPeripheral();
   };
 
@@ -39,7 +39,7 @@ namespace stm32plus {
    */
 
   template<PeripheralName TPeripheralName>
-  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(AdcOperatingMode /* operatingMode */) {
+  inline AdcPeripheral<TPeripheralName>::AdcPeripheral(Adc * /* master */) {
   }
 
 

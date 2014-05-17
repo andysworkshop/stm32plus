@@ -75,7 +75,7 @@ namespace stm32plus {
 
   template<class TAdc2,uint32_t TDmaModeType,uint32_t TAdcMultiModeType,uint8_t TTwoSamplingDelay>
   inline void AdcDualFeature<TAdc2,TDmaModeType,TAdcMultiModeType,TTwoSamplingDelay>::initialise() {
-    _adc2.reset(new TAdc2(AdcOperatingMode::MULTI_ADC));
+    _adc2.reset(new TAdc2(&this->_adc));
   }
 
 
@@ -83,62 +83,62 @@ namespace stm32plus {
    * 2 ADC, Independent mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcIndependentNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_Mode_Independent,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcIndependentDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_Mode_Independent,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcIndependentDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_Mode_Independent,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcIndependentDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_Mode_Independent,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualIndependentNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_Mode_Independent,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualIndependentDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_Mode_Independent,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualIndependentDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_Mode_Independent,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualIndependentDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_Mode_Independent,TTwoSamplingDelay>;
 
   /*
    * 2 ADC, Injected simultaneous mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInjectedSimultaneousNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInjectedSimultaneousDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInjectedSimultaneousDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInjectedSimultaneousDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInjectedSimultaneousNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInjectedSimultaneousDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInjectedSimultaneousDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInjectedSimultaneousDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_InjecSimult,TTwoSamplingDelay>;
 
   /*
    * 2 ADC, Regular simultaneous mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_RegSimult,TTwoSamplingDelay>;
 
   /*
    * 2 ADC, Interleaved mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInterleavedNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_Interl,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInterleavedDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_Interl,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInterleavedDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_Interl,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcInterleavedDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_Interl,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInterleavedNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_Interl,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInterleavedDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_Interl,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInterleavedDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_Interl,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualInterleavedDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_Interl,TTwoSamplingDelay>;
 
   /*
    * 2 ADC, Alternate trigger mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcAlternateTriggerNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcAlternateTriggerDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcAlternateTriggerDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcAlternateTriggerDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualAlternateTriggerNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualAlternateTriggerDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualAlternateTriggerDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualAlternateTriggerDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_AlterTrig,TTwoSamplingDelay>;
 
   /*
    * 2 ADC, Combined regular/injected simultaneous mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularInjectedSimultaneousNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularInjectedSimultaneousDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularInjectedSimultaneousDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularInjectedSimultaneousDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularInjectedSimultaneousNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularInjectedSimultaneousDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularInjectedSimultaneousDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularInjectedSimultaneousDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_RegSimult_InjecSimult,TTwoSamplingDelay>;
 
   /*
    * 2 ADC, Combined regular simultaneous alternate trigger mode
    */
 
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousAlternateTriggerNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousAlternateTriggerDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousAlternateTriggerDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
-  template<class TAdc2,uint8_t TTwoSamplingDelay> using DualAdcRegularSimultaneousAlternateTriggerDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousAlternateTriggerNoDmaFeature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_Disabled,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousAlternateTriggerDmaMode1Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_1,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousAlternateTriggerDmaMode2Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_2,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
+  template<class TAdc2,uint8_t TTwoSamplingDelay> using AdcDualRegularSimultaneousAlternateTriggerDmaMode3Feature=AdcDualFeature<TAdc2,ADC_DMAAccessMode_3,ADC_DualMode_RegSimult_AlterTrig,TTwoSamplingDelay>;
 }

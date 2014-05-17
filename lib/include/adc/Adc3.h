@@ -24,8 +24,8 @@ namespace stm32plus {
      * @param params Initialisation parameters
      */
 
-    Adc3(AdcOperatingMode operatingMode=AdcOperatingMode::SINGLE_ADC)
-        : AdcPeripheral<PERIPHERAL_ADC3>(operatingMode),
+    Adc3(Adc *master=nullptr)
+        : AdcPeripheral<PERIPHERAL_ADC3>(master),
           Features(static_cast<Adc&>(*this))... {
 
       // this is the most-derived class and construction is now complete

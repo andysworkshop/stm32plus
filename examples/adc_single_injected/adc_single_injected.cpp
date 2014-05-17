@@ -28,9 +28,13 @@ using namespace stm32plus;
  * PA1 (ADC123_IN1) to valid levels, or GND/VCC if you want to see values close to 0 and 4095.
  *
  * Compatible MCU:
+ *   STM32F1
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F100RBT6
+ *   STM32F103ZET6
+ *   STM32F107VCT6
  *   STM32F407VGT6
  */
 

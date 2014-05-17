@@ -63,8 +63,8 @@
 // feature includes
 
 #include "adc/features/AdcFeatureBase.h"
-
 #include "adc/features/AdcContinuousModeFeature.h"
+#include "adc/features/AdcChannelType.h"
 
 // device specific feature includes
 
@@ -81,6 +81,11 @@
   #include "adc/features/f0/AdcInternalReferenceVoltageFeature.h"
   #include "adc/features/f0/AdcTemperatureSensorFeature.h"
   #include "adc/features/f0/AdcInterruptFeature.h"
+  #include "adc/features/f0/AdcAnalogWatchdogFeature.h"
+  #include "adc/features/f0/AdcSingleChannelAnalogWatchdogFeature.h"
+  #include "adc/features/f0/AdcAllChannelsAnalogWatchdogFeature.h"
+  #include "adc/features/f0/AdcAutoPowerOffFeature.h"
+  #include "adc/features/f0/AdcAutoDelayFeature.h"
 
 #elif defined(STM32PLUS_F1)
 
@@ -97,6 +102,9 @@
   #include "adc/features/f1/AdcInjectedChannelFeatureBase.h"
   #include "adc/features/f1/AdcInjectedChannelFeature.h"
   #include "adc/features/f1/AdcInjectedTriggerFeature.h"
+  #include "adc/features/f1/AdcAnalogWatchdogFeature.h"
+  #include "adc/features/f1/AdcSingleChannelAnalogWatchdogFeature.h"
+  #include "adc/features/f1/AdcAllChannelsAnalogWatchdogFeature.h"
 
 #elif defined(STM32PLUS_F4)
 
@@ -118,6 +126,9 @@
   #include "adc/features/f4/AdcBatteryVoltageFeature.h"
   #include "adc/features/f4/AdcInternalReferenceVoltageFeature.h"
   #include "adc/features/f4/AdcTemperatureSensorFeature.h"
+  #include "adc/features/f4/AdcAnalogWatchdogFeature.h"
+  #include "adc/features/f4/AdcSingleChannelAnalogWatchdogFeature.h"
+  #include "adc/features/f4/AdcAllChannelsAnalogWatchdogFeature.h"
 
 #endif
 

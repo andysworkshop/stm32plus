@@ -4,6 +4,7 @@
 #
 
 import os
+import InstallFiles
 
 # import everything exported in SConstruct
 
@@ -34,7 +35,7 @@ matches.append(RecursiveGlob("fwlib", ("*.c", "*.cpp", "*.asm")))
 
 # trigger a build with the correct library name
 
-libstm32plus=env.Library("stm32plus-"+VERSION+"-"+mcu+"-"+mode+".a",matches)
+libstm32plus=env.Library("stm32plus-"+VERSION+"-"+mode+"-"+mcu+"-"+hse+".a",matches)
 
 # install the library and headers if the user gave the install option
 
@@ -57,6 +58,13 @@ fwlib_header_paths = [
 for path in fwlib_header_paths:
   env.InstallAs(INSTALLDIR+"/include/stm32plus/fwlib"+path,Dir("#lib/fwlib"+path))
 
+env.Install(INSTALLDIR,libstm32plus)
 env.Alias("install",INSTALLDIR)
+
+# install headers
+
+InstallFiles.InstallExclude(env,"*.c","*.o","*.xml","*.csv","*.xlsx")
+InstallFiles.InstallFiles(env,INSTALLDIR+"/include","#lib/include")
+InstallFiles.InstallFiles(env,INSTALLDIR+"/fwlib","#lib/fwlib",glob="*.h")
 
 Return("libstm32plus")
