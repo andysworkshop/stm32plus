@@ -23,6 +23,13 @@ namespace stm32plus {
                     Gpio::GpioOutputType outputType=Gpio::PUSH_PULL);
 
     /**
+     * Initialisation for analog pins
+     */
+
+    void initialise(GPIO_TypeDef *port,uint16_t pins);
+
+
+    /**
      * Initialisation for AF input pins
      */
 
@@ -44,5 +51,11 @@ namespace stm32plus {
                     Gpio::GpioPullUpDownType pupdType,
                     Gpio::GpioOutputType outputType,
                     uint8_t afSelection);
+
+    /**
+     * Initialiser for analog input pins
+     */
+
+    void initialise(GPIO_TypeDef *port,uint16_t pins);
   }
 }

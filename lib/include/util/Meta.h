@@ -17,6 +17,40 @@ namespace stm32plus {
 
   /**
    * Recursive initialisation of feature classes defined using variadic templates.
+   * This initialiser is "void initialise()"
+   * Here's the forward definition
+   */
+
+  template<class F,class... T>
+  struct RecursiveVoidInit;
+
+  /**
+   * Recursion termination condition, always return success
+   */
+
+  template<class F>
+  struct RecursiveVoidInit<F> {
+    static void tinit(F *) {
+    }
+  };
+
+
+  /**
+   * General recursive initialiser
+   */
+
+  template<class F,class T,class... G>
+  struct RecursiveVoidInit<F,T,G...> {
+    static void tinit(F *ptr) {
+
+      ptr->T::initialise();
+      RecursiveVoidInit<F,G...>::tinit(ptr);
+    }
+  };
+
+
+  /**
+   * Recursive initialisation of feature classes defined using variadic templates.
    * This initialiser has a parameters class and returns bool
    * Here's the forward definition
    */

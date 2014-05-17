@@ -24,6 +24,31 @@ namespace stm32plus {
   struct PeripheralTraits;
 
   template<>
+  struct PeripheralTraits<PERIPHERAL_ADC1> {
+    enum {
+      PERIPHERAL_BASE = ADC1_BASE,
+      V25 = 1430,         // from the datasheet, scaled by 1000
+      AVG_SLOPE = 4300
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_ADC2> {
+    enum {
+      PERIPHERAL_BASE = ADC2_BASE
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC2> Adc2PeripheralTraits;
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_ADC3> {
+    enum {
+      PERIPHERAL_BASE = ADC3_BASE
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_ADC3> Adc3PeripheralTraits;
+  template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
     enum {
       CHANNEL_NUMBER = DAC_Channel_1
@@ -131,6 +156,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM1_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER1> Timer1PeripheralTraits;
@@ -141,6 +167,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM2_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER2> Timer2PeripheralTraits;
@@ -150,6 +177,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM3_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER3> Timer3PeripheralTraits;
@@ -159,6 +187,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM4_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER4> Timer4PeripheralTraits;
@@ -168,6 +197,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM5_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER5> Timer5PeripheralTraits;
@@ -177,6 +207,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM6_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER6> Timer6PeripheralTraits;
@@ -186,6 +217,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM7_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER7> Timer7PeripheralTraits;
@@ -195,6 +227,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM8_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER8> Timer8PeripheralTraits;
@@ -204,6 +237,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM9_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER9> Timer9PeripheralTraits;
@@ -213,6 +247,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM10_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER10> Timer10PeripheralTraits;
@@ -222,6 +257,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM11_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER11> Timer11PeripheralTraits;
@@ -231,6 +267,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM12_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER12> Timer12PeripheralTraits;
@@ -240,6 +277,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM13_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER13> Timer13PeripheralTraits;
@@ -249,6 +287,7 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = TIM14_BASE,
+      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER14> Timer14PeripheralTraits;

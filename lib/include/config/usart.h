@@ -54,8 +54,9 @@
 #include "usart/Usart1.h"
 #include "usart/Usart2.h"
 
-#if !defined(STM32PLUS_F0)
-
+#if defined(STM32PLUS_F0)
+  #include "usart/f0/Usart2Remap2PinPackage.h"
+#else
   #include "usart/Usart3.h"
   #include "usart/Uart4.h"
   #include "usart/Uart5.h"

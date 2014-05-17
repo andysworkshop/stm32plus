@@ -14,6 +14,38 @@
 
 namespace stm32plus {
 
+  /**
+   * ADC2
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_ADC2> {
+
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2,ENABLE);
+    }
+
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC2,DISABLE);
+    }
+  };
+
+  /**
+   * ADC3
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_ADC3> {
+
+    static void On() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC3,ENABLE);
+    }
+
+    static void Off() {
+      RCC_APB2PeriphClockCmd(RCC_APB2Periph_ADC3,DISABLE);
+    }
+  };
+
   /*
    * DAC2
    */
@@ -29,7 +61,6 @@ namespace stm32plus {
       RCC_APB1PeriphClockCmd(RCC_APB1Periph_DAC,DISABLE);
     }
   };
-
 
   /**
    * CRC
