@@ -4,6 +4,8 @@ Firstly, welcome to stm32plus, the C++ library that eases the burden of programm
 
 The main introduction and getting started guide can be found at [my website](http://www.andybrown.me.uk).
 
+[![Build Status](https://travis-ci.org/andysworkshop/stm32plus.svg?branch=master)](https://travis-ci.org/andysworkshop/stm32plus)
+
 How to compile the library
 ==========================
 

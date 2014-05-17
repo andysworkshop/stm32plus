@@ -24,7 +24,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM11_CH1_IN {
 
-    static void initialise() {
+    TIM11_CH1_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,NULL,NULL,GPIOF };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_9,0,0,GPIO_Pin_7 };
@@ -42,7 +42,7 @@ namespace stm32plus {
   template<TimerGpioRemapLevel TRemapLevel>
   struct TIM11_CH1_OUT {
 
-    static void initialise() {
+    TIM11_CH1_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,NULL,NULL,GPIOF };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_9,0,0,GPIO_Pin_7 };
@@ -58,22 +58,20 @@ namespace stm32plus {
    * Timer11GpioFeature<REMAP_NONE,TIM11_CH1_OUT>
    */
 
-  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class TF0=NullTimerGpio>
+  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class... Features>
   struct Timer11GpioFeature;
 
 
-  template<template<TimerGpioRemapLevel> class TF0>
-  struct Timer11GpioFeature<TIMER_REMAP_NONE,TF0> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer11GpioFeature<TIMER_REMAP_NONE,Features...> : TimerFeatureBase, Features<TIMER_REMAP_NONE>... {
     Timer11GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
-      TF0<TIMER_REMAP_NONE>::initialise();
     }
   };
 
 
-  template<template<TimerGpioRemapLevel> class TF0>
-  struct Timer11GpioFeature<TIMER_REMAP_FULL,TF0> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer11GpioFeature<TIMER_REMAP_FULL,Features...> : TimerFeatureBase, Features<TIMER_REMAP_FULL>... {
     Timer11GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
-      TF0<TIMER_REMAP_FULL>::initialise();
     }
   };
 }

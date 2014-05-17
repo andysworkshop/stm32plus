@@ -23,7 +23,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_ETR() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOA,GPIOA };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_0,GPIO_Pin_15,GPIO_Pin_0,GPIO_Pin_15 };
@@ -40,7 +40,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH1_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOA,GPIOA };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_0,GPIO_Pin_15,GPIO_Pin_0,GPIO_Pin_15 };
@@ -57,7 +57,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH1_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOA,GPIOA };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_0,GPIO_Pin_15,GPIO_Pin_0,GPIO_Pin_15 };
@@ -74,7 +74,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH2_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOB,GPIOA,GPIOB };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_1,GPIO_Pin_3,GPIO_Pin_1,GPIO_Pin_3 };
@@ -91,7 +91,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH2_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOB,GPIOA,GPIOB };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_1,GPIO_Pin_3,GPIO_Pin_1,GPIO_Pin_3 };
@@ -108,7 +108,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH3_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOB,GPIOB };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_2,GPIO_Pin_2,GPIO_Pin_10,GPIO_Pin_10 };
@@ -125,7 +125,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH3_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOB,GPIOB };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_2,GPIO_Pin_2,GPIO_Pin_10,GPIO_Pin_10 };
@@ -142,7 +142,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH4_IN() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOB,GPIOB };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_3,GPIO_Pin_3,GPIO_Pin_11,GPIO_Pin_11 };
@@ -159,7 +159,7 @@ namespace stm32plus {
      * @tparam TRemapLevel The remap level (none, partial1, partial2, full)
      */
  
-    static void initialise() {
+    TIM2_CH4_OUT() {
 
       static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,GPIOA,GPIOB,GPIOB };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_3,GPIO_Pin_3,GPIO_Pin_11,GPIO_Pin_11 };
@@ -175,61 +175,41 @@ namespace stm32plus {
    * Timer2GpioFeature<REMAP_NONE,TIM2_CH1_OUT>
    */
 
-  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class TF0=NullTimerGpio,template<TimerGpioRemapLevel> class TF1=NullTimerGpio,template<TimerGpioRemapLevel> class TF2=NullTimerGpio,template<TimerGpioRemapLevel> class TF3=NullTimerGpio,template<TimerGpioRemapLevel> class TF4=NullTimerGpio>
+  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class... Features>
   struct Timer2GpioFeature;
 
 
-  template<template<TimerGpioRemapLevel> class TF0,template<TimerGpioRemapLevel> class TF1,template<TimerGpioRemapLevel> class TF2,template<TimerGpioRemapLevel> class TF3,template<TimerGpioRemapLevel> class TF4>
-  struct Timer2GpioFeature<TIMER_REMAP_NONE,TF0,TF1,TF2,TF3,TF4> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer2GpioFeature<TIMER_REMAP_NONE,Features...> : TimerFeatureBase, Features<TIMER_REMAP_NONE>... {
     Timer2GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
-      TF0<TIMER_REMAP_NONE>::initialise();
-      TF1<TIMER_REMAP_NONE>::initialise();
-      TF2<TIMER_REMAP_NONE>::initialise();
-      TF3<TIMER_REMAP_NONE>::initialise();
-      TF4<TIMER_REMAP_NONE>::initialise();
     }
   };
 
 
-  template<template<TimerGpioRemapLevel> class TF0,template<TimerGpioRemapLevel> class TF1,template<TimerGpioRemapLevel> class TF2,template<TimerGpioRemapLevel> class TF3,template<TimerGpioRemapLevel> class TF4>
-  struct Timer2GpioFeature<TIMER_REMAP_PARTIAL1,TF0,TF1,TF2,TF3,TF4> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer2GpioFeature<TIMER_REMAP_PARTIAL1,Features...> : TimerFeatureBase, Features<TIMER_REMAP_PARTIAL1>... {
     Timer2GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
       GPIO_PinRemapConfig(GPIO_PartialRemap1_TIM2,ENABLE);
-      TF0<TIMER_REMAP_PARTIAL1>::initialise();
-      TF1<TIMER_REMAP_PARTIAL1>::initialise();
-      TF2<TIMER_REMAP_PARTIAL1>::initialise();
-      TF3<TIMER_REMAP_PARTIAL1>::initialise();
-      TF4<TIMER_REMAP_PARTIAL1>::initialise();
     }
   };
 
 
-  template<template<TimerGpioRemapLevel> class TF0,template<TimerGpioRemapLevel> class TF1,template<TimerGpioRemapLevel> class TF2,template<TimerGpioRemapLevel> class TF3,template<TimerGpioRemapLevel> class TF4>
-  struct Timer2GpioFeature<TIMER_REMAP_PARTIAL2,TF0,TF1,TF2,TF3,TF4> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer2GpioFeature<TIMER_REMAP_PARTIAL2,Features...> : TimerFeatureBase, Features<TIMER_REMAP_PARTIAL2>... {
     Timer2GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
       GPIO_PinRemapConfig(GPIO_PartialRemap2_TIM2,ENABLE);
-      TF0<TIMER_REMAP_PARTIAL2>::initialise();
-      TF1<TIMER_REMAP_PARTIAL2>::initialise();
-      TF2<TIMER_REMAP_PARTIAL2>::initialise();
-      TF3<TIMER_REMAP_PARTIAL2>::initialise();
-      TF4<TIMER_REMAP_PARTIAL2>::initialise();
     }
   };
 
 
-  template<template<TimerGpioRemapLevel> class TF0,template<TimerGpioRemapLevel> class TF1,template<TimerGpioRemapLevel> class TF2,template<TimerGpioRemapLevel> class TF3,template<TimerGpioRemapLevel> class TF4>
-  struct Timer2GpioFeature<TIMER_REMAP_FULL,TF0,TF1,TF2,TF3,TF4> : public TimerFeatureBase {
+  template<template<TimerGpioRemapLevel> class... Features>
+  struct Timer2GpioFeature<TIMER_REMAP_FULL,Features...> : TimerFeatureBase, Features<TIMER_REMAP_FULL>... {
     Timer2GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
       RCC_APB2PeriphClockCmd(RCC_APB2Periph_AFIO,ENABLE);
       GPIO_PinRemapConfig(GPIO_FullRemap_TIM2,ENABLE);
-      TF0<TIMER_REMAP_FULL>::initialise();
-      TF1<TIMER_REMAP_FULL>::initialise();
-      TF2<TIMER_REMAP_FULL>::initialise();
-      TF3<TIMER_REMAP_FULL>::initialise();
-      TF4<TIMER_REMAP_FULL>::initialise();
     }
   };
 }
