@@ -3,6 +3,7 @@
 .sconsign.dblite
 lib/build/
 examples/*/build/
+site_scons/*.pyc
 
 # compiler output
 
