@@ -21,11 +21,19 @@ open $outfile, ">", "GpioPinMap.h" or die $!;
 &writePort("D");
 &writePort("E");
 &writePort("F");
+
+print $outfile "\n\n#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)";
+
 &writePort("G");
+
+print $outfile "\n\n#if defined(STM32PLUS_F4)";
+
 &writePort("H");
 &writePort("I");
 &writePort("J");
 &writePort("K");
+
+print $outfile "\n\n#endif  // F4\n#endif  // F1 or F4\n";
 
 &writeTrailer;
 

@@ -684,6 +684,8 @@ namespace stm32plus {
       };
     };
 
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+
     struct PG0 {
       enum {
         Port=GPIOG_BASE,
@@ -795,6 +797,8 @@ namespace stm32plus {
         Pin=GPIO_Pin_15
       };
     };
+
+#if defined(STM32PLUS_F4)
 
     struct PH0 {
       enum {
@@ -1243,5 +1247,9 @@ namespace stm32plus {
         Pin=GPIO_Pin_15
       };
     };
+
+#endif  // F4
+#endif  // F1 or F4
+
   }
 }
