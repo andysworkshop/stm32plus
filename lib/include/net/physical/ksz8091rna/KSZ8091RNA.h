@@ -11,11 +11,11 @@ namespace stm32plus {
   namespace net {
 
     /**
-     * Class for the KSZ8051MLL PHY. Contains additional register definitions
-     * that describe the additional features of this PHY. This is an MII PHY.
+     * Class for the KSZ8091RNA PHY. Contains additional register definitions
+     * that describe the additional features of this PHY. This is an RMII PHY.
      */
 
-    class KSZ8051MLL : public PhyBase {
+    class KSZ8091RNA : public PhyBase {
 
       public:
 
@@ -24,13 +24,14 @@ namespace stm32plus {
          */
 
         enum {
-          AFE_CONTROL                     = 0x11,   //!< AFE_CONTROL
+          AFE_CONTROL_1                   = 0x11,   //!< AFE_CONTROL_1
+          AFE_CONTROL_4                   = 0x13,   //!< AFE_CONTROL_4
           RXER_COUNTER                    = 0x15,   //!< RXER_COUNTER
           OPERATION_MODE_STRAP_OVERRIDE   = 0x16,   //!< OPERATION_MODE_STRAP_OVERRIDE
           OPERATION_MODE_STRAP_STATUS     = 0x17,   //!< OPERATION_MODE_STRAP_STATUS
           EXPANDED_CONTROL                = 0x18,   //!< EXPANDED_CONTROL
           INTERRUPT_CONTROL_STATUS        = 0x1b,   //!< INTERRUPT_CONTROL_STATUS
-          LINKMD_CONTROL_STATUS           = 0x1d,   //!< LINKMD_CONTROL_STATUS
+          LINKMD_CABLE_DIAGNOSTIC         = 0x1d,   //!< LINKMD_CABLE_DIAGNOSTIC
           PHY_CONTROL_1                   = 0x1e,   //!< PHY_CONTROL_1
           PHY_CONTROL_2                   = 0x1f    //!< PHY_CONTROL_2
         };
@@ -63,7 +64,7 @@ namespace stm32plus {
            */
 
           Parameters() {
-            phy_resetDelay      = 2;        // wait 2ms after reset is asserted
+            phy_resetDelay      = 100;      // wait 100ms after reset is asserted
             phy_speedStatusBit  = 0x0002;   // link speed bit in status word
             phy_duplexStatusBit = 0x0004;   // full duplex bit in status word
           }
@@ -89,7 +90,7 @@ namespace stm32plus {
      * @return
      */
 
-    inline bool KSZ8051MLL::initialise(Parameters& params,NetworkUtilityObjects& netutils) {
+    inline bool KSZ8091RNA::initialise(Parameters& params,NetworkUtilityObjects& netutils) {
       return PhyBase::initialise(params,netutils);
     }
 
@@ -99,7 +100,7 @@ namespace stm32plus {
      * @return
      */
 
-    inline bool KSZ8051MLL::startup() {
+    inline bool KSZ8091RNA::startup() {
       return PhyBase::startup();
     }
 
@@ -110,14 +111,16 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    inline bool KSZ8051MLL::phyIs100M(bool& is100) const {
+    inline bool KSZ8091RNA::phyIs100M(bool& is100) const {
 
       uint16_t value;
 
       if(!phyReadRegister(PHY_CONTROL_1,value))
         return false;
 
-      is100=(value & 0x0001)==0;
+      value&=7;
+      is100=value==2 || value==6;     // 010 or 110
+
       return true;
     }
 
@@ -128,14 +131,16 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    inline bool KSZ8051MLL::phyIsFullDuplex(bool& isFull) const {
+    inline bool KSZ8091RNA::phyIsFullDuplex(bool& isFull) const {
 
       uint16_t value;
 
       if(!phyReadRegister(PHY_CONTROL_1,value))
         return false;
 
-      isFull=(value & 0x0004)!=0;
+      value&=7;
+      isFull=value==5 || value==6;
+
       return true;
     }
 
@@ -147,7 +152,7 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    inline bool KSZ8051MLL::phyEnableInterrupts(uint8_t interruptMask) const {
+    inline bool KSZ8091RNA::phyEnableInterrupts(uint8_t interruptMask) const {
       return phySetRegisterBits(INTERRUPT_CONTROL_STATUS,static_cast<uint16_t>(interruptMask) << 8);
     }
 
@@ -159,29 +164,29 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    inline bool KSZ8051MLL::phyDisableInterrupts(uint8_t interruptMask) const {
+    inline bool KSZ8091RNA::phyDisableInterrupts(uint8_t interruptMask) const {
       return phyClearRegisterBits(INTERRUPT_CONTROL_STATUS,static_cast<uint16_t>(interruptMask) << 8);
     }
 
 
     /**
-     * Clear pending interrupt flags. On the KSZ8051MLL reading the INTERRUPT_CONTROL_STATUS register
+     * Clear pending interrupt flags. On the KSZ8091RNA reading the INTERRUPT_CONTROL_STATUS register
      * clears the pending interrupt flags
      * @return true if it worked
      */
 
-    inline bool KSZ8051MLL::phyClearPendingInterrupts() const {
+    inline bool KSZ8091RNA::phyClearPendingInterrupts() const {
       uint16_t value;
       return phyReadRegister(INTERRUPT_CONTROL_STATUS,value);
     }
 
 
     /**
-     * Hard-rest the KSZ8051MLL by pulling the RESET pin low for 5ms
+     * Hard-rest the KSZ8091RNA by pulling the RESET pin low for 5ms
      * @param pin
      */
 
-    inline void KSZ8051MLL::hardReset(GpioPinRef& pin) const {
+    inline void KSZ8091RNA::hardReset(GpioPinRef& pin) const {
       pin.set();
       pin.reset();
       MillisecondTimer::delay(5);

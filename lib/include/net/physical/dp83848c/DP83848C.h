@@ -24,7 +24,6 @@ namespace stm32plus {
          */
 
         enum {
-          AUTO_NEGOTIATION_NEXT_PAGE      = 0x07,   //!< AUTO_NEGOTIATION_NEXT_PAGE
           PHY_STATUS                      = 0x10,   //!< PHY_STATUS
           INTERRUPT_CONTROL               = 0x11,   //!< INTERRUPT_CONTROL
           INTERRUPT_STATUS                = 0x12,   //!< INTERRUPT_STATUS

@@ -467,6 +467,7 @@ namespace stm32plus {
                                                      uint16_t timeoutMillis) {
 
       volatile uint32_t tmpreg;
+      uint32_t start;
 
       // get the ETHERNET MACMIIAR value
       tmpreg=ETH->MACMIIAR;
@@ -486,11 +487,11 @@ namespace stm32plus {
 
       // check for the Busy flag
 
-      MillisecondTimer::reset();
+      start=MillisecondTimer::millis();
 
       do
       {
-        if(MillisecondTimer::millis()>timeoutMillis)
+        if(MillisecondTimer::hasTimedOut(start,timeoutMillis))
           return errorProvider.set(ErrorProvider::ERROR_PROVIDER_NET_MAC,E_PHY_READ_TIMEOUT);
 
         tmpreg=ETH->MACMIIAR;
@@ -519,6 +520,7 @@ namespace stm32plus {
                                                       uint16_t value,
                                                       uint16_t timeoutMillis) {
       volatile uint32_t tmpreg;
+      uint32_t start;
 
       // get the ETHERNET MACMIIAR value
       tmpreg=ETH->MACMIIAR;
@@ -537,13 +539,14 @@ namespace stm32plus {
 
       // Write the result value into the MII Address register
       ETH->MACMIIAR=tmpreg;
+
       // Check for the Busy flag
 
-      MillisecondTimer::reset();
+      start=MillisecondTimer::millis();
 
       do
       {
-        if(MillisecondTimer::millis()>timeoutMillis)
+        if(MillisecondTimer::hasTimedOut(start,timeoutMillis))
           return errorProvider.set(ErrorProvider::ERROR_PROVIDER_NET_MAC,E_PHY_WRITE_TIMEOUT);
 
         tmpreg=ETH->MACMIIAR;

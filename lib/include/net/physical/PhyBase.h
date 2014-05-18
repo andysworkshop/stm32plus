@@ -33,13 +33,15 @@ namespace stm32plus {
          */
 
         enum {
-          BASIC_MODE_CONFIGURATION    = 0x00,   //!< BASIC_MODE_CONFIGURATION
-          STATUS_WORD                 = 0x01,   //!< STATUS_WORD
-          PHY_IDENTIFICATION_1        = 0x02,   //!< PHY_IDENTIFICATION_1
-          PHY_IDENTIFICATION_2        = 0x03,   //!< PHY_IDENTIFICATION_2
-          ABILITY_ADVERTISEMENT       = 0x04,   //!< ABILITY_ADVERTISEMENT
-          LINK_PARTNER_ABILITY        = 0x05,   //!< LINK_PARTNER_ABILITY
-          AUTO_NEGOTIATION_EXPANSION  = 0x06    //!< AUTO_NEGOTIATION_EXPANSION
+          BASIC_MODE_CONFIGURATION        = 0x00,   //!< BASIC_MODE_CONFIGURATION
+          STATUS_WORD                     = 0x01,   //!< STATUS_WORD
+          PHY_IDENTIFICATION_1            = 0x02,   //!< PHY_IDENTIFICATION_1
+          PHY_IDENTIFICATION_2            = 0x03,   //!< PHY_IDENTIFICATION_2
+          ABILITY_ADVERTISEMENT           = 0x04,   //!< ABILITY_ADVERTISEMENT
+          LINK_PARTNER_ABILITY            = 0x05,   //!< LINK_PARTNER_ABILITY
+          AUTO_NEGOTIATION_EXPANSION      = 0x06,   //!< AUTO_NEGOTIATION_EXPANSION
+          AUTO_NEGOTIATION_NEXT_PAGE      = 0x07,   //!< AUTO_NEGOTIATION_NEXT_PAGE
+          LINK_PARTNER_NEXT_PAGE_ABILITY  = 0x08    //!< LINK_PARTNER_NEXT_PAGE_ABILITY
         };
 
 
@@ -81,10 +83,10 @@ namespace stm32plus {
 
           Parameters() {
             phy_address=1;                    // station address #1
-            phy_readTimeout=1000;             // 1s read timeout
-            phy_writeTimeout=1000;            // 1s write timeout
-            phy_linkTimeout=1000;             // 1s link timeout
-            phy_autoNegotiationTimeout=1000;  // 1s auto-negotiation timeout
+            phy_readTimeout=5000;             // 5s read timeout
+            phy_writeTimeout=5000;            // 5s write timeout
+            phy_linkTimeout=5000;             // 5s link timeout
+            phy_autoNegotiationTimeout=5000;  // 5s auto-negotiation timeout
             phy_postConfigurationDelay=10;    // 10ms delay after configuration is set
           }
         };
@@ -233,16 +235,17 @@ namespace stm32plus {
     __attribute__((noinline)) inline bool PhyBase::phyWaitForStatusRegisterBit(uint16_t bit,uint16_t timeout) const {
 
       uint16_t value;
+      uint32_t start;
 
       // clear the timer
 
-      MillisecondTimer::reset();
+      start=MillisecondTimer::millis();
 
       do {
 
         // check for timeout
 
-        if(MillisecondTimer::millis()>timeout)
+        if(MillisecondTimer::hasTimedOut(start,timeout))
           return errorProvider.set(ErrorProvider::ERROR_PROVIDER_NET_PHY,E_PHY_WAIT_TIMEOUT);
 
         // read the status register

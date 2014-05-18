@@ -64,6 +64,7 @@
 #include "net/physical/PhyWriteRequestEvent.h"
 #include "net/physical/PhyBase.h"
 #include "net/physical/ksz8051mll/KSZ8051MLL.h"
+#include "net/physical/ksz8091rna/KSZ8091RNA.h"
 #include "net/physical/dp83848c/DP83848C.h"
 
 // data link layer
