@@ -14,25 +14,25 @@
 
 // generic includes
 
-#include "include/rcc/ClockControl.h"
-#include "include/rcc/RccBusInformation.h"
-#include "include/rcc/PeripheralBusSpeed.h"
+#include "rcc/ClockControl.h"
+#include "rcc/RccBusInformation.h"
+#include "rcc/PeripheralBusSpeed.h"
 
 // device-specific includes
 
 #if defined(STM32PLUS_F1)
 
-  #include "include/rcc/f1/ClockControl.h"
-  #include "include/rcc/f1/PeripheralBusSpeed.h"
+  #include "rcc/f1/ClockControl.h"
+  #include "rcc/f1/PeripheralBusSpeed.h"
 
 #elif defined(STM32PLUS_F4)
 
-  #include "include/rcc/f4/ClockControl.h"
-  #include "include/rcc/f4/PeripheralBusSpeed.h"
+  #include "rcc/f4/ClockControl.h"
+  #include "rcc/f4/PeripheralBusSpeed.h"
 
 #elif defined(STM32PLUS_F0)
 
-  #include "include/rcc/f0/ClockControl.h"
+  #include "rcc/f0/ClockControl.h"
 
 #endif
 
