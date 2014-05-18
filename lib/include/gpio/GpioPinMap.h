@@ -12,884 +12,1236 @@
 namespace stm32plus {
   namespace gpio {
 
-    enum class PA0 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_0
+    struct PA0 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PA1 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_1
+    struct PA1 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PA2 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_2
+    struct PA2 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PA3 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_3
+    struct PA3 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PA4 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_4
+    struct PA4 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PA5 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_5
+    struct PA5 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PA6 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_6
+    struct PA6 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PA7 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_7
+    struct PA7 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PA8 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_8
+    struct PA8 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PA9 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_9
+    struct PA9 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PA10 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_10
+    struct PA10 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PA11 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_11
+    struct PA11 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PA12 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_12
+    struct PA12 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PA13 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_13
+    struct PA13 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PA14 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_14
+    struct PA14 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PA15 {
-      Port=GPIOA_BASE,
-      Pin=GPIO_Pin_15
+    struct PA15 {
+      enum {
+        Port=GPIOA_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PB0 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_0
+    struct PB0 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PB1 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_1
+    struct PB1 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PB2 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_2
+    struct PB2 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PB3 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_3
+    struct PB3 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PB4 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_4
+    struct PB4 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PB5 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_5
+    struct PB5 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PB6 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_6
+    struct PB6 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PB7 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_7
+    struct PB7 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PB8 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_8
+    struct PB8 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PB9 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_9
+    struct PB9 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PB10 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_10
+    struct PB10 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PB11 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_11
+    struct PB11 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PB12 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_12
+    struct PB12 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PB13 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_13
+    struct PB13 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PB14 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_14
+    struct PB14 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PB15 {
-      Port=GPIOB_BASE,
-      Pin=GPIO_Pin_15
+    struct PB15 {
+      enum {
+        Port=GPIOB_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PC0 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_0
+    struct PC0 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PC1 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_1
+    struct PC1 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PC2 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_2
+    struct PC2 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PC3 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_3
+    struct PC3 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PC4 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_4
+    struct PC4 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PC5 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_5
+    struct PC5 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PC6 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_6
+    struct PC6 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PC7 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_7
+    struct PC7 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PC8 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_8
+    struct PC8 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PC9 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_9
+    struct PC9 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PC10 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_10
+    struct PC10 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PC11 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_11
+    struct PC11 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PC12 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_12
+    struct PC12 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PC13 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_13
+    struct PC13 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PC14 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_14
+    struct PC14 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PC15 {
-      Port=GPIOC_BASE,
-      Pin=GPIO_Pin_15
+    struct PC15 {
+      enum {
+        Port=GPIOC_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PD0 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_0
+    struct PD0 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PD1 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_1
+    struct PD1 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PD2 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_2
+    struct PD2 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PD3 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_3
+    struct PD3 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PD4 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_4
+    struct PD4 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PD5 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_5
+    struct PD5 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PD6 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_6
+    struct PD6 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PD7 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_7
+    struct PD7 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PD8 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_8
+    struct PD8 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PD9 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_9
+    struct PD9 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PD10 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_10
+    struct PD10 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PD11 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_11
+    struct PD11 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PD12 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_12
+    struct PD12 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PD13 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_13
+    struct PD13 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PD14 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_14
+    struct PD14 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PD15 {
-      Port=GPIOD_BASE,
-      Pin=GPIO_Pin_15
+    struct PD15 {
+      enum {
+        Port=GPIOD_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PE0 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_0
+    struct PE0 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PE1 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_1
+    struct PE1 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PE2 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_2
+    struct PE2 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PE3 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_3
+    struct PE3 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PE4 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_4
+    struct PE4 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PE5 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_5
+    struct PE5 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PE6 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_6
+    struct PE6 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PE7 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_7
+    struct PE7 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PE8 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_8
+    struct PE8 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PE9 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_9
+    struct PE9 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PE10 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_10
+    struct PE10 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PE11 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_11
+    struct PE11 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PE12 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_12
+    struct PE12 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PE13 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_13
+    struct PE13 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PE14 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_14
+    struct PE14 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PE15 {
-      Port=GPIOE_BASE,
-      Pin=GPIO_Pin_15
+    struct PE15 {
+      enum {
+        Port=GPIOE_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PF0 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_0
+    struct PF0 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PF1 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_1
+    struct PF1 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PF2 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_2
+    struct PF2 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PF3 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_3
+    struct PF3 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PF4 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_4
+    struct PF4 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PF5 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_5
+    struct PF5 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PF6 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_6
+    struct PF6 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PF7 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_7
+    struct PF7 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PF8 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_8
+    struct PF8 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PF9 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_9
+    struct PF9 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PF10 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_10
+    struct PF10 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PF11 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_11
+    struct PF11 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PF12 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_12
+    struct PF12 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PF13 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_13
+    struct PF13 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PF14 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_14
+    struct PF14 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PF15 {
-      Port=GPIOF_BASE,
-      Pin=GPIO_Pin_15
+    struct PF15 {
+      enum {
+        Port=GPIOF_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PG0 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_0
+    struct PG0 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PG1 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_1
+    struct PG1 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PG2 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_2
+    struct PG2 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PG3 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_3
+    struct PG3 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PG4 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_4
+    struct PG4 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PG5 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_5
+    struct PG5 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PG6 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_6
+    struct PG6 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PG7 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_7
+    struct PG7 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PG8 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_8
+    struct PG8 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PG9 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_9
+    struct PG9 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PG10 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_10
+    struct PG10 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PG11 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_11
+    struct PG11 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PG12 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_12
+    struct PG12 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PG13 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_13
+    struct PG13 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PG14 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_14
+    struct PG14 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PG15 {
-      Port=GPIOG_BASE,
-      Pin=GPIO_Pin_15
+    struct PG15 {
+      enum {
+        Port=GPIOG_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PH0 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_0
+    struct PH0 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PH1 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_1
+    struct PH1 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PH2 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_2
+    struct PH2 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PH3 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_3
+    struct PH3 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PH4 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_4
+    struct PH4 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PH5 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_5
+    struct PH5 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PH6 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_6
+    struct PH6 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PH7 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_7
+    struct PH7 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PH8 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_8
+    struct PH8 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PH9 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_9
+    struct PH9 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PH10 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_10
+    struct PH10 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PH11 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_11
+    struct PH11 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PH12 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_12
+    struct PH12 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PH13 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_13
+    struct PH13 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PH14 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_14
+    struct PH14 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PH15 {
-      Port=GPIOH_BASE,
-      Pin=GPIO_Pin_15
+    struct PH15 {
+      enum {
+        Port=GPIOH_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PI0 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_0
+    struct PI0 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PI1 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_1
+    struct PI1 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PI2 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_2
+    struct PI2 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PI3 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_3
+    struct PI3 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PI4 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_4
+    struct PI4 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PI5 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_5
+    struct PI5 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PI6 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_6
+    struct PI6 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PI7 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_7
+    struct PI7 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PI8 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_8
+    struct PI8 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PI9 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_9
+    struct PI9 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PI10 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_10
+    struct PI10 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PI11 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_11
+    struct PI11 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PI12 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_12
+    struct PI12 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PI13 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_13
+    struct PI13 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PI14 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_14
+    struct PI14 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PI15 {
-      Port=GPIOI_BASE,
-      Pin=GPIO_Pin_15
+    struct PI15 {
+      enum {
+        Port=GPIOI_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PJ0 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_0
+    struct PJ0 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PJ1 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_1
+    struct PJ1 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PJ2 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_2
+    struct PJ2 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PJ3 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_3
+    struct PJ3 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PJ4 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_4
+    struct PJ4 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PJ5 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_5
+    struct PJ5 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PJ6 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_6
+    struct PJ6 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PJ7 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_7
+    struct PJ7 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PJ8 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_8
+    struct PJ8 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PJ9 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_9
+    struct PJ9 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PJ10 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_10
+    struct PJ10 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PJ11 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_11
+    struct PJ11 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PJ12 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_12
+    struct PJ12 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PJ13 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_13
+    struct PJ13 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PJ14 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_14
+    struct PJ14 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PJ15 {
-      Port=GPIOJ_BASE,
-      Pin=GPIO_Pin_15
+    struct PJ15 {
+      enum {
+        Port=GPIOJ_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
 
-    enum class PK0 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_0
+    struct PK0 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_0
+      };
     };
 
-    enum class PK1 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_1
+    struct PK1 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_1
+      };
     };
 
-    enum class PK2 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_2
+    struct PK2 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_2
+      };
     };
 
-    enum class PK3 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_3
+    struct PK3 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_3
+      };
     };
 
-    enum class PK4 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_4
+    struct PK4 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_4
+      };
     };
 
-    enum class PK5 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_5
+    struct PK5 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_5
+      };
     };
 
-    enum class PK6 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_6
+    struct PK6 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_6
+      };
     };
 
-    enum class PK7 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_7
+    struct PK7 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_7
+      };
     };
 
-    enum class PK8 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_8
+    struct PK8 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_8
+      };
     };
 
-    enum class PK9 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_9
+    struct PK9 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_9
+      };
     };
 
-    enum class PK10 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_10
+    struct PK10 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_10
+      };
     };
 
-    enum class PK11 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_11
+    struct PK11 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_11
+      };
     };
 
-    enum class PK12 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_12
+    struct PK12 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_12
+      };
     };
 
-    enum class PK13 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_13
+    struct PK13 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_13
+      };
     };
 
-    enum class PK14 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_14
+    struct PK14 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_14
+      };
     };
 
-    enum class PK15 {
-      Port=GPIOK_BASE,
-      Pin=GPIO_Pin_15
+    struct PK15 {
+      enum {
+        Port=GPIOK_BASE,
+        Pin=GPIO_Pin_15
+      };
     };
   }
 }

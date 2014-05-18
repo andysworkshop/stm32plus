@@ -4,8 +4,9 @@ use strict;
 use warnings;
 
 
-# generate the enumerations that allow pin details to be encapsulated
-
+# Generate the enumerations that allow pin details to be encapsulated
+# This script will generate a file in the same directory alled GpioPinMap.h
+# which should be moved one directory level up.
 
 my $outfile;
 
@@ -61,11 +62,14 @@ sub writePort {
 
   for(my $i=0;$i<16;$i++) {
 
-    print $outfile "\n\n";
-    print $outfile "    enum class P${port}${i} {\n";
-    print $outfile "      Port=GPIO${port}_BASE,\n";
-    print $outfile "      Pin=GPIO_Pin_${i}\n";
-    print $outfile "    };" 
+    print $outfile qq!
+
+    struct P${port}${i} {
+      enum {
+        Port=GPIO${port}_BASE,
+        Pin=GPIO_Pin_${i}
+      };
+    };! 
   }
 }
 

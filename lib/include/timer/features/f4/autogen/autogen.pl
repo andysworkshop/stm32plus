@@ -9,6 +9,7 @@ use warnings;
 print "Done\n";
 exit 0;
 
+my ($pinsNoneText,$pinsRemap1Text,$pinsRemap2Text,$pinsRemapFullText,$featuresText);
 
 #
 # generate GPIO headers
@@ -41,11 +42,12 @@ sub genGpio {
 				# check if we need to move on
 
 				$line =~ m/TIM(\d+)/;
-
 				if($1 ne $timerNumber) {
 
 						writeClosing($outfile,$timerNumber,$featureCount,$hasNone,$hasPartial1,$hasPartial2,$hasFull)
 								if(defined($outfile));
+
+            $pinsNoneText=$pinsRemap1Text=$pinsRemap2Text=$pinsRemapFullText=$featuresText="";
 
 						$timerNumber=$1;
 						$filename="Timer${timerNumber}GpioFeature.h";
@@ -80,7 +82,7 @@ sub writeHeader {
 
 		print {$_[0]} qq[/*
  * This file is a part of the open source stm32plus library.
- * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
+ * Copyright (c) 2011 to 2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
  *
  * THIS IS AN AUTOMATICALLY GENERATED FILE - DO NOT EDIT!
@@ -104,25 +106,19 @@ namespace stm32plus {
 sub writeFeature {
 
 		my ($outfile,$feature,$noremap,$remap1,$remap2,$remapf,$timerNumber)=@_;
-		my ($portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,$mode);
 
-		if(length($noremap)>0) { $portNone="GPIO" . substr($noremap,1,1); } else { $portNone="NULL"; }
-		if(length($remap1)>0) { $port1="GPIO" . substr($remap1,1,1); } else { $port1="NULL"; }
-		if(length($remap2)>0) { $port2="GPIO" . substr($remap2,1,1); } else { $port2="NULL"; }
-		if(length($remapf)>0) { $portf="GPIO" . substr($remapf,1,1); } else { $portf="NULL"; }
+    $pinsNoneText.="\n    typedef gpio::${noremap} ${feature}_Pin;" if(length($noremap)>0);
+    $pinsRemap1Text.="\n    typedef gpio::${remap1} ${feature}_Pin;" if(length($remap1)>0);
+    $pinsRemap2Text.="\n    typedef gpio::${remap2} ${feature}_Pin;" if(length($remap2)>0);
+    $pinsRemapFullText.="\n    typedef gpio::${remapf} ${feature}_Pin;" if(length($remapf)>0);
 
-		if(length($noremap)>0) { $pinNone="GPIO_Pin_" . substr($noremap,2); } else { $pinNone="0"; }
-		if(length($remap1)>0) { $pin1="GPIO_Pin_" . substr($remap1,2); } else { $pin1="0"; }
-		if(length($remap2)>0) { $pin2="GPIO_Pin_" . substr($remap2,2); } else { $pin2="0"; }
-		if(length($remapf)>0) { $pinf="GPIO_Pin_" . substr($remapf,2); } else { $pinf="0"; }
-
-		writeFeatureStruct($outfile,$feature,$portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,"GPIO_Mode_IN_FLOATING",$timerNumber) if($feature =~ m/ETR/);
-		writeFeatureStruct($outfile,$feature,$portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,"GPIO_Mode_IN_FLOATING",$timerNumber) if($feature =~ m/BKIN/);
-		writeFeatureStruct($outfile,$feature,$portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,"GPIO_Mode_AF_PP",$timerNumber) if($feature =~ m/CH\dN/);
+		writeFeatureStruct($outfile,$feature,$feature,$timerNumber) if($feature =~ m/ETR/);
+		writeFeatureStruct($outfile,$feature,$feature,$timerNumber) if($feature =~ m/BKIN/);
+		writeFeatureStruct($outfile,$feature,$feature,$timerNumber) if($feature =~ m/CH\dN/);
 
 		if($feature =~ m/CH\d$/) {
-				writeFeatureStruct($outfile,"${feature}_IN",$portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,"GPIO_Mode_IN_FLOATING",$timerNumber);
-				writeFeatureStruct($outfile,"${feature}_OUT",$portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,"GPIO_Mode_AF_PP",$timerNumber);
+				writeFeatureStruct($outfile,"${feature}_IN",$feature,$timerNumber);
+        $featuresText.="\n  template<typename TPinPackage> using ${feature}_OUT=${feature}_IN<TPinPackage>;";
 		}
 }
 
@@ -132,30 +128,32 @@ sub writeFeature {
 			
 sub writeFeatureStruct {
 	
-		my ($outfile,$feature,$portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,$mode,$timerNumber)=@_;
+		my ($outfile,$feature,$shortFeature,$timerNumber)=@_;
  
-		print {$outfile} qq~
+		$featuresText.=qq~
 
   /**
    * Initialise GPIO pins for this timer GPIO mode
-   * \@tparam TRemapLevel The remap level (none, partial1, partial2, full)
+   * \@tparam TPinPackage A type containing pin definitions for this timer feature
    */
 
-  template<TimerGpioRemapLevel TRemapLevel>
+  template<typename TPinPackage>
   struct ${feature} {
 
     ${feature}() {
-
-      static constexpr GPIO_TypeDef *const ports[4]={ ${portNone},${port1},${port2},${portf} };
-      static constexpr const uint16_t pins[4]={ ${pinNone},${pin1},${pin2},${pinf} };
-~;
-
-		print {$outfile} qq/
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER${timerNumber}>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER${timerNumber},(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
-    }
+      GpioPinInitialiser::initialise(
+          reinterpret_cast<GPIO_TypeDef *>(TPinPackage::${shortFeature}_Pin::Port),
+          TPinPackage::${shortFeature}_Pin::Pin,
+          Gpio::ALTERNATE_FUNCTION,
+          (GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER${timerNumber}>::GPIO_SPEED,
+          Gpio::PUPD_NONE,
+          Gpio::PUSH_PULL,
+          GpioAlternateFunctionMapper<PERIPHERAL_TIMER${timerNumber},
+          TPinPackage::${shortFeature}_Pin::Port,
+          TPinPackage::${shortFeature}_Pin::Pin>::GPIO_AF);
+      }
   };
-/;
-
+~
 }
 
 
@@ -165,66 +163,98 @@ sub writeFeatureStruct {
 
 sub writeClosing {
 
-		my ($outfile,$timerNumber,$featureCount,$hasNone,$hasPartial1,$hasPartial2,$hasFull)=@_;
+	my ($outfile,$timerNumber,$featureCount,$hasNone,$hasPartial1,$hasPartial2,$hasFull)=@_;
 
-		writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_NONE",undef) if($hasNone==1);
+  # write the pin packages
 
-		if($hasPartial1==1 && $hasPartial2==1) {
-				writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_PARTIAL1","GPIO_PartialRemap1_TIM${timerNumber}");
-				writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_PARTIAL2","GPIO_PartialRemap2_TIM${timerNumber}");
-		}
-		elsif($hasPartial1==1) {
-				writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_PARTIAL1","GPIO_PartialRemap_TIM${timerNumber}");
-		}
-		elsif($hasPartial2==1) {
-				writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_PARTIAL2","GPIO_PartialRemap_TIM${timerNumber}");
-		}
+  if($hasNone==1) {
+    print ${outfile} qq~
+  struct TIM${timerNumber}_PinPackage_Remap_None {${pinsNoneText}
+  };
+~
+  }
 
-		if($hasFull) {
+  if($hasPartial1==1) {
+    print ${outfile} qq~
+  struct TIM${timerNumber}_PinPackage_Remap_Partial1 {${pinsRemap1Text}
+  };
+~
+  }
 
-				if($hasPartial1 || $hasPartial2) {
-						writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_FULL","GPIO_FullRemap_TIM${timerNumber}") if($hasFull==1);
-				}
-				else {
-						writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_FULL","GPIO_Remap_TIM${timerNumber}") if($hasFull==1);
-				}
-		}
+  if($hasPartial2==1) {
+    print ${outfile} qq~
+  struct TIM${timerNumber}_PinPackage_Remap_Partial2 {${pinsRemap2Text}
+  };
+~
+  }
 
-		print {$outfile} "}\n";
+  if($hasFull==1) {
+    print ${outfile} qq~
+  struct TIM${timerNumber}_PinPackage_Remap_Full {${pinsRemapFullText}
+  };
+~
+  }
 
-		close($outfile);
+  # write the features
+
+  print ${outfile} ${featuresText};
+
+  # write the definitions
+
+	writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_NONE","None") if($hasNone==1);
+	writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_PARTIAL1","Partial1") if($hasPartial1==1);
+  writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_PARTIAL2","Partial2") if($hasPartial2==1);
+  writeClosingDef($outfile,$timerNumber,$featureCount,"TIMER_REMAP_FULL","Full") if($hasFull==1);
+
+  print ${outfile} qq~
+  /**
+   * Custom structure to allow any pin mapping.
+   *
+   * e.g:
+   *    Timer14CustomGpioFeature<TIM14_CH1_OUT<Myclass>>
+   * and in "MyClass" you would do a public declaration:
+   *    typedef gpio::PF9 TIM14_CH1_Pin;
+   */
+
+  template<class... Features>
+  struct Timer${timerNumber}CustomGpioFeature : TimerFeatureBase,Features... {
+    Timer${timerNumber}CustomGpioFeature(Timer& timer) : TimerFeatureBase(timer) {
+    }
+  };
+}
+~;
+
+  close($outfile);
 }
 
 
 sub writeClosingDef {
 
-		my ($outfile,$timerNumber,$featureCount,$remapLevel,$gpioRemap)=@_;
-		my ($fulldef);
+	my ($outfile,$timerNumber,$featureCount,$remapLevel,$remapLevelShort)=@_;
 
-		# generic definition if this is the first call
+	# generic definition if this is the first call
 
-		if($remapLevel eq "TIMER_REMAP_NONE") {
+  if($remapLevel eq "TIMER_REMAP_NONE") {
 
-				$fulldef=qq~
+	  print ${outfile} qq~
+
   /**
    * Timer feature to enable any number of the GPIO alternate function outputs.
    * All remap levels are supported. An example declaration could be:
    *
-   * Timer${timerNumber}GpioFeature<REMAP_NONE,TIM${timerNumber}_CH1_OUT>
+   * Timer${timerNumber}GpioFeature<TIMER_REMAP_NONE,TIM${timerNumber}_CH1_OUT>
    */
 
-  template<TimerGpioRemapLevel TRemapLevel,template<TimerGpioRemapLevel> class... Features>
+  template<TimerGpioRemapLevel TRemapLevel,template<typename> class... Features>
   struct Timer${timerNumber}GpioFeature;
 ~;
 		}
 		
-		$fulldef.=qq~
-
-  template<template<TimerGpioRemapLevel> class... Features>
-  struct Timer${timerNumber}GpioFeature<${remapLevel},Features...> : TimerFeatureBase, Features<${remapLevel}>... {
+		print ${outfile} qq~
+  template<template<typename> class... Features>
+  struct Timer${timerNumber}GpioFeature<${remapLevel},Features...> : TimerFeatureBase,Features<TIM${timerNumber}_PinPackage_Remap_${remapLevelShort}>... {
     Timer${timerNumber}GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
     }
   };
 ~;
-    print ${outfile} $fulldef;
 }
