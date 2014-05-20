@@ -167,3 +167,8 @@ env.Append(LIBS=[libstm32plus])
 
 SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"])
 
+# build the CMake helper
+
+SConscript("cmake/SConscript",
+           exports=["env","systemprefix","libstm32plus","INSTALLDIR","INSTALLDIR_INCLUDE_PREFIX","VERSION"],
+           variant_dir="lib/build/"+systemprefix+"/cmake")
