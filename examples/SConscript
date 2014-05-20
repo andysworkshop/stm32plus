@@ -8,9 +8,13 @@ import os
 
 Import('*')
 
+# Place examples in a bin subdirectory
+
+INSTALLDIR=INSTALLDIR+"/bin/stm32plus"
+
 for example in Glob("*",strings=True):
 	if os.path.isdir(example):
 		SConscript(example+"/SConscript",
 							 exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION","example"],
-							 variant_dir=example+"/build/"+mode+"-"+mcu+"-"+hse,
+							 variant_dir=example+"/build/"+systemprefix,
 							 duplicate=0)

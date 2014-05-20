@@ -89,13 +89,15 @@ if len(VERSION) != 6:
   print "Unexpected error getting the library version"
   Exit(1)
 
-INSTALLDIR="/usr/lib/stm32plus/"+VERSION
+INSTALLDIR=ARGUMENTS.get('INSTALLDIR') or "/usr/local/arm-none-eabi"
+INSTALLDIR_INCLUDE_PREFIX=ARGUMENTS.get('INSTALLDIR_INCLUDE_PREFIX') or "stm32plus-"+VERSION
 
 # get the required args and validate
 
 mode = ARGUMENTS.get('mode')
 mcu = ARGUMENTS.get('mcu')
 hse = ARGUMENTS.get('hse')
+float = None
 
 if not (mode in ['debug', 'fast', 'small']):
 	usage()
@@ -159,6 +161,8 @@ elif mcu=="f4":
 	if float=="hard":
 		env.Append(CCFLAGS=["-mfloat-abi=hard"])
 		env.Append(LINKFLAGS=["-mfloat-abi=hard","-mfpu=fpv4-sp-d16"]);
+	else:
+		float=None
 
 elif mcu=="f051":
 	env.Append(CCFLAGS=["-mcpu=cortex-m0","-DSTM32PLUS_F0_51"])
@@ -175,11 +179,13 @@ elif mode=="small":
 	env.Append(CCFLAGS=["-Os"])
 
 systemprefix=mode+"-"+mcu+"-"+hse
+if float:
+	systemprefix += "-"+float
 	
 # launch SConscript for the main library
 
 libstm32plus=SConscript("lib/SConscript",
-												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"],
+												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_INCLUDE_PREFIX","VERSION"],
 												variant_dir="lib/build/"+systemprefix,
 												duplicate=0)
 
