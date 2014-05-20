@@ -32,9 +32,12 @@
 # CPU this can greatly accelerate the build. Set <N> to approximately the number
 # of cores that you have.
 #
-# The built library will end up in the stm32plus/build subdirectory. If you specify
-# the install command-line option then that library will be installed into the location
-# given by the INSTALLDIR constant (below). Default is /usr/lib/stm32plus/VERSION.
+# The built library will be placed in the stm32plus/build subdirectory.
+#
+# If you specify the install command-line option then that library will be installed
+# into the location given by INSTALLDIR, which defaults to /usr/local/arm-none-eabi.
+# The library, headers, and examples will be installed respectively, to the lib,
+# include, and bin subdirectories of INSTALLDIR.
 #
 # It is safe to compile multiple combinations of mode/mcu/hse as the compiled object
 # code and library are placed in a unique directory name underneath stm32plus/build
