@@ -10,7 +10,7 @@ Import('*')
 
 # Place examples in a bin subdirectory
 
-INSTALLDIR=INSTALLDIR+"/bin/stm32plus"
+INSTALLDIR=INSTALLDIR+"/bin/"+INSTALLDIR_PREFIX
 
 for example in Glob("*",strings=True):
 	if os.path.isdir(example):
