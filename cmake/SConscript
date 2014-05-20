@@ -9,11 +9,18 @@ def cmake_config_build(target, source, env):
   env_dict.update({ k: ' '.join(env_dict[k]) for k in list_names })
   env_dict['LIBSTM32PLUS'] = os.path.basename(str(libstm32plus[0])) 
   env_dict['INSTALLDIR_PREFIX'] = INSTALLDIR_PREFIX
+  env_dict['VERSION'] = VERSION
   
   for target_file, source_file in zip(target, source):
     with open(str(source_file), "r") as s, open(str(target_file), "w") as t:
       t.write(s.read() % env_dict)
 
 
-cmake_config = env.AlwaysBuild(env.Command('stm32plus-' + systemprefix + '-config.cmake', 'stm32plus-config.cmake.in', cmake_config_build))
+cmake_config_specific = env.AlwaysBuild(env.Command('stm32plus-config-' + systemprefix + '.cmake', 'stm32plus-config-specific.cmake.in', cmake_config_build))
+env.Install(INSTALLDIR+"/lib/"+INSTALLDIR_PREFIX, cmake_config_specific)
+
+cmake_config = env.AlwaysBuild(env.Command('stm32plus-config.cmake', 'stm32plus-config.cmake.in', cmake_config_build))
 env.Install(INSTALLDIR+"/lib/"+INSTALLDIR_PREFIX, cmake_config)
+
+cmake_config_version = env.AlwaysBuild(env.Command('stm32plus-config-version.cmake', 'stm32plus-config-version.cmake.in', cmake_config_build))
+env.Install(INSTALLDIR+"/lib/"+INSTALLDIR_PREFIX, cmake_config_version)
