@@ -19,20 +19,21 @@ set(CMAKE_ASM_COMPILER %(CC)s)
 set(CMAKE_OBJCOPY arm-none-eabi-objcopy CACHE INTERNAL "objcopy tool")
 set(CMAKE_OBJDUMP arm-none-eabi-objdump CACHE INTERNAL "objdump tool")
 
-get_filename_component(INSTALLDIR "${CMAKE_CURRENT_LIST_DIR}/.." ABSOLUTE)
-message(STATUS "Using stm32plus installdir: ${INSTALLDIR}")
+get_filename_component(INSTALLDIR "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
+message(STATUS "Using stm32plus install: ${INSTALLDIR}")
+message(STATUS "Using stm32plus prefix:  %(INSTALLDIR_PREFIX)s")
 
 set(STM32PLUS_INSTALLDIR "${INSTALLDIR}" CACHE INTERNAL "stm32plus installdir")
-set(STM32PLUS_LIBS "${INSTALLDIR}/lib/stm32plus/%(LIBSTM32PLUS)s" CACHE INTERNAL "library location")
+set(STM32PLUS_LIBS "${INSTALLDIR}/lib/%(INSTALLDIR_PREFIX)s/%(LIBSTM32PLUS)s" CACHE INTERNAL "library location")
 
 # TODO: Bring in these paths from SCons
 set(STM32PLUS_INCLUDE_DIRS
-  ${INSTALLDIR}/include/%(INSTALLDIR_INCLUDE_PREFIX)s/
-  ${INSTALLDIR}/include/%(INSTALLDIR_INCLUDE_PREFIX)s/stl)
+  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/
+  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/stl)
 set(STM32PLUS_FWLIB_INCLUDE_DIRS
-  ${INSTALLDIR}/include/%(INSTALLDIR_INCLUDE_PREFIX)s/fwlib/f4/cmsis/Include
-  ${INSTALLDIR}/include/%(INSTALLDIR_INCLUDE_PREFIX)s/fwlib/f4/cmsis/Device/ST/STM32F4xx/Include
-  ${INSTALLDIR}/include/%(INSTALLDIR_INCLUDE_PREFIX)s/fwlib/f4/stdperiph/inc
+  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib/f4/cmsis/Include
+  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib/f4/cmsis/Device/ST/STM32F4xx/Include
+  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib/f4/stdperiph/inc
   )
 
 function(add_bin_target TARGET)

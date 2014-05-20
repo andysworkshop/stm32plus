@@ -170,5 +170,5 @@ SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix
 # build the CMake helper
 
 SConscript("cmake/SConscript",
-           exports=["env","systemprefix","libstm32plus","INSTALLDIR","INSTALLDIR_INCLUDE_PREFIX","VERSION"],
+           exports=["env","systemprefix","libstm32plus","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"],
            variant_dir="lib/build/"+systemprefix+"/cmake")
