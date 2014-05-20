@@ -13,4 +13,5 @@ before_install:
 install:
   - sudo apt-get install gcc-arm-none-eabi
 script:
-  - scons mode=$MODE mcu=$MCU hse=$HSE
+  - scons mode=$MODE mcu=$MCU hse=$HSE install INSTALLDIR=~/usr
+  - cd ~/usr && find . | sort
