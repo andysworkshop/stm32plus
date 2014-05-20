@@ -93,7 +93,7 @@ if len(VERSION) != 6:
   Exit(1)
 
 INSTALLDIR=ARGUMENTS.get('INSTALLDIR') or "/usr/local/arm-none-eabi"
-INSTALLDIR_INCLUDE_PREFIX=ARGUMENTS.get('INSTALLDIR_INCLUDE_PREFIX') or "stm32plus-"+VERSION
+INSTALLDIR_PREFIX=ARGUMENTS.get('INSTALLDIR_PREFIX') or "stm32plus-"+VERSION
 
 # get the required args and validate
 
@@ -188,7 +188,7 @@ if float:
 # launch SConscript for the main library
 
 libstm32plus=SConscript("lib/SConscript",
-												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_INCLUDE_PREFIX","VERSION"],
+												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"],
 												variant_dir="lib/build/"+systemprefix,
 												duplicate=0)
 
@@ -196,5 +196,5 @@ env.Append(LIBS=[libstm32plus])
 
 # launch SConscript for the examples
 
-SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION"])
+SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
 
