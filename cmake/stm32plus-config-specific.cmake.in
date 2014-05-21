@@ -22,6 +22,7 @@ set(CMAKE_OBJDUMP arm-none-eabi-objdump CACHE INTERNAL "objdump tool")
 get_filename_component(INSTALLDIR "${CMAKE_CURRENT_LIST_DIR}/../.." ABSOLUTE)
 message(STATUS "Using stm32plus install: ${INSTALLDIR}")
 message(STATUS "Using stm32plus prefix:  %(INSTALLDIR_PREFIX)s")
+add_definitions("-DSTM32PLUS_BUILD")
 
 set(STM32PLUS_INSTALLDIR "${INSTALLDIR}" CACHE INTERNAL "stm32plus installdir")
 set(STM32PLUS_LIBS "${INSTALLDIR}/lib/%(INSTALLDIR_PREFIX)s/%(LIBSTM32PLUS)s" CACHE INTERNAL "library location")
