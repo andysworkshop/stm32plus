@@ -13,6 +13,6 @@ namespace stm32plus {
    * Generic definition for a timer channel feature
    */
 
-  template<uint8_t TChannelNumber>
+  template<uint8_t TChannelNumber,class... TChannelFeatures>
   class TimerChannelFeature {};
 }

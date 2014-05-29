@@ -17,13 +17,14 @@
  * what you can do.
  */
 
-// timer depends on gpio, event, interrupts, nvic, rtc, exti
+// timer depends on gpio, event, interrupts, nvic, rtc, exti, scoped_ptr
 
 #include "config/gpio.h"
 #include "config/nvic.h"
 #include "config/rtc.h"
 #include "config/event.h"
 #include "config/exti.h"
+#include "memory/scoped_ptr.h"
 
 // generic peripheral and feature includes
 
@@ -34,6 +35,10 @@
 #include "timer/features/TimerFeatureBase.h"
 #include "timer/features/TimerInterruptFeatureEnabler.h"
 #include "timer/features/TimerChannelFeatureBase.h"
+
+// generic timer channel feature includes
+
+#include "timer/features/channel/TimerChannelOCPolarityHighFeature.h"
 
 // generic feature includes
 

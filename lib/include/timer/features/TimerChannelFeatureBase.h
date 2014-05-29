@@ -10,16 +10,23 @@
 namespace stm32plus {
 
   /**
-   * Common functionality for all timers
-   * @param frequency
+   * Common functionality for all timer channels
    */
 
   class TimerChannelFeatureBase : public TimerFeatureBase {
 
+    protected:
+      uint8_t _dutyCycle;
+      scoped_ptr<TIM_OCInitTypeDef> _oci;
+
     public:
       TimerChannelFeatureBase(Timer& timer);
 
+      void initialise();
+
       uint32_t calculateFrequency(uint32_t capture1,uint32_t capture2) const;
+
+      operator TIM_OCInitTypeDef&();
   };
 
 
@@ -30,6 +37,23 @@ namespace stm32plus {
 
   inline TimerChannelFeatureBase::TimerChannelFeatureBase(Timer& timer)
     : TimerFeatureBase(timer) {
+  }
+
+
+  /**
+   * Provide access to the OC structure, creating it where required
+   */
+
+  inline TimerChannelFeatureBase::operator TIM_OCInitTypeDef&() {
+
+    // create if it doesn't exist
+
+    if(_oci==nullptr) {
+      _oci.reset(new TIM_OCInitTypeDef);
+      TIM_OCStructInit(oci);
+    }
+
+    return *_oci.get();
   }
 
 
