@@ -50,7 +50,7 @@ namespace stm32plus {
 
     if(_oci==nullptr) {
       _oci.reset(new TIM_OCInitTypeDef);
-      TIM_OCStructInit(oci);
+      TIM_OCStructInit(_oci.get());
     }
 
     return *_oci.get();

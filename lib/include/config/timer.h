@@ -38,7 +38,9 @@
 
 // generic timer channel feature includes
 
-#include "timer/features/channel/TimerChannelOCPolarityHighFeature.h"
+#include "timer/features/channel/TimerChannelOCPolarityFeature.h"
+#include "timer/features/channel/TimerChannelOCNPolarityFeature.h"
+#include "timer/features/channel/TimerChannelOCModeFeature.h"
 
 // generic feature includes
 

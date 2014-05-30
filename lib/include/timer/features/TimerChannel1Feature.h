@@ -47,12 +47,12 @@ namespace stm32plus {
   template<class... Features>
   inline TimerChannelFeature<1,Features...>::TimerChannelFeature(Timer& timer)
     : TimerChannelFeatureBase(timer),
-      Features(static_cast<TimerChannelFeatureBase&>(this))... {
+      Features(static_cast<TimerChannelFeatureBase&>(*this))... {
 
     // feature constructors have set up the OC/IC structures, now we can use them
 
     if(_oci!=nullptr) {
-      TIM_OC1Init(_timer,_oci);
+      TIM_OC1Init(_timer,_oci.get());
       _oci.reset(nullptr);
     }
   }
