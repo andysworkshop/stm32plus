@@ -22,7 +22,7 @@ namespace stm32plus {
   template<>
   struct PeripheralBusSpeed<PERIPHERAL_SDIO> {
     static uint32_t getBusSpeed() {
-      // it's hardcoded on the F4 (See RM0090: 26.3 SDIO functional description)
+      // it's hardcoded on the F4 (See RM0090: "SDIO functional description")
       return 48000000;
     }
   };
