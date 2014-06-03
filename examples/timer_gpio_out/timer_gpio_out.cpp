@@ -50,7 +50,7 @@ class TimerGpioOutTest {
 
       Timer2<
         Timer2InternalClockFeature,       // the timer clock source is HCLK/2
-        TimerChannel1Feature,             // we're going to use channel 1
+        TimerChannel1Feature<TimerChannelOCPolarityHighFeature>,           // we're going to use channel 1
         Timer2GpioFeature<                // we want to output something to GPIO
           TIMER_REMAP_NONE,               // the GPIO output will not be remapped
           TIM2_CH1_OUT                    // we will output channel 1 to GPIO

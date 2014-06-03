@@ -22,7 +22,11 @@ namespace stm32plus {
 
     TimerChannelOCNPolarityFeature(TimerChannelFeatureBase& tcfb) {
       static_assert(TPolarity==TIM_OCNPolarity_High || TPolarity==TIM_OCNPolarity_Low,"Invalid polarity type");
-      static_cast<TIM_OCInitTypeDef&>(tcfb).TIM_OCNPolarity=TPolarity;
+
+      TIM_OCInitTypeDef& oci=static_cast<TIM_OCInitTypeDef&>(tcfb);
+
+      oci.TIM_OCNPolarity=TPolarity;
+      oci.TIM_OutputNState=TIM_OutputNState_Enable;
     }
   };
 

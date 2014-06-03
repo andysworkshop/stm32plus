@@ -41,6 +41,9 @@
 #include "timer/features/channel/TimerChannelOCPolarityFeature.h"
 #include "timer/features/channel/TimerChannelOCNPolarityFeature.h"
 #include "timer/features/channel/TimerChannelOCModeFeature.h"
+#include "timer/features/channel/TimerChannelOCPulseFeature.h"
+#include "timer/features/channel/TimerChannelOCIdleStateFeature.h"
+#include "timer/features/channel/TimerChannelOCNIdleStateFeature.h"
 
 // generic feature includes
 

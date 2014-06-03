@@ -79,7 +79,8 @@ namespace stm32plus {
 
 
   /**
-   * Initialise the output compare mode and first value.
+   * Initialise the output compare mode and first value. This is now deprecated in favour
+   * of using the channel feature classes.
    * @param compareValue the timer tick value to compare to
    * @param ocMode What to do when matched (default is TIM_OCMode_Toggle)
    * @param polarity value. Default is TIM_OCPolarity_Low
@@ -150,7 +151,8 @@ namespace stm32plus {
 
 
   /**
-   *  Initialise the channel in input capture mode
+   *  Initialise the channel in input capture mode. This is now deprecated in favour
+   *  of using the channel feature classes.
    *  @param polarity default is TIM_ICPolarity_Rising
    *  @param selection default is TIM_ICSelection_DirectTI
    *  @param prescaler default is TIM_ICPSC_DIV1 (= number of captures to skip)

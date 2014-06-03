@@ -15,11 +15,9 @@ namespace stm32plus {
    * a specific timer channel
    */
 
-  template<>
-  class TimerChannelFeature<2> : public TimerChannelFeatureBase {
-
-    protected:
-      uint8_t _dutyCycle;
+  template<class... Features>
+  class TimerChannelFeature<2,Features...> : public TimerChannelFeatureBase,
+                                             public Features... {
 
     public:
       TimerChannelFeature(Timer& timer);
@@ -37,7 +35,8 @@ namespace stm32plus {
    * Typedef for easier access
    */
 
-  typedef TimerChannelFeature<2> TimerChannel2Feature;
+  template<class... Features>
+  using TimerChannel2Feature=TimerChannelFeature<2,Features...>;
 
 
   /**
@@ -45,8 +44,17 @@ namespace stm32plus {
    * @param timer
    */
 
-  inline TimerChannelFeature<2>::TimerChannelFeature(Timer& timer)
-    : TimerChannelFeatureBase(timer) {
+  template<class... Features>
+  inline TimerChannelFeature<2,Features...>::TimerChannelFeature(Timer& timer)
+    : TimerChannelFeatureBase(timer),
+      Features(static_cast<TimerChannelFeatureBase&>(*this))... {
+
+    // feature constructors have set up the OC/IC structures, now we can use them
+
+    if(_oci!=nullptr) {
+      TIM_OC2Init(_timer,_oci.get());
+      _oci.reset(nullptr);
+    }
   }
 
 
@@ -54,7 +62,8 @@ namespace stm32plus {
    * Get the capture value for this channel
    */
 
-  inline uint32_t TimerChannelFeature<2>::getCapture() const {
+  template<class... Features>
+  inline uint32_t TimerChannelFeature<2,Features...>::getCapture() const {
     return TIM_GetCapture2(_timer);
   }
 
@@ -63,20 +72,23 @@ namespace stm32plus {
    * Set the compare value for this channel
    */
 
-  inline void TimerChannelFeature<2>::setCompare(uint32_t compareValue) const {
+  template<class... Features>
+  inline void TimerChannelFeature<2,Features...>::setCompare(uint32_t compareValue) const {
     return TIM_SetCompare2(_timer,compareValue);
   }
 
 
   /**
-   * Initialise the output compare mode and first value.
+   * Initialise the output compare mode and first value. This is now deprecated in favour
+   * of using the channel feature classes.
    * @param compareValue the timer tick value to compare to
    * @param ocMode What to do when matched (default is TIM_OCMode_Toggle)
    * @param polarity value. Default is TIM_OCPolarity_Low
    * @param preload The preload enable/disable flag. Default is TIM_OCPreload_Disable.
    */
 
-  inline void TimerChannelFeature<2>::initCompare(uint32_t compareValue,uint16_t ocMode,uint16_t polarity,uint16_t preload) {
+  template<class... Features>
+  inline void TimerChannelFeature<2,Features...>::initCompare(uint32_t compareValue,uint16_t ocMode,uint16_t polarity,uint16_t preload) {
 
     TIM_OCInitTypeDef oci;
 
@@ -102,7 +114,8 @@ namespace stm32plus {
    * @param ocPolarity Default is TIM_OCPolarity_High
    */
 
-  inline void TimerChannelFeature<2>::initCompareForPwmOutput(uint8_t initialDutyCycle,uint16_t ocMode,uint16_t ocPolarity) {
+  template<class... Features>
+  inline void TimerChannelFeature<2,Features...>::initCompareForPwmOutput(uint8_t initialDutyCycle,uint16_t ocMode,uint16_t ocPolarity) {
     initCompare(0,ocMode,ocPolarity);
     setDutyCycle(initialDutyCycle);
   }
@@ -113,7 +126,8 @@ namespace stm32plus {
    * @param dutyCycle The duty cycle as a percentage (0..100)
    */
 
-  inline void TimerChannelFeature<2>::setDutyCycle(uint8_t dutyCycle) {
+  template<class... Features>
+  inline void TimerChannelFeature<2,Features...>::setDutyCycle(uint8_t dutyCycle) {
 
     uint32_t compareValue,period;
 
@@ -137,7 +151,8 @@ namespace stm32plus {
 
 
   /**
-   *  Initialise the channel in input capture mode
+   *  Initialise the channel in input capture mode. This is now deprecated in favour
+   *  of using the channel feature classes.
    *  @param polarity default is TIM_ICPolarity_Rising
    *  @param selection default is TIM_ICSelection_DirectTI
    *  @param prescaler default is TIM_ICPSC_DIV1 (= number of captures to skip)
@@ -145,7 +160,8 @@ namespace stm32plus {
    *  @param timerPrescaler prescaler for the timer. Default is 1.
    */
 
-  inline void TimerChannelFeature<2>::initCapture(uint16_t polarity,uint16_t selection,uint16_t prescaler,uint16_t filter,uint16_t timerPrescaler) {
+  template<class... Features>
+  inline void TimerChannelFeature<2,Features...>::initCapture(uint16_t polarity,uint16_t selection,uint16_t prescaler,uint16_t filter,uint16_t timerPrescaler) {
 
     TIM_ICInitTypeDef init;
 
