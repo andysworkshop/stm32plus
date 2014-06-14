@@ -79,7 +79,7 @@ class AdcMultiDmaMultiChan {
           Adc2<                                         // the second ADC
             Adc2Cycle55RegularChannelFeature<2,3>,      // using channels 2,3 on ADC2 with 55.5-cycle latency
             AdcScanModeFeature,                         // scan mode
-            AdcContinuousModeFeature
+            AdcContinuousModeFeature                    // continuous mode
           >
         >
       > adc;
@@ -119,7 +119,8 @@ class AdcMultiDmaMultiChan {
             AdcClockPrescalerFeature<2>,                // prescaler of 2
             AdcResolutionFeature<12>,                   // 12 bit resolution
             Adc2Cycle144RegularChannelFeature<2,3>,     // using channels 2,3 on ADC2 with 144-cycle latency
-            AdcScanModeFeature<>                        // scan mode with EOC after each group
+            AdcScanModeFeature<>,                       // scan mode with EOC after each group
+            AdcContinuousModeFeature                    // continuous mode
           >,
           5                                             // 5 cycle min delay
         >
@@ -162,6 +163,13 @@ class AdcMultiDmaMultiChan {
        * Go into an infinite loop converting
        */
 
+      /*
+       * Start a conversion and wait until the interrupt handler tells us
+       * that it's finished.
+       */
+
+      adc.startRegularConversion();
+
       for(;;) {
 
         /*
@@ -170,13 +178,6 @@ class AdcMultiDmaMultiChan {
          */
 
         readBuffer[0]=readBuffer[1]=readBuffer[2]=readBuffer[3]=0xAAAA;
-
-        /*
-         * Start a conversion and wait until the interrupt handler tells us
-         * that it's finished.
-         */
-
-        adc.startRegularConversion();
 
         while(!_ready);
         _ready=false;
