@@ -67,7 +67,7 @@ namespace stm32plus {
 
       _accessMode.writeCommand(r61523::SET_PIXEL_FORMAT,0x6);
 
-      // now set DFM to 1 (2 transfers = 1 pixel) (this is requires MCAP enable)
+      // now set DFM to 1 (2 transfers = 1 pixel) (this requires MCAP to be enabled)
 
       _accessMode.writeCommand(r61523::SET_FRAME_AND_INTERFACE);
       _accessMode.writeData(0x80);
