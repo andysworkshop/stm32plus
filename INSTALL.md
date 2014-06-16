@@ -15,7 +15,7 @@ If you're happy with building from the `master` branch then you can just go righ
 Prerequisites
 -------------
 
-* Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_. Download the most recent EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
+* A compatible arm-none-eabi toolchain. I currently support the Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_ and [ARM launchpad](https://launchpad.net/gcc-arm-embedded) toolchains. Download the most recent EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
 
 		$ arm-none-eabi-g++
 		arm-none-eabi-g++.exe: no input files
@@ -42,7 +42,7 @@ You can build all of the above combinations side-by-side if you so wish by execu
 
 * Execute `scons` with the parameters that define the build:
 
-		Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE>
+		Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
 		
 		  <MODE>: debug/fast/small.
 		    debug = -O0
@@ -62,23 +62,28 @@ You can build all of the above combinations side-by-side if you so wish by execu
 		    the HSI and don't have an HSE connected then just supply a default
 		    of 8000000.
 		
+		  [float=hard]:
+		        Optional flag for an F4 build that will cause the hardware FPU to be
+		        used for floating point operations. Requires the "GNU Tools for ARM Embedded
+		        Processors" toolchain. Will not work with Code Sourcery Lite.
+		
 		  Examples:
-		    scons mode=debug mcu=f1hd hse=8000000            // debug / f1hd / 8MHz
-		    scons mode=debug mcu=f1cle hse=25000000          // debug / f1cle / 25MHz
-		    scons mode=debug mcu=f1mdvl hse=8000000          // debug / f1mdvl / 8MHz
-		    scons mode=fast mcu=f1hd hse=8000000 install     // fast / f1hd / 8MHz
-		    scons mode=small mcu=f4 hse=8000000 install        // small / f4 / 8Mhz
-		    scons mode=debug mcu=f4 hse=8000000 -j4 install    // debug / f4 / 8Mhz
-		    scons mode=debug mcu=f051 hse=8000000 -j4 install  // debug / f051 / 8Mhz
+		    scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
+		    scons mode=debug mcu=f1cle hse=25000000                     // debug / f1cle / 25MHz
+		    scons mode=debug mcu=f1mdvl hse=8000000                     // debug / f1mdvl / 8MHz
+		    scons mode=fast mcu=f1hd hse=8000000 install                // fast / f1hd / 8MHz
+		    scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f4 / 8Mhz
+		    scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f4 / 8Mhz
+		    scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
 
 The `-j<N>` option can be passed to scons to do a parallel build. On a multicore CPU this can greatly accelerate the build. Set <N> to approximately the number of cores that you have.
 
-The `install` option will install the library and the examples into subdirectories of `/usr/lib/stm32plus/VERSION`. This location can be customised by editing the `SConstruct` file.
+The `install` option will install the library and the examples into subdirectories of `/usr/local/arm-none-eabi`. This location can be customised by supplying an `INSTALLDIR` argument on the command line.
 
 #### A note on the example projects ####
 
 The example projects are designed to run on either the 512/64Kb/72MHz STM32F103, the 256/64Kb/72Mhz STM32F107, the 128/8Kb/24MHz STM32F100, the 1024Kb/128Kb/168Mhz STM32F4 and the 64/8Kb/48MHz F051.
 
-It is the linker script (`Linker.ld`) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent.
+It is the linker script (`Linker.ld`) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent. For example, I have used stm32plus with an STM32F429 MCU just by using the F4 build and adjusting my system and linker files to reflect the higher clock speed and memory configuration.
 
 Some examples are not suitable for all MCUs. For example, the STM32F107 does not come with SDIO or FSMC peripherals, and the STM32F103 does not have an ethernet MAC. If an example is not suitable for the MCU that you are targetting then the scons script will skip over it and the Eclipse project will not contain a configuration for it.
