@@ -43,6 +43,7 @@ namespace stm32plus {
         BACKLIGHT_CONTROL_3     = 0xba,
         DEVICE_CODE_READ        = 0xbf,
         PANEL_DRIVING_SETTING   = 0xc0,
+        NORMAL_DISPLAY_TIMING   = 0xc1,
         GAMMA_SET_A             = 0xc8,
         GAMMA_SET_B             = 0xc9,
         POWER_SETTING_COMMON    = 0xd0,
