@@ -21,7 +21,7 @@ namespace stm32plus {
    */
 
   template<uint8_t TChannelNumber>
-  struct AdcChannelGpioInitiaiser {
+  struct AdcChannelGpioInitialiser {
 
     /**
      * Initialise the GPIO pin. The idea here is that the conditional statements are on constants
