@@ -67,8 +67,8 @@ namespace stm32plus {
     _init.DMA_DIR=DMA_DIR_PeripheralToMemory;                 // 'peripheral' is source
     _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;        // 'peripheral' does not increment
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
-    _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_HalfWord; // transferring 16-bits
-    _init.DMA_MemoryDataSize=DMA_MemoryDataSize_HalfWord;         // transferring 16-bits
+    _init.DMA_PeripheralDataSize=TPeripheralDataSize;         // transferring 16 or 32-bits depending on the mode
+    _init.DMA_MemoryDataSize=TMemoryDataSize;                 // transferring 16 or 32-bits depending on the mode
     _init.DMA_Mode=DMA_Mode_Circular;                         // is a circular buffer
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_MemoryBurst=DMA_MemoryBurst_Single;             // burst size
