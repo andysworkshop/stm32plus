@@ -21,7 +21,7 @@ namespace stm32plus {
    */
 
   template<class TAdc2,class TAdc3,uint32_t TDmaModeType,uint32_t TAdcMultiModeType,uint8_t TTwoSamplingDelay>
-  class AdcTripleFeature : AdcDualFeature<TAdc2,TDmaModeType,TAdcMultiModeType,TTwoSamplingDelay> {
+  class AdcTripleFeature : public AdcDualFeature<TAdc2,TDmaModeType,TAdcMultiModeType,TTwoSamplingDelay> {
 
     protected:
       scoped_ptr<TAdc3> _adc3;
