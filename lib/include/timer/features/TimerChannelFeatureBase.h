@@ -18,6 +18,7 @@ namespace stm32plus {
     protected:
       uint8_t _dutyCycle;
       scoped_ptr<TIM_OCInitTypeDef> _oci;
+      scoped_ptr<TIM_ICInitTypeDef> _ici;
 
     public:
       TimerChannelFeatureBase(Timer& timer);
@@ -27,6 +28,7 @@ namespace stm32plus {
       uint32_t calculateFrequency(uint32_t capture1,uint32_t capture2) const;
 
       operator TIM_OCInitTypeDef&();
+      operator TIM_ICInitTypeDef&();
   };
 
 
@@ -41,7 +43,8 @@ namespace stm32plus {
 
 
   /**
-   * Provide access to the OC structure, creating it where required
+   * Provide access to the OC structure, creating it where required - this means that
+   * classes not using the OC features won't incur the overhead of the structure.
    */
 
   inline TimerChannelFeatureBase::operator TIM_OCInitTypeDef&() {
@@ -54,6 +57,24 @@ namespace stm32plus {
     }
 
     return *_oci.get();
+  }
+
+
+  /**
+   * Provide access to the IC structure, creating it where required - this means that
+   * classes not using the IC features won't incur the overhead of the structure.
+   */
+
+  inline TimerChannelFeatureBase::operator TIM_ICInitTypeDef&() {
+
+    // create if it doesn't exist
+
+    if(_ici==nullptr) {
+      _ici.reset(new TIM_ICInitTypeDef);
+      TIM_ICStructInit(_ici.get());
+    }
+
+    return *_ici.get();
   }
 
 

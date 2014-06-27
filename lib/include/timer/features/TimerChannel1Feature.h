@@ -50,10 +50,17 @@ namespace stm32plus {
       Features(static_cast<TimerChannelFeatureBase&>(*this))... {
 
     // feature constructors have set up the OC/IC structures, now we can use them
+    // and free the memory that they were using
 
     if(_oci!=nullptr) {
       TIM_OC1Init(_timer,_oci.get());
       _oci.reset(nullptr);
+    }
+
+    if(_ici!=nullptr) {
+      _ici->TIM_Channel=TIM_Channel_1;
+      TIM_ICInit(_timer,_ici.get());
+      _ici.reset(nullptr);
     }
   }
 

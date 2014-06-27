@@ -55,6 +55,11 @@ namespace stm32plus {
       TIM_OC3Init(_timer,_oci.get());
       _oci.reset(nullptr);
     }
+    if(_ici!=nullptr) {
+      _ici->TIM_Channel=TIM_Channel_3;
+      TIM_ICInit(_timer,_ici.get());
+      _ici.reset(nullptr);
+    }
   }
 
 

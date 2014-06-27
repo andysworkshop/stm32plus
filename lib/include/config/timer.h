@@ -45,6 +45,11 @@
 #include "timer/features/channel/TimerChannelOCIdleStateFeature.h"
 #include "timer/features/channel/TimerChannelOCNIdleStateFeature.h"
 
+#include "timer/features/channel/TimerChannelICPolarityFeature.h"
+#include "timer/features/channel/TimerChannelICSelectionFeature.h"
+#include "timer/features/channel/TimerChannelICPrescalerFeature.h"
+#include "timer/features/channel/TimerChannelICFilterFeature.h"
+
 // generic feature includes
 
 #include "timer/features/TimerChannelFeature.h"
