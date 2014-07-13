@@ -133,12 +133,10 @@ namespace stm32plus {
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_MemoryBurst=DMA_MemoryBurst_Single;             // burst size
     _init.DMA_PeripheralBurst=DMA_PeripheralBurst_Single;     // burst size
-    _init.DMA_FIFOMode=DMA_FIFOMode_Enable;                   // fifo mode
+    _init.DMA_FIFOMode=TFifoMode;                             // fifo mode
 
     if(TFifoMode==DMA_FIFOMode_Enable)
       _init.DMA_FIFOThreshold=DMA_FIFOThreshold_HalfFull;     // flush on half-full
-
-    DAC_DMACmd(TDacAlignmentFeature::getChannel(),ENABLE);
   }
 
 
@@ -168,5 +166,7 @@ namespace stm32plus {
     DMA_Cmd(peripheralAddress,DISABLE);
     DMA_Init(peripheralAddress,&_init);
     DMA_Cmd(peripheralAddress,ENABLE);
+
+    DAC_DMACmd(TDacAlignmentFeature::getChannel(),ENABLE);
   }
 }
