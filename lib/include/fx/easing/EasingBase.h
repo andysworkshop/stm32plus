@@ -27,27 +27,27 @@ namespace stm32plus {
 
         /**
          * Ease a transition in
-         * @param[in] time_ The time to do the transition.
+         * @param[in] time The time to do the transition.
          */
 
         virtual float easeIn(float time) const=0;
 
         /**
          * Ease a transition out.
-         * @param[in] time_ The time to do the transition.
+         * @param[in] time The time to do the transition.
          */
 
         virtual float easeOut(float time) const=0;
 
         /**
          * Ease a transition in and out.
-         * @param[in] time_ The time to do the transition.
+         * @param[in] time The time to do the transition.
          */
 
         virtual float easeInOut(float time) const=0;
 
         void setDuration(float duration);
-        void setTotalChangeInPosition(float totalChangeInPosition_);
+        void setTotalChangeInPosition(float totalChangeInPosition);
     };
   }
 }
