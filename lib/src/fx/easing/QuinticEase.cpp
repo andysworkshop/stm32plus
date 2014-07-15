@@ -15,18 +15,18 @@ namespace stm32plus {
      * Ease in
      */
 
-    double QuinticEase::easeIn(double time_) const {
-      time_/=_duration;
-      return _change * time_ * time_ * time_ * time_ * time_;
+    float QuinticEase::easeIn(float time) const {
+      time/=_duration;
+      return _change * time * time * time * time * time;
     }
 
     /*
      * Ease out
      */
 
-    double QuinticEase::easeOut(double time_) const {
-      time_=time_ / _duration - 1;
-      return _change * (time_ * time_ * time_ * time_ * time_ + 1);
+    float QuinticEase::easeOut(float time) const {
+      time=time / _duration - 1;
+      return _change * (time * time * time * time * time + 1);
 
     }
 
@@ -34,14 +34,14 @@ namespace stm32plus {
      * Ease in and out
      */
 
-    double QuinticEase::easeInOut(double time_) const {
-      time_/=_duration / 2;
+    float QuinticEase::easeInOut(float time) const {
+      time/=_duration / 2;
 
-      if(time_ < 1)
-        return _change / 2 * time_ * time_ * time_ * time_ * time_;
+      if(time < 1)
+        return _change / 2 * time * time * time * time * time;
 
-      time_-=2;
-      return _change / 2 * (time_ * time_ * time_ * time_ * time_ + 2);
+      time-=2;
+      return _change / 2 * (time * time * time * time * time + 2);
     }
   }
 }

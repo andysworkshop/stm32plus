@@ -15,32 +15,32 @@ namespace stm32plus {
      * Ease in
      */
 
-    double QuarticEase::easeIn(double time_) const {
-      time_/=_duration;
-      return _change * time_ * time_ * time_ * time_;
+    float QuarticEase::easeIn(float time) const {
+      time/=_duration;
+      return _change * time * time * time * time;
     }
 
     /*
      * Ease out
      */
 
-    double QuarticEase::easeOut(double time_) const {
-      time_=time_ / _duration - 1;
-      return -_change * (time_ * time_ * time_ * time_ - 1);
+    float QuarticEase::easeOut(float time) const {
+      time=time / _duration - 1;
+      return -_change * (time * time * time * time - 1);
     }
 
     /*
      * Ease in and out
      */
 
-    double QuarticEase::easeInOut(double time_) const {
-      time_/=_duration / 2;
+    float QuarticEase::easeInOut(float time) const {
+      time/=_duration / 2;
 
-      if(time_ < 1)
-        return _change / 2 * time_ * time_ * time_ * time_;
+      if(time < 1)
+        return _change / 2 * time * time * time * time;
 
-      time_-=2;
-      return -_change / 2 * (time_ * time_ * time_ * time_ - 2);
+      time-=2;
+      return -_change / 2 * (time * time * time * time - 2);
     }
   }
 }

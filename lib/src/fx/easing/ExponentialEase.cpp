@@ -10,40 +10,41 @@
 
 namespace stm32plus {
   namespace fx {
+
     /*
      * Ease in
      */
 
-    double ExponentialEase::easeIn(double time_) const {
-      return time_ == 0 ? 0 : _change * pow(2,10 * (time_ / _duration - 1));
+    float ExponentialEase::easeIn(float time) const {
+      return time == 0 ? 0 : _change * pow(2,10 * (time / _duration - 1));
     }
 
     /*
      * Ease out
      */
 
-    double ExponentialEase::easeOut(double time_) const {
-      return time_ == _duration ? _change : _change * (-pow(2,-10 * time_ / _duration) + 1);
+    float ExponentialEase::easeOut(float time) const {
+      return time == _duration ? _change : _change * (-pow(2,-10 * time / _duration) + 1);
     }
 
     /*
      * Ease in and out
      */
 
-    double ExponentialEase::easeInOut(double time_) const {
-      if(time_ == 0)
+    float ExponentialEase::easeInOut(float time) const {
+      if(time == 0)
         return 0;
 
-      if(time_ == _duration)
+      if(time == _duration)
         return _change;
 
-      time_/=_duration / 2;
+      time/=_duration / 2;
 
-      if(time_ < 1)
-        return _change / 2 * pow(2,10 * (time_ - 1));
+      if(time < 1)
+        return _change / 2 * pow(2,10 * (time - 1));
 
-      time_--;
-      return _change / 2 * (-pow(2,-10 * time_) + 2);
+      time--;
+      return _change / 2 * (-pow(2,-10 * time) + 2);
     }
   }
 }

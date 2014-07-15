@@ -21,16 +21,16 @@ namespace stm32plus {
       public:
         /// starts motion from a zero velocity, and then accelerates
         /// motion as it executes.
-        virtual double easeIn(double time) const override;
+        virtual float easeIn(float time) const override;
 
         /// starts motion fast, and then decelerates motion to
         /// a zero velocity as it executes
-        virtual double easeOut(double time) const override;
+        virtual float easeOut(float time) const override;
 
         /// Combines the motion of the easeIn and easeOut methods to
         /// to start the motion from a zero velocity, accelerate motion,
         /// then decelerate to a zero velocity
-        virtual double easeInOut(double time) const override;
+        virtual float easeInOut(float time) const override;
     };
 
   }

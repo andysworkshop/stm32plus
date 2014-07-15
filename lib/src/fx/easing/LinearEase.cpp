@@ -15,24 +15,24 @@ namespace stm32plus {
      * Ease in
      */
 
-    double LinearEase::easeIn(double time_) const {
-      return _change * time_ / _duration;
+    float LinearEase::easeIn(float time) const {
+      return _change * time / _duration;
     }
 
     /*
      * Ease out
      */
 
-    double LinearEase::easeOut(double time_) const {
-      return easeIn(time_);
+    float LinearEase::easeOut(float time) const {
+      return easeIn(time);
     }
 
     /*
      * Ease in and out
      */
 
-    double LinearEase::easeInOut(double time_) const {
-      return easeIn(time_);
+    float LinearEase::easeInOut(float time) const {
+      return easeIn(time);
     }
   }
 }
