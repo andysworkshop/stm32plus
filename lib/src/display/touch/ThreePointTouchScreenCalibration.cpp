@@ -50,13 +50,13 @@ namespace stm32plus {
 
       // final values
 
-      _ax=(double)deltaX1/(double)delta;
-      _bx=(double)deltaX2/(double)delta;
-      _dx=(double)deltaX3/(double)delta;
+      _ax=(float)deltaX1/(float)delta;
+      _bx=(float)deltaX2/(float)delta;
+      _dx=(float)deltaX3/(float)delta;
 
-      _ay=(double)deltaY1/(double)delta;
-      _by=(double)deltaY2/(double)delta;
-      _dy=(double)deltaY3/(double)delta;
+      _ay=(float)deltaY1/(float)delta;
+      _by=(float)deltaY2/(float)delta;
+      _dy=(float)deltaY3/(float)delta;
     }
 
 
