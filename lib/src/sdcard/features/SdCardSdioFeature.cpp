@@ -71,7 +71,14 @@ namespace stm32plus {
 
     sdioBusSpeed=PeripheralBusSpeed<PERIPHERAL_SDIO>::getBusSpeed();
 
-    _initDivider=(sdioBusSpeed/200000L)-2;
+    // set the init clk speed to the max of 400kHz. we used to attempt 200kHz which
+    // would fail due to overflow on the F1. sdioBusSpeed (SDIOCLK) is HCLK (e.g. 72MHz)
+    // on the F1 and a fixed 48MHz on the F2/F4
+
+    _initDivider=(sdioBusSpeed/400000L)-2;
+
+    // transfer divider is calculated to be a fixed 24MHz (1MHz off the 25MHz maximum for SDIO)
+
     _transferDivider=(sdioBusSpeed/24000000L)-2;
   }
 
