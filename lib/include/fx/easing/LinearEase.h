@@ -18,13 +18,13 @@ namespace stm32plus {
 
       public:
         /// no acceleration
-        virtual double easeIn(double time) const override;
+        virtual float easeIn(float time) const override;
 
         /// no acceleration
-        virtual double easeOut(double time) const override;
+        virtual float easeOut(float time) const override;
 
         /// no acceleration
-        virtual double easeInOut(double time) const override;
+        virtual float easeInOut(float time) const override;
     };
   }
 }

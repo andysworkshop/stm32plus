@@ -11,8 +11,9 @@
  * This file gets you access to the EEPROM functionality.
  */
 
-// eeprom depends on input stream, output stream, minmax
+// eeprom depends on i2c, input stream, output stream, minmax
 
+#include "config/i2c.h"
 #include "config/stream.h"
 #include "util/MinMax.h"
 
@@ -23,3 +24,4 @@
 // device includes
 
 #include "eeprom/AT24Cxx.h"
+#include "eeprom/BR24G32.h"

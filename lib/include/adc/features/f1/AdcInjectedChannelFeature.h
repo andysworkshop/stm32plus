@@ -112,7 +112,7 @@ namespace stm32plus {
   template<uint8_t TChannelNumber>
   inline void AdcInjectedChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
-    AdcChannelGpioInitiaiser<TAdcNumber,TChannelNumber>::initialiseGpioPin();
+    AdcChannelGpioInitialiser<TAdcNumber,TChannelNumber>::initialiseGpioPin();
     ADC_InjectedChannelConfig(_adc,TChannelNumber,_adc.getAndIncrementInjectedChannelRank(TAdcNumber),TSampleCycles);
   }
 
@@ -125,7 +125,7 @@ namespace stm32plus {
   template<uint8_t TFirst,uint8_t TNext,uint8_t... TRest>
   inline void AdcInjectedChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
-    AdcChannelGpioInitiaiser<TAdcNumber,TFirst>::initialiseGpioPin();
+    AdcChannelGpioInitialiser<TAdcNumber,TFirst>::initialiseGpioPin();
     ADC_InjectedChannelConfig(_adc,TFirst,_adc.getAndIncrementInjectedChannelRank(TAdcNumber),TSampleCycles);
     init<TNext,TRest...>();
   }

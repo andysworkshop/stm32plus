@@ -34,19 +34,21 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f4 / 8Mhz
     scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
 
-The -j<N> option can be passed to scons to do a parallel build. On a multicore
-CPU this can greatly accelerate the build. Set <N> to approximately the number
-of cores that you have.
+  Additional Notes:
+    The -j<N> option can be passed to scons to do a parallel build. On a multicore
+    CPU this can greatly accelerate the build. Set <N> to approximately the number
+    of cores that you have.
 
-The built library will be placed in the stm32plus/build subdirectory.
+    The built library will be placed in the stm32plus/build subdirectory.
 
-If you specify the install command-line option then that library will be installed
-into the location given by INSTALLDIR, which defaults to /usr/local/arm-none-eabi.
-The library, headers, and examples will be installed respectively, to the lib,
-include, and bin subdirectories of INSTALLDIR.
+    If you specify the install command-line option then that library will be installed
+    into the location given by INSTALLDIR, which defaults to /usr/local/arm-none-eabi.
+    The library, headers, and examples will be installed respectively, to the lib,
+    include, and bin subdirectories of INSTALLDIR.
 
-It is safe to compile multiple combinations of mode/mcu/hse as the compiled object
-code and library are placed in a unique directory name underneath stm32plus/build
+    It is safe to compile multiple combinations of mode/mcu/hse as the compiled object
+    code and library are placed in a unique directory name underneath stm32plus/build.
+    It is likewise safe to install multiple versions of the library and examples.
 """
 
 import os

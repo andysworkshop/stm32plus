@@ -5,7 +5,6 @@
  */
 
 #include "config/stm32plus.h"
-#include "config/i2c.h"
 #include "config/eeprom.h"
 #include "config/timing.h"
 

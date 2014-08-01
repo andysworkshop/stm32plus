@@ -15,33 +15,33 @@ namespace stm32plus {
      * Ease in
      */
 
-    double CircularEase::easeIn(double time_) const {
-      time_/=_duration;
+    float CircularEase::easeIn(float time) const {
+      time/=_duration;
 
-      return -_change * (sqrt(1 - time_ * time_) - 1);
+      return -_change * (sqrt(1 - time * time) - 1);
     }
 
     /*
      * Ease out
      */
 
-    double CircularEase::easeOut(double time_) const {
-      time_=time_ / _duration - 1;
-      return _change * sqrt(1 - time_ * time_);
+    float CircularEase::easeOut(float time) const {
+      time=time / _duration - 1;
+      return _change * sqrt(1 - time * time);
     }
 
     /*
      * Ease in and out
      */
 
-    double CircularEase::easeInOut(double time_) const {
-      time_/=_duration / 2;
+    float CircularEase::easeInOut(float time) const {
+      time/=_duration / 2;
 
-      if(time_ < 1)
-        return -_change / 2 * (sqrt(1 - time_ * time_) - 1);
+      if(time < 1)
+        return -_change / 2 * (sqrt(1 - time * time) - 1);
 
-      time_-=2;
-      return _change / 2 * (sqrt(1 - time_ * time_) + 1);
+      time-=2;
+      return _change / 2 * (sqrt(1 - time * time) + 1);
     }
 
   }

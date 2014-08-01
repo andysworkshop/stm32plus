@@ -17,8 +17,8 @@ namespace stm32plus {
     class EasingBase {
 
       protected:
-        double _change;
-        double _duration;
+        float _change;
+        float _duration;
 
       public:
         /// default constructor
@@ -27,27 +27,27 @@ namespace stm32plus {
 
         /**
          * Ease a transition in
-         * @param[in] time_ The time to do the transition.
+         * @param[in] time The time to do the transition.
          */
 
-        virtual double easeIn(double time_) const=0;
+        virtual float easeIn(float time) const=0;
 
         /**
          * Ease a transition out.
-         * @param[in] time_ The time to do the transition.
+         * @param[in] time The time to do the transition.
          */
 
-        virtual double easeOut(double time_) const=0;
+        virtual float easeOut(float time) const=0;
 
         /**
          * Ease a transition in and out.
-         * @param[in] time_ The time to do the transition.
+         * @param[in] time The time to do the transition.
          */
 
-        virtual double easeInOut(double time_) const=0;
+        virtual float easeInOut(float time) const=0;
 
-        void setDuration(double duration_);
-        void setTotalChangeInPosition(double totalChangeInPosition_);
+        void setDuration(float duration);
+        void setTotalChangeInPosition(float totalChangeInPosition);
     };
   }
 }
