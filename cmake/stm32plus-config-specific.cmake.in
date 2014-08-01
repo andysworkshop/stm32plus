@@ -27,15 +27,13 @@ add_definitions("-DSTM32PLUS_BUILD")
 set(STM32PLUS_INSTALLDIR "${INSTALLDIR}" CACHE INTERNAL "stm32plus installdir")
 set(STM32PLUS_LIBS "${INSTALLDIR}/lib/%(INSTALLDIR_PREFIX)s/%(LIBSTM32PLUS)s" CACHE INTERNAL "library location")
 
-# TODO: Bring in these paths from SCons
+# These paths cover your bases if you're using pure stm32plus interfaces.
 set(STM32PLUS_INCLUDE_DIRS
   ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/
   ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/stl)
-set(STM32PLUS_FWLIB_INCLUDE_DIRS
-  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib/f4/cmsis/Include
-  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib/f4/cmsis/Device/ST/STM32F4xx/Include
-  ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib/f4/stdperiph/inc
-  )
+
+# You'll need include paths under here if you're calling into stdperiph or cmsis directly.
+set(STM32PLUS_FWLIB_DIR ${INSTALLDIR}/include/%(INSTALLDIR_PREFIX)s/fwlib)
 
 function(add_bin_target TARGET)
   if(EXECUTABLE_OUTPUT_PATH)
