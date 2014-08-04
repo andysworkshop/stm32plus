@@ -249,7 +249,7 @@ namespace std{
 
 #ifdef STM32PLUS_BUILD
 
-		length=modp_dtoa(f,stream.precision(),buffer);
+		length=stm32plus::StringUtil::modp_dtoa(f,stream.precision(),buffer);
 
 #else
 			if(stream.flags() & ios_base::scientific){

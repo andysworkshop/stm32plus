@@ -25,15 +25,15 @@ namespace stm32plus {
      * Ease in
      */
 
-    double ElasticEase::easeIn(double time_) const {
-      double p,a,s;
+    float ElasticEase::easeIn(float time) const {
+      float p,a,s;
 
-      if(time_ == 0)
+      if(time == 0)
         return 0;
 
-      time_/=_duration;
+      time/=_duration;
 
-      if(time_ == 1)
+      if(time == 1)
         return _change;
 
       if(_period == 0)
@@ -48,22 +48,22 @@ namespace stm32plus {
       } else
         s=p / (2 * M_PI) * asin(_change / a);
 
-      time_-=1;
-      return -(a * pow(2,10 * time_) * sin((time_ * _duration - s) * (2 * M_PI) / p));
+      time-=1;
+      return -(a * pow(2,10 * time) * sin((time * _duration - s) * (2 * M_PI) / p));
     }
 
     /*
      * Ease out
      */
 
-    double ElasticEase::easeOut(double time_) const {
-      double p,a,s;
+    float ElasticEase::easeOut(float time) const {
+      float p,a,s;
 
-      if(time_ == 0)
+      if(time == 0)
         return 0;
 
-      time_/=_duration;
-      if(time_ == 1)
+      time/=_duration;
+      if(time == 1)
         return _change;
 
       if(_period == 0)
@@ -78,21 +78,21 @@ namespace stm32plus {
       } else
         s=p / (2 * M_PI) * asin(_change / a);
 
-      return a * pow(2,-10 * time_) * sin((time_ * _duration - s) * (2 * M_PI) / p) + _change;
+      return a * pow(2,-10 * time) * sin((time * _duration - s) * (2 * M_PI) / p) + _change;
     }
 
     /*
      * Ease in/out
      */
 
-    double ElasticEase::easeInOut(double time_) const {
-      double p,a,s;
+    float ElasticEase::easeInOut(float time) const {
+      float p,a,s;
 
-      if(time_ == 0)
+      if(time == 0)
         return 0;
 
-      time_/=_duration / 2;
-      if(time_ == 2)
+      time/=_duration / 2;
+      if(time == 2)
         return _change;
 
       if(_period == 0)
@@ -107,20 +107,20 @@ namespace stm32plus {
       } else
         s=p / (2 * M_PI) * asin(_change / a);
 
-      if(time_ < 1) {
-        time_-=1;
-        return -0.5 * (a * pow(2,10 * time_) * sin((time_ * _duration - s) * (2 * M_PI) / p));
+      if(time < 1) {
+        time-=1;
+        return -0.5 * (a * pow(2,10 * time) * sin((time * _duration - s) * (2 * M_PI) / p));
       }
 
-      time_-=1;
-      return a * pow(2,-10 * time_) * sin((time_ * _duration - s) * (2 * M_PI) / p) * 0.5 + _change;
+      time-=1;
+      return a * pow(2,-10 * time) * sin((time * _duration - s) * (2 * M_PI) / p) * 0.5 + _change;
     }
 
     /*
      * Set the period
      */
 
-    void ElasticEase::setPeriod(double period_) {
+    void ElasticEase::setPeriod(float period_) {
       _period=period_;
     }
 
@@ -128,7 +128,7 @@ namespace stm32plus {
      * Set the amplitude
      */
 
-    void ElasticEase::setAmplitude(double amplitude_) {
+    void ElasticEase::setAmplitude(float amplitude_) {
       _amplitude=amplitude_;
     }
   }

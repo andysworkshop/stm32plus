@@ -112,7 +112,7 @@ namespace stm32plus {
   inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
     if(TChannelNumber<=15)
-      AdcChannelGpioInitiaiser<TAdcNumber,TChannelNumber>::initialiseGpioPin();
+      AdcChannelGpioInitialiser<TAdcNumber,TChannelNumber>::initialiseGpioPin();
 
     ADC_RegularChannelConfig(_adc,TChannelNumber,_adc.getAndIncrementRegularChannelRank(TAdcNumber),TSampleCycles);
   }
@@ -127,7 +127,7 @@ namespace stm32plus {
   inline void AdcRegularChannelFeature<TAdcNumber,TSampleCycles,TChannelNumbers...>::init() {
 
     if(TFirst<=15)
-      AdcChannelGpioInitiaiser<TAdcNumber,TFirst>::initialiseGpioPin();
+      AdcChannelGpioInitialiser<TAdcNumber,TFirst>::initialiseGpioPin();
 
     ADC_RegularChannelConfig(_adc,TFirst,_adc.getAndIncrementRegularChannelRank(TAdcNumber),TSampleCycles);
     init<TNext,TRest...>();

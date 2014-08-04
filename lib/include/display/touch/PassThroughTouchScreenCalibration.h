@@ -22,8 +22,8 @@ namespace stm32plus {
     class PassThroughTouchScreenCalibration : public TouchScreenCalibration {
 
       protected:
-        double _ax,_bx,_dx;
-        double _ay,_by,_dy;
+        float _ax,_bx,_dx;
+        float _ay,_by,_dy;
 
       public:
 

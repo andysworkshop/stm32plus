@@ -21,20 +21,20 @@ namespace stm32plus {
 
     /**
      * Set the duration
-     * @param[in] duration_ The duration
+     * @param[in] duration The duration
      */
 
-    void EasingBase::setDuration(double duration_) {
-      _duration=duration_;
+    void EasingBase::setDuration(float duration) {
+      _duration=duration;
     }
 
     /**
      * Set the total change in position
-     * @param[in] totalChangeInPosition_ The total change in position.
+     * @param[in] totalChangeInPosition The total change in position.
      */
 
-    void EasingBase::setTotalChangeInPosition(double totalChangeInPosition_) {
-      _change=totalChangeInPosition_;
+    void EasingBase::setTotalChangeInPosition(float totalChangeInPosition) {
+      _change=totalChangeInPosition;
     }
   }
 }

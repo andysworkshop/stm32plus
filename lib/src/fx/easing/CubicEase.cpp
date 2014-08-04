@@ -16,10 +16,10 @@ namespace stm32plus {
      * accelerates motion as it executes.
      */
 
-    double CubicEase::easeIn(double time_) const {
-      time_/=_duration;
+    float CubicEase::easeIn(float time) const {
+      time/=_duration;
 
-      return _change * time_ * time_ * time_;
+      return _change * time * time * time;
     }
 
     /*
@@ -27,10 +27,10 @@ namespace stm32plus {
      * to a zero velocity as it executes.
      */
 
-    double CubicEase::easeOut(double time_) const {
-      time_=time_ / _duration - 1;
+    float CubicEase::easeOut(float time) const {
+      time=time / _duration - 1;
 
-      return _change * (time_ * time_ * time_ + 1);
+      return _change * (time * time * time + 1);
     }
 
     /*
@@ -39,14 +39,14 @@ namespace stm32plus {
      * then decelerates back to a zero velocity.
      */
 
-    double CubicEase::easeInOut(double time_) const {
-      time_/=_duration / 2;
+    float CubicEase::easeInOut(float time) const {
+      time/=_duration / 2;
 
-      if(time_ < 1)
-        return _change / 2 * time_ * time_ * time_;
+      if(time < 1)
+        return _change / 2 * time * time * time;
 
-      time_-=2;
-      return _change / 2 * (time_ * time_ * time_ + 2);
+      time-=2;
+      return _change / 2 * (time * time * time + 2);
     }
   }
 }

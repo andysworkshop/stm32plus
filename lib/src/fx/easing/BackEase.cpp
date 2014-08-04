@@ -24,7 +24,7 @@ namespace stm32plus {
      * Set the overshoot value
      */
 
-    void BackEase::setOvershoot(double overshoot_) {
+    void BackEase::setOvershoot(float overshoot_) {
       _overshoot=overshoot_;
     }
 
@@ -32,35 +32,35 @@ namespace stm32plus {
      * Ease in
      */
 
-    double BackEase::easeIn(double time_) const {
-      time_/=_duration;
-      return _change * time_ * time_ * ((_overshoot + 1) * time_ - _overshoot);
+    float BackEase::easeIn(float time) const {
+      time/=_duration;
+      return _change * time * time * ((_overshoot + 1) * time - _overshoot);
     }
 
     /*
      * Ease out
      */
 
-    double BackEase::easeOut(double time_) const {
-      time_=time_ / _duration - 1;
-      return _change * (time_ * time_ * ((_overshoot + 1) * time_ + _overshoot) + 1);
+    float BackEase::easeOut(float time) const {
+      time=time / _duration - 1;
+      return _change * (time * time * ((_overshoot + 1) * time + _overshoot) + 1);
     }
 
     /*
      * Ease in and out
      */
 
-    double BackEase::easeInOut(double time_) const {
-      double overshoot;
+    float BackEase::easeInOut(float time) const {
+      float overshoot;
 
       overshoot=_overshoot * 1.525;
-      time_/=_duration / 2;
+      time/=_duration / 2;
 
-      if(time_ < 1)
-        return _change / 2 * (time_ * time_ * ((overshoot + 1) * time_ - overshoot));
+      if(time < 1)
+        return _change / 2 * (time * time * ((overshoot + 1) * time - overshoot));
 
-      time_-=2;
-      return _change / 2 * (time_ * time_ * ((overshoot + 1) * time_ + overshoot) + 2);
+      time-=2;
+      return _change / 2 * (time * time * ((overshoot + 1) * time + overshoot) + 2);
     }
   }
 }

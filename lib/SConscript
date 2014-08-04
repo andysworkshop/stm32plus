@@ -12,7 +12,7 @@ Import('*')
 
 # we'll need this to find source files in a variant_dir environment
 
-def RecursiveGlob(directory):
+def RecursiveGlob(directory, patterns):
 
 	node = Dir(directory)
 	build_dir = node.abspath
@@ -22,17 +22,16 @@ def RecursiveGlob(directory):
 
 	result = []
 	for root, dirs, files in os.walk(node.abspath):
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.cpp"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.c"))
-		result += Glob(os.path.join(root.replace(node.abspath, build_dir), "*.asm"))
+		for pattern in patterns:
+			result += Glob(os.path.join(root.replace(node.abspath, build_dir), pattern))
 
 	return result
 
 # get all the sources
 
 matches=[]
-matches.append(RecursiveGlob("src"))
-matches.append(RecursiveGlob("fwlib"))
+matches.append(RecursiveGlob("src", ("*.c", "*.cpp", "*.asm")))
+matches.append(RecursiveGlob("fwlib", ("*.c", "*.cpp", "*.asm")))
 
 # trigger a build with the correct library name
 

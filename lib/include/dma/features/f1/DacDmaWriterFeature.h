@@ -119,8 +119,6 @@ namespace stm32plus {
     _init.DMA_Mode=DMA_Mode_Normal;                           // not a circular buffer
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_M2M=DMA_M2M_Disable;                            // memory->peripheral configuration
-
-    DAC_DMACmd(TDacAlignmentFeature::getChannel(),ENABLE);
   }
 
 
@@ -150,5 +148,7 @@ namespace stm32plus {
     DMA_Cmd(peripheralAddress,DISABLE);
     DMA_Init(peripheralAddress,&_init);
     DMA_Cmd(peripheralAddress,ENABLE);
+
+    DAC_DMACmd(TDacAlignmentFeature::getChannel(),ENABLE);
   }
 }

@@ -1,0 +1,59 @@
+"""
+SCons script file for the CMake package files. The relationship between these
+files is thus:
+
+stm32plus-config.cmake
+----------------------
+This file is the entry point for the CMake find_package infrastructure. Once
+installed in a standard path, it permits a user to place an invocation like
+so in their CMakeLists and have the right thing done:
+
+    set(STM32PLUS_CONFIGURATION small-f4-25000000-hard)
+    find_package(stm32plus 030300 REQUIRED)
+
+For more on how CMake finds libraries:
+http://www.cmake.org/Wiki/CMake:How_To_Find_Libraries
+
+stm32plus-config-version.cmake
+------------------------------
+This provides the logic which allows CMake's find_package function to call
+for a specific version of stm32plus. For more information on how this scheme
+works, see the following page:
+http://www.cmake.org/Wiki/CMake/Tutorials/Packaging
+
+stm32plus-config-small-f4-8000000.cmake [or similar]
+----------------------------------------------------
+This is the real logic, and is specific to the build parameters of stm32plus.
+Having this in a separate file permits multiple versions and build configs
+of stm32plus to be installed simultaneously and trivially switched between.
+
+"""
+
+import os.path
+
+Import('*')
+
+def cmake_config_build(target, source, env):
+  list_names = ('CCFLAGS', 'CXXFLAGS', 'ASFLAGS', 'LINKFLAGS') 
+  env_dict = env.Dictionary().copy()
+  env_dict.update({ k: ' '.join(env_dict[k]) for k in list_names })
+  env_dict['LIBSTM32PLUS'] = os.path.basename(str(libstm32plus[0])) 
+  env_dict['INSTALLDIR_PREFIX'] = INSTALLDIR_PREFIX
+  env_dict['VERSION'] = VERSION
+  
+  for target_file, source_file in zip(target, source):
+    with open(str(source_file), "r") as s, open(str(target_file), "w") as t:
+      t.write(s.read() % env_dict)
+
+
+cmake_config_specific = env.Command('stm32plus-config-' + systemprefix + '.cmake',
+                                    'stm32plus-config-specific.cmake.in', cmake_config_build)
+env.Install(INSTALLDIR+"/lib/"+INSTALLDIR_PREFIX, cmake_config_specific)
+
+cmake_config = env.Command('stm32plus-config.cmake',
+                           'stm32plus-config.cmake.in', cmake_config_build)
+env.Install(INSTALLDIR+"/lib/"+INSTALLDIR_PREFIX, cmake_config)
+
+cmake_config_version = env.Command('stm32plus-config-version.cmake',
+                                   'stm32plus-config-version.cmake.in', cmake_config_build)
+env.Install(INSTALLDIR+"/lib/"+INSTALLDIR_PREFIX, cmake_config_version)

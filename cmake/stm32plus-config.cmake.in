@@ -1,0 +1,1 @@
+include(${CMAKE_CURRENT_LIST_DIR}/stm32plus-config-${STM32PLUS_CONFIGURATION}.cmake)
