@@ -72,14 +72,14 @@ class TimerDualPwmGpioOutTest {
        * have the same names.
        */
 
-      timer.TimerChannel1Feature::initCompareForPwmOutput();
+      timer.TimerChannel1Feature<>::initCompareForPwmOutput();
 
       /*
        * Initialise channel 2 as a PWM channel in edge-aligned mode (TIM_OCMode_PWM1).
        * The default starting duty cycle is zero.
        */
 
-      timer.TimerChannel2Feature::initCompareForPwmOutput();
+      timer.TimerChannel2Feature<>::initCompareForPwmOutput();
 
       /*
        * Enable the timer. The PWM outputs are on PA0 and PA1.
@@ -97,16 +97,16 @@ class TimerDualPwmGpioOutTest {
         // fade channel 1 up to 100% in 4ms steps while channel 2 comes down to 0
 
         for(int8_t i=0;i<=100;i++) {
-          timer.TimerChannel1Feature::setDutyCycle(i);
-          timer.TimerChannel2Feature::setDutyCycle(100-i);
+          timer.TimerChannel1Feature<>::setDutyCycle(i);
+          timer.TimerChannel2Feature<>::setDutyCycle(100-i);
           MillisecondTimer::delay(4);
         }
 
         // fade channel 1 down to 0% in 4ms steps while channel 2 goes up to 100%
 
         for(int8_t i=100;i>=0;i--) {
-          timer.TimerChannel1Feature::setDutyCycle(i);
-          timer.TimerChannel2Feature::setDutyCycle(100-i);
+          timer.TimerChannel1Feature<>::setDutyCycle(i);
+          timer.TimerChannel2Feature<>::setDutyCycle(100-i);
           MillisecondTimer::delay(4);
         }
       }

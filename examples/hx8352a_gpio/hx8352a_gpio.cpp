@@ -68,7 +68,7 @@ class HX8352ATest {
     // define the PWM backlight to come from timer5, channel 2 (PA1)
 
     typedef Backlight<Timer5<Timer5InternalClockFeature,
-                             TimerChannel2Feature,
+                             TimerChannel2Feature<>,
                              Timer5GpioFeature<TIMER_REMAP_NONE,TIM5_CH2_OUT>
                              > > MyBacklight;
 

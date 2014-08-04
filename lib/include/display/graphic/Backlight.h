@@ -77,7 +77,7 @@ namespace stm32plus {
      */
 
     typedef Backlight<Timer17<Timer17InternalClockFeature,
-                             TimerChannel1Feature,
+                             TimerChannel1Feature<>,
                              Timer17GpioFeature<TIMER_REMAP_NONE,TIM17_CH1_OUT>
                              > > DefaultBacklight;
 #else

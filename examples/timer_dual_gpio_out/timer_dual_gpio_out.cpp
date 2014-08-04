@@ -79,7 +79,7 @@ class TimerDualGpioOutTest {
        * the same names.
        */
 
-      timer.TimerChannel1Feature::initCompare(3999);
+      timer.TimerChannel1Feature<>::initCompare(3999);
 
       /*
        * Initialise the channel 2 output compare value to 2000 with the default
@@ -87,7 +87,7 @@ class TimerDualGpioOutTest {
        * of phase with the toggling of channel 1.
        */
 
-      timer.TimerChannel2Feature::initCompare(2000);
+      timer.TimerChannel2Feature<>::initCompare(2000);
 
       /*
        * Start the timer. Each time it ticks up to 4000 (which will take 1 second)
