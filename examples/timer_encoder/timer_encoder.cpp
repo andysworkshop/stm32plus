@@ -89,7 +89,7 @@ class TimerEncoderTest {
          EncoderPolarity::Rising,       // TI1 polarity
          EncoderPolarity::Rising        // TI2 polarity
        >,
-       TimerChannel1Feature,            // we'll use channel 1 for CC interrupts
+       TimerChannel1Feature<>,          // we'll use channel 1 for CC interrupts
        Timer1InterruptFeature           // that means we need the interrupt feature
     > _timer;
 

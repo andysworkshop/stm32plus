@@ -56,8 +56,13 @@ class TimerInputCaptureTest {
      */
 
     typedef Timer3<
-        Timer3InternalClockFeature,       // we'll need this for the frequency calculation
-        TimerChannel3Feature,             // we're going to use channel 3
+        Timer3InternalClockFeature,         // we'll need this for the frequency calculation
+        TimerChannel3Feature<               // we're going to use channel 3
+          TimerChannelICRisingEdgeFeature,  // rising edge trigger
+          TimerChannelICDirectTiFeature,    // direct connection
+          TimerChannelICPreScaler1Feature,  // prescaler of 1
+          TimerChannelICFilterFeature<0>    // no filter
+        >,
         Timer3InterruptFeature,           // we want to use interrupts
         Timer3GpioFeature<                // we want to read something from GPIO
           TIMER_REMAP_NONE,               // the GPIO input will not be remapped
@@ -105,7 +110,7 @@ class TimerInputCaptureTest {
 
       Timer2<
         Timer2InternalClockFeature,     // clocked from the internal clock
-        TimerChannel2Feature,           // we're going to use channel 1
+        TimerChannel2Feature<>,         // we're going to use channel 1
         Timer2GpioFeature<              // we want to output something to GPIO
           TIMER_REMAP_NONE,             // the GPIO output will not (cannot for this timer) be remapped
           TIM2_CH2_OUT                  // we will output channel 1 to GPIO (PB6)
@@ -143,17 +148,6 @@ class TimerInputCaptureTest {
       _myInputTimer->TimerInterruptEventSender.insertSubscriber(
           TimerInterruptEventSourceSlot::bind(this,&TimerInputCaptureTest::onInterrupt)
         );
-
-      /*
-       * Initialise the channel (this will be channel 2) for capturing the signal
-       */
-
-      _myInputTimer->initCapture(
-          TIM_ICPolarity_Rising,      // capture rising edges
-          TIM_ICSelection_DirectTI,   // direct connection to timer input trigger
-          TIM_ICPSC_DIV1,             // sample every transition
-          0,                          // no oversampling filter
-          0);                         // prescaler of 0
 
       /*
        * Reset the variables used to hold the state

@@ -66,7 +66,7 @@ class TimerMasterSlaveTest {
 
       Timer2<
         Timer2InternalClockFeature,         // the timer bus is APB1 (APB on the F0)
-        TimerChannel1Feature,               // we're going to use channel 1
+        TimerChannel1Feature<>,             // we're going to use channel 1
         TimerOutputCompare1MasterFeature    // we're the master timer using OC1 as the trigger
       > masterTimer;
 
@@ -90,7 +90,7 @@ class TimerMasterSlaveTest {
 
       Timer3<
         Timer3InternalClockFeature,       // the timer bus is APB1 (APB on the F0)
-        TimerChannel1Feature,             // we're going to use channel 1
+        TimerChannel1Feature<>,           // we're going to use channel 1
         Timer2MasterTimer3SlaveFeature<   // timer3 is a slave to timer2 (ITR1)
           TIM_SlaveMode_Gated             // gated mode - the slave counter goes on and off with the trigger
         >,

@@ -69,8 +69,13 @@ namespace stm32plus {
     // Declare an instance of timer14
 
     Timer14<
-      Timer14InternalClockFeature,    // used only for its calculation of the timer clock frequency
-      TimerChannel1Feature,           // we need channel 4
+      Timer14InternalClockFeature,        // used only for its calculation of the timer clock frequency
+      TimerChannel1Feature<               // we need channel 1
+        TimerChannelICRisingEdgeFeature,  // rising edge trigger
+        TimerChannelICDirectTiFeature,    // direct TI connection
+        TimerChannelICPreScaler8Feature,  // input capture prescaler of 8
+        TimerChannelICFilterFeature<0>    // no filter
+      >,
       Timer14InterruptFeature,        // we'll be using interrupts
       Timer14RemapRtcClkFeature       // we will remap RTC output to TIM14 ch1 input
     > timer14;
@@ -78,15 +83,6 @@ namespace stm32plus {
     // insert our local class as an interrupt event subscriber
 
     timer14.TimerInterruptEventSender.insertSubscriber(TimerInterruptEventSourceSlot::bind(&interruptObserver,&T14Observer::onTimerEvent));
-
-    // initialise input capture for timer14
-
-    timer14.initCapture(
-        TIM_ICPolarity_Rising,      // capture rising edges
-        TIM_ICSelection_DirectTI,   // direct connection to timer input trigger
-        TIM_ICPSC_DIV8,             // sample every 8th transition
-        0,                          // no oversampling filter
-        0);                         // timer prescaler = 0
 
     // enable interrupts and the timer
 

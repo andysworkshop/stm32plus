@@ -52,7 +52,7 @@ class TimerDmaPwmTest {
 
       Timer1<
         Timer1InternalClockFeature,       // the timer bus is APB2
-        TimerChannel1Feature,             // we're going to use channel 1
+        TimerChannel1Feature<>,           // we're going to use channel 1
         Timer1GpioFeature<                // we want to output something to GPIO
           TIMER_REMAP_NONE,               // the GPIO output will not be remapped
           TIM1_CH1_OUT                    // we will output channel 1 to GPIO

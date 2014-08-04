@@ -52,8 +52,8 @@ class TimerDualGpioOutTest {
 
       Timer2<
         Timer2InternalClockFeature,       // the timer clock source is APB1 (APB on the F0)
-        TimerChannel1Feature,             // we're going to use channel 1...
-        TimerChannel2Feature,             // ...and we're going to use channel 2
+        TimerChannel1Feature<>,           // we're going to use channel 1...
+        TimerChannel2Feature<>,           // ...and we're going to use channel 2
         Timer2GpioFeature<                // we want to output something to GPIO
           TIMER_REMAP_NONE,               // the GPIO output will not be remapped
           TIM2_CH1_OUT,                   // we will output channel 1 to GPIO PA0

@@ -69,8 +69,13 @@ namespace stm32plus {
     // Declare an instance of timer5
 
     Timer5<
-      Timer5InternalClockFeature,   // used only for its calculation of the timer clock frequency
-      TimerChannel4Feature,         // we need channel 4
+      Timer5InternalClockFeature,         // used only for its calculation of the timer clock frequency
+      TimerChannel4Feature<               // we need channel 4
+        TimerChannelICRisingEdgeFeature,  // rising edge trigger
+        TimerChannelICDirectTiFeature,    // direct TI connection
+        TimerChannelICPreScaler8Feature,  // input capture prescaler of 8
+        TimerChannelICFilterFeature<0>    // no filter
+      >,
       Timer5InterruptFeature,       // we'll be using interrupts
       Timer5RemapLsiFeature         // we will remap LSI output to TIM5 ch4 input
     > timer5;
@@ -78,15 +83,6 @@ namespace stm32plus {
     // insert our local class as an interrupt event subscriber
 
     timer5.TimerInterruptEventSender.insertSubscriber(TimerInterruptEventSourceSlot::bind(&interruptObserver,&T5Observer::onTimerEvent));
-
-    // initialise input capture for timer5
-
-    timer5.initCapture(
-        TIM_ICPolarity_Rising,      // capture rising edges
-        TIM_ICSelection_DirectTI,   // direct connection to timer input trigger
-        TIM_ICPSC_DIV8,             // sample every 8th transition
-        0,                          // no oversampling filter
-        0);                         // timer prescaler = 0
 
     // enable interrupts and the timer
 
