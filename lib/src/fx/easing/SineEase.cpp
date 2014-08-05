@@ -16,7 +16,7 @@ namespace stm32plus {
      */
 
     float SineEase::easeIn(float time) const {
-      return -_change * cos(time / _duration * M_PI_2) + _change;
+      return -_change * cos(time / _duration * (float)M_PI_2) + _change;
     }
 
     /*
@@ -24,7 +24,7 @@ namespace stm32plus {
      */
 
     float SineEase::easeOut(float time) const {
-      return _change * sin(time / _duration * M_PI_2);
+      return _change * sin(time / _duration * (float)M_PI_2);
     }
 
     /*
@@ -32,7 +32,7 @@ namespace stm32plus {
      */
 
     float SineEase::easeInOut(float time) const {
-      return -_change / 2 * (cos(M_PI * time / _duration) - 1);
+      return -_change / 2 * (cos((float)M_PI * time / _duration) - 1);
     }
   }
 }

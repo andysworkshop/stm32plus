@@ -26,21 +26,21 @@ namespace stm32plus {
     float BounceEase::easeOut(float time) const {
       time/=_duration;
 
-      if(time < (1 / 2.75))
-        return _change * (7.5625 * time * time);
+      if(time < (1 / 2.75f))
+        return _change * (7.5625f * time * time);
 
-      if(time < (2 / 2.75)) {
-        time-=1.5 / 2.75;
-        return _change * (7.5625 * time * time + 0.75);
+      if(time < (2 / 2.75f)) {
+        time-=1.5f / 2.75f;
+        return _change * (7.5625f * time * time + 0.75f);
       }
 
-      if(time < (2.5 / 2.75)) {
-        time-=2.25 / 2.75;
-        return _change * (7.5625 * time * time + 0.9375);
+      if(time < (2.5f / 2.75f)) {
+        time-=2.25f / 2.75f;
+        return _change * (7.5625f * time * time + 0.9375f);
       }
 
-      time-=2.625 / 2.75;
-      return _change * (7.5625 * time * time + 0.984375);
+      time-=2.625f / 2.75f;
+      return _change * (7.5625f * time * time + 0.984375f);
     }
 
     /*
@@ -49,9 +49,9 @@ namespace stm32plus {
 
     float BounceEase::easeInOut(float time) const {
       if(time < _duration / 2)
-        return easeIn(time * 2) * 0.5;
+        return easeIn(time * 2) * 0.5f;
       else
-        return easeOut(time * 2 - _duration) * 0.5 + _change * 0.5;
+        return easeOut(time * 2 - _duration) * 0.5f + _change * 0.5f;
     }
   }
 }

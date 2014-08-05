@@ -37,7 +37,7 @@ namespace stm32plus {
         return _change;
 
       if(_period == 0)
-        p=_duration * 0.3;
+        p=_duration * 0.3f;
       else
         p=_period;
 
@@ -46,10 +46,10 @@ namespace stm32plus {
         a=_change;
         s=p / 4;
       } else
-        s=p / (2 * M_PI) * asin(_change / a);
+        s=p / (2 * (float)M_PI) * asin(_change / a);
 
       time-=1;
-      return -(a * pow(2,10 * time) * sin((time * _duration - s) * (2 * M_PI) / p));
+      return -(a * pow(2,10 * time) * sin((time * _duration - s) * (2 * (float)M_PI) / p));
     }
 
     /*
@@ -67,7 +67,7 @@ namespace stm32plus {
         return _change;
 
       if(_period == 0)
-        p=_duration * 0.3;
+        p=_duration * 0.3f;
       else
         p=_period;
 
@@ -76,9 +76,9 @@ namespace stm32plus {
         a=_change;
         s=p / 4;
       } else
-        s=p / (2 * M_PI) * asin(_change / a);
+        s=p / (2 * (float)M_PI) * asin(_change / a);
 
-      return a * pow(2,-10 * time) * sin((time * _duration - s) * (2 * M_PI) / p) + _change;
+      return a * pow(2,-10 * time) * sin((time * _duration - s) * (2 * (float)M_PI) / p) + _change;
     }
 
     /*
@@ -96,7 +96,7 @@ namespace stm32plus {
         return _change;
 
       if(_period == 0)
-        p=_duration * (0.3 * 1.5);
+        p=_duration * (0.3f * 1.5f);
       else
         p=_period;
 
@@ -105,15 +105,15 @@ namespace stm32plus {
         a=_change;
         s=p / 4;
       } else
-        s=p / (2 * M_PI) * asin(_change / a);
+        s=p / (2 * (float)M_PI) * asin(_change / a);
 
       if(time < 1) {
         time-=1;
-        return -0.5 * (a * pow(2,10 * time) * sin((time * _duration - s) * (2 * M_PI) / p));
+        return -0.5f * (a * pow(2,10 * time) * sin((time * _duration - s) * (2 * (float)M_PI) / p));
       }
 
       time-=1;
-      return a * pow(2,-10 * time) * sin((time * _duration - s) * (2 * M_PI) / p) * 0.5 + _change;
+      return a * pow(2,-10 * time) * sin((time * _duration - s) * (2 * (float)M_PI) / p) * 0.5f + _change;
     }
 
     /*
