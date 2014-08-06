@@ -55,7 +55,7 @@ namespace wink
     /// \note This function must be either marked as static, or not inside a class/struct (i.e. in global scope)
     static slot<Signature> bind(Signature fn)
     {
-      return slot_type(fn);
+      return __this_type(fn);
     }
     
     /// Binds a member function
