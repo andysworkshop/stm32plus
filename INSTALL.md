@@ -15,7 +15,7 @@ If you're happy with building from the `master` branch then you can just go righ
 Prerequisites
 -------------
 
-* A compatible arm-none-eabi toolchain. I currently support the Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_ and [ARM launchpad](https://launchpad.net/gcc-arm-embedded) toolchains. Download the most recent EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
+* A compatible arm-none-eabi toolchain. I prefer the [ARM launchpad](https://launchpad.net/gcc-arm-embedded) toolchain because it supports the hardware FPU in the F4 series. I can also confirm that the Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_ toolchain preferred in previous stm32plus releases still works as long as you don't require the hardware FPU. Download the most recent EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
 
 		$ arm-none-eabi-g++
 		arm-none-eabi-g++.exe: no input files
@@ -75,6 +75,22 @@ You can build all of the above combinations side-by-side if you so wish by execu
 		    scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f4 / 8Mhz
 		    scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f4 / 8Mhz
 		    scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
+		
+		  Additional Notes:
+		    The -j<N> option can be passed to scons to do a parallel build. On a multicore
+		    CPU this can greatly accelerate the build. Set <N> to approximately the number
+		    of cores that you have.
+		
+		    The built library will be placed in the stm32plus/build subdirectory.
+		
+		    If you specify the install command-line option then that library will be installed
+		    into the location given by INSTALLDIR, which defaults to /usr/local/arm-none-eabi.
+		    The library, headers, and examples will be installed respectively, to the lib,
+		    include, and bin subdirectories of INSTALLDIR.
+		
+		    It is safe to compile multiple combinations of mode/mcu/hse as the compiled object
+		    code and library are placed in a unique directory name underneath stm32plus/build.
+		    It is likewise safe to install multiple versions of the library and examples.
 
 The `-j<N>` option can be passed to scons to do a parallel build. On a multicore CPU this can greatly accelerate the build. Set <N> to approximately the number of cores that you have.
 
@@ -87,3 +103,22 @@ The example projects are designed to run on either the 512/64Kb/72MHz STM32F103,
 It is the linker script (`Linker.ld`) and the system startup code (`System.c`) that specify these things. For example, if you wanted to change the core clock then you need to look at `System.c` (`SystemCoreClock` is a key variable). If you want to change the memory size then you need to look at `Linker.ld`. The stm32plus library itself is clock-speed and memory-independent. For example, I have used stm32plus with an STM32F429 MCU just by using the F4 build and adjusting my system and linker files to reflect the higher clock speed and memory configuration.
 
 Some examples are not suitable for all MCUs. For example, the STM32F107 does not come with SDIO or FSMC peripherals, and the STM32F103 does not have an ethernet MAC. If an example is not suitable for the MCU that you are targetting then the scons script will skip over it and the Eclipse project will not contain a configuration for it.
+
+#### A note on the net examples
+
+The network code requires the dynamic heap CRT library functions to be safe for re-entrant use, therefore these examples contain the following code in the `LibraryHacks.cpp` file. When writing your own code it is very important that you include this:
+
+	/*
+	 * The net code needs the heap to re-entrant so we need to ensure that an
+	 * IRQ cannot be raised while the heap structures are updated
+	 */
+	
+	extern "C" {
+	  void __malloc_lock(struct _reent * /* reent */) {
+	    stm32plus::IrqSuspend::suspend();
+	  }
+	
+	  void __malloc_unlock(struct _reent * /* reent */) {
+	    stm32plus::IrqSuspend::resume();
+	  }
+	}

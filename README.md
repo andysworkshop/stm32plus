@@ -66,9 +66,7 @@ Working in Eclipse
 ------------------
 I do all my development in Eclipse Kepler using the CDT and the [GNU ARM Eclipse plugin](http://gnuarmeclipse.livius.net/blog/). The `.project` and `.cproject` files for the main library and all the examples are included. You can use Eclipse's import option on the root checkout directory to bring them all into your workspace in one go. I recommend that you create a _working set_ to contain all the stm32plus projects because there's a lot of them.
 
-I recommend version *1.8.1-201401111229* of the GNU ARM Eclipse plugin with Eclipse Kepler. That's the combination that I use in day-to-day development and the `.project` and `.cproject` will work with that version.
-
-The example projects are configured to use the external `cs-make` builder. Linux users should change this to 'Internal builder' in the 'C/C++ Build' project properties page.    
+I have found that the recent updates to the plugin have been stable and non-breaking so you can probably just get the latest version. At the time of writing I am using version *1.10.2.201407190854* of the _Cross Compiler Support_ plugin.
 
 How do I report a bug?
 ======================
@@ -103,15 +101,15 @@ A short walk around the directories
 A quick guide to flashing using OpenOCD
 =======================================
 
-At the time of writing the lastest version of openocd is 0.6.1 and it contains full support for the STM32 connected via JTAG and also via ST-Link (e.g. the STM32F4DISCOVERY  and STM32VLDISCOVERY boards). The following guide assumes that you are using either Linux or Windows with a Unix-like shell (cygwin or mingw) and that you have built the binaries.
+At the time of writing the lastest version of openocd is 0.8.0 and it contains full support for the STM32 connected via JTAG and also via ST-Link (e.g. the STM32F4DISCOVERY  and STM32VLDISCOVERY boards). The following guide assumes that you are using either Linux or Windows with a Unix-like shell (cygwin or mingw) and that you have built the binaries.
 
 Flashing the stm32f4discovery board
 -----------------------------------
 
 `cd` into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
 
-	$ bin-x64/openocd-x64-0.6.1.exe -f scripts/board/stm32f4discovery.cfg
-	Open On-Chip Debugger 0.6.1 (2012-10-07-10:39)
+	$ bin-x64/openocd-x64-0.8.0.exe -f scripts/board/stm32f4discovery.cfg
+	Open On-Chip Debugger 0.8.0 (2012-10-07-10:39)
 	Licensed under GNU GPL v2
 	For bug reports, read
 	http://openocd.sourceforge.net/doc/doxygen/bugs.html
@@ -221,8 +219,8 @@ Windows users need to ensure that they can connect to the ST-Link V1 debugger on
 
 `cd` into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
 
-	$ bin-x64/openocd-x64-0.6.1.exe -f scripts/board/stm32vldiscovery.cfg 
-	Open On-Chip Debugger 0.6.1 (2012-10-07-10:39)
+	$ bin-x64/openocd-x64-0.8.0.exe -f scripts/board/stm32vldiscovery.cfg 
+	Open On-Chip Debugger 0.8.0 (2012-10-07-10:39)
 	Licensed under GNU GPL v2
 	For bug reports, read
 	        http://openocd.sourceforge.net/doc/doxygen/bugs.html
@@ -269,8 +267,8 @@ This is one of the more recent _discovery_ boards from ST and as such it comes e
 
 `cd` into the openocd directory and run it with the flags required for the discovery board. For me on Windows 7 x64/cygwin this is:
 
-	$ bin-x64/openocd-x64-0.7.0.exe -f scripts/board/stm32f0discovery.cfg
-	Open On-Chip Debugger 0.7.0 (2013-05-05-10:44)
+	$ bin-x64/openocd-x64-0.8.0.exe -f scripts/board/stm32f0discovery.cfg
+	Open On-Chip Debugger 0.8.0 (2013-05-05-10:44)
 	Licensed under GNU GPL v2
 	For bug reports, read
 	        http://openocd.sourceforge.net/doc/doxygen/bugs.html
