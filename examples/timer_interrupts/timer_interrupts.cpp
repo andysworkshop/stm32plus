@@ -92,9 +92,10 @@ class TimerInterruptsTest  {
       timer.setTimeBaseByFrequency(5000,4999,TIM_CounterMode_CenterAligned3);
 
       /*
-       * Enable just the Update interrupt.
+       * Enable just the Update interrupt, clearing any spurious pending flag first
        */
 
+      timer.clearPendingInterruptsFlag(TIM_IT_Update);
       timer.enableInterrupts(TIM_IT_Update);
 
       /*

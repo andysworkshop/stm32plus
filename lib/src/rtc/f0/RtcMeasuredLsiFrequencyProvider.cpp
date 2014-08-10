@@ -87,6 +87,7 @@ namespace stm32plus {
     // enable interrupts and the timer
 
     timer14.Timer::enablePeripheral();
+    timer14.clearPendingInterruptsFlag(TIM_IT_CC1);
     timer14.enableInterrupts(TIM_IT_CC1);
 
     // wait until completed

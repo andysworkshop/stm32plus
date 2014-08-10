@@ -71,6 +71,7 @@ namespace stm32plus {
 
       void enableInterrupts(uint16_t interruptMask);
       void disableInterrupts(uint16_t interruptMask);
+      void clearPendingInterruptsFlag(uint16_t interruptMask) const;
   };
 
 
@@ -144,6 +145,15 @@ namespace stm32plus {
     USART_ITConfig(_usart,interruptMask,DISABLE);
   }
 
+  /**
+   * Clear the selected pending interrupt flags
+   * @param interruptMask The bitmask of interrupts, e.g. USART_IT_TC / USART_IT_RXNE
+   */
+
+  template<uint8_t TUsartNumber>
+  inline void UsartInterruptFeature<TUsartNumber>::clearPendingInterruptsFlag(uint16_t interruptMask) const {
+    USART_ClearITPendingBit(_usart,interruptMask);
+  }
 
   /**
    * Enabler specialisation, Usart 1
