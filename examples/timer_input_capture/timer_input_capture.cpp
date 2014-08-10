@@ -26,12 +26,9 @@ using namespace stm32plus;
  *
  * The USART protocol is 57600/8/N/1
  *
- * Timer2 channel 2 is used to generate a PWM signal. This signal is fed to Timer3
+ * Timer2 channel 2 is used to generate a 10kHz PWM signal. This signal is fed to Timer3
  * channel 3. Each rising edge of the signal causes an interrupt to fire. When two
  * successive edges have been captured we calculate and display the result.
- *
- * On the F4 and F103 HD the frequency is 100KHz. This is too
- * fast for the F0 and F100 VL so we use 10KHz instead.
  *
  * You will need to wire PA1 (TIM2_CH2) to PB0 (TIM3_CH3) to test this demo.
  *
@@ -71,7 +68,7 @@ class TimerInputCaptureTest {
       > MyInputTimer;
 
     /*
-     * The timer needs to be a class member so we can see it from the Observable callback
+     * The timer needs to be a class member so we can see it from the callback
      */
 
     MyInputTimer *_myInputTimer;
@@ -113,20 +110,15 @@ class TimerInputCaptureTest {
         TimerChannel2Feature<>,         // we're going to use channel 1
         Timer2GpioFeature<              // we want to output something to GPIO
           TIMER_REMAP_NONE,             // the GPIO output will not (cannot for this timer) be remapped
-          TIM2_CH2_OUT                  // we will output channel 1 to GPIO (PB6)
+          TIM2_CH2_OUT                  // we will output channel 1 to GPIO (PA1)
         >
       > outputTimer;
 
       /*
-       * On the F1HD and F4 we set the output timer to 24Mhz with a reload frequency of 100Khz (24Mhz/240).
-       * On the F0 and F1 VL we set it to 10KHz to avoid CPU starvation by the interrupt handler.
+       * Set the output timer to 800kHz with a reload frequency of 10Khz (800kHz/80).
        */
 
-#if defined(STM32PLUS_F1_MD_VL) || defined(STM32PLUS_F0)
       outputTimer.setTimeBaseByFrequency(800000,80-1);
-#else
-      outputTimer.setTimeBaseByFrequency(24000000,240-1);
-#endif
 
       /*
        * Initialise the output channel for PWM output with a duty cycle of 50%. This will
