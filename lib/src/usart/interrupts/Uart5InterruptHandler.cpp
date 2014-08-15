@@ -7,7 +7,7 @@
 #include "config/stm32plus.h"
 #include "config/usart.h"
 
-#if !defined(STM32PLUS_MD_VL) && !defined(STM32PLUS_F0)
+#if !defined(STM32PLUS_F1_MD_VL) && !defined(STM32PLUS_F0)
 
 using namespace stm32plus;
 
