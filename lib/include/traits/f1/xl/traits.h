@@ -160,7 +160,6 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER1> Timer1PeripheralTraits;
-  typedef PeripheralTraits<PERIPHERAL_TIMER1> Timer1PeripheralTraits;
 
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER2> {
