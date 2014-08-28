@@ -42,8 +42,7 @@ namespace stm32plus {
 
   /**
    * Constructor
-   * @param i2c
-   * or reads.
+   * @param i2c The i2c feature base reference
    */
 
   inline I2CMasterPollingFeature::I2CMasterPollingFeature(I2C& i2c)

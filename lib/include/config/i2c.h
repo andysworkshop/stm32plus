@@ -62,11 +62,20 @@
 
 // device specific includes
 
+#if defined(STM32PLUS_F0)
+
+  #include "i2c/features/f0/I2CSecondSlaveFeature.h"
+
+#elif defined(STM32PLUS_F1)
+
+  #include "i2c/features/f1/I2CSecondSlaveFeature.h"
+
 #if defined(STM32PLUS_F4)
 
   #define USE_I2C3_INTERRUPT
 
   #include "i2c/features/f4/I2CInterruptFeature.h"
+  #include "i2c/features/f4/I2CSecondSlaveFeature.h"
 
   #include "i2c/f4/I2C2Remap.h"
   #include "i2c/f4/I2C3.h"
