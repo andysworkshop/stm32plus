@@ -36,12 +36,12 @@ namespace stm32plus {
    */
 
   template<uint8_t TSecondSlaveAddress,uint8_t TAddressMask>
-  I2CSecondSlaveFeature<TSecondSlaveAddress>::I2CSecondSlaveFeature(I2C& i2c)
+  I2CSecondSlaveFeature<TSecondSlaveAddress,TAddressMask>::I2CSecondSlaveFeature(I2C& i2c)
     : I2CFeatureBase(i2c) {
 
     // configure the values
 
-    I2C_OwnAddress2Config(_i2c,TAddressMask)
+    I2C_OwnAddress2Config(_i2c,TSecondSlaveAddress,TAddressMask)
     I2C_DualAddressCmd(_i2c,ENABLE);
   }
 }

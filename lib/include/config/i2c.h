@@ -70,7 +70,7 @@
 
   #include "i2c/features/f1/I2CSecondSlaveFeature.h"
 
-#if defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F4)
 
   #define USE_I2C3_INTERRUPT
 
