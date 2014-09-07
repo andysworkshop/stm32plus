@@ -1176,15 +1176,13 @@ namespace stm32plus {
    * @retval SD_Error: SD Card Error code.
    */
 
-  SdCardIoFeature::SD_Error SdCardSdioFeature::cmdResp1Error(uint8_t cmd) {
+  SdCardIoFeature::SD_Error SdCardSdioFeature::cmdResp1Error(uint8_t cmd) const {
+
     SD_Error errorstatus=SD_OK;
     uint32_t status;
     uint32_t response_r1;
 
-    status=SDIO->STA;
-
-    while(!(status & (SDIO_FLAG_CCRCFAIL | SDIO_FLAG_CMDREND | SDIO_FLAG_CTIMEOUT)))
-      status=SDIO->STA;
+    status=waitStatusFlags();
 
     if(status & SDIO_FLAG_CTIMEOUT) {
       errorstatus=SD_CMD_RSP_TIMEOUT;
@@ -1281,22 +1279,18 @@ namespace stm32plus {
    */
 
   SdCardIoFeature::SD_Error SdCardSdioFeature::cmdResp3Error() {
-    SD_Error errorstatus=SD_OK;
+
     uint32_t status;
 
-    status=SDIO->STA;
-
-    while(!(status & (SDIO_FLAG_CCRCFAIL | SDIO_FLAG_CMDREND | SDIO_FLAG_CTIMEOUT)))
-      status=SDIO->STA;
+    status=waitStatusFlags();
 
     if(status & SDIO_FLAG_CTIMEOUT) {
-      errorstatus=SD_CMD_RSP_TIMEOUT;
       SDIO_ClearFlag(SDIO_FLAG_CTIMEOUT);
-      return errorstatus;
+      return SD_CMD_RSP_TIMEOUT;
     }
     /*!< Clear all the static flags */
     SDIO_ClearFlag(SDIO_STATIC_FLAGS);
-    return errorstatus;
+    return SD_OK;
   }
 
 
@@ -1307,13 +1301,11 @@ namespace stm32plus {
    */
 
   SdCardIoFeature::SD_Error SdCardSdioFeature::cmdResp2Error() {
+
     SD_Error errorstatus=SD_OK;
     uint32_t status;
 
-    status=SDIO->STA;
-
-    while(!(status & (SDIO_FLAG_CCRCFAIL | SDIO_FLAG_CTIMEOUT | SDIO_FLAG_CMDREND)))
-      status=SDIO->STA;
+    status=waitStatusFlags();
 
     if(status & SDIO_FLAG_CTIMEOUT) {
       errorstatus=SD_CMD_RSP_TIMEOUT;
@@ -1331,6 +1323,22 @@ namespace stm32plus {
   }
 
 
+  /*
+   * Wait for STA register to indicate end or failure
+   */
+
+  uint32_t SdCardSdioFeature::waitStatusFlags() const {
+
+    uint32_t status;
+
+    do {
+      status=SDIO->STA;
+    } while(!(status & (SDIO_FLAG_CCRCFAIL | SDIO_FLAG_CTIMEOUT | SDIO_FLAG_CMDREND)));
+
+    return status;
+  }
+
+
   /**
    * @brief  Checks for error conditions for R6 (RCA) response.
    * @param  cmd: The sent command index.
@@ -1345,10 +1353,7 @@ namespace stm32plus {
     uint32_t status;
     uint32_t response_r1;
 
-    status=SDIO->STA;
-
-    while(!(status & (SDIO_FLAG_CCRCFAIL | SDIO_FLAG_CTIMEOUT | SDIO_FLAG_CMDREND)))
-      status=SDIO->STA;
+    status=waitStatusFlags();
 
     if(status & SDIO_FLAG_CTIMEOUT) {
       errorstatus=SD_CMD_RSP_TIMEOUT;
@@ -1442,11 +1447,11 @@ namespace stm32plus {
    * @retval SDCardState: SD Card Error or SD Card Current State.
    */
 
-  SdCardSdioFeature::SDCardState SdCardSdioFeature::getCardState() {
+  SdCardSdioFeature::SDCardState SdCardSdioFeature::getCardState() const {
 
-    uint32_t resp1=0;
+    uint32_t resp1;
 
-    if(sendStatus(&resp1) != SD_OK)
+    if(sendStatus(resp1)!=SD_OK)
       return SD_CARD_ERROR;
     else
       return (SDCardState)((resp1 >> 9) & 0x0F);
@@ -1462,7 +1467,7 @@ namespace stm32plus {
   *        - SD_TRANSFER_BUSY: Data transfer is acting
   */
 
-  SdCardSdioFeature::SDTransferState SdCardSdioFeature::getStatus() {
+  SdCardSdioFeature::SDTransferState SdCardSdioFeature::getStatus() const {
 
     SDCardState cardstate;
 
@@ -1484,15 +1489,10 @@ namespace stm32plus {
    */
 
 
-  SdCardIoFeature::SD_Error SdCardSdioFeature::sendStatus(uint32_t *pcardstatus) {
+  SdCardIoFeature::SD_Error SdCardSdioFeature::sendStatus(uint32_t& cardstatus) const {
 
     SD_Error errorstatus=SD_OK;
     SDIO_CmdInitTypeDef cmdInit;
-
-    if(pcardstatus == nullptr) {
-      errorstatus=SD_INVALID_PARAMETER;
-      return errorstatus;
-    }
 
     cmdInit.SDIO_Argument=(uint32_t)_rca << 16;
     cmdInit.SDIO_CmdIndex=SD_CMD_SEND_STATUS;
@@ -1506,7 +1506,7 @@ namespace stm32plus {
     if(errorstatus != SD_OK)
       return errorstatus;
 
-    *pcardstatus=SDIO_GetResponse(SDIO_RESP1);
+    cardstatus=SDIO_GetResponse(SDIO_RESP1);
     return errorstatus;
   }
 
@@ -1518,8 +1518,8 @@ namespace stm32plus {
   bool SdCardSdioFeature::eraseBlocks(uint32_t firstBlock,uint32_t lastBlock) {
 
     SD_Error errorstatus=SD_OK;
-    uint32_t delay=0;
-    uint8_t cardstate=0;
+    uint32_t delay;
+    uint8_t cardstate;
     SDIO_CmdInitTypeDef cmdInit;
 
     /*!< Check if the card coomnd class supports erase command */
@@ -1552,8 +1552,7 @@ namespace stm32plus {
       cmdInit.SDIO_CPSM=SDIO_CPSM_Enable;
       SDIO_SendCommand(&cmdInit);
 
-      errorstatus=cmdResp1Error(SD_CMD_SD_ERASE_GRP_START);
-      if(errorstatus != SD_OK)
+      if((errorstatus=cmdResp1Error(SD_CMD_SD_ERASE_GRP_START))!=SD_OK)
         return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SD_SDIO,SD_ERROR,errorstatus);
 
       /*!< Send CMD33 SD_ERASE_GRP_END with argument as addr  */
@@ -1564,8 +1563,7 @@ namespace stm32plus {
       cmdInit.SDIO_CPSM=SDIO_CPSM_Enable;
       SDIO_SendCommand(&cmdInit);
 
-      errorstatus=cmdResp1Error(SD_CMD_SD_ERASE_GRP_END);
-      if(errorstatus != SD_OK)
+      if((errorstatus=cmdResp1Error(SD_CMD_SD_ERASE_GRP_END))!=SD_OK)
         return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SD_SDIO,SD_ERROR,errorstatus);
     }
 
@@ -1577,19 +1575,48 @@ namespace stm32plus {
     cmdInit.SDIO_CPSM=SDIO_CPSM_Enable;
     SDIO_SendCommand(&cmdInit);
 
-    if(errorstatus != SD_OK)
+    if(errorstatus!=SD_OK)
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SD_SDIO,SD_ERROR,errorstatus);
 
-    /*!< Wait till the card is in programming state */
+    ///< Wait till the card is in the programming state
 
-    errorstatus=isCardProgramming(&cardstate);
+    errorstatus=isCardProgramming(cardstate);
+
     delay=SD_DATATIMEOUT;
     while((delay > 0) && (errorstatus == SD_OK) && ((SD_CARD_PROGRAMMING == cardstate) || (SD_CARD_RECEIVING == cardstate))) {
-      errorstatus=isCardProgramming(&cardstate);
+      errorstatus=isCardProgramming(cardstate);
       delay--;
     }
 
     if(SD_OK!=errorstatus)
+      return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SD_SDIO,E_SDIO_ERROR,errorstatus);
+
+    return true;
+  }
+
+
+  /**
+   * @brief  Aborts an ongoing data transfer.
+   * @param  None
+   * @retval SD_Error: SD Card Error code.
+   */
+
+  bool SdCardSdioFeature::stopTransfer() const {
+
+    SDIO_CmdInitTypeDef cmdInit;
+    SD_Error errorstatus;
+
+    /*!< Send CMD12 STOP_TRANSMISSION  */
+
+    cmdInit.SDIO_Argument = 0x0;
+    cmdInit.SDIO_CmdIndex = SD_CMD_STOP_TRANSMISSION;
+    cmdInit.SDIO_Response = SDIO_Response_Short;
+    cmdInit.SDIO_Wait = SDIO_Wait_No;
+    cmdInit.SDIO_CPSM = SDIO_CPSM_Enable;
+
+    SDIO_SendCommand(&cmdInit);
+
+    if((errorstatus=cmdResp1Error(SD_CMD_STOP_TRANSMISSION))!=SD_OK)
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_SD_SDIO,E_SDIO_ERROR,errorstatus);
 
     return true;
@@ -1602,10 +1629,10 @@ namespace stm32plus {
    * @retval SD_Error: SD Card Error code.
    */
 
-  SdCardIoFeature::SD_Error SdCardSdioFeature::isCardProgramming(uint8_t *pstatus) {
+  SdCardIoFeature::SD_Error SdCardSdioFeature::isCardProgramming(uint8_t& cardstatus) const {
 
     SD_Error errorstatus=SD_OK;
-    volatile uint32_t respR1=0,status=0;
+    volatile uint32_t respR1,status;
     SDIO_CmdInitTypeDef cmdInit;
 
     cmdInit.SDIO_Argument=(uint32_t)_rca << 16;
@@ -1615,9 +1642,7 @@ namespace stm32plus {
     cmdInit.SDIO_CPSM=SDIO_CPSM_Enable;
     SDIO_SendCommand(&cmdInit);
 
-    status=SDIO->STA;
-    while(!(status & (SDIO_FLAG_CCRCFAIL | SDIO_FLAG_CMDREND | SDIO_FLAG_CTIMEOUT)))
-      status=SDIO->STA;
+    status=waitStatusFlags();
 
     if(status & SDIO_FLAG_CTIMEOUT) {
       errorstatus=SD_CMD_RSP_TIMEOUT;
@@ -1645,7 +1670,7 @@ namespace stm32plus {
     respR1=SDIO_GetResponse(SDIO_RESP1);
 
     /*!< Find out card status */
-    *pstatus=(uint8_t)((respR1 >> 9) & 0x0000000F);
+    cardstatus=(uint8_t)((respR1 >> 9) & 0x0000000F);
 
     if((respR1 & SD_OCR_ERRORBITS) == SD_ALLZERO)
       return errorstatus;

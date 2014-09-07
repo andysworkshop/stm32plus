@@ -134,16 +134,6 @@ namespace stm32plus {
 
   bool SdioDmaSdCard::readBlocks(void *dest,uint32_t blockIndex,uint32_t numBlocks) {
 
-#if 0
-    uint8_t *ptr;
-
-    for(ptr=static_cast<uint8_t *>(dest);numBlocks;numBlocks--,blockIndex++,ptr+=BLOCK_SIZE)
-      if(!readBlock(ptr,blockIndex))
-        return false;
-
-    return true;
-
-#else
     _dmaFinished=_sdioFinished=false;
 
     // enable the relevant interrupts
@@ -160,16 +150,15 @@ namespace stm32plus {
 
     beginRead(dest,numBlocks*BLOCK_SIZE);
 
-    // wait for completion or error
+    // wait for completion or error and send the stop transfer command
 
-    if(!waitForTransfer())
+    if(!waitForTransfer() || !stopTransfer())
       return false;
 
     // wait for the peripheral to go quiet
 
     SdCardSdioFeature::waitForReceiveComplete();
     return true;
-#endif
   }
 
 
@@ -221,15 +210,6 @@ namespace stm32plus {
 
   bool SdioDmaSdCard::writeBlocks(const void *src,uint32_t blockIndex,uint32_t numBlocks) {
 
-    const uint8_t *ptr;
-
-    for(ptr=static_cast<const uint8_t *>(src);numBlocks;numBlocks--,blockIndex++,ptr+=BLOCK_SIZE)
-      if(!writeBlock(ptr,blockIndex))
-        return false;
-
-    return true;
-
-#if 0
     _dmaFinished=_sdioFinished=false;
 
     // enable the relevant interrupts
@@ -244,18 +224,17 @@ namespace stm32plus {
 
     // use DMA to transfer the data
 
-    beginWrite(dest,numBlocks*BLOCK_SIZE);
+    beginWrite(src,numBlocks*BLOCK_SIZE);
 
-    // wait for completion or error
+    // wait for completion or error and issue the stop transfer command
 
-    if(!waitForTransfer())
+    if(!waitForTransfer() || !stopTransfer())
       return false;
 
     // wait for the peripheral to go quiet
 
     SdCardSdioFeature::waitForTransmitComplete();
     return true;
-#endif
   }
 
 
@@ -270,6 +249,10 @@ namespace stm32plus {
 
     while(!_sdioFinished);
     while(!_dmaFinished);
+
+    // clear static flags
+
+    SDIO_ClearFlag(SDIO_STATIC_FLAGS);
 
     // check for error
 

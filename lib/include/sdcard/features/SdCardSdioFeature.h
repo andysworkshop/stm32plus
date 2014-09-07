@@ -123,14 +123,17 @@ namespace stm32plus {
       SD_Error findSCR(uint32_t *pscr);
 
       SD_Error cmdError();
-      SD_Error cmdResp1Error(uint8_t cmd);
+      SD_Error cmdResp1Error(uint8_t cmd) const;
       SD_Error cmdResp2Error();
       SD_Error cmdResp3Error();
       SD_Error cmdResp6Error(uint8_t cmd,uint16_t *prca);
       SD_Error cmdResp7Error();
 
-      SD_Error sendStatus(uint32_t *pcardstatus);
-      SD_Error isCardProgramming(uint8_t *pstatus);
+      SD_Error sendStatus(uint32_t& pcardstatus) const;
+      SD_Error isCardProgramming(uint8_t& pstatus) const;
+
+      bool stopTransfer() const;
+      uint32_t waitStatusFlags() const;
 
     public:
       SdCardSdioFeature(SdCardBase& sdcard);
@@ -162,8 +165,8 @@ namespace stm32plus {
       const CardInfo& getCardInfo() const;
       uint32_t getCardType() const;
 
-      SDCardState getCardState();
-      SDTransferState getStatus();
+      SDCardState getCardState() const;
+      SDTransferState getStatus() const;
   };
 
 

@@ -33,6 +33,17 @@ using namespace stm32plus;
  * and are unfortunate enough to be located on the blocks we target. You should reformat the
  * card after you're done.
  *
+ * Wiring:
+ *   PC12 => SDIO_CLK
+ *   PC8  => SDIO_D0
+ *   PC9  => SDIO_D1
+ *   PC10 => SDIO_D2
+ *   PC11 => SDIO_D3
+ *   PD2  => SDIO_CMD
+ *
+ * stm32plus enables the internal pullups on the data and command lines so you do not need
+ * to connect external pullup resistors.
+ *
  * Compatible MCU:
  *   STM32F1
  *   STM32F4
@@ -48,6 +59,7 @@ class SdioTest {
   protected:
 
     GpioF<DefaultDigitalOutputFeature<6> > _pf;
+    SdioDmaSdCard *_sdcard;
 
   public:
 
@@ -68,7 +80,7 @@ class SdioTest {
          * does not happen. In this case you will need to call powerOn() and initialiseCard() yourself.
          */
 
-        SdioDmaSdCard sdcard;
+        _sdcard=new SdioDmaSdCard;
 
         /*
          * Check for any errors raised in the constructor
@@ -78,9 +90,19 @@ class SdioTest {
           error();
 
         for(;;) {
-          eraseBlocks(sdcard);
-          writeBlocks(sdcard);
-          readBlocks(sdcard);
+
+          eraseBlocks();
+
+          writeSingleBlocks();
+          readSingleBlocks();
+
+          writeMultiBlocks();
+          readMultiBlocks();
+
+          // wait 5 seconds and do it again. it's not a good idea to go into a tight
+          // program/erase loop with flash memory because it can wear out
+
+          MillisecondTimer::delay(5000);
         }
       }
 
@@ -90,11 +112,11 @@ class SdioTest {
        * Erase blocks 20000 to 20099
        */
 
-      void eraseBlocks(SdioDmaSdCard& sdcard) {
+      void eraseBlocks() {
 
         // erase the blocks
 
-        if(!sdcard.eraseBlocks(20000,20099))
+        if(!_sdcard->eraseBlocks(20000,20099))
           error();
 
         // it worked
@@ -104,10 +126,10 @@ class SdioTest {
 
 
       /*
-       * Write blocks 20000 to 20099
+       * Write blocks 20000 to 20099 using the single block write command
        */
 
-      void writeBlocks(SdioDmaSdCard& sdcard) {
+      void writeSingleBlocks() {
 
         int i;
         uint8_t block[512];
@@ -118,16 +140,45 @@ class SdioTest {
           block[i]=i & 0xff;
 
         for(i=20000;i<20099;i++)
-          if(!sdcard.writeBlock(block,i))
+          if(!_sdcard->writeBlock(block,i))
             error();
+
+        // it worked
+
+        signalOK();
       }
 
 
       /*
-       * Read blocks 20000 to 20099
+       * Write blocks 20000 to 20099 using the multi-block write command
+       * to write 20 blocks at a time
        */
 
-      void readBlocks(SdioDmaSdCard& sdcard) {
+      void writeMultiBlocks() {
+
+        uint32_t i;
+        uint8_t block[512*20];
+
+        // init the blocks
+
+        for(i=0;i<512*20;i++)
+          block[i]=i & 0xff;
+
+        for(i=20000;i<20099;i+=20)
+          if(!_sdcard->writeBlocks(block,i,20))
+            error();
+
+        // it worked
+
+        signalOK();
+      }
+
+
+      /*
+       * Read blocks 20000 to 20099 using the single block read command
+       */
+
+      void readSingleBlocks() {
 
         int i,j;
         uint8_t block[512];
@@ -138,7 +189,7 @@ class SdioTest {
 
           // read this block
 
-          if(!sdcard.readBlock(block,i))
+          if(!_sdcard->readBlock(block,i))
             error();
 
           // verify the content
@@ -147,6 +198,40 @@ class SdioTest {
             if(block[j]!=(j & 0xff))
               error();
         }
+
+        // it worked
+
+        signalOK();
+      }
+
+
+      /*
+       * Read blocks 20000 to 20099 using the multi-block read command
+       * to read 20 blocks at a time
+       */
+
+      void readMultiBlocks() {
+
+        uint32_t i,j;
+        uint8_t blocks[512*20];
+
+        for(i=20000;i<20099;i+=20) {
+
+          // read these blocks
+
+          if(!_sdcard->readBlocks(blocks,i,20))
+            error();
+
+          // verify the content
+
+          for(j=0;j<512*20;j++)
+            if(blocks[j]!=(j & 0xff))
+              error();
+        }
+
+        // it worked
+
+        signalOK();
       }
 
 
@@ -158,6 +243,7 @@ class SdioTest {
         _pf[6].reset();                     // on
         MillisecondTimer::delay(1000);      // wait a second
         _pf[6].set();                       // off
+        MillisecondTimer::delay(1000);      // wait a second
       }
 
 
