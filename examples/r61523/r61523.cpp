@@ -29,10 +29,12 @@ using namespace stm32plus::display;
  * using the FSMC peripheral on bank 1. The wiring
  * that you need to do is as follows:
  *
+ * VCC  => 3.0V / 3.3V
+ * GND  => GND
  * PE1  => RESET
  * PD11 => RS (D/CX)
  * PD7  => CS (or tie to GND)
- * PD4  => RD (or tie to GND)
+ * PD4  => RD (or tie to VCC)
  * PD5  => WR
  * PD14 => D0    PE11 => D8
  * PD15 => D1    PE12 => D9
@@ -61,7 +63,8 @@ class R61523Test {
 
   protected:
     typedef Fsmc16BitAccessMode<FsmcBank1NorSram1> LcdAccessMode;
-    typedef R61523_Landscape_16M<LcdAccessMode> LcdPanel;
+    typedef R61523_Landscape_16M<LcdAccessMode> LcdPanel;           // type A panel or...
+//  typedef R61523_Landscape_16M_TypeB<LcdAccessMode> LcdPanel;     // ...type B panel
     typedef R61523PwmBacklight<LcdAccessMode> LcdBacklight;
 
     LcdAccessMode *_accessMode;
@@ -79,7 +82,7 @@ class R61523Test {
 
       // Set up the FSMC timing. These numbers (particularly the data setup time) are dependent on
       // both the FSMC bus speed and the panel timing parameters. If you see corrupted graphics then
-      // you may need to adjust these to uit the characteristics of your particular panel.
+      // you may need to adjust these to fit the characteristics of your particular panel.
 
 #if defined(STM32PLUS_F4)
       Fsmc8080LcdTiming fsmcReadTiming(0,20);
