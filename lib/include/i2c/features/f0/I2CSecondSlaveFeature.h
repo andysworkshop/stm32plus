@@ -41,7 +41,7 @@ namespace stm32plus {
 
     // configure the values
 
-    I2C_OwnAddress2Config(_i2c,TSecondSlaveAddress,TAddressMask)
+    I2C_OwnAddress2Config(_i2c,TSecondSlaveAddress,TAddressMask);
     I2C_DualAddressCmd(_i2c,ENABLE);
   }
 }
