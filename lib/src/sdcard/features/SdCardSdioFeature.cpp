@@ -27,25 +27,39 @@ namespace stm32plus {
     // all pins are AFIO and they're all on the same AF ID for F1,F2,F4. SDIO is
     // not present on the F3.
 
+    // clock (no pullup)
+
     GpioPinInitialiser::initialise(
         GPIOC,
-        GPIO_Pin_8 |        // DO
-        GPIO_Pin_9 |        // D1
-        GPIO_Pin_10 |       // D2
-        GPIO_Pin_11 |       // D3
         GPIO_Pin_12,        // SDIO_SCK
         Gpio::ALTERNATE_FUNCTION,
         (GPIOSpeed_TypeDef)SdioPeripheralTraits::GPIO_SPEED,
         Gpio::PUPD_NONE,
         Gpio::PUSH_PULL,
+        GpioAlternateFunctionMapper<PERIPHERAL_SDIO,GPIOC_BASE,GPIO_Pin_12>::GPIO_AF);
+
+    // data lines, pullup
+
+    GpioPinInitialiser::initialise(
+        GPIOC,
+        GPIO_Pin_8 |        // DO
+        GPIO_Pin_9 |        // D1
+        GPIO_Pin_10 |       // D2
+        GPIO_Pin_11,        // D3
+        Gpio::ALTERNATE_FUNCTION,
+        (GPIOSpeed_TypeDef)SdioPeripheralTraits::GPIO_SPEED,
+        Gpio::PUPD_UP,
+        Gpio::PUSH_PULL,
         GpioAlternateFunctionMapper<PERIPHERAL_SDIO,GPIOC_BASE,GPIO_Pin_8>::GPIO_AF);
+
+    // CMD, pullup
 
     GpioPinInitialiser::initialise(
         GPIOD,
         GPIO_Pin_2,         // SDIO_CMD
         Gpio::ALTERNATE_FUNCTION,
         (GPIOSpeed_TypeDef)SdioPeripheralTraits::GPIO_SPEED,
-        Gpio::PUPD_NONE,
+        Gpio::PUPD_UP,
         Gpio::PUSH_PULL,
         GpioAlternateFunctionMapper<PERIPHERAL_SDIO,GPIOD_BASE,GPIO_Pin_2>::GPIO_AF);
 

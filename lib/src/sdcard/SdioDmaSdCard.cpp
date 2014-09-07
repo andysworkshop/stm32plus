@@ -134,6 +134,7 @@ namespace stm32plus {
 
   bool SdioDmaSdCard::readBlocks(void *dest,uint32_t blockIndex,uint32_t numBlocks) {
 
+#if 0
     uint8_t *ptr;
 
     for(ptr=static_cast<uint8_t *>(dest);numBlocks;numBlocks--,blockIndex++,ptr+=BLOCK_SIZE)
@@ -142,7 +143,7 @@ namespace stm32plus {
 
     return true;
 
-#if 0
+#else
     _dmaFinished=_sdioFinished=false;
 
     // enable the relevant interrupts
@@ -272,12 +273,7 @@ namespace stm32plus {
 
     // check for error
 
-    if(_sdioErrorCode!=ErrorProvider::ERROR_NO_ERROR || _dmaErrorCode!=ErrorProvider::ERROR_NO_ERROR)
-      return false;
-
-    // wait for DMA to signal complete
-
-    return true;
+    return _sdioErrorCode==ErrorProvider::ERROR_NO_ERROR && _dmaErrorCode==ErrorProvider::ERROR_NO_ERROR;
   }
 
 
