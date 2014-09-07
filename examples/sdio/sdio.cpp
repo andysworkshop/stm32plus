@@ -13,32 +13,25 @@ using namespace stm32plus;
 
 
 /**
- * SD card demonstration using the onboard SDIO peripheral
- * in high-speed 4-bit mode. This example will erase 100
- * blocks from 20000 to 20099, then write a bit-pattern to
- * each of these blocks and finally read back each block to
- * verify the bit-pattern. Blocks are always 512 bytes in
- * size, even if your card is a non-SDHC card that has
+ * SD card demonstration using the onboard SDIO peripheral in high-speed 4-bit mode.
+ * This example will erase 100 blocks from 20000 to 20099, then write a bit-pattern to
+ * each of these blocks and finally read back each block to verify the bit-pattern.
+ * Blocks are always 512 bytes in size, even if your card is a non-SDHC card that has
  * physical block sizes that are not 512 bytes.
  *
- * If all is OK then a LED on PF[6] will be flashed for
- * 1-second at the end of each of the erase, write, read
- * sequences. If anything goes wrong then the LED will
- * flash rapidly at 5Hz.
+ * If all is OK then a LED on PF[6] will be flashed for 1-second at the end of each of
+ * the erase, write, read sequences. If anything goes wrong then the LED will flash
+ * rapidly at 5Hz.
  *
- * The SdioDmaSdCard class encapsulates access to the SDIO
- * peripheral classes and uses DMA and interrupts to
- * transfer data. The default constructor will
- * automatically detect appropriate SDIO initialisation
- * and transfer frequencies based on targets of 200kHz and
- * 24MHz, respectively. You can tune these dividers by
- * using an SdioDmaSdCard constructor parameter of
- * 'false' (see the code comments below).
+ * The SdioDmaSdCard class encapsulates access to the SDIO peripheral classes and uses
+ * DMA and interrupts to transfer data. The default constructor will automatically detect
+ * appropriate SDIO initialisation and transfer frequencies based on targets of 400kHz and
+ * 24MHz, respectively. You can tune these dividers by using an SdioDmaSdCard constructor
+ * parameter of 'false' (see the code comments below).
  *
- * Please note that this demo is destructive to any files
- * that happen to be on your SD card and are unfortunate
- * enough to be located on the blocks we target. You
- * should reformat the card after you're done.
+ * Please note that this demo is destructive to any files that happen to be on your SD card
+ * and are unfortunate enough to be located on the blocks we target. You should reformat the
+ * card after you're done.
  *
  * Compatible MCU:
  *   STM32F1
