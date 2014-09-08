@@ -1,4 +1,6 @@
-#if defined(STM32PLUS_F4)
+#if !defined(STM32PLUS_F4)
+#error This source file is only applicable to the F4 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp_tdes.c
@@ -324,4 +326,3 @@ ErrorStatus CRYP_TDES_CBC(uint8_t Mode, uint8_t Key[24], uint8_t InitVectors[8],
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

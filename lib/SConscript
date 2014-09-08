@@ -12,22 +12,40 @@ Import('*')
 
 # we'll need this to find source files in a variant_dir environment
 
-def RecursiveGlob(directory, patterns):
+def RecursiveGlob(directory,patterns):
 
-	node = Dir(directory)
-	build_dir = node.abspath
+  node=Dir(directory)
+  build_dir=node.abspath
 
-	while node != node.srcnode():
-		node = node.srcnode()
+  while node!=node.srcnode():
+    node=node.srcnode()
 
-	result = []
-	for root, dirs, files in os.walk(node.abspath):
-		for pattern in patterns:
-			result += Glob(os.path.join(root.replace(node.abspath, build_dir), pattern))
+  result=[]
+  for root,dirs,files in os.walk(node.abspath):
 
-	return result
+    # get the full pathname of this directory and the optional compat file
 
-# get all the sources
+    compatFile=os.path.join(root,"compat.txt")
+    supported=True
+
+    # presence of compat file indicates that the sources in this directory have MCU
+    # compatibility restrictions. subdirectories must also have a compat.txt file. 
+
+    if os.path.exists(compatFile):
+      supported=False
+      for line in open(compatFile,"r"):
+        line=line.rstrip()
+        if not line.startswith("#") and line==mcu:
+          supported=True
+          break
+
+    if supported:
+      for pattern in patterns:
+        result+=Glob(os.path.join(root.replace(node.abspath,build_dir),pattern))
+
+  return result
+
+# get all the stm32plus library sources
 
 matches=[]
 matches.append(RecursiveGlob("src", ("*.c", "*.cpp", "*.asm")))

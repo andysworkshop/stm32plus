@@ -1,4 +1,6 @@
-#if defined(STM32PLUS_F4)
+#if !defined(STM32PLUS_F4)
+#error This source file is only applicable to the F4 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f4xx_spi.c
@@ -1311,4 +1313,3 @@ void SPI_I2S_ClearITPendingBit(SPI_TypeDef* SPIx, uint8_t SPI_I2S_IT)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

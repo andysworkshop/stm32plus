@@ -1,4 +1,6 @@
-#if defined(STM32PLUS_F4)
+#if !defined(STM32PLUS_F4)
+#error This source file is only applicable to the F4 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f4xx_rtc.c
@@ -2760,4 +2762,3 @@ static uint8_t RTC_Bcd2ToByte(uint8_t Value)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

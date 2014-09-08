@@ -1,4 +1,6 @@
-#if defined (STM32PLUS_F0_51)
+#if !defined (STM32PLUS_F0_51)
+#error This source file is only applicable to the F0 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f0xx_usart.c
@@ -2095,4 +2097,3 @@ void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint32_t USART_IT)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

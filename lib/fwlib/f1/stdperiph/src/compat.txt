@@ -1,0 +1,6 @@
+# This standard peripheral library is only compatible with the MCUs supported by stm32plus
+# that are in the list below
+
+f1hd
+f1cle
+f1mdvl

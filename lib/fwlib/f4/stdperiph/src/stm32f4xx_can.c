@@ -1,4 +1,6 @@
-#if defined(STM32PLUS_F4)
+#if !defined(STM32PLUS_F4)
+#error This source file is only applicable to the F4 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f4xx_can.c
@@ -1700,4 +1702,3 @@ static ITStatus CheckITStatus(uint32_t CAN_Reg, uint32_t It_Bit)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

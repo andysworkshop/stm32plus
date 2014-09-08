@@ -1,4 +1,6 @@
-#if defined(STM32PLUS_F4)
+#if !defined(STM32PLUS_F4)
+#error This source file is only applicable to the F4 series
+#endif
 /**
   ******************************************************************************
   * @file    misc.c
@@ -248,4 +250,3 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

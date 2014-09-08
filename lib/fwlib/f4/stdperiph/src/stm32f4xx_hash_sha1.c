@@ -1,4 +1,6 @@
-#if defined(STM32PLUS_F4)
+#if !defined(STM32PLUS_F4)
+#error This source file is only applicable to the F4 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash_sha1.c
@@ -322,4 +324,3 @@ ErrorStatus HMAC_SHA1(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

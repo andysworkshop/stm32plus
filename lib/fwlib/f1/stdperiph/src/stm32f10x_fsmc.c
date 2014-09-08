@@ -1,4 +1,6 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
+#if !defined (STM32PLUS_F1_HD) && !defined(STM32PLUS_F1_CL_E) && !defined(STM32PLUS_F1_MD_VL)
+#error This source file is only applicable to the F1 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f10x_fsmc.c
@@ -865,4 +867,3 @@ void FSMC_ClearITPendingBit(uint32_t FSMC_Bank, uint32_t FSMC_IT)
   */
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif

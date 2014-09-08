@@ -1,4 +1,6 @@
-#if defined (STM32PLUS_F0_51)
+#if !defined (STM32PLUS_F0_51)
+#error This source file is only applicable to the F0 series
+#endif
 /**
   ******************************************************************************
   * @file    stm32f0xx_i2c.c
@@ -1584,4 +1586,3 @@ void I2C_ClearITPendingBit(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif
