@@ -14,6 +14,7 @@
 extern "C" void I2C1_EV_IRQHandler();
 extern "C" void I2C2_EV_IRQHandler();
 extern "C" void I2C1_IRQHandler();        // F0
+extern "C" void I2C2_IRQHandler();        // F0
 
 
 namespace stm32plus {
@@ -61,6 +62,8 @@ namespace stm32plus {
 
       void enableInterrupts(uint16_t interruptMask);
       void disableInterrupts(uint16_t interruptMask);
+
+      void clearPendingInterruptsFlag(uint16_t interruptMask) const;
   };
 
 
@@ -145,6 +148,17 @@ namespace stm32plus {
   }
 
 
+  /**
+   * Clear the pending bit(s) for interrupt
+   * @param interruptMask The bitmask of interrupts, e.g. I2C_IT_TXE / I2C_IT_RXNE
+   */
+
+  template<uint8_t TI2CNumber>
+  inline void I2CInterruptFeature<TI2CNumber>::clearPendingInterruptsFlag(uint16_t interruptMask) const {
+    I2C_ClearITPendingBit(_i2c,interruptMask);
+  }
+
+
 #if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
 
   /**
@@ -177,8 +191,19 @@ namespace stm32plus {
 
   template<>
   inline void I2CInterruptFeatureEnabler<1>::enable(uint8_t priority,uint8_t /* subPriority */) {
-    _forceLinkage=&I2C1_EV_IRQHandler;
+    _forceLinkage=&I2C1_IRQHandler;
     Nvic::configureIrq(I2C1_IRQn,ENABLE,priority);
+  }
+
+
+  /**
+   * Enabler specialisation, I2C 2
+   */
+
+  template<>
+  inline void I2CInterruptFeatureEnabler<2>::enable(uint8_t priority,uint8_t /* subPriority */) {
+    _forceLinkage=&I2C2_IRQHandler;
+    Nvic::configureIrq(I2C2_IRQn,ENABLE,priority);
   }
 
 #endif

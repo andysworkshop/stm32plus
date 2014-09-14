@@ -17,11 +17,10 @@ namespace stm32plus {
    * the I2C Parameters class.
    */
 
-  class I2CMasterPollingFeature : public I2CFeatureBase {
+  class I2CMasterPollingFeature : public I2CIoFeature {
 
     protected:
       uint8_t _slaveAddress;
-      uint32_t _timeout;
 
     protected:
       bool checkEvent(uint32_t eventId) const;
@@ -36,7 +35,6 @@ namespace stm32plus {
       bool writeBytes(const uint8_t *address,const uint8_t *input,uint32_t count) const;
 
       void setSlaveAddress(uint8_t address);
-      void setTimeout(uint32_t timeout);
   };
 
 
@@ -46,10 +44,7 @@ namespace stm32plus {
    */
 
   inline I2CMasterPollingFeature::I2CMasterPollingFeature(I2C& i2c)
-    : I2CFeatureBase(i2c) {
-    // default timeout is 5 seconds
-
-    _timeout=5000;
+    : I2CIoFeature(i2c) {
   }
 
 
@@ -61,15 +56,5 @@ namespace stm32plus {
 
   inline void I2CMasterPollingFeature::setSlaveAddress(uint8_t address) {
     _slaveAddress=address;
-  }
-
-
-  /**
-   * Set the timeout, after which an error will be raised
-   * @param timeout The number of milliseconds to wait for a reply on the bus before considering it an error
-   */
-
-  inline void I2CMasterPollingFeature::setTimeout(uint32_t timeout) {
-    _timeout=timeout;
   }
 }

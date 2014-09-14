@@ -37,10 +37,15 @@
 // generic feature includes
 
 #include "i2c/features/I2CFeatureBase.h"
+#include "i2c/features/I2CIoFeature.h"
 #include "i2c/features/I2CMasterPollingFeature.h"
 #include "i2c/features/I2CSingleByteMasterPollingFeature.h"
 #include "i2c/features/I2CTwoByteMasterPollingFeature.h"
 #include "i2c/features/I2CInterruptFeature.h"
+
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
+#include "i2c/features/f1,f4/I2CSlaveFeature.h"
+#endif
 
 // includes for the alternate function mappings
 
@@ -65,6 +70,7 @@
 #if defined(STM32PLUS_F0)
 
   #include "i2c/features/f0/I2CSecondSlaveFeature.h"
+  #include "i2c/f0/I2C2Remap.h"
 
 #elif defined(STM32PLUS_F1)
 
