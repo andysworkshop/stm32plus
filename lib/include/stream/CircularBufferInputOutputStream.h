@@ -40,6 +40,8 @@ namespace stm32plus {
         _wrappedWrite=false;
       }
 
+      bool isFull() const;
+
       // overrides from InputStream
 
       virtual int16_t read() override;
@@ -76,4 +78,14 @@ namespace stm32plus {
         return true;
       }
   };
+
+
+  /**
+   * Check if the buffer is full
+   * @return true if it's full
+   */
+
+  inline bool CircularBufferInputOutputStream::isFull() const {
+    return _readPtr==_writePtr && _wrappedWrite;
+  }
 }
