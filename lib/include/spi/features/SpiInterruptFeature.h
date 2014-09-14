@@ -61,6 +61,8 @@ namespace stm32plus {
 
       void enableInterrupts(uint16_t interruptMask);
       void disableInterrupts(uint16_t interruptMask);
+
+      void clearPendingInterruptsFlag(uint16_t interruptMask) const;
   };
 
 
@@ -143,6 +145,17 @@ namespace stm32plus {
   inline void SpiInterruptFeature<TSpiNumber>::disableInterrupts(uint16_t interruptMask) {
     _interruptMask&=~interruptMask;
     SPI_I2S_ITConfig(_spi,interruptMask,DISABLE);
+  }
+
+
+  /**
+   * Clear the selected pending interrupt flags
+   * @param interruptMask The bitmask of interrupts, e.g. SPI_I2S_IT_TXE / SPI_I2S_IT_RXNE / SPI_I2S_IT_ERR
+   */
+
+  template<uint8_t TSpiNumber>
+  inline void SpiInterruptFeature<TSpiNumber>::clearPendingInterruptsFlag(uint16_t interruptMask) const {
+    SPI_I2S_ClearITPendingBit(_spi,interruptMask);
   }
 
 
