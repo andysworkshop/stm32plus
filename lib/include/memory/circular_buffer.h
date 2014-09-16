@@ -33,7 +33,10 @@ namespace stm32plus {
       ~circular_buffer();
 
       void read(T *output,uint32_t size) volatile;
+      T read() volatile;
+
       void write(const T *input,uint32_t size) volatile;
+      void write(const T& input) volatile;
 
       uint32_t availableToWrite() const volatile;
       uint32_t availableToRead() const volatile;
@@ -119,8 +122,32 @@ namespace stm32plus {
         pos=0;
     }
 
+    _lastOpRead=true;
+    _readIndex=pos;
+  }
+
+
+  /*
+   * Read a single type
+   * @return The next type
+   */
+
+  template<typename T>
+  inline T circular_buffer<T>::read() volatile {
+
+    uint32_t pos;
+    T retval;
+
+    pos=_readIndex;
+    retval=_buffer[pos];
+
+    if(++pos==_size)
+      pos=0;
+
     _readIndex=pos;
     _lastOpRead=true;
+
+    return retval;
   }
 
 
@@ -136,6 +163,8 @@ namespace stm32plus {
 
     uint32_t pos;
 
+    // operate on local version of write index until we're sure it's valid when written back.
+
     for(pos=_writeIndex;size!=0;size--) {
 
       _buffer[pos]=*input++;
@@ -143,6 +172,29 @@ namespace stm32plus {
       if(++pos==_size)
         pos=0;
     }
+
+    _writeIndex=pos;
+    _lastOpRead=false;
+  }
+
+
+  /*
+   * Write a single type
+   * @param input the single type to write
+   */
+
+  template<typename T>
+  inline void circular_buffer<T>::write(const T& input) volatile {
+
+    uint32_t pos;
+
+    // operate on local version of write index until we're sure it's valid when written back.
+
+    pos=_writeIndex;
+    _buffer[pos]=input;
+
+    if(++pos==_size)
+      pos=0;
 
     _writeIndex=pos;
     _lastOpRead=false;
