@@ -15,6 +15,11 @@ namespace stm32plus {
    * maintained. Methods are provided to read from and write to the buffer. More methods are provided
    * to find out how much read space and write space is available without overrunning the other
    * position.
+   *
+   * The 'last operation type' flag is stored in the high bit of the read index. This allows the
+   * availableToWrite() and availableToRead() methods to get at the read index and the flag in an
+   * atomic operation. This makes this class safe to use for an IRQ-based writer and a normal code
+   * reader - but not the other way around.
    */
 
   template<typename T>
@@ -22,18 +27,25 @@ namespace stm32plus {
 
     protected:
 
+      enum {
+        LAST_OP_READ_FLAG = 0x8000000,
+        READ_INDEX_MASK = 0x7FFFFFFF
+      };
+
       T *_buffer;
       uint32_t _size;
       uint32_t _readIndex;
       uint32_t _writeIndex;
-      bool _lastOpRead;
 
     public:
       circular_buffer(uint32_t size);
       ~circular_buffer();
 
       void read(T *output,uint32_t size) volatile;
+      T read() volatile;
+
       void write(const T *input,uint32_t size) volatile;
+      void write(const T& input) volatile;
 
       uint32_t availableToWrite() const volatile;
       uint32_t availableToRead() const volatile;
@@ -49,9 +61,8 @@ namespace stm32plus {
   inline circular_buffer<T>::circular_buffer(uint32_t size)
     : _buffer(new T[size]),
       _size(size),
-      _readIndex(0),
-      _writeIndex(0),
-      _lastOpRead(true) {
+      _readIndex(LAST_OP_READ_FLAG),
+      _writeIndex(0) {
   }
 
 
@@ -66,19 +77,27 @@ namespace stm32plus {
 
 
   /**
-   * get the number of types that available to write without overrunning the read pointer
+   * get the number of types that available to write without overrunning the read pointer. In
+   * an IRQ-writer, normal reader scenario this method is safe for the IRQ writer to call.
    * @return The number of available types
    */
 
   template<typename T>
   inline uint32_t circular_buffer<T>::availableToWrite() const volatile {
 
-    if(_writeIndex==_readIndex)
-      return _lastOpRead ? _size : 0;
-    else if(_writeIndex>_readIndex)
-      return _size-_writeIndex+_readIndex;
+    volatile uint32_t readIndex;
+    bool lastOpRead;
+
+    readIndex=_readIndex;
+    lastOpRead=(readIndex & LAST_OP_READ_FLAG)!=0;
+    readIndex&=READ_INDEX_MASK;
+
+    if(_writeIndex==readIndex)
+      return lastOpRead ? _size : 0;
+    else if(_writeIndex>readIndex)
+      return _size-_writeIndex+readIndex;
     else
-      return _readIndex-_writeIndex;
+      return readIndex-_writeIndex;
   }
 
 
@@ -90,12 +109,19 @@ namespace stm32plus {
   template<typename T>
   inline uint32_t circular_buffer<T>::availableToRead() const volatile {
 
-    if(_writeIndex==_readIndex)
-      return _lastOpRead ? 0 : _size;
-    else if(_writeIndex>_readIndex)
-      return _writeIndex-_readIndex;
+    volatile uint32_t readIndex;
+    bool lastOpRead;
+
+    readIndex=_readIndex;
+    lastOpRead=(readIndex & LAST_OP_READ_FLAG)!=0;
+    readIndex&=READ_INDEX_MASK;
+
+    if(_writeIndex==readIndex)
+      return lastOpRead ? 0 : _size;
+    else if(_writeIndex>readIndex)
+      return _writeIndex-readIndex;
     else
-      return _size-_readIndex+_writeIndex;
+      return _size-readIndex+_writeIndex;
   }
 
 
@@ -111,7 +137,7 @@ namespace stm32plus {
 
     uint32_t pos;
 
-    for(pos=_readIndex;size!=0;size--) {
+    for(pos=(_readIndex & READ_INDEX_MASK);size!=0;size--) {
 
       *output++=_buffer[pos];
 
@@ -119,8 +145,29 @@ namespace stm32plus {
         pos=0;
     }
 
-    _readIndex=pos;
-    _lastOpRead=true;
+    _readIndex=pos | LAST_OP_READ_FLAG;
+  }
+
+
+  /*
+   * Read a single type
+   * @return The next type
+   */
+
+  template<typename T>
+  inline T circular_buffer<T>::read() volatile {
+
+    uint32_t pos;
+    T retval;
+
+    pos=_readIndex & READ_INDEX_MASK;
+    retval=_buffer[pos];
+
+    if(++pos==_size)
+      pos=0;
+
+    _readIndex=pos | LAST_OP_READ_FLAG;
+    return retval;
   }
 
 
@@ -136,6 +183,8 @@ namespace stm32plus {
 
     uint32_t pos;
 
+    // operate on local version of write index until we're sure it's valid when written back.
+
     for(pos=_writeIndex;size!=0;size--) {
 
       _buffer[pos]=*input++;
@@ -145,6 +194,29 @@ namespace stm32plus {
     }
 
     _writeIndex=pos;
-    _lastOpRead=false;
+    _readIndex&=~LAST_OP_READ_FLAG;
+  }
+
+
+  /*
+   * Write a single type
+   * @param input the single type to write
+   */
+
+  template<typename T>
+  inline void circular_buffer<T>::write(const T& input) volatile {
+
+    uint32_t pos;
+
+    // operate on local version of write index until we're sure it's valid when written back.
+
+    pos=_writeIndex;
+    _buffer[pos]=input;
+
+    if(++pos==_size)
+      pos=0;
+
+    _writeIndex=pos;
+    _readIndex&=~LAST_OP_READ_FLAG;
   }
 }
