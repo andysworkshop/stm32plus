@@ -36,6 +36,11 @@ namespace stm32plus {
       this->unpackColour(cr,_foreground);
     }
 
+    template<class TDevice,typename TDeviceAccessMode>
+    inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::setForeground(uint8_t r,uint8_t g,uint8_t b) {
+      this->unpackColour(r,g,b,_foreground);
+    }
+
     /**
      * set the background
      */
@@ -45,6 +50,10 @@ namespace stm32plus {
       this->unpackColour(cr,_background);
     }
 
+    template<class TDevice,typename TDeviceAccessMode>
+    inline void GraphicsLibrary<TDevice,TDeviceAccessMode>::setBackground(uint8_t r,uint8_t g,uint8_t b) {
+      this->unpackColour(r,g,b,_background);
+    }
 
     /**
      * Get a full-screen rectangle

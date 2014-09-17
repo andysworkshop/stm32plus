@@ -43,7 +43,10 @@ namespace stm32plus {
       // colour choices
 
       void setForeground(tCOLOUR cr);
+      void setForeground(uint8_t r,uint8_t g,uint8_t b);
+
       void setBackground(tCOLOUR cr);
+      void setBackground(uint8_t r,uint8_t g,uint8_t b);
 
       // panel querying
 
