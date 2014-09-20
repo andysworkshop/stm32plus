@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include "string/StringUtil.h"
-
 
 namespace stm32plus {
   namespace display {

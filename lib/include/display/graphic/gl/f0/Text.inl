@@ -6,8 +6,10 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include "string/StringUtil.h"
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
 
 
 namespace stm32plus {
@@ -65,7 +67,7 @@ namespace stm32plus {
 
     /**
      * Write a single character withoug filling the background. Slower than filling the background due
-     * to the movement calculations
+     * to the movement calculations.  (the F0 does not have bitbanding for access to the font data)
      */
 
     template<class TDevice,typename TDeviceAccessMode>

@@ -6,8 +6,6 @@
 
 #pragma once
 
-#include "display/graphic/JpegDecoder.h"
-
 
 namespace stm32plus {
   namespace display {

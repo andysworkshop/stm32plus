@@ -6,9 +6,6 @@
 
 #pragma once
 
-#include <stdlib.h>
-#include "util/MinMax.h"
-
 
 namespace stm32plus {
   namespace display {

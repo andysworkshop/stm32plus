@@ -33,7 +33,8 @@ namespace FontConv {
    */
 
     override protected void WriteSourceTrailer() {
-      _sourceWriter.Write("} }\n");
+      _sourceWriter.Write("} }\n\n");
+      _sourceWriter.Write("#undef FONTCONST\n");
     }
 
   /*
@@ -43,6 +44,13 @@ namespace FontConv {
     override protected void WriteSourceHeader() {
       _sourceWriter.Write("#include \"config/stm32plus.h\"\n");
       _sourceWriter.Write("#include \"config/display/font.h\"\n\n");
+
+      _sourceWriter.Write("#if defined STM32PLUS_F0\n");
+      _sourceWriter.Write("#define FONTCONST const\n");
+      _sourceWriter.Write("#else\n");
+      _sourceWriter.Write("#define FONTCONST\n");
+      _sourceWriter.Write("#endif\n\n");
+
       _sourceWriter.Write("namespace stm32plus { namespace display {\n\n");
     }
 
@@ -75,7 +83,7 @@ namespace FontConv {
 
         str=GetBytesName(c);
 
-        _sourceWriter.Write("  uint8_t "+str+"[]={ ");
+        _sourceWriter.Write("  FONTCONST uint8_t "+str+"[]={ ");
 
         values=FontUtil.GetCharacterBitmap(_refControl,_font.GdiFont,c,_font.XOffset,_font.YOffset,_font.ExtraLines);
           
