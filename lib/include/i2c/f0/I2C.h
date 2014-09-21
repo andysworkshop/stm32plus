@@ -31,7 +31,6 @@ namespace stm32plus {
         uint32_t i2c_timing;
         bool     i2c_analogFilter;
         uint8_t  i2c_digitalFilter;       // number of i2c clocks to ignore spikes
-        bool     i2c_hostMode;
         bool     i2c_ack;
         uint16_t i2c_ackAddress;
         uint16_t i2c_ownAddress;
@@ -41,7 +40,6 @@ namespace stm32plus {
           i2c_timing=timing;
           i2c_analogFilter=true;
           i2c_digitalFilter=0;
-          i2c_hostMode=true;
           i2c_ack=true;
           i2c_ackAddress=I2C_AcknowledgedAddress_7bit;
           i2c_ownAddress=0xFE;
