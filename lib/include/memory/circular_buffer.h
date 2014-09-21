@@ -28,8 +28,8 @@ namespace stm32plus {
     protected:
 
       enum {
-        LAST_OP_READ_FLAG = 0x8000000,
-        READ_INDEX_MASK = 0x7FFFFFFF
+        LAST_OP_READ_FLAG = 0x80000000,
+        READ_INDEX_MASK = ~LAST_OP_READ_FLAG
       };
 
       T *_buffer;
