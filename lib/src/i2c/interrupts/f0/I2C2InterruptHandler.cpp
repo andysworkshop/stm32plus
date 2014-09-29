@@ -26,33 +26,33 @@ extern "C" {
 
     void __attribute__ ((interrupt("IRQ"))) I2C2_IRQHandler(void) {
 
-      if(I2C_GetITStatus(I2C2,I2C_IT_TXI)!=RESET) {
+      if(I2C_GetITStatus(I2C2,I2C_IT_TXIS)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_READY_TO_TRANSMIT);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_TXI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_TXIS);
       }
-      else if(I2C_GetITStatus(I2C2,I2C_IT_RXI)!=RESET) {
+      else if(I2C_GetITStatus(I2C2,I2C_IT_RXNE)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_RECEIVE);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_RXI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_RXNE);
       }
-      else if(I2C_GetITStatus(I2C2,I2C_IT_STOPI)!=RESET) {
+      else if(I2C_GetITStatus(I2C2,I2C_IT_STOPF)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_STOP_BIT_RECEIVED);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_STOPI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_STOPF);
       }
-      else if(I2C_GetITStatus(I2C2,I2C_IT_ADDRI)!=RESET) {
+      else if(I2C_GetITStatus(I2C2,I2C_IT_ADDR)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_ADDRESS_MATCH);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_ADDRI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_ADDR);
       }
-      else if(I2C_GetITStatus(I2C2,I2C_IT_TCI)!=RESET) {
+      else if(I2C_GetITStatus(I2C2,I2C_IT_TC | I2C_IT_TCR)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_TRANSFER_COMPLETE);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_TCI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_TC | I2C_IT_TCR);
       }
-      else if(I2C_GetITStatus(I2C2,I2C_IT_ERRI)!=RESET) {
+      else if(I2C_GetITStatus(I2C2,I2C_IT_BERR | I2C_IT_ARLO | I2C_IT_OVR | I2C_IT_PECERR | I2C_IT_TIMEOUT | I2C_IT_ALERT)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_ERROR);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_ERRI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_BERR | I2C_IT_ARLO | I2C_IT_OVR | I2C_IT_PECERR | I2C_IT_TIMEOUT | I2C_IT_ALERT);
       }
-      else if(I2C_GetITStatus(I2C2,I2C_IT_NACKI)!=RESET) {
+      else if(I2C_GetITStatus(I2C2,I2C_IT_NACKF)!=RESET) {
         I2CInterruptFeature<2>::_i2cInstance->I2CInterruptEventSender.raiseEvent(I2CEventType::EVENT_NOT_ACKNOWLEDGE);
-        I2C_ClearITPendingBit(I2C2,I2C_IT_NACKI);
+        I2C_ClearITPendingBit(I2C2,I2C_IT_NACKF);
       }
       __DSB();      // prevent erroneous recall of this handler due to delayed memory write
     }
