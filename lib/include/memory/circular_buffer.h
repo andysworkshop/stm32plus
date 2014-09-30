@@ -110,18 +110,26 @@ namespace stm32plus {
   inline uint32_t circular_buffer<T>::availableToRead() const volatile {
 
     volatile uint32_t readIndex;
+    uint32_t ret;
     bool lastOpRead;
 
-    readIndex=_readIndex;
-    lastOpRead=(readIndex & LAST_OP_READ_FLAG)!=0;
-    readIndex&=READ_INDEX_MASK;
+    // the loop catches a nasty case where an interrupt gets in between the lines labelled
+    // 1 and 2 below and the write index subsequently wraps below the read index
 
-    if(_writeIndex==readIndex)
-      return lastOpRead ? 0 : _size;
-    else if(_writeIndex>readIndex)
-      return _writeIndex-readIndex;
-    else
-      return _size-readIndex+_writeIndex;
+    do {
+      readIndex=_readIndex;
+      lastOpRead=(readIndex & LAST_OP_READ_FLAG)!=0;
+      readIndex&=READ_INDEX_MASK;
+
+      if(_writeIndex==readIndex)
+        ret=lastOpRead ? 0 : _size;
+      else if(_writeIndex>readIndex)    // 1
+        ret=_writeIndex-readIndex;      // 2
+      else
+        ret=_size-readIndex+_writeIndex;
+    } while(ret>_size);
+
+    return ret;
   }
 
 
