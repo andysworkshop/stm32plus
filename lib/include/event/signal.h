@@ -57,10 +57,10 @@ namespace wink {
 
       void insertSubscriber(const slot_type& slot) {
 
-        _slots.push_front(slot);
-
-        if(_firstSlot==nullptr)
+        if(_slots.size()==0)
           _firstSlot=&slot;
+
+        _slots.push_front(slot);
       }
 
       /// Disconnects a slot from the signal
@@ -68,9 +68,6 @@ namespace wink {
       /// \see bind To bind a slot to a function
 
       bool removeSubscriber(const slot_type& slot) {
-
-        if(&slot==_firstSlot)
-          _firstSlot=nullptr;
 
         for(auto it=_slots.begin();it!=_slots.end();it++) {
           if(*it==slot) {
