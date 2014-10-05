@@ -41,16 +41,26 @@ namespace wink {
     protected:
 
       typedef Slot slot_type;
+
+      const slot_type *_firstSlot;
       std::slist<slot_type> _slots;
 
     public:
+
+      signal()
+        : _firstSlot(nullptr) {
+      }
 
       /// Connects a slot to the signal
       /// \param slot The slot you wish to connect
       /// \see bind To bind a slot to a function
 
       void insertSubscriber(const slot_type& slot) {
+
         _slots.push_front(slot);
+
+        if(_firstSlot==nullptr)
+          _firstSlot=&slot;
       }
 
       /// Disconnects a slot from the signal
@@ -58,6 +68,9 @@ namespace wink {
       /// \see bind To bind a slot to a function
 
       bool removeSubscriber(const slot_type& slot) {
+
+        if(&slot==_firstSlot)
+          _firstSlot=nullptr;
 
         for(auto it=_slots.begin();it!=_slots.end();it++) {
           if(*it==slot) {
@@ -73,8 +86,12 @@ namespace wink {
       template <class ...Args>
       void raiseEvent(Args&&... args) const {
 
-        for(auto it=_slots.begin();it!=_slots.end();it++)
-          (*it)(args...);
+        if(_slots.size()==1)
+          (*_firstSlot)(args...);
+        else {
+          for(auto it=_slots.begin();it!=_slots.end();it++)
+            (*it)(args...);
+        }
       }
   };
 }
