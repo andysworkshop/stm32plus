@@ -47,10 +47,6 @@ namespace wink {
 
     public:
 
-      signal()
-        : _firstSlot(nullptr) {
-      }
-
       /// Connects a slot to the signal
       /// \param slot The slot you wish to connect
       /// \see bind To bind a slot to a function
