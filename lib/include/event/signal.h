@@ -42,7 +42,7 @@ namespace wink {
 
       typedef Slot slot_type;
 
-      const slot_type *_firstSlot;
+      slot_type _firstSlot;
       std::slist<slot_type> _slots;
 
     public:
@@ -54,7 +54,7 @@ namespace wink {
       void insertSubscriber(const slot_type& slot) {
 
         if(_slots.size()==0)
-          _firstSlot=&slot;
+          _firstSlot=slot;
 
         _slots.push_front(slot);
       }
@@ -80,7 +80,7 @@ namespace wink {
       void raiseEvent(Args&&... args) const {
 
         if(_slots.size()==1)
-          (*_firstSlot)(args...);
+          _firstSlot(args...);
         else {
           for(auto it=_slots.begin();it!=_slots.end();it++)
             (*it)(args...);
