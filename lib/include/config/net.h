@@ -86,17 +86,18 @@
 #include "net/datalink/EthernetFrame.h"
 #include "net/datalink/mac/MacAddressFilter.h"
 #include "net/datalink/mac/MacDefaultPinPackage.h"
-#include "net/datalink/mac/MacRemapPinPackage.h"
 #include "net/datalink/mac/MacBase.h"
 #include "net/datalink/mac/Mac.h"
 
 #if defined(STM32PLUS_F4)
 
+  #include "net/datalink/mac/f4/MacRemapPinPackage.h"
   #include "net/datalink/mac/f4/MiiInterface.h"
   #include "net/datalink/mac/f4/RmiiInterface.h"
 
 #elif defined(STM32PLUS_F1_CL_E)
 
+  #include "net/datalink/mac/f1/MacRemapPinPackage.h"
   #include "net/datalink/mac/f1/MiiInterface.h"
   #include "net/datalink/mac/f1/RmiiInterface.h"
 

@@ -7,14 +7,19 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
+
 
 namespace stm32plus {
   namespace net {
 
 
     /**
-     * MacDefaultPinPackage favours the lower ports and matches the STM32F107 pin-for-pin in remap mode.
-     *   RXDV, RXD0..3 are moved to PD8..12
+     * MacDefaultPinPackage favours the lower ports and matches the STM32F107 pin-for-pin
+     * in MII mode. RMII mode moves TXEN/TXD0/TXD1 to port G
      */
 
     struct MacRemapPinPackage {
@@ -43,13 +48,13 @@ namespace stm32plus {
 
       // RMII ports/pins
 
-      typedef gpio::PB12 RMII_TXD0;
-      typedef gpio::PB13 RMII_TXD1;
-      typedef gpio::PB11 RMII_TXEN;
-      typedef gpio::PD9 RMII_RXD0;
-      typedef gpio::PD10 RMII_RXD1;
-      typedef gpio::PD8 RMII_CRSDV;
       typedef gpio::PA1 RMII_REFCLK;
+      typedef gpio::PA7 RMII_CRSDV;
+      typedef gpio::PC4 RMII_RXD0;
+      typedef gpio::PC5 RMII_RXD1;
+      typedef gpio::PG11 RMII_TXEN;
+      typedef gpio::PG13 RMII_TXD0;
+      typedef gpio::PG14 RMII_TXD1;
 
       // PHY ports/pins
 
