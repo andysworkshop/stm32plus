@@ -77,10 +77,12 @@ namespace stm32plus {
         bool phyIs100M(bool& is100) const;
         bool phyIsFullDuplex(bool& isFull) const;
 
+        // hard reset is supported through the PhyHardReset feature class
+
+        void phyHardReset(GpioPinRef& pin) const;
+
         bool initialise(Parameters& params,NetworkUtilityObjects& netutils);
         bool startup();
-
-        void hardReset(GpioPinRef& pin) const;
     };
 
 
@@ -182,14 +184,15 @@ namespace stm32plus {
 
 
     /**
-     * Hard-rest the KSZ8091RNA by pulling the RESET pin low for 5ms
+     * Hard-reset the KSZ8091RNA by pulling the RESET pin low for 20ms. The datasheet
+     * indicates that 10ms is the minimum between stable power and rising reset so
+     * we're playing safe.
      * @param pin
      */
 
-    inline void KSZ8091RNA::hardReset(GpioPinRef& pin) const {
-      pin.set();
+    inline void KSZ8091RNA::phyHardReset(GpioPinRef& pin) const {
       pin.reset();
-      MillisecondTimer::delay(5);
+      MillisecondTimer::delay(20);
       pin.set();
     }
   }

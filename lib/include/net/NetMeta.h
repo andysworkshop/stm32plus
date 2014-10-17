@@ -46,5 +46,42 @@ namespace stm32plus {
         return RecursiveBoolInitWithParamsAndNetworkUtilityObjects<F,G...>::tinit(ptr,p,netUtils);
       }
     };
+
+
+    /**
+     * Recursive initialisation of physical layer feature classes defined using variadic
+     * templates. This initialiser has parameters, NetworkUtilityObjects and a PHY class
+     * and returns bool. Here's the forward definition
+     */
+
+    template<class F,class TPhy,class... T>
+    struct RecursivePhysicalLayerInit;
+
+    /**
+     * Recursion termination condition, always return success
+     */
+
+    template<class F,class TPhy>
+    struct RecursivePhysicalLayerInit<F,TPhy> {
+      static bool tinit(F *,typename F::Parameters&,NetworkUtilityObjects&,TPhy&) {
+        return true;
+      }
+    };
+
+
+    /**
+     * General recursive initialiser
+     */
+
+    template<class F,class TPhy,class T,class... G>
+    struct RecursivePhysicalLayerInit<F,TPhy,T,G...> {
+      static bool tinit(F *ptr,typename F::Parameters& p,TPhy& phy,NetworkUtilityObjects& netUtils) {
+
+        if(!ptr->T::initialise(p,netUtils,phy))
+          return false;
+
+        return RecursivePhysicalLayerInit<F,TPhy,G...>::tinit(ptr,p,netUtils,phy);
+      }
+    };
   }
 }

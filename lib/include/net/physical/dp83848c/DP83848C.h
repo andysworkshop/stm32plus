@@ -79,6 +79,10 @@ namespace stm32plus {
         bool phyClearPendingInterrupts() const;
         bool phyGetPendingInterrupts(uint16_t& interrupts) const;
 
+        // hard reset is supported through the PhyHardReset feature class
+
+        void phyHardReset(GpioPinRef& pin) const;
+
         bool initialise(Parameters& params,NetworkUtilityObjects& netutils);
         bool startup();
     };
@@ -195,6 +199,20 @@ namespace stm32plus {
 
     inline bool DP83848C::phyDisableInterrupts(uint8_t interruptMask) const {
       return phyClearRegisterBits(INTERRUPT_STATUS,interruptMask);
+    }
+
+
+    /**
+     * Hard-reset the PHY by pulling the RESET pin low for 5ms. The datasheet
+     * indicates that 1us is the minimum between stable power and rising reset so
+     * we're playing safe.
+     * @param pin
+     */
+
+    inline void DP83848C::phyHardReset(GpioPinRef& pin) const {
+      pin.reset();
+      MillisecondTimer::delay(5);
+      pin.set();
     }
   }
 }
