@@ -85,7 +85,7 @@ namespace stm32plus {
 
       // recursively startup the features
 
-      return RecursiveBoolStartup<PhysicalLayer,Features...>::tstartup(this);
+      return RecursiveBoolStartup<PhysicalLayer,Features<TPhy>...>::tstartup(this);
     }
   }
 }
