@@ -61,7 +61,7 @@ namespace stm32plus {
 
       // recursively initialise the features
 
-      return RecursivePhysicalLayerInit<PhysicalLayer,Features...>::tinit(this,params,*this);
+      return RecursivePhysicalLayerInit<PhysicalLayer,TPhy,Features<TPhy>...>::tinit(this,params,*this,*this);
     }
 
 
@@ -85,7 +85,7 @@ namespace stm32plus {
 
       // recursively startup the features
 
-      return RecursiveBoolStartup<PhysicalLayer,Features<TPhy>...>::tstartup(this);
+      return RecursiveBoolStartup<PhysicalLayer,TPhy,Features<TPhy>...>::tstartup(this);
     }
   }
 }
