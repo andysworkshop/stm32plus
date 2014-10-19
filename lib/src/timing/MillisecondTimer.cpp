@@ -31,7 +31,7 @@ namespace stm32plus {
  */
 
 extern "C" {
-  void __attribute__ ((interrupt("IRQ"))) SysTick_Handler(void) {
+  void __attribute__ ((weak,interrupt("IRQ"))) SysTick_Handler(void) {
     stm32plus::MillisecondTimer::_counter++;
   }
 }

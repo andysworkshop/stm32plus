@@ -283,9 +283,13 @@ g_pfnVectors:
 	.weak	PendSV_Handler
 	.thumb_set PendSV_Handler,Default_Handler
 
+/*
+ * SysTick_Handler in stm32plus is now marked 'weak' so that compatibility with other
+ * frameworks is made possible.
+
 	.weak	SysTick_Handler
 	.thumb_set SysTick_Handler,Default_Handler
-
+*/
 	.weak	WWDG_IRQHandler
 	.thumb_set WWDG_IRQHandler,Default_Handler
 
