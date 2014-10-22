@@ -16,9 +16,9 @@ using namespace stm32plus::net;
 
 
 /**
- * This example shows how to use the HttpClientConnection to retrieve an HTTP resource.
- * In this example we will connect to http://www.st.com and ask for the root document.
- * We will write the response to the USART.
+ * This example shows how to use the HttpClientConnection to retrieve an HTTP resource. In this example
+ * we will connect to http://www.st.com and ask for the root document. We will write the response to
+ * the USART.
  *
  * I use USART3, remap-2 with settings 57000/8/N/1.
  *

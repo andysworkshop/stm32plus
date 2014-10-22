@@ -17,16 +17,14 @@ using namespace stm32plus::net;
 
 
 /**
- * This demo brings together a number of the stm32plus components, namely
- * the network stack, the RTC, the SD card and the FAT16/32 filesystem
- * to build a simple web server that listens on port 80.
+ * This demo brings together a number of the stm32plus components, namely the network stack, the RTC,
+ * the SD card and the FAT16/32 filesystem to build a simple web server that listens on port 80.
  *
- * Files are served starting from the root directory on the SD card. HTTP GET
- * is the only action supported. A number of content-type mappings are supported
- * and may be extended by amending MyHttpConnection.h accordingly. The client URI
- * must match a physical file on the card. e.g. http://yourserver/foo/bar.html
- * expects to find a file called /foo/bar.html on the SD card. The server supports
- * HTTP/1.1 persistent connections.
+ * Files are served starting from the root directory on the SD card. HTTP GET is the only action
+ * supported. A number of content-type mappings are supported and may be extended by amending
+ * MyHttpConnection.h accordingly. The client URI must match a physical file on the card. e.g.
+ * http://yourserver/foo/bar.html expects to find a file called /foo/bar.html on the SD card. The
+ * server supports HTTP/1.1 persistent connections.
  *
  *              +----------------------------+
  * APPLICATION: | DhcpClient                 |
@@ -40,12 +38,12 @@ using namespace stm32plus::net;
  * PHYSICAL:    | DP83848C                   |
  *              +----------------------------+
  *
- * This example is only compatible with the F4 because it requires the SDIO
- * peripheral to be able to talk to the SD card.
+ * This example is only compatible with the F4 because it requires the SDIO peripheral to be able
+ * to talk to the SD card.
  *
- * An example website is included in the 'www' subdirectory of this card. To use,
- * copy 'www' to the root directory of your SD card, run this example and then
- * retrieve it from your web browser at "http://<your-dhcp-ip>/www/index.html"
+ * An example website is included in the 'www' subdirectory of this card. To use, copy 'www' to the
+ * root directory of your SD card, run this example and then retrieve it from your web browser at
+ * "http://<your-dhcp-ip>/www/index.html"
  *
  * Tested on devices:
  *   STM32F407VGT6

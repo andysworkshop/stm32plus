@@ -108,7 +108,7 @@ namespace stm32plus {
         bool phySetRegisterBits(uint16_t regNumber,uint16_t bits) const;
         bool phyClearRegisterBits(uint16_t regNumber,uint16_t bits) const;
 
-        bool phyReset() const;
+        bool phySoftReset() const;
         void phyPostConfigurationDelay() const;
 
         bool phyWaitForLink() const;
@@ -167,7 +167,7 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    inline bool PhyBase::phyReset() const {
+    inline bool PhyBase::phySoftReset() const {
 
       // write the reset bit
 

@@ -15,24 +15,21 @@ using namespace stm32plus::net;
 
 
 /**
- * This examples demonstrates the use of the Link Local IP client
- * to automatically select an unused IP address from the "link local"
- * class B network: 169.254/16. Link-local addresses can be used
- * in a scenario where a DHCP server is not available, such as when
- * a number of computers are directly connected to each other.
+ * This examples demonstrates the use of the Link Local IP client to automatically select an unused
+ * IP address from the "link local" class B network: 169.254/16. Link-local addresses can be used
+ * in a scenario where a DHCP server is not available, such as when a number of computers are directly
+ * connected to each other.
  *
- * If an address collision is detected while the stack is running then
- * a new address will be automatically generated and broadcast to the
- * stack modules. You can simulate this condition by using the linux
- * NPING utility to hand-craft a colliding ARP packet. For example, if
- * you have been assigned 169.254.232.52:
+ * If an address collision is detected while the stack is running then a new address will be
+ * automatically generated and broadcast to the stack modules. You can simulate this condition by using
+ * the linux NPING utility to hand-craft a colliding ARP packet. For example, if you have been assigned
+ * 169.254.232.52:
  *
  * $ nping 169.254.232.52 --arp --arp-type arp-request --arp-sender-mac \
  *   00:0a:34:30:fe:ae --arp-sender-ip 169.254.232.52 --arp-target-mac \
  *   00:00:00:00:00:00 --arp-target-ip 169.254.232.52
  *
- * You can then use tcpdump or wireshark to observe this module searching
- * for a new address.
+ * You can then use tcpdump or wireshark to observe this module searching for a new address.
  *
  * The results and any errors are sent to USART3 (57000/8/N/1).
  *
@@ -50,11 +47,10 @@ using namespace stm32plus::net;
  * PHYSICAL:    | DP83848C                   |
  *              +-----------------------------
  *
- * This example is also tested using the KSZ8051MLL in MII mode
- * instead of the DP83848C/RMII. The KSZ8051MLL test was performed
- * on the STM32F107. The DP83848C was tested on the STM32F407. To
- * reconfigure this demo for the F107 using remapped MAC pins connected
- * to the KSZ8051MLL change the physical and datalink layers thus:
+ * This example is also tested using the KSZ8051MLL in MII mode instead of the DP83848C/RMII.
+ * The KSZ8051MLL test was performed on the STM32F107. The DP83848C was tested on the STM32F407. To
+ * reconfigure this demo for the F107 using remapped MAC pins connected to the KSZ8051MLL change
+ * the physical and datalink layers thus:
  *
  * typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
  * typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;

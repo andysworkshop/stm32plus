@@ -15,16 +15,13 @@ using namespace stm32plus::net;
 
 
 /**
- * This examples demonstrates the use of the DNS client to
- * look up a host name on the internet. In this example we will
- * look up "www.google.co.uk". After obtaining an IP address and
- * our DNS servers via DHCP this example will perform the DNS lookup.
+ * This examples demonstrates the use of the DNS client to look up a host name on the internet.
+ * In this example we will look up "www.google.co.uk". After obtaining an IP address and our DNS
+ * servers via DHCP this example will perform the DNS lookup.
  *
- * The results of the DNS query and any errors are sent to
- * USART3 configured as 57600/8/N/1.
+ * The results of the DNS query and any errors are sent to USART3 configured as 57600/8/N/1.
  *
- * DHCP lease renewal is not considered here - see the DHCP example for the
- * correct procedure.
+ * DHCP lease renewal is not considered here - see the DHCP example for the correct procedure.
  *
  * Here's how the network stack for this example is configured:
  *
@@ -40,11 +37,10 @@ using namespace stm32plus::net;
  * PHYSICAL:    | DP83848C                   |
  *              +-----------------------------
  *
- * This example is also tested using the KSZ8051MLL in MII mode
- * instead of the DP83848C/RMII. The KSZ8051MLL test was performed
- * on the STM32F107. The DP83848C was tested on the STM32F407. To
- * reconfigure this demo for the F107 using remapped MAC pins connected
- * to the KSZ8051MLL change the physical and datalink layers thus:
+ * This example is also tested using the KSZ8051MLL in MII mode instead of the DP83848C/RMII.
+ * The KSZ8051MLL test was performed on the STM32F107. The DP83848C was tested on the STM32F407.
+ * To reconfigure this demo for the F107 using remapped MAC pins connected to the KSZ8051MLL change
+ * the physical and datalink layers thus:
  *
  * typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
  * typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
@@ -52,6 +48,7 @@ using namespace stm32plus::net;
  * Tested on devices:
  *   STM32F107VCT6
  *   STM32F407VGT6
+ *   STM32F407ZGT6
  */
 
 

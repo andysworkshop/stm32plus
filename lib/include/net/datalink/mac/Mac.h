@@ -246,7 +246,7 @@ namespace stm32plus {
 
       // reset the PHY
 
-      if(!this->phyReset())
+      if(!this->phySoftReset())
         return false;
 
       if(params.ETH_AutoNegotiation!=ETH_AutoNegotiation_Disable) {

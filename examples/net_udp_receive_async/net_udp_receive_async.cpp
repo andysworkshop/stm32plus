@@ -15,15 +15,14 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates how to receive UDP packets from a remote host.
- * After obtaining an IP address via DHCP this example will wait for UDP
- * datagrams to arrive on port 12345. When a datagram arrives it will print
- * the first 10 bytes to USART #3. The reception is done asynchronously via
- * a subscription to an event provided by the network stack's UDP module.
+ * This example demonstrates how to receive UDP packets from a remote host. After obtaining an IP
+ * address via DHCP this example will wait for UDP datagrams to arrive on port 12345. When a
+ * datagram arrives it will print the first 10 bytes to USART #3. The reception is done
+ * asynchronously via a subscription to an event provided by the network stack's UDP module.
  *
- * For testing I recommend the Linux NPING utility that allows you to create
- * hand-crafted network packets to send to your device. For example, here's how
- * to send a byte sequence of 1..10 to your device on 192.168.1.5 using nping:
+ * For testing I recommend the Linux NPING utility that allows you to create hand-crafted
+ * network packets to send to your device. For example, here's how to send a byte sequence of
+ * 1..10 to your device on 192.168.1.5 using nping:
  *
  * nping --udp 192.168.1.5 -p 12345 --data 0102030405060708090a
  *

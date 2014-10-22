@@ -12,10 +12,14 @@ namespace stm32plus {
   namespace net {
 
     /*
-     * Provides optional support for issuing a hard reset to the PHY via
-     * a GPIO pin. The PHY itself must support phyHardReset() and phyInitialiseReset()
-     * methods. The TResetGpio template parameter should be one of the GpioPinMap.h types
-     * e.g. gpio::PB14
+     * Provides optional support for issuing a hard reset to the PHY via its own active-low
+     * reset pin. This is the most reliable method of resetting the PHY even if it's hung hard.
+     *
+     * Here's an example of how to include this feature in the physical layer of your network
+     * stack. In this example PB14 is connected to the PHY reset pin.
+     *
+     * template<class TPhy> using MyPhyHardReset=PhyHardReset<TPhy,gpio::PB14>;
+     * typedef PhysicalLayer<DP83848C,MyPhyHardReset> MyPhysicalLayer;
      */
 
     template<class TPhy,class TResetGpio>

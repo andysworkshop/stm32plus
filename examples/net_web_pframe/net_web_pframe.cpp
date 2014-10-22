@@ -21,14 +21,12 @@ extern uint32_t ErrorPixels,ErrorPixelsSize;
 
 
 /**
- * This example demonstrates a cycling 'picture frame' of JPEG images
- * downloaded from the internet and displayed on the attached LCD
- * screen. The images are pre-sized to fit the QVGA screen and are
- * located in a directory on my website.
+ * This example demonstrates a cycling 'picture frame' of JPEG images downloaded from the internet and
+ * displayed on the attached LCD screen. The images are pre-sized to fit the QVGA screen and are located
+ * in a directory on my website.
  *
- * The examples works by reading an 'index' text file from the web
- * site which tells it how many images there are and what their URLs
- * are. The example then goes into a loop retrieving each JPEG image
+ * The examples works by reading an 'index' text file from the web site which tells it how many images
+ * there are and what their URLs are. The example then goes into a loop retrieving each JPEG image
  * and displaying it on the LCD.
  *
  *              +----------------------------+
@@ -43,8 +41,8 @@ extern uint32_t ErrorPixels,ErrorPixelsSize;
  * PHYSICAL:    | DP83848C                   |
  *              +----------------------------+
  *
- * This is example is only compatible with the F4 because it
- * requires the FSMC peripheral to drive the LCD.
+ * This is example is only compatible with the F4 because it requires the FSMC peripheral to drive
+ * the LCD.
  *
  * Tested on devices:
  *   STM32F407VGT6

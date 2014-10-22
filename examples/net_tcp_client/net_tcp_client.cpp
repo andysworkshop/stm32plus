@@ -15,11 +15,11 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates a TCP 'echo' client. It will attempt to connect to a server
- * on a remote computer and send it a line of text. The server will read that line of text
- * and then send it back in reverse. An example server, written in perl, is included in
- * this example code directory. It can be run directly on Linux or Linux-alike systems
- * such as cygwin or msys on Windows. The reversed string will be sent to the USART.
+ * This example demonstrates a TCP 'echo' client. It will attempt to connect to a server on a remote
+ * computer and send it a line of text. The server will read that line of text and then send it back
+ * in reverse. An example server, written in perl, is included in this example code directory.
+ * It can be run directly on Linux or Linux-alike systems such as cygwin or msys on Windows. The
+ * reversed string will be sent to the USART.
  *
  * I use Usart3, remap-2 with settings 57000/8/N/1.
  *

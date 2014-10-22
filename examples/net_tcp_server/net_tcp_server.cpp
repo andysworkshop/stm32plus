@@ -15,12 +15,11 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates a TCP 'echo' server. Telnet to this server and type lines of
- * text at it to see them echo'd back. Maximum 100 characters per line, please. Multiple
- * simultaneous connections are supported up to the configured maximum per server. The
- * 'TcpConnectionArray' class takes care of the connection multiplexing for you. All you need
- * to do to run a server is subclass TcpConnection and implement the handleRead(), handleWrite()
- * and handleClose() methods as demonstrated below.
+ * This example demonstrates a TCP 'echo' server. Telnet to this server and type lines of text at it
+ * to see them echo'd back. Maximum 100 characters per line, please. Multiple simultaneous connections
+ * are supported up to the configured maximum per server. The 'TcpConnectionArray' class takes care of
+ * the connection multiplexing for you. All you need to do to run a server is subclass TcpConnection
+ * and implement the handleRead(), handleWrite() and handleClose() methods as demonstrated below.
  *
  *              +----------------------------+
  * APPLICATION: | DhcpClient                 |

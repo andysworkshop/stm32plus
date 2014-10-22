@@ -15,26 +15,24 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates how to receive UDP packets from a remote host.
- * After obtaining an IP address via DHCP this example will wait for UDP
- * datagrams to arrive on port 12345. When a datagram arrives it will print
- * the first 10 bytes to USART #3.
+ * This example demonstrates how to receive UDP packets from a remote host. After obtaining an IP
+ * address via DHCP this example will wait for UDP datagrams to arrive on port 12345. When a datagram
+ * arrives it will print the first 10 bytes to USART #3.
  *
- * For testing I recommend the Linux NPING utility that allows you to create
- * hand-crafted network packets to send to your device. For example, here's how
- * to send a byte sequence of 1..10 to your device on 192.168.1.5 using nping:
+ * For testing I recommend the Linux NPING utility that allows you to create hand-crafted network
+ * packets to send to your device. For example, here's how to send a byte sequence of 1..10 to your
+ * device on 192.168.1.5 using nping:
  *
  * nping --udp 192.168.1.10 -p 12345 --data 0102030405060708090a
  *
- * The ICMP protocol is included to demonstrate how you'll get a "port
- * unreachable" error if you try to hit a port other than 12345. This feature
- * can be individually controlled or ICMP can be left out entirely.
+ * The ICMP protocol is included to demonstrate how you'll get a "port unreachable" error if you try
+ * to hit a port other than 12345. This feature can be individually controlled or ICMP can be left out
+ * entirely.
  *
  * If there are any errors then they are output to a USART which for me is
  * USART3 57600/8/N/1
  *
- * DHCP lease renewal is not considered here - see the DHCP example for the
- * correct procedure.
+ * DHCP lease renewal is not considered here - see the DHCP example for the correct procedure.
  *
  * Here's how the network stack for this example is configured:
  *

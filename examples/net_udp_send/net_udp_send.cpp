@@ -15,19 +15,17 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates how to send UDP packets to a remote host. After
- * obtaining an IP address via DHCP this example will send three 2Kb UDP packets
- * to a remote host every 5 seconds. The target IP address is hardcoded into
- * this example code and you can change it to fit your network configuration.
+ * This example demonstrates how to send UDP packets to a remote host. After obtaining an IP
+ * address via DHCP this example will send three 2Kb UDP packets to a remote host every 5 seconds.
+ * The target IP address is hardcoded into this example code and you can change it to fit your
+ * network configuration.
  *
- * I recommend either tcpdump (linux) or wireshark (windows) for observing the
- * incoming packets. The requisite wireshark filter is "udp.dstport==12345"
+ * I recommend either tcpdump (linux) or wireshark (windows) for observing the incoming packets.
+ * The requisite wireshark filter is "udp.dstport==12345"
  *
- * If there are any errors then they are output to a USART which for me is
- * USART3 57600/8/N/1
+ * If there are any errors then they are output to a USART which for me is USART3 57600/8/N/1
  *
- * DHCP lease renewal is not considered here - see the DHCP example for the
- * correct procedure.
+ * DHCP lease renewal is not considered here - see the DHCP example for the correct procedure.
  *
  * Here's how the network stack for this example is configured:
  *
@@ -43,11 +41,10 @@ using namespace stm32plus::net;
  * PHYSICAL:    | DP83848C                   |
  *              +-----------------------------
  *
- * This example is also tested using the KSZ8051MLL in MII mode
- * instead of the DP83848C/RMII. The KSZ8051MLL test was performed
- * on the STM32F107. The DP83848C was tested on the STM32F407. To
- * reconfigure this demo for the F107 using remapped MAC pins connected
- * to the KSZ8051MLL change the physical and datalink layers thus:
+ * This example is also tested using the KSZ8051MLL in MII mode instead of the DP83848C/RMII.
+ * The KSZ8051MLL test was performed on the STM32F107. The DP83848C was tested on the STM32F407.
+ * To reconfigure this demo for the F107 using remapped MAC pins connected to the KSZ8051MLL change
+ * the physical and datalink layers thus:
  *
  * typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
  * typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
@@ -65,8 +62,8 @@ class NetUdpSendTest {
      * Types that define the network stack
      */
 
-    typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
-    typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
+    typedef PhysicalLayer<KSZ8091RNA> MyPhysicalLayer;
+    typedef DatalinkLayer<MyPhysicalLayer,DefaultRmiiInterface,Mac> MyDatalinkLayer;
     typedef NetworkLayer<MyDatalinkLayer,DefaultIp,Arp> MyNetworkLayer;
     typedef TransportLayer<MyNetworkLayer,Udp> MyTransportLayer;
     typedef ApplicationLayer<MyTransportLayer,DhcpClient> MyApplicationLayer;
@@ -144,7 +141,7 @@ class NetUdpSendTest {
       // IP multicast senders are supported so feel free to use the multicast host group
       // range if that's what you want.
 
-      IpAddress ipAddress("192.168.1.2");
+      IpAddress ipAddress("192.168.1.12");
 
       // Set up a buffer full of a test pattern. The buffer is 50 bytes in size and as such is
       // guaranteed to easily fit within the ethernet MTU size.

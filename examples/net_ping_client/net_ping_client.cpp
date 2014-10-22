@@ -16,14 +16,12 @@ using namespace stm32plus::net;
 
 
 /**
- * This example demonstrates the ICMP transport by sending periodic
- * echo requests (pings) to a hardcoded IP address (change it to suit your
- * network).
+ * This example demonstrates the ICMP transport by sending periodic echo requests (pings) to a
+ * hardcoded IP address (change it to suit your network).
  *
- * This network stack is about as simple as it gets. We don't even
- * use DHCP for client configuration so you'll need to be connected to a
- * network that understands that you have the static IP address configured
- * in this example.
+ * This network stack is about as simple as it gets. We don't even use DHCP for client configuration
+ * so you'll need to be connected to a network that understands that you have the static IP address
+ * configured in this example.
  *
  * Here's how the network stack for this example is configured:
  *
@@ -39,11 +37,10 @@ using namespace stm32plus::net;
  * PHYSICAL:    | DP83848C                   |
  *              +-----------------------------
  *
- * This example is also tested using the KSZ8051MLL in MII mode
- * instead of the DP83848C/RMII. The KSZ8051MLL test was performed
- * on the STM32F107. The DP83848C was tested on the STM32F407. To
- * reconfigure this demo for the F107 using remapped MAC pins connected
- * to the KSZ8051MLL change the physical and datalink layers thus:
+ * This example is also tested using the KSZ8051MLL in MII mode instead of the DP83848C/RMII. The
+ * KSZ8051MLL test was performed on the STM32F107. The DP83848C was tested on the STM32F407. To
+ * reconfigure this demo for the F107 using remapped MAC pins connected to the KSZ8051MLL change the
+ * physical and datalink layers thus:
  *
  * typedef PhysicalLayer<KSZ8051MLL> MyPhysicalLayer;
  * typedef DatalinkLayer<MyPhysicalLayer,RemapMiiInterface,Mac> MyDatalinkLayer;
