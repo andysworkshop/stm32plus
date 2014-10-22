@@ -62,7 +62,7 @@ class NetUdpSendTest {
      * Types that define the network stack
      */
 
-    typedef PhysicalLayer<KSZ8091RNA> MyPhysicalLayer;
+    typedef PhysicalLayer<DP83848C> MyPhysicalLayer;
     typedef DatalinkLayer<MyPhysicalLayer,DefaultRmiiInterface,Mac> MyDatalinkLayer;
     typedef NetworkLayer<MyDatalinkLayer,DefaultIp,Arp> MyNetworkLayer;
     typedef TransportLayer<MyNetworkLayer,Udp> MyTransportLayer;
