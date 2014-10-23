@@ -23,6 +23,8 @@ namespace stm32plus {
     _counter=0;
     SysTick_Config(SystemCoreClock / 1000);
   }
+
+  DECLARE_EVENT_SOURCE(MillisecondTick);
 }
 
 
@@ -33,5 +35,6 @@ namespace stm32plus {
 extern "C" {
   void __attribute__ ((weak,interrupt("IRQ"))) SysTick_Handler(void) {
     stm32plus::MillisecondTimer::_counter++;
+    stm32plus::MillisecondTickEventSender.raiseEvent();
   }
 }

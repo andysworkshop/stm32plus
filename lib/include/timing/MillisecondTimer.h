@@ -6,12 +6,15 @@
 
 #pragma once
 
+#include "config/event.h"
+
 
 /**
  * The stm32plus namespace is the top-level namespace for all classes in the library.
  */
 
 namespace stm32plus {
+  DECLARE_EVENT_SIGNATURE(MillisecondTick,void());
 
   /**
    * @brief Millisecond delay counter using the SYSTICK core peripheral
@@ -30,6 +33,8 @@ namespace stm32plus {
       static bool hasTimedOut(uint32_t start,uint32_t timeout);
       static uint32_t difference(uint32_t start);
   };
+
+  extern DECLARE_EVENT_SOURCE(MillisecondTick);
 
 
   /**
