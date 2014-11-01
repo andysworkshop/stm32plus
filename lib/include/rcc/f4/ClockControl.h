@@ -145,8 +145,10 @@ namespace stm32plus {
 
 
   /**
-   * FSMC
+   * FSMC/FMC
    */
+
+#if defined(STM32F40_41xxx)
 
   template<>
   struct ClockControl<PERIPHERAL_FSMC> {
@@ -159,6 +161,22 @@ namespace stm32plus {
       RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FSMC,DISABLE);
     }
   };
+#endif
+
+#if defined(STM32F427_437xx) || defined(STM32F429_439xx)
+
+  template<>
+  struct ClockControl<PERIPHERAL_FMC> {
+
+    static void On() {
+      RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FMC,ENABLE);
+    }
+
+    static void Off() {
+      RCC_AHB3PeriphClockCmd(RCC_AHB3Periph_FMC,DISABLE);
+    }
+  };
+#endif
 
   /**
    * Hash

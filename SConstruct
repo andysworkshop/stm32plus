@@ -8,11 +8,19 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     small = -Os
 
   <MCU>: f1hd/f1cle/f1mdvl/f051/f4.
+    f051   = STM32F051 series.
     f1hd   = STM32F103HD series.
     f1cle  = STM32F107 series.
     f1mdvl = STM32100 Medium Density Value Line series.
-    f4     = STM32F4xx series.
-    f051   = STM32F051 series.
+    f4     = STM32F407/f417 series (maintained for backwards compatibility)
+    f401   = STM32F401
+    f407   = STM32F407
+    f415   = STM32F417
+    f417   = STM32F417
+    f427   = STM32F427
+    f437   = STM32F437
+    f429   = STM32F429
+    f439   = STM32F439
 
   <HSE>:
     Your external oscillator speed in Hz. Some of the ST standard peripheral
@@ -21,17 +29,17 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     of 8000000.
 
   [float=hard]:
-  	Optional flag for an F4 build that will cause the hardware FPU to be
-  	used for floating point operations. Requires the "GNU Tools for ARM Embedded
-  	Processors" toolchain. Will not work with Code Sourcery Lite.
+    Optional flag for an F4 build that will cause the hardware FPU to be
+    used for floating point operations. Requires the "GNU Tools for ARM Embedded
+    Processors" toolchain. Will not work with Code Sourcery Lite.
 
   Examples:
     scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
     scons mode=debug mcu=f1cle hse=25000000                     // debug / f1cle / 25MHz
     scons mode=debug mcu=f1mdvl hse=8000000                     // debug / f1mdvl / 8MHz
     scons mode=fast mcu=f1hd hse=8000000 install                // fast / f1hd / 8MHz
-    scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f4 / 8Mhz
-    scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f4 / 8Mhz
+    scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f407 or f417 / 8Mhz
+    scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f407 or f417 / 8Mhz
     scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
 
   Additional Notes:
@@ -53,6 +61,36 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
 
 import os
 
+
+#
+# set CCFLAGS/ASFLAGS/LINKFLAGS
+#
+
+def setFlags(cpu,libdef):
+
+  cpuopt="-mcpu=cortex-"+cpu;
+  libopt="-DSTM32PLUS_"+libdef;
+
+  env.Append(CCFLAGS=[cpuopt,libopt])
+  env.Append(ASFLAGS=cpuopt)
+  env.Append(LINKFLAGS=cpuopt)
+
+#
+# set the F4-specific hard float option
+#
+
+def floatOpt():
+
+  float=ARGUMENTS.get('float')
+  if float=="hard":
+    env.Append(CCFLAGS=["-mfloat-abi=hard"])
+    env.Append(LINKFLAGS=["-mfloat-abi=hard","-mfpu=fpv4-sp-d16"]);
+  else:
+    float=None
+
+  return
+
+
 # set the installation root. you can customise this. the default attempts to read the
 # current release version from the stm32plus.h configuration header file.
 
@@ -73,19 +111,9 @@ mcu = ARGUMENTS.get('mcu')
 hse = ARGUMENTS.get('hse')
 float = None
 
-if not (mode in ['debug', 'fast', 'small']):
-	print __doc__
-	Exit(1)
-
-if not (mcu in ['f1hd', 'f1cle', 'f4', 'f1mdvl', 'f051']):
-	print __doc__
-	Exit(1)
-
 if not hse or not hse.isdigit():
-	print __doc__
-	Exit(1)
-
-print "stm32plus build version is "+VERSION
+  print __doc__
+  Exit(1)
 
 # set up build environment and pull in OS environment variables
 
@@ -113,55 +141,66 @@ env.Append(LINKFLAGS=["-Xlinker","--gc-sections","-mthumb","-g3","-gdwarf-2"])
 # add on the MCU-specific definitions
 
 if mcu=="f1hd":
-	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_HD"])
-	env.Append(ASFLAGS="-mcpu=cortex-m3")
-	env.Append(LINKFLAGS="-mcpu=cortex-m3")
+  setFlags("m3","F1_HD")
 elif mcu=="f1cle":
-	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_CL_E"])
-	env.Append(ASFLAGS="-mcpu=cortex-m3")
-	env.Append(LINKFLAGS="-mcpu=cortex-m3")
+  setFlags("m3","F1_CL_E")
 elif mcu=="f1mdvl":
-	env.Append(CCFLAGS=["-mcpu=cortex-m3","-DSTM32PLUS_F1_MD_VL"])
-	env.Append(ASFLAGS="-mcpu=cortex-m3")
-	env.Append(LINKFLAGS="-mcpu=cortex-m3")
-elif mcu=="f4":
-	env.Append(CCFLAGS=["-mcpu=cortex-m4","-DSTM32PLUS_F4"])
-	env.Append(ASFLAGS="-mcpu=cortex-m4")
-	env.Append(LINKFLAGS="-mcpu=cortex-m4")
-
-	# support for the hardware FPU in the F4
-
-	float=ARGUMENTS.get('float')
-	if float=="hard":
-		env.Append(CCFLAGS=["-mfloat-abi=hard"])
-		env.Append(LINKFLAGS=["-mfloat-abi=hard","-mfpu=fpv4-sp-d16"]);
-	else:
-		float=None
-
+  setFlags("m3","F1_MD_VL")
+elif mcu=="f4" or mcu=="f407":
+  setFlags("m4","F407")
+  floatOpt()
+elif mcu=="f415":
+  setFlags("m4","F415")
+  floatOpt()
+elif mcu=="f417":
+  setFlags("m4","F417")
+  floatOpt()
+elif mcu=="f401":
+  setFlags("m4","F401")
+  floatOpt()
+elif mcu=="f427":
+  setFlags("m4","F427")
+  floatOpt()
+  floatOpt()
+elif mcu=="f437":
+  setFlags("m4","F437")
+  floatOpt()
+elif mcu=="f429":
+  setFlags("m4","F429")
+  floatOpt()
+elif mcu=="f439":
+  setFlags("m4","F439")
+  floatOpt()
 elif mcu=="f051":
-	env.Append(CCFLAGS=["-mcpu=cortex-m0","-DSTM32PLUS_F0_51"])
-	env.Append(ASFLAGS="-mcpu=cortex-m0")
-	env.Append(LINKFLAGS="-mcpu=cortex-m0")
+  setFlags("m0","F0_51")
+else:
+  print __doc__
+  Exit(1)
 
 # add on the mode=specific optimisation definitions
 
 if mode=="debug":
-	env.Append(CCFLAGS=["-O0","-g3"])
+  env.Append(CCFLAGS=["-O0","-g3"])
 elif mode=="fast":
-	env.Append(CCFLAGS=["-O3"])
+  env.Append(CCFLAGS=["-O3"])
 elif mode=="small":
-	env.Append(CCFLAGS=["-Os"])
+  env.Append(CCFLAGS=["-Os"])
+else:
+  print __doc__
+  Exit(1)
+
+print "stm32plus build version is "+VERSION
 
 systemprefix=mode+"-"+mcu+"-"+hse
 if float:
-	systemprefix += "-"+float
-	
+  systemprefix += "-"+float
+  
 # launch SConscript for the main library
 
 libstm32plus=SConscript("lib/SConscript",
-												exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"],
-												variant_dir="lib/build/"+systemprefix,
-												duplicate=0)
+                        exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"],
+                        variant_dir="lib/build/"+systemprefix,
+                        duplicate=0)
 
 env.Append(LIBS=[libstm32plus])
 

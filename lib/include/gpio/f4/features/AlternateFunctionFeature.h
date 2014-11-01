@@ -95,7 +95,15 @@ namespace stm32plus {
   template<uint8_t... TPins> using DefaultUart5AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_UART5,TPins...>;
   template<uint8_t... TPins> using DefaultUsart6AlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_USART6,TPins...>;
 
+  // FSMC/FMC depending on device
+
+#if defined(STM32F40_41xxx)
   template<uint8_t... TPins> using DefaultFsmcAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_FSMC,TPins...>;
+#endif
+
+#if defined(STM32F427_437xx) || defined(STM32F429_439xx)
+  template<uint8_t... TPins> using DefaultFmcAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_FMC,TPins...>;
+#endif
 
   template<uint8_t... TPins> using DefaultSdioAlternateFunctionFeature=DefaultAlternateFunctionFeature<GPIO_AF_SDIO,TPins...>;
 }

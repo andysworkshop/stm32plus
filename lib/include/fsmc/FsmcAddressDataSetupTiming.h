@@ -6,6 +6,12 @@
 
 #pragma once
 
+#if !defined(STM32PLUS_F1_HD) && !defined(STM32PLUS_F4)
+#error "Unsupported MCU"
+#elif defined(STM32F427_437xx) || defined(STM32F429_439xx)
+#error "This MCU uses the FMC not the FSMC"
+#endif
+
 
 namespace stm32plus {
 
@@ -16,9 +22,18 @@ namespace stm32plus {
    * the user to customise it.
    */
 
-  class FsmcAddressDataSetupTiming : public FSMC_NORSRAMTimingInitTypeDef {
-    public:
-      FsmcAddressDataSetupTiming();
-      FsmcAddressDataSetupTiming(uint32_t addressSetup,uint32_t dataSetup);
+  struct FsmcAddressDataSetupTiming : FSMC_NORSRAMTimingInitTypeDef {
+
+      FsmcAddressDataSetupTiming()
+        : FSMC_NORSRAMTimingInitTypeDef() {
+      }
+
+
+      FsmcAddressDataSetupTiming(uint32_t addressSetup,uint32_t dataSetup)
+        : FSMC_NORSRAMTimingInitTypeDef() {
+
+        FSMC_AddressSetupTime=addressSetup;
+        FSMC_DataSetupTime=dataSetup;
+      }
   };
 }

@@ -1,4 +1,4 @@
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**************************************************************************//**
  * @file     core_sc000.h
  * @brief    CMSIS SC000 Core Peripheral Access Layer Header File
@@ -125,8 +125,8 @@
 #endif
 
 #include <stdint.h>                      /* standard types definitions                      */
-#include <core_cmInstr.h>                /* Core Instruction Access                         */
-#include <core_cmFunc.h>                 /* Core Function Access                            */
+#include <fwlib/f4/cmsis/Include/core_cmInstr.h>                /* Core Instruction Access                         */
+#include <fwlib/f4/cmsis/Include/core_cmFunc.h>                 /* Core Function Access                            */
 
 #endif /* __CORE_SC000_H_GENERIC */
 

@@ -1,12 +1,9 @@
-#if !defined(STM32PLUS_F4)
-#error This source file is only applicable to the F4 series
-#endif
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp_tdes.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    08-November-2013
+  * @version V1.4.0
+  * @date    04-August-2014
   * @brief   This file provides high level functions to encrypt and decrypt an 
   *          input message using TDES in ECB/CBC modes .
   *          It uses the stm32f4xx_cryp.c/.h drivers to access the STM32F4xx CRYP
@@ -14,9 +11,9 @@
   *
 @verbatim
 
- ===================================================================
-                  ##### How to use this driver #####
- ===================================================================
+ ===============================================================================
+                           ##### How to use this driver #####
+ ===============================================================================
  [..]
    (#) Enable The CRYP controller clock using 
        RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_CRYP, ENABLE); function.
@@ -30,7 +27,7 @@
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.

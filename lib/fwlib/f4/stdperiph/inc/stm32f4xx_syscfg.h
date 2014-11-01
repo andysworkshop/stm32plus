@@ -1,16 +1,16 @@
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_syscfg.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    08-November-2013
+  * @version V1.4.0
+  * @date    04-August-2014
   * @brief   This file contains all the functions prototypes for the SYSCFG firmware
   *          library. 
   ******************************************************************************
   * @attention
   *
-  * <h2><center>&copy; COPYRIGHT 2013 STMicroelectronics</center></h2>
+  * <h2><center>&copy; COPYRIGHT 2014 STMicroelectronics</center></h2>
   *
   * Licensed under MCD-ST Liberty SW License Agreement V2, (the "License");
   * You may not use this file except in compliance with the License.
@@ -148,11 +148,11 @@
                                                ((REMAP) == SYSCFG_MemoryRemap_FSMC))
 #endif /* STM32F40_41xxx */
 
-#if defined (STM32F401xx) 
+#if defined (STM32F401xx) || defined (STM32F411xE)
 #define IS_SYSCFG_MEMORY_REMAP_CONFING(REMAP) (((REMAP) == SYSCFG_MemoryRemap_Flash)       || \
                                                ((REMAP) == SYSCFG_MemoryRemap_SystemFlash) || \
                                                ((REMAP) == SYSCFG_MemoryRemap_SRAM))
-#endif /* STM32F401xx */
+#endif /* STM32F401xx || STM32F411xE */
 
 #if defined (STM32F427_437xx) || defined (STM32F429_439xx)
 #define IS_SYSCFG_MEMORY_REMAP_CONFING(REMAP) (((REMAP) == SYSCFG_MemoryRemap_Flash)       || \

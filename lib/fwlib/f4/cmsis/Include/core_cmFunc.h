@@ -1,4 +1,4 @@
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**************************************************************************//**
  * @file     core_cmFunc.h
  * @brief    CMSIS Cortex-M Core Function Access Header File
@@ -607,19 +607,15 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __get_FPSCR(void)
 
     \param [in]    fpscr  Floating Point Status/Control value to set
  */
-#if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
-__attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr)
+__attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr __attribute__((unused)))
 {
+#if (__FPU_PRESENT == 1) && (__FPU_USED == 1)
   /* Empty asm statement works as a scheduling barrier */
   __ASM volatile ("");
   __ASM volatile ("VMSR fpscr, %0" : : "r" (fpscr) : "vfpcc");
   __ASM volatile ("");
-}
-#else
-__attribute__( ( always_inline ) ) __STATIC_INLINE void __set_FPSCR(uint32_t fpscr __attribute__((unused)))
-{
-}
 #endif
+}
 
 #endif /* (__CORTEX_M == 0x04) */
 
