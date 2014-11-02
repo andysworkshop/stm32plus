@@ -21,7 +21,7 @@ namespace stm32plus {
 
   struct FsmcNandTiming : FSMC_NAND_PCCARDTimingInitTypeDef {
 
-    FsmcNandTiming::FsmcNandTiming(
+    FsmcNandTiming(
         uint32_t setupTime,
         uint32_t waitSetupTime,
         uint32_t holdSetupTime,

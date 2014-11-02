@@ -844,6 +844,7 @@
 			<resource resourceType="PROJECT" workspacePath="/stm32plus"/>
 		</configuration>
 		<configuration configurationName="Debug_f4_168_hard_float"/>
+		<configuration configurationName="Debug_f429_180"/>
 		<configuration configurationName="Debug_f4_168">
 			<resource resourceType="PROJECT" workspacePath="/stm32plus"/>
 		</configuration>
