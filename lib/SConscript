@@ -50,6 +50,7 @@ def RecursiveGlob(directory,patterns):
 matches=[]
 matches.append(RecursiveGlob("src", ("*.c", "*.cpp", "*.asm")))
 matches.append(RecursiveGlob("fwlib", ("*.c", "*.cpp", "*.asm")))
+matches.append(RecursiveGlob("usblib", ("*.c", "*.cpp", "*.asm")))
 
 # trigger a build with the correct library name
 
