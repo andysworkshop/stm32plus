@@ -1,4 +1,4 @@
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /* ----------------------------------------------------------------------
 * Copyright (C) 2010-2013 ARM Limited. All rights reserved.
 *
@@ -42,7 +42,7 @@
 #ifndef _ARM_COMMON_TABLES_H
 #define _ARM_COMMON_TABLES_H
 
-#include "arm_math.h"
+#include "fwlib/f4/cmsis/Include/arm_math.h"
 
 extern const uint16_t armBitRevTable[1024];
 extern const q15_t armRecipTableQ15[64];

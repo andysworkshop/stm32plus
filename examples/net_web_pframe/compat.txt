@@ -2,3 +2,6 @@
 # The compatible MCUs are listed below, one per line.
 
 f4
+f407
+f415
+f417

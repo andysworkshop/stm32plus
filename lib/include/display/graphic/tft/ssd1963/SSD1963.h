@@ -73,8 +73,10 @@ namespace stm32plus {
 
       // slow down the device for the register setup
 
+#if defined (STM32F40_41xxx) || defined(STM32PLUS_F1_HD)
       FSMC_Bank1->BTCR[FSMC_Bank+1] = FSMC_BTR1_ADDSET_0 | FSMC_BTR1_DATAST_2 | FSMC_BTR1_BUSTURN_0 ;
       FSMC_Bank1->BTCR[FSMC_Bank] = FSMC_BCR1_MWID_0 | FSMC_BCR1_WREN | FSMC_BCR1_MBKEN;
+#endif
 
       // do a software reset
 

@@ -41,8 +41,18 @@
 #elif defined(STM32PLUS_F0_51)
   #define STM32PLUS_F0                // enable features common to all F0
   #define STM32F0XX_MD                // this is a medium density device
-#elif defined(STM32PLUS_F4)
+#elif defined(STM32PLUS_F401)
+  #define STM32PLUS_F4
+  #define STM32F401xx
+#elif defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
+  #define STM32PLUS_F4
   #define STM32F40_41xxx
+#elif defined(STM32PLUS_F437) || defined(STM32PLUS_F427)
+  #define STM32PLUS_F4
+  #define STM32F427_437xx
+#elif defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+  #define STM32PLUS_F4
+  #define STM32F429_439xx
 #else
   #error "You must define an MCU type. See config/stm32plus.h"
 #endif
@@ -62,7 +72,7 @@
  */
 
 #undef STM32PLUS_BUILD
-#define STM32PLUS_BUILD 0x030500
+#define STM32PLUS_BUILD 0x030600
 
 
 /**
@@ -108,6 +118,7 @@ namespace stm32plus {
     PERIPHERAL_DMA2,                //!< PERIPHERAL_DMA2
     PERIPHERAL_GPIO,                //!< PERIPHERAL_GPIO
     PERIPHERAL_FSMC,                //!< PERIPHERAL_FSMC
+    PERIPHERAL_FMC,                 //!< PERIPHERAL_FMC
     PERIPHERAL_HASH,                //!< PERIPHERAL_HASH
     PERIPHERAL_I2C1,                //!< PERIPHERAL_I2C1
     PERIPHERAL_I2C2,                //!< PERIPHERAL_I2C2

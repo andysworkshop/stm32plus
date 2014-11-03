@@ -21,73 +21,73 @@ compatFile=os.path.join(sconscriptDir,"compat.txt");
 
 supported=True
 if os.path.exists(compatFile):
-        supported=False
-        for line in open(compatFile,"r"):
-                line=line.rstrip()
-                if not line.startswith("#") and line==mcu:
-                        supported=True
-                        break
+  supported=False
+  for line in open(compatFile,"r"):
+    line=line.rstrip()
+    if not line.startswith("#") and line==mcu:
+      supported=True
+      break
 
 if supported:
 
-        # get all the sources
+  # get all the sources
 
-        matches=[]
-        matches.append(Glob("*.cpp"))
-        matches.append(Glob("*.c"))
-        matches.append(Glob("*.asm"))
-        matches.append("system/LibraryHacks.cpp")
+  matches=[]
+  matches.append(Glob("*.cpp"))
+  matches.append(Glob("*.c"))
+  matches.append(Glob("*.asm"))
+  matches.append("system/LibraryHacks.cpp")
 
-        # handle MCU differences
+  # handle MCU differences
 
-        if mcu=="f4":
-                matches.append("system/f4/Startup.asm")
-                matches.append("system/f4/System.c")
-                linkerscript="examples/"+example+"/system/f4/Linker.ld"
+  if mcu.startswith("f4"):
+    matches.append("system/f4/Startup.asm")
+    matches.append("system/f4/System.c")
+    linkerscript="examples/"+example+"/system/f4/Linker.ld"
 
-        elif mcu=="f1hd":
-                matches.append("system/f1hd/Startup.asm")
-                matches.append("system/f1hd/System.c")
-                linkerscript="examples/"+example+"/system/f1hd/Linker.ld"
-        
-        elif mcu=="f1cle":
-                matches.append("system/f1cle/Startup.asm")
-                matches.append("system/f1cle/System.c")
-                linkerscript="examples/"+example+"/system/f1cle/Linker.ld"
+  elif mcu=="f1hd":
+    matches.append("system/f1hd/Startup.asm")
+    matches.append("system/f1hd/System.c")
+    linkerscript="examples/"+example+"/system/f1hd/Linker.ld"
 
-        elif mcu=="f1mdvl":
-                matches.append("system/f1mdvl/Startup.asm")
-                matches.append("system/f1mdvl/System.c")
-                linkerscript="examples/"+example+"/system/f1mdvl/Linker.ld"
+  elif mcu=="f1cle":
+    matches.append("system/f1cle/Startup.asm")
+    matches.append("system/f1cle/System.c")
+    linkerscript="examples/"+example+"/system/f1cle/Linker.ld"
 
-        elif mcu=="f051":
-                matches.append("system/f051/Startup.asm")
-                matches.append("system/f051/System.c")
-                linkerscript="examples/"+example+"/system/f051/Linker.ld"
+  elif mcu=="f1mdvl":
+    matches.append("system/f1mdvl/Startup.asm")
+    matches.append("system/f1mdvl/System.c")
+    linkerscript="examples/"+example+"/system/f1mdvl/Linker.ld"
 
-        buildoutdir="examples/"+example+"/build/"+systemprefix
-	
-        # set the additional linker flags
+  elif mcu=="f051":
+    matches.append("system/f051/Startup.asm")
+    matches.append("system/f051/System.c")
+    linkerscript="examples/"+example+"/system/f051/Linker.ld"
 
-        env.Append(LINKFLAGS=["-T"+linkerscript,"-Wl,-wrap,__aeabi_unwind_cpp_pr0","-Wl,-wrap,__aeabi_unwind_cpp_pr1","-Wl,-wrap,__aeabi_unwind_cpp_pr2"])
+  buildoutdir="examples/"+example+"/build/"+systemprefix
 
-        # additional include directory for the graphics
+  # set the additional linker flags
 
-        env.Append(ASFLAGS="-Iexamples/"+example)
+  env.Append(LINKFLAGS=["-T"+linkerscript,"-Wl,-wrap,__aeabi_unwind_cpp_pr0","-Wl,-wrap,__aeabi_unwind_cpp_pr1","-Wl,-wrap,__aeabi_unwind_cpp_pr2"])
 
-        # unique additions for this example
+  # additional include directory for the graphics
 
-        env.Append(CPPPATH="#examples/"+example)
+  env.Append(ASFLAGS="-Iexamples/"+example)
 
-        # trigger a build with the correct library name
+  # unique additions for this example
 
-        elf=env.Program(example+".elf",matches)
-        hex=env.Command(example+".hex",elf,"arm-none-eabi-objcopy -O ihex "+buildoutdir+"/"+example+".elf "+buildoutdir+"/"+example+".hex")
-        bin=env.Command(example+".bin",elf,"arm-none-eabi-objcopy -O binary "+buildoutdir+"/"+example+".elf "+buildoutdir+"/"+example+".bin")
-        lst=env.Command(example+".lst",elf,"arm-none-eabi-objdump -h -S "+buildoutdir+"/"+example+".elf > "+buildoutdir+"/"+example+".lst")
-        size=env.Command(example+".size",elf,"arm-none-eabi-size --format=berkeley "+buildoutdir+"/"+example+".elf | tee "+buildoutdir+"/"+example+".size")
+  env.Append(CPPPATH="#examples/"+example)
 
-        # install the library if the user gave the install option
+  # trigger a build with the correct library name
 
-        EXAMPLEINSTALLDIR=INSTALLDIR+"/examples/"+example+"/"+systemprefix
-        env.Alias("install",env.Install(EXAMPLEINSTALLDIR,[elf,hex,bin,lst,size]))
+  elf=env.Program(example+".elf",matches)
+  hex=env.Command(example+".hex",elf,"arm-none-eabi-objcopy -O ihex "+buildoutdir+"/"+example+".elf "+buildoutdir+"/"+example+".hex")
+  bin=env.Command(example+".bin",elf,"arm-none-eabi-objcopy -O binary "+buildoutdir+"/"+example+".elf "+buildoutdir+"/"+example+".bin")
+  lst=env.Command(example+".lst",elf,"arm-none-eabi-objdump -h -S "+buildoutdir+"/"+example+".elf > "+buildoutdir+"/"+example+".lst")
+  size=env.Command(example+".size",elf,"arm-none-eabi-size --format=berkeley "+buildoutdir+"/"+example+".elf | tee "+buildoutdir+"/"+example+".size")
+
+  # install the library if the user gave the install option
+
+  EXAMPLEINSTALLDIR=INSTALLDIR+"/examples/"+example+"/"+systemprefix
+  env.Alias("install",env.Install(EXAMPLEINSTALLDIR,[elf,hex,bin,lst,size]))
