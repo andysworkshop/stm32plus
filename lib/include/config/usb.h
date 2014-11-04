@@ -11,18 +11,25 @@
  * Include this config file to get access to the USB peripheral.
  */
 
+// ST driver includes
+
+#include "usblib/device/core/inc/usbd_def.h"
+
+
 // usb depends on ...
 
-#include "config/rcc.h"
-#include "config/gpio.h"
-#include "config/dma.h"
-#include "config/stream.h"
 #include "config/event.h"
 
-// device-specific pin initialiser
 
 #if defined(STM32PLUS_F4)
 
+#include "usb/UsbInternalFsPhy.h"
+#include "usb/UsbCore.h"
+
+#include "usb/device/events/UsbDeviceEventDescriptor.h"
+#include "usb/device/UsbDeviceEventSource.h"
+#include "usb/device/UsbDevice.h"
+#include "usb/device/UsbHidDevice.h"
 
 #endif
 
