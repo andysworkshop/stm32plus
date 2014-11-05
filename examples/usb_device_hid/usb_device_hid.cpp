@@ -14,13 +14,25 @@ using namespace stm32plus;
 /**
  */
 
-class UsbDeviceHidTest {
 
-  UsbHidDevice<UsbInternalFsPhy> usb;
+template<class TUsbDevice>
+struct TestFeature {
+
+  struct Parameters {
+  };
+
+  TestFeature(TUsbDevice&,const Parameters&) {}
+};
+
+
+class UsbDeviceHidTest {
 
   public:
 
     void run() {
+
+      UsbHidDevice<UsbInternalFsPhy,TestFeature>::Parameters params;
+      UsbHidDevice<UsbInternalFsPhy,TestFeature> usb(params);
 
       for(;;);
     }

@@ -16,6 +16,23 @@ namespace stm32plus {
   struct UsbDeviceEventDescriptor {
 
     enum class EventType {
+      INIT,
+      DEINIT,
+      START,
+      STOP,
+      OPEN_ENDPOINT,
+      CLOSE_ENDPOINT,
+      FLUSH_ENDPOINT,
+      STALL_ENDPOINT,
+      CLEAR_STALL_ENDPOINT,
+      IS_STALL_ENDPOINT,
+      SET_USB_ADDRESS,
+      TRANSMIT,
+      PREPARE_RECEIVE,
+      GET_RX_DATA_SIZE,
+
+      GET_DEVICE_DESCRIPTOR,
+      GET_LANGUAGE_DESCRIPTOR
     };
 
     EventType eventType;

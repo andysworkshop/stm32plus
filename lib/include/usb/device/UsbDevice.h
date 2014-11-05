@@ -11,197 +11,209 @@ namespace stm32plus {
 
 
   /*
-   * USB Device
+   * USB Device template. This is an intermediate template in the hierarchy. Inherits from UsbDeviceEventSource
+   * to provide event subscription for device-specific events. Subclasses such as UsbHidDevice inherit from
+   * this template to provide device-class specific functionality.
    */
 
-  template<class TPhy,class... Features>
+  template<class TPhy>
   class UsbDevice : public UsbCore<TPhy>,
-                    public UsbDeviceEventSource,
-                    public Features... {
+                    public UsbDeviceEventSource {
 
+    protected:
+      USBD_HandleTypeDef _deviceHandle;
+      USBD_DescriptorsTypeDef _deviceDescriptorCallbacks;
+      UsbDeviceDescriptor _deviceDescriptor;
+      UsbLanguageDescriptor _languageDescriptor;
+      scoped_array<uint16_t> _unicodeString;      // very basic 8-bit to UTF-16 holder
+
+    public:
+
+      /**
+       * Parameters structure - device specific detail
+       */
+
+      struct Parameters : UsbCore<TPhy>::Parameters {
+
+        uint16_t device_vid;          // no default
+        uint16_t device_pid;          // no default
+        uint16_t device_usb_version;  // defaults to 0x0200 (USB 2.0)
+        uint16_t device_version;      // your device version. default 01.00
+        uint16_t device_id;           // this device id (default is 0)
+        uint16_t device_language_id;  // default is 0x0409 (English; US)
+
+        Parameters() {
+          device_usb_version=0x0200;
+          device_version=0x0100;
+          device_id=0;
+          device_language_id=0x0409;
+        }
+      };
+
+      static UsbDevice<TPhy> *_instance;    // this is how the global callbacks get back in
+
+    public:
+      UsbDevice(Parameters& params);
+
+      USBD_HandleTypeDef& getDeviceHandle();
+      UsbDeviceDescriptor& getDeviceDescriptor();
+
+      // re-entry points from the SDK
+
+      uint8_t *onGetDeviceDescriptor(USBD_SpeedTypeDef speed,uint16_t *length);
+      uint8_t *onGetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length);
   };
 
 
   /*
-   * The following C functions are callbacks from the ST driver code. We'll translate them
-   * to an event and pass them to subscribers
+   * Template static member initialisation
    */
 
-  extern "C" {
+  template<class TPhy>
+  UsbDevice<TPhy> *UsbDevice<TPhy>::_instance=nullptr;
 
-    /**
-      * @brief  Initializes the Low Level portion of the Device driver.
-      * @param  pdev: Device handle
-      * @retval USBD Status
-      */
 
-    inline USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev) {
-      return USBD_OK;
+  /*
+   * Internal global callbacks needed by the SDK device API
+   */
+
+  namespace usb_device_internal {
+
+    template<class TPhy>
+    inline uint8_t *GetDeviceDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetDeviceDescriptor(speed,length);
     }
 
+    template<class TPhy>
+    inline uint8_t *GetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetLangIdStrDescriptor(speed,length);
+    }
+  }
 
-    /**
-      * @brief  De-Initializes the Low Level portion of the Device driver.
-      * @param  pdev: Device handle
-      * @retval USBD Status
-      */
-    inline USBD_StatusTypeDef USBD_LL_DeInit(USBD_HandleTypeDef *pdev) {
-      return USBD_OK;
+
+  /**
+   * Constructor
+   * @param params The parameters structure
+   */
+
+  template<class TPhy>
+  inline UsbDevice<TPhy>::UsbDevice(Parameters& params)
+    : UsbCore<TPhy>(params) {
+
+    // static member initialisation
+
+    _instance=this;
+
+    // this is how the "LL" callbacks raise events
+
+    _deviceHandle.pUserData=static_cast<UsbDeviceEventSource *>(this);
+
+    // fill in the SDK device descriptor callbacks
+
+    _deviceDescriptorCallbacks.GetDeviceDescriptor=usb_device_internal::GetDeviceDescriptor<TPhy>;
+    _deviceDescriptorCallbacks.GetLangIDStrDescriptor=usb_device_internal::GetLangIdStrDescriptor<TPhy>;
+
+    // set up the device descriptor
+
+    _deviceDescriptor.bcdDevice=params.device_version;
+    _deviceDescriptor.bcdUSB=params.device_usb_version;
+
+    // set up the language descriptor
+
+    _languageDescriptor.wLanguageId=params.device_language_id;
+
+    // initialise SDK
+
+    USBD_Init(&_deviceHandle,&_deviceDescriptorCallbacks,params.device_id);
+  }
+
+
+  /**
+   * Get the USB device descriptor (SDK callback). This happens when connected. An event is raised that
+   * allows the caller to modify the device descriptor dynamically based on the speed of the connection
+   * @param speed The connection speed
+   * @param length Will get set to 18
+   * @return The device descriptor pointer
+   */
+
+  template<class TPhy>
+  inline uint8_t *UsbDevice<TPhy>::onGetDeviceDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+
+    // give anyone a chance to change the descriptor based on the connection speed
+
+    UsbDeviceEventSender.raiseEvent(UsbDeviceGetDeviceDescriptorEvent(speed,_deviceDescriptor));
+
+    // return the descriptor
+
+    *length=USB_LEN_DEV_DESC;
+    return reinterpret_cast<uint8_t *>(&_deviceDescriptor);
+  }
+
+
+  /**
+   * Get the USB language descriptor (SDK callback). This happens when connected. An event is raised that
+   * allows the caller to modify the language descriptor dynamically.
+   * @param speed The connection speed
+   * @param length Will get set to 18
+   * @return The device descriptor pointer
+   */
+
+  template<class TPhy>
+  inline uint8_t *UsbDevice<TPhy>::onGetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+
+    // give anyone a chance to change the descriptor based on the connection speed
+
+    UsbDeviceEventSender.raiseEvent(UsbDeviceGetLanguageDescriptorEvent(speed,_languageDescriptor));
+
+    // return the descriptor
+
+    *length=USB_LEN_LANGID_STR_DESC;
+    return reinterpret_cast<uint8_t *>(&_languageDescriptor);
+  }
+
+
+  /**
+   * Get the device handle
+   * @return a reference to the SDK device handle
+   */
+
+  template<class TPhy>
+  inline USBD_HandleTypeDef& UsbDevice<TPhy>::getDeviceHandle() {
+    return _deviceHandle;
+  }
+
+
+  /**
+   * Get the device descriptor reference
+   * @return The device descriptor
+   */
+
+  template<class TPhy>
+  inline UsbDeviceDescriptor& UsbDevice<TPhy>::getDeviceDescriptor() {
+    return _deviceDescriptor;
+  }
+
+
+  namespace usb_device_internal {
+
+    /*
+     * Helpers to dispatch events that have common parameters
+     */
+
+    inline USBD_StatusTypeDef notifyEvent(USBD_HandleTypeDef *pdev,UsbDeviceEventDescriptor::EventType eventType) {
+
+      UsbDeviceSdkNotifyEvent event(eventType);
+
+      reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+      return event.retval;
     }
 
+    inline USBD_StatusTypeDef endpointEvent(USBD_HandleTypeDef *pdev,UsbDeviceEventDescriptor::EventType eventType,uint8_t ep_addr) {
 
-    /**
-      * @brief  Starts the Low Level portion of the Device driver.
-      * @param  pdev: Device handle
-      * @retval USBD Status
-      */
+      UsbDeviceSdkEndpointEvent event(eventType,ep_addr);
 
-    USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Stops the Low Level portion of the Device driver.
-      * @param  pdev: Device handle
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_Stop(USBD_HandleTypeDef *pdev) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Opens an endpoint of the Low Level Driver.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @param  ep_type: Endpoint Type
-      * @param  ep_mps: Endpoint Max Packet Size
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_OpenEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8_t ep_type,uint16_t ep_mps) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Closes an endpoint of the Low Level Driver.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_CloseEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Flushes an endpoint of the Low Level Driver.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_FlushEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Sets a Stall condition on an endpoint of the Low Level Driver.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_StallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Clears a Stall condition on an endpoint of the Low Level Driver.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdevuint8_t ep_addr) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Returns Stall condition.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval Stall (1: Yes, 0: No)
-      */
-
-    uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-       return 0;
-    }
-
-
-    /**
-      * @brief  Assigns a USB address to the device.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_SetUSBAddress(USBD_HandleTypeDef *pdev,uint8_t dev_addr) {
-      return USBD_OK;
-    }
-
-
-    /**
-      * @brief  Transmits data over an endpoint.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @param  pbuf: Pointer to data to be sent
-      * @param  size: Data size
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_Transmit(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8_t *pbuf,uint16_t size) {
-      return USBD_OK;
-    }
-
-    /**
-      * @brief  Prepares an endpoint for reception.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @param  pbuf: Pointer to data to be received
-      * @param  size: Data size
-      * @retval USBD Status
-      */
-
-    USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8_t *pbuf,uint16_t size) {
-      return USBD_OK;
-    }
-
-    /**
-      * @brief  Returns the last transfered packet size.
-      * @param  pdev: Device handle
-      * @param  ep_addr: Endpoint Number
-      * @retval Recived Data Size
-      */
-
-    uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-      return 0;
-    }
-
-    /**
-      * @brief  Delays routine for the USB Device Library.
-      * @param  Delay: Delay in ms
-      * @retval None
-      */
-
-    void USBD_LL_Delay(uint32_t Delay) {
+      reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+      return event.retval;
     }
   }
 }

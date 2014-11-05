@@ -13,7 +13,26 @@ namespace stm32plus {
    * Template class for USB HID devices
    */
 
-  template<class TPhy,class... Features>
-  class UsbHidDevice : public UsbDevice<TPhy,Features...> {
+  template<class TPhy,template <class> class... Features>
+  struct UsbHidDevice : UsbDevice<TPhy>,
+                        Features<UsbDevice<TPhy>>... {
+
+    /*
+     * Parameters for the HID device
+     */
+
+    struct Parameters : UsbDevice<TPhy>::Parameters,
+                        Features<UsbDevice<TPhy>>::Parameters... {
+    };
+
+
+    /*
+     * Constructor
+     */
+
+    UsbHidDevice(Parameters& params)
+      : UsbDevice<TPhy>(params),
+        Features<UsbDevice<TPhy>>(*this,params)... {
+    }
   };
 }
