@@ -46,5 +46,11 @@
   #include "usb/device/UsbDevice.h"
   #include "usb/device/UsbHidDevice.h"
 
+  #include "usb/device/features/UsbDeviceFeatureBase.h"
+  #include "usb/device/features/UsbStringFeatureBase.h"
+  #include "usb/device/features/UsbManufacturerFeature.h"
+  #include "usb/device/features/UsbProductFeature.h"
+  #include "usb/device/features/UsbSerialNumberFeature.h"
+
 #endif
 

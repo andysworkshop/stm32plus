@@ -62,6 +62,7 @@ namespace stm32plus {
 
       uint8_t *onGetDeviceDescriptor(USBD_SpeedTypeDef speed,uint16_t *length);
       uint8_t *onGetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length);
+      uint8_t *onGetDisplayStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length,uint8_t stringIndex);
   };
 
 
@@ -88,6 +89,21 @@ namespace stm32plus {
     inline uint8_t *GetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
       return UsbDevice<TPhy>::_instance->onGetLangIdStrDescriptor(speed,length);
     }
+
+    template<class TPhy>
+    inline uint8_t *GetManufacturerStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_MFC_STR);
+    }
+
+    template<class TPhy>
+    inline uint8_t *GetProductStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_PRODUCT_STR);
+    }
+
+    template<class TPhy>
+    inline uint8_t *GetSerialStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_SERIAL_STR);
+    }
   }
 
 
@@ -112,6 +128,9 @@ namespace stm32plus {
 
     _deviceDescriptorCallbacks.GetDeviceDescriptor=usb_device_internal::GetDeviceDescriptor<TPhy>;
     _deviceDescriptorCallbacks.GetLangIDStrDescriptor=usb_device_internal::GetLangIdStrDescriptor<TPhy>;
+    _deviceDescriptorCallbacks.GetManufacturerStrDescriptor=usb_device_internal::GetManufacturerStrDescriptor<TPhy>;
+    _deviceDescriptorCallbacks.GetProductStrDescriptor=usb_device_internal::GetProductStrDescriptor<TPhy>;
+    _deviceDescriptorCallbacks.GetSerialStrDescriptor=usb_device_internal::GetSerialStrDescriptor<TPhy>;
 
     // set up the device descriptor
 
@@ -169,6 +188,26 @@ namespace stm32plus {
 
     *length=USB_LEN_LANGID_STR_DESC;
     return reinterpret_cast<uint8_t *>(&_languageDescriptor);
+  }
+
+
+  /**
+   * Get the USB language descriptor (SDK callback). This happens when connected. An event is raised that
+   * allows the caller to modify the language descriptor dynamically.
+   * @param speed The connection speed
+   * @param length Will get set to 18
+   * @return The device descriptor pointer
+   */
+
+  template<class TPhy>
+  inline uint8_t *UsbDevice<TPhy>::onGetDisplayStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length,uint8_t stringIndex) {
+
+    // send the event that will be picked up by one of the feature classes that implements
+    // the required string
+
+    UsbDeviceEventSender.raiseEvent(UsbDeviceGetDisplayStringDescriptorEvent(speed,stringIndex));
+
+    // return the descriptor
   }
 
 

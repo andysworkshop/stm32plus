@@ -10,7 +10,8 @@ namespace stm32plus {
 
 
   /*
-   * Event class for opening and endpoint
+   * Event class for checking if an endpoint is stalled. Default is false. Change
+   * isStalled to true to indicate stalled.
    */
 
   struct UsbDeviceSdkIsStalledEndpointEvent : UsbDeviceSdkEndpointEvent {

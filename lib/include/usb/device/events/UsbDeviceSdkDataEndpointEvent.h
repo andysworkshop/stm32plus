@@ -10,7 +10,7 @@ namespace stm32plus {
 
 
   /*
-   * Event class for opening and endpoint
+   * Event class for the transmit/prepare-to-receive events
    */
 
   struct UsbDeviceSdkDataEndpointEvent : UsbDeviceSdkEndpointEvent {

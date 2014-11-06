@@ -10,7 +10,8 @@ namespace stm32plus {
 
 
   /*
-   * Event class for an SDK event asking for the last transferred packet size
+   * Event class for an SDK event asking for the last transferred packet size. The
+   * default is zero so lastTransferred should be changed to the actual value
    */
 
   struct UsbDeviceSdkGetLastTransferredSizeEndpointEvent : UsbDeviceEventDescriptor {

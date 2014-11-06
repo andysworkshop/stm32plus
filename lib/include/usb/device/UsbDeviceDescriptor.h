@@ -45,9 +45,9 @@ namespace stm32plus {
       bDeviceSubClass=0;                              // as above
       bDeviceProtocol=0;                              // as above
       bMaxPacketSize=USB_MAX_EP0_SIZE;                // max size of endpoint 0
-      iManufacturer=USBD_IDX_MFC_STR;                 // Index of manufacturer string
-      iProduct=USBD_IDX_PRODUCT_STR;                  // Index of product string
-      iSerialNumber=USBD_IDX_SERIAL_STR;              // Index of serial number string
+      iManufacturer=0;                                // index of manufacturer string
+      iProduct=0;                                     // index of product string
+      iSerialNumber=0;                                // index of serial number string
       bNumConfigurations=USBD_MAX_NUM_CONFIGURATION;  // bNumConfigurations
 
     }
