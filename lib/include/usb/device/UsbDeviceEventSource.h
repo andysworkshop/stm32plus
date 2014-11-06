@@ -12,7 +12,7 @@ namespace stm32plus {
    * The event signature for USB device events
    */
 
-  DECLARE_EVENT_SIGNATURE(UsbDevice,void(UsbDeviceEventDescriptor));
+  DECLARE_EVENT_SIGNATURE(UsbDevice,void(UsbDeviceEventDescriptor&));
 
 
   /*

@@ -17,8 +17,7 @@ namespace stm32plus {
    */
 
   template<class TPhy>
-  class UsbDevice : public UsbCore<TPhy>,
-                    public UsbDeviceEventSource {
+  class UsbDevice : public UsbDeviceBase<TPhy> {
 
     protected:
       USBD_HandleTypeDef _deviceHandle;
@@ -33,7 +32,7 @@ namespace stm32plus {
        * Parameters structure - device specific detail
        */
 
-      struct Parameters : UsbCore<TPhy>::Parameters {
+      struct Parameters : UsbDeviceBase<TPhy>::Parameters {
 
         uint16_t device_vid;          // no default
         uint16_t device_pid;          // no default
@@ -104,6 +103,16 @@ namespace stm32plus {
     inline uint8_t *GetSerialStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
       return UsbDevice<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_SERIAL_STR);
     }
+
+    template<class TPhy>
+    inline uint8_t *GetConfigurationStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_CONFIG_STR);
+    }
+
+    template<class TPhy>
+    inline uint8_t *GetInterfaceStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      return UsbDevice<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_INTERFACE_STR);
+    }
   }
 
 
@@ -114,7 +123,7 @@ namespace stm32plus {
 
   template<class TPhy>
   inline UsbDevice<TPhy>::UsbDevice(Parameters& params)
-    : UsbCore<TPhy>(params) {
+    : UsbDeviceBase<TPhy>(params) {
 
     // static member initialisation
 
@@ -131,6 +140,8 @@ namespace stm32plus {
     _deviceDescriptorCallbacks.GetManufacturerStrDescriptor=usb_device_internal::GetManufacturerStrDescriptor<TPhy>;
     _deviceDescriptorCallbacks.GetProductStrDescriptor=usb_device_internal::GetProductStrDescriptor<TPhy>;
     _deviceDescriptorCallbacks.GetSerialStrDescriptor=usb_device_internal::GetSerialStrDescriptor<TPhy>;
+    _deviceDescriptorCallbacks.GetConfigurationStrDescriptor=usb_device_internal::GetConfigurationStrDescriptor<TPhy>;
+    _deviceDescriptorCallbacks.GetInterfaceStrDescriptor=usb_device_internal::GetInterfaceStrDescriptor<TPhy>;
 
     // set up the device descriptor
 
@@ -160,7 +171,7 @@ namespace stm32plus {
 
     // give anyone a chance to change the descriptor based on the connection speed
 
-    UsbDeviceEventSender.raiseEvent(UsbDeviceGetDeviceDescriptorEvent(speed,_deviceDescriptor));
+    this->UsbDeviceEventSender.raiseEvent(UsbDeviceGetDeviceDescriptorEvent(speed,_deviceDescriptor));
 
     // return the descriptor
 
@@ -182,7 +193,7 @@ namespace stm32plus {
 
     // give anyone a chance to change the descriptor based on the connection speed
 
-    UsbDeviceEventSender.raiseEvent(UsbDeviceGetLanguageDescriptorEvent(speed,_languageDescriptor));
+    this->UsbDeviceEventSender.raiseEvent(UsbDeviceGetLanguageDescriptorEvent(speed,_languageDescriptor));
 
     // return the descriptor
 
@@ -202,12 +213,17 @@ namespace stm32plus {
   template<class TPhy>
   inline uint8_t *UsbDevice<TPhy>::onGetDisplayStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length,uint8_t stringIndex) {
 
+    UsbDeviceGetDisplayStringDescriptorEvent event(speed,stringIndex);
+
     // send the event that will be picked up by one of the feature classes that implements
     // the required string
 
-    UsbDeviceEventSender.raiseEvent(UsbDeviceGetDisplayStringDescriptorEvent(speed,stringIndex));
+    this->UsbDeviceEventSender.raiseEvent(event);
 
-    // return the descriptor
+    // subscriber sets these, or if not that's OK too
+
+    *length=event.length;
+    return reinterpret_cast<uint8_t *>(event.string);
   }
 
 

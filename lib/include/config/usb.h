@@ -41,16 +41,20 @@
   #include "usb/device/events/UsbDeviceSdkGetLastTransferredSizeEndpointEvent.h"
   #include "usb/device/events/UsbDeviceGetDeviceDescriptorEvent.h"
   #include "usb/device/events/UsbDeviceGetLanguageDescriptorEvent.h"
+  #include "usb/device/events/UsbDeviceGetDisplayStringDescriptorEvent.h"
 
   #include "usb/device/UsbDeviceEventSource.h"
+  #include "usb/device/UsbDeviceBase.h"
   #include "usb/device/UsbDevice.h"
   #include "usb/device/UsbHidDevice.h"
 
   #include "usb/device/features/UsbDeviceFeatureBase.h"
   #include "usb/device/features/UsbStringFeatureBase.h"
-  #include "usb/device/features/UsbManufacturerFeature.h"
-  #include "usb/device/features/UsbProductFeature.h"
-  #include "usb/device/features/UsbSerialNumberFeature.h"
+  #include "usb/device/features/UsbManufacturerTextFeature.h"
+  #include "usb/device/features/UsbProductTextFeature.h"
+  #include "usb/device/features/UsbSerialNumberTextFeature.h"
+  #include "usb/device/features/UsbConfigurationTextFeature.h"
+  #include "usb/device/features/UsbInterfaceTextFeature.h"
 
 #endif
 

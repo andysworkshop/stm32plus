@@ -32,7 +32,8 @@ namespace stm32plus {
       GET_RX_DATA_SIZE,
 
       GET_DEVICE_DESCRIPTOR,
-      GET_LANGUAGE_DESCRIPTOR
+      GET_LANGUAGE_DESCRIPTOR,
+      GET_STRING_DESCRIPTOR
     };
 
     EventType eventType;

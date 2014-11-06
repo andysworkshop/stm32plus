@@ -21,18 +21,23 @@ class UsbDeviceHidTest {
     void run() {
 
       typedef UsbHidDevice<
-          UsbInternalFsPhy,               // use the internal full speed PHY
-          UsbManufacturerFeature,         // we'll supply a manufacturer name
-          UsbProductFeature,              // ... and a product name
-          UsbSerialNumberFeature> MyUsb;  // ... and a serial number
+          UsbInternalFsPhy,                   // use the internal full speed PHY
+          UsbManufacturerTextFeature,         // we'll supply a manufacturer name
+          UsbProductTextFeature,              // ... and a product name
+          UsbSerialNumberTextFeature,         // ... and a serial number
+          UsbConfigurationTextFeature,        // ... and a config text string
+          UsbInterfaceTextFeature             // ... and an interface text string
+        > MyUsb;
 
       MyUsb::Parameters params;
 
       params.device_vid=0xDEAD;
       params.device_pid=0xBEEF;
-      params.device_manufacturer="Andy's Workshop";   // see params.device_language_id to change the language
-      params.device_product="Joystick";
-      params.device_serial="1234567890";
+      params.device_manufacturer_text="Andy's Workshop";   // see params.device_language_id to change the language
+      params.device_product_text="Joystick";
+      params.device_serial_text="1234567890";
+      params.device_configuration_text="My configuration";
+      params.device_interface_text="My interface";
 
       MyUsb usb(params);
 

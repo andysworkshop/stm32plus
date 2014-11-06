@@ -19,11 +19,15 @@ namespace stm32plus {
   class UsbStringFeatureBase : public UsbDeviceFeatureBase<TUsbDevice> {
 
     protected:
+      uint16_t _length;
       scoped_array<uint16_t> _unicodeString;
       uint8_t _stringIndex;
 
     protected:
       UsbStringFeatureBase(TUsbDevice& device,const char *str,uint8_t stringIndex);
+      ~UsbStringFeatureBase();
+
+      void onEvent(UsbDeviceEventDescriptor& event);
   };
 
 
@@ -40,7 +44,8 @@ namespace stm32plus {
   template<class TUsbDevice>
   inline UsbStringFeatureBase<TUsbDevice>::UsbStringFeatureBase(TUsbDevice& device,const char *str,uint8_t stringIndex)
     : UsbDeviceFeatureBase<TUsbDevice>(device),
-      _unicodeString(new uint16_t[(strlen(str)+1)*2]),
+      _length(strlen(str)+1),
+      _unicodeString(new uint16_t[_length]),
       _stringIndex(stringIndex) {
 
     const char *src;
@@ -58,5 +63,53 @@ namespace stm32plus {
     // register this string index with the device descriptor
 
     device.getDeviceDescriptor().iManufacturer=stringIndex;
+
+    // subscribe to device events
+
+    device.UsbDeviceEventSender.insertSubscriber(
+        UsbDeviceEventSourceSlot::bind(this,&UsbStringFeatureBase<TUsbDevice>::onEvent)
+      );
+  }
+
+
+  /**
+   * Destructor
+   */
+
+  template<class TUsbDevice>
+  inline UsbStringFeatureBase<TUsbDevice>::~UsbStringFeatureBase() {
+
+    // unsubscribe from device events
+
+    this->_device.UsbDeviceEventSender.removeSubscriber(
+        UsbDeviceEventSourceSlot::bind(this,&UsbStringFeatureBase<TUsbDevice>::onEvent)
+      );
+  }
+
+
+  /**
+   * Event callback
+   * @param event The event object
+   */
+
+  template<class TUsbDevice>
+  inline void UsbStringFeatureBase<TUsbDevice>::onEvent(UsbDeviceEventDescriptor& event) {
+
+    if(event.eventType==UsbDeviceEventDescriptor::EventType::GET_STRING_DESCRIPTOR) {
+
+      // convert to the event type that we know it is
+
+      UsbDeviceGetDisplayStringDescriptorEvent & stringEvent(
+          static_cast<UsbDeviceGetDisplayStringDescriptorEvent&>(event));
+
+      // if we handle this string index then set the return values as long
+      // as someone hasn't got there first
+
+      if(stringEvent.stringIndex==_stringIndex && stringEvent.string==nullptr) {
+
+        stringEvent.string=_unicodeString.get();
+        stringEvent.length=_length*2;   // length in bytes incl. \0 terminator
+      }
+    }
   }
 }
