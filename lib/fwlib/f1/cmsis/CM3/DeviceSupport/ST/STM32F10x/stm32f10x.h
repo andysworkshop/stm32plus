@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
+#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD) || defined(STM32PLUS_F1_MD_VL)
 
 /**
   ******************************************************************************
@@ -17,15 +17,15 @@
   *          is using in the C source code, usually in main.c. This file contains:
   *           - Configuration section that allows to select:
   *              - The device used in the target application
-  *              - To use or not the peripheral’s drivers in application code(i.e. 
-  *                code will be based on direct access to peripheral’s registers 
+  *              - To use or not the peripheralï¿½s drivers in application code(i.e. 
+  *                code will be based on direct access to peripheralï¿½s registers 
   *                rather than drivers API), this option is controlled by 
   *                "#define USE_STDPERIPH_DRIVER"
   *              - To change few application-specific parameters such as the HSE 
   *                crystal frequency
   *           - Data structures and the address mapping for all peripherals
   *           - Peripheral's registers declarations and bits definition
-  *           - Macros to access peripheral’s registers hardware
+  *           - Macros to access peripheralï¿½s registers hardware
   *
   ******************************************************************************
   * @attention
@@ -60,14 +60,12 @@
 
 #if defined(STM32PLUS_F1_HD) && !defined(STM32F10X_HD)
   #define STM32F10X_HD
-#else
-  #if (defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F1_CL_E)) && !defined(STM32F10X_CL)
-    #define STM32F10X_CL
-  #else
-    #if defined(STM32PLUS_F1_MD_VL) && !defined(STM32F10X_MD_VL)
-      #define STM32F10X_MD_VL
-    #endif
-  #endif
+#elif (defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F1_CL_E)) && !defined(STM32F10X_CL)
+  #define STM32F10X_CL
+#elif defined(STM32PLUS_F1_MD) && !defined(STM32F10X_MD)
+  #define STM32F10X_MD
+#elif defined(STM32PLUS_F1_MD_VL) && !defined(STM32F10X_MD_VL)
+  #define STM32F10X_MD_VL
 #endif
 
 #define assert_param(expr) ((void)0)

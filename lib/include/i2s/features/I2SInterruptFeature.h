@@ -143,7 +143,7 @@ namespace stm32plus {
     Nvic::configureIrq(SPI2_IRQn,ENABLE,priority,subPriority);
   }
 
-#if !defined(STM32PLUS_F1_MD_VL) && !defined(STM32PLUS_F0)
+#if !defined(STM32PLUS_F1_MD) && !defined(STM32PLUS_F1_MD_VL) && !defined(STM32PLUS_F0)
 
   /**
    * Enabler specialisation, I2S 3

@@ -148,6 +148,8 @@
   #include "timer/features/f1/hd/TimerInterruptFeature.h"
 #elif defined(STM32PLUS_F1_CL)
   #include "timer/features/f1/cl/TimerInterruptFeature.h"
+#elif defined(STM32PLUS_F1_MD)
+  #include "timer/features/f1/md/TimerInterruptFeature.h"
 #elif defined(STM32PLUS_F1_MD_VL)
   #include "timer/features/f1/mdvl/TimerInterruptFeature.h"
 #elif defined(STM32PLUS_F1_XL)
