@@ -8,7 +8,7 @@
 
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F1_MD_VL
+#if !defined(STM32PLUS_F1_MD) && !defined(STM32PLUS_F1_MD_VL)
 #error This class can only be used with the STM32F1 MD VL series
 #endif
 
