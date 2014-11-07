@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
+#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD) || defined(STM32PLUS_F1_MD_VL)
 
 /**
   ******************************************************************************
@@ -60,14 +60,12 @@
 
 #if defined(STM32PLUS_F1_HD) && !defined(STM32F10X_HD)
   #define STM32F10X_HD
-#else
-  #if (defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F1_CL_E)) && !defined(STM32F10X_CL)
-    #define STM32F10X_CL
-  #else
-    #if defined(STM32PLUS_F1_MD_VL) && !defined(STM32F10X_MD_VL)
-      #define STM32F10X_MD_VL
-    #endif
-  #endif
+#elif (defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F1_CL_E)) && !defined(STM32F10X_CL)
+  #define STM32F10X_CL
+#elif defined(STM32PLUS_F1_MD) && !defined(STM32F10X_MD)
+  #define STM32F10X_MD
+#elif defined(STM32PLUS_F1_MD_VL) && !defined(STM32F10X_MD_VL)
+  #define STM32F10X_MD_VL
 #endif
 
 #define assert_param(expr) ((void)0)
