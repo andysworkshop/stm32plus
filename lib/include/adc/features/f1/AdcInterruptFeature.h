@@ -11,7 +11,7 @@
  */
 
 // ensure the MCU series is correct
-#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD)
   extern "C" void ADC1_2_IRQHandler();
 #elif defined(STM32PLUS_F1_MD_VL)
   extern "C" void ADC1_IRQHandler();
