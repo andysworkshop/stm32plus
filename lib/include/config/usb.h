@@ -13,6 +13,10 @@
 
 // ST driver includes
 
+#include "usblib/hal/inc/stm32f4xx_ll_usb.h"
+#include "usblib/hal/inc/stm32f4xx_hal_pcd.h"
+#include "usblib/hal/inc/stm32f4xx_hal_pcd_ex.h"
+
 #include "usblib/device/core/inc/usbd_def.h"
 #include "usblib/device/core/inc/usbd_core.h"
 
