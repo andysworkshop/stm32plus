@@ -258,7 +258,7 @@ namespace stm32plus {
 
       // When Rx Buffer unavailable flag is set: clear it and resume reception
 
-      if((ETH->DMASR & ETH_DMASR_RBUS)!=(u32)RESET) {
+      if((ETH->DMASR & ETH_DMASR_RBUS)!=(uint32_t)RESET) {
 
         // clear RBUS ETHERNET DMA flag
 

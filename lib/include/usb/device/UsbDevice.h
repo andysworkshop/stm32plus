@@ -20,7 +20,7 @@ namespace stm32plus {
   class UsbDevice : public UsbDeviceBase<TPhy> {
 
     protected:
-      PCD_HandleTypeDef hpcd _pcdHandle;
+      PCD_HandleTypeDef _pcdHandle;
       USBD_HandleTypeDef _deviceHandle;
       USBD_DescriptorsTypeDef _deviceDescriptorCallbacks;
       UsbDeviceDescriptor _deviceDescriptor;

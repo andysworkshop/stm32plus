@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp.c
@@ -932,3 +934,5 @@ FlagStatus CRYP_GetFlagStatus(uint8_t CRYP_FLAG)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

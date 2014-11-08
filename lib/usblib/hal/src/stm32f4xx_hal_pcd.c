@@ -74,6 +74,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usblib/hal/inc/stm32f4xx_hal.h"
+#include "usblib/hal/inc/stm32f4xx_hal_pcd.h"
 
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{
@@ -214,7 +215,7 @@ HAL_StatusTypeDef HAL_PCD_DeInit(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
-__weak void HAL_PCD_MspInit(PCD_HandleTypeDef *hpcd)
+__weak void HAL_PCD_MspInit(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_MspInit could be implenetd in the user file
@@ -226,7 +227,7 @@ __weak void HAL_PCD_MspInit(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
-__weak void HAL_PCD_MspDeInit(PCD_HandleTypeDef *hpcd)
+__weak void HAL_PCD_MspDeInit(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_MspDeInit could be implenetd in the user file
@@ -577,7 +578,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
+ __weak void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)), uint8_t epnum __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -589,7 +590,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
+ __weak void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)), uint8_t epnum __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -600,7 +601,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -612,7 +613,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_SOFCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -624,7 +625,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -637,7 +638,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -649,7 +650,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -661,7 +662,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
+ __weak void HAL_PCD_ISOOUTIncompleteCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)), uint8_t epnum __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -673,7 +674,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd, uint8_t epnum)
+ __weak void HAL_PCD_ISOINIncompleteCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)), uint8_t epnum __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -685,7 +686,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -697,7 +698,7 @@ void HAL_PCD_IRQHandler(PCD_HandleTypeDef *hpcd)
   * @param  hpcd: PCD handle
   * @retval None
   */
- __weak void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd)
+ __weak void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd __attribute__((unused)))
 {
   /* NOTE : This function Should not be modified, when the callback is needed,
             the HAL_PCD_DataOutStageCallback could be implenetd in the user file
@@ -1097,7 +1098,7 @@ static HAL_StatusTypeDef PCD_WriteEmptyTxFifo(PCD_HandleTypeDef *hpcd, uint32_t 
   ep = &hpcd->IN_ep[epnum];
   len = ep->xfer_len - ep->xfer_count;
   
-  if (len > ep->maxpacket)
+  if (len > (int32_t)ep->maxpacket)
   {
     len = ep->maxpacket;
   }
@@ -1112,7 +1113,7 @@ static HAL_StatusTypeDef PCD_WriteEmptyTxFifo(PCD_HandleTypeDef *hpcd, uint32_t 
     /* Write the FIFO */
     len = ep->xfer_len - ep->xfer_count;
     
-    if (len > ep->maxpacket)
+    if (len > (int32_t)ep->maxpacket)
     {
       len = ep->maxpacket;
     }

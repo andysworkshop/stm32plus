@@ -227,17 +227,23 @@ void RCC_DeInit(void)
   /* Reset PLLI2SCFGR register */
   RCC->PLLI2SCFGR = 0x20003000;
 
+#if defined(STM32PLUS_F429) || defined(STM32PLUS_F439) || defined(STM32PLUS_F427) || defined(STM32PLUS_F437)
   /* Reset PLLSAICFGR register, only available for STM32F42/43xxx devices */
   RCC->PLLSAICFGR = 0x24003000;
- 
+#endif
+
   /* Reset HSEBYP bit */
   RCC->CR &= (uint32_t)0xFFFBFFFF;
 
   /* Disable all interrupts */
   RCC->CIR = 0x00000000;
 
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
   /* Disable Timers clock prescalers selection, only available for STM32F42/43xxx devices */
   RCC->DCKCFGR = 0x00000000; 
+#endif
+
 }
 
 /**
@@ -610,6 +616,8 @@ void RCC_PLLI2SCmd(FunctionalState NewState)
   *(__IO uint32_t *) CR_PLLI2SON_BB = (uint32_t)NewState;
 }
 
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   * @brief  Configures the PLLSAI clock multiplication and division factors.
   *
@@ -656,6 +664,7 @@ void RCC_PLLSAICmd(FunctionalState NewState)
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   *(__IO uint32_t *) CR_PLLSAION_BB = (uint32_t)NewState;
 }
+#endif
 
 /**
   * @brief  Enables or disables the Clock Security System.
@@ -1293,6 +1302,8 @@ void RCC_I2SCLKConfig(uint32_t RCC_I2SCLKSource)
   *(__IO uint32_t *) CFGR_I2SSRC_BB = RCC_I2SCLKSource;
 }
 
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   * @brief  Configures the SAI clock Divider coming from PLLI2S.
   * 
@@ -1320,38 +1331,6 @@ void RCC_SAIPLLI2SClkDivConfig(uint32_t RCC_PLLI2SDivQ)
 
   /* Set PLLI2SDIVQ values */
   tmpreg |= (RCC_PLLI2SDivQ - 1);
-
-  /* Store the new value */
-  RCC->DCKCFGR = tmpreg;
-}
-
-/**
-  * @brief  Configures the SAI clock Divider coming from PLLSAI.
-  * 
-  * @note   This function can be used only for STM32F42xxx/43xxx devices.
-  *        
-  * @note   This function must be called before enabling the PLLSAI.
-  *   
-  * @param  RCC_PLLSAIDivQ: specifies the PLLSAI division factor for SAI1 clock .
-  *          This parameter must be a number between 1 and 32.
-  *          SAI1 clock frequency = f(PLLSAI_Q) / RCC_PLLSAIDivQ  
-  *              
-  * @retval None
-  */
-void RCC_SAIPLLSAIClkDivConfig(uint32_t RCC_PLLSAIDivQ)  
-{
-  uint32_t tmpreg = 0;
-  
-  /* Check the parameters */
-  assert_param(IS_RCC_PLLSAI_DIVQ_VALUE(RCC_PLLSAIDivQ));
-  
-  tmpreg = RCC->DCKCFGR;
-
-  /* Clear PLLI2SDIVQ[4:0] and PLLSAIDIVQ[4:0] bits */
-  tmpreg &= ~(RCC_DCKCFGR_PLLSAIDIVQ);
-
-  /* Set PLLSAIDIVQ values */
-  tmpreg |= ((RCC_PLLSAIDivQ - 1) << 8);
 
   /* Store the new value */
   RCC->DCKCFGR = tmpreg;
@@ -1392,6 +1371,7 @@ void RCC_SAIBlockACLKConfig(uint32_t RCC_SAIBlockACLKSource)
   /* Store the new value */
   RCC->DCKCFGR = tmpreg;
 }
+
 
 /**
   * @brief  Configures SAI1BlockB clock source selection.
@@ -1461,6 +1441,41 @@ void RCC_LTDCCLKDivConfig(uint32_t RCC_PLLSAIDivR)
   /* Store the new value */
   RCC->DCKCFGR = tmpreg;
 }
+
+/**
+  * @brief  Configures the SAI clock Divider coming from PLLSAI.
+  *
+  * @note   This function can be used only for STM32F42xxx/43xxx devices.
+  *
+  * @note   This function must be called before enabling the PLLSAI.
+  *
+  * @param  RCC_PLLSAIDivQ: specifies the PLLSAI division factor for SAI1 clock .
+  *          This parameter must be a number between 1 and 32.
+  *          SAI1 clock frequency = f(PLLSAI_Q) / RCC_PLLSAIDivQ
+  *
+  * @retval None
+  */
+void RCC_SAIPLLSAIClkDivConfig(uint32_t RCC_PLLSAIDivQ)
+{
+  uint32_t tmpreg = 0;
+
+  /* Check the parameters */
+  assert_param(IS_RCC_PLLSAI_DIVQ_VALUE(RCC_PLLSAIDivQ));
+
+  tmpreg = RCC->DCKCFGR;
+
+  /* Clear PLLI2SDIVQ[4:0] and PLLSAIDIVQ[4:0] bits */
+  tmpreg &= ~(RCC_DCKCFGR_PLLSAIDIVQ);
+
+  /* Set PLLSAIDIVQ values */
+  tmpreg |= ((RCC_PLLSAIDivQ - 1) << 8);
+
+  /* Store the new value */
+  RCC->DCKCFGR = tmpreg;
+}
+
+#endif
+
 
 /**
   * @brief  Configures the Timers clocks prescalers selection.
@@ -2087,6 +2102,7 @@ void RCC_APB2PeriphClockLPModeCmd(uint32_t RCC_APB2Periph, FunctionalState NewSt
   }
 }
 
+#if defined(STM32PLUS_F415) | defined(STM32PLUS_F417)
 /**
   * @brief Configures the External Low Speed oscillator mode (LSE mode).
   * @note This mode is only available for STM32F411xx devices.
@@ -2110,6 +2126,7 @@ void RCC_LSEModeConfig(uint8_t Mode)
     CLEAR_BIT(RCC->BDCR, RCC_BDCR_LSEMOD);
   }
 }
+#endif
 
 /**
   * @}

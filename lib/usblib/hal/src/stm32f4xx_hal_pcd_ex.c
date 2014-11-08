@@ -41,6 +41,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "usblib/hal/inc/stm32f4xx_hal.h"
+#include "usblib/hal/inc/stm32f4xx_hal_pcd.h"
 
 /** @addtogroup STM32F4xx_HAL_Driver
   * @{

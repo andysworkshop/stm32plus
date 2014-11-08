@@ -1,3 +1,4 @@
+#if defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_ltdc.c
@@ -73,6 +74,7 @@
   */
 
 /* Includes ------------------------------------------------------------------*/
+
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_ltdc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
 
@@ -1108,3 +1110,4 @@ void LTDC_ClearITPendingBit(uint32_t LTDC_IT)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

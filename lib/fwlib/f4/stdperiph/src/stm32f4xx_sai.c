@@ -1,3 +1,4 @@
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_sai.c
@@ -1077,3 +1078,4 @@ uint32_t SAI_GetFIFOStatus(SAI_Block_TypeDef* SAI_Block_x)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

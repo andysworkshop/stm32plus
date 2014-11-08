@@ -1,3 +1,4 @@
+#if defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp_aes.c
@@ -1705,3 +1706,4 @@ ErrorStatus CRYP_AES_CCM(uint8_t Mode,
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
+#endif

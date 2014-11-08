@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash.c
@@ -724,3 +726,5 @@ void HASH_ClearITPendingBit(uint32_t HASH_IT)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

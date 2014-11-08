@@ -752,13 +752,13 @@ FrameTypeDef ETH_Get_Received_Frame_interrupt(uint8_t receiveBufferCount)
   * @param  FrameLength : length of the frame to send
   * @retval error status
   */
-uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength)
+uint32_t ETH_Prepare_Transmit_Descriptors(uint16_t FrameLength)
 {   
   uint32_t buf_count =0, size=0,i=0;
   __IO ETH_DMADESCTypeDef *DMATxNextDesc;
   
   /* Check if the descriptor is owned by the ETHERNET DMA (when set) or CPU (when reset) */
-  if((DMATxDescToSet->Status & ETH_DMATxDesc_OWN) != (u32)RESET)
+  if((DMATxDescToSet->Status & ETH_DMATxDesc_OWN) != (uint32_t)RESET)
   {  
     /* Return ERROR: OWN bit set */
     return ETH_ERROR;
@@ -814,7 +814,7 @@ uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength)
   }
     
   /* When Tx Buffer unavailable flag is set: clear it and resume transmission */
-  if ((ETH->DMASR & ETH_DMASR_TBUS) != (u32)RESET)
+  if ((ETH->DMASR & ETH_DMASR_TBUS) != (uint32_t)RESET)
   {
     /* Clear TBUS ETHERNET DMA flag */
     ETH->DMASR = ETH_DMASR_TBUS;

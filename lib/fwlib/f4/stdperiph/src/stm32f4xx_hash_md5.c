@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash_md5.c
@@ -318,3 +320,5 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
+
+#endif

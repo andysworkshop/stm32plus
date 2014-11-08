@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**************************************************************************//**
  * @file     core_cmInstr.h
  * @brief    CMSIS Cortex-M Core Instruction Access Header File
@@ -687,4 +686,3 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint8_t __CLZ(uint32_t value)
 /*@}*/ /* end of group CMSIS_Core_InstructionInterface */
 
 #endif /* __CORE_CMINSTR_H */
-#endif

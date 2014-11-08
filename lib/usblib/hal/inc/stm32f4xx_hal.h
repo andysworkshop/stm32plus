@@ -45,6 +45,7 @@
 #endif
 
 /* Includes ------------------------------------------------------------------*/
+#include "usblib/hal/inc/stm32f4xx_hal_def.h"
 #include "usblib/hal/inc/stm32f4xx_hal_conf.h"
 
 /** @addtogroup STM32F4xx_HAL_Driver

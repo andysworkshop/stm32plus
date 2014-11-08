@@ -1024,6 +1024,7 @@ namespace stm32plus {
       };
     };
 
+#if defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
     struct PJ0 {
       enum {
         Port=GPIOJ_BASE,
@@ -1247,7 +1248,7 @@ namespace stm32plus {
         Pin=GPIO_Pin_15
       };
     };
-
+#endif // F427 || F429 || F437 || F439
 #endif  // F4
 #endif  // F1 or F4
 
