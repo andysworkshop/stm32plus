@@ -19,8 +19,42 @@ namespace stm32plus {
       struct Parameters {
       };
 
+    protected:
+      USB_OTG_GlobalTypeDef *_phyRegisters;
+
     public:
-      UsbInternalFsPhy(Parameters& /* params */) {
+      UsbInternalFsPhy(Parameters& /* params */)
+        : _phyRegisters(USB_OTG_FS) {
+      }
+
+
+      /**
+       * Return true if the PHY supports DMA
+       * @return false
+       */
+
+      bool phySupportsDma() const {
+        return false;
+      }
+
+
+      /**
+       * Get the type of interface (embedded/ULPI)
+       * @return PCD_PHY_EMBEDDED
+       */
+
+      uint32_t getPhyInterface() const {
+        return PCD_PHY_EMBEDDED;
+      }
+
+
+      /**
+       * Get the interface speed
+       * @return PCD_SPEED_FULL
+       */
+
+      uint32_t getPhySpeed() const {
+        return PCD_SPEED_FULL;
       }
   };
 }

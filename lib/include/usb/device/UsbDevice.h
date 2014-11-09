@@ -41,19 +41,31 @@ namespace stm32plus {
         uint16_t device_version;      // your device version. default 01.00
         uint16_t device_id;           // this device id (default is 0)
         uint16_t device_language_id;  // default is 0x0409 (English; US)
+        bool device_use_dedicated_endpoint1;  // default is false
+        bool device_vbus_sensing;     // default is true
+        bool device_low_power_enable; // default is true
+        uint32_t device_endpoint0_max_packet_size;  // default is 0x40
 
         Parameters() {
           device_usb_version=0x0200;
           device_version=0x0100;
           device_id=0;
           device_language_id=0x0409;
+          device_use_dedicated_endpoint1=false;
+          device_endpoint0_max_packet_size=0x40;
+          device_vbus_sensing=true;
+          device_low_power_enable=true;
         }
       };
 
       static UsbDevice<TPhy> *_instance;    // this is how the global callbacks get back in
 
+    protected:
+      void onEvent(UsbDeviceEventDescriptor& event);
+
     public:
       UsbDevice(Parameters& params);
+      ~UsbDevice();
 
       USBD_HandleTypeDef& getDeviceHandle();
       UsbDeviceDescriptor& getDeviceDescriptor();
@@ -153,9 +165,69 @@ namespace stm32plus {
 
     _languageDescriptor.wLanguageId=params.device_language_id;
 
+     // subscribe to USB events
+
+    this->UsbDeviceEventSender.insertSubscriber(
+        UsbDeviceEventSourceSlot::bind(this,&UsbDevice<TPhy>::onEvent)
+      );
+
     // initialise SDK
 
     USBD_Init(&_deviceHandle,&_deviceDescriptorCallbacks,params.device_id);
+
+    // set up the PCD handle
+
+    _pcdHandle.Instance=this->_phyRegisters;
+
+    _pcdHandle.Init.dev_endpoints=params.device_num_endpoints;
+    _pcdHandle.Init.use_dedicated_ep1=params.device_use_dedicated_endpoint1;
+    _pcdHandle.Init.ep0_mps=params.device_endpoint0_max_packet_size;
+    _pcdHandle.Init.vbus_sensing_enable=params.device_vbus_sensing;
+    _pcdHandle.Init.low_power_enable=params.device_low_power_enable;
+
+    _pcdHandle.Init.dma_enable=this->phySupportsDma();
+    _pcdHandle.Init.phy_itface=this->getPhyInterface();
+    _pcdHandle.Init.Sof_enable=0;
+    _pcdHandle.Init.speed=this->getPhySpeed();
+
+    // link the driver to the stack
+
+    _pcdHandle.pData=&_deviceHandle;
+    _deviceHandle.pData=&_pcdHandle;
+
+    // initialise the HAL driver
+
+    HAL_PCD_Init(&_pcdHandle);
+
+    HAL_PCD_SetRxFiFo(&hpcd,0x80);
+    HAL_PCD_SetTxFiFo(&hpcd,0,0x40);
+    HAL_PCD_SetTxFiFo(&hpcd,1,0x80);
+ }
+
+
+  /**
+   * Destructor
+   */
+
+  template<class TPhy>
+  inline UsbDevice<TPhy>::~UsbDevice() {
+
+    // unsubscribe from USB events
+
+    this->UsbDeviceEventSender.removeSubscriber(
+        UsbDeviceEventSourceSlot::bind(this,&UsbDevice<TPhy>::onEvent)
+      );
+  }
+
+
+  /**
+   * Event handler for device events
+   * @param event The event descriptor
+   */
+
+  template<class TPhy>
+  inline void UsbDevice<TPhy>::onEvent(UsbDeviceEventDescriptor& event) {
+
   }
 
 

@@ -18,9 +18,6 @@ using namespace stm32plus;
   */
 
 USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev) {
-
-
-
   return stm32plus::usb_device_internal::notifyEvent(pdev,UsbDeviceEventDescriptor::EventType::INIT);
 }
 
