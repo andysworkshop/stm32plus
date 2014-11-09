@@ -15,8 +15,8 @@ namespace stm32plus {
      * supplied string into unicode ready for use by the protocol
      */
 
-    template<class TUsbDevice>
-    class StringFeatureBase : public DeviceFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class StringFeatureBase : public DeviceFeatureBase<TDevice> {
 
       protected:
         uint16_t _length;
@@ -24,7 +24,7 @@ namespace stm32plus {
         uint8_t _stringIndex;
 
       protected:
-        StringFeatureBase(TUsbDevice& device,const char *str,uint8_t stringIndex);
+        StringFeatureBase(TDevice& device,const char *str,uint8_t stringIndex);
         ~StringFeatureBase();
 
         void onEvent(DeviceEventDescriptor& event);
@@ -41,9 +41,9 @@ namespace stm32plus {
      * @param stringIndex Index used by the protocol when it calls back for this string
      */
 
-    template<class TUsbDevice>
-    inline StringFeatureBase<TUsbDevice>::StringFeatureBase(TUsbDevice& device,const char *str,uint8_t stringIndex)
-      : DeviceFeatureBase<TUsbDevice>(device),
+    template<class TDevice>
+    inline StringFeatureBase<TDevice>::StringFeatureBase(TDevice& device,const char *str,uint8_t stringIndex)
+      : DeviceFeatureBase<TDevice>(device),
         _length(strlen(str)+1),
         _unicodeString(new uint16_t[_length]),
         _stringIndex(stringIndex) {
@@ -67,7 +67,7 @@ namespace stm32plus {
       // subscribe to device events
 
       device.DeviceEventSender.insertSubscriber(
-          DeviceEventSourceSlot::bind(this,&StringFeatureBase<TUsbDevice>::onEvent)
+          DeviceEventSourceSlot::bind(this,&StringFeatureBase<TDevice>::onEvent)
         );
     }
 
@@ -76,13 +76,13 @@ namespace stm32plus {
      * Destructor
      */
 
-    template<class TUsbDevice>
-    inline StringFeatureBase<TUsbDevice>::~StringFeatureBase() {
+    template<class TDevice>
+    inline StringFeatureBase<TDevice>::~StringFeatureBase() {
 
       // unsubscribe from device events
 
       this->_device.DeviceEventSender.removeSubscriber(
-          DeviceEventSourceSlot::bind(this,&StringFeatureBase<TUsbDevice>::onEvent)
+          DeviceEventSourceSlot::bind(this,&StringFeatureBase<TDevice>::onEvent)
         );
     }
 
@@ -92,8 +92,8 @@ namespace stm32plus {
      * @param event The event object
      */
 
-    template<class TUsbDevice>
-    inline void StringFeatureBase<TUsbDevice>::onEvent(DeviceEventDescriptor& event) {
+    template<class TDevice>
+    inline void StringFeatureBase<TDevice>::onEvent(DeviceEventDescriptor& event) {
 
       if(event.eventType==DeviceEventDescriptor::EventType::GET_STRING_DESCRIPTOR) {
 

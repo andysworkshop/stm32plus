@@ -14,8 +14,8 @@ namespace stm32plus {
      * Provide a manufacturer string. This is optional
      */
 
-    template<class TUsbDevice>
-    class ManufacturerTextFeature : public StringFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class ManufacturerTextFeature : public StringFeatureBase<TDevice> {
 
       public:
         struct Parameters {
@@ -23,7 +23,7 @@ namespace stm32plus {
         };
 
       public:
-        ManufacturerTextFeature(TUsbDevice& device,const Parameters& params);
+        ManufacturerTextFeature(TDevice& device,const Parameters& params);
     };
 
 
@@ -33,9 +33,9 @@ namespace stm32plus {
      * @param str The manufacturer string
      */
 
-    template<class TUsbDevice>
-    inline ManufacturerTextFeature<TUsbDevice>::ManufacturerTextFeature(TUsbDevice& device,const Parameters& params)
-      : StringFeatureBase<TUsbDevice>(device,params.device_manufacturer_text,USBD_IDX_MFC_STR) {
+    template<class TDevice>
+    inline ManufacturerTextFeature<TDevice>::ManufacturerTextFeature(TDevice& device,const Parameters& params)
+      : StringFeatureBase<TDevice>(device,params.device_manufacturer_text,USBD_IDX_MFC_STR) {
     }
   }
 }

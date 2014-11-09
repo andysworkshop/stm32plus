@@ -14,8 +14,8 @@ namespace stm32plus {
      * Provide a configuration string. This is optional
      */
 
-    template<class TUsbDevice>
-    class ConfigurationTextFeature : public StringFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class ConfigurationTextFeature : public StringFeatureBase<TDevice> {
 
       public:
         struct Parameters {
@@ -23,7 +23,7 @@ namespace stm32plus {
         };
 
       protected:
-        ConfigurationTextFeature(TUsbDevice& device,const Parameters& params);
+        ConfigurationTextFeature(TDevice& device,const Parameters& params);
     };
 
 
@@ -33,9 +33,9 @@ namespace stm32plus {
      * @param str The configuration string
      */
 
-    template<class TUsbDevice>
-    inline ConfigurationTextFeature<TUsbDevice>::ConfigurationTextFeature(TUsbDevice& device,const Parameters& params)
-      : StringFeatureBase<TUsbDevice>(device,params.device_configuration_text,USBD_IDX_CONFIG_STR) {
+    template<class TDevice>
+    inline ConfigurationTextFeature<TDevice>::ConfigurationTextFeature(TDevice& device,const Parameters& params)
+      : StringFeatureBase<TDevice>(device,params.device_configuration_text,USBD_IDX_CONFIG_STR) {
     }
   }
 }

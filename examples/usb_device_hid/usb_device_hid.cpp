@@ -19,16 +19,23 @@ class UsbDeviceHidTest {
 
   public:
 
-    void run() {
+    // declare the interrupt endpoint that we'll use to send data into the host
 
-      typedef HidDevice<
-          InternalFsPhy,                   // use the internal full speed PHY
-          ManufacturerTextFeature,         // we'll supply a manufacturer name
-          ProductTextFeature,              // ... and a product name
-          SerialNumberTextFeature,         // ... and a serial number
-          ConfigurationTextFeature,        // ... and a config text string
-          InterfaceTextFeature             // ... and an interface text string
-        > MyUsb;
+    template<class TDevice> using Endpoint1=InterruptInEndpointFeature<1,TDevice>;
+
+    // declare the USB stack
+
+    typedef HidDevice<
+      InternalFsPhy,                   // use the internal full speed PHY
+      ManufacturerTextFeature,         // we'll supply a manufacturer name
+      ProductTextFeature,              // ... and a product name
+      SerialNumberTextFeature,         // ... and a serial number
+      ConfigurationTextFeature,        // ... and a config text string
+      InterfaceTextFeature,            // ... and an interface text string
+      Endpoint1                        // the interrupt endpoint
+    > MyUsb;
+
+    void run() {
 
       MyUsb::Parameters params;
 

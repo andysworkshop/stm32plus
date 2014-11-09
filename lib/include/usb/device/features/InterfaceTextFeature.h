@@ -15,8 +15,8 @@ namespace stm32plus {
      * Provide an interface text string. This is optional
      */
 
-    template<class TUsbDevice>
-    class InterfaceTextFeature : public StringFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class InterfaceTextFeature : public StringFeatureBase<TDevice> {
 
       public:
         struct Parameters {
@@ -24,7 +24,7 @@ namespace stm32plus {
         };
 
       protected:
-        InterfaceTextFeature(TUsbDevice& device,const Parameters& params);
+        InterfaceTextFeature(TDevice& device,const Parameters& params);
     };
 
 
@@ -34,9 +34,9 @@ namespace stm32plus {
      * @param str The interface text
      */
 
-    template<class TUsbDevice>
-    inline InterfaceTextFeature<TUsbDevice>::InterfaceTextFeature(TUsbDevice& device,const Parameters& params)
-      : StringFeatureBase<TUsbDevice>(device,params.device_interface_text,USBD_IDX_INTERFACE_STR) {
+    template<class TDevice>
+    inline InterfaceTextFeature<TDevice>::InterfaceTextFeature(TDevice& device,const Parameters& params)
+      : StringFeatureBase<TDevice>(device,params.device_interface_text,USBD_IDX_INTERFACE_STR) {
     }
   }
 }

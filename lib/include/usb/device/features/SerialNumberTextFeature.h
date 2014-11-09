@@ -14,8 +14,8 @@ namespace stm32plus {
      * Provide a serial number string. This is optional
      */
 
-    template<class TUsbDevice>
-    class SerialNumberTextFeature : public StringFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class SerialNumberTextFeature : public StringFeatureBase<TDevice> {
 
       public:
         struct Parameters {
@@ -23,7 +23,7 @@ namespace stm32plus {
         };
 
       protected:
-        SerialNumberTextFeature(TUsbDevice& device,const Parameters& params);
+        SerialNumberTextFeature(TDevice& device,const Parameters& params);
     };
 
 
@@ -33,9 +33,9 @@ namespace stm32plus {
      * @param str The serial number string
      */
 
-    template<class TUsbDevice>
-    inline SerialNumberTextFeature<TUsbDevice>::SerialNumberTextFeature(TUsbDevice& device,const Parameters& params)
-      : StringFeatureBase<TUsbDevice>(device,params.device_serial_text,USBD_IDX_SERIAL_STR) {
+    template<class TDevice>
+    inline SerialNumberTextFeature<TDevice>::SerialNumberTextFeature(TDevice& device,const Parameters& params)
+      : StringFeatureBase<TDevice>(device,params.device_serial_text,USBD_IDX_SERIAL_STR) {
     }
   }
 }

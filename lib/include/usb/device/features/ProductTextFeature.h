@@ -15,8 +15,8 @@ namespace stm32plus {
      * Provide a product string. This is optional
      */
 
-    template<class TUsbDevice>
-    class ProductTextFeature : public StringFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class ProductTextFeature : public StringFeatureBase<TDevice> {
 
       public:
         struct Parameters {
@@ -24,7 +24,7 @@ namespace stm32plus {
         };
 
       protected:
-        ProductTextFeature(TUsbDevice& device,const Parameters& params);
+        ProductTextFeature(TDevice& device,const Parameters& params);
     };
 
 
@@ -34,9 +34,9 @@ namespace stm32plus {
      * @param str The product string
      */
 
-    template<class TUsbDevice>
-    inline ProductTextFeature<TUsbDevice>::ProductTextFeature(TUsbDevice& device,const Parameters& params)
-      : StringFeatureBase<TUsbDevice>(device,params.device_product_text,USBD_IDX_PRODUCT_STR) {
+    template<class TDevice>
+    inline ProductTextFeature<TDevice>::ProductTextFeature(TDevice& device,const Parameters& params)
+      : StringFeatureBase<TDevice>(device,params.device_product_text,USBD_IDX_PRODUCT_STR) {
     }
   }
 }

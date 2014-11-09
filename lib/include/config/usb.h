@@ -55,6 +55,8 @@
 
   #include "usb/device/features/DeviceFeatureBase.h"
   #include "usb/device/features/endpoints/ControlEndpointFeature.h"
+  #include "usb/device/features/endpoints/InEndpointFeatureBase.h"
+  #include "usb/device/features/endpoints/InterruptInEndpointFeature.h"
   #include "usb/device/features/StringFeatureBase.h"
   #include "usb/device/features/ManufacturerTextFeature.h"
   #include "usb/device/features/ProductTextFeature.h"

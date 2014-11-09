@@ -210,8 +210,6 @@ namespace stm32plus {
       // both FS and HS PHYs manage a shared RX FIFO
 
       HAL_PCD_SetRxFiFo(&_pcdHandle,params.phy_rxFifoSize);
-
-   //   HAL_PCD_SetTxFiFo(&hpcd,1,0x80);
    }
 
 

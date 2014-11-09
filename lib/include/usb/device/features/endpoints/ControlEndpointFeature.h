@@ -15,8 +15,8 @@ namespace stm32plus {
      * This endpoint feature is automatically added to your features so don't add it yourself.
      */
 
-    template<class TUsbDevice>
-    class ControlEndpointFeature : public DeviceFeatureBase<TUsbDevice> {
+    template<class TDevice>
+    class ControlEndpointFeature : public DeviceFeatureBase<TDevice> {
 
       public:
         struct Parameters {
@@ -28,7 +28,7 @@ namespace stm32plus {
         };
 
       protected:
-        ControlEndpointFeature(TUsbDevice& device,const Parameters& params);
+        ControlEndpointFeature(TDevice& device,const Parameters& params);
     };
 
 
@@ -38,9 +38,9 @@ namespace stm32plus {
      * @param str The manufacturer string
      */
 
-    template<class TUsbDevice>
-    inline ControlEndpointFeature<TUsbDevice>::ControlEndpointFeature(TUsbDevice& device,const Parameters& params)
-      : DeviceFeatureBase<TUsbDevice>(device) {
+    template<class TDevice>
+    inline ControlEndpointFeature<TDevice>::ControlEndpointFeature(TDevice& device,const Parameters& params)
+      : DeviceFeatureBase<TDevice>(device) {
 
       // increase endpoints counter
 

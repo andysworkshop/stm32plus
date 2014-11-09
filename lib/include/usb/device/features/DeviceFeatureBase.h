@@ -16,14 +16,14 @@ namespace stm32plus {
      * USB device reference
      */
 
-    template<class TUsbDevice>
+    template<class TDevice>
     class DeviceFeatureBase {
 
       protected:
-        TUsbDevice& _device;
+        TDevice& _device;
 
       protected:
-        DeviceFeatureBase(TUsbDevice& device);
+        DeviceFeatureBase(TDevice& device);
     };
 
 
@@ -32,8 +32,8 @@ namespace stm32plus {
      * @param device A reference to the USB device class
      */
 
-    template<class TUsbDevice>
-    inline DeviceFeatureBase<TUsbDevice>::DeviceFeatureBase(TUsbDevice& device)
+    template<class TDevice>
+    inline DeviceFeatureBase<TDevice>::DeviceFeatureBase(TDevice& device)
       : _device(device) {
     }
   }
