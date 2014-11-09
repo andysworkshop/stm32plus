@@ -90,7 +90,7 @@ class NetUdpReceiveAsyncTest {
 
     volatile bool _datagramArrived;
     volatile uint16_t _datagramDataSize;
-    volatile uint8_t _datagramData[20];
+    volatile uint8_t _datagramData[10];
 
 
     /*
@@ -199,7 +199,7 @@ class NetUdpReceiveAsyncTest {
 
       // cut it down to a max of 10 bytes
 
-      _datagramDataSize=_datagramDataSize<=20 ? _datagramDataSize : 20;
+      _datagramDataSize=_datagramDataSize<=10 ? _datagramDataSize : 10;
 
       // copy out the data and notify it's here
 
