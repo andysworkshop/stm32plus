@@ -20,6 +20,8 @@
 #include "usblib/device/core/inc/usbd_def.h"
 #include "usblib/device/core/inc/usbd_core.h"
 
+#include "usblib/device/class/hid/inc/usbd_hid.h"
+
 // usb depends on ...
 
 #include "config/event.h"
@@ -50,15 +52,17 @@
   #include "usb/device/UsbDeviceEventSource.h"
   #include "usb/device/UsbDeviceBase.h"
   #include "usb/device/UsbDevice.h"
-  #include "usb/device/UsbHidDevice.h"
 
   #include "usb/device/features/UsbDeviceFeatureBase.h"
+  #include "usb/device/features/endpoints/UsbControlEndpointFeature.h"
   #include "usb/device/features/UsbStringFeatureBase.h"
   #include "usb/device/features/UsbManufacturerTextFeature.h"
   #include "usb/device/features/UsbProductTextFeature.h"
   #include "usb/device/features/UsbSerialNumberTextFeature.h"
   #include "usb/device/features/UsbConfigurationTextFeature.h"
   #include "usb/device/features/UsbInterfaceTextFeature.h"
+
+  #include "usb/device/UsbHidDevice.h"
 
 #endif
 

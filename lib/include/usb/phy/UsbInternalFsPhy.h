@@ -17,6 +17,12 @@ namespace stm32plus {
 
     public:
       struct Parameters {
+
+        uint16_t phy_rxFifoSize;    // default is 0x80
+
+        Parameters() {
+          phy_rxFifoSize=0x80;
+        }
       };
 
     protected:

@@ -26,6 +26,7 @@ namespace stm32plus {
       UsbDeviceDescriptor _deviceDescriptor;
       UsbLanguageDescriptor _languageDescriptor;
       scoped_array<uint16_t> _unicodeString;      // very basic 8-bit to UTF-16 holder
+      uint8_t _numEndpoints;                      // endpoint classes will increment this
 
     public:
 
@@ -69,6 +70,9 @@ namespace stm32plus {
 
       USBD_HandleTypeDef& getDeviceHandle();
       UsbDeviceDescriptor& getDeviceDescriptor();
+      PCD_HandleTypeDef& getPcdHandle();
+
+      void incrementNumEndpoints();
 
       // re-entry points from the SDK
 
@@ -142,6 +146,10 @@ namespace stm32plus {
 
     _instance=this;
 
+    // reset the endpoint counter
+
+    _numEndpoints=0;
+
     // this is how the "LL" callbacks raise events
 
     _deviceHandle.pUserData=static_cast<UsbDeviceEventSource *>(this);
@@ -179,7 +187,7 @@ namespace stm32plus {
 
     _pcdHandle.Instance=this->_phyRegisters;
 
-    _pcdHandle.Init.dev_endpoints=params.device_num_endpoints;
+    _pcdHandle.Init.dev_endpoints=_numEndpoints;
     _pcdHandle.Init.use_dedicated_ep1=params.device_use_dedicated_endpoint1;
     _pcdHandle.Init.ep0_mps=params.device_endpoint0_max_packet_size;
     _pcdHandle.Init.vbus_sensing_enable=params.device_vbus_sensing;
@@ -199,9 +207,11 @@ namespace stm32plus {
 
     HAL_PCD_Init(&_pcdHandle);
 
-    HAL_PCD_SetRxFiFo(&hpcd,0x80);
-    HAL_PCD_SetTxFiFo(&hpcd,0,0x40);
-    HAL_PCD_SetTxFiFo(&hpcd,1,0x80);
+    // both FS and HS PHYs manage a shared RX FIFO
+
+    HAL_PCD_SetRxFiFo(&_pcdHandle,params.phy_rxFifoSize);
+
+ //   HAL_PCD_SetTxFiFo(&hpcd,1,0x80);
  }
 
 
@@ -226,7 +236,7 @@ namespace stm32plus {
    */
 
   template<class TPhy>
-  inline void UsbDevice<TPhy>::onEvent(UsbDeviceEventDescriptor& event) {
+  inline void UsbDevice<TPhy>::onEvent(UsbDeviceEventDescriptor& /* event */) {
 
   }
 
@@ -308,6 +318,27 @@ namespace stm32plus {
   template<class TPhy>
   inline USBD_HandleTypeDef& UsbDevice<TPhy>::getDeviceHandle() {
     return _deviceHandle;
+  }
+
+
+  /**
+   * Get the PCD handle
+   * @return a reference to the SDK PCD handle
+   */
+
+  template<class TPhy>
+  inline PCD_HandleTypeDef& UsbDevice<TPhy>::getPcdHandle() {
+    return _pcdHandle;
+  }
+
+
+  /**
+   * Increment the number of endpoints by 1
+   */
+
+  template<class TPhy>
+  inline void UsbDevice<TPhy>::incrementNumEndpoints() {
+    _numEndpoints++;
   }
 
 

@@ -15,6 +15,7 @@ namespace stm32plus {
 
   template<class TPhy,template <class> class... Features>
   struct UsbHidDevice : UsbDevice<TPhy>,
+                        UsbControlEndpointFeature<UsbDevice<TPhy>>,
                         Features<UsbDevice<TPhy>>... {
 
     /*
@@ -22,6 +23,7 @@ namespace stm32plus {
      */
 
     struct Parameters : UsbDevice<TPhy>::Parameters,
+                        UsbControlEndpointFeature<UsbDevice<TPhy>>::Parameters,
                         Features<UsbDevice<TPhy>>::Parameters... {
     };
 
@@ -32,7 +34,12 @@ namespace stm32plus {
 
     UsbHidDevice(Parameters& params)
       : UsbDevice<TPhy>(params),
+        UsbControlEndpointFeature<UsbDevice<TPhy>>(*this,params),
         Features<UsbDevice<TPhy>>(*this,params)... {
+
+      // link the HID interface/endpoint registration into the SDK structure
+
+      USBD_RegisterClass(&this->_deviceHandle,USBD_HID_CLASS);
     }
   };
 }
