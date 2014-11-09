@@ -90,7 +90,7 @@ class NetUdpReceiveAsyncTest {
 
     volatile bool _datagramArrived;
     volatile uint16_t _datagramDataSize;
-    volatile uint8_t _datagramData[10];
+    volatile uint8_t _datagramData[20];
 
 
     /*
@@ -98,6 +98,10 @@ class NetUdpReceiveAsyncTest {
      */
 
     void run() {
+
+      // nothing arrived yet
+
+      _datagramArrived=false;
 
       // declare an instance of the USART and the stream that we'll use to write to it
 
@@ -195,7 +199,7 @@ class NetUdpReceiveAsyncTest {
 
       // cut it down to a max of 10 bytes
 
-      _datagramDataSize=_datagramDataSize<=10 ? _datagramDataSize : 10;
+      _datagramDataSize=_datagramDataSize<=20 ? _datagramDataSize : 20;
 
       // copy out the data and notify it's here
 
