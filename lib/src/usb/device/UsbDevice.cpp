@@ -9,6 +9,7 @@
 
 
 using namespace stm32plus;
+using namespace stm32plus::usb;
 
 
 /**
@@ -18,7 +19,7 @@ using namespace stm32plus;
   */
 
 USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev) {
-  return stm32plus::usb_device_internal::notifyEvent(pdev,UsbDeviceEventDescriptor::EventType::INIT);
+  return stm32plus::usb::usb_device_internal::notifyEvent(pdev,DeviceEventDescriptor::EventType::INIT);
 }
 
 
@@ -29,7 +30,7 @@ USBD_StatusTypeDef USBD_LL_Init(USBD_HandleTypeDef *pdev) {
   */
 
 USBD_StatusTypeDef USBD_LL_DeInit(USBD_HandleTypeDef *pdev) {
-  return stm32plus::usb_device_internal::notifyEvent(pdev,UsbDeviceEventDescriptor::EventType::DEINIT);
+  return stm32plus::usb::usb_device_internal::notifyEvent(pdev,DeviceEventDescriptor::EventType::DEINIT);
 }
 
 
@@ -40,7 +41,7 @@ USBD_StatusTypeDef USBD_LL_DeInit(USBD_HandleTypeDef *pdev) {
   */
 
 USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev) {
-  return stm32plus::usb_device_internal::notifyEvent(pdev,UsbDeviceEventDescriptor::EventType::START);
+  return stm32plus::usb::usb_device_internal::notifyEvent(pdev,DeviceEventDescriptor::EventType::START);
 }
 
 
@@ -51,7 +52,7 @@ USBD_StatusTypeDef USBD_LL_Start(USBD_HandleTypeDef *pdev) {
   */
 
 USBD_StatusTypeDef USBD_LL_Stop(USBD_HandleTypeDef *pdev) {
-  return stm32plus::usb_device_internal::notifyEvent(pdev,UsbDeviceEventDescriptor::EventType::STOP);
+  return stm32plus::usb::usb_device_internal::notifyEvent(pdev,DeviceEventDescriptor::EventType::STOP);
 }
 
 
@@ -66,9 +67,9 @@ USBD_StatusTypeDef USBD_LL_Stop(USBD_HandleTypeDef *pdev) {
 
 USBD_StatusTypeDef USBD_LL_OpenEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8_t ep_type,uint16_t ep_mps) {
 
-  UsbDeviceSdkOpenEndpointEvent event(ep_addr,static_cast<UsbEndpointType>(ep_type),ep_mps);
+  DeviceSdkOpenEndpointEvent event(ep_addr,static_cast<EndpointType>(ep_type),ep_mps);
 
-  reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+  reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
   return event.retval;
 }
 
@@ -81,7 +82,7 @@ USBD_StatusTypeDef USBD_LL_OpenEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8
   */
 
 USBD_StatusTypeDef USBD_LL_CloseEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-  return stm32plus::usb_device_internal::endpointEvent(pdev,UsbDeviceEventDescriptor::EventType::CLOSE_ENDPOINT,ep_addr);
+  return stm32plus::usb::usb_device_internal::endpointEvent(pdev,DeviceEventDescriptor::EventType::CLOSE_ENDPOINT,ep_addr);
 }
 
 
@@ -93,7 +94,7 @@ USBD_StatusTypeDef USBD_LL_CloseEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
   */
 
 USBD_StatusTypeDef USBD_LL_FlushEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-  return stm32plus::usb_device_internal::endpointEvent(pdev,UsbDeviceEventDescriptor::EventType::FLUSH_ENDPOINT,ep_addr);
+  return stm32plus::usb::usb_device_internal::endpointEvent(pdev,DeviceEventDescriptor::EventType::FLUSH_ENDPOINT,ep_addr);
 }
 
 
@@ -105,7 +106,7 @@ USBD_StatusTypeDef USBD_LL_FlushEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
   */
 
 USBD_StatusTypeDef USBD_LL_StallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr) {
-  return stm32plus::usb_device_internal::endpointEvent(pdev,UsbDeviceEventDescriptor::EventType::STALL_ENDPOINT,ep_addr);
+  return stm32plus::usb::usb_device_internal::endpointEvent(pdev,DeviceEventDescriptor::EventType::STALL_ENDPOINT,ep_addr);
 }
 
 
@@ -117,7 +118,7 @@ USBD_StatusTypeDef USBD_LL_StallEP(USBD_HandleTypeDef *pdev, uint8_t ep_addr) {
   */
 
 USBD_StatusTypeDef USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
-  return stm32plus::usb_device_internal::endpointEvent(pdev,UsbDeviceEventDescriptor::EventType::CLEAR_STALL_ENDPOINT,ep_addr);
+  return stm32plus::usb::usb_device_internal::endpointEvent(pdev,DeviceEventDescriptor::EventType::CLEAR_STALL_ENDPOINT,ep_addr);
 }
 
 
@@ -130,9 +131,9 @@ USBD_StatusTypeDef USBD_LL_ClearStallEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr
 
 uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
 
-  UsbDeviceSdkIsStalledEndpointEvent event(ep_addr);
+  DeviceSdkIsStalledEndpointEvent event(ep_addr);
 
-  reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+  reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
   return event.isStalled;
 }
 
@@ -145,7 +146,7 @@ uint8_t USBD_LL_IsStallEP(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
   */
 
 USBD_StatusTypeDef USBD_LL_SetUSBAddress(USBD_HandleTypeDef *pdev,uint8_t /* dev_addr */) {
-  return stm32plus::usb_device_internal::notifyEvent(pdev,UsbDeviceEventDescriptor::EventType::SET_USB_ADDRESS);
+  return stm32plus::usb::usb_device_internal::notifyEvent(pdev,DeviceEventDescriptor::EventType::SET_USB_ADDRESS);
 }
 
 
@@ -160,9 +161,9 @@ USBD_StatusTypeDef USBD_LL_SetUSBAddress(USBD_HandleTypeDef *pdev,uint8_t /* dev
 
 USBD_StatusTypeDef USBD_LL_Transmit(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8_t *pbuf,uint16_t size) {
 
-  UsbDeviceSdkDataEndpointEvent event(UsbDeviceEventDescriptor::EventType::TRANSMIT,ep_addr,pbuf,size);
+  DeviceSdkDataEndpointEvent event(DeviceEventDescriptor::EventType::TRANSMIT,ep_addr,pbuf,size);
 
-  reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+  reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
   return event.retval;
 }
 
@@ -178,9 +179,9 @@ USBD_StatusTypeDef USBD_LL_Transmit(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uin
 
 USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev,uint8_t ep_addr,uint8_t *pbuf,uint16_t size) {
 
-  UsbDeviceSdkDataEndpointEvent event(UsbDeviceEventDescriptor::EventType::PREPARE_RECEIVE,ep_addr,pbuf,size);
+  DeviceSdkDataEndpointEvent event(DeviceEventDescriptor::EventType::PREPARE_RECEIVE,ep_addr,pbuf,size);
 
-  reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+  reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
   return event.retval;
 }
 
@@ -194,9 +195,9 @@ USBD_StatusTypeDef USBD_LL_PrepareReceive(USBD_HandleTypeDef *pdev,uint8_t ep_ad
 
 uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
 
-  UsbDeviceSdkGetLastTransferredSizeEndpointEvent event(ep_addr);
+  DeviceSdkGetLastTransferredSizeEndpointEvent event(ep_addr);
 
-  reinterpret_cast<UsbDeviceEventSource *>(pdev->pUserData)->UsbDeviceEventSender.raiseEvent(event);
+  reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
   return event.lastTransferred;
 }
 

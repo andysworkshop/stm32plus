@@ -4,20 +4,21 @@
  * Please see website for licensing terms.
  */
 
+
 #pragma once
 
 
 namespace stm32plus {
+  namespace usb {
 
+    /*
+     * Device descriptor structure, 18 bytes
+     */
 
-  /*
-   * Endpoint type enumeration. This matches the SDK enumeration in usbd_def.h
-   */
+    struct StringDescriptor {
 
-  enum class UsbEndpointType : uint8_t {
-    CONTROL     = 0,
-    ISOCHRONOUS = 1,
-    BULK        = 2,
-    INTERRUPT   = 3
-  };
+      uint8_t bLength;
+      uint8_t bDescriptorType;
+    } __attribute__((packed));
+  }
 }

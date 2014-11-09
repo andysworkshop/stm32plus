@@ -9,6 +9,7 @@
 
 
 using namespace stm32plus;
+using namespace stm32plus::usb;
 
 
 /**
@@ -20,13 +21,13 @@ class UsbDeviceHidTest {
 
     void run() {
 
-      typedef UsbHidDevice<
-          UsbInternalFsPhy,                   // use the internal full speed PHY
-          UsbManufacturerTextFeature,         // we'll supply a manufacturer name
-          UsbProductTextFeature,              // ... and a product name
-          UsbSerialNumberTextFeature,         // ... and a serial number
-          UsbConfigurationTextFeature,        // ... and a config text string
-          UsbInterfaceTextFeature             // ... and an interface text string
+      typedef HidDevice<
+          InternalFsPhy,                   // use the internal full speed PHY
+          ManufacturerTextFeature,         // we'll supply a manufacturer name
+          ProductTextFeature,              // ... and a product name
+          SerialNumberTextFeature,         // ... and a serial number
+          ConfigurationTextFeature,        // ... and a config text string
+          InterfaceTextFeature             // ... and an interface text string
         > MyUsb;
 
       MyUsb::Parameters params;
