@@ -99,6 +99,10 @@ class NetUdpReceiveAsyncTest {
 
     void run() {
 
+      // nothing arrived yet
+
+      _datagramArrived=false;
+
       // declare an instance of the USART and the stream that we'll use to write to it
 
       _usart=new MyUsart(57600);
