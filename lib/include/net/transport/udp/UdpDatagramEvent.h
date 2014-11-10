@@ -18,6 +18,8 @@ namespace stm32plus {
     struct UdpDatagramEvent : NetEventDescriptor {
 
       UdpDatagram& udpDatagram;             ///< the UDP datagram
+      IpPacket& ipPacket;                   ///< the underlying IP packet
+
       bool handled;                         ///< set to true if this datagram was handled
 
       /**
@@ -26,9 +28,10 @@ namespace stm32plus {
        * @param ip The IP packet structure
        */
 
-      UdpDatagramEvent(UdpDatagram& udp)
+      UdpDatagramEvent(UdpDatagram& udp,IpPacket& ipp)
         : NetEventDescriptor(NetEventType::UDP_DATAGRAM),
           udpDatagram(udp),
+          ipPacket(ipp),
           handled(false) {
       }
     };
