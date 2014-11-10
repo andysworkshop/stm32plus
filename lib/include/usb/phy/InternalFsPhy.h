@@ -15,7 +15,7 @@ namespace stm32plus {
      */
 
     template<class... Features>
-    class InternalFsPhy {
+    class InternalFsPhy : public Features... {
 
       public:
         struct Parameters : Features::Parameters... {
@@ -34,7 +34,7 @@ namespace stm32plus {
         InternalFsPhy(Parameters& params);
         ~InternalFsPhy();
 
-        bool phySupportsDma();
+        bool phySupportsDma() const;
         uint32_t getPhyInterface() const;
         uint32_t getPhySpeed() const;
     };

@@ -5,6 +5,9 @@
  */
 
 #include "config/stm32plus.h"
+
+#if defined(STM32PLUS_F4)
+
 #include "config/usb.h"
 
 
@@ -20,3 +23,5 @@ extern "C" {
     MillisecondTimer::delay(ms);
   }
 }
+
+#endif

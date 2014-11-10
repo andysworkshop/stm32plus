@@ -34,7 +34,7 @@ namespace stm32plus {
      * @param params the config parameters
      */
 
-    inline FsLowPowerFeature::FsLowPowerFeature(const Parameters& params)
+    inline FsLowPowerFeature::FsLowPowerFeature(const Parameters& /* params */)
       : _wakeup(EXTI_Mode_Interrupt,EXTI_Trigger_Rising) {
 
       _wakeup.clearPendingInterrupt();

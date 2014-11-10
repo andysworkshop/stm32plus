@@ -256,11 +256,11 @@ namespace stm32plus {
   struct ClockControl<PERIPHERAL_OTG_FS> {
 
     static void On() {
-      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_OTG_FS,ENABLE);
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_OTG_HS,ENABLE);
     }
 
     static void Off() {
-      RCC_AHBPeriphClockCmd(RCC_AHBPeriph_OTG_FS,DISABLE);
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_OTG_HS,DISABLE);
     }
   };
 

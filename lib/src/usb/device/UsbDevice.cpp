@@ -5,6 +5,9 @@
  */
 
 #include "config/stm32plus.h"
+
+#if defined(STM32PLUS_F4)
+
 #include "config/usb.h"
 
 
@@ -211,3 +214,5 @@ uint32_t USBD_LL_GetRxDataSize(USBD_HandleTypeDef *pdev,uint8_t ep_addr) {
 void USBD_LL_Delay(uint32_t delay) {
   MillisecondTimer::delay(delay);
 }
+
+#endif

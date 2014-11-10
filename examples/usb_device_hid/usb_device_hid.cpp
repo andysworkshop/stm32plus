@@ -26,13 +26,15 @@ class UsbDeviceHidTest {
     // declare the USB stack
 
     typedef HidDevice<
-      InternalFsPhy,                   // use the internal full speed PHY
-      ManufacturerTextFeature,         // we'll supply a manufacturer name
-      ProductTextFeature,              // ... and a product name
-      SerialNumberTextFeature,         // ... and a serial number
-      ConfigurationTextFeature,        // ... and a config text string
-      InterfaceTextFeature,            // ... and an interface text string
-      Endpoint1                        // the interrupt endpoint
+      InternalFsPhy<                      // use the internal full speed PHY
+        FsLowPowerFeature                 // include the low power EXTI wakeup
+      >,
+      ManufacturerTextFeature,            // we'll supply a manufacturer name
+      ProductTextFeature,                 // ... and a product name
+      SerialNumberTextFeature,            // ... and a serial number
+      ConfigurationTextFeature,           // ... and a config text string
+      InterfaceTextFeature,               // ... and an interface text string
+      Endpoint1                           // the interrupt endpoint
     > MyUsb;
 
     void run() {

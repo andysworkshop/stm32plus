@@ -42,11 +42,12 @@ namespace stm32plus {
 
     public:
       static void enable();
+      static void disable();
   };
 
 
   /**
-   * Enabler specialisations for F1 and F4
+   * Enabler specialisations for F0
    */
 
   template<>
@@ -56,10 +57,22 @@ namespace stm32plus {
   }
 
   template<>
+  inline void ExtiInterruptEnabler<0>::disable() {
+    Nvic::configureIrq(EXTI0_1_IRQn,DISABLE);
+  }
+
+
+  template<>
   inline void ExtiInterruptEnabler<1>::enable() {
     _forceLinkage=&EXTI0_1_IRQHandler;
     Nvic::configureIrq(EXTI0_1_IRQn);
   }
+
+  template<>
+  inline void ExtiInterruptEnabler<1>::disable() {
+    Nvic::configureIrq(EXTI0_1_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<2>::enable() {
@@ -68,9 +81,20 @@ namespace stm32plus {
   }
 
   template<>
+  inline void ExtiInterruptEnabler<2>::disable() {
+    Nvic::configureIrq(EXTI2_3_IRQn,DISABLE);
+  }
+
+
+  template<>
   inline void ExtiInterruptEnabler<3>::enable() {
     _forceLinkage=&EXTI2_3_IRQHandler;
     Nvic::configureIrq(EXTI2_3_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<3>::disable() {
+    Nvic::configureIrq(EXTI2_3_IRQn,DISABLE);
   }
 
 
@@ -84,11 +108,21 @@ namespace stm32plus {
     Nvic::configureIrq(EXTI4_15_IRQn);
   }
 
+  template<>
+  inline void ExtiInterruptEnabler<4>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<5>::enable() {
     _forceLinkage=&EXTI4_15_IRQHandler;
     Nvic::configureIrq(EXTI4_15_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<5>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
   }
 
 
@@ -98,11 +132,21 @@ namespace stm32plus {
     Nvic::configureIrq(EXTI4_15_IRQn);
   }
 
+  template<>
+  inline void ExtiInterruptEnabler<6>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<7>::enable() {
     _forceLinkage=&EXTI4_15_IRQHandler;
     Nvic::configureIrq(EXTI4_15_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<7>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
   }
 
 
@@ -112,11 +156,21 @@ namespace stm32plus {
     Nvic::configureIrq(EXTI4_15_IRQn);
   }
 
+  template<>
+  inline void ExtiInterruptEnabler<8>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<9>::enable() {
     _forceLinkage=&EXTI4_15_IRQHandler;
     Nvic::configureIrq(EXTI4_15_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<9>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
   }
 
 
@@ -126,11 +180,21 @@ namespace stm32plus {
     Nvic::configureIrq(EXTI4_15_IRQn);
   }
 
+  template<>
+  inline void ExtiInterruptEnabler<10>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<11>::enable() {
     _forceLinkage=&EXTI4_15_IRQHandler;
     Nvic::configureIrq(EXTI4_15_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<11>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
   }
 
 
@@ -140,11 +204,21 @@ namespace stm32plus {
     Nvic::configureIrq(EXTI4_15_IRQn);
   }
 
+  template<>
+  inline void ExtiInterruptEnabler<12>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<13>::enable() {
     _forceLinkage=&EXTI4_15_IRQHandler;
     Nvic::configureIrq(EXTI4_15_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<13>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
   }
 
 
@@ -154,11 +228,21 @@ namespace stm32plus {
     Nvic::configureIrq(EXTI4_15_IRQn);
   }
 
+  template<>
+  inline void ExtiInterruptEnabler<14>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
+  }
+
 
   template<>
   inline void ExtiInterruptEnabler<15>::enable() {
     _forceLinkage=&EXTI4_15_IRQHandler;
     Nvic::configureIrq(EXTI4_15_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<15>::disable() {
+    Nvic::configureIrq(EXTI4_15_IRQn,DISABLE);
   }
 
 
@@ -173,14 +257,31 @@ namespace stm32plus {
   }
 
   template<>
+  inline void ExtiInterruptEnabler<16>::disable() {
+    Nvic::configureIrq(PVD_IRQn,DISABLE);
+  }
+
+
+  template<>
   inline void ExtiInterruptEnabler<17>::enable() {
     _forceLinkage=&RTC_IRQHandler;
     Nvic::configureIrq(RTC_IRQn);
   }
 
   template<>
+  inline void ExtiInterruptEnabler<17>::disable() {
+    Nvic::configureIrq(RTC_IRQn,DISABLE);
+  }
+
+
+  template<>
   inline void ExtiInterruptEnabler<19>::enable() {
     _forceLinkage=&TS_IRQHandler;
     Nvic::configureIrq(TS_IRQn);
+  }
+
+  template<>
+  inline void ExtiInterruptEnabler<19>::disable() {
+    Nvic::configureIrq(TS_IRQn,DISABLE);
   }
 }
