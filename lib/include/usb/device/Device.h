@@ -44,7 +44,6 @@ namespace stm32plus {
           uint16_t device_language_id;  // default is 0x0409 (English; US)
           bool device_use_dedicated_endpoint1;  // default is false
           bool device_vbus_sensing;     // default is true
-          bool device_low_power_enable; // default is true
           uint32_t device_endpoint0_max_packet_size;  // default is 0x40
 
           Parameters() {
@@ -55,7 +54,6 @@ namespace stm32plus {
             device_use_dedicated_endpoint1=false;
             device_endpoint0_max_packet_size=0x40;
             device_vbus_sensing=true;
-            device_low_power_enable=true;
           }
         };
 

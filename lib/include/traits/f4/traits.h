@@ -355,6 +355,14 @@ namespace stm32plus {
   typedef PeripheralTraits<PERIPHERAL_MAC> MacPeripheralTraits;
 
   template<>
+  struct PeripheralTraits<PERIPHERAL_OTG_FS> {
+    enum {
+      GPIO_SPEED = GPIO_Speed_50MHz
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_OTG_FS> OtgFsPeripheralTraits;
+
+  template<>
   struct PeripheralTraits<PERIPHERAL_USART6> {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,

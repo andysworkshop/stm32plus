@@ -27,10 +27,12 @@
 #include "config/event.h"
 #include "config/timing.h"
 #include "config/smartptr.h"
-
+#include "config/rcc.h"
+#include "config/exti.h"
 
 #if defined(STM32PLUS_F4)
 
+  #include "usb/phy/features/FsLowPowerFeature.h"
   #include "usb/phy/InternalFsPhy.h"
   #include "usb/core/Core.h"
 
