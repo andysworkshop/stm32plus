@@ -23,8 +23,11 @@ namespace stm32plus {
         struct Parameters {
         };
 
+      public:
+        bool initialise(const Parameters& params);
+
       protected:
-        FsLowPowerFeature(const Parameters& params);
+        FsLowPowerFeature();
         ~FsLowPowerFeature();
     };
 
@@ -34,12 +37,22 @@ namespace stm32plus {
      * @param params the config parameters
      */
 
-    inline FsLowPowerFeature::FsLowPowerFeature(const Parameters& /* params */)
+    inline FsLowPowerFeature::FsLowPowerFeature()
       : _wakeup(EXTI_Mode_Interrupt,EXTI_Trigger_Rising) {
 
       _wakeup.clearPendingInterrupt();
     }
 
+
+    /**
+     * Initialise the class
+     * @param parameters reference
+     * @return true
+     */
+
+    inline bool FsLowPowerFeature::initialise(const Parameters& /* params */) {
+      return true;
+    }
 
 
     /**

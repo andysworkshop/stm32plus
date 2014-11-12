@@ -22,9 +22,19 @@ namespace stm32plus {
         };
 
       public:
-        Core(Parameters& params)
-          : TPhy(params) {
-        }
+        bool initialise(Parameters& params);
     };
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters
+     * @return true if it worked
+     */
+
+    template<class TPhy>
+    bool Core<TPhy>::initialise(Parameters& params) {
+      return TPhy::initialise(params);
+    }
   }
 }

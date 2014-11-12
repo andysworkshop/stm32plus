@@ -24,7 +24,10 @@ namespace stm32plus {
         };
 
       protected:
-        InterfaceTextFeature(TDevice& device,const Parameters& params);
+        InterfaceTextFeature(TDevice& device);
+
+      public:
+        bool initialise(const Parameters& params);
     };
 
 
@@ -35,8 +38,20 @@ namespace stm32plus {
      */
 
     template<class TDevice>
-    inline InterfaceTextFeature<TDevice>::InterfaceTextFeature(TDevice& device,const Parameters& params)
-      : StringFeatureBase<TDevice>(device,params.device_interface_text,USBD_IDX_INTERFACE_STR) {
+    inline InterfaceTextFeature<TDevice>::InterfaceTextFeature(TDevice& device)
+      : StringFeatureBase<TDevice>(device,USBD_IDX_INTERFACE_STR) {
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters
+     * @return true
+     */
+
+    template<class TDevice>
+    inline bool InterfaceTextFeature<TDevice>::initialise(const Parameters& params) {
+      return StringFeatureBase<TDevice>::initialise(params.device_interface_text);
     }
   }
 }

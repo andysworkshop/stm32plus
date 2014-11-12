@@ -17,7 +17,7 @@ namespace stm32plus {
      */
 
     template<class TPhy>
-    class Device : public DeviceBase<TPhy> {
+    class Device : public Core<TPhy> {
 
       protected:
         PCD_HandleTypeDef _pcdHandle;
@@ -31,10 +31,19 @@ namespace stm32plus {
       public:
 
         /**
+         * Error codes
+         */
+
+        enum {
+          E_INIT = 1
+        };
+
+
+        /**
          * Parameters structure - device specific detail
          */
 
-        struct Parameters : DeviceBase<TPhy>::Parameters {
+        struct Parameters : Core<TPhy>::Parameters {
 
           uint16_t device_vid;          // no default
           uint16_t device_pid;          // no default
@@ -60,11 +69,13 @@ namespace stm32plus {
         static Device<TPhy> *_instance;    // this is how the global callbacks get back in
 
       protected:
-        void onEvent(DeviceEventDescriptor& event);
+        void onEvent(UsbEventDescriptor& event);
 
       public:
-        Device(Parameters& params);
+        Device();
         ~Device();
+
+        bool initialise(Parameters& params);
 
         USBD_HandleTypeDef& getDeviceHandle();
         DeviceDescriptor& getDeviceDescriptor();
@@ -137,8 +148,9 @@ namespace stm32plus {
      */
 
     template<class TPhy>
-    inline Device<TPhy>::Device(Parameters& params)
-      : DeviceBase<TPhy>(params) {
+    inline Device<TPhy>::Device()
+      : _pcdHandle(),
+        _deviceHandle() {
 
       // static member initialisation
 
@@ -150,7 +162,7 @@ namespace stm32plus {
 
       // this is how the "LL" callbacks raise events
 
-      _deviceHandle.pUserData=static_cast<DeviceEventSource *>(this);
+      _deviceHandle.pUserData=static_cast<UsbEventSource *>(this);
 
       // fill in the SDK device descriptor callbacks
 
@@ -162,6 +174,30 @@ namespace stm32plus {
       _deviceDescriptorCallbacks.GetConfigurationStrDescriptor=usb_device_internal::GetConfigurationStrDescriptor<TPhy>;
       _deviceDescriptorCallbacks.GetInterfaceStrDescriptor=usb_device_internal::GetInterfaceStrDescriptor<TPhy>;
 
+      // subscribe to USB events
+
+      this->UsbEventSender.insertSubscriber(
+          UsbEventSourceSlot::bind(this,&Device<TPhy>::onEvent)
+        );
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters
+     * @return true if it worked
+     */
+
+    template<class TPhy>
+    bool Device<TPhy>::initialise(Parameters& params) {
+
+      USBD_StatusTypeDef status;
+
+      // initialise upwards
+
+      if(!Core<TPhy>::initialise(params))
+        return false;
+
       // set up the device descriptor
 
       _deviceDescriptor.bcdDevice=params.device_version;
@@ -170,16 +206,6 @@ namespace stm32plus {
       // set up the language descriptor
 
       _languageDescriptor.wLanguageId=params.device_language_id;
-
-       // subscribe to USB events
-
-      this->DeviceEventSender.insertSubscriber(
-          DeviceEventSourceSlot::bind(this,&Device<TPhy>::onEvent)
-        );
-
-      // initialise SDK
-
-      USBD_Init(&_deviceHandle,&_deviceDescriptorCallbacks,params.device_id);
 
       // set up the PCD handle
 
@@ -200,13 +226,15 @@ namespace stm32plus {
       _pcdHandle.pData=&_deviceHandle;
       _deviceHandle.pData=&_pcdHandle;
 
-      // initialise the HAL driver
+      // initialise SDK
 
-      HAL_PCD_Init(&_pcdHandle);
+      if((status=USBD_Init(&_deviceHandle,&_deviceDescriptorCallbacks,params.device_id))!=USBD_OK)
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,E_INIT,status);
 
       // both FS and HS PHYs manage a shared RX FIFO
 
       HAL_PCD_SetRxFiFo(&_pcdHandle,params.phy_rxFifoSize);
+      return true;
    }
 
 
@@ -219,8 +247,8 @@ namespace stm32plus {
 
       // unsubscribe from USB events
 
-      this->DeviceEventSender.removeSubscriber(
-          DeviceEventSourceSlot::bind(this,&Device<TPhy>::onEvent)
+      this->UsbEventSender.removeSubscriber(
+          UsbEventSourceSlot::bind(this,&Device<TPhy>::onEvent)
         );
     }
 
@@ -231,8 +259,95 @@ namespace stm32plus {
      */
 
     template<class TPhy>
-    inline void Device<TPhy>::onEvent(DeviceEventDescriptor& /* event */) {
+    __attribute__((noinline)) inline void Device<TPhy>::onEvent(UsbEventDescriptor& event) {
 
+      switch(event.eventType) {
+
+        case UsbEventDescriptor::EventType::OTG_FS_INTERRUPT:
+          HAL_PCD_IRQHandler(&_pcdHandle);    // handle the OTG interrupt
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_INIT:
+          static_cast<DeviceSdkNotifyEvent&>(event).retval=HAL_PCD_Init(&_pcdHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_DEINIT:
+          static_cast<DeviceSdkNotifyEvent&>(event).retval=HAL_PCD_DeInit(&_pcdHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_SET_USB_ADDRESS:
+          static_cast<DeviceSdkNotifyEvent&>(event).retval=HAL_PCD_SetAddress(&_pcdHandle,_deviceHandle.dev_address);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_START:
+          static_cast<DeviceSdkNotifyEvent&>(event).retval=HAL_PCD_Start(&_pcdHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_STOP:
+          static_cast<DeviceSdkNotifyEvent&>(event).retval=HAL_PCD_Stop(&_pcdHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_OPEN_ENDPOINT: {
+            DeviceSdkOpenEndpointEvent& openEvent(static_cast<DeviceSdkOpenEndpointEvent&>(event));
+            openEvent.retval=HAL_PCD_EP_Open(&_pcdHandle,openEvent.endpointAddress,openEvent.maximumPacketSize,static_cast<uint8_t>(openEvent.endpointType));
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_CLOSE_ENDPOINT: {
+            DeviceSdkEndpointEvent& epEvent(static_cast<DeviceSdkEndpointEvent&>(event));
+            epEvent.retval=HAL_PCD_EP_Close(&_pcdHandle,epEvent.endpointAddress);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_FLUSH_ENDPOINT: {
+            DeviceSdkEndpointEvent& epEvent(static_cast<DeviceSdkEndpointEvent&>(event));
+            epEvent.retval=HAL_PCD_EP_Flush(&_pcdHandle,epEvent.endpointAddress);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_STALL_ENDPOINT: {
+            DeviceSdkEndpointEvent& epEvent(static_cast<DeviceSdkEndpointEvent&>(event));
+            epEvent.retval=HAL_PCD_EP_SetStall(&_pcdHandle,epEvent.endpointAddress);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_CLEAR_STALL_ENDPOINT: {
+            DeviceSdkEndpointEvent& epEvent(static_cast<DeviceSdkEndpointEvent&>(event));
+            epEvent.retval=HAL_PCD_EP_ClrStall(&_pcdHandle,epEvent.endpointAddress);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IS_STALL_ENDPOINT: {
+            DeviceSdkIsStalledEndpointEvent& epEvent(static_cast<DeviceSdkIsStalledEndpointEvent&>(event));
+
+            if((epEvent.endpointAddress & 0x80)==0x80)
+              epEvent.isStalled=_pcdHandle.IN_ep[epEvent.endpointAddress & 0x7F].is_stall;
+            else
+              epEvent.isStalled=_pcdHandle.OUT_ep[epEvent.endpointAddress & 0x7F].is_stall;
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_TRANSMIT: {
+            DeviceSdkDataEndpointEvent& dataEvent(static_cast<DeviceSdkDataEndpointEvent&>(event));
+            dataEvent.retval=HAL_PCD_EP_Transmit(&_pcdHandle,dataEvent.endpointAddress,dataEvent.data,dataEvent.size);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_PREPARE_RECEIVE: {
+            DeviceSdkDataEndpointEvent& dataEvent(static_cast<DeviceSdkDataEndpointEvent&>(event));
+            dataEvent.retval=HAL_PCD_EP_Receive(&_pcdHandle,dataEvent.endpointAddress,dataEvent.data,dataEvent.size);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_GET_RX_DATA_SIZE: {
+            DeviceSdkGetLastTransferredSizeEndpointEvent& dataEvent(static_cast<DeviceSdkGetLastTransferredSizeEndpointEvent&>(event));
+            dataEvent.lastTransferred=HAL_PCD_EP_GetRxCount(&_pcdHandle,dataEvent.endpointAddress);
+          }
+          break;
+
+        default:
+          break;
+      }
     }
 
 
@@ -249,7 +364,7 @@ namespace stm32plus {
 
       // give anyone a chance to change the descriptor based on the connection speed
 
-      this->DeviceEventSender.raiseEvent(DeviceGetDeviceDescriptorEvent(speed,_deviceDescriptor));
+      this->UsbEventSender.raiseEvent(DeviceGetDeviceDescriptorEvent(speed,_deviceDescriptor));
 
       // return the descriptor
 
@@ -271,7 +386,7 @@ namespace stm32plus {
 
       // give anyone a chance to change the descriptor based on the connection speed
 
-      this->DeviceEventSender.raiseEvent(DeviceGetLanguageDescriptorEvent(speed,_languageDescriptor));
+      this->UsbEventSender.raiseEvent(DeviceGetLanguageDescriptorEvent(speed,_languageDescriptor));
 
       // return the descriptor
 
@@ -296,7 +411,7 @@ namespace stm32plus {
       // send the event that will be picked up by one of the feature classes that implements
       // the required string
 
-      this->DeviceEventSender.raiseEvent(event);
+      this->UsbEventSender.raiseEvent(event);
 
       // subscriber sets these, or if not that's OK too
 
@@ -354,19 +469,19 @@ namespace stm32plus {
        * Helpers to dispatch events that have common parameters
        */
 
-      inline USBD_StatusTypeDef notifyEvent(USBD_HandleTypeDef *pdev,DeviceEventDescriptor::EventType eventType) {
+      inline USBD_StatusTypeDef notifyEvent(USBD_HandleTypeDef *pdev,UsbEventDescriptor::EventType eventType) {
 
         DeviceSdkNotifyEvent event(eventType);
 
-        reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
+        reinterpret_cast<UsbEventSource *>(pdev->pUserData)->UsbEventSender.raiseEvent(event);
         return event.retval;
       }
 
-      inline USBD_StatusTypeDef endpointEvent(USBD_HandleTypeDef *pdev,DeviceEventDescriptor::EventType eventType,uint8_t ep_addr) {
+      inline USBD_StatusTypeDef endpointEvent(USBD_HandleTypeDef *pdev,UsbEventDescriptor::EventType eventType,uint8_t ep_addr) {
 
         DeviceSdkEndpointEvent event(eventType,ep_addr);
 
-        reinterpret_cast<DeviceEventSource *>(pdev->pUserData)->DeviceEventSender.raiseEvent(event);
+        reinterpret_cast<UsbEventSource *>(pdev->pUserData)->UsbEventSender.raiseEvent(event);
         return event.retval;
       }
     }

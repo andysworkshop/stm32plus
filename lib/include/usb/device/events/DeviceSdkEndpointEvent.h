@@ -14,14 +14,13 @@ namespace stm32plus {
      * Event class for SDK events that just tell us something has happened to an endpoint
      */
 
-    struct DeviceSdkEndpointEvent : DeviceEventDescriptor {
+    struct DeviceSdkEndpointEvent : UsbEventDescriptor {
 
-      USBD_StatusTypeDef retval;
+      HalUsbStatus retval;
       uint8_t endpointAddress;
 
       DeviceSdkEndpointEvent(EventType eventType,uint8_t ep_addr)
-        : DeviceEventDescriptor(eventType),
-          retval(USBD_OK),
+        : UsbEventDescriptor(eventType),
           endpointAddress(ep_addr) {
       }
     };

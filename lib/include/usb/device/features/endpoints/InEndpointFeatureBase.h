@@ -28,27 +28,46 @@ namespace stm32plus {
         };
 
       protected:
-        InEndpointFeatureBase(TDevice& device,const Parameters& params,uint8_t endpointNumber);
+        uint8_t _endpointNumber;
+
+      protected:
+        InEndpointFeatureBase(TDevice& device,uint8_t endpointNumber);
+
+      public:
+        bool initialise(const Parameters& params);
     };
 
 
     /**
      * Constructor
      * @param device Reference to the device
-     * @param params Reference to the parameters
      */
 
     template<class TDevice>
-    inline InEndpointFeatureBase<TDevice>::InEndpointFeatureBase(TDevice& device,const Parameters& params,uint8_t endpointNumber)
+    inline InEndpointFeatureBase<TDevice>::InEndpointFeatureBase(TDevice& device,uint8_t endpointNumber)
       : DeviceFeatureBase<TDevice>(device) {
 
-      // set the FIFO size
-
-      HAL_PCD_SetTxFiFo(&device.getPcdHandle(),endpointNumber,params.ep_txFifoSize);
+      _endpointNumber=endpointNumber;
 
       // increase the endpoint counter
 
       device.incrementNumEndpoints();
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params the parameters
+     * @return true
+     */
+
+    template<class TDevice>
+    inline bool InEndpointFeatureBase<TDevice>::initialise(const Parameters& params) {
+
+      // set the FIFO size
+
+      HAL_PCD_SetTxFiFo(&this->_device.getPcdHandle(),_endpointNumber,params.ep_txFifoSize);
+      return true;
     }
   }
 }

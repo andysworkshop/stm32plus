@@ -15,10 +15,13 @@ namespace stm32plus {
      */
 
     template<class... Features>
-    class InternalFsPhy : public Features... {
+    class InternalFsPhy : public UsbEventSource,
+                          public InternalFsPhyInterruptFeature,
+                          public Features... {
 
       public:
-        struct Parameters : Features::Parameters... {
+        struct Parameters : InternalFsPhyInterruptFeature::Parameters,
+                            Features::Parameters... {
 
           uint16_t phy_rxFifoSize;      // default is 0x80
 
@@ -31,8 +34,10 @@ namespace stm32plus {
         USB_OTG_GlobalTypeDef *_phyRegisters;
 
       public:
-        InternalFsPhy(Parameters& params);
+        InternalFsPhy();
         ~InternalFsPhy();
+
+        bool initialise(Parameters& params);
 
         bool phySupportsDma() const;
         uint32_t getPhyInterface() const;
@@ -42,13 +47,29 @@ namespace stm32plus {
 
     /**
      * Constructor
-     * @param params Reference to the parameters structure
      */
 
     template<class... Features>
-    inline InternalFsPhy<Features...>::InternalFsPhy(Parameters& params)
-      : Features(params)...,
+    inline InternalFsPhy<Features...>::InternalFsPhy()
+      : InternalFsPhyInterruptFeature(static_cast<UsbEventSource&>(*this)),
         _phyRegisters(USB_OTG_FS) {
+    }
+
+
+    /**
+     * Initialise
+     * @param params The parameters class
+     * @return true
+     */
+
+    template<class... Features>
+    inline bool InternalFsPhy<Features...>::initialise(Parameters& params) {
+
+      // initialise upwards
+
+      if(!InternalFsPhyInterruptFeature::initialise(params) ||
+         !RecursiveBoolInitWithParams<InternalFsPhy,Features...>::tinit(this,params))
+          return false;
 
       // configure DM/DP Pins
 
@@ -85,6 +106,7 @@ namespace stm32plus {
       // PHY clock on
 
       ClockControl<PERIPHERAL_OTG_FS>::On();
+      return true;
     }
 
 

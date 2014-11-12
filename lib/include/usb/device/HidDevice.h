@@ -15,33 +15,79 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    struct HidDevice : Device<TPhy>,
-                       ControlEndpointFeature<Device<TPhy>>,
-                       Features<Device<TPhy>>... {
-
-      /*
-       * Parameters for the HID device
-       */
-
-      struct Parameters : Device<TPhy>::Parameters,
-                          ControlEndpointFeature<Device<TPhy>>::Parameters,
-                          Features<Device<TPhy>>::Parameters... {
-      };
+    class HidDevice : public Device<TPhy>,
+                      public ControlEndpointFeature<Device<TPhy>>,
+                      public Features<Device<TPhy>>... {
 
 
-      /*
-       * Constructor
-       */
+      public:
 
-      HidDevice(Parameters& params)
-        : Device<TPhy>(params),
-          ControlEndpointFeature<Device<TPhy>>(*this,params),
-          Features<Device<TPhy>>(*this,params)... {
+        /**
+         * Error codes
+         */
 
-        // link the HID interface/endpoint registration into the SDK structure
+        enum {
+          E_REGISTER_CLASS = 1,
+          E_START = 2
+        };
 
-        USBD_RegisterClass(&this->_deviceHandle,USBD_HID_CLASS);
-      }
+        /*
+         * Parameters for the HID device
+         */
+
+        struct Parameters : Device<TPhy>::Parameters,
+                            ControlEndpointFeature<Device<TPhy>>::Parameters,
+                            Features<Device<TPhy>>::Parameters... {
+        };
+
+      public:
+        HidDevice();
+
+        bool initialise(Parameters& params);
     };
+
+
+    /**
+     * Constructor
+     * @param params paramters class
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline HidDevice<TPhy,Features...>::HidDevice()
+      : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
+        Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters class
+     * @return true if it worked
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool HidDevice<TPhy,Features...>::initialise(Parameters& params) {
+
+      USBD_StatusTypeDef status;
+
+      // initialise upwards
+
+      if(!Device<TPhy>::initialise(params) ||
+         !ControlEndpointFeature<Device<TPhy>>::initialise(params) ||
+         !RecursiveBoolInitWithParams<HidDevice,Features<Device<TPhy>>...>::tinit(this,params))
+        return false;
+
+      // link the HID interface/endpoint registration into the SDK structure
+
+      if((status=USBD_RegisterClass(&this->_deviceHandle,USBD_HID_CLASS))!=USBD_OK)
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_REGISTER_CLASS,status);
+
+      // start the device
+
+      if((status=USBD_Start(&this->_deviceHandle))!=USBD_OK)
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_START,status);
+
+      return true;
+    }
   }
 }

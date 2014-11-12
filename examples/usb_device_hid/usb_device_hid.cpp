@@ -49,8 +49,16 @@ class UsbDeviceHidTest {
       params.device_configuration_text="My configuration";
       params.device_interface_text="My interface";
 
-      MyUsb usb(params);
+      MyUsb usb;
 
+      if(!usb.initialise(params))
+        error();
+
+      for(;;);
+    }
+
+
+    void error() {
       for(;;);
     }
 };
@@ -61,6 +69,12 @@ class UsbDeviceHidTest {
  */
 
 int main() {
+
+  // initialise the millisecond timer
+
+  MillisecondTimer::initialise();
+
+  // run the test
 
   UsbDeviceHidTest test;
   test.run();

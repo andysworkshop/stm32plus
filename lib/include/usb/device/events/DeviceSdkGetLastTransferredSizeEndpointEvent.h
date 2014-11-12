@@ -15,13 +15,13 @@ namespace stm32plus {
      * default is zero so lastTransferred should be changed to the actual value
      */
 
-    struct DeviceSdkGetLastTransferredSizeEndpointEvent : DeviceEventDescriptor {
+    struct DeviceSdkGetLastTransferredSizeEndpointEvent : UsbEventDescriptor {
 
       uint8_t endpointAddress;
       uint32_t lastTransferred;
 
       DeviceSdkGetLastTransferredSizeEndpointEvent(uint8_t ep_addr)
-        : DeviceEventDescriptor(EventType::GET_RX_DATA_SIZE),
+        : UsbEventDescriptor(EventType::DEVICE_GET_RX_DATA_SIZE),
           endpointAddress(ep_addr),
           lastTransferred(0) {
       }

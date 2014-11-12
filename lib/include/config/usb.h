@@ -11,6 +11,8 @@
  * Include this config file to get access to the USB peripheral.
  */
 
+#define USE_OTG_FS_INTERRUPT
+
 // ST driver includes
 
 #include "usblib/hal/inc/stm32f4xx_ll_usb.h"
@@ -29,10 +31,19 @@
 #include "config/smartptr.h"
 #include "config/rcc.h"
 #include "config/exti.h"
+#include "util/Meta.h"
 
 #if defined(STM32PLUS_F4)
 
+  #include "usb/device/HalUsbdStatus.h"
+
+  #include "usb/UsbEventDescriptor.h"
+  #include "usb/UsbErrorEventDescriptor.h"
+  #include "usb/UsbEventSource.h"
+
+  #include "usb/phy/events/OtgFsInterruptEvent.h"
   #include "usb/phy/features/FsLowPowerFeature.h"
+  #include "usb/phy/features/InternalFsPhyInterruptFeature.h"
   #include "usb/phy/InternalFsPhy.h"
   #include "usb/core/Core.h"
 
@@ -40,7 +51,6 @@
   #include "usb/device/LanguageDescriptor.h"
   #include "usb/device/EndpointType.h"
 
-  #include "usb/device/events/DeviceEventDescriptor.h"
   #include "usb/device/events/DeviceSdkNotifyEvent.h"
   #include "usb/device/events/DeviceSdkEndpointEvent.h"
   #include "usb/device/events/DeviceSdkOpenEndpointEvent.h"
@@ -51,8 +61,6 @@
   #include "usb/device/events/DeviceGetLanguageDescriptorEvent.h"
   #include "usb/device/events/DeviceGetDisplayStringDescriptorEvent.h"
 
-  #include "usb/device/DeviceEventSource.h"
-  #include "usb/device/DeviceBase.h"
   #include "usb/device/Device.h"
 
   #include "usb/device/features/DeviceFeatureBase.h"

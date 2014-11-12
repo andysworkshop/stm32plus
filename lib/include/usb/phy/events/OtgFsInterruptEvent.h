@@ -11,15 +11,13 @@ namespace stm32plus {
   namespace usb {
 
     /*
-     * Event class for SDK events that just tell us something has happened
+     * Event class to notify that an OTG interrupt has happened
      */
 
-    struct DeviceSdkNotifyEvent : UsbEventDescriptor {
+    struct OtgFsInterruptEvent : UsbEventDescriptor {
 
-      HalUsbStatus retval;
-
-      DeviceSdkNotifyEvent(EventType eventType)
-        : UsbEventDescriptor(eventType) {
+      OtgFsInterruptEvent()
+        : UsbEventDescriptor(EventType::OTG_FS_INTERRUPT) {
       }
     };
   }

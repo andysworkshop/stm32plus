@@ -14,15 +14,17 @@ namespace stm32plus {
      * The event signature for USB device events
      */
 
-    DECLARE_EVENT_SIGNATURE(Device,void(DeviceEventDescriptor&));
+    DECLARE_EVENT_SIGNATURE(Usb,void(UsbEventDescriptor&));
+    DECLARE_EVENT_SIGNATURE(UsbError,void(UsbErrorEventDescriptor&));
 
 
     /*
      * Base structure that holds just the event subscriber/publisher for USB devices
      */
 
-    struct DeviceEventSource {
-      DECLARE_EVENT_SOURCE(Device);
+    struct UsbEventSource {
+      DECLARE_EVENT_SOURCE(Usb);
+      DECLARE_EVENT_SOURCE(UsbError);
     };
   }
 }

@@ -16,13 +16,13 @@ namespace stm32plus {
      * can modify descriptor if required.
      */
 
-    struct DeviceGetDeviceDescriptorEvent : DeviceEventDescriptor {
+    struct DeviceGetDeviceDescriptorEvent : UsbEventDescriptor {
 
       USBD_SpeedTypeDef speed;
       DeviceDescriptor& descriptor;
 
       DeviceGetDeviceDescriptorEvent(USBD_SpeedTypeDef s,DeviceDescriptor& desc)
-        : DeviceEventDescriptor(EventType::GET_DEVICE_DESCRIPTOR),
+        : UsbEventDescriptor(EventType::DEVICE_GET_DEVICE_DESCRIPTOR),
           speed(s),
           descriptor(desc) {
       }

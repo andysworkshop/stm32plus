@@ -23,19 +23,32 @@ namespace stm32plus {
         };
 
       protected:
-        InterruptInEndpointFeature(TDevice& device,const Parameters& params);
+        InterruptInEndpointFeature(TDevice& device);
+
+      public:
+        bool initialise(Parameters& params);
     };
 
 
     /**
      * Constructor
      * @param device Reference to the device
-     * @param params Reference to the parameters
      */
 
     template<uint8_t TEndpointNumber,class TDevice>
-    inline InterruptInEndpointFeature<TEndpointNumber,TDevice>::InterruptInEndpointFeature(TDevice& device,const Parameters& params)
-      : InEndpointFeatureBase<TDevice>(device,params,TEndpointNumber) {
+    inline InterruptInEndpointFeature<TEndpointNumber,TDevice>::InterruptInEndpointFeature(TDevice& device)
+      : InEndpointFeatureBase<TDevice>(device,TEndpointNumber) {
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params the parameters
+     */
+
+    template<uint8_t TEndpointNumber,class TDevice>
+    inline bool InterruptInEndpointFeature<TEndpointNumber,TDevice>::initialise(Parameters& params) {
+      return InEndpointFeatureBase<TDevice>::initialise(params);
     }
   }
 }

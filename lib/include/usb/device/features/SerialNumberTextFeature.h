@@ -23,7 +23,10 @@ namespace stm32plus {
         };
 
       protected:
-        SerialNumberTextFeature(TDevice& device,const Parameters& params);
+        SerialNumberTextFeature(TDevice& device);
+
+      public:
+        bool initialise(const Parameters& params);
     };
 
 
@@ -34,8 +37,20 @@ namespace stm32plus {
      */
 
     template<class TDevice>
-    inline SerialNumberTextFeature<TDevice>::SerialNumberTextFeature(TDevice& device,const Parameters& params)
-      : StringFeatureBase<TDevice>(device,params.device_serial_text,USBD_IDX_SERIAL_STR) {
+    inline SerialNumberTextFeature<TDevice>::SerialNumberTextFeature(TDevice& device)
+      : StringFeatureBase<TDevice>(device,USBD_IDX_SERIAL_STR) {
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters
+     * @return true
+     */
+
+    template<class TDevice>
+    inline bool SerialNumberTextFeature<TDevice>::initialise(const Parameters& params) {
+      return StringFeatureBase<TDevice>::initialise(params.device_serial_text);
     }
   }
 }

@@ -16,13 +16,13 @@ namespace stm32plus {
      * can modify descriptor if required.
      */
 
-    struct DeviceGetLanguageDescriptorEvent : DeviceEventDescriptor {
+    struct DeviceGetLanguageDescriptorEvent : UsbEventDescriptor {
 
       USBD_SpeedTypeDef speed;
       LanguageDescriptor& descriptor;
 
       DeviceGetLanguageDescriptorEvent(USBD_SpeedTypeDef s,LanguageDescriptor& desc)
-        : DeviceEventDescriptor(EventType::GET_LANGUAGE_DESCRIPTOR),
+        : UsbEventDescriptor(EventType::DEVICE_GET_LANGUAGE_DESCRIPTOR),
           speed(s),
           descriptor(desc) {
       }

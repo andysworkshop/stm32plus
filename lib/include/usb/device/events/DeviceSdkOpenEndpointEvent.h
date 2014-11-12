@@ -20,7 +20,7 @@ namespace stm32plus {
       EndpointType endpointType;
 
       DeviceSdkOpenEndpointEvent(uint8_t ep_addr,EndpointType ep_type,uint16_t ep_mps)
-        : DeviceSdkEndpointEvent(EventType::OPEN_ENDPOINT,ep_addr),
+        : DeviceSdkEndpointEvent(EventType::DEVICE_OPEN_ENDPOINT,ep_addr),
           maximumPacketSize(ep_mps),
           endpointType(ep_type) {
       }

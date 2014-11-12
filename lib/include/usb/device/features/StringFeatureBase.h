@@ -24,29 +24,52 @@ namespace stm32plus {
         uint8_t _stringIndex;
 
       protected:
-        StringFeatureBase(TDevice& device,const char *str,uint8_t stringIndex);
+        StringFeatureBase(TDevice& device,uint8_t stringIndex);
         ~StringFeatureBase();
 
-        void onEvent(DeviceEventDescriptor& event);
+        bool initialise(const char *str);
+
+        void onEvent(UsbEventDescriptor& event);
     };
 
 
     /**
-     * Constructor. This will do a dumb conversion to unicode by assuming that the mapping
-     * of 8-bit characters is represented by an equivalent [cc00] unicode character.
-     *
+     * Constructor
      * @param device A reference to the USB device class
-     * @param str 8-bit ASCII version of the string. Does not need to remain in
-     * scope after this constructor completes.
      * @param stringIndex Index used by the protocol when it calls back for this string
      */
 
     template<class TDevice>
-    inline StringFeatureBase<TDevice>::StringFeatureBase(TDevice& device,const char *str,uint8_t stringIndex)
-      : DeviceFeatureBase<TDevice>(device),
-        _length(strlen(str)+1),
-        _unicodeString(new uint16_t[_length]),
-        _stringIndex(stringIndex) {
+    inline StringFeatureBase<TDevice>::StringFeatureBase(TDevice& device,uint8_t stringIndex)
+      : DeviceFeatureBase<TDevice>(device) {
+
+      _stringIndex=stringIndex;
+
+      // register this string index with the device descriptor
+
+      device.getDeviceDescriptor().iManufacturer=stringIndex;
+
+      // subscribe to device events
+
+      device.UsbEventSender.insertSubscriber(
+          UsbEventSourceSlot::bind(this,&StringFeatureBase<TDevice>::onEvent)
+        );
+    }
+
+
+    /**
+     * Initialise. This will do a dumb conversion to unicode by assuming that the mapping
+     * of 8-bit characters is represented by an equivalent [cc00] unicode character.
+     *
+     * @param str 8-bit ASCII version of the string. Does not need to remain in
+     * scope after this constructor completes.
+     */
+
+    template<class TDevice>
+    inline bool StringFeatureBase<TDevice>::initialise(const char *str) {
+
+      _length=strlen(str)+1;
+      _unicodeString.reset(new uint16_t[_length]);
 
       const char *src;
       uint16_t *dest;
@@ -60,15 +83,7 @@ namespace stm32plus {
         *dest++=*src;
       } while(*src++);
 
-      // register this string index with the device descriptor
-
-      device.getDeviceDescriptor().iManufacturer=stringIndex;
-
-      // subscribe to device events
-
-      device.DeviceEventSender.insertSubscriber(
-          DeviceEventSourceSlot::bind(this,&StringFeatureBase<TDevice>::onEvent)
-        );
+      return true;
     }
 
 
@@ -81,8 +96,8 @@ namespace stm32plus {
 
       // unsubscribe from device events
 
-      this->_device.DeviceEventSender.removeSubscriber(
-          DeviceEventSourceSlot::bind(this,&StringFeatureBase<TDevice>::onEvent)
+      this->_device.UsbEventSender.removeSubscriber(
+          UsbEventSourceSlot::bind(this,&StringFeatureBase<TDevice>::onEvent)
         );
     }
 
@@ -93,9 +108,9 @@ namespace stm32plus {
      */
 
     template<class TDevice>
-    inline void StringFeatureBase<TDevice>::onEvent(DeviceEventDescriptor& event) {
+    inline void StringFeatureBase<TDevice>::onEvent(UsbEventDescriptor& event) {
 
-      if(event.eventType==DeviceEventDescriptor::EventType::GET_STRING_DESCRIPTOR) {
+      if(event.eventType==UsbEventDescriptor::EventType::DEVICE_GET_STRING_DESCRIPTOR) {
 
         // convert to the event type that we know it is
 

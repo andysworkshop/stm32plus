@@ -28,27 +28,41 @@ namespace stm32plus {
         };
 
       protected:
-        ControlEndpointFeature(TDevice& device,const Parameters& params);
+        ControlEndpointFeature(TDevice& device);
+
+      public:
+        bool initialise(const Parameters& params);
     };
 
 
     /**
      * Constructor
-     * @param device A reference to the USB device
-     * @param str The manufacturer string
+     * @param the device reference
      */
 
     template<class TDevice>
-    inline ControlEndpointFeature<TDevice>::ControlEndpointFeature(TDevice& device,const Parameters& params)
+    inline ControlEndpointFeature<TDevice>::ControlEndpointFeature(TDevice& device)
       : DeviceFeatureBase<TDevice>(device) {
 
       // increase endpoints counter
 
       device.incrementNumEndpoints();
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters class
+     * @return true;
+     */
+
+    template<class TDevice>
+    inline bool ControlEndpointFeature<TDevice>::initialise(const Parameters& params) {
 
       // set the tx fifo size
 
-      HAL_PCD_SetTxFiFo(&device.getPcdHandle(),0,params.ctrlep_txFifoSize);
+      HAL_PCD_SetTxFiFo(&this->_device.getPcdHandle(),0,params.ctrlep_txFifoSize);
+      return true;
     }
   }
 }

@@ -20,7 +20,7 @@ namespace stm32plus {
       bool isStalled;
 
       DeviceSdkIsStalledEndpointEvent(uint8_t ep_addr)
-        : DeviceSdkEndpointEvent(EventType::IS_STALL_ENDPOINT,ep_addr),
+        : DeviceSdkEndpointEvent(EventType::DEVICE_IS_STALL_ENDPOINT,ep_addr),
           isStalled(false) {
       }
     };

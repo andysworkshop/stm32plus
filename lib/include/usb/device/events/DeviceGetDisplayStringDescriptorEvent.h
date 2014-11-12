@@ -16,7 +16,7 @@ namespace stm32plus {
      * process this event
      */
 
-    struct DeviceGetDisplayStringDescriptorEvent : DeviceEventDescriptor {
+    struct DeviceGetDisplayStringDescriptorEvent : UsbEventDescriptor {
 
       /*
        * Inputs
@@ -34,7 +34,7 @@ namespace stm32plus {
 
 
       DeviceGetDisplayStringDescriptorEvent(USBD_SpeedTypeDef s,uint8_t stringIndex)
-        : DeviceEventDescriptor(EventType::GET_STRING_DESCRIPTOR),
+        : UsbEventDescriptor(EventType::DEVICE_GET_STRING_DESCRIPTOR),
           speed(s),
           stringIndex(stringIndex),
           string(nullptr),

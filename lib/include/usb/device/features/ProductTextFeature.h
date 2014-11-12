@@ -24,19 +24,33 @@ namespace stm32plus {
         };
 
       protected:
-        ProductTextFeature(TDevice& device,const Parameters& params);
+        ProductTextFeature(TDevice& device);
+
+      public:
+        bool initialise(const Parameters& params);
     };
 
 
     /**
      * Constructor
      * @param device A reference to the USB device
-     * @param str The product string
      */
 
     template<class TDevice>
-    inline ProductTextFeature<TDevice>::ProductTextFeature(TDevice& device,const Parameters& params)
-      : StringFeatureBase<TDevice>(device,params.device_product_text,USBD_IDX_PRODUCT_STR) {
+    inline ProductTextFeature<TDevice>::ProductTextFeature(TDevice& device)
+      : StringFeatureBase<TDevice>(device,USBD_IDX_PRODUCT_STR) {
+    }
+
+
+    /**
+     * Initialise the class
+     * @param params The parameters
+     * @return true
+     */
+
+    template<class TDevice>
+    inline bool ProductTextFeature<TDevice>::initialise(const Parameters& params) {
+      return StringFeatureBase<TDevice>::initialise(params.device_product_text);
     }
   }
 }
