@@ -128,6 +128,7 @@ namespace stm32plus {
     PERIPHERAL_MAC,                 //!< PERIPHERAL_MAC
     PERIPHERAL_MAC_REMAP,           //!< PERIPHERAL_MAC_REMAP
     PERIPHERAL_OTG_FS,              //!< internal OTG FS PHY
+    PERIPHERAL_OTG_HS,              //!< internal OTG HS PHY
     PERIPHERAL_POWER,               //!< PERIPHERAL_POWER
     PERIPHERAL_RNG,                 //!< PERIPHERAL_RNG
     PERIPHERAL_SDIO,                //!< PERIPHERAL_SDIO

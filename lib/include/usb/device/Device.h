@@ -212,9 +212,9 @@ namespace stm32plus {
       _pcdHandle.Instance=this->_phyRegisters;
 
       _pcdHandle.Init.dev_endpoints=_numEndpoints;
-      _pcdHandle.Init.use_dedicated_ep1=params.device_use_dedicated_endpoint1;
+      _pcdHandle.Init.use_dedicated_ep1=params.device_use_dedicated_endpoint1 ? ENABLE : DISABLE;
       _pcdHandle.Init.ep0_mps=params.device_endpoint0_max_packet_size;
-      _pcdHandle.Init.vbus_sensing_enable=params.device_vbus_sensing;
+      _pcdHandle.Init.vbus_sensing_enable=params.device_vbus_sensing ? ENABLE : DISABLE;
 
       _pcdHandle.Init.dma_enable=this->phySupportsDma();
       _pcdHandle.Init.phy_itface=this->getPhyInterface();

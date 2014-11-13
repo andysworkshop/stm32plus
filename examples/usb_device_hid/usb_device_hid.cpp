@@ -70,6 +70,10 @@ class UsbDeviceHidTest {
 
 int main() {
 
+  // initialise the interrupt controller
+
+  Nvic::initialise();
+
   // initialise the millisecond timer
 
   MillisecondTimer::initialise();

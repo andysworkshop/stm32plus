@@ -35,7 +35,7 @@ namespace stm32plus {
           uint8_t fsphy_nvicSubPriority;   // secondary priority
 
           Parameters() {
-            fsphy_nvicPriority=0;
+            fsphy_nvicPriority=5;
             fsphy_nvicSubPriority=0;
           }
         };
