@@ -91,6 +91,7 @@ class NetUdpReceiveAsyncTest {
     volatile bool _datagramArrived;
     volatile uint16_t _datagramDataSize;
     volatile uint8_t _datagramData[10];
+    volatile IpAddress _remoteAddress;
 
 
     /*
@@ -154,9 +155,17 @@ class NetUdpReceiveAsyncTest {
 
       for(;;) {
 
+        char buffer[20];
+
         if(_datagramArrived) {
 
-          // a datagram has been received, print out the first 10 bytes
+          // a datagram has been received, print the address of the sender
+
+          const_cast<IpAddress&>(_remoteAddress).toString(buffer);
+
+          *(_outputStream) << "From: " << buffer << ": ";
+
+          // now print out the first 10 bytes
 
           for(uint16_t i=0;i<_datagramDataSize;i++)
             (*_outputStream) << (uint16_t) _datagramData[i] << " ";
@@ -192,6 +201,10 @@ class NetUdpReceiveAsyncTest {
       // unreachable message may be sent back to the sender (depending on your configuration)
 
       event.handled=true;
+
+      // get the remote address of the sender
+
+      _remoteAddress=event.ipPacket.header->ip_sourceAddress;
 
       // the datagram length includes the UDP network header (8 bytes)
 

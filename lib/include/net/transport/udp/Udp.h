@@ -56,6 +56,7 @@ namespace stm32plus {
         volatile void *_awaitingBuffer;               ///< buffer to copy incoming data into
         volatile uint16_t *_awaitingBufferSize;       ///< buffer size, updated with actual value
         volatile uint16_t _awaitingDatagramSize;      ///< the actual size received
+        volatile IpPacketHeader _ipPacketHeader;      ///< the underlying IP packet header
 
       protected:
         void onReceive(IpPacketEvent& ned);
@@ -75,7 +76,11 @@ namespace stm32plus {
                      bool async,
                      uint32_t transmitTimeout);
 
+        // synchronous receive functions
+
         bool udpReceive(uint16_t portNumber,void *buffer,uint16_t& size,uint32_t receiveTimeout=0);
+        const volatile IpPacketHeader& udpGetIpPacketHeader() const;
+        const volatile IpAddress& udpGetRemoteAddress() const;
     };
 
 
@@ -149,6 +154,7 @@ namespace stm32plus {
           _awaitingDatagramSize=NetUtil::ntohs(datagram->udp_length)-UdpDatagram::getHeaderSize();
           *_awaitingBufferSize=Min<uint16_t>((uint16_t)_awaitingDatagramSize,(uint16_t)*_awaitingBufferSize);
           memcpy(const_cast<void *>(_awaitingBuffer),datagram->udp_data,*_awaitingBufferSize);
+          const_cast<IpPacketHeader&>(_ipPacketHeader)=*(ipe.ipPacket.header);     // struct copy
 
           _awaiting=false;
           handled=true;
@@ -161,7 +167,7 @@ namespace stm32plus {
 
       // raise the receive event
 
-      UdpDatagramEvent ude(*datagram);
+      UdpDatagramEvent ude(*datagram,ipe.ipPacket);
       UdpReceiveEventSender.raiseEvent(ude);
 
       // merge the handled flag
@@ -362,6 +368,32 @@ namespace stm32plus {
       // return the correct value
 
       return _awaitingDatagramSize>size ? this->setError(ErrorProvider::ERROR_PROVIDER_NET_UDP,E_MSG_SIZE) : true;
+    }
+
+
+    /**
+     * Get a reference to the IP packet header belonging to the datagram that was last
+     * received with the udpReceive() synchronous method. The reference returned by this method
+     * is valid until the next call to udpReceive()
+     * @return A reference to the IP packet header
+     */
+
+    template<class TNetworkLayer>
+    const volatile IpPacketHeader& Udp<TNetworkLayer>::udpGetIpPacketHeader() const {
+      return _ipPacketHeader;
+    }
+
+
+    /**
+     * Convenience function to get the remote address (sender) of the last datagram to be
+     * received by the udpReceive() synchronous method. The reference returned by this method
+     * is valid until the next call to udpReceive()
+     * @return A reference to the IP address
+     */
+
+    template<class TNetworkLayer>
+    const volatile IpAddress& Udp<TNetworkLayer>::udpGetRemoteAddress() const {
+      return _ipPacketHeader.ip_sourceAddress;
     }
 
 
