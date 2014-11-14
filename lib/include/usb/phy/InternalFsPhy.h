@@ -106,6 +106,11 @@ namespace stm32plus {
       // PHY clock on
 
       ClockControl<PERIPHERAL_OTG_FS>::On();
+
+      // enable interrupts
+
+      this->phyEnableInterrupts();
+
       return true;
     }
 

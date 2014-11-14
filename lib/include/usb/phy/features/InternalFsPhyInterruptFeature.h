@@ -55,10 +55,8 @@ namespace stm32plus {
         InternalFsPhyInterruptFeature(UsbEventSource& eventSource);
         ~InternalFsPhyInterruptFeature();
 
-        void enable() const;
-        void disable() const;
-
-        void onEvent(UsbEventDescriptor& eventDescriptor);
+        void phyEnableInterrupts() const;
+        void phyDisableInterrupts() const;
     };
 
 
@@ -72,12 +70,6 @@ namespace stm32plus {
 
       _forceLinkage=&OTG_FS_IRQHandler;
       _usbEventSource=&eventSource;
-
-      // subscribe to events
-
-      eventSource.UsbEventSender.insertSubscriber(
-          UsbEventSourceSlot::bind(this,&InternalFsPhyInterruptFeature::onEvent)
-        );
     }
 
 
@@ -101,27 +93,7 @@ namespace stm32plus {
 
       // disable interrupts
 
-      disable();
-
-      // unsubscribe from events
-
-      _usbEventSource->UsbEventSender.removeSubscriber(
-          UsbEventSourceSlot::bind(this,&InternalFsPhyInterruptFeature::onEvent)
-        );
-    }
-
-
-    /**
-     * Event subscription callback
-     * @param eventDescriptor The event descriptor
-     */
-
-    __attribute__((noinline)) inline void InternalFsPhyInterruptFeature::onEvent(UsbEventDescriptor& eventDescriptor) {
-
-      // if the device is initialising then enable the interrupts
-
-      if(eventDescriptor.eventType==UsbEventDescriptor::EventType::DEVICE_INIT)
-        enable();
+      phyDisableInterrupts();
     }
 
 
@@ -129,7 +101,7 @@ namespace stm32plus {
      * Enable interrupts
      */
 
-    inline void InternalFsPhyInterruptFeature::enable() const {
+    inline void InternalFsPhyInterruptFeature::phyEnableInterrupts() const {
       Nvic::configureIrq(OTG_FS_IRQn,ENABLE,_params.fsphy_nvicPriority,_params.fsphy_nvicSubPriority);
     }
 
@@ -138,7 +110,7 @@ namespace stm32plus {
      * Disable the interrupts
      */
 
-    inline void InternalFsPhyInterruptFeature::disable() const {
+    inline void InternalFsPhyInterruptFeature::phyDisableInterrupts() const {
       Nvic::configureIrq(OTG_FS_IRQn,DISABLE,_params.fsphy_nvicPriority,_params.fsphy_nvicSubPriority);
     }
   }
