@@ -32,6 +32,7 @@
 #include "config/rcc.h"
 #include "config/exti.h"
 #include "util/Meta.h"
+#include "util/StdExt.h"
 
 #if defined(STM32PLUS_F4)
 
