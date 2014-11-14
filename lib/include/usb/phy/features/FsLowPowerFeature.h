@@ -39,7 +39,6 @@ namespace stm32plus {
 
     inline FsLowPowerFeature::FsLowPowerFeature()
       : _wakeup(EXTI_Mode_Interrupt,EXTI_Trigger_Rising) {
-
       _wakeup.clearPendingInterrupt();
     }
 

@@ -40,6 +40,7 @@ namespace stm32plus {
         bool initialise(Parameters& params);
 
         bool phySupportsDma() const;
+        bool phySupportsLowPower() const;
         uint32_t getPhyInterface() const;
         uint32_t getPhySpeed() const;
     };
@@ -136,6 +137,20 @@ namespace stm32plus {
     template<class... Features>
     inline bool InternalFsPhy<Features...>::phySupportsDma() const {
       return false;
+    }
+
+
+    /**
+     * Return true if the PHY supports low power mode
+     * @return true if FsLowPowerFeature is included as a feature
+     */
+
+    template<class... Features>
+    inline bool InternalFsPhy<Features...>::phySupportsLowPower() const {
+
+      // this is a compile-time check
+
+      return std::is_base_of<FsLowPowerFeature,InternalFsPhy<Features...>>::value;
     }
 
 
