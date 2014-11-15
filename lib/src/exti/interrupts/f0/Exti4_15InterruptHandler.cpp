@@ -14,34 +14,6 @@
 using namespace stm32plus;
 
 
-// static initialiser for the hack that forces the IRQ handlers to be linked
-
-template<> ExtiInterruptEnabler<4>::FPTR ExtiInterruptEnabler<4>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<5>::FPTR ExtiInterruptEnabler<5>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<6>::FPTR ExtiInterruptEnabler<6>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<7>::FPTR ExtiInterruptEnabler<7>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<8>::FPTR ExtiInterruptEnabler<8>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<9>::FPTR ExtiInterruptEnabler<9>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<10>::FPTR ExtiInterruptEnabler<10>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<11>::FPTR ExtiInterruptEnabler<11>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<12>::FPTR ExtiInterruptEnabler<12>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<13>::FPTR ExtiInterruptEnabler<13>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<14>::FPTR ExtiInterruptEnabler<14>::_forceLinkage=nullptr;
-template<> ExtiInterruptEnabler<15>::FPTR ExtiInterruptEnabler<15>::_forceLinkage=nullptr;
-template<> ExtiPeripheral<EXTI_Line4> *ExtiPeripheral<EXTI_Line4>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line5> *ExtiPeripheral<EXTI_Line5>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line6> *ExtiPeripheral<EXTI_Line6>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line7> *ExtiPeripheral<EXTI_Line7>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line8> *ExtiPeripheral<EXTI_Line8>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line9> *ExtiPeripheral<EXTI_Line9>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line10> *ExtiPeripheral<EXTI_Line10>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line11> *ExtiPeripheral<EXTI_Line11>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line12> *ExtiPeripheral<EXTI_Line12>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line13> *ExtiPeripheral<EXTI_Line13>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line14> *ExtiPeripheral<EXTI_Line14>::_extiInstance=nullptr;
-template<> ExtiPeripheral<EXTI_Line15> *ExtiPeripheral<EXTI_Line15>::_extiInstance=nullptr;
-
-
 #if defined(USE_EXTI4_15_INTERRUPT)
 
 extern "C" {
