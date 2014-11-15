@@ -42,6 +42,7 @@
   #include "usb/UsbErrorEventDescriptor.h"
   #include "usb/UsbEventSource.h"
 
+  #include "usb/phy/features/PhyFeatureBase.h"
   #include "usb/phy/events/OtgFsInterruptEvent.h"
   #include "usb/phy/features/FsLowPowerFeature.h"
   #include "usb/phy/features/InternalFsPhyInterruptFeature.h"
@@ -61,6 +62,14 @@
   #include "usb/device/events/DeviceGetDeviceDescriptorEvent.h"
   #include "usb/device/events/DeviceGetLanguageDescriptorEvent.h"
   #include "usb/device/events/DeviceGetDisplayStringDescriptorEvent.h"
+  #include "usb/device/events/DeviceSdkResetInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkSuspendInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkResumeInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkSetupStageInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkConnectInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkDisconnectInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkDataOutStageInterruptEvent.h"
+  #include "usb/device/events/DeviceSdkDataInStageInterruptEvent.h"
 
   #include "usb/device/Device.h"
 

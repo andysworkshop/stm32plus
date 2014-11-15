@@ -53,6 +53,7 @@ namespace stm32plus {
     template<class... Features>
     inline InternalFsPhy<Features...>::InternalFsPhy()
       : InternalFsPhyInterruptFeature(static_cast<UsbEventSource&>(*this)),
+        Features(static_cast<UsbEventSource&>(*this))...,
         _phyRegisters(USB_OTG_FS) {
     }
 

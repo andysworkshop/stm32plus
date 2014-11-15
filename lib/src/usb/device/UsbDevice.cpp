@@ -216,4 +216,93 @@ void USBD_LL_Delay(uint32_t delay) {
 }
 
 
+/**
+ * Reset IRQ callback
+ */
+
+void HAL_PCD_ResetCallback(PCD_HandleTypeDef *hpcd) {
+
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkResetInterruptEvent());
+}
+
+
+/**
+ * Suspend IRQ callback
+ */
+
+void HAL_PCD_SuspendCallback(PCD_HandleTypeDef *hpcd) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkSuspendInterruptEvent());
+}
+
+
+/**
+ * Resume IRQ callback
+ */
+
+void HAL_PCD_ResumeCallback(PCD_HandleTypeDef *hpcd) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkResumeInterruptEvent());
+}
+
+
+/**
+ * Connect callback
+ */
+
+void HAL_PCD_ConnectCallback(PCD_HandleTypeDef *hpcd) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkConnectInterruptEvent());
+}
+
+
+/**
+ * Disconnect callback
+ */
+
+void HAL_PCD_DisconnectCallback(PCD_HandleTypeDef *hpcd) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkDisconnectInterruptEvent());
+}
+
+
+/**
+ * Setup stage callback
+ */
+
+void HAL_PCD_SetupStageCallback(PCD_HandleTypeDef *hpcd) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkSetupStageInterruptEvent());
+}
+
+
+/**
+ * Data out stage callback
+ */
+
+void HAL_PCD_DataOutStageCallback(PCD_HandleTypeDef *hpcd,uint8_t epnum) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkDataOutStageInterruptEvent(epnum));
+}
+
+
+/**
+ * Data in stage callback
+ */
+
+void HAL_PCD_DataInStageCallback(PCD_HandleTypeDef *hpcd,uint8_t epnum) {
+  reinterpret_cast<UsbEventSource *>(
+    reinterpret_cast<USBD_HandleTypeDef *>(hpcd->pData)->pUserData
+  )->UsbEventSender.raiseEvent(DeviceSdkDataInStageInterruptEvent(epnum));
+}
+
+
 #endif

@@ -262,8 +262,8 @@ HAL_StatusTypeDef HAL_PCD_Start(PCD_HandleTypeDef *hpcd)
 { 
   __HAL_LOCK(hpcd); 
   USB_DevConnect (hpcd->Instance);  
+  __HAL_UNLOCK(hpcd);
   __HAL_PCD_ENABLE(hpcd);
-  __HAL_UNLOCK(hpcd); 
   return HAL_OK;
 }
 

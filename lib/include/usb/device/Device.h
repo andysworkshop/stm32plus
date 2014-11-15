@@ -70,6 +70,7 @@ namespace stm32plus {
 
       protected:
         void onEvent(UsbEventDescriptor& event);
+        void onResetIrqEvent();
 
       public:
         Device();
@@ -345,9 +346,76 @@ namespace stm32plus {
           }
           break;
 
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_RESET:
+          onResetIrqEvent();
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_SUSPEND:
+          USBD_LL_Suspend(&_deviceHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_RESUME:
+          USBD_LL_Resume(&_deviceHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_SETUP_STAGE:
+          USBD_LL_SetupStage(&_deviceHandle,reinterpret_cast<uint8_t *>(_pcdHandle.Setup));
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_CONNECT:
+          USBD_LL_DevConnected(&_deviceHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_DISCONNECT:
+          USBD_LL_DevDisconnected(&_deviceHandle);
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_DATA_IN_STAGE: {
+            uint8_t endpointNumber=static_cast<DeviceSdkDataInStageInterruptEvent&>(event).endpointNumber;
+            USBD_LL_DataInStage(&_deviceHandle,endpointNumber,_pcdHandle.IN_ep[endpointNumber].xfer_buff);
+          }
+          break;
+
+        case UsbEventDescriptor::EventType::DEVICE_IRQ_DATA_OUT_STAGE: {
+            uint8_t endpointNumber=static_cast<DeviceSdkDataOutStageInterruptEvent&>(event).endpointNumber;
+            USBD_LL_DataOutStage(&_deviceHandle,endpointNumber,_pcdHandle.OUT_ep[endpointNumber].xfer_buff);
+          }
+          break;
+
         default:
           break;
       }
+    }
+
+
+    /**
+     * USB reset IRQ handler
+     */
+
+    template<class TPhy>
+    inline void Device<TPhy>::onResetIrqEvent() {
+
+      USBD_SpeedTypeDef speed=USBD_SPEED_FULL;
+
+      switch(_pcdHandle.Init.speed) {
+
+        case PCD_SPEED_HIGH:
+          speed = USBD_SPEED_HIGH;
+          break;
+
+        case PCD_SPEED_FULL:
+          speed=USBD_SPEED_FULL;
+          break;
+
+        default:
+          speed=USBD_SPEED_FULL;
+          break;
+      }
+
+      // set the speed and reset
+
+      USBD_LL_SetSpeed(&_deviceHandle,speed);
+      USBD_LL_Reset(&_deviceHandle);
     }
 
 
