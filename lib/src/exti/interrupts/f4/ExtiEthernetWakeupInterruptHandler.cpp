@@ -14,12 +14,6 @@
 using namespace stm32plus;
 
 
-// static initialiser for the hack that forces the IRQ handlers to be linked
-
-template<> ExtiInterruptEnabler<19>::FPTR ExtiInterruptEnabler<19>::_forceLinkage=nullptr;
-template<> ExtiPeripheral<EXTI_Line19> *ExtiPeripheral<EXTI_Line19>::_extiInstance=nullptr;
-
-
 #if defined(USE_EXTI_ETH_WAKEUP_INTERRUPT)
 
 extern "C" {

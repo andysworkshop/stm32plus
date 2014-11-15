@@ -151,6 +151,15 @@ namespace stm32plus {
         return *this;
       }
 
+      /**
+       * Returning a reference causes gcc to emit a bogus warning
+       * @param rhs
+       */
+
+      void operator=(const volatile IpAddress& rhs) volatile {
+        ipAddress=rhs.ipAddress;
+      }
+
 
       /**
        * Assign 127.0.0.1 to this address

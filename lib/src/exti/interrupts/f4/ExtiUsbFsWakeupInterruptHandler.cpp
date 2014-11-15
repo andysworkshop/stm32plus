@@ -14,21 +14,17 @@
 using namespace stm32plus;
 
 
-// static initialiser for the hack that forces the IRQ handlers to be linked
-
-template<> ExtiInterruptEnabler<18>::FPTR ExtiInterruptEnabler<18>::_forceLinkage=nullptr;
-template<> ExtiPeripheral<EXTI_Line18> *ExtiPeripheral<EXTI_Line18>::_extiInstance=nullptr;
-
-
 #if defined(USE_EXTI_USB_FS_WAKEUP_INTERRUPT)
 
 extern "C" {
 
-  void __attribute__ ((interrupt("IRQ"))) USBWakeUp_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) OTG_FS_WKUP_IRQHandler(void) {
 
-    if(EXTI_GetITStatus(EXTI_Line18)!=RESET) {
-        ExtiUsbFsWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(18);
-        EXTI_ClearITPendingBit(EXTI_Line18);
+    if(ExtiUsbFsWakeup::_extiInstance) {
+      if(EXTI_GetITStatus(EXTI_Line18)!=RESET) {
+          ExtiUsbFsWakeup::_extiInstance->ExtiInterruptEventSender.raiseEvent(18);
+          EXTI_ClearITPendingBit(EXTI_Line18);
+      }
     }
     __DSB();      // prevent erroneous recall of this handler due to delayed memory write
   }

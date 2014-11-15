@@ -141,6 +141,8 @@ class NetUdpReceiveTest {
 
         uint8_t datagramBytes[10];
         uint16_t size;
+        char buffer[20];
+        bool printData;
 
         // receive up to 10 bytes with a 24 hour timeout. If nothing
         // arrives in 60 seconds then false is returned and ERROR_PROVIDER_NET_UDP/E_TIMED_OUT
@@ -148,9 +150,32 @@ class NetUdpReceiveTest {
         // number of bytes actually received, which may be less than I asked for.
 
         size=10;
-        if(_net->udpReceive(12345,datagramBytes,size,1000*60*60*24)) {
+        printData=false;
 
-          // a datagram has been received, print out the first 10 bytes
+        if(!_net->udpReceive(12345,datagramBytes,size,1000*60*60*24)) {
+
+          if(errorProvider.isLastError(ErrorProvider::ERROR_PROVIDER_NET_UDP,Udp<MyNetworkLayer>::E_MSG_SIZE)) {
+
+            // got a datagram but it was too large and got truncated
+
+            *(_outputStream) << "(truncated) ";
+            printData=true;
+          }
+          else
+            printData=false;    // another error occurred and no data was received
+        }
+        else
+          printData=true;       // no error, data is ready and all fitted into the buffer
+
+        if(printData) {
+
+          // a datagram has been received, print the address of the sender
+
+          const_cast<IpAddress&>(_net->udpGetRemoteAddress()).toString(buffer);
+
+          *(_outputStream) << "From: " << buffer << ": ";
+
+          // now print out the first 10 bytes
 
           for(uint16_t i=0;i<size;i++)
             (*_outputStream) << (uint16_t) datagramBytes[i] << " ";

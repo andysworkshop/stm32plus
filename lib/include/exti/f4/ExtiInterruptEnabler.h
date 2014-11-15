@@ -27,7 +27,7 @@ namespace stm32plus {
   extern "C" void EXTI15_10_IRQHandler();
   extern "C" void PVD_IRQHandler();
   extern "C" void RTCAlarm_IRQHandler();
-  extern "C" void USBWakeUp_IRQHandler();
+  extern "C" void OTG_FS_WKUP_IRQHandler();
   extern "C" void ETH_WKUP_IRQHandler();
   extern "C" void OTG_HS_WKUP_IRQHandler();
   extern "C" void TAMP_STAMP_IRQHandler();
@@ -50,6 +50,14 @@ namespace stm32plus {
     public:
       static void enable();
   };
+
+
+  /**
+   * template static initialiser
+   */
+
+  template<uint8_t TExtiNumber>
+  typename ExtiInterruptEnabler<TExtiNumber>::FPTR ExtiInterruptEnabler<TExtiNumber>::_forceLinkage=nullptr;
 
 
   /**
@@ -124,7 +132,7 @@ namespace stm32plus {
 
   template<>
   inline void ExtiInterruptEnabler<18>::enable() {
-    _forceLinkage=&USBWakeUp_IRQHandler;
+    _forceLinkage=&OTG_FS_WKUP_IRQHandler;
     Nvic::configureIrq(OTG_FS_WKUP_IRQn);
   }
 
