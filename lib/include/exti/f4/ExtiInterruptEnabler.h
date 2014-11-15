@@ -54,6 +54,14 @@ namespace stm32plus {
 
 
   /**
+   * template static initialiser
+   */
+
+  template<uint8_t TExtiNumber>
+  typename ExtiInterruptEnabler<TExtiNumber>::FPTR ExtiInterruptEnabler<TExtiNumber>::_forceLinkage=nullptr;
+
+
+  /**
    * Enabler specialisations for the F4
    */
 
