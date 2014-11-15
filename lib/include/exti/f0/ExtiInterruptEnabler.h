@@ -45,17 +45,11 @@ namespace stm32plus {
       static void disable();
   };
 
-
-  /**
-   * template static initialiser
-   */
-
   template<uint8_t TExtiNumber>
   typename ExtiInterruptEnabler<TExtiNumber>::FPTR ExtiInterruptEnabler<TExtiNumber>::_forceLinkage=nullptr;
 
-
   /**
-   * Enabler specialisations for F0
+   * Enabler specialisations for F1 and F4
    */
 
   template<>

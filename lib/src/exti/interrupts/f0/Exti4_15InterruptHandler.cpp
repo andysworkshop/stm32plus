@@ -14,6 +14,22 @@
 using namespace stm32plus;
 
 
+// static initialiser for the hack that forces the IRQ handlers to be linked
+
+template<> ExtiPeripheral<EXTI_Line4> *ExtiPeripheral<EXTI_Line4>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line5> *ExtiPeripheral<EXTI_Line5>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line6> *ExtiPeripheral<EXTI_Line6>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line7> *ExtiPeripheral<EXTI_Line7>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line8> *ExtiPeripheral<EXTI_Line8>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line9> *ExtiPeripheral<EXTI_Line9>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line10> *ExtiPeripheral<EXTI_Line10>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line11> *ExtiPeripheral<EXTI_Line11>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line12> *ExtiPeripheral<EXTI_Line12>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line13> *ExtiPeripheral<EXTI_Line13>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line14> *ExtiPeripheral<EXTI_Line14>::_extiInstance=nullptr;
+template<> ExtiPeripheral<EXTI_Line15> *ExtiPeripheral<EXTI_Line15>::_extiInstance=nullptr;
+
+
 #if defined(USE_EXTI4_15_INTERRUPT)
 
 extern "C" {

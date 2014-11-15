@@ -52,11 +52,6 @@ namespace stm32plus {
       static void disable();
   };
 
-
-  /**
-   * template static initialiser
-   */
-
   template<uint8_t TExtiNumber>
   typename ExtiInterruptEnabler<TExtiNumber>::FPTR ExtiInterruptEnabler<TExtiNumber>::_forceLinkage=nullptr;
 
