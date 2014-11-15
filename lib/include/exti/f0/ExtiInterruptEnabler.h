@@ -44,6 +44,8 @@ namespace stm32plus {
       static void enable();
   };
 
+  template<uint8_t TExtiNumber>
+  typename ExtiInterruptEnabler<TExtiNumber>::FPTR ExtiInterruptEnabler<TExtiNumber>::_forceLinkage=nullptr;
 
   /**
    * Enabler specialisations for F1 and F4
