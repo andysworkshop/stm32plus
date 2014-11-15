@@ -185,7 +185,7 @@
   * @{
   */
 
-static void SetSysClock(void);
+void SetSysClock(void);
 #ifdef DATA_IN_ExtSRAM
   static void SystemInit_ExtMemCtl(void);
 #endif /* DATA_IN_ExtSRAM */
@@ -339,7 +339,7 @@ void SystemCoreClockUpdate(void)
   * @param  None
   * @retval None
   */
-static void SetSysClock(void)
+void SetSysClock(void)
 {
 /******************************************************************************/
 /*            PLL (clocked by HSE) used as System clock source                */
