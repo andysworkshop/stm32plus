@@ -154,6 +154,11 @@ namespace stm32plus {
       _mouseDescriptor.configuration.wTotalLength=sizeof(_mouseDescriptor);
       _mouseDescriptor.configuration.bNumInterfaces=1;
 
+      // if ConfigurationTextFeature is in the hierarchy then we've got a configuration string (compile-time check)
+
+      if(std::is_base_of<ConfigurationTextFeature<Device<TPhy>>,MouseHidDevice<TPhy,Features...>>::value)
+        _mouseDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
+
       // set up the interface descriptor (see constructor for defaults)
 
       _mouseDescriptor.interface.bInterfaceNumber=0;
@@ -161,6 +166,11 @@ namespace stm32plus {
       _mouseDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
       _mouseDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::BOOT);
       _mouseDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::MOUSE);
+
+      // if InterfaceTextFeature is in the hierarchy then we've got an interface string (compile-time check)
+
+      if(std::is_base_of<InterfaceTextFeature<Device<TPhy>>,MouseHidDevice<TPhy,Features...>>::value)
+        _mouseDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
 
       // set up the hid class descriptor (see constructor for defaults)
 

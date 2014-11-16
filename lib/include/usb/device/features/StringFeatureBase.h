@@ -66,10 +66,14 @@ namespace stm32plus {
 
       uint16_t len;
 
-      _length=strlen(str)*2+2;    // +1 for 16-bit descriptor header, +1 for \0 at end
-      _descriptor.reset(new uint8_t[_length]);
+      if(str==nullptr)
+        _length=0;
+      else {
+        _length=strlen(str)*2+2;    // +1 for 16-bit descriptor header, +1 for \0 at end
+        _descriptor.reset(new uint8_t[_length]);
 
-      USBD_GetString((uint8_t *)str,&_descriptor[0],&len);
+        USBD_GetString((uint8_t *)str,&_descriptor[0],&len);
+      }
       return true;
     }
 

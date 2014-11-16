@@ -15,7 +15,7 @@ namespace stm32plus {
      */
 
     DECLARE_EVENT_SIGNATURE(Usb,void(UsbEventDescriptor&));
-    DECLARE_EVENT_SIGNATURE(UsbError,void(UsbErrorEventDescriptor&));
+    DECLARE_EVENT_SIGNATURE(UsbError,void(UsbErrorEvent&));
 
 
     /*
@@ -25,6 +25,16 @@ namespace stm32plus {
     struct UsbEventSource {
       DECLARE_EVENT_SOURCE(Usb);
       DECLARE_EVENT_SOURCE(UsbError);
+
+
+      /**
+       * Set an error in the error provider and raise an event
+       */
+
+      bool setError(int provider,uint32_t code,uint32_t cause=0) const {
+        UsbErrorEventSender.raiseEvent(UsbErrorEvent(provider,code,cause));
+        return false;
+      }
     };
   }
 }

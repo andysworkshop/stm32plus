@@ -39,7 +39,7 @@
   #include "usb/device/HalUsbdStatus.h"
 
   #include "usb/UsbEventDescriptor.h"
-  #include "usb/UsbErrorEventDescriptor.h"
+  #include "usb/UsbErrorEvent.h"
   #include "usb/UsbEventSource.h"
 
   #include "usb/phy/features/PhyFeatureBase.h"

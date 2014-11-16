@@ -107,7 +107,8 @@ namespace stm32plus {
         ERROR_PROVIDER_SPI_FLASH                                  = 68,
         ERROR_PROVIDER_SPI_FLASH_INPUT_STREAM                     = 69,
         ERROR_PROVIDER_USB_HID_DEVICE                             = 70,
-        ERROR_PROVIDER_USB_DEVICE                                 = 71
+        ERROR_PROVIDER_USB_DEVICE                                 = 71,
+        ERROR_PROVIDER_USB_IN_ENDPOINT                            = 72
       };
 
     public:

@@ -18,7 +18,7 @@ namespace stm32plus {
      * as the error works its way up the stack.
      */
 
-    struct UsbErrorEventDescriptor : UsbEventDescriptor {
+    struct UsbErrorEvent : UsbEventDescriptor {
 
       int provider;
       uint32_t code;
@@ -31,7 +31,7 @@ namespace stm32plus {
        * @param cause extended error information, if any
        */
 
-      UsbErrorEventDescriptor(int provider_,uint32_t code_,uint32_t cause_=0)
+      UsbErrorEvent(int provider_,uint32_t code_,uint32_t cause_=0)
         : UsbEventDescriptor(UsbEventDescriptor::EventType::USB_ERROR),
           provider(provider_),
           code(code_),
