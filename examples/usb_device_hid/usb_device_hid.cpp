@@ -43,13 +43,15 @@ class UsbDeviceHidTest {
 
       params.device_vid=0xDEAD;
       params.device_pid=0xBEEF;
-      params.device_manufacturer_text="Andy's Workshop";   // see params.device_language_id to change the language
-      params.device_product_text="Joystick";
-      params.device_serial_text="1234567890";
+      params.device_manufacturer_text="Andy's Workshop";   // see params.device_language_[ids/count] to change the languages
+      params.device_product_text="stm32plus";
+      params.device_serial_text="0123456789";
       params.device_configuration_text="My configuration";
       params.device_interface_text="My interface";
 
       MyUsb usb;
+
+      // there is no requirement for the parameters to remain in scope after the initialise call
 
       if(!usb.initialise(params))
         error();

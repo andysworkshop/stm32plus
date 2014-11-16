@@ -23,8 +23,8 @@ namespace stm32plus {
         PCD_HandleTypeDef _pcdHandle;
         USBD_HandleTypeDef _deviceHandle;
         USBD_DescriptorsTypeDef _deviceDescriptorCallbacks;
+        scoped_ptr<LanguageDescriptor> _languageDescriptor;
         DeviceDescriptor _deviceDescriptor;
-        LanguageDescriptor _languageDescriptor;
         scoped_array<uint16_t> _unicodeString;      // very basic 8-bit to UTF-16 holder
         uint8_t _numEndpoints;                      // endpoint classes will increment this
 
@@ -50,19 +50,24 @@ namespace stm32plus {
           uint16_t device_usb_version;  // defaults to 0x0200 (USB 2.0)
           uint16_t device_version;      // your device version. default 01.00
           uint16_t device_id;           // this device id (default is 0)
-          uint16_t device_language_id;  // default is 0x0409 (English; US)
+          const uint16_t *device_language_ids;  // default is 0x0409
+          uint16_t device_language_count;       // default is 1
           bool device_use_dedicated_endpoint1;  // default is false
           bool device_vbus_sensing;     // default is true
           uint32_t device_endpoint0_max_packet_size;  // default is 0x40
 
           Parameters() {
+
+            static const uint16_t englishUs=0x0409;
+
             device_usb_version=0x0200;
             device_version=0x0100;
             device_id=0;
-            device_language_id=0x0409;
             device_use_dedicated_endpoint1=false;
             device_endpoint0_max_packet_size=0x40;
             device_vbus_sensing=true;
+            device_language_ids=&englishUs;
+            device_language_count=1;
           }
         };
 
@@ -203,10 +208,12 @@ namespace stm32plus {
 
       _deviceDescriptor.bcdDevice=params.device_version;
       _deviceDescriptor.bcdUSB=params.device_usb_version;
+      _deviceDescriptor.idVendor=params.device_vid;
+      _deviceDescriptor.idProduct=params.device_pid;
 
       // set up the language descriptor
 
-      _languageDescriptor.wLanguageId=params.device_language_id;
+      _languageDescriptor.reset(new LanguageDescriptor(params.device_language_ids,params.device_language_count));
 
       // set up the PCD handle
 
@@ -454,12 +461,12 @@ namespace stm32plus {
 
       // give anyone a chance to change the descriptor based on the connection speed
 
-      this->UsbEventSender.raiseEvent(DeviceGetLanguageDescriptorEvent(speed,_languageDescriptor));
+      this->UsbEventSender.raiseEvent(DeviceGetLanguageDescriptorEvent(speed,*_languageDescriptor));
 
       // return the descriptor
 
-      *length=USB_LEN_LANGID_STR_DESC;
-      return reinterpret_cast<uint8_t *>(&_languageDescriptor);
+      *length=_languageDescriptor->getDescriptor()[0];
+      return _languageDescriptor->getDescriptor();
     }
 
 
@@ -484,7 +491,7 @@ namespace stm32plus {
       // subscriber sets these, or if not that's OK too
 
       *length=event.length;
-      return reinterpret_cast<uint8_t *>(event.string);
+      return event.descriptor;
     }
 
 

@@ -29,7 +29,7 @@ namespace stm32plus {
        * Outputs
        */
 
-      uint16_t *string;
+      uint8_t *descriptor;
       uint16_t length;
 
 
@@ -37,7 +37,7 @@ namespace stm32plus {
         : UsbEventDescriptor(EventType::DEVICE_GET_STRING_DESCRIPTOR),
           speed(s),
           stringIndex(stringIndex),
-          string(nullptr),
+          descriptor(nullptr),
           length(0) {
       }
     };

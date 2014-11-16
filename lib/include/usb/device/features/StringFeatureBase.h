@@ -20,7 +20,7 @@ namespace stm32plus {
 
       protected:
         uint16_t _length;
-        scoped_array<uint16_t> _unicodeString;
+        scoped_array<uint8_t> _descriptor;
         uint8_t _stringIndex;
 
       protected:
@@ -45,10 +45,6 @@ namespace stm32plus {
 
       _stringIndex=stringIndex;
 
-      // register this string index with the device descriptor
-
-      device.getDeviceDescriptor().iManufacturer=stringIndex;
-
       // subscribe to device events
 
       device.UsbEventSender.insertSubscriber(
@@ -68,21 +64,12 @@ namespace stm32plus {
     template<class TDevice>
     inline bool StringFeatureBase<TDevice>::initialise(const char *str) {
 
-      _length=strlen(str)+1;
-      _unicodeString.reset(new uint16_t[_length]);
+      uint16_t len;
 
-      const char *src;
-      uint16_t *dest;
+      _length=strlen(str)*2+2;    // +1 for 16-bit descriptor header, +1 for \0 at end
+      _descriptor.reset(new uint8_t[_length]);
 
-      // convert the string to unicode
-
-      src=str;
-      dest=&_unicodeString[0];
-
-      do {
-        *dest++=*src;
-      } while(*src++);
-
+      USBD_GetString((uint8_t *)str,&_descriptor[0],&len);
       return true;
     }
 
@@ -120,10 +107,10 @@ namespace stm32plus {
         // if we handle this string index then set the return values as long
         // as someone hasn't got there first
 
-        if(stringEvent.stringIndex==_stringIndex && stringEvent.string==nullptr) {
+        if(stringEvent.stringIndex==_stringIndex && stringEvent.descriptor==nullptr) {
 
-          stringEvent.string=_unicodeString.get();
-          stringEvent.length=_length*2;   // length in bytes incl. \0 terminator
+          stringEvent.descriptor=_descriptor.get();
+          stringEvent.length=_length;   // length in bytes incl. \0 terminator
         }
       }
     }

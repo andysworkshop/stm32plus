@@ -39,6 +39,10 @@ namespace stm32plus {
     template<class TDevice>
     inline SerialNumberTextFeature<TDevice>::SerialNumberTextFeature(TDevice& device)
       : StringFeatureBase<TDevice>(device,USBD_IDX_SERIAL_STR) {
+
+      // register this string index with the device descriptor
+
+      device.getDeviceDescriptor().iSerialNumber=USBD_IDX_SERIAL_STR;
     }
 
 

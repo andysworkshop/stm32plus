@@ -39,6 +39,10 @@ namespace stm32plus {
     template<class TDevice>
     inline ProductTextFeature<TDevice>::ProductTextFeature(TDevice& device)
       : StringFeatureBase<TDevice>(device,USBD_IDX_PRODUCT_STR) {
+
+      // register this string index with the device descriptor
+
+      device.getDeviceDescriptor().iProduct=USBD_IDX_PRODUCT_STR;
     }
 
 
