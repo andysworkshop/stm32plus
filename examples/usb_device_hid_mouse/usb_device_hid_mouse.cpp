@@ -15,7 +15,7 @@ using namespace stm32plus::usb;
 /**
  */
 
-class UsbDeviceHidTest {
+class UsbDeviceHidMouseTest {
 
   public:
 
@@ -77,7 +77,7 @@ int main() {
 
   // run the test
 
-  UsbDeviceHidTest test;
+  UsbDeviceHidMouseTest test;
   test.run();
 
   // not reached
