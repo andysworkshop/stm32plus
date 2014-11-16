@@ -405,6 +405,7 @@ static uint8_t  USBD_HID_Setup (USBD_HandleTypeDef *pdev,
       hhid->AltSetting = (uint8_t)(req->wValue);
       break;
     }
+    break;
   }
   return USBD_OK;
 }

@@ -19,13 +19,9 @@ class UsbDeviceHidTest {
 
   public:
 
-    // declare the interrupt endpoint that we'll use to send data into the host
-
-    template<class TDevice> using Endpoint1=InterruptInEndpointFeature<1,TDevice>;
-
     // declare the USB stack
 
-    typedef HidDevice<
+    typedef MouseHidDevice<
       InternalFsPhy<                      // use the internal full speed PHY
         FsLowPowerFeature                 // include the low power EXTI wakeup
       >,
@@ -33,8 +29,7 @@ class UsbDeviceHidTest {
       ProductTextFeature,                 // ... and a product name
       SerialNumberTextFeature,            // ... and a serial number
       ConfigurationTextFeature,           // ... and a config text string
-      InterfaceTextFeature,               // ... and an interface text string
-      Endpoint1                           // the interrupt endpoint
+      InterfaceTextFeature                // ... and an interface text string
     > MyUsb;
 
     void run() {

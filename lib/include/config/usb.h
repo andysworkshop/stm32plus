@@ -49,6 +49,10 @@
   #include "usb/phy/InternalFsPhy.h"
   #include "usb/core/Core.h"
 
+  #include "usb/device/DescriptorHeader.h"
+  #include "usb/device/ConfigurationDescriptor.h"
+  #include "usb/device/InterfaceDescriptor.h"
+  #include "usb/device/EndpointDescriptor.h"
   #include "usb/device/DeviceDescriptor.h"
   #include "usb/device/LanguageDescriptor.h"
   #include "usb/device/EndpointType.h"
@@ -72,6 +76,7 @@
   #include "usb/device/events/DeviceSdkDataInStageInterruptEvent.h"
 
   #include "usb/device/Device.h"
+  #include "usb/device/DeviceClass.h"
 
   #include "usb/device/features/DeviceFeatureBase.h"
   #include "usb/device/features/endpoints/ControlEndpointFeature.h"
@@ -84,7 +89,13 @@
   #include "usb/device/features/ConfigurationTextFeature.h"
   #include "usb/device/features/InterfaceTextFeature.h"
 
-  #include "usb/device/HidDevice.h"
+  #include "usb/device/hid/HidClassDescriptor.h"
+  #include "usb/device/hid/HidSubClass.h"
+  #include "usb/device/hid/HidProtocol.h"
+
+  #include "usb/device/hid/HidDevice.h"
+  #include "usb/device/hid/MouseReportDescriptor.h"
+  #include "usb/device/hid/MouseHidDevice.h"
 
 #endif
 

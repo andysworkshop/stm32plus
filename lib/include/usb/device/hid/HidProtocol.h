@@ -4,21 +4,21 @@
  * Please see website for licensing terms.
  */
 
-
 #pragma once
 
 
 namespace stm32plus {
   namespace usb {
 
-    /*
-     * Device descriptor structure, 18 bytes
+
+    /**
+     * Protocol types for HID devices
      */
 
-    struct StringDescriptor {
-
-      uint8_t bLength;
-      uint8_t bDescriptorType;
-    } __attribute__((packed));
+    enum class HidProtocol : uint8_t {
+      NONE      = 0,        //!< NONE
+      KEYBOARD  = 1,        //!< KEYBOARD
+      MOUSE     = 2         //!< MOUSE
+    };
   }
 }

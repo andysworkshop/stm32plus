@@ -16,8 +16,7 @@ namespace stm32plus {
 
     struct DeviceDescriptor {
 
-      uint8_t  bLength;
-      uint8_t  bDescriptorType;
+      DescriptorHeader header;
       uint16_t bcdUSB;
       uint8_t  bDeviceClass;
       uint8_t  bDeviceSubClass;
@@ -35,12 +34,11 @@ namespace stm32plus {
        * Constructor - set up the constants
        */
 
-      DeviceDescriptor() {
+      DeviceDescriptor()
+        : header(USB_LEN_DEV_DESC,USB_DESC_TYPE_DEVICE) {
 
         static_assert(sizeof(DeviceDescriptor)==USB_LEN_DEV_DESC,"Compilation error: sizeof(DeviceDescriptor)!=0x12");
 
-        bLength=USB_LEN_DEV_DESC;                       // structure size
-        bDescriptorType=USB_DESC_TYPE_DEVICE;           // this is a device desc
         bDeviceClass=0;                                 // use class in interface desc
         bDeviceSubClass=0;                              // as above
         bDeviceProtocol=0;                              // as above

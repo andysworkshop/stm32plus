@@ -10,8 +10,10 @@
 namespace stm32plus {
   namespace usb {
 
-    /*
+    /**
      * Template class for USB HID devices
+     * @tparam TPhy the PHY implementation
+     * @tparam Features... The device feature classes
      */
 
     template<class TPhy,template <class> class... Features>
