@@ -5,6 +5,9 @@
  */
 
 #include "config/stm32plus.h"
+
+#if defined(STM32PLUS_F4)
+
 #include "config/usb.h"
 
 using namespace stm32plus::usb;
@@ -29,4 +32,5 @@ extern "C" {
   }
 }
 
-#endif // extern "C"
+#endif
+#endif

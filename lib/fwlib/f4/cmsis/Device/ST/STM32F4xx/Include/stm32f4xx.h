@@ -79,12 +79,16 @@
   #define STM32F40_41xxx
 #elif defined(STM32PLUS_F437)
   #define STM32F437xx
+  #define STM32F427_437xx
 #elif defined(STM32PLUS_F427)
   #define STM32F427xx
+  #define STM32F427_437xx
 #elif defined(STM32PLUS_F429)
   #define STM32F429xx
+  #define STM32F429_439xx
 #elif defined(STM32PLUS_F439)
-   #define STM32F439xx
+  #define STM32F439xx
+  #define STM32F429_439xx
 #else
   #error "You must define an MCU type. See config/stm32plus.h"
 #endif
