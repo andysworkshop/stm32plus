@@ -6,6 +6,7 @@
 
 #include "config/stm32plus.h"
 #include "config/usb.h"
+#include "config/button.h"
 
 
 using namespace stm32plus;
@@ -51,9 +52,28 @@ class UsbDeviceHidMouseTest {
       if(!usb.initialise(params))
         error();
 
-      usb.hidSendReport("fooo");
+      GpioA<DefaultDigitalInputFeature<0> > pa;
 
-      for(;;);
+      // create the button class with parameters
+
+      AutoRepeatPushButton button(pa[0],false,600,150);
+
+      // main loop
+
+      for(;;) {
+
+        if(button.getState()==PushButton::Pressed) {
+
+          uint8_t buffer[4];
+
+          buffer[0] = 0;
+          buffer[1] = 1;
+          buffer[2] = 0;
+          buffer[3] = 0;
+
+          usb.hidSendReport(buffer);
+        }
+      }
     }
 
 
