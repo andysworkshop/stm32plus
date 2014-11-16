@@ -30,7 +30,9 @@ namespace stm32plus {
 
         enum {
           E_REGISTER_CLASS = 1,
-          E_START = 2
+          E_START = 2,
+          E_UNCONFIGURED = 3,
+          E_BUSY = 4
         };
 
         /*
@@ -46,6 +48,8 @@ namespace stm32plus {
         HidDevice();
 
         bool initialise(Parameters& params);
+
+        bool hidSendReport(InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len);
     };
 
 
@@ -78,6 +82,38 @@ namespace stm32plus {
         return false;
 
       return true;
+    }
+
+
+    /**
+     * Send a HID 'report' to an IN endpoint
+     * @param endpoint The endpoint to send to
+     * @param data The data to send
+     * @param len The size of the data
+     * @return true if it worked
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool HidDevice<TPhy,Features...>::hidSendReport(InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) {
+
+      USBD_HID_HandleTypeDef *hhid;
+
+      hhid=reinterpret_cast<USBD_HID_HandleTypeDef *>(this->_deviceHandle.pClassData);
+
+      // must be configured
+
+      if(this->_deviceHandle.dev_state!=USBD_STATE_CONFIGURED)
+        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_UNCONFIGURED);
+
+      // must be idle
+
+      if(hhid->state!=HID_IDLE)
+        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_BUSY);
+
+      // OK (XXX: check this for state mgmt if USBD_LL_Transmit fails)
+
+      hhid->state=HID_BUSY;
+      return endpoint.endpointTransmit(data,len);
     }
   }
 }

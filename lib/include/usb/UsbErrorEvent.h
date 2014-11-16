@@ -31,11 +31,11 @@ namespace stm32plus {
        * @param cause extended error information, if any
        */
 
-      UsbErrorEvent(int provider_,uint32_t code_,uint32_t cause_=0)
+      UsbErrorEvent(int provider,uint32_t code,uint32_t cause=0)
         : UsbEventDescriptor(UsbEventDescriptor::EventType::USB_ERROR),
-          provider(provider_),
-          code(code_),
-          cause(cause_) {
+          provider(provider),
+          code(code),
+          cause(cause) {
         errorProvider.set(provider,code,cause);
       }
     };

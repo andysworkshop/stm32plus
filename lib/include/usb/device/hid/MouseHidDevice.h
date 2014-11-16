@@ -28,6 +28,8 @@ namespace stm32plus {
 
       protected:
 
+        typedef HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...> HidDeviceBase;
+
         /**
          * Declare the structure that gets sent back when the host asks for the whole
          * configuration descriptor
@@ -49,7 +51,7 @@ namespace stm32plus {
          * Customisable parameters for this HID device
          */
 
-        struct Parameters : HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...>::Parameters {
+        struct Parameters : HidDeviceBase::Parameters {
 
           uint8_t hid_mouse_poll_interval;      // default is 10
 
@@ -64,6 +66,8 @@ namespace stm32plus {
         MouseHidDevice();
 
         bool initialise(Parameters& params);
+
+        bool hidSendReport(const void *data);
 
         uint8_t onHidInit(uint8_t cfgindx);
         uint8_t onHidDeInit(uint8_t cfgindx);
@@ -146,7 +150,7 @@ namespace stm32plus {
 
       // initialise upwards
 
-      if(!HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...>::initialise(params))
+      if(!HidDeviceBase::initialise(params))
         return false;
 
       // set up the configuration descriptor (see constructor for defaults)
@@ -398,6 +402,21 @@ namespace stm32plus {
           break;
       }
       return USBD_OK;
+    }
+
+
+    /**
+     * Send a 4-byte HID report to the host
+     * @param data The data to send
+     * @return true if it worked
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool MouseHidDevice<TPhy,Features...>::hidSendReport(const void *data) {
+      return HidDeviceBase::hidSendReport(
+          static_cast<MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this),
+          data,
+          4);
     }
   }
 }

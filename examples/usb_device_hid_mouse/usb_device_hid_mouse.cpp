@@ -51,6 +51,8 @@ class UsbDeviceHidMouseTest {
       if(!usb.initialise(params))
         error();
 
+      usb.hidSendReport("fooo");
+
       for(;;);
     }
 
