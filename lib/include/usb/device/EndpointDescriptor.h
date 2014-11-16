@@ -25,6 +25,10 @@ namespace stm32plus {
        *    Bits 7 Direction 0 = Out, 1 = In (Ignored for Control Endpoints)
        */
 
+      enum {
+        IN = 0x80
+      };
+
       uint8_t bEndpointAddress;
 
       /**
@@ -46,6 +50,22 @@ namespace stm32plus {
        *    10 = Explicit Feedback Data Endpoint
        *    11 = Reserved
        */
+
+      enum {
+        CONTROL = 0,
+        ISOCHRONOUS = 1,
+        BULK = 2,
+        INTERRUPT = 3,
+
+        SYNC_NONE = 0,
+        SYNC_ASYNC = 1 << 2,
+        SYNC_ADAPTIVE = 2 << 2,
+        SYNC_SYNC = 3 << 2,
+
+        USAGE_DATA = 0,
+        USAGE_FEEDBACK = 1 << 4,
+        USAGE_EXPLICIT_FEEDBACK_DATA = 2 << 4
+      };
 
       uint8_t bmAttributes;
 

@@ -92,10 +92,10 @@ namespace stm32plus {
 
       // set up the endpoint descriptor
 
-      _mouseDescriptor.endpoint.bEndpointAddress=0x81;            // IN | 0x01
-      _mouseDescriptor.endpoint.bmAttributes=3;                   // interrupt type
-      _mouseDescriptor.endpoint.wMaxPacketSize=4;                 // mouse reports are 4 bytes
-      _mouseDescriptor.endpoint.bInterval=HID_POLLING_INTERVAL;   // 10 frames
+      _mouseDescriptor.endpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
+      _mouseDescriptor.endpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
+      _mouseDescriptor.endpoint.wMaxPacketSize=4;                           // mouse reports are 4 bytes
+      _mouseDescriptor.endpoint.bInterval=params.hid_mouse_poll_interval;   // default is 10 frames
 
       return HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...>::initialise(params);
     }
