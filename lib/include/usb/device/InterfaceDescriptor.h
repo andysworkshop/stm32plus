@@ -32,6 +32,7 @@ namespace stm32plus {
         static_assert(sizeof(InterfaceDescriptor)==9,"Compiler error: sizeof(InterfaceDescriptor)!=9");
 
         iInterface=0;
+        bAlternateSetting=0;
       }
     } __attribute__((packed));
   }

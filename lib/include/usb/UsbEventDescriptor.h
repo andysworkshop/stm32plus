@@ -45,6 +45,13 @@ namespace stm32plus {
 
         OTG_FS_INTERRUPT,
 
+        HID_INIT,
+        HID_DEINIT,
+        HID_SETUP,
+        HID_DATA_IN,
+        HID_GET_CONFIGURATION_DESCRIPTOR,
+        HID_GET_DEVICE_QUALIFIER_DESCRIPTOR,
+
         USB_ERROR
       };
 

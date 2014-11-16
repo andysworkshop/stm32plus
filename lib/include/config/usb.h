@@ -54,6 +54,7 @@
   #include "usb/device/InterfaceDescriptor.h"
   #include "usb/device/EndpointDescriptor.h"
   #include "usb/device/DeviceDescriptor.h"
+  #include "usb/device/DeviceQualifierDescriptor.h"
   #include "usb/device/LanguageDescriptor.h"
   #include "usb/device/EndpointType.h"
 
@@ -92,6 +93,12 @@
   #include "usb/device/hid/HidClassDescriptor.h"
   #include "usb/device/hid/HidSubClass.h"
   #include "usb/device/hid/HidProtocol.h"
+
+  #include "usb/device/hid/events/HidSdkInitEvent.h"
+  #include "usb/device/hid/events/HidSdkDeInitEvent.h"
+  #include "usb/device/hid/events/HidSdkDataInEvent.h"
+  #include "usb/device/hid/events/HidSdkGetConfigurationDescriptorEvent.h"
+  #include "usb/device/hid/events/HidSdkGetDeviceQualifierDescriptorEvent.h"
 
   #include "usb/device/hid/HidDevice.h"
   #include "usb/device/hid/MouseReportDescriptor.h"

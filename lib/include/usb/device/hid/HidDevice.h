@@ -70,24 +70,12 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline bool HidDevice<TPhy,Features...>::initialise(Parameters& params) {
 
-      USBD_StatusTypeDef status;
-
       // initialise upwards
 
       if(!Device<TPhy>::initialise(params) ||
          !ControlEndpointFeature<Device<TPhy>>::initialise(params) ||
          !RecursiveBoolInitWithParams<HidDevice,Features<Device<TPhy>>...>::tinit(this,params))
         return false;
-
-      // link the HID interface/endpoint registration into the SDK structure
-
-      if((status=USBD_RegisterClass(&this->_deviceHandle,USBD_HID_CLASS))!=USBD_OK)
-        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_REGISTER_CLASS,status);
-
-      // start the device
-
-      if((status=USBD_Start(&this->_deviceHandle))!=USBD_OK)
-        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_START,status);
 
       return true;
     }

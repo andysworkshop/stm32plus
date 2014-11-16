@@ -23,6 +23,7 @@ namespace stm32plus {
         PCD_HandleTypeDef _pcdHandle;
         USBD_HandleTypeDef _deviceHandle;
         USBD_DescriptorsTypeDef _deviceDescriptorCallbacks;
+        USBD_ClassTypeDef _classType;
         scoped_ptr<LanguageDescriptor> _languageDescriptor;
         DeviceDescriptor _deviceDescriptor;
         scoped_array<uint16_t> _unicodeString;      // very basic 8-bit to UTF-16 holder
@@ -156,7 +157,8 @@ namespace stm32plus {
     template<class TPhy>
     inline Device<TPhy>::Device()
       : _pcdHandle(),
-        _deviceHandle() {
+        _deviceHandle(),
+        _classType() {
 
       // static member initialisation
 
