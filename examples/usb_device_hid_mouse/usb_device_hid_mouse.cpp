@@ -27,7 +27,10 @@ using namespace stm32plus::usb;
  *
  * To use this example, compile it and flash it to your STM32F4DISCOVERY board. Attach a USB
  * cable from the micro-USB socket on the discovery board to your PC. The USB device should be
- * recognised automatically. Have fun with your mouse!
+ * recognised automatically. Ensure that the board is held flat when power is first applied
+ * because an initial reading is taken and used as the calibration "flat" state.
+ *
+ * Have fun with your mouse!
  *
  * Compatible MCU:
  *   STM32F4
