@@ -7,20 +7,23 @@
 #include "config/stm32plus.h"
 #include "config/usb.h"
 #include "config/spi.h"
+#include "config/timer.h"
 
 
 using namespace stm32plus;
 using namespace stm32plus::usb;
 
 
-/**
+/*
  * This example demonstrates using the accelerometer in your STM32F4DISCOVERY board as a mouse
  * by implementing the USB Human interface device (HID) protocol. The MouseHidDevice class is
  * used to implement the USB mouse boot protocol that requires no PC driver installation.
  *
  * By tilting your discovery board in the X,Y directions you will, amusingly, be able to move
- * your computer mouse pointer around the screen. Sometimes it might even move in the direction
- * you intend it to...
+ * your computer mouse pointer around the screen. Yes, entire minutes of fun can be had trying
+ * to get your mouse pointer to go in the direction you want it to. For extra credit we'll also
+ * light up the four LEDs that surround the LIS302DL on the board at an intensity proportional
+ * to how much you're tilting the board in the direction of each respective LED.
  *
  * To use this example, compile it and flash it to your STM32F4DISCOVERY board. Attach a USB
  * cable from the micro-USB socket on the discovery board to your PC. The USB device should be
@@ -131,6 +134,38 @@ class UsbDeviceHidMouseTest {
       initialiseAccelerometer(spi);
 
       /*
+       * Initialise the 4 LEDs on the board, which are conveniently attached to TIM4
+       * channels 1,2,3,4
+       */
+
+      Timer4<
+        Timer4InternalClockFeature,       // the timer clock source is APB1 (APB on the F0)
+        TimerChannel1Feature<>,           // we're going to use channel 1...
+        TimerChannel2Feature<>,           // ...and we're going to use channel 2
+        TimerChannel3Feature<>,           // ...and we're going to use channel 3
+        TimerChannel4Feature<>,           // ...and we're going to use channel 4
+        Timer4GpioFeature<                // we want to output something to GPIO
+          TIMER_REMAP_FULL,               // the GPIO output will be remapped to PD12..15
+          TIM4_CH1_OUT,                   // we will output channel 1 to GPIO...
+          TIM4_CH2_OUT,                   // ...and we will output channel 2 to GPIO
+          TIM4_CH3_OUT,                   // ...and we will output channel 2 to GPIO
+          TIM4_CH4_OUT                    // ...and we will output channel 2 to GPIO
+        >
+      > timer;
+
+      /**
+       * Set the timer clock to 4.2MHz with a reload counter of 2000
+       */
+      timer.setTimeBaseByFrequency(4200000,2000);
+
+      timer.TimerChannel1Feature<>::initCompareForPwmOutput();
+      timer.TimerChannel2Feature<>::initCompareForPwmOutput();
+      timer.TimerChannel3Feature<>::initCompareForPwmOutput();
+      timer.TimerChannel4Feature<>::initCompareForPwmOutput();
+
+      timer.enablePeripheral();
+
+      /*
        * read the starting position to use as an offset
        */
 
@@ -150,6 +185,51 @@ class UsbDeviceHidMouseTest {
 
         x-=xoffset;
         y-=yoffset;
+
+        // only consider movements >2 pixels
+
+        if(Abs<int8_t>(x)<=2)
+          x=0;
+
+        if(Abs<int8_t>(y)<=2)
+          y=0;
+
+        // cap x,y at (-127 .. +127)
+
+        x=Min<int8_t>(127,Max<int8_t>(-127,x));
+        y=Min<int8_t>(127,Max<int8_t>(-127,y));
+
+        // send the report to the USB host (your PC)
+
+        usb.mouseSendReport(0,x,y);
+
+        // give visual feedback via the LEDs, brighter means faster
+
+        if(x>0) {
+          timer.TimerChannel3Feature<>::setDutyCycle(x*2);
+          timer.TimerChannel1Feature<>::setDutyCycle(0);
+        }
+        else if(x<0) {
+          timer.TimerChannel3Feature<>::setDutyCycle(0);
+          timer.TimerChannel1Feature<>::setDutyCycle(-x*2);
+        }
+        else {
+          timer.TimerChannel3Feature<>::setDutyCycle(0);
+          timer.TimerChannel1Feature<>::setDutyCycle(0);
+        }
+
+        if(y>0) {
+          timer.TimerChannel4Feature<>::setDutyCycle(y*2);
+          timer.TimerChannel2Feature<>::setDutyCycle(0);
+        }
+        else if(y<0) {
+          timer.TimerChannel4Feature<>::setDutyCycle(0);
+          timer.TimerChannel2Feature<>::setDutyCycle(-y*2);
+        }
+        else {
+          timer.TimerChannel4Feature<>::setDutyCycle(0);
+          timer.TimerChannel2Feature<>::setDutyCycle(0);
+        }
       }
     }
 
@@ -173,8 +253,10 @@ class UsbDeviceHidMouseTest {
       spi.receive(output,4);
       spi.setNss(true);
 
-      x=output[0];
-      y=output[2];
+      // re-orient the chip so that the "ST" logo is upright
+
+      y=output[0];
+      x=output[2];
     }
 
 

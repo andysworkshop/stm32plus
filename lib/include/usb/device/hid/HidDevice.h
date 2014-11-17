@@ -49,7 +49,7 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool hidSendReport(InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len);
+        bool hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) const;
     };
 
 
@@ -94,7 +94,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool HidDevice<TPhy,Features...>::hidSendReport(InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) {
+    inline bool HidDevice<TPhy,Features...>::hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) const {
 
       USBD_HID_HandleTypeDef *hhid;
 

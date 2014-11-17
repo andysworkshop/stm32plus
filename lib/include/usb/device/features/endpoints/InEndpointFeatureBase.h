@@ -44,7 +44,7 @@ namespace stm32plus {
       public:
         bool initialise(const Parameters& params);
 
-        bool endpointTransmit(const void *data,uint16_t size);
+        bool endpointTransmit(const void *data,uint16_t size) const;
     };
 
 
@@ -89,7 +89,7 @@ namespace stm32plus {
      */
 
     template<class TDevice>
-    inline bool InEndpointFeatureBase<TDevice>::endpointTransmit(const void *data,uint16_t size) {
+    inline bool InEndpointFeatureBase<TDevice>::endpointTransmit(const void *data,uint16_t size) const {
 
       USBD_StatusTypeDef status;
 

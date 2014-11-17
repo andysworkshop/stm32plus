@@ -83,7 +83,7 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool hidSendReport(const void *data);
+        bool mouseSendReport(uint8_t buttons,int8_t x,int8_t y) const;
 
         uint8_t onHidInit(uint8_t cfgindx);
         uint8_t onHidDeInit(uint8_t cfgindx);
@@ -428,9 +428,16 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool MouseHidDevice<TPhy,Features...>::hidSendReport(const void *data) {
+    inline bool MouseHidDevice<TPhy,Features...>::mouseSendReport(uint8_t buttons,int8_t x,int8_t y) const {
+
+      uint8_t data[3];
+
+      data[0]=buttons;
+      data[1]=x;
+      data[2]=y;
+
       return HidDeviceBase::hidSendReport(
-          static_cast<MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this),
+          static_cast<const MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this),
           data,
           MOUSE_HID_REPORT_SIZE);
     }
