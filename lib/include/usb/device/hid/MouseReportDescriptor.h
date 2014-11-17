@@ -14,7 +14,7 @@ namespace stm32plus {
      * The mouse report descriptor bytes
      */
 
-    extern const uint8_t MouseReportDescriptor[74];
+    extern const uint8_t MouseReportDescriptor[50];
   }
 }
 

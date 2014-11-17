@@ -21,6 +21,13 @@ namespace stm32plus {
      *   1x Configuration descriptor
      *   1x Interface
      *   1x Inbound interrupt endpoint
+     *
+     * The 3-byte HID report is for a simple 3-button mouse using the BOOT protocol. The format
+     * of the 3-bytes is:
+     *
+     *  0: B7..3=unused. B2=left button. B1=middle button. B0=right button.
+     *  1: X-axis relative movement as signed integer.
+     *  2: Y-axis relative movement as signed integer.
      */
 
     template<class TPhy,template <class> class... Features>
@@ -29,6 +36,15 @@ namespace stm32plus {
       protected:
 
         typedef HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...> HidDeviceBase;
+
+        /**
+         * Constants
+         */
+
+        enum {
+          MOUSE_HID_REPORT_SIZE = 3
+        };
+
 
         /**
          * Declare the structure that gets sent back when the host asks for the whole
@@ -186,7 +202,7 @@ namespace stm32plus {
 
       _mouseDescriptor.endpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
       _mouseDescriptor.endpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      _mouseDescriptor.endpoint.wMaxPacketSize=4;                           // mouse reports are 4 bytes
+      _mouseDescriptor.endpoint.wMaxPacketSize=MOUSE_HID_REPORT_SIZE;       // mouse reports are 3 bytes
       _mouseDescriptor.endpoint.bInterval=params.hid_mouse_poll_interval;   // default is 10 frames
 
       // set up the qualifier descriptor (see constructor for defaults)
@@ -231,7 +247,7 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t MouseHidDevice<TPhy,Features...>::onHidInit(uint8_t cfgindx) {
 
-      USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,4);
+      USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,MOUSE_HID_REPORT_SIZE);
 
       this->_deviceHandle.pClassData=USBD_malloc(sizeof (USBD_HID_HandleTypeDef));
       ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->state=HID_IDLE;
@@ -253,7 +269,7 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t MouseHidDevice<TPhy,Features...>::onHidDeInit(uint8_t cfgidx) {
 
-      USBD_LL_CloseEP(&this->_deviceHandle,4);
+      USBD_LL_CloseEP(&this->_deviceHandle,MOUSE_HID_REPORT_SIZE);
 
       if(this->_deviceHandle.pClassData) {
         USBD_free(this->_deviceHandle.pClassData);
@@ -406,7 +422,7 @@ namespace stm32plus {
 
 
     /**
-     * Send a 4-byte HID report to the host
+     * Send a 3-byte HID report to the host
      * @param data The data to send
      * @return true if it worked
      */
@@ -416,7 +432,7 @@ namespace stm32plus {
       return HidDeviceBase::hidSendReport(
           static_cast<MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this),
           data,
-          4);
+          MOUSE_HID_REPORT_SIZE);
     }
   }
 }
