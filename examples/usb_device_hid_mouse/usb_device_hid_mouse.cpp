@@ -114,7 +114,9 @@ class UsbDeviceHidMouseTest {
 
       MySpi::Parameters spiParams;
 
-      // override some of the default SPI parameters
+      /*
+       * override some of the default SPI parameters
+       */
 
       spiParams.spi_baudRatePrescaler=SPI_BaudRatePrescaler_4;
       spiParams.spi_cpol=SPI_CPOL_Low;
@@ -122,9 +124,83 @@ class UsbDeviceHidMouseTest {
 
       MySpi spi(spiParams);
 
-      // the LIS302DL interrupt1 and interrupt2 pins are on PE0, PE1,
+      /*
+       * initialise the accelerometer
+       */
 
-      GpioE<DefaultDigitalInputFeature<0,1>> pe;
+      initialiseAccelerometer(spi);
+
+      /*
+       * read the starting position to use as an offset
+       */
+
+      int8_t xoffset,yoffset,x,y;
+
+      readXY(spi,xoffset,yoffset);
+
+      /*
+       * Go into a loop reading the X and Y position every 10ms (the USB poll frequency)
+       */
+
+      for(;;) {
+
+        MillisecondTimer::delay(10);
+
+        readXY(spi,x,y);
+
+        x-=xoffset;
+        y-=yoffset;
+      }
+    }
+
+
+    /*
+     * Read the X and Y position
+     */
+
+    void readXY(MySpi& spi,int8_t& x,int8_t& y) {
+
+      const uint8_t cmd=0x29 |    // LIS302DL_OUT_X_ADDR
+                        0x80 |    // READWRITE_CMD
+                        0x40;     // MULTIPLEBYTE_CMD
+
+      uint8_t output[4];
+
+      // read the data. OUT_X is 29 and OUT_Y is 2B. we'll grab both in one read
+
+      spi.setNss(false);
+      spi.send(&cmd,1);
+      spi.receive(output,4);
+      spi.setNss(true);
+
+      x=output[0];
+      y=output[2];
+    }
+
+
+    /*
+     * Initialise the accelerometer by writing to the control register
+     */
+
+    void initialiseAccelerometer(MySpi& spi) {
+
+      uint8_t buffer[2];
+
+      buffer[0]=0x20;     // LIS302DL_CTRL_REG1_ADDR
+      buffer[1]=0x40 |    // LIS302DL_LOWPOWERMODE_ACTIVE
+                0x01 |    // LIS302DL_X_ENABLE
+                0x02;     // LIS302DL_Y_ENABLE
+
+      // send the data
+
+      spi.setNss(false);
+      while(!spi.readyToSend());
+      spi.send(buffer,2);
+      spi.setNss(true);
+
+      // wait for ready
+
+      MillisecondTimer::delay(30);
     }
 
 
