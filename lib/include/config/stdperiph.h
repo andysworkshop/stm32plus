@@ -39,7 +39,16 @@
 #include "fwlib/f1/stdperiph/inc/stm32f10x_cec.h"
 #include "fwlib/f1/stdperiph/inc/stm32f10x_wwdg.h"
 
-#elif defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+#elif defined(STM32PLUS_F401) || \
+      defined(STM32PLUS_F405) || \
+      defined(STM32PLUS_F407) || \
+      defined(STM32PLUS_F411) || \
+      defined(STM32PLUS_F415) || \
+      defined(STM32PLUS_F417) || \
+      defined(STM32PLUS_F437) || \
+      defined(STM32PLUS_F427) || \
+      defined(STM32PLUS_F429) || \
+      defined(STM32PLUS_F439)
 
 #include "fwlib/f4/stdperiph/inc/misc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_adc.h"
