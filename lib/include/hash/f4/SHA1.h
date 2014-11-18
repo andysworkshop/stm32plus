@@ -6,7 +6,7 @@
 
 #pragma once
 
-#if !defined(STM32PLUS_F4) || !defined(STM32PLUS_F4_HARDWARE_CRYPTO)
+#if !defined(STM32PLUS_F4_HAS_CRYPTO)
 #error Incorrect MCU - this file is for the F4 devices that have hardware crypto
 #endif
 

@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_DCMI)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_dcmi.c
@@ -536,3 +538,5 @@ void DCMI_ClearITPendingBit(uint16_t DCMI_IT)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

@@ -1,4 +1,4 @@
-#if defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+#if defined(STM32PLUS_F4_HAS_LTDC)
 /**
   ******************************************************************************
   * @file    stm32f4xx_ltdc.c

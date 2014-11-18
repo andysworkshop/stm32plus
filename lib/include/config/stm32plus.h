@@ -17,7 +17,8 @@
  *  STM32PLUS_F1_CL
  *  STM32PLUS_F1_MDVL
  *  STM32PLUS_F0_51
- *  STM32PLUS_F4
+ *  STM32PLUS_F401
+ *  ... and all the others (see SConstruct for all)
  *
  *  Also ensure that HSE_VALUE has been set to the speed of your external oscillator in hertz. The scons
  *  build procedure takes care of all these definitions.
@@ -41,19 +42,16 @@
 #elif defined(STM32PLUS_F0_51)
   #define STM32PLUS_F0                // enable features common to all F0
   #define STM32F0XX_MD                // this is a medium density device
-#elif defined(STM32PLUS_F401)
-  #define STM32PLUS_F4
-  #define STM32F401xx
-#elif defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
-  #define STM32PLUS_F4
-  #define STM32F40_41xxx
-#elif defined(STM32PLUS_F437) || defined(STM32PLUS_F427)
-  #define STM32PLUS_F4
-  #define STM32F427_437xx
-#elif defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
-  #define STM32PLUS_F4
-  #define STM32F429_439xx
-#else
+#elif defined(STM32PLUS_F401) || \
+      defined(STM32PLUS_F407) || \
+      defined(STM32PLUS_F415) || \
+      defined(STM32PLUS_F417) || \
+      defined(STM32PLUS_F437) || \
+      defined(STM32PLUS_F427) || \
+      defined(STM32PLUS_F429) || \
+      defined(STM32PLUS_F439)
+  #define STM32PLUS_F4                // enable features common to all F4. See stm32f4xx.h
+#else                                 // in cmsis for individual F4 features
   #error "You must define an MCU type. See config/stm32plus.h"
 #endif
 
@@ -73,14 +71,6 @@
 
 #undef STM32PLUS_BUILD
 #define STM32PLUS_BUILD 0x030600
-
-
-/**
- * Define this if you have hardware crypto support and want to use the hash functionality.
- * Crypto is export restricted - your device may not have it even if the datasheet indicates otherwise.
- */
-
-#undef STM32PLUS_F4_HARDWARE_CRYPTO
 
 
 /**

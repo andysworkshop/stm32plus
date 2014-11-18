@@ -345,6 +345,8 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_UART5> Uart5PeripheralTraits;
 
+#if defined(STM32PLUS_F4_HAS_MAC)
+
   template<>
   struct PeripheralTraits<PERIPHERAL_MAC> {
     enum {
@@ -353,6 +355,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_MAC> MacPeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_OTG_FS> {

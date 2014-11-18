@@ -192,6 +192,8 @@ namespace stm32plus {
   }
 
 
+#if defined(STM32PLUS_F4_HAS_MAC)
+
   /**
    * Ethernet EXTI is available
    */
@@ -207,6 +209,8 @@ namespace stm32plus {
   inline void ExtiInterruptEnabler<19>::disable() {
     Nvic::configureIrq(ETH_WKUP_IRQn,DISABLE);
   }
+
+#endif
 
 
   /**
