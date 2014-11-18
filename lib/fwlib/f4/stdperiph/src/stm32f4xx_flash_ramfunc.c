@@ -94,7 +94,7 @@
   */
 
 
-#if defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
+#if defined(STM32PLUS_F411)
 /**
   * @brief Start/Stop the flash interface while System Run
   * @note  This mode is only available for STM32F411xx devices. 

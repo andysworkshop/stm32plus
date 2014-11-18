@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
 /**
   ******************************************************************************
   * @file    stm32f4xx_fsmc.h
@@ -674,4 +673,3 @@ void FSMC_ClearITPendingBit(uint32_t FSMC_Bank, uint32_t FSMC_IT);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

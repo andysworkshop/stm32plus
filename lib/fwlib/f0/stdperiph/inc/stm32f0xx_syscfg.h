@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx_syscfg.h
@@ -261,4 +260,3 @@ void SYSCFG_ClearFlag(uint32_t SYSCFG_Flag);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

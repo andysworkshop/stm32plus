@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx.h
@@ -60,11 +59,9 @@
   
  /* stm32plus addition */
 
-#if defined(STM32PLUS_F0_51) && !defined(STM32F0XX_MD)
-  #define STM32F0XX_MD
-#endif
-
 #define assert_param(expr) ((void)0)
+#include "config/mcu_defines.h"
+
 
  /** @addtogroup Library_configuration_section
   * @{
@@ -5118,5 +5115,3 @@ typedef struct
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-
-#endif

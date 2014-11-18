@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
 /**
   ******************************************************************************
   * @file    stm32f10x_dbgmcu.h
@@ -118,4 +117,3 @@ void DBGMCU_Config(uint32_t DBGMCU_Periph, FunctionalState NewState);
   */
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif

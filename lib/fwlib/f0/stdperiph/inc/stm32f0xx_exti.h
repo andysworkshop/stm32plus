@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx_exti.h
@@ -215,4 +214,3 @@ void EXTI_ClearITPendingBit(uint32_t EXTI_Line);
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

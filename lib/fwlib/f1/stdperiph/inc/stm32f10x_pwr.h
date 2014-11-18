@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
 /**
   ******************************************************************************
   * @file    stm32f10x_pwr.h
@@ -155,4 +154,3 @@ void PWR_ClearFlag(uint32_t PWR_FLAG);
   */
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif

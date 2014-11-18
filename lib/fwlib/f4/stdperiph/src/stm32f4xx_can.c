@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_CAN)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_can.c
@@ -1698,3 +1700,5 @@ static ITStatus CheckITStatus(uint32_t CAN_Reg, uint32_t It_Bit)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

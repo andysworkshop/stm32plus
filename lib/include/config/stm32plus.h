@@ -24,38 +24,10 @@
  *  build procedure takes care of all these definitions.
  */
 
-/*
- * Verify that an MCU has been selected
- */
 
-#if defined(STM32PLUS_F1_HD)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32F10X_HD                // for the std peripheral library
-#elif defined(STM32PLUS_F1_CL_E)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32PLUS_F1_CL             // enable features common to F105 and F107
-  #define STM32F10X_CL                // for the std peripheral library
-#elif defined(STM32PLUS_F1_MD_VL)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32PLUS_F1_VL             // enable features common to all VL devices
-  #define STM32F10X_MD_VL             // for the std peripheral library
-#elif defined(STM32PLUS_F0_51)
-  #define STM32PLUS_F0                // enable features common to all F0
-  #define STM32F0XX_MD                // this is a medium density device
-#elif defined(STM32PLUS_F401) || \
-      defined(STM32PLUS_F405) || \
-      defined(STM32PLUS_F407) || \
-      defined(STM32PLUS_F411) || \
-      defined(STM32PLUS_F415) || \
-      defined(STM32PLUS_F417) || \
-      defined(STM32PLUS_F437) || \
-      defined(STM32PLUS_F427) || \
-      defined(STM32PLUS_F429) || \
-      defined(STM32PLUS_F439)
-  #define STM32PLUS_F4                // enable features common to all F4. See stm32f4xx.h
-#else                                 // in cmsis for individual F4 features
-  #error "You must define an MCU type. See config/stm32plus.h"
-#endif
+// include the standard peripheral library
+
+#include "config/stdperiph.h"
 
 
 /*
@@ -172,15 +144,10 @@ namespace stm32plus {
 
 // include standard libraries
 
-#include <stdint.h>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <cctype>
-
-// include the ST library
-
-#include "config/stdperiph.h"
 
 // error provider is common to everyone
 

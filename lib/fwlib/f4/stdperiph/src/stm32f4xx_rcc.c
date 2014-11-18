@@ -2102,7 +2102,7 @@ void RCC_APB2PeriphClockLPModeCmd(uint32_t RCC_APB2Periph, FunctionalState NewSt
   }
 }
 
-#if defined(STM32PLUS_F415) | defined(STM32PLUS_F417)
+#if defined(STM32PLUS_F411)
 /**
   * @brief Configures the External Low Speed oscillator mode (LSE mode).
   * @note This mode is only available for STM32F411xx devices.

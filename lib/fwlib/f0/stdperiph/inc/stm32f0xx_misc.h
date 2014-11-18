@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F0_51)
 /**
   ******************************************************************************
   * @file    stm32f0xx_misc.h
@@ -142,4 +141,3 @@ void SysTick_CLKSourceConfig(uint32_t SysTick_CLKSource);
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

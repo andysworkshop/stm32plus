@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD_VL)
 /**
   ******************************************************************************
   * @file    stm32f10x_dma.h
@@ -438,4 +437,3 @@ void DMA_ClearITPendingBit(uint32_t DMAy_IT);
   */
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif
