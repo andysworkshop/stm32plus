@@ -155,9 +155,12 @@
   #include "dma/features/f4/SdioDmaReaderFeature.h"
   #include "dma/features/f4/SdioDmaWriterFeature.h"
   #include "dma/features/f4/DmaFsmcLcdMemoryCopyFeature.h"
-  #include "dma/features/f4/DacDmaWriterFeature.h"
   #include "dma/features/f4/AdcDmaFeature.h"
   #include "dma/features/f4/AdcMultiDmaFeature.h"
+
+#if defined(STM32PLUS_F4_HAS_DAC)
+  #include "dma/features/f4/DacDmaWriterFeature.h"
+#endif
 
   #include "dma/features/f4/DmaPeripheralInfo.h"
 

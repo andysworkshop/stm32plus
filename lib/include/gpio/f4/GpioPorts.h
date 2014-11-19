@@ -24,8 +24,16 @@ namespace stm32plus {
   template<class... Features> using GpioC=GpioPort<GPIOC_BASE,Features...>;
   template<class... Features> using GpioD=GpioPort<GPIOD_BASE,Features...>;
   template<class... Features> using GpioE=GpioPort<GPIOE_BASE,Features...>;
+  template<class... Features> using GpioH=GpioPort<GPIOH_BASE,Features...>;
+
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
   template<class... Features> using GpioF=GpioPort<GPIOF_BASE,Features...>;
   template<class... Features> using GpioG=GpioPort<GPIOG_BASE,Features...>;
-  template<class... Features> using GpioH=GpioPort<GPIOH_BASE,Features...>;
   template<class... Features> using GpioI=GpioPort<GPIOI_BASE,Features...>;
+#endif
+
+#if defined(STM32PLUS_F4_HAS_GPIOJ_K)
+  template<class... Features> using GpioJ=GpioPort<GPIOJ_BASE,Features...>;
+  template<class... Features> using GpioK=GpioPort<GPIOK_BASE,Features...>;
+#endif
 }

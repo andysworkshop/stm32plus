@@ -214,8 +214,10 @@ namespace stm32plus {
 
 
   /**
-   * Additional EXTI lines on the F4 devices
+   * Additional EXTI lines on many F4 devices
    */
+
+#if defined(STM32PLUS_F4_HAS_OTG_HS)
 
   template<>
   inline void ExtiInterruptEnabler<20>::enable() {
@@ -223,10 +225,13 @@ namespace stm32plus {
     Nvic::configureIrq(OTG_HS_WKUP_IRQn);
   }
 
+
   template<>
   inline void ExtiInterruptEnabler<20>::disable() {
     Nvic::configureIrq(OTG_HS_WKUP_IRQn,DISABLE);
   }
+
+#endif
 
 
   template<>

@@ -73,8 +73,13 @@
 #include "timer/Timer1.h"
 #include "timer/Timer2.h"
 #include "timer/Timer3.h"
-#include "timer/Timer6.h"
-#include "timer/Timer14.h"
+
+#if defined(STM32PLUS_F1) || defined(STM32PLUS_F0) || defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+
+  #include "timer/Timer6.h"
+  #include "timer/Timer14.h"
+
+#endif
 
 // MCU-specific timer includes
 
@@ -94,13 +99,18 @@
 
   #include "timer/f4/Timer4.h"
   #include "timer/f4/Timer5.h"
-  #include "timer/f4/Timer7.h"
-  #include "timer/f4/Timer8.h"
   #include "timer/f4/Timer9.h"
   #include "timer/f4/Timer10.h"
   #include "timer/f4/Timer11.h"
+
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+
+  #include "timer/f4/Timer7.h"
+  #include "timer/f4/Timer8.h"
   #include "timer/f4/Timer12.h"
   #include "timer/f4/Timer13.h"
+
+#endif
 
 #elif defined(STM32PLUS_F0)
 
@@ -178,12 +188,18 @@
   #include "timer/features/f4/Timer3GpioFeature.h"
   #include "timer/features/f4/Timer4GpioFeature.h"
   #include "timer/features/f4/Timer5GpioFeature.h"
-  #include "timer/features/f4/Timer8GpioFeature.h"
   #include "timer/features/f4/Timer9GpioFeature.h"
   #include "timer/features/f4/Timer10GpioFeature.h"
   #include "timer/features/f4/Timer11GpioFeature.h"
+
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+
+  #include "timer/features/f4/Timer8GpioFeature.h"
   #include "timer/features/f4/Timer13GpioFeature.h"
   #include "timer/features/f4/Timer14GpioFeature.h"
+
+#endif
+
   #include "timer/features/f4/Timer2RemapEthernetPtpFeature.h"
   #include "timer/features/f4/Timer2RemapUsbFullSpeedSofFeature.h"
   #include "timer/features/f4/Timer2RemapUsbHighSpeedSofFeature.h"
