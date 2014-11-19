@@ -16,12 +16,12 @@
 
 #include "gpio/GpioPortBase.h"
 #include "gpio/GpioAlternateFunctionMapper.h"
-#include "gpio/GpioPinMap.h"
 
 // device-specific feature includes
 
 #if defined(STM32PLUS_F1)
 
+  #include "gpio/f1/GpioPinMap.h"
   #include "gpio/f1/Gpio.h"
   #include "gpio/f1/GpioPort.h"
   #include "gpio/f1/features/DigitalOutputFeature.h"
@@ -33,6 +33,7 @@
 
 #elif defined(STM32PLUS_F4)
 
+  #include "gpio/f4/GpioPinMap.h"
   #include "gpio/f4/Gpio.h"
   #include "gpio/f4/GpioPort.h"
   #include "gpio/f4/features/DigitalOutputFeature.h"
@@ -44,6 +45,7 @@
 
 #elif defined(STM32PLUS_F0)
 
+  #include "gpio/f0/GpioPinMap.h"
   #include "gpio/f0/Gpio.h"
   #include "gpio/f0/GpioPort.h"
   #include "gpio/f0/features/DigitalOutputFeature.h"

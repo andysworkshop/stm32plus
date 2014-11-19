@@ -32,6 +32,7 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
 
+#if defined(STM32PLUS_F4_HAS_ADC2_3)
   template<>
   struct PeripheralTraits<PERIPHERAL_ADC2> {
     enum {
@@ -47,6 +48,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_ADC3> Adc3PeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
@@ -318,6 +320,8 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_USART2> Usart2PeripheralTraits;
 
+#if defined(STM32PLUS_F4_HAS_USART3_4_5)
+
   template<>
   struct PeripheralTraits<PERIPHERAL_USART3> {
     enum {
@@ -344,6 +348,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_UART5> Uart5PeripheralTraits;
+#endif
 
 #if defined(STM32PLUS_F4_HAS_MAC)
 

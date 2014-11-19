@@ -2,11 +2,14 @@
  * This file is a part of the open source stm32plus library.
  * Copyright (c) 2011,2012,2013,2014 Andy Brown <www.andybrown.me.uk>
  * Please see website for licensing terms.
- *
- * THIS IS AN AUTOMATICALLY GENERATED FILE - DO NOT EDIT!
  */
 
 #pragma once
+
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F4
+#error This class can only be used with the STM32F4 series
+#endif
 
 
 namespace stm32plus {
@@ -572,6 +575,8 @@ namespace stm32plus {
       };
     };
 
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
+
     struct PF0 {
       enum {
         Port=GPIOF_BASE,
@@ -683,8 +688,6 @@ namespace stm32plus {
         Pin=GPIO_Pin_15
       };
     };
-
-#if defined(STM32PLUS_F1) || defined(STM32PLUS_F4)
 
     struct PG0 {
       enum {
@@ -798,7 +801,7 @@ namespace stm32plus {
       };
     };
 
-#if defined(STM32PLUS_F4)
+#endif
 
     struct PH0 {
       enum {
@@ -912,6 +915,8 @@ namespace stm32plus {
       };
     };
 
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
+
     struct PI0 {
       enum {
         Port=GPIOI_BASE,
@@ -1024,7 +1029,9 @@ namespace stm32plus {
       };
     };
 
-#if defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
+#endif
+#if defined(STM32PLUS_F4_HAS_GPIOJ_K)
+
     struct PJ0 {
       enum {
         Port=GPIOJ_BASE,
@@ -1248,9 +1255,8 @@ namespace stm32plus {
         Pin=GPIO_Pin_15
       };
     };
-#endif // F427 || F429 || F437 || F439
-#endif  // F4
-#endif  // F1 or F4
+
+#endif
 
   }
 }

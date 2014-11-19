@@ -28,10 +28,19 @@ namespace stm32plus {
     template<> inline uint32_t getPeripheral<GPIOC_BASE>() { return RCC_AHB1Periph_GPIOC; }
     template<> inline uint32_t getPeripheral<GPIOD_BASE>() { return RCC_AHB1Periph_GPIOD; }
     template<> inline uint32_t getPeripheral<GPIOE_BASE>() { return RCC_AHB1Periph_GPIOE; }
+
+    template<> inline uint32_t getPeripheral<GPIOH_BASE>() { return RCC_AHB1Periph_GPIOH; }
+
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
     template<> inline uint32_t getPeripheral<GPIOF_BASE>() { return RCC_AHB1Periph_GPIOF; }
     template<> inline uint32_t getPeripheral<GPIOG_BASE>() { return RCC_AHB1Periph_GPIOG; }
-    template<> inline uint32_t getPeripheral<GPIOH_BASE>() { return RCC_AHB1Periph_GPIOH; }
     template<> inline uint32_t getPeripheral<GPIOI_BASE>() { return RCC_AHB1Periph_GPIOI; }
+#endif
+
+#if defined(STM32PLUS_F4_HAS_GPIOJ_K)
+    template<> inline uint32_t getPeripheral<GPIOJ_BASE>() { return RCC_AHB1Periph_GPIOJ; }
+    template<> inline uint32_t getPeripheral<GPIOK_BASE>() { return RCC_AHB1Periph_GPIOK; }
+#endif
   }
 
 

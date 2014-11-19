@@ -10,8 +10,13 @@
 
 /**
  * Use the selected MCU family to set up other definitions used to include and exclude
- * features. Some are used by stm32plus and some are used by the ST peripheral and CMSIS libraries.
+ * features. Some are used by stm32plus and some are used by the ST peripheral and CMSIS
+ * libraries.
+ *
+ * The _HAS_ macros are considered private to stm32plus and may change without warning
+ * with new library releases.
  */
+
 
 #if defined(STM32PLUS_F1_HD)
   #define STM32PLUS_F1                // enable features common to all F1
@@ -31,16 +36,22 @@
   #define STM32PLUS_F0                // enable features common to all F0
   #define STM32F0XX_MD                // this is a medium density device
 
-#elif defined(STM32PLUS_F401)
+#elif defined(STM32PLUS_F401E)
   #define STM32PLUS_F4
-  #define STM32F40_41xxx
   #define STM32F401xE
+
+#elif defined(STM32PLUS_F401C)
+  #define STM32PLUS_F4
+  #define STM32F401xC
 
 #elif defined(STM32PLUS_F405)
   #define STM32PLUS_F4
   #define STM32F405xx
   #define STM32F40_41xxx
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
 
 #elif defined(STM32PLUS_F407)
   #define STM32PLUS_F4
@@ -50,11 +61,13 @@
   #define STM32PLUS_F4_HAS_DCMI
   #define STM32PLUS_F4_HAS_SAI
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+ #define STM32PLUS_F4_HAS_GPIOF_G_I
 
-#elif defined(STM32PLUS_F411)
+#elif defined(STM32PLUS_F411E)
   #define STM32PLUS_F4
   #define STM32F411xE
-  #define STM32F40_41xxx
 
 #elif defined(STM32PLUS_F415)
   #define STM32PLUS_F4
@@ -62,6 +75,9 @@
   #define STM32F40_41xxx
   #define STM32PLUS_F4_HAS_CRYPTO
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
 
 #elif defined(STM32PLUS_F417)
   #define STM32PLUS_F4
@@ -72,6 +88,9 @@
   #define STM32PLUS_F4_HAS_SAI
   #define STM32PLUS_F4_HAS_CRYPTO
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
 
 #elif defined(STM32PLUS_F427)
   #define STM32PLUS_F4
@@ -82,6 +101,10 @@
   #define STM32PLUS_F4_HAS_SAI
   #define STM32PLUS_F4_HAS_DMA2D
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
+  #define STM32PLUS_F4_HAS_GPIOJ_K
 
 #elif defined(STM32PLUS_F429)
   #define STM32PLUS_F4
@@ -93,6 +116,10 @@
   #define STM32PLUS_F4_HAS_LTDC
   #define STM32PLUS_F4_HAS_DMA2D
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
+  #define STM32PLUS_F4_HAS_GPIOJ_K
 
 #elif defined(STM32PLUS_F437)
   #define STM32PLUS_F4
@@ -104,6 +131,10 @@
   #define STM32PLUS_F4_HAS_CRYPTO
   #define STM32PLUS_F4_HAS_DMA2D
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
+  #define STM32PLUS_F4_HAS_GPIOJ_K
 
 #elif defined(STM32PLUS_F439)
   #define STM32PLUS_F4
@@ -116,6 +147,11 @@
   #define STM32PLUS_F4_HAS_LTDC
   #define STM32PLUS_F4_HAS_DMA2D
   #define STM32PLUS_F4_HAS_CAN
+  #define STM32PLUS_F4_HAS_ADC2_3
+  #define STM32PLUS_F4_HAS_USART3_4_5
+  #define STM32PLUS_F4_HAS_GPIOF_G_I
+  #define STM32PLUS_F4_HAS_GPIOJ_K
+
 #else
   #error "You must define an MCU type. See config/stm32plus.h"
 #endif
