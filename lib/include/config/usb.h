@@ -82,7 +82,9 @@
   #include "usb/device/features/DeviceFeatureBase.h"
   #include "usb/device/features/endpoints/ControlEndpointFeature.h"
   #include "usb/device/features/endpoints/InEndpointFeatureBase.h"
+  #include "usb/device/features/endpoints/OutEndpointFeatureBase.h"
   #include "usb/device/features/endpoints/InterruptInEndpointFeature.h"
+  #include "usb/device/features/endpoints/InterruptOutEndpointFeature.h"
   #include "usb/device/features/StringFeatureBase.h"
   #include "usb/device/features/ManufacturerTextFeature.h"
   #include "usb/device/features/ProductTextFeature.h"
@@ -102,7 +104,9 @@
 
   #include "usb/device/hid/HidDevice.h"
   #include "usb/device/hid/MouseReportDescriptor.h"
+  #include "usb/device/hid/KeyboardReportDescriptor.h"
   #include "usb/device/hid/MouseHidDevice.h"
+  #include "usb/device/hid/KeyboardHidDevice.h"
 
 #endif
 

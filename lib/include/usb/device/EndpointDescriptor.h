@@ -26,7 +26,8 @@ namespace stm32plus {
        */
 
       enum {
-        IN = 0x80
+        OUT = 0x00,
+        IN  = 0x80
       };
 
       uint8_t bEndpointAddress;

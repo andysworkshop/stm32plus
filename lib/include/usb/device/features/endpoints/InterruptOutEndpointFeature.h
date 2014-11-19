@@ -12,18 +12,18 @@ namespace stm32plus {
 
 
     /**
-     * Class to handle interrupt IN endpoints
+     * Class to handle interrupt OUT endpoints
      */
 
     template<uint8_t TEndpointNumber,class TDevice>
-    class InterruptInEndpointFeature : public InEndpointFeatureBase<TDevice> {
+    class InterruptOutEndpointFeature : public OutEndpointFeatureBase<TDevice> {
 
       public:
-        struct Parameters : InEndpointFeatureBase<TDevice>::Parameters {
+        struct Parameters : OutEndpointFeatureBase<TDevice>::Parameters {
         };
 
       protected:
-        InterruptInEndpointFeature(TDevice& device);
+        InterruptOutEndpointFeature(TDevice& device);
 
       public:
         bool initialise(Parameters& params);
@@ -36,8 +36,8 @@ namespace stm32plus {
      */
 
     template<uint8_t TEndpointNumber,class TDevice>
-    inline InterruptInEndpointFeature<TEndpointNumber,TDevice>::InterruptInEndpointFeature(TDevice& device)
-      : InEndpointFeatureBase<TDevice>(device,TEndpointNumber) {
+    inline InterruptOutEndpointFeature<TEndpointNumber,TDevice>::InterruptOutEndpointFeature(TDevice& device)
+      : OutEndpointFeatureBase<TDevice>(device,TEndpointNumber) {
     }
 
 
@@ -47,8 +47,8 @@ namespace stm32plus {
      */
 
     template<uint8_t TEndpointNumber,class TDevice>
-    inline bool InterruptInEndpointFeature<TEndpointNumber,TDevice>::initialise(Parameters& params) {
-      return InEndpointFeatureBase<TDevice>::initialise(params);
+    inline bool InterruptOutEndpointFeature<TEndpointNumber,TDevice>::initialise(Parameters& params) {
+      return OutEndpointFeatureBase<TDevice>::initialise(params);
     }
   }
 }
