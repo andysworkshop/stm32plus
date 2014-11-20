@@ -267,6 +267,14 @@ namespace stm32plus {
       this->_deviceHandle.pClassData=USBD_malloc(sizeof(USBD_HID_HandleTypeDef));
       ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->state=HID_IDLE;
 
+      // prepare OUT endpoint to receive the first packet
+
+      USBD_LL_PrepareReceive(
+          &this->_deviceHandle,
+          EndpointDescriptor::OUT | 2,
+          ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->Report_buf,
+          USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
+
       HidSdkInitEvent event(cfgindx);;
       this->UsbEventSender.raiseEvent(event);
 

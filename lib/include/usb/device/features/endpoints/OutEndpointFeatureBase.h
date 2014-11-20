@@ -57,7 +57,7 @@ namespace stm32plus {
      */
 
     template<class TDevice>
-    inline bool OutEndpointFeatureBase<TDevice>::initialise(const Parameters& params) {
+    inline bool OutEndpointFeatureBase<TDevice>::initialise(const Parameters& /* params */) {
       return true;
     }
   }

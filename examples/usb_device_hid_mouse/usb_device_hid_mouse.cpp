@@ -112,7 +112,14 @@ class UsbDeviceHidMouseTest {
        */
 
       if(!usb.initialise(usbParams))
-        error();
+        for(;;);      // onError has already locked up
+
+
+      /*
+       * Subscribe to errors
+       */
+
+      usb.UsbErrorEventSender.insertSubscriber(UsbErrorEventSourceSlot::bind(this,&UsbDeviceHidMouseTest::onError));
 
       /*
        * The USB device is now up and running. Now we initialise the LIS302DL SPI1 interface
@@ -289,8 +296,23 @@ class UsbDeviceHidMouseTest {
     }
 
 
-    void error() {
-      for(;;);
+    /**
+     * USB error event received
+     * @param uee the event descriptor
+     */
+
+    void onError(UsbErrorEvent& /* uee */) {
+
+      // flash the RED led on PD5 at 1Hz
+
+      GpioD<DefaultDigitalOutputFeature<5>> pd;
+
+      for(;;) {
+        pd[5].reset();
+        MillisecondTimer::delay(500);
+        pd[5].set();
+        MillisecondTimer::delay(500);
+      }
     }
 };
 
