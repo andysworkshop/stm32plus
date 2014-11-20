@@ -61,6 +61,8 @@ namespace stm32plus {
         KeyboardConfigurationDescriptor _keyboardDescriptor;
         DeviceQualifierDescriptor _qualifierDescriptor;
 
+        uint8_t _outReportBuffer[KEYBOARD_HID_LED_REPORT_SIZE];
+
       public:
 
         /**
@@ -73,8 +75,8 @@ namespace stm32plus {
           uint8_t hid_keyboard_out_poll_interval;       // default is 10
 
           Parameters() {
-            hid_keyboard_in_poll_interval=HID_POLLING_INTERVAL;
-            hid_keyboard_out_poll_interval=HID_POLLING_INTERVAL;
+            hid_keyboard_in_poll_interval=10;
+            hid_keyboard_out_poll_interval=10;
           }
         };
 
@@ -92,6 +94,7 @@ namespace stm32plus {
         uint8_t *onHidGetDeviceQualifierDescriptor(uint16_t *length);
         uint8_t onHidDataIn(uint8_t epnum);
         uint8_t onHidDataOut(uint8_t epnum);
+        uint8_t onHidEp0RxReady();
     };
 
 
@@ -142,6 +145,11 @@ namespace stm32plus {
       template<class TPhy,template <class> class... Features>
       __attribute__((noinline)) inline uint8_t HID_DataOut(USBD_HandleTypeDef * /* pdev */,uint8_t epnum) {
         return KeyboardHidDevice<TPhy,Features...>::_instance->onHidDataOut(epnum);
+      }
+
+      template<class TPhy,template <class> class... Features>
+      __attribute__((noinline)) inline uint8_t HID_Ep0RxReady(USBD_HandleTypeDef * /* pdev */) {
+        return KeyboardHidDevice<TPhy,Features...>::_instance->onHidEp0RxReady();
       }
     }
 
@@ -201,7 +209,6 @@ namespace stm32plus {
       // set up the hid class descriptor (see constructor for defaults)
 
       _keyboardDescriptor.hid.bNumDescriptors=1;
-      _keyboardDescriptor.hid.bDescriptorType=HID_REPORT_DESC;
       _keyboardDescriptor.hid.wItemLength=sizeof(KeyboardReportDescriptor);
 
       // set up the IN endpoint descriptor
@@ -233,6 +240,7 @@ namespace stm32plus {
       this->_classType.Setup=keyboard_hid_device_internal::HID_Setup<TPhy,Features...>;
       this->_classType.DataIn=keyboard_hid_device_internal::HID_DataIn<TPhy,Features...>;
       this->_classType.DataOut=keyboard_hid_device_internal::HID_DataOut<TPhy,Features...>;
+      this->_classType.EP0_RxReady=keyboard_hid_device_internal::HID_Ep0RxReady<TPhy,Features...>;
       this->_classType.GetHSConfigDescriptor=keyboard_hid_device_internal::HID_GetCfgDesc<TPhy,Features...>;
       this->_classType.GetFSConfigDescriptor=keyboard_hid_device_internal::HID_GetCfgDesc<TPhy,Features...>;
       this->_classType.GetOtherSpeedConfigDescriptor=keyboard_hid_device_internal::HID_GetCfgDesc<TPhy,Features...>;
@@ -264,16 +272,13 @@ namespace stm32plus {
       USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,KEYBOARD_HID_KEYS_REPORT_SIZE);
       USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::OUT | 2,EndpointDescriptor::INTERRUPT,KEYBOARD_HID_LED_REPORT_SIZE);
 
-      this->_deviceHandle.pClassData=USBD_malloc(sizeof(USBD_HID_HandleTypeDef));
-      ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->state=HID_IDLE;
+      // device is not busy
+
+      this->_busy=false;
 
       // prepare OUT endpoint to receive the first packet
 
-      USBD_LL_PrepareReceive(
-          &this->_deviceHandle,
-          EndpointDescriptor::OUT | 2,
-          ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->Report_buf,
-          USBD_CUSTOMHID_OUTREPORT_BUF_SIZE);
+      USBD_LL_PrepareReceive(&this->_deviceHandle,EndpointDescriptor::OUT | 2,_outReportBuffer,sizeof(_outReportBuffer));
 
       HidSdkInitEvent event(cfgindx);;
       this->UsbEventSender.raiseEvent(event);
@@ -292,13 +297,10 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t KeyboardHidDevice<TPhy,Features...>::onHidDeInit(uint8_t cfgidx) {
 
+      // close endpoints
+
       USBD_LL_CloseEP(&this->_deviceHandle,EndpointDescriptor::IN | 1);
       USBD_LL_CloseEP(&this->_deviceHandle,EndpointDescriptor::OUT | 2);
-
-      if(this->_deviceHandle.pClassData) {
-        USBD_free(this->_deviceHandle.pClassData);
-        this->_deviceHandle.pClassData=nullptr;
-      }
 
       HidSdkDeInitEvent event(cfgidx);
       this->UsbEventSender.raiseEvent(event);
@@ -364,7 +366,7 @@ namespace stm32plus {
       // Ensure that the FIFO is empty before a new transfer, this condition could
       // be caused by  a new transfer before the end of the previous transfer
 
-      ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->state=HID_IDLE;
+      this->_busy=false;
 
       // create the event with the default descriptor and send
 
@@ -372,6 +374,59 @@ namespace stm32plus {
       this->UsbEventSender.raiseEvent(event);
 
       return event.status;
+    }
+
+
+    /**
+     * Data out event
+     * @param epnum endpoint number
+     * @return
+     */
+
+    template<class TPhy,template <class> class... Features>
+    __attribute__((noinline))  inline uint8_t KeyboardHidDevice<TPhy,Features...>::onHidDataOut(uint8_t epnum) {
+
+      // create the event with the default descriptor and send
+
+      HidSdkDataOutEvent event(epnum,_outReportBuffer,sizeof(_outReportBuffer));
+      this->UsbEventSender.raiseEvent(event);
+
+      USBD_LL_PrepareReceive(
+          &this->_deviceHandle,
+          EndpointDescriptor::OUT | 2,
+          _outReportBuffer,
+          sizeof(_outReportBuffer));
+
+      return event.status;
+    }
+
+
+    /**
+     * Control endpoint ready handler
+     * @return
+     */
+
+    template<class TPhy,template <class> class... Features>
+    __attribute__((noinline))  inline uint8_t KeyboardHidDevice<TPhy,Features...>::onHidEp0RxReady() {
+
+      // has a report arrived?
+
+      if(this->_isReportAvailable) {
+
+        // send the data event
+
+        HidSdkDataOutEvent event(EndpointDescriptor::OUT | 2,_outReportBuffer,sizeof(_outReportBuffer));
+        this->UsbEventSender.raiseEvent(event);
+
+        // clear the available flag
+
+        this->_isReportAvailable=false;
+      }
+
+      // send the notify event
+
+      this->UsbEventSender.raiseEvent(HidSdkEp0ReadyEvent());
+      return USBD_OK;
     }
 
 
@@ -385,29 +440,32 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t KeyboardHidDevice<TPhy,Features...>::onHidSetup(USBD_SetupReqTypedef *req) {
 
-      uint16_t len=0;
-      uint8_t *pbuf=NULL;
-
-      USBD_HID_HandleTypeDef *hhid=(USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData;
+      uint16_t len;
+      uint8_t *pbuf;
 
       switch(req->bmRequest & USB_REQ_TYPE_MASK) {
         case USB_REQ_TYPE_CLASS:
-          switch(req->bRequest) {
+          switch(static_cast<HidClassRequestType>(req->bRequest)) {
 
-            case HID_REQ_SET_PROTOCOL:
-              hhid->Protocol=(uint8_t)(req->wValue);
+            case HidClassRequestType::SET_PROTOCOL:
+              this->_hidProtocol=req->wValue;
               break;
 
-            case HID_REQ_GET_PROTOCOL:
-              USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&hhid->Protocol,1);
+            case HidClassRequestType::GET_PROTOCOL:
+              USBD_CtlSendData(&this->_deviceHandle,&this->_hidProtocol,1);
               break;
 
-            case HID_REQ_SET_IDLE:
-              hhid->IdleState=(uint8_t)(req->wValue >> 8);
+            case HidClassRequestType::SET_IDLE:
+              this->_hidIdleState=req->wValue >> 8;
               break;
 
-            case HID_REQ_GET_IDLE:
-              USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&hhid->IdleState,1);
+            case HidClassRequestType::GET_IDLE:
+              USBD_CtlSendData(&this->_deviceHandle,&this->_hidIdleState,1);
+              break;
+
+            case HidClassRequestType::SET_REPORT:
+              this->_isReportAvailable = 1;
+              USBD_CtlPrepareRx(&this->_deviceHandle,_outReportBuffer,req->wLength);
               break;
 
             default:
@@ -420,23 +478,23 @@ namespace stm32plus {
           switch(req->bRequest) {
 
             case USB_REQ_GET_DESCRIPTOR:
-              if(req->wValue >> 8 == HID_REPORT_DESC) {
-                len=MIN(sizeof(MouseReportDescriptor),req->wLength);
-                pbuf=const_cast<uint8_t *>(MouseReportDescriptor);
-              } else if(req->wValue >> 8 == HID_DESCRIPTOR_TYPE) {
+              if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
+                len=Min<uint16_t>(sizeof(KeyboardReportDescriptor),req->wLength);
+                pbuf=const_cast<uint8_t *>(KeyboardReportDescriptor);
+              } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
                 pbuf=reinterpret_cast<uint8_t *>(&_keyboardDescriptor.hid);
-                len=MIN(sizeof(_keyboardDescriptor.hid),req->wLength);
+                len=Min<uint16_t>(sizeof(_keyboardDescriptor.hid),req->wLength);
               }
 
               USBD_CtlSendData(&this->_deviceHandle,pbuf,len);
               break;
 
             case USB_REQ_GET_INTERFACE:
-              USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&hhid->AltSetting,1);
+              USBD_CtlSendData(&this->_deviceHandle,&this->_hidAltSetting,1);
               break;
 
             case USB_REQ_SET_INTERFACE:
-              hhid->AltSetting=(uint8_t)(req->wValue);
+              this->_hidAltSetting=req->wValue;
               break;
           }
           break;

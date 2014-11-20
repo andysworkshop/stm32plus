@@ -22,8 +22,6 @@
 #include "usblib/device/core/inc/usbd_def.h"
 #include "usblib/device/core/inc/usbd_core.h"
 
-#include "usblib/device/class/hid/inc/usbd_hid.h"
-
 // usb depends on ...
 
 #include "config/event.h"
@@ -33,6 +31,7 @@
 #include "config/exti.h"
 #include "util/Meta.h"
 #include "util/StdExt.h"
+#include "util/MinMax.h"
 
 #if defined(STM32PLUS_F4)
 
@@ -92,6 +91,7 @@
   #include "usb/device/features/ConfigurationTextFeature.h"
   #include "usb/device/features/InterfaceTextFeature.h"
 
+  #include "usb/device/hid/HidClassRequestType.h"
   #include "usb/device/hid/HidClassDescriptor.h"
   #include "usb/device/hid/HidSubClass.h"
   #include "usb/device/hid/HidProtocol.h"
@@ -99,6 +99,8 @@
   #include "usb/device/hid/events/HidSdkInitEvent.h"
   #include "usb/device/hid/events/HidSdkDeInitEvent.h"
   #include "usb/device/hid/events/HidSdkDataInEvent.h"
+  #include "usb/device/hid/events/HidSdkDataOutEvent.h"
+  #include "usb/device/hid/events/HidSdkEp0ReadyEvent.h"
   #include "usb/device/hid/events/HidSdkGetConfigurationDescriptorEvent.h"
   #include "usb/device/hid/events/HidSdkGetDeviceQualifierDescriptorEvent.h"
 

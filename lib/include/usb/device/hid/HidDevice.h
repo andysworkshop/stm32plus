@@ -44,12 +44,19 @@ namespace stm32plus {
                             Features<Device<TPhy>>::Parameters... {
         };
 
+      protected:
+        uint8_t _hidProtocol;
+        uint8_t _hidIdleState;
+        uint8_t _hidAltSetting;
+        bool _busy;
+        bool _isReportAvailable;
+
       public:
         HidDevice();
 
         bool initialise(Parameters& params);
 
-        bool hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) const;
+        bool hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len);
     };
 
 
@@ -62,6 +69,9 @@ namespace stm32plus {
     inline HidDevice<TPhy,Features...>::HidDevice()
       : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
         Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
+
+      _busy=false;
+      _isReportAvailable=false;
     }
 
 
@@ -94,11 +104,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool HidDevice<TPhy,Features...>::hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) const {
-
-      USBD_HID_HandleTypeDef *hhid;
-
-      hhid=reinterpret_cast<USBD_HID_HandleTypeDef *>(this->_deviceHandle.pClassData);
+    inline bool HidDevice<TPhy,Features...>::hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) {
 
       // must be configured
 
@@ -107,12 +113,12 @@ namespace stm32plus {
 
       // must be idle
 
-      if(hhid->state!=HID_IDLE)
+      if(_busy)
         return this->setError(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_BUSY);
 
       // OK (XXX: check this for state mgmt if USBD_LL_Transmit fails)
 
-      hhid->state=HID_BUSY;
+      _busy=true;
       return endpoint.endpointTransmit(data,len);
     }
   }

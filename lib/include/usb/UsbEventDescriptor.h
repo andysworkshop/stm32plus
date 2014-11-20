@@ -49,6 +49,8 @@ namespace stm32plus {
         HID_DEINIT,
         HID_SETUP,
         HID_DATA_IN,
+        HID_DATA_OUT,
+        HID_EP0_READY,
         HID_GET_CONFIGURATION_DESCRIPTOR,
         HID_GET_DEVICE_QUALIFIER_DESCRIPTOR,
 

@@ -72,7 +72,7 @@ namespace stm32plus {
           uint8_t hid_mouse_poll_interval;      // default is 10
 
           Parameters() {
-            hid_mouse_poll_interval=HID_POLLING_INTERVAL;
+            hid_mouse_poll_interval = 10;
           }
         };
 
@@ -83,7 +83,7 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool mouseSendReport(uint8_t buttons,int8_t x,int8_t y) const;
+        bool mouseSendReport(uint8_t buttons,int8_t x,int8_t y);
 
         uint8_t onHidInit(uint8_t cfgindx);
         uint8_t onHidDeInit(uint8_t cfgindx);
@@ -195,7 +195,6 @@ namespace stm32plus {
       // set up the hid class descriptor (see constructor for defaults)
 
       _mouseDescriptor.hid.bNumDescriptors=1;
-      _mouseDescriptor.hid.bDescriptorType=HID_REPORT_DESC;
       _mouseDescriptor.hid.wItemLength=sizeof(MouseReportDescriptor);
 
       // set up the endpoint descriptor
@@ -249,8 +248,11 @@ namespace stm32plus {
 
       USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,MOUSE_HID_REPORT_SIZE);
 
-      this->_deviceHandle.pClassData=USBD_malloc(sizeof (USBD_HID_HandleTypeDef));
-      ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->state=HID_IDLE;
+      // device is not busy
+
+      this->_busy=false;
+
+      // send init event
 
       HidSdkInitEvent event(cfgindx);;
       this->UsbEventSender.raiseEvent(event);
@@ -269,12 +271,11 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t MouseHidDevice<TPhy,Features...>::onHidDeInit(uint8_t cfgidx) {
 
+      // close the endpoint
+
       USBD_LL_CloseEP(&this->_deviceHandle,EndpointDescriptor::IN | 1);
 
-      if(this->_deviceHandle.pClassData) {
-        USBD_free(this->_deviceHandle.pClassData);
-        this->_deviceHandle.pClassData=nullptr;
-      }
+      // send the notification
 
       HidSdkDeInitEvent event(cfgidx);
       this->UsbEventSender.raiseEvent(event);
@@ -284,8 +285,7 @@ namespace stm32plus {
 
 
     /**
-     * @brief  USBD_HID_DataIn
-     *         handle data IN Stage
+     * Get the configuration descriptor
      * @param  pdev: device instance
      * @param  epnum: endpoint index
      * @retval status
@@ -340,7 +340,7 @@ namespace stm32plus {
       // Ensure that the FIFO is empty before a new transfer, this condition could
       // be caused by  a new transfer before the end of the previous transfer
 
-      ((USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData)->state=HID_IDLE;
+      this->_busy=false;
 
       // create the event with the default descriptor and send
 
@@ -361,29 +361,27 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t MouseHidDevice<TPhy,Features...>::onHidSetup(USBD_SetupReqTypedef *req) {
 
-      uint16_t len=0;
-      uint8_t *pbuf=NULL;
-
-      USBD_HID_HandleTypeDef *hhid=(USBD_HID_HandleTypeDef *)this->_deviceHandle.pClassData;
+      uint16_t len;
+      uint8_t *pbuf;
 
       switch(req->bmRequest & USB_REQ_TYPE_MASK) {
         case USB_REQ_TYPE_CLASS:
-          switch(req->bRequest) {
+          switch(static_cast<HidClassRequestType>(req->bRequest)) {
 
-            case HID_REQ_SET_PROTOCOL:
-              hhid->Protocol=(uint8_t)(req->wValue);
+            case HidClassRequestType::SET_PROTOCOL:
+              this->_hidProtocol=req->wValue;
               break;
 
-            case HID_REQ_GET_PROTOCOL:
-              USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&hhid->Protocol,1);
+            case HidClassRequestType::GET_PROTOCOL:
+              USBD_CtlSendData(&this->_deviceHandle,&this->_hidProtocol,1);
               break;
 
-            case HID_REQ_SET_IDLE:
-              hhid->IdleState=(uint8_t)(req->wValue >> 8);
+            case HidClassRequestType::SET_IDLE:
+              this->_hidIdleState=req->wValue >> 8;
               break;
 
-            case HID_REQ_GET_IDLE:
-              USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&hhid->IdleState,1);
+            case HidClassRequestType::GET_IDLE:
+              USBD_CtlSendData(&this->_deviceHandle,&this->_hidIdleState,1);
               break;
 
             default:
@@ -396,23 +394,23 @@ namespace stm32plus {
           switch(req->bRequest) {
 
             case USB_REQ_GET_DESCRIPTOR:
-              if(req->wValue >> 8 == HID_REPORT_DESC) {
-                len=MIN(sizeof(MouseReportDescriptor),req->wLength);
+              if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
+                len=Min<uint16_t>(sizeof(MouseReportDescriptor),req->wLength);
                 pbuf=const_cast<uint8_t *>(MouseReportDescriptor);
-              } else if(req->wValue >> 8 == HID_DESCRIPTOR_TYPE) {
+              } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
                 pbuf=reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid);
-                len=MIN(sizeof(_mouseDescriptor.hid),req->wLength);
+                len=Min<uint16_t>(sizeof(_mouseDescriptor.hid),req->wLength);
               }
 
               USBD_CtlSendData(&this->_deviceHandle,pbuf,len);
               break;
 
             case USB_REQ_GET_INTERFACE:
-              USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&hhid->AltSetting,1);
+              USBD_CtlSendData(&this->_deviceHandle,&this->_hidAltSetting,1);
               break;
 
             case USB_REQ_SET_INTERFACE:
-              hhid->AltSetting=(uint8_t)(req->wValue);
+              this->_hidAltSetting=req->wValue;
               break;
           }
           break;
@@ -428,7 +426,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool MouseHidDevice<TPhy,Features...>::mouseSendReport(uint8_t buttons,int8_t x,int8_t y) const {
+    inline bool MouseHidDevice<TPhy,Features...>::mouseSendReport(uint8_t buttons,int8_t x,int8_t y) {
 
       uint8_t data[3];
 

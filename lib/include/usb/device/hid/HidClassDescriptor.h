@@ -16,6 +16,15 @@ namespace stm32plus {
 
     struct HidClassDescriptor {
 
+      /**
+       * HID descriptor type enumeration
+       */
+
+      enum {
+        HID_DESCRIPTOR_TYPE   = 0x21,
+        HID_REPORT_DESCRIPTOR = 0x22
+      };
+
       DescriptorHeader header;
 
       uint16_t bcdHID;            // HID version number
@@ -31,6 +40,7 @@ namespace stm32plus {
 
         bcdHID=0x0111;    // default version 1.11
         bCountryCode=0;
+        bDescriptorType=HID_REPORT_DESCRIPTOR;
       }
     } __attribute__((packed));
   }

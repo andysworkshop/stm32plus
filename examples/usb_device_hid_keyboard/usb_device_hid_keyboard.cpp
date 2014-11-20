@@ -14,7 +14,8 @@ using namespace stm32plus;
 using namespace stm32plus::usb;
 
 
-/*
+/**
+ * Work in progress...
  *
  * Compatible MCU:
  *   STM32F4
