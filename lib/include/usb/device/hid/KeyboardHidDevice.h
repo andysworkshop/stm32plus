@@ -88,7 +88,7 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool keyboardSendReport(uint8_t *data);
+        bool keyboardSendReport(const uint8_t *data);
 
         uint8_t onHidInit(uint8_t cfgindx);
         uint8_t onHidDeInit(uint8_t cfgindx);
@@ -514,7 +514,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool KeyboardHidDevice<TPhy,Features...>::keyboardSendReport(uint8_t *data) {
+    inline bool KeyboardHidDevice<TPhy,Features...>::keyboardSendReport(const uint8_t *data) {
 
       return HidDeviceBase::hidSendReport(
           static_cast<const KeyboardHidDeviceKeysEndpoint<Device<TPhy>>&>(*this),
