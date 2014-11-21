@@ -31,19 +31,39 @@ namespace stm32plus {
                                                KeyboardHidDeviceLedsEndpoint,
                                                Features...> {
 
+       public:
+
+         typedef HidDevice<TPhy,KeyboardHidDeviceKeysEndpoint,KeyboardHidDeviceLedsEndpoint,Features...> HidDeviceBase;
+
+         /**
+          * Constants
+          */
+
+         enum {
+           KEYBOARD_HID_KEYS_REPORT_SIZE = 8,    // must be 8 to be accepted by BOOT protocol
+           KEYBOARD_HID_LED_REPORT_SIZE = 1
+         };
+
+
+         /**
+          * Customisable parameters for this HID device
+          */
+
+         struct Parameters : HidDeviceBase::Parameters {
+
+           uint8_t hid_keyboard_in_poll_interval;        // default is 10
+           uint8_t hid_keyboard_out_poll_interval;       // default is 10
+
+           Parameters() {
+             hid_keyboard_in_poll_interval=10;
+             hid_keyboard_out_poll_interval=10;
+           }
+         };
+
+         static KeyboardHidDevice<TPhy,Features...> *_instance;    // this is how the global callbacks get back in
+
+
       protected:
-
-        typedef HidDevice<TPhy,KeyboardHidDeviceKeysEndpoint,KeyboardHidDeviceLedsEndpoint,Features...> HidDeviceBase;
-
-        /**
-         * Constants
-         */
-
-        enum {
-          KEYBOARD_HID_KEYS_REPORT_SIZE = 8,    // must be 8 to be accepted by BOOT protocol
-          KEYBOARD_HID_LED_REPORT_SIZE = 6
-        };
-
 
         /**
          * Declare the structure that gets sent back when the host asks for the whole
@@ -64,28 +84,11 @@ namespace stm32plus {
         uint8_t _outReportBuffer[KEYBOARD_HID_LED_REPORT_SIZE];
 
       public:
-
-        /**
-         * Customisable parameters for this HID device
-         */
-
-        struct Parameters : HidDeviceBase::Parameters {
-
-          uint8_t hid_keyboard_in_poll_interval;        // default is 10
-          uint8_t hid_keyboard_out_poll_interval;       // default is 10
-
-          Parameters() {
-            hid_keyboard_in_poll_interval=10;
-            hid_keyboard_out_poll_interval=10;
-          }
-        };
-
-        static KeyboardHidDevice<TPhy,Features...> *_instance;    // this is how the global callbacks get back in
-
-      public:
         KeyboardHidDevice();
 
         bool initialise(Parameters& params);
+
+        bool keyboardSendReport(uint8_t *data);
 
         uint8_t onHidInit(uint8_t cfgindx);
         uint8_t onHidDeInit(uint8_t cfgindx);
@@ -500,6 +503,23 @@ namespace stm32plus {
           break;
       }
       return USBD_OK;
+    }
+
+
+    /**
+     * Send an 8-byte HID report to the host. The data must be an 8-byte standard
+     * keyboard report (modifiers, reserved, 6-key rollover).
+     * @param data The data to send.
+     * @return true if it worked
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool KeyboardHidDevice<TPhy,Features...>::keyboardSendReport(uint8_t *data) {
+
+      return HidDeviceBase::hidSendReport(
+          static_cast<const KeyboardHidDeviceKeysEndpoint<Device<TPhy>>&>(*this),
+          data,
+          KEYBOARD_HID_KEYS_REPORT_SIZE);
     }
   }
 }

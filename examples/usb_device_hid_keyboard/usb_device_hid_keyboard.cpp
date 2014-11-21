@@ -8,6 +8,7 @@
 #include "config/usb.h"
 #include "config/spi.h"
 #include "config/timer.h"
+#include "config/button.h"
 
 
 using namespace stm32plus;
@@ -43,10 +44,41 @@ class UsbDeviceHidKeyboardTest {
 
 
     /*
+     * The three keyboard LEDs will go to these pins
+     */
+
+    GpioPinRef _numLock;                  // PD12 (green)
+    GpioPinRef _capsLock;                 // PD13 (orange)
+    GpioPinRef _scrollLock;               // PD14 (red)
+
+
+    /*
      * Run the example
      */
 
     void run() {
+
+      /*
+       * Set up the keyboard LED indicators and switch them off
+       */
+
+      GpioD<DefaultDigitalOutputFeature<12,13,14>> pd;
+
+      _numLock=pd[12];
+      _capsLock=pd[13];
+      _scrollLock=pd[14];
+
+      _numLock.reset();
+      _capsLock.reset();
+      _scrollLock.reset();
+
+      /*
+       * Set up the auto-repeat pushbutton on PA0 with 500ms initial delay
+       * then 150ms auto-repeat.
+       */
+
+      GpioA<DefaultDigitalInputFeature<0>> pa;
+      AutoRepeatPushButton button(pa[0],true,500,150);
 
       /*
        * set up the parameters for the USB hid device
@@ -76,6 +108,12 @@ class UsbDeviceHidKeyboardTest {
       usb.UsbErrorEventSender.insertSubscriber(UsbErrorEventSourceSlot::bind(this,&UsbDeviceHidKeyboardTest::onError));
 
       /*
+       * Subscribe to OUT reports from the host (keyboard LED status reports)
+       */
+
+      usb.UsbEventSender.insertSubscriber(UsbEventSourceSlot::bind(this,&UsbDeviceHidKeyboardTest::onEvent));
+
+      /*
        * Start the USB peripheral. It will run asynchronously. There is no requirement
        * for the parameters to remain in scope after the initialise call
        */
@@ -83,8 +121,49 @@ class UsbDeviceHidKeyboardTest {
       if(!usb.initialise(usbParams))
         for(;;);      // onError() has already locked up
 
+      char key='a';
+      uint8_t report[MyUsb::KEYBOARD_HID_KEYS_REPORT_SIZE];
+      memset(report,'\0',sizeof(report));
+
       for(;;) {
+
+        if(button.getState()==PushButton::Pressed) {
+
+          // send the key to the host
+
+          report[2]=key;
+          usb.keyboardSendReport(report);
+
+          // loop through the alphabet
+
+          if(key=='z')
+            key='a';
+          else
+            key++;
+        }
       }
+    }
+
+
+    /**
+     * Event callback from the USB stack. Lots of stuff will come through here but
+     * we're only interested in data packets from the host
+     */
+
+    void onEvent(UsbEventDescriptor& ued) {
+
+      // reject all events that we don't care about
+
+      if(ued.eventType!=UsbEventDescriptor::EventType::HID_DATA_OUT)
+        return;
+
+      HidSdkDataOutEvent& event(static_cast<HidSdkDataOutEvent&>(ued));
+
+      // num,caps and scroll lock are in byte 0, bits 0..2 respectively
+
+      _numLock.setState(!!(event.buffer[0] & 0x1));
+      _capsLock.setState(!!(event.buffer[0] & 0x2));
+      _scrollLock.setState(!!(event.buffer[0] & 0x4));
     }
 
 
