@@ -361,9 +361,6 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t MouseHidDevice<TPhy,Features...>::onHidSetup(USBD_SetupReqTypedef *req) {
 
-      uint16_t len;
-      uint8_t *pbuf;
-
       // send the event
 
       HidSdkSetupEvent event(*req);
@@ -383,14 +380,18 @@ namespace stm32plus {
 
         case USB_REQ_GET_DESCRIPTOR:
           if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
-            len=Min<uint16_t>(sizeof(MouseReportDescriptor),req->wLength);
-            pbuf=const_cast<uint8_t *>(MouseReportDescriptor);
+
+            USBD_CtlSendData(&this->_deviceHandle,
+                             const_cast<uint8_t *>(MouseReportDescriptor),
+                             Min<uint16_t>(sizeof(MouseReportDescriptor),req->wLength));
+
           } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
-            pbuf=reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid);
-            len=Min<uint16_t>(sizeof(_mouseDescriptor.hid),req->wLength);
+
+            USBD_CtlSendData(&this->_deviceHandle,
+                             reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid),
+                             Min<uint16_t>(sizeof(_mouseDescriptor.hid),req->wLength));
           }
 
-          USBD_CtlSendData(&this->_deviceHandle,pbuf,len);
           break;
 
         case USB_REQ_GET_INTERFACE:

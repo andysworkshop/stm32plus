@@ -443,9 +443,6 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline uint8_t KeyboardHidDevice<TPhy,Features...>::onHidSetup(USBD_SetupReqTypedef *req) {
 
-      uint16_t len;
-      uint8_t *pbuf;
-
       // send the event
 
       HidSdkSetupEvent event(*req);
@@ -480,14 +477,19 @@ namespace stm32plus {
 
           case USB_REQ_GET_DESCRIPTOR:
             if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
-              len=Min<uint16_t>(sizeof(KeyboardReportDescriptor),req->wLength);
-              pbuf=const_cast<uint8_t *>(KeyboardReportDescriptor);
+
+              USBD_CtlSendData(&this->_deviceHandle,
+                               const_cast<uint8_t *>(KeyboardReportDescriptor),
+                               Min<uint16_t>(sizeof(KeyboardReportDescriptor),req->wLength));
+
             } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
-              pbuf=reinterpret_cast<uint8_t *>(&_keyboardDescriptor.hid);
-              len=Min<uint16_t>(sizeof(_keyboardDescriptor.hid),req->wLength);
+
+              USBD_CtlSendData(&this->_deviceHandle,
+                               reinterpret_cast<uint8_t *>(&_keyboardDescriptor.hid),
+                               Min<uint16_t>(sizeof(_keyboardDescriptor.hid),req->wLength));
+
             }
 
-            USBD_CtlSendData(&this->_deviceHandle,pbuf,len);
             break;
 
           case USB_REQ_GET_INTERFACE:
