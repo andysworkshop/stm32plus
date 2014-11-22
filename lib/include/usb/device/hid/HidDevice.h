@@ -34,11 +34,11 @@ namespace stm32plus {
         };
 
       protected:
-        uint8_t _hidProtocol;
-        uint8_t _hidIdleState;
-        uint8_t _hidAltSetting;
-        bool _busy;
-        bool _isReportAvailable;
+        volatile uint8_t _hidProtocol;
+        volatile uint8_t _hidIdleState;
+        volatile uint8_t _hidAltSetting;
+        volatile bool _busy;
+        volatile bool _isReportAvailable;
 
       protected:
         void onEvent(UsbEventDescriptor& event);
@@ -137,6 +137,8 @@ namespace stm32plus {
       if((event.request.bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_CLASS)
         return;
 
+      // handle the common stuff
+
       switch(static_cast<HidClassRequestType>(event.request.bRequest)) {
 
         case HidClassRequestType::SET_PROTOCOL:
@@ -144,7 +146,7 @@ namespace stm32plus {
           break;
 
         case HidClassRequestType::GET_PROTOCOL:
-          USBD_CtlSendData(&this->_deviceHandle,&_hidProtocol,1);
+          USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&_hidProtocol,1);
           break;
 
         case HidClassRequestType::SET_IDLE:
@@ -152,12 +154,10 @@ namespace stm32plus {
           break;
 
         case HidClassRequestType::GET_IDLE:
-          USBD_CtlSendData(&this->_deviceHandle,&_hidIdleState,1);
+          USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&_hidIdleState,1);
           break;
 
         default:
-          USBD_CtlError(&this->_deviceHandle,&event.request);
-          event.status=USBD_FAIL;
           break;
       }
     }

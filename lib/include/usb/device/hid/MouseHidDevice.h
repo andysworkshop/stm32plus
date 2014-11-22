@@ -394,7 +394,7 @@ namespace stm32plus {
           break;
 
         case USB_REQ_GET_INTERFACE:
-          USBD_CtlSendData(&this->_deviceHandle,&this->_hidAltSetting,1);
+          USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&this->_hidAltSetting,1);
           break;
 
         case USB_REQ_SET_INTERFACE:

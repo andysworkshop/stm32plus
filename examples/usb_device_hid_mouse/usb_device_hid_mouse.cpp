@@ -30,13 +30,14 @@ using namespace stm32plus::usb;
  * recognised automatically. Ensure that the board is held flat when power is first applied
  * because an initial reading is taken and used as the calibration "flat" state.
  *
- * Have fun with your mouse!
+ * There's no need to detach your real mouse from your PC because the Windows USB HID driver will
+ * happily recognise as many mice as you can plug in. Have fun with your mouse!
  *
  * Compatible MCU:
  *   STM32F4
  *
  * Tested on devices:
- *   STM32F407VGT6
+ *   STM32F407VGT6 / Windows 8.1 x64 host
  */
 
 class UsbDeviceHidMouseTest {
@@ -86,13 +87,16 @@ class UsbDeviceHidMouseTest {
     void run() {
 
       /*
-       * set up the parameters for the USB hid device
+       * set up the parameters for the USB hid device. Do not attempt to reuse vid/pid combinations unless
+       * you know how to flush your PC's USB driver cache because Windows caches the characteristics of each
+       * device and will suspend your device if it suddenly re-appears as a different device type.
        */
 
       MyUsb::Parameters usbParams;
 
       usbParams.device_vid=0xDEAD;           // demo vendor ID
       usbParams.device_pid=0xBEEF;           // demo product ID
+
       usbParams.device_manufacturer_text="Andy's Workshop";   // see params.device_language_[ids/count] to change the languages
       usbParams.device_product_text="stm32plus wacky mouse";
       usbParams.device_serial_text="0123456789";

@@ -6,8 +6,6 @@
 
 #include "config/stm32plus.h"
 #include "config/usb.h"
-#include "config/spi.h"
-#include "config/timer.h"
 #include "config/button.h"
 
 
@@ -16,13 +14,27 @@ using namespace stm32plus::usb;
 
 
 /**
- * Work in progress...
+ * This examples demonstrates using the STM32F4DISCOVERY board as a USB keyboard device, with the
+ * slightly limiting factor of only having a single key! The USB Keyboard Boot protocol provides for
+ * an 8-byte IN report that's used tell the host which of the modifier keys (ctrl/alt/shift etc) is
+ * pressed and a 6-key rollover sequence. It also provides a 1-byte OUT report that the host uses
+ * to communicate the current state of the keyboard LEDs (caps lock/num lock etc).
+ *
+ * Pressing the blue "user" key on the discovery board will send the letters 'a' through 'z' to the
+ * host, one at a time before cycling back to 'a'. Pressing Caps-Lock on your real keyboard will light
+ * the orange LED on the discovery board. Pressing Num-Lock will light the green LED. Finally, pressing
+ * scroll-lock will light the red LED.
+ *
+ * To use this example, compile it and flash it to your STM32F4DISCOVERY board. Attach a USB
+ * cable from the micro-USB socket on the discovery board to your PC. The USB device should be
+ * recognised automatically. There's no need to detach your real keyboard from your PC - the PC USB HID
+ * driver will happily recognise as many keyboards as you can plug in.
  *
  * Compatible MCU:
  *   STM32F4
  *
  * Tested on devices:
- *   STM32F407VGT6
+ *   STM32F407VGT6 / Windows 8.1 x64 host
  */
 
 class UsbDeviceHidKeyboardTest {
@@ -78,16 +90,19 @@ class UsbDeviceHidKeyboardTest {
        */
 
       GpioA<DefaultDigitalInputFeature<0>> pa;
-      AutoRepeatPushButton button(pa[0],true,500,150);
+      AutoRepeatPushButton button(pa[0],false,500,150);
 
       /*
-       * set up the parameters for the USB hid device
+       * set up the parameters for the USB hid device. Do not attempt to reuse vid/pid combinations unless
+       * you know how to flush your PC's USB driver cache because Windows caches the characteristics of each
+       * device and will suspend your device if it suddenly re-appears as a different device type.
        */
 
       MyUsb::Parameters usbParams;
 
       usbParams.device_vid=0xDEAD;           // demo vendor ID
-      usbParams.device_pid=0xBEEF;           // demo product ID
+      usbParams.device_pid=0xBEED;           // demo product ID
+
       usbParams.device_manufacturer_text="Andy's Workshop";   // see params.device_language_[ids/count] to change the languages
       usbParams.device_product_text="stm32plus one-key keyboard";
       usbParams.device_serial_text="0123456789";
@@ -121,25 +136,26 @@ class UsbDeviceHidKeyboardTest {
       if(!usb.initialise(usbParams))
         for(;;);      // onError() has already locked up
 
-      char key='a';
-      uint8_t report[MyUsb::KEYBOARD_HID_KEYS_REPORT_SIZE];
-      memset(report,'\0',sizeof(report));
+      uint8_t keycode=4;      // 4 = USB keyboard 'a'
 
       for(;;) {
+
+        // wait for the report interrupt delay time
+
+        MillisecondTimer::delay(10);
 
         if(button.getState()==PushButton::Pressed) {
 
           // send the key to the host
 
-          report[2]=key;
-          usb.keyboardSendReport(report);
+          usb.keyboardSendKeyReport(keycode);
 
-          // loop through the alphabet
+          // loop through the alphabet until code 29 is sent (code 29 = USB 'z')
 
-          if(key=='z')
-            key='a';
+          if(keycode==29)
+            keycode=4;
           else
-            key++;
+            keycode++;
         }
       }
     }
@@ -172,7 +188,12 @@ class UsbDeviceHidKeyboardTest {
      * @param uee the event descriptor
      */
 
-    void onError(UsbErrorEvent& /* uee */) {
+    void onError(UsbErrorEvent& uee) {
+
+      // ignore unconfigured errors from the HID device
+
+      if(uee.provider==ErrorProvider::ERROR_PROVIDER_USB_DEVICE && uee.code==MyUsb::E_UNCONFIGURED)
+        return;
 
       // flash the RED led on PD5 at 1Hz
 
