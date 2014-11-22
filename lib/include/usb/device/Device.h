@@ -36,7 +36,11 @@ namespace stm32plus {
          */
 
         enum {
-          E_INIT = 1
+          E_INIT = 1,
+          E_REGISTER_CLASS = 1,
+          E_START = 2,
+          E_UNCONFIGURED = 3,
+          E_BUSY = 4
         };
 
 
@@ -83,6 +87,8 @@ namespace stm32plus {
         ~Device();
 
         bool initialise(Parameters& params);
+
+        bool isConfigured() const;
 
         USBD_HandleTypeDef& getDeviceHandle();
         DeviceDescriptor& getDeviceDescriptor();
@@ -245,7 +251,21 @@ namespace stm32plus {
 
       HAL_PCD_SetRxFiFo(&_pcdHandle,params.phy_rxFifoSize);
       return true;
-   }
+    }
+
+
+    /**
+     * Check if this device is configured, i.e. connected to the host and fully
+     * ready to use. Note that there is a race condition if you call this as a pre-check to
+     * sending a report. Better to send the report and check the return value, ignoring errors
+     * that indicate unconfigured.
+     * @return true if the device is configured and ready to use
+     */
+
+    template<class TPhy>
+    inline bool Device<TPhy>::isConfigured() const {
+      return _deviceHandle.dev_state==USBD_STATE_CONFIGURED;
+    }
 
 
     /**

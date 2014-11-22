@@ -24,17 +24,6 @@ namespace stm32plus {
 
       public:
 
-        /**
-         * Error codes
-         */
-
-        enum {
-          E_REGISTER_CLASS = 1,
-          E_START = 2,
-          E_UNCONFIGURED = 3,
-          E_BUSY = 4
-        };
-
         /*
          * Parameters for the HID device
          */
@@ -51,8 +40,13 @@ namespace stm32plus {
         bool _busy;
         bool _isReportAvailable;
 
+      protected:
+        void onEvent(UsbEventDescriptor& event);
+        void onHidSetupEvent(HidSdkSetupEvent& event);
+
       public:
         HidDevice();
+        ~HidDevice();
 
         bool initialise(Parameters& params);
 
@@ -62,7 +56,6 @@ namespace stm32plus {
 
     /**
      * Constructor
-     * @param params paramters class
      */
 
     template<class TPhy,template <class> class... Features>
@@ -72,6 +65,27 @@ namespace stm32plus {
 
       _busy=false;
       _isReportAvailable=false;
+
+      // subscribe to USB events
+
+      this->UsbEventSender.insertSubscriber(
+          UsbEventSourceSlot::bind(this,&HidDevice<TPhy,Features...>::onEvent)
+        );
+    }
+
+
+    /**
+     * Destructor
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline HidDevice<TPhy,Features...>::~HidDevice() {
+
+      // subscribe to USB events
+
+      this->UsbEventSender.removeSubscriber(
+          UsbEventSourceSlot::bind(this,&HidDevice<TPhy,Features...>::onEvent)
+        );
     }
 
 
@@ -96,6 +110,60 @@ namespace stm32plus {
 
 
     /**
+     * Event handler for device events
+     * @param event The event descriptor
+     */
+
+    template<class TPhy,template <class> class... Features>
+    __attribute__((noinline)) inline void HidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+
+      // check for handled events
+
+      if(event.eventType==UsbEventDescriptor::EventType::HID_SETUP)
+        onHidSetupEvent(static_cast<HidSdkSetupEvent&>(event));
+    }
+
+
+    /**
+     * Handle a HID setup event
+     * @param event the setup event
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline void HidDevice<TPhy,Features...>::onHidSetupEvent(HidSdkSetupEvent& event) {
+
+      // handle device class requests
+
+      if((event.request.bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_CLASS)
+        return;
+
+      switch(static_cast<HidClassRequestType>(event.request.bRequest)) {
+
+        case HidClassRequestType::SET_PROTOCOL:
+          _hidProtocol=event.request.wValue;
+          break;
+
+        case HidClassRequestType::GET_PROTOCOL:
+          USBD_CtlSendData(&this->_deviceHandle,&_hidProtocol,1);
+          break;
+
+        case HidClassRequestType::SET_IDLE:
+          _hidIdleState=event.request.wValue >> 8;
+          break;
+
+        case HidClassRequestType::GET_IDLE:
+          USBD_CtlSendData(&this->_deviceHandle,&_hidIdleState,1);
+          break;
+
+        default:
+          USBD_CtlError(&this->_deviceHandle,&event.request);
+          event.status=USBD_FAIL;
+          break;
+      }
+    }
+
+
+    /**
      * Send a HID 'report' to an IN endpoint
      * @param endpoint The endpoint to send to
      * @param data The data to send
@@ -109,12 +177,12 @@ namespace stm32plus {
       // must be configured
 
       if(this->_deviceHandle.dev_state!=USBD_STATE_CONFIGURED)
-        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_UNCONFIGURED);
+        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_UNCONFIGURED);
 
       // must be idle
 
       if(_busy)
-        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,E_BUSY);
+        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_BUSY);
 
       // OK (XXX: check this for state mgmt if USBD_LL_Transmit fails)
 

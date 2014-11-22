@@ -226,12 +226,12 @@ namespace stm32plus {
       // link the HID interface/endpoint registration into the SDK structure
 
       if((status=USBD_RegisterClass(&this->_deviceHandle,&this->_classType))!=USBD_OK)
-        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,this->E_REGISTER_CLASS,status);
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_REGISTER_CLASS,status);
 
       // start the device
 
       if((status=USBD_Start(&this->_deviceHandle))!=USBD_OK)
-        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_HID_DEVICE,this->E_START,status);
+        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_START,status);
 
       // OK
 
@@ -364,57 +364,44 @@ namespace stm32plus {
       uint16_t len;
       uint8_t *pbuf;
 
-      switch(req->bmRequest & USB_REQ_TYPE_MASK) {
-        case USB_REQ_TYPE_CLASS:
-          switch(static_cast<HidClassRequestType>(req->bRequest)) {
+      // send the event
 
-            case HidClassRequestType::SET_PROTOCOL:
-              this->_hidProtocol=req->wValue;
-              break;
+      HidSdkSetupEvent event(*req);
+      this->UsbEventSender.raiseEvent(event);
 
-            case HidClassRequestType::GET_PROTOCOL:
-              USBD_CtlSendData(&this->_deviceHandle,&this->_hidProtocol,1);
-              break;
+      // check for fail
 
-            case HidClassRequestType::SET_IDLE:
-              this->_hidIdleState=req->wValue >> 8;
-              break;
+      if(event.status!=USBD_OK)
+        return event.status;
 
-            case HidClassRequestType::GET_IDLE:
-              USBD_CtlSendData(&this->_deviceHandle,&this->_hidIdleState,1);
-              break;
+      // process the setup event handled here
 
-            default:
-              USBD_CtlError(&this->_deviceHandle,req);
-              return USBD_FAIL;
+      if((req->bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_STANDARD)
+        return USBD_OK;
+
+      switch(req->bRequest) {
+
+        case USB_REQ_GET_DESCRIPTOR:
+          if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
+            len=Min<uint16_t>(sizeof(MouseReportDescriptor),req->wLength);
+            pbuf=const_cast<uint8_t *>(MouseReportDescriptor);
+          } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
+            pbuf=reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid);
+            len=Min<uint16_t>(sizeof(_mouseDescriptor.hid),req->wLength);
           }
+
+          USBD_CtlSendData(&this->_deviceHandle,pbuf,len);
           break;
 
-        case USB_REQ_TYPE_STANDARD:
-          switch(req->bRequest) {
+        case USB_REQ_GET_INTERFACE:
+          USBD_CtlSendData(&this->_deviceHandle,&this->_hidAltSetting,1);
+          break;
 
-            case USB_REQ_GET_DESCRIPTOR:
-              if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
-                len=Min<uint16_t>(sizeof(MouseReportDescriptor),req->wLength);
-                pbuf=const_cast<uint8_t *>(MouseReportDescriptor);
-              } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
-                pbuf=reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid);
-                len=Min<uint16_t>(sizeof(_mouseDescriptor.hid),req->wLength);
-              }
-
-              USBD_CtlSendData(&this->_deviceHandle,pbuf,len);
-              break;
-
-            case USB_REQ_GET_INTERFACE:
-              USBD_CtlSendData(&this->_deviceHandle,&this->_hidAltSetting,1);
-              break;
-
-            case USB_REQ_SET_INTERFACE:
-              this->_hidAltSetting=req->wValue;
-              break;
-          }
+        case USB_REQ_SET_INTERFACE:
+          this->_hidAltSetting=req->wValue;
           break;
       }
+
       return USBD_OK;
     }
 

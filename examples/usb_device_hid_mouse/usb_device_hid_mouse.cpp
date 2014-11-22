@@ -166,6 +166,7 @@ class UsbDeviceHidMouseTest {
       /**
        * Set the timer clock to 4.2MHz with a reload counter of 2000
        */
+
       timer.setTimeBaseByFrequency(4200000,2000);
 
       timer.TimerChannel1Feature<>::initCompareForPwmOutput();
@@ -301,7 +302,12 @@ class UsbDeviceHidMouseTest {
      * @param uee the event descriptor
      */
 
-    void onError(UsbErrorEvent& /* uee */) {
+    void onError(UsbErrorEvent& uee) {
+
+      // ignore unconfigured errors from the HID device
+
+      if(uee.provider==ErrorProvider::ERROR_PROVIDER_USB_DEVICE && uee.code==MyUsb::E_UNCONFIGURED)
+        return;
 
       // flash the RED led on PD5 at 1Hz
 

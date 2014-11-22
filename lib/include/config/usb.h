@@ -103,6 +103,7 @@
   #include "usb/device/hid/events/HidSdkEp0ReadyEvent.h"
   #include "usb/device/hid/events/HidSdkGetConfigurationDescriptorEvent.h"
   #include "usb/device/hid/events/HidSdkGetDeviceQualifierDescriptorEvent.h"
+  #include "usb/device/hid/events/HidSdkSetupEvent.h"
 
   #include "usb/device/hid/HidDevice.h"
   #include "usb/device/hid/MouseReportDescriptor.h"
