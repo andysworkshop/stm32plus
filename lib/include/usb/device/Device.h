@@ -25,6 +25,7 @@ namespace stm32plus {
         USBD_DescriptorsTypeDef _deviceDescriptorCallbacks;
         scoped_ptr<LanguageDescriptor> _languageDescriptor;
         DeviceDescriptor _deviceDescriptor;
+        DeviceQualifierDescriptor _qualifierDescriptor;
         scoped_array<uint16_t> _unicodeString;      // very basic 8-bit to UTF-16 holder
         uint8_t _numEndpoints;                      // endpoint classes will increment this
 

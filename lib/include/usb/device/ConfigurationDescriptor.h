@@ -16,6 +16,11 @@ namespace stm32plus {
 
     struct ConfigurationDescriptor {
 
+      enum {
+        SELF_POWERED = 0x40,
+        REMOTE_WAKEUP = 0x20
+      };
+
       DescriptorHeader header;
 
       uint16_t wTotalLength;       // Total length in bytes of data returned
@@ -32,7 +37,7 @@ namespace stm32plus {
 
         bConfigurationValue=1;
         iConfiguration=0;
-        bmAttributes=0xE0;          // default is bus powered, remote wakeup supported
+        bmAttributes=0x80 | SELF_POWERED | REMOTE_WAKEUP;
         bMaxPower=0x32;             // 100mA
 
         static_assert(sizeof(ConfigurationDescriptor)==9,"Compiler error: sizeof(ConfigurationDescriptor)!=9");

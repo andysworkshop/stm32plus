@@ -61,7 +61,7 @@ namespace stm32plus {
       uint8_t bDeviceProtocol;
 
       uint8_t bMaxPacketSize0;      // Maximum packet size for other speed.
-      uint8_t bNumConfigurations;   // Number  Number of other-speed configurations.
+      uint8_t bNumConfigurations;   // Number of other-speed configurations.
       uint8_t bReserved;
 
       DeviceQualifierDescriptor()
@@ -71,6 +71,9 @@ namespace stm32plus {
 
         bcdUSB=0x0200;
         bReserved=0;
+        bDeviceClass=0;
+        bDeviceSubClass=0;
+        bDeviceProtocol=0;
       }
     } __attribute__((packed));
   }

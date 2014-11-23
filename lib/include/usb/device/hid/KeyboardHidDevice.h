@@ -95,7 +95,6 @@ namespace stm32plus {
         } __attribute__((packed));
 
         KeyboardConfigurationDescriptor _keyboardDescriptor;
-        DeviceQualifierDescriptor _qualifierDescriptor;
 
         uint8_t _outReportBuffer[KEYBOARD_HID_LED_REPORT_SIZE];
 
@@ -106,8 +105,6 @@ namespace stm32plus {
         void onHidDeInit();
         void onHidSetup(DeviceClassSdkSetupEvent& event);
         void onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event);
-        void onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event);
-        void onHidDataIn();
         void onHidDataOut();
         void onHidEp0RxReady();
 
@@ -211,11 +208,8 @@ namespace stm32plus {
 
       // set up the qualifier descriptor (see constructor for defaults)
 
-      _qualifierDescriptor.bDeviceClass=0;
-      _qualifierDescriptor.bDeviceSubClass=0;
-      _qualifierDescriptor.bDeviceProtocol=0;
-      _qualifierDescriptor.bMaxPacketSize0=0x40;
-      _qualifierDescriptor.bNumConfigurations=1;
+      this->_qualifierDescriptor.bMaxPacketSize0=0x40;
+      this->_qualifierDescriptor.bNumConfigurations=1;
 
       // start the device
 
@@ -244,10 +238,6 @@ namespace stm32plus {
 
         case UsbEventDescriptor::EventType::CLASS_DEINIT:
           onHidDeInit();
-          break;
-
-        case UsbEventDescriptor::EventType::CLASS_DATA_IN:
-          onHidDataIn();
           break;
 
         case UsbEventDescriptor::EventType::CLASS_DATA_OUT:
@@ -281,10 +271,6 @@ namespace stm32plus {
 
       USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,KEYBOARD_HID_KEYS_REPORT_SIZE);
       USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::OUT | 2,EndpointDescriptor::INTERRUPT,KEYBOARD_HID_LED_REPORT_SIZE);
-
-      // device is not busy
-
-      this->_busy=false;
 
       // prepare OUT endpoint to receive the first packet
 
@@ -323,32 +309,6 @@ namespace stm32plus {
         event.length=sizeof(_keyboardDescriptor);
         event.descriptor=reinterpret_cast<uint8_t *>(&_keyboardDescriptor);
       }
-    }
-
-
-    /**
-     * Get the device qualifier descriptor
-     * @param event The event class to receive the descriptor pointer
-     */
-
-    template<class TPhy,template <class> class... Features>
-    inline void KeyboardHidDevice<TPhy,Features...>::onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event) {
-
-      event.descriptor=reinterpret_cast<uint8_t *>(&_qualifierDescriptor);
-      event.length=sizeof(_qualifierDescriptor);
-    }
-
-
-    /**
-     * Data in event
-     */
-
-    template<class TPhy,template <class> class... Features>
-    inline void KeyboardHidDevice<TPhy,Features...>::onHidDataIn() {
-
-      // not busy any more
-
-      this->_busy=false;
     }
 
 
@@ -399,11 +359,9 @@ namespace stm32plus {
 
 
     /**
-      * USBD_HID_Setup. Handle the HID specific requests
-      * @param pdev: instance
-      * @param req: usb requests
-      * @retval status
-      */
+     * Handle the HID setup requests
+     * @param event the event containg value being requested
+     */
 
     template<class TPhy,template <class> class... Features>
     inline void KeyboardHidDevice<TPhy,Features...>::onHidSetup(DeviceClassSdkSetupEvent& event) {
@@ -476,7 +434,9 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline bool KeyboardHidDevice<TPhy,Features...>::keyboardSendKeyReport(uint8_t key,uint8_t modifiers) {
 
-      uint8_t report[KEYBOARD_HID_KEYS_REPORT_SIZE];
+      // data must remain in scope until IRQ indicates transmission complete
+
+      static uint8_t report[KEYBOARD_HID_KEYS_REPORT_SIZE];
 
       report[1]=report[3]=report[4]=report[5]=report[6]=report[7]='\0';
       report[0]=modifiers;

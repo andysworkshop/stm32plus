@@ -7,42 +7,45 @@
 #pragma once
 
 
+// The HID report descriptor is defined in usb_device_hid_custom_adc.cpp
+
+extern const uint8_t CustomAdcHidReportDescriptor[22];
+
+
 namespace stm32plus {
   namespace usb {
 
     /**
-     * Endpoint used by this device
+     * Endpoint used by this device: a single IN endpoint to send data inbound to the host
      */
 
-    template<class TDevice> using MouseHidDeviceEndpoint1=InterruptInEndpointFeature<1,TDevice>;
+    template<class TDevice> using CustomAdcHidDeviceEndpoint=InterruptInEndpointFeature<1,TDevice>;
 
     /**
-     * Derivation of HidDevice to handle a HID mouse. This device type declares the following:
+     * Derivation of HidDevice to handle a custom HID device that sends 3 ADC conversions to the
+     * host every 1 second. ADC-1 channels 1,2,3 (PA1,PA2,PA3) are the channels used. Each conversion
+     * takes 2-bytes so we are sending 6-byte reports.
+     *
+     * This HID device declares the following configuration structure:
+     *
      *   1x Configuration descriptor
      *   1x Interface
      *   1x Inbound interrupt endpoint
-     *
-     * The 3-byte HID report is for a simple 3-button mouse using the BOOT protocol. The format
-     * of the 3-bytes is:
-     *
-     *  0: B7..3=unused. B2=left button. B1=middle button. B0=right button.
-     *  1: X-axis relative movement as signed integer.
-     *  2: Y-axis relative movement as signed integer.
      */
 
     template<class TPhy,template <class> class... Features>
-    class MouseHidDevice : public HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...> {
+    class CustomAdcHidDevice : public HidDevice<TPhy,CustomAdcHidDeviceEndpoint,Features...> {
 
       protected:
 
-        typedef HidDevice<TPhy,MouseHidDeviceEndpoint1,Features...> HidDeviceBase;
+        typedef HidDevice<TPhy,CustomAdcHidDeviceEndpoint,Features...> HidDeviceBase;
 
         /**
          * Constants
          */
 
         enum {
-          MOUSE_HID_REPORT_SIZE = 3
+          CUSTOM_ADC_HID_REPORT_SIZE = 6
         };
 
 
@@ -51,14 +54,14 @@ namespace stm32plus {
          * configuration descriptor
          */
 
-        struct MouseConfigurationDescriptor {
+        struct CustomAdcHidConfigurationDescriptor {
           ConfigurationDescriptor configuration;
           InterfaceDescriptor interface;
           HidClassDescriptor hid;
           EndpointDescriptor endpoint;
         } __attribute__((packed));
 
-        MouseConfigurationDescriptor _mouseDescriptor;
+        CustomAdcHidConfigurationDescriptor _hidDescriptor;
 
       public:
 
@@ -68,15 +71,17 @@ namespace stm32plus {
 
         struct Parameters : HidDeviceBase::Parameters {
 
-          uint8_t hid_mouse_poll_interval;      // default is 10
+          uint8_t custom_hid_poll_interval;      // default is 100
 
           Parameters() {
-            hid_mouse_poll_interval = 10;
+            custom_hid_poll_interval=100;
           }
         };
 
       protected:
         void onEvent(UsbEventDescriptor& event);
+
+        // event processing for the events that we'll need to take action upon
 
         void onHidInit();
         void onHidDeInit();
@@ -84,12 +89,12 @@ namespace stm32plus {
         void onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event);
 
       public:
-        MouseHidDevice();
-        ~MouseHidDevice();
+        CustomAdcHidDevice();
+        ~CustomAdcHidDevice();
 
         bool initialise(Parameters& params);
 
-        bool mouseSendReport(uint8_t buttons,int8_t x,int8_t y);
+        bool sendAdcReport(uint16_t channel1,uint16_t channel2,uint16_t channel3);
     };
 
 
@@ -98,12 +103,12 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline MouseHidDevice<TPhy,Features...>::MouseHidDevice() {
+    inline CustomAdcHidDevice<TPhy,Features...>::CustomAdcHidDevice() {
 
       // subscribe to USB events
 
       this->UsbEventSender.insertSubscriber(
-          UsbEventSourceSlot::bind(this,&MouseHidDevice<TPhy,Features...>::onEvent)
+          UsbEventSourceSlot::bind(this,&CustomAdcHidDevice<TPhy,Features...>::onEvent)
         );
     }
 
@@ -113,12 +118,12 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline MouseHidDevice<TPhy,Features...>::~MouseHidDevice() {
+    inline CustomAdcHidDevice<TPhy,Features...>::~CustomAdcHidDevice() {
 
       // unsubscribe from USB events
 
       this->UsbEventSender.removeSubscriber(
-          UsbEventSourceSlot::bind(this,&MouseHidDevice<TPhy,Features...>::onEvent)
+          UsbEventSourceSlot::bind(this,&CustomAdcHidDevice<TPhy,Features...>::onEvent)
         );
     }
 
@@ -130,7 +135,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool MouseHidDevice<TPhy,Features...>::initialise(Parameters& params) {
+    inline bool CustomAdcHidDevice<TPhy,Features...>::initialise(Parameters& params) {
 
       USBD_StatusTypeDef status;
 
@@ -141,38 +146,40 @@ namespace stm32plus {
 
       // set up the configuration descriptor (see constructor for defaults)
 
-      _mouseDescriptor.configuration.wTotalLength=sizeof(_mouseDescriptor);
-      _mouseDescriptor.configuration.bNumInterfaces=1;
+      _hidDescriptor.configuration.wTotalLength=sizeof(_hidDescriptor);
+      _hidDescriptor.configuration.bNumInterfaces=1;
+      _hidDescriptor.configuration.bmAttributes=0x80 | ConfigurationDescriptor::SELF_POWERED;
 
       // if ConfigurationTextFeature is in the hierarchy then we've got a configuration string (compile-time check)
 
-      if(std::is_base_of<ConfigurationTextFeature<Device<TPhy>>,MouseHidDevice<TPhy,Features...>>::value)
-        _mouseDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
+      if(std::is_base_of<ConfigurationTextFeature<Device<TPhy>>,CustomAdcHidDevice<TPhy,Features...>>::value)
+        _hidDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
 
       // set up the interface descriptor (see constructor for defaults)
 
-      _mouseDescriptor.interface.bInterfaceNumber=0;
-      _mouseDescriptor.interface.bNumEndpoints=1;
-      _mouseDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
-      _mouseDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::BOOT);
-      _mouseDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::MOUSE);
+      _hidDescriptor.interface.bInterfaceNumber=0;
+      _hidDescriptor.interface.bNumEndpoints=1;
+      _hidDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
+      _hidDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::NONE);    // custom HID
+      _hidDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::NONE);
 
       // if InterfaceTextFeature is in the hierarchy then we've got an interface string (compile-time check)
 
-      if(std::is_base_of<InterfaceTextFeature<Device<TPhy>>,MouseHidDevice<TPhy,Features...>>::value)
-        _mouseDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
+      if(std::is_base_of<InterfaceTextFeature<Device<TPhy>>,CustomAdcHidDevice<TPhy,Features...>>::value)
+        _hidDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
 
       // set up the hid class descriptor (see constructor for defaults)
 
-      _mouseDescriptor.hid.bNumDescriptors=1;
-      _mouseDescriptor.hid.wItemLength=sizeof(MouseReportDescriptor);
+      _hidDescriptor.hid.bNumDescriptors=1;
+      _hidDescriptor.hid.wItemLength=sizeof(CustomAdcHidReportDescriptor);
 
-      // set up the endpoint descriptor
+      // set up the endpoint descriptor. we'll configure a max packet size of 64 though the
+      // actual number of bytes per report will be 1+6=7
 
-      _mouseDescriptor.endpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
-      _mouseDescriptor.endpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      _mouseDescriptor.endpoint.wMaxPacketSize=MOUSE_HID_REPORT_SIZE;       // mouse reports are 3 bytes
-      _mouseDescriptor.endpoint.bInterval=params.hid_mouse_poll_interval;   // default is 10 frames
+      _hidDescriptor.endpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
+      _hidDescriptor.endpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
+      _hidDescriptor.endpoint.wMaxPacketSize=USB_FS_MAX_PACKET_SIZE;
+      _hidDescriptor.endpoint.bInterval=params.custom_hid_poll_interval;  // default is 1000ms
 
       // set up the qualifier descriptor (see constructor for defaults)
 
@@ -196,7 +203,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline)) inline void MouseHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+    __attribute__((noinline)) inline void CustomAdcHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 
@@ -227,9 +234,14 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void MouseHidDevice<TPhy,Features...>::onHidInit() {
+    inline void CustomAdcHidDevice<TPhy,Features...>::onHidInit() {
 
-      USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,MOUSE_HID_REPORT_SIZE);
+      // open an interrupt IN endpoint
+
+      USBD_LL_OpenEP(&this->_deviceHandle,
+                     EndpointDescriptor::IN | 1,
+                     EndpointDescriptor::INTERRUPT,
+                     CUSTOM_ADC_HID_REPORT_SIZE);
     }
 
 
@@ -238,7 +250,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void MouseHidDevice<TPhy,Features...>::onHidDeInit() {
+    inline void CustomAdcHidDevice<TPhy,Features...>::onHidDeInit() {
 
       // close the endpoint
 
@@ -252,7 +264,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void MouseHidDevice<TPhy,Features...>::onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event) {
+    inline void CustomAdcHidDevice<TPhy,Features...>::onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event) {
 
       if(event.type==DeviceClassSdkGetConfigurationDescriptorEvent::Type::HIGH_SPEED ||
          event.type==DeviceClassSdkGetConfigurationDescriptorEvent::Type::FULL_SPEED ||
@@ -260,8 +272,8 @@ namespace stm32plus {
 
         // set up the values in the event
 
-        event.length=sizeof(_mouseDescriptor);
-        event.descriptor=reinterpret_cast<uint8_t *>(&_mouseDescriptor);
+        event.length=sizeof(_hidDescriptor);
+        event.descriptor=reinterpret_cast<uint8_t *>(&_hidDescriptor);
       }
     }
 
@@ -272,7 +284,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void MouseHidDevice<TPhy,Features...>::onHidSetup(DeviceClassSdkSetupEvent& event) {
+    inline void CustomAdcHidDevice<TPhy,Features...>::onHidSetup(DeviceClassSdkSetupEvent& event) {
 
       // check for fail
 
@@ -290,14 +302,14 @@ namespace stm32plus {
           if(event.request.wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
 
             USBD_CtlSendData(&this->_deviceHandle,
-                             const_cast<uint8_t *>(MouseReportDescriptor),
-                             Min<uint16_t>(sizeof(MouseReportDescriptor),event.request.wLength));
+                             const_cast<uint8_t *>(CustomAdcHidReportDescriptor),
+                             Min<uint16_t>(sizeof(CustomAdcHidReportDescriptor),event.request.wLength));
 
           } else if(event.request.wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
 
             USBD_CtlSendData(&this->_deviceHandle,
-                             reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid),
-                             Min<uint16_t>(sizeof(_mouseDescriptor.hid),event.request.wLength));
+                             reinterpret_cast<uint8_t *>(&_hidDescriptor.hid),
+                             Min<uint16_t>(sizeof(_hidDescriptor.hid),event.request.wLength));
           }
 
           break;
@@ -308,6 +320,9 @@ namespace stm32plus {
 
         case USB_REQ_SET_INTERFACE:
           this->_hidAltSetting=event.request.wValue;
+          break;
+
+        default:
           break;
       }
     }
@@ -320,20 +335,20 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool MouseHidDevice<TPhy,Features...>::mouseSendReport(uint8_t buttons,int8_t x,int8_t y) {
+    inline bool CustomAdcHidDevice<TPhy,Features...>::sendAdcReport(uint16_t channel1,uint16_t channel2,uint16_t channel3) {
 
       // data must remain in scope until IRQ indicates transmission complete
 
-      static uint8_t data[3];
+      static uint16_t data[3];
 
-      data[0]=buttons;
-      data[1]=x;
-      data[2]=y;
+      data[0]=channel1;
+      data[1]=channel2;
+      data[2]=channel3;
 
       return HidDeviceBase::hidSendReport(
-          static_cast<const MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this),
+          static_cast<const CustomAdcHidDeviceEndpoint<Device<TPhy>>&>(*this),
           data,
-          MOUSE_HID_REPORT_SIZE);
+          CUSTOM_ADC_HID_REPORT_SIZE);
     }
   }
 }

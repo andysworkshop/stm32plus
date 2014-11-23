@@ -43,6 +43,7 @@ namespace stm32plus {
       protected:
         void onEvent(UsbEventDescriptor& event);
         void onHidSetupEvent(DeviceClassSdkSetupEvent& event);
+        void onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event);
 
       public:
         HidDevice();
@@ -50,6 +51,7 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
+        bool isBusy() const;
         bool hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len);
     };
 
@@ -122,8 +124,27 @@ namespace stm32plus {
 
       // check for handled events
 
-      if(event.eventType==UsbEventDescriptor::EventType::CLASS_SETUP)
-        onHidSetupEvent(static_cast<DeviceClassSdkSetupEvent&>(event));
+      switch(event.eventType) {
+
+        case UsbEventDescriptor::EventType::CLASS_SETUP:
+          onHidSetupEvent(static_cast<DeviceClassSdkSetupEvent&>(event));
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_INIT:
+          _busy=false;
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_DATA_IN:
+          _busy=false;
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_GET_DEVICE_QUALIFIER_DESCRIPTOR:
+          onHidGetDeviceQualifierDescriptor(static_cast<DeviceClassSdkGetDeviceQualifierDescriptorEvent&>(event));
+          break;
+
+        default:
+          break;
+      }
     }
 
 
@@ -167,6 +188,19 @@ namespace stm32plus {
 
 
     /**
+     * Get the device qualifier descriptor
+     * @param event The event class to receive the descriptor pointer
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline void HidDevice<TPhy,Features...>::onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event) {
+
+      event.descriptor=&this->_qualifierDescriptor;
+      event.length=sizeof(this->_qualifierDescriptor);
+    }
+
+
+    /**
      * Send a HID 'report' to an IN endpoint
      * @param endpoint The endpoint to send to
      * @param data The data to send
@@ -191,6 +225,16 @@ namespace stm32plus {
 
       _busy=true;
       return endpoint.endpointTransmit(data,len);
+    }
+
+
+    /**
+     * Check if we're busy (data IN to host in progress)
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool HidDevice<TPhy,Features...>::isBusy() const {
+      return _busy;
     }
   }
 }
