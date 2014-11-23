@@ -26,64 +26,20 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
+#include "config/stm32plus.h"
+#include "config/event.h"
+#include "usb/UsbEventDescriptor.h"
+#include "usb/UsbErrorEvent.h"
+#include "usb/UsbEventSource.h"
 #include "usblib/device/core/inc/usbd_core.h"
+#include "usb/device/events/class/DeviceClassSdkInitEvent.h"
+#include "usb/device/events/class/DeviceClassSdkDeInitEvent.h"
+#include "usb/device/events/class/DeviceClassSdkEp0ReadyEvent.h"
+#include "usb/device/events/class/DeviceClassSdkEp0TxSentEvent.h"
+#include "usb/device/events/class/DeviceClassSdkDataInEvent.h"
+#include "usb/device/events/class/DeviceClassSdkDataOutEvent.h"
+#include "usb/device/events/class/DeviceClassSdkSofEvent.h"
 
-/** @addtogroup STM32_USBD_DEVICE_LIBRARY
-* @{
-*/
-
-
-/** @defgroup USBD_CORE 
-* @brief usbd core module
-* @{
-*/ 
-
-/** @defgroup USBD_CORE_Private_TypesDefinitions
-* @{
-*/ 
-/**
-* @}
-*/ 
-
-
-/** @defgroup USBD_CORE_Private_Defines
-* @{
-*/ 
-
-/**
-* @}
-*/ 
-
-
-/** @defgroup USBD_CORE_Private_Macros
-* @{
-*/ 
-/**
-* @}
-*/ 
-
-
-
-
-/** @defgroup USBD_CORE_Private_FunctionPrototypes
-* @{
-*/ 
-
-/**
-* @}
-*/ 
-
-/** @defgroup USBD_CORE_Private_Variables
-* @{
-*/ 
-
-/**
-* @}
-*/ 
-
-/** @defgroup USBD_CORE_Private_Functions
-* @{
-*/ 
 
 /**
 * @brief  USBD_Init
@@ -103,10 +59,8 @@ USBD_StatusTypeDef USBD_Init(USBD_HandleTypeDef *pdev, USBD_DescriptorsTypeDef *
   }
   
   /* Unlink previous class*/
-  if(pdev->pClass != NULL)
-  {
-    pdev->pClass = NULL;
-  }
+  if(pdev->pEventSource)
+    pdev->pEventSource = NULL;
   
   /* Assign USBD Descriptors */
   if(pdesc != NULL)
@@ -135,7 +89,7 @@ USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
   pdev->dev_state  = USBD_STATE_DEFAULT;
   
   /* Free Class Resources */
-  pdev->pClass->DeInit(pdev, pdev->dev_config);  
+  pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDeInitEvent(pdev->dev_config));
   
     /* Stop the low level driver  */
   USBD_LL_Stop(pdev); 
@@ -151,26 +105,16 @@ USBD_StatusTypeDef USBD_DeInit(USBD_HandleTypeDef *pdev)
   * @brief  USBD_RegisterClass 
   *         Link class driver to Device Core.
   * @param  pDevice : Device Handle
-  * @param  pclass: Class handle
+  * @param  pEventSource: Pointer to event source
   * @retval USBD Status
   */
-USBD_StatusTypeDef  USBD_RegisterClass(USBD_HandleTypeDef *pdev, USBD_ClassTypeDef *pclass)
+
+USBD_StatusTypeDef  USBD_RegisterClass(USBD_HandleTypeDef *pdev, stm32plus::usb::UsbEventSource *eventSource)
 {
-  USBD_StatusTypeDef   status = USBD_OK;
-  if(pclass != 0)
-  {
-    /* link the class tgo the USB Device handle */
-    pdev->pClass = pclass;
-    status = USBD_OK;
-  }
-  else
-  {
-    USBD_ErrLog("Invalid Class handle");
-    status = USBD_FAIL; 
-  }
-  
-  return status;
+  pdev->pEventSource=eventSource;
+  return USBD_OK;
 }
+
 
 /**
   * @brief  USBD_Start 
@@ -196,7 +140,7 @@ USBD_StatusTypeDef  USBD_Start  (USBD_HandleTypeDef *pdev)
 USBD_StatusTypeDef  USBD_Stop   (USBD_HandleTypeDef *pdev)
 {
   /* Free Class Resources */
-  pdev->pClass->DeInit(pdev, pdev->dev_config);  
+  pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDeInitEvent(pdev->dev_config));
 
   /* Stop the low level driver  */
   USBD_LL_Stop(pdev); 
@@ -226,17 +170,17 @@ USBD_StatusTypeDef  USBD_RunTestMode (USBD_HandleTypeDef  *pdev __attribute__((u
 
 USBD_StatusTypeDef USBD_SetClassConfig(USBD_HandleTypeDef  *pdev, uint8_t cfgidx)
 {
-  USBD_StatusTypeDef   ret = USBD_FAIL;
-  
-  if(pdev->pClass != NULL)
+  if(pdev->pEventSource)
   {
-    /* Set configuration  and Start the Class*/
-    if(pdev->pClass->Init(pdev, cfgidx) == 0)
-    {
-      ret = USBD_OK;
-    }
+    // send init event
+
+    stm32plus::usb::DeviceClassSdkInitEvent event(cfgidx);
+    pdev->pEventSource->UsbEventSender.raiseEvent(event);
+
+    return event.status;
   }
-  return ret; 
+  else
+    return USBD_FAIL;
 }
 
 /**
@@ -249,7 +193,7 @@ USBD_StatusTypeDef USBD_SetClassConfig(USBD_HandleTypeDef  *pdev, uint8_t cfgidx
 USBD_StatusTypeDef USBD_ClrClassConfig(USBD_HandleTypeDef  *pdev, uint8_t cfgidx)
 {
   /* Clear configuration  and Deinitialize the Class process*/
-  pdev->pClass->DeInit(pdev, cfgidx);  
+  pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDeInitEvent(cfgidx));
   return USBD_OK;
 }
 
@@ -316,20 +260,16 @@ USBD_StatusTypeDef USBD_LL_DataOutStage(USBD_HandleTypeDef *pdev , uint8_t epnum
       }
       else
       {
-        if((pdev->pClass->EP0_RxReady != NULL)&&
-           (pdev->dev_state == USBD_STATE_CONFIGURED))
-        {
-          pdev->pClass->EP0_RxReady(pdev); 
-        }
+        if(pdev->dev_state == USBD_STATE_CONFIGURED)
+          pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkEp0ReadyEvent());
+
         USBD_CtlSendStatus(pdev);
       }
     }
   }
-  else if((pdev->pClass->DataOut != NULL)&&
-          (pdev->dev_state == USBD_STATE_CONFIGURED))
-  {
-    pdev->pClass->DataOut(pdev, epnum); 
-  }  
+  else if(pdev->dev_state == USBD_STATE_CONFIGURED)
+    pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDataOutEvent(epnum));
+
   return USBD_OK;
 }
 
@@ -370,11 +310,9 @@ USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev ,uint8_t epnum, 
         }
         else
         {
-          if((pdev->pClass->EP0_TxSent != NULL)&&
-             (pdev->dev_state == USBD_STATE_CONFIGURED))
-          {
-            pdev->pClass->EP0_TxSent(pdev); 
-          }          
+          if(pdev->dev_state == USBD_STATE_CONFIGURED)
+            pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkEp0TxSentEvent());
+
           USBD_CtlReceiveStatus(pdev);
         }
       }
@@ -385,11 +323,9 @@ USBD_StatusTypeDef USBD_LL_DataInStage(USBD_HandleTypeDef *pdev ,uint8_t epnum, 
       pdev->dev_test_mode = 0;
     }
   }
-  else if((pdev->pClass->DataIn != NULL)&& 
-          (pdev->dev_state == USBD_STATE_CONFIGURED))
-  {
-    pdev->pClass->DataIn(pdev, epnum); 
-  }  
+  else if(pdev->dev_state == USBD_STATE_CONFIGURED)
+    pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDataInEvent(epnum));
+
   return USBD_OK;
 }
 
@@ -420,8 +356,8 @@ USBD_StatusTypeDef USBD_LL_Reset(USBD_HandleTypeDef  *pdev)
   /* Upon Reset call usr call back */
   pdev->dev_state = USBD_STATE_DEFAULT;
   
-  if (pdev->pClassData) 
-    pdev->pClass->DeInit(pdev, pdev->dev_config);  
+  if (pdev->pEventSource)
+    pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDeInitEvent(pdev->dev_config));
  
   
   return USBD_OK;
@@ -478,13 +414,9 @@ USBD_StatusTypeDef USBD_LL_Resume(USBD_HandleTypeDef  *pdev)
 
 USBD_StatusTypeDef USBD_LL_SOF(USBD_HandleTypeDef  *pdev)
 {
-  if(pdev->dev_state == USBD_STATE_CONFIGURED)
-  {
-    if(pdev->pClass->SOF != NULL)
-    {
-      pdev->pClass->SOF(pdev);
-    }
-  }
+  if(pdev->dev_state == USBD_STATE_CONFIGURED && pdev->pEventSource)
+    pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkSofEvent());
+
   return USBD_OK;
 }
 
@@ -533,23 +465,7 @@ USBD_StatusTypeDef USBD_LL_DevDisconnected(USBD_HandleTypeDef  *pdev)
 {
   /* Free Class Resources */
   pdev->dev_state = USBD_STATE_DEFAULT;
-  pdev->pClass->DeInit(pdev, pdev->dev_config);  
+  pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkDeInitEvent(pdev->dev_config));
    
   return USBD_OK;
 }
-/**
-* @}
-*/ 
-
-
-/**
-* @}
-*/ 
-
-
-/**
-* @}
-*/ 
-
-/************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-

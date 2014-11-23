@@ -6,40 +6,41 @@
 
 #pragma once
 
-/**
- * @file
- * Include this config file to get access to the USB peripheral.
- */
-
-#define USE_OTG_FS_INTERRUPT
-
-// ST driver includes
-
-#include "usblib/hal/inc/stm32f4xx_ll_usb.h"
-#include "usblib/hal/inc/stm32f4xx_hal_pcd.h"
-#include "usblib/hal/inc/stm32f4xx_hal_pcd_ex.h"
-
-#include "usblib/device/core/inc/usbd_def.h"
-#include "usblib/device/core/inc/usbd_core.h"
-
-// usb depends on ...
-
-#include "config/event.h"
-#include "config/timing.h"
-#include "config/smartptr.h"
-#include "config/rcc.h"
-#include "config/exti.h"
-#include "util/Meta.h"
-#include "util/StdExt.h"
-#include "util/MinMax.h"
-
 #if defined(STM32PLUS_F4)
 
-  #include "usb/device/HalUsbdStatus.h"
+  /**
+   * @file
+   * Include this config file to get access to the USB peripheral.
+   */
+
+  #define USE_OTG_FS_INTERRUPT
+
+  // ST driver includes
+
+  #include "usblib/hal/inc/stm32f4xx_ll_usb.h"
+  #include "usblib/hal/inc/stm32f4xx_hal_pcd.h"
+  #include "usblib/hal/inc/stm32f4xx_hal_pcd_ex.h"
+
+  #include "config/event.h"
 
   #include "usb/UsbEventDescriptor.h"
   #include "usb/UsbErrorEvent.h"
   #include "usb/UsbEventSource.h"
+
+  #include "usblib/device/core/inc/usbd_def.h"
+  #include "usblib/device/core/inc/usbd_core.h"
+
+  // usb depends on ...
+
+  #include "config/timing.h"
+  #include "config/smartptr.h"
+  #include "config/rcc.h"
+  #include "config/exti.h"
+  #include "util/Meta.h"
+  #include "util/StdExt.h"
+  #include "util/MinMax.h"
+
+  #include "usb/device/HalUsbdStatus.h"
 
   #include "usb/phy/features/PhyFeatureBase.h"
   #include "usb/phy/events/OtgFsInterruptEvent.h"
@@ -75,6 +76,17 @@
   #include "usb/device/events/DeviceSdkDataOutStageInterruptEvent.h"
   #include "usb/device/events/DeviceSdkDataInStageInterruptEvent.h"
 
+  #include "usb/device/events/class/DeviceClassSdkInitEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkDeInitEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkDataInEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkDataOutEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkEp0ReadyEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkEp0TxSentEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkGetConfigurationDescriptorEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkGetDeviceQualifierDescriptorEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkSetupEvent.h"
+  #include "usb/device/events/class/DeviceClassSdkSofEvent.h"
+
   #include "usb/device/Device.h"
   #include "usb/device/DeviceClass.h"
 
@@ -96,14 +108,7 @@
   #include "usb/device/hid/HidSubClass.h"
   #include "usb/device/hid/HidProtocol.h"
 
-  #include "usb/device/hid/events/HidSdkInitEvent.h"
-  #include "usb/device/hid/events/HidSdkDeInitEvent.h"
-  #include "usb/device/hid/events/HidSdkDataInEvent.h"
-  #include "usb/device/hid/events/HidSdkDataOutEvent.h"
-  #include "usb/device/hid/events/HidSdkEp0ReadyEvent.h"
-  #include "usb/device/hid/events/HidSdkGetConfigurationDescriptorEvent.h"
-  #include "usb/device/hid/events/HidSdkGetDeviceQualifierDescriptorEvent.h"
-  #include "usb/device/hid/events/HidSdkSetupEvent.h"
+  #include "usb/device/hid/events/HidKeyboardLedStateEvent.h"
 
   #include "usb/device/hid/HidDevice.h"
   #include "usb/device/hid/MouseReportDescriptor.h"

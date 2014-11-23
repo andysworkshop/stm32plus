@@ -76,68 +76,24 @@ namespace stm32plus {
           }
         };
 
-        static MouseHidDevice<TPhy,Features...> *_instance;    // this is how the global callbacks get back in
+      protected:
+        void onEvent(UsbEventDescriptor& event);
+
+        void onHidInit();
+        void onHidDeInit();
+        void onHidSetup(DeviceClassSdkSetupEvent& event);
+        void onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event);
+        void onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event);
+        void onHidDataIn();
 
       public:
         MouseHidDevice();
+        ~MouseHidDevice();
 
         bool initialise(Parameters& params);
 
         bool mouseSendReport(uint8_t buttons,int8_t x,int8_t y);
-
-        uint8_t onHidInit(uint8_t cfgindx);
-        uint8_t onHidDeInit(uint8_t cfgindx);
-        uint8_t onHidSetup(USBD_SetupReqTypedef *req);
-        uint8_t *onHidGetConfigurationDescriptor(uint16_t *length);
-        uint8_t *onHidGetDeviceQualifierDescriptor(uint16_t *length);
-        uint8_t onHidDataIn(uint8_t epnum);
     };
-
-
-    /*
-     * Template static member initialisation
-     */
-
-    template<class TPhy,template <class> class... Features>
-    MouseHidDevice<TPhy,Features...> *MouseHidDevice<TPhy,Features...>::_instance=nullptr;
-
-
-    /**
-     * Internal SDK callbacks
-     */
-
-    namespace mouse_hid_device_internal {
-
-      template<class TPhy,template <class> class... Features>
-      __attribute__((noinline)) inline uint8_t HID_Init(USBD_HandleTypeDef */* pdev */,uint8_t cfgidx) {
-        return MouseHidDevice<TPhy,Features...>::_instance->onHidInit(cfgidx);
-      }
-
-      template<class TPhy,template <class> class... Features>
-      __attribute__((noinline)) inline uint8_t HID_DeInit(USBD_HandleTypeDef */* pdev */,uint8_t cfgidx) {
-        return MouseHidDevice<TPhy,Features...>::_instance->onHidDeInit(cfgidx);
-      }
-
-      template<class TPhy,template <class> class... Features>
-      __attribute__((noinline)) inline uint8_t HID_Setup(USBD_HandleTypeDef * /* pdev */,USBD_SetupReqTypedef *req) {
-        return MouseHidDevice<TPhy,Features...>::_instance->onHidSetup(req);
-      }
-
-      template<class TPhy,template <class> class... Features>
-      __attribute__((noinline)) inline uint8_t *HID_GetCfgDesc(uint16_t *length) {
-        return MouseHidDevice<TPhy,Features...>::_instance->onHidGetConfigurationDescriptor(length);
-      }
-
-      template<class TPhy,template <class> class... Features>
-      __attribute__((noinline)) inline uint8_t *HID_GetDeviceQualifierDesc(uint16_t *length) {
-        return MouseHidDevice<TPhy,Features...>::_instance->onHidGetDeviceQualifierDescriptor(length);
-      }
-
-      template<class TPhy,template <class> class... Features>
-      __attribute__((noinline)) inline uint8_t HID_DataIn(USBD_HandleTypeDef * /* pdev */,uint8_t epnum) {
-        return MouseHidDevice<TPhy,Features...>::_instance->onHidDataIn(epnum);
-      }
-    }
 
 
     /**
@@ -147,9 +103,26 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline MouseHidDevice<TPhy,Features...>::MouseHidDevice() {
 
-      // static member initialisation
+      // subscribe to USB events
 
-      _instance=this;
+      this->UsbEventSender.insertSubscriber(
+          UsbEventSourceSlot::bind(this,&MouseHidDevice<TPhy,Features...>::onEvent)
+        );
+    }
+
+
+    /**
+     * Destructor
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline MouseHidDevice<TPhy,Features...>::~MouseHidDevice() {
+
+      // unsubscribe from USB events
+
+      this->UsbEventSender.removeSubscriber(
+          UsbEventSourceSlot::bind(this,&MouseHidDevice<TPhy,Features...>::onEvent)
+        );
     }
 
 
@@ -212,22 +185,6 @@ namespace stm32plus {
       _qualifierDescriptor.bMaxPacketSize0=0x40;
       _qualifierDescriptor.bNumConfigurations=1;
 
-      // set up the SDK class type
-
-      this->_classType.Init=mouse_hid_device_internal::HID_Init<TPhy,Features...>;
-      this->_classType.DeInit=mouse_hid_device_internal::HID_DeInit<TPhy,Features...>;
-      this->_classType.Setup=mouse_hid_device_internal::HID_Setup<TPhy,Features...>;
-      this->_classType.DataIn=mouse_hid_device_internal::HID_DataIn<TPhy,Features...>;
-      this->_classType.GetHSConfigDescriptor=mouse_hid_device_internal::HID_GetCfgDesc<TPhy,Features...>;
-      this->_classType.GetFSConfigDescriptor=mouse_hid_device_internal::HID_GetCfgDesc<TPhy,Features...>;
-      this->_classType.GetOtherSpeedConfigDescriptor=mouse_hid_device_internal::HID_GetCfgDesc<TPhy,Features...>;
-      this->_classType.GetDeviceQualifierDescriptor=mouse_hid_device_internal::HID_GetDeviceQualifierDesc<TPhy,Features...>;
-
-      // link the HID interface/endpoint registration into the SDK structure
-
-      if((status=USBD_RegisterClass(&this->_deviceHandle,&this->_classType))!=USBD_OK)
-        return errorProvider.set(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_REGISTER_CLASS,status);
-
       // start the device
 
       if((status=USBD_Start(&this->_deviceHandle))!=USBD_OK)
@@ -240,114 +197,112 @@ namespace stm32plus {
 
 
     /**
+     * Event handler for device events
+     * @param event The event descriptor
+     */
+
+    template<class TPhy,template <class> class... Features>
+    __attribute__((noinline)) inline void MouseHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+
+      switch(event.eventType) {
+
+        case UsbEventDescriptor::EventType::CLASS_INIT:
+          onHidInit();
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_DEINIT:
+          onHidDeInit();
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_DATA_IN:
+          onHidDataIn();
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_GET_CONFIGURATION_DESCRIPTOR:
+          onHidGetConfigurationDescriptor(static_cast<DeviceClassSdkGetConfigurationDescriptorEvent&>(event));
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_SETUP:
+          onHidSetup(static_cast<DeviceClassSdkSetupEvent&>(event));
+          break;
+
+        default:
+          break;
+      }
+    }
+
+
+    /**
      * HID initialisation
      */
 
     template<class TPhy,template <class> class... Features>
-    inline uint8_t MouseHidDevice<TPhy,Features...>::onHidInit(uint8_t cfgindx) {
+    inline void MouseHidDevice<TPhy,Features...>::onHidInit() {
 
       USBD_LL_OpenEP(&this->_deviceHandle,EndpointDescriptor::IN | 1,EndpointDescriptor::INTERRUPT,MOUSE_HID_REPORT_SIZE);
 
       // device is not busy
 
       this->_busy=false;
-
-      // send init event
-
-      HidSdkInitEvent event(cfgindx);;
-      this->UsbEventSender.raiseEvent(event);
-
-      return event.status;
     }
 
 
     /**
      * De-initialise the HID device
-     * @param pdev
-     * @param cfgidx
-     * @return
      */
 
     template<class TPhy,template <class> class... Features>
-    inline uint8_t MouseHidDevice<TPhy,Features...>::onHidDeInit(uint8_t cfgidx) {
+    inline void MouseHidDevice<TPhy,Features...>::onHidDeInit() {
 
       // close the endpoint
 
       USBD_LL_CloseEP(&this->_deviceHandle,EndpointDescriptor::IN | 1);
-
-      // send the notification
-
-      HidSdkDeInitEvent event(cfgidx);
-      this->UsbEventSender.raiseEvent(event);
-
-      return event.status;
     }
 
 
     /**
      * Get the configuration descriptor
-     * @param  pdev: device instance
-     * @param  epnum: endpoint index
-     * @retval status
+     * @param event The event class to receive the descriptor and provide type of descriptor being requested
      */
 
     template<class TPhy,template <class> class... Features>
-    inline uint8_t *MouseHidDevice<TPhy,Features...>::onHidGetConfigurationDescriptor(uint16_t *length) {
+    inline void MouseHidDevice<TPhy,Features...>::onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event) {
 
-      // create the event with the default descriptor and send
+      if(event.type==DeviceClassSdkGetConfigurationDescriptorEvent::Type::HIGH_SPEED ||
+         event.type==DeviceClassSdkGetConfigurationDescriptorEvent::Type::FULL_SPEED ||
+         event.type==DeviceClassSdkGetConfigurationDescriptorEvent::Type::OTHER_SPEED) {
 
-      HidSdkGetConfigurationDescriptorEvent event(reinterpret_cast<uint8_t *>(&_mouseDescriptor),sizeof(_mouseDescriptor));
-      this->UsbEventSender.raiseEvent(event);
+        // set up the values in the event
 
-      // set the return values
-
-      *length=event.length;
-      return event.descriptor;
+        event.length=sizeof(_mouseDescriptor);
+        event.descriptor=reinterpret_cast<uint8_t *>(&_mouseDescriptor);
+      }
     }
 
 
     /**
-     * @brief  DeviceQualifierDescriptor
-     *         return Device Qualifier descriptor
-     * @param  length : pointer data length
-     * @retval pointer to descriptor buffer
+     * Get the device qualifier descriptor
+     * @param event The event class to receive the descriptor pointer
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline))  inline uint8_t *MouseHidDevice<TPhy,Features...>::onHidGetDeviceQualifierDescriptor(uint16_t *length) {
+    inline void MouseHidDevice<TPhy,Features...>::onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event) {
 
-      // create the event with the default descriptor and send
-
-      HidSdkGetDeviceQualifierDescriptorEvent event(_qualifierDescriptor);
-      this->UsbEventSender.raiseEvent(event);
-
-      // set the return values
-
-      *length=sizeof(DeviceQualifierDescriptor);
-      return reinterpret_cast<uint8_t *>(&_qualifierDescriptor);
+      event.descriptor=reinterpret_cast<uint8_t *>(&_qualifierDescriptor);
+      event.length=sizeof(_qualifierDescriptor);
     }
 
 
     /**
      * Data in event
-     * @param epnum endpoint number
-     * @return
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline))  inline uint8_t MouseHidDevice<TPhy,Features...>::onHidDataIn(uint8_t epnum) {
+    inline void MouseHidDevice<TPhy,Features...>::onHidDataIn() {
 
-      // Ensure that the FIFO is empty before a new transfer, this condition could
-      // be caused by  a new transfer before the end of the previous transfer
+      // clear the busy flag
 
       this->_busy=false;
-
-      // create the event with the default descriptor and send
-
-      HidSdkDataInEvent event(epnum);
-      this->UsbEventSender.raiseEvent(event);
-
-      return event.status;
     }
 
 
@@ -359,37 +314,32 @@ namespace stm32plus {
       */
 
     template<class TPhy,template <class> class... Features>
-    inline uint8_t MouseHidDevice<TPhy,Features...>::onHidSetup(USBD_SetupReqTypedef *req) {
-
-      // send the event
-
-      HidSdkSetupEvent event(*req);
-      this->UsbEventSender.raiseEvent(event);
+    inline void MouseHidDevice<TPhy,Features...>::onHidSetup(DeviceClassSdkSetupEvent& event) {
 
       // check for fail
 
       if(event.status!=USBD_OK)
-        return event.status;
+        return;
 
       // process the setup event handled here
 
-      if((req->bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_STANDARD)
-        return USBD_OK;
+      if((event.request.bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_STANDARD)
+        return;
 
-      switch(req->bRequest) {
+      switch(event.request.bRequest) {
 
         case USB_REQ_GET_DESCRIPTOR:
-          if(req->wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
+          if(event.request.wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
 
             USBD_CtlSendData(&this->_deviceHandle,
                              const_cast<uint8_t *>(MouseReportDescriptor),
-                             Min<uint16_t>(sizeof(MouseReportDescriptor),req->wLength));
+                             Min<uint16_t>(sizeof(MouseReportDescriptor),event.request.wLength));
 
-          } else if(req->wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
+          } else if(event.request.wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
 
             USBD_CtlSendData(&this->_deviceHandle,
                              reinterpret_cast<uint8_t *>(&_mouseDescriptor.hid),
-                             Min<uint16_t>(sizeof(_mouseDescriptor.hid),req->wLength));
+                             Min<uint16_t>(sizeof(_mouseDescriptor.hid),event.request.wLength));
           }
 
           break;
@@ -399,11 +349,9 @@ namespace stm32plus {
           break;
 
         case USB_REQ_SET_INTERFACE:
-          this->_hidAltSetting=req->wValue;
+          this->_hidAltSetting=event.request.wValue;
           break;
       }
-
-      return USBD_OK;
     }
 
 

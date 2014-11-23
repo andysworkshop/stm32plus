@@ -42,7 +42,7 @@ namespace stm32plus {
 
       protected:
         void onEvent(UsbEventDescriptor& event);
-        void onHidSetupEvent(HidSdkSetupEvent& event);
+        void onHidSetupEvent(DeviceClassSdkSetupEvent& event);
 
       public:
         HidDevice();
@@ -105,6 +105,9 @@ namespace stm32plus {
          !RecursiveBoolInitWithParams<HidDevice,Features<Device<TPhy>>...>::tinit(this,params))
         return false;
 
+      // link UsbEventSource class into the SDK structure
+
+      USBD_RegisterClass(&this->_deviceHandle,static_cast<UsbEventSource *>(this));
       return true;
     }
 
@@ -119,8 +122,8 @@ namespace stm32plus {
 
       // check for handled events
 
-      if(event.eventType==UsbEventDescriptor::EventType::HID_SETUP)
-        onHidSetupEvent(static_cast<HidSdkSetupEvent&>(event));
+      if(event.eventType==UsbEventDescriptor::EventType::CLASS_SETUP)
+        onHidSetupEvent(static_cast<DeviceClassSdkSetupEvent&>(event));
     }
 
 
@@ -130,7 +133,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void HidDevice<TPhy,Features...>::onHidSetupEvent(HidSdkSetupEvent& event) {
+    inline void HidDevice<TPhy,Features...>::onHidSetupEvent(DeviceClassSdkSetupEvent& event) {
 
       // handle device class requests
 

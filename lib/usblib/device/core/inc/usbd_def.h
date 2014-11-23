@@ -235,7 +235,7 @@ typedef struct _USBD_HandleTypeDef
 
   USBD_SetupReqTypedef    request;
   USBD_DescriptorsTypeDef *pDesc;
-  USBD_ClassTypeDef       *pClass;
+  stm32plus::usb::UsbEventSource *pEventSource;
   void                    *pClassData;  
   void                    *pUserData;    
   void                    *pData;    

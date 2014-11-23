@@ -26,8 +26,18 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
+#include "config/stm32plus.h"
+#include "config/event.h"
+#include "usb/UsbEventDescriptor.h"
+#include "usb/UsbErrorEvent.h"
+#include "usb/UsbEventSource.h"
 #include "usblib/device/core/inc/usbd_ctlreq.h"
 #include "usblib/device/core/inc/usbd_ioreq.h"
+#include "usb/device/events/class/DeviceClassSdkSetupEvent.h"
+#include "usb/device/events/class/DeviceClassSdkGetConfigurationDescriptorEvent.h"
+#include "usb/device/DescriptorHeader.h"
+#include "usb/device/DeviceQualifierDescriptor.h"
+#include "usb/device/events/class/DeviceClassSdkGetDeviceQualifierDescriptorEvent.h"
 
 
 /** @addtogroup STM32_USBD_STATE_DEVICE_LIBRARY
@@ -177,7 +187,7 @@ USBD_StatusTypeDef  USBD_StdItfReq (USBD_HandleTypeDef *pdev , USBD_SetupReqType
     
     if (LOBYTE(req->wIndex) <= USBD_MAX_NUM_INTERFACES) 
     {
-      pdev->pClass->Setup (pdev, req); 
+      pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkSetupEvent(*req));
       
       if((req->wLength == 0)&& (ret == USBD_OK))
       {
@@ -235,7 +245,7 @@ USBD_StatusTypeDef  USBD_StdEPReq (USBD_HandleTypeDef *pdev , USBD_SetupReqTyped
           
         }
       }
-      pdev->pClass->Setup (pdev, req);   
+      pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkSetupEvent(*req));
       USBD_CtlSendStatus(pdev);
       
       break;
@@ -263,7 +273,7 @@ USBD_StatusTypeDef  USBD_StdEPReq (USBD_HandleTypeDef *pdev , USBD_SetupReqTyped
         if ((ep_addr & 0x7F) != 0x00) 
         {        
           USBD_LL_ClearStallEP(pdev , ep_addr);
-          pdev->pClass->Setup (pdev, req);
+          pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkSetupEvent(*req));
         }
         USBD_CtlSendStatus(pdev);
       }
@@ -336,12 +346,26 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev ,
   case USB_DESC_TYPE_CONFIGURATION:     
     if(pdev->dev_speed == USBD_SPEED_HIGH )   
     {
-      pbuf   = (uint8_t *)pdev->pClass->GetHSConfigDescriptor(&len);
+      stm32plus::usb::DeviceClassSdkGetConfigurationDescriptorEvent event(
+          stm32plus::usb::DeviceClassSdkGetConfigurationDescriptorEvent::Type::HIGH_SPEED);
+
+      pdev->pEventSource->UsbEventSender.raiseEvent(event);
+
+      pbuf=event.descriptor;
+      len=event.length;
+
       pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
     }
     else
     {
-      pbuf   = (uint8_t *)pdev->pClass->GetFSConfigDescriptor(&len);
+      stm32plus::usb::DeviceClassSdkGetConfigurationDescriptorEvent event(
+          stm32plus::usb::DeviceClassSdkGetConfigurationDescriptorEvent::Type::FULL_SPEED);
+
+      pdev->pEventSource->UsbEventSender.raiseEvent(event);
+
+      pbuf=event.descriptor;
+      len=event.length;
+
       pbuf[1] = USB_DESC_TYPE_CONFIGURATION;
     }
     break;
@@ -387,7 +411,11 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev ,
 
     if(pdev->dev_speed == USBD_SPEED_HIGH  )   
     {
-      pbuf   = (uint8_t *)pdev->pClass->GetDeviceQualifierDescriptor(&len);
+      stm32plus::usb::DeviceClassSdkGetDeviceQualifierDescriptorEvent event;
+      pdev->pEventSource->UsbEventSender.raiseEvent(event);
+
+      pbuf = (uint8_t *)event.descriptor;
+      len = event.length;
       break;
     }
     else
@@ -399,7 +427,14 @@ static void USBD_GetDescriptor(USBD_HandleTypeDef *pdev ,
   case USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION:
     if(pdev->dev_speed == USBD_SPEED_HIGH  )   
     {
-      pbuf   = (uint8_t *)pdev->pClass->GetOtherSpeedConfigDescriptor(&len);
+      stm32plus::usb::DeviceClassSdkGetConfigurationDescriptorEvent event(
+          stm32plus::usb::DeviceClassSdkGetConfigurationDescriptorEvent::Type::OTHER_SPEED);
+
+      pdev->pEventSource->UsbEventSender.raiseEvent(event);
+
+      pbuf=event.descriptor;
+      len=event.length;
+
       pbuf[1] = USB_DESC_TYPE_OTHER_SPEED_CONFIGURATION;
       break; 
     }
@@ -639,7 +674,7 @@ static void USBD_SetFeature(USBD_HandleTypeDef *pdev ,
   if (req->wValue == USB_FEATURE_REMOTE_WAKEUP)
   {
     pdev->dev_remote_wakeup = 1;  
-    pdev->pClass->Setup (pdev, req);   
+    pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkSetupEvent(*req));
     USBD_CtlSendStatus(pdev);
   }
 
@@ -663,7 +698,7 @@ static void USBD_ClrFeature(USBD_HandleTypeDef *pdev ,
     if (req->wValue == USB_FEATURE_REMOTE_WAKEUP) 
     {
       pdev->dev_remote_wakeup = 0; 
-      pdev->pClass->Setup (pdev, req);   
+      pdev->pEventSource->UsbEventSender.raiseEvent(stm32plus::usb::DeviceClassSdkSetupEvent(*req));
       USBD_CtlSendStatus(pdev);
     }
     break;

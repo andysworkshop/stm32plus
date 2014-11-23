@@ -45,14 +45,18 @@ namespace stm32plus {
 
         OTG_FS_INTERRUPT,
 
-        HID_INIT,
-        HID_DEINIT,
-        HID_SETUP,
-        HID_DATA_IN,
-        HID_DATA_OUT,
-        HID_EP0_READY,
-        HID_GET_CONFIGURATION_DESCRIPTOR,
-        HID_GET_DEVICE_QUALIFIER_DESCRIPTOR,
+        CLASS_INIT,
+        CLASS_DEINIT,
+        CLASS_SETUP,
+        CLASS_DATA_IN,
+        CLASS_DATA_OUT,
+        CLASS_EP0_READY,
+        CLASS_SOF,
+        CLASS_EP0_TX_SENT,
+        CLASS_GET_CONFIGURATION_DESCRIPTOR,
+        CLASS_GET_DEVICE_QUALIFIER_DESCRIPTOR,
+
+        HID_KEYBOARD_LED_STATE,
 
         USB_ERROR
       };

@@ -163,23 +163,23 @@ class UsbDeviceHidKeyboardTest {
 
     /**
      * Event callback from the USB stack. Lots of stuff will come through here but
-     * we're only interested in data packets from the host
+     * we're only interested in LED state notifications
      */
 
     void onEvent(UsbEventDescriptor& ued) {
 
       // reject all events that we don't care about
 
-      if(ued.eventType!=UsbEventDescriptor::EventType::HID_DATA_OUT)
+      if(ued.eventType!=UsbEventDescriptor::EventType::HID_KEYBOARD_LED_STATE)
         return;
 
-      HidSdkDataOutEvent& event(static_cast<HidSdkDataOutEvent&>(ued));
+      HidKeyboardLedStateEvent& event(static_cast<HidKeyboardLedStateEvent&>(ued));
 
-      // num,caps and scroll lock are in byte 0, bits 0..2 respectively
+      // light up the leds
 
-      _numLock.setState(!!(event.buffer[0] & 0x1));
-      _capsLock.setState(!!(event.buffer[0] & 0x2));
-      _scrollLock.setState(!!(event.buffer[0] & 0x4));
+      _numLock.setState(event.isNumLock());
+      _capsLock.setState(event.isCapsLock());
+      _scrollLock.setState(event.isScrollLock());
     }
 
 

@@ -26,6 +26,11 @@
   */ 
 
 /* Includes ------------------------------------------------------------------*/
+#include "config/stm32plus.h"
+#include "config/event.h"
+#include "usb/UsbEventDescriptor.h"
+#include "usb/UsbErrorEvent.h"
+#include "usb/UsbEventSource.h"
 #include "usblib/device/core/inc/usbd_ioreq.h"
 
 /** @addtogroup STM32_USB_DEVICE_LIBRARY

@@ -11,18 +11,18 @@ namespace stm32plus {
   namespace usb {
 
     /*
-     * Event class for HID data in
+     * Event class for the class setup event
      */
 
-    struct HidSdkDataInEvent : UsbEventDescriptor {
+    struct DeviceClassSdkSetupEvent : UsbEventDescriptor {
 
-      uint8_t endpointNumber;
       USBD_StatusTypeDef status;
+      USBD_SetupReqTypedef& request;
 
-      HidSdkDataInEvent(uint8_t epnum)
-        : UsbEventDescriptor(EventType::HID_DATA_IN),
-          endpointNumber(epnum),
-          status(USBD_OK) {
+      DeviceClassSdkSetupEvent(USBD_SetupReqTypedef& req)
+        : UsbEventDescriptor(EventType::CLASS_SETUP),
+          status(USBD_OK),
+          request(req) {
       }
     };
   }
