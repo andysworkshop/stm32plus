@@ -62,7 +62,6 @@ namespace stm32plus {
     }
   };
 
-#if defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F4)
 
   /**
    * NSS is on PA[15]. The others move to PB
@@ -96,6 +95,5 @@ namespace stm32plus {
         Features(static_cast<Spi&>(*this))... {
     }
   };
-#endif
 }
 

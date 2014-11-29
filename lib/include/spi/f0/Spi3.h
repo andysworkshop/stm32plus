@@ -61,41 +61,5 @@ namespace stm32plus {
         Features(static_cast<Spi&>(*this))... {
     }
   };
-
-#if defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F4)
-
-  /**
-   * NSS is on PA[15]. The others move to PB
-   */
-
-  struct Spi3Remap1PinPackage {
-    enum {
-      Port_NSS=GPIOA_BASE,
-      Port_SCK=GPIOC_BASE,
-      Port_MISO=GPIOC_BASE,
-      Port_MOSI=GPIOC_BASE,
-
-      Pin_NSS  = GPIO_Pin_4,
-      Pin_SCK  = GPIO_Pin_10,
-      Pin_MISO = GPIO_Pin_11,
-      Pin_MOSI = GPIO_Pin_12
-    };
-  };
-
-
-  /**
-   * Convenience class to match the F1 pin for pin.
-   */
-
-  template<class... Features>
-  struct Spi3_Remap1 : SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>,
-                       Features... {
-
-    Spi3_Remap1(const Parameters& params)
-      : SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>(params),
-        Features(static_cast<Spi&>(*this))... {
-    }
-  };
-#endif
 }
 
