@@ -42,14 +42,6 @@ namespace stm32plus {
 
 
   /**
-   * Template static initialiser
-   */
-
-  template<uint32_t Line>
-  ExtiPeripheral<Line> *ExtiPeripheral<Line>::_extiInstance=nullptr;
-
-
-  /**
    * Constructor
    *
    * @param[in] mode EXTI_Mode_Event or EXTI_Mode_Interrupt

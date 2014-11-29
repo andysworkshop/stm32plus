@@ -274,7 +274,6 @@ namespace stm32plus {
     enum {
       GPIO_SPEED = GPIO_Speed_50MHz,
       PERIPHERAL_BASE = USART1_BASE,
-      COUNTER_MAX = 0xFFFF
     };
   };
   typedef PeripheralTraits<PERIPHERAL_USART1> Usart1PeripheralTraits;

@@ -62,13 +62,22 @@
 
   #include "spi/features/f0/SpiFifoNotifyFeature.h"
 
+  #include "spi/f0/Spi1.h"
+  #include "spi/f0/Spi3.h"
+
+#elif defined(STM32PLUS_F1)
+
+  #include "spi/f1/Spi1.h"
+  #include "spi/f1/Spi3.h"
+
+#elif defined(STM32PLUS_F4)
+
+  #include "spi/f4/Spi1.h"
+  #include "spi/f4/Spi3.h"
+
 #endif
 
-// general includes for the peripheral
-
-#include "spi/Spi1.h"
 #include "spi/Spi2.h"
-#include "spi/Spi3.h"
 
 #define USE_SPI1_INTERRUPT
 #define USE_SPI2_INTERRUPT
