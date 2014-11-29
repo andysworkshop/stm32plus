@@ -15,7 +15,23 @@ using namespace stm32plus::usb;
 
 
 /*
- * Work in progress... Not ready yet.
+ * This example defines a custom HID that we will use to send ADC conversion results from the
+ * STM32 to the PC USB host. We configure ADC1, channels 0,1,2 to convert once per second using
+ * DMA to tell us when the data is ready to send. Channels 0,1,2 are mapped to PA0, PA1, PA2.
+ * This custom HID has a single interrupt IN endpoint, the minimum required by the HID standard.
+ *
+ * The key to a custom HID is its report descriptor which is used to define the format of the
+ * data sent back to the host. We declare a single host input report with an ID of 1 and a
+ * following sequence of 6 bytes that represent the converted values.
+ *
+ * To use, compile and flash the example to your STM32F4DISCOVERY board. Connect the USB device
+ * to a PC host and it will be automtically recognised. Unlike mice and keyboards, custom devices
+ * will be suspended by the host until an application opens the device for use. In this state
+ * you will see the red LED on the discovery board flash briefly once per second.
+ *
+ * A sample Windows application can be found in the "hidreader" subdirectory that will connect
+ * to the running device and log the incoming reports. Full source code is supplied and I've also
+ * included a compiled exe if you don't happen to have Visual Studio 2013 or better.
  *
  * Compatible MCU:
  *   STM32F4
@@ -33,7 +49,7 @@ using namespace stm32plus::usb;
  * This descriptor tells the host that we will send reports with an ID of #1 followed by a sequence
  * of 6 (REPORT_COUNT) 8-bit (REPORT_SIZE) data items. Therefore the actual packet sent to the host
  * will be 7 bytes long. It would be more true to the data to declare 3x12 bit data items and 4-bits
- * of padding but keeping it all byte-oriented makes it easier to pack and unpack.
+ * of padding to round it up but keeping it all byte-oriented makes it easier to pack and unpack.
  */
 
 const uint8_t CustomAdcHidReportDescriptor[22] = {
@@ -71,6 +87,38 @@ class UsbDeviceCustomAdcTest {
       ConfigurationTextFeature,           // ... and a config text string
       InterfaceTextFeature                // ... and an interface text string
     > MyUsb;
+
+    /*
+     * Declare the ADC peripheral with an APB2 clock prescaler of 2, a resolution of
+     * 12 bits. We will use 144-cycle conversions on ADC channels 0,1 and 2. Scan mode is used
+     * with the default template parameter that causes EOC to be raised at the end of a complete
+     * conversion group.
+     */
+
+    typedef Adc1<
+      AdcClockPrescalerFeature<2>,                // prescaler of 2
+      AdcResolutionFeature<12>,                   // 12 bit resolution
+      Adc1Cycle144RegularChannelFeature<0,1>,     // using channels 0,1 on ADC1 with 144-cycle latency
+      Adc1Cycle480RegularChannelFeature<2>,       // using channel 2 on ADC1 with 480-cycle latency
+      Adc1Cycle480TemperatureSensorFeature,       // using the temperature sensor channel
+      AdcScanModeFeature<>                        // scan mode with EOC after each group
+    > MyAdc;
+
+    /*
+     * Declare the ADC1 DMA channel. The default is circular mode for the AdcDmaFeature
+     * which means that it wil automatically refill our buffer on each conversion because
+     * one conversion exactly matches the size of the memory buffer that we will give
+     * to the DMA peripheral.
+     */
+
+    typedef Adc1DmaChannel<AdcDmaFeature<Adc1PeripheralTraits>,Adc1DmaChannelInterruptFeature> MyDma;
+
+    /*
+     * Declare the ADC conversion buffer and the flag that tells us when data is ready
+     */
+
+    uint16_t _values[3];
+    volatile bool _ready;
 
 
     /*
@@ -112,17 +160,77 @@ class UsbDeviceCustomAdcTest {
         for(;;);      // onError has already locked up
 
       /*
-       * Subscribe to errors
+       * Subscribe to USB errors
        */
 
-      usb.UsbErrorEventSender.insertSubscriber(UsbErrorEventSourceSlot::bind(this,&UsbDeviceCustomAdcTest::onError));
+      usb.UsbErrorEventSender.insertSubscriber(
+          UsbErrorEventSourceSlot::bind(this,&UsbDeviceCustomAdcTest::onError)
+      );
+
+      /*
+       * Declare the DMA and ADC instances
+       */
+
+      MyDma dma;
+      MyAdc adc;
+
+      _ready=false;
+
+      /*
+       * Subscribe to the DMA complete interrupt
+       */
+
+      dma.DmaInterruptEventSender.insertSubscriber(
+          DmaInterruptEventSourceSlot::bind(this,&UsbDeviceCustomAdcTest::onComplete)
+      );
+
+      /*
+       * Enable the DMA interrupt
+       */
+
+      dma.enableInterrupts(Adc1DmaChannelInterruptFeature::COMPLETE);
+
+      /*
+       * start the DMA (i.e. make it ready to receive requests from the ADC peripheral)
+       */
+
+      dma.beginRead(_values,4);
+
+      /*
+       * Go into an infinite loop converting
+       */
 
       for(;;) {
 
+        // wait a second
+
         MillisecondTimer::delay(1000);
 
-        usb.sendAdcReport(1,2,3);
+        /*
+         * Start a conversion and wait until the interrupt handler tells us that it's finished.
+         */
+
+        adc.startRegularConversion();
+
+        while(!_ready);
+        _ready=false;
+
+        /*
+         * Send the converted values as a report to the USB host
+         */
+
+        usb.sendAdcReport(_values[0],_values[1],_values[2]);
       }
+    }
+
+
+    /**
+     * Interrupt handler for the DMA complete event. Set the ready flag when it's received
+     */
+
+    void onComplete(DmaEventType det) {
+      if(det==DmaEventType::EVENT_COMPLETE)
+        _ready=true;
     }
 
 
