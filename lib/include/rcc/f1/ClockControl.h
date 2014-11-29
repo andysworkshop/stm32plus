@@ -215,40 +215,6 @@ namespace stm32plus {
   };
 
   /**
-   * SPI1_REMAP
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_SPI1_REMAP> {
-
-    static void On() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_AFIO,ENABLE);
-      GPIO_PinRemapConfig(GPIO_Remap_SPI1,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
-    }
-  };
-
-  /**
-   * SPI3_REMAP
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_SPI3_REMAP> {
-
-    static void On() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
-      GPIO_PinRemapConfig(GPIO_Remap_SPI3,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,DISABLE);
-    }
-  };
-
-  /**
    * SPI3
    */
 
