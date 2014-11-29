@@ -22,6 +22,18 @@ namespace stm32plus {
     template<class TDevice> using CustomAdcHidDeviceEndpoint=InterruptInEndpointFeature<1,TDevice>;
 
     /**
+     * Declare the structure that gets sent back when the host asks for the whole
+     * configuration descriptor
+     */
+
+    struct CustomAdcHidConfigurationDescriptor {
+      ConfigurationDescriptor configuration;
+      InterfaceDescriptor interface;
+      HidClassDescriptor hid;
+      EndpointDescriptor endpoint;
+    } __attribute__((packed));
+
+    /**
      * Derivation of HidDevice to handle a custom HID device that sends 3 ADC conversions to the
      * host every 1 second. ADC-1 channels 1,2,3 (PA1,PA2,PA3) are the channels used. Each conversion
      * takes 2-bytes so we are sending 6-byte reports.
@@ -34,34 +46,25 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    class CustomAdcHidDevice : public HidDevice<TPhy,CustomAdcHidDeviceEndpoint,Features...> {
+    class CustomAdcHidDevice : public HidDevice<TPhy,
+                                                CustomAdcHidConfigurationDescriptor,
+                                                CustomAdcHidDeviceEndpoint,
+                                                Features...> {
 
       protected:
 
-        typedef HidDevice<TPhy,CustomAdcHidDeviceEndpoint,Features...> HidDeviceBase;
+        typedef HidDevice<TPhy,
+                          CustomAdcHidConfigurationDescriptor,
+                          CustomAdcHidDeviceEndpoint,
+                          Features...> HidDeviceBase;
 
         /**
          * Constants
          */
 
         enum {
-          CUSTOM_ADC_HID_REPORT_SIZE = 6
+          CUSTOM_ADC_HID_REPORT_SIZE = 7    // 1-byte report ID
         };
-
-
-        /**
-         * Declare the structure that gets sent back when the host asks for the whole
-         * configuration descriptor
-         */
-
-        struct CustomAdcHidConfigurationDescriptor {
-          ConfigurationDescriptor configuration;
-          InterfaceDescriptor interface;
-          HidClassDescriptor hid;
-          EndpointDescriptor endpoint;
-        } __attribute__((packed));
-
-        CustomAdcHidConfigurationDescriptor _hidDescriptor;
 
       public:
 
@@ -85,7 +88,6 @@ namespace stm32plus {
 
         void onHidInit();
         void onHidDeInit();
-        void onHidSetup(DeviceClassSdkSetupEvent& event);
         void onHidGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event);
 
       public:
@@ -103,7 +105,8 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline CustomAdcHidDevice<TPhy,Features...>::CustomAdcHidDevice() {
+    inline CustomAdcHidDevice<TPhy,Features...>::CustomAdcHidDevice()
+      : HidDeviceBase(CustomAdcHidReportDescriptor,sizeof(CustomAdcHidReportDescriptor)) {
 
       // subscribe to USB events
 
@@ -146,40 +149,40 @@ namespace stm32plus {
 
       // set up the configuration descriptor (see constructor for defaults)
 
-      _hidDescriptor.configuration.wTotalLength=sizeof(_hidDescriptor);
-      _hidDescriptor.configuration.bNumInterfaces=1;
-      _hidDescriptor.configuration.bmAttributes=0x80 | ConfigurationDescriptor::SELF_POWERED;
+      this->_configurationDescriptor.configuration.wTotalLength=sizeof(this->_configurationDescriptor);
+      this->_configurationDescriptor.configuration.bNumInterfaces=1;
+      this->_configurationDescriptor.configuration.bmAttributes=0x80 | ConfigurationDescriptor::SELF_POWERED;
 
       // if ConfigurationTextFeature is in the hierarchy then we've got a configuration string (compile-time check)
 
       if(std::is_base_of<ConfigurationTextFeature<Device<TPhy>>,CustomAdcHidDevice<TPhy,Features...>>::value)
-        _hidDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
+        this->_configurationDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
 
       // set up the interface descriptor (see constructor for defaults)
 
-      _hidDescriptor.interface.bInterfaceNumber=0;
-      _hidDescriptor.interface.bNumEndpoints=1;
-      _hidDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
-      _hidDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::NONE);    // custom HID
-      _hidDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::NONE);
+      this->_configurationDescriptor.interface.bInterfaceNumber=0;
+      this->_configurationDescriptor.interface.bNumEndpoints=1;
+      this->_configurationDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
+      this->_configurationDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::NONE);    // custom HID
+      this->_configurationDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::NONE);
 
       // if InterfaceTextFeature is in the hierarchy then we've got an interface string (compile-time check)
 
       if(std::is_base_of<InterfaceTextFeature<Device<TPhy>>,CustomAdcHidDevice<TPhy,Features...>>::value)
-        _hidDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
+        this->_configurationDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
 
       // set up the hid class descriptor (see constructor for defaults)
 
-      _hidDescriptor.hid.bNumDescriptors=1;
-      _hidDescriptor.hid.wItemLength=sizeof(CustomAdcHidReportDescriptor);
+      this->_configurationDescriptor.hid.bNumDescriptors=1;
+      this->_configurationDescriptor.hid.wItemLength=sizeof(CustomAdcHidReportDescriptor);
 
       // set up the endpoint descriptor. we'll configure a max packet size of 64 though the
       // actual number of bytes per report will be 1+6=7
 
-      _hidDescriptor.endpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
-      _hidDescriptor.endpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      _hidDescriptor.endpoint.wMaxPacketSize=USB_FS_MAX_PACKET_SIZE;
-      _hidDescriptor.endpoint.bInterval=params.custom_hid_poll_interval;  // default is 1000ms
+      this->_configurationDescriptor.endpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
+      this->_configurationDescriptor.endpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
+      this->_configurationDescriptor.endpoint.wMaxPacketSize=USB_FS_MAX_PACKET_SIZE;
+      this->_configurationDescriptor.endpoint.bInterval=params.custom_hid_poll_interval;  // default is 1000ms
 
       // set up the qualifier descriptor (see constructor for defaults)
 
@@ -217,10 +220,6 @@ namespace stm32plus {
 
         case UsbEventDescriptor::EventType::CLASS_GET_CONFIGURATION_DESCRIPTOR:
           onHidGetConfigurationDescriptor(static_cast<DeviceClassSdkGetConfigurationDescriptorEvent&>(event));
-          break;
-
-        case UsbEventDescriptor::EventType::CLASS_SETUP:
-          onHidSetup(static_cast<DeviceClassSdkSetupEvent&>(event));
           break;
 
         default:
@@ -272,58 +271,8 @@ namespace stm32plus {
 
         // set up the values in the event
 
-        event.length=sizeof(_hidDescriptor);
-        event.descriptor=reinterpret_cast<uint8_t *>(&_hidDescriptor);
-      }
-    }
-
-
-    /**
-     * Handle the HID setup requests
-     * @param event the event containg value being requested
-     */
-
-    template<class TPhy,template <class> class... Features>
-    inline void CustomAdcHidDevice<TPhy,Features...>::onHidSetup(DeviceClassSdkSetupEvent& event) {
-
-      // check for fail
-
-      if(event.status!=USBD_OK)
-        return;
-
-      // process the setup event handled here
-
-      if((event.request.bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_STANDARD)
-        return;
-
-      switch(event.request.bRequest) {
-
-        case USB_REQ_GET_DESCRIPTOR:
-          if(event.request.wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
-
-            USBD_CtlSendData(&this->_deviceHandle,
-                             const_cast<uint8_t *>(CustomAdcHidReportDescriptor),
-                             Min<uint16_t>(sizeof(CustomAdcHidReportDescriptor),event.request.wLength));
-
-          } else if(event.request.wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
-
-            USBD_CtlSendData(&this->_deviceHandle,
-                             reinterpret_cast<uint8_t *>(&_hidDescriptor.hid),
-                             Min<uint16_t>(sizeof(_hidDescriptor.hid),event.request.wLength));
-          }
-
-          break;
-
-        case USB_REQ_GET_INTERFACE:
-          USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&this->_hidAltSetting,1);
-          break;
-
-        case USB_REQ_SET_INTERFACE:
-          this->_hidAltSetting=event.request.wValue;
-          break;
-
-        default:
-          break;
+        event.length=sizeof(this->_configurationDescriptor);
+        event.descriptor=reinterpret_cast<uint8_t *>(&this->_configurationDescriptor);
       }
     }
 
@@ -339,15 +288,21 @@ namespace stm32plus {
 
       // data must remain in scope until IRQ indicates transmission complete
 
-      static uint16_t data[3];
+      static uint8_t report[7];
+      uint16_t *ptr;
 
-      data[0]=channel1;
-      data[1]=channel2;
-      data[2]=channel3;
+      // serialized report has 1-byte id at the front, followed by actual data;
+
+      ptr=reinterpret_cast<uint16_t *>(&report[1]);
+
+      report[0]=1;
+      *ptr++=channel1;
+      *ptr++=channel2;
+      *ptr=channel3;
 
       return HidDeviceBase::hidSendReport(
           static_cast<const CustomAdcHidDeviceEndpoint<Device<TPhy>>&>(*this),
-          data,
+          report,
           CUSTOM_ADC_HID_REPORT_SIZE);
     }
   }

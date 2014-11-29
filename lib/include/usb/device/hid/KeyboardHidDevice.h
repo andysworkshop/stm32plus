@@ -18,6 +18,19 @@ namespace stm32plus {
     template<class TDevice> using KeyboardHidDeviceLedsEndpoint=InterruptOutEndpointFeature<2,TDevice>;
 
     /**
+     * Declare the structure that gets sent back when the host asks for the whole
+     * configuration descriptor
+     */
+
+    struct KeyboardConfigurationDescriptor {
+      ConfigurationDescriptor configuration;
+      InterfaceDescriptor interface;
+      HidClassDescriptor hid;
+      EndpointDescriptor inEndpoint;
+      EndpointDescriptor outEndpoint;
+    } __attribute__((packed));
+
+    /**
      * Derivation of HidDevice to handle a HID keyboard using the BOOT protocol. This device type
      * declares the following:
      *
@@ -44,15 +57,20 @@ namespace stm32plus {
      *   Byte0                   Kana  Compose  Scroll Lock Caps Lock  Num Lock
      */
 
-    template<class TPhy,template <class> class... Features>
-    class KeyboardHidDevice : public HidDevice<TPhy,
+     template<class TPhy,template <class> class... Features>
+     class KeyboardHidDevice : public HidDevice<TPhy,
+                                               KeyboardConfigurationDescriptor,
                                                KeyboardHidDeviceKeysEndpoint,
                                                KeyboardHidDeviceLedsEndpoint,
                                                Features...> {
 
        public:
 
-         typedef HidDevice<TPhy,KeyboardHidDeviceKeysEndpoint,KeyboardHidDeviceLedsEndpoint,Features...> HidDeviceBase;
+         typedef HidDevice<TPhy,
+                           KeyboardConfigurationDescriptor,
+                           KeyboardHidDeviceKeysEndpoint,
+                           KeyboardHidDeviceLedsEndpoint,
+                           Features...> HidDeviceBase;
 
          /**
           * Constants
@@ -81,21 +99,6 @@ namespace stm32plus {
 
       protected:
 
-        /**
-         * Declare the structure that gets sent back when the host asks for the whole
-         * configuration descriptor
-         */
-
-        struct KeyboardConfigurationDescriptor {
-          ConfigurationDescriptor configuration;
-          InterfaceDescriptor interface;
-          HidClassDescriptor hid;
-          EndpointDescriptor inEndpoint;
-          EndpointDescriptor outEndpoint;
-        } __attribute__((packed));
-
-        KeyboardConfigurationDescriptor _keyboardDescriptor;
-
         uint8_t _outReportBuffer[KEYBOARD_HID_LED_REPORT_SIZE];
 
       protected:
@@ -123,7 +126,8 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline KeyboardHidDevice<TPhy,Features...>::KeyboardHidDevice() {
+    inline KeyboardHidDevice<TPhy,Features...>::KeyboardHidDevice()
+      : HidDeviceBase(KeyboardReportDescriptor,sizeof(KeyboardReportDescriptor)) {
 
       // subscribe to USB events
 
@@ -166,45 +170,45 @@ namespace stm32plus {
 
       // set up the configuration descriptor (see constructor for defaults)
 
-      _keyboardDescriptor.configuration.wTotalLength=sizeof(_keyboardDescriptor);
-      _keyboardDescriptor.configuration.bNumInterfaces=1;
+      this->_configurationDescriptor.configuration.wTotalLength=sizeof(this->_configurationDescriptor);
+      this->_configurationDescriptor.configuration.bNumInterfaces=1;
 
       // if ConfigurationTextFeature is in the hierarchy then we've got a configuration string (compile-time check)
 
       if(std::is_base_of<ConfigurationTextFeature<Device<TPhy>>,KeyboardHidDevice<TPhy,Features...>>::value)
-        _keyboardDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
+        this->_configurationDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
 
       // set up the interface descriptor (see constructor for defaults)
 
-      _keyboardDescriptor.interface.bInterfaceNumber=0;
-      _keyboardDescriptor.interface.bNumEndpoints=2;
-      _keyboardDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
-      _keyboardDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::BOOT);
-      _keyboardDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::KEYBOARD);
+      this->_configurationDescriptor.interface.bInterfaceNumber=0;
+      this->_configurationDescriptor.interface.bNumEndpoints=2;
+      this->_configurationDescriptor.interface.bInterfaceClass=static_cast<uint8_t>(DeviceClass::HID);
+      this->_configurationDescriptor.interface.bInterfaceSubClass=static_cast<uint8_t>(HidSubClass::BOOT);
+      this->_configurationDescriptor.interface.bInterfaceProtocol=static_cast<uint8_t>(HidProtocol::KEYBOARD);
 
       // if InterfaceTextFeature is in the hierarchy then we've got an interface string (compile-time check)
 
       if(std::is_base_of<InterfaceTextFeature<Device<TPhy>>,KeyboardHidDevice<TPhy,Features...>>::value)
-        _keyboardDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
+        this->_configurationDescriptor.interface.iInterface=USBD_IDX_INTERFACE_STR;
 
       // set up the hid class descriptor (see constructor for defaults)
 
-      _keyboardDescriptor.hid.bNumDescriptors=1;
-      _keyboardDescriptor.hid.wItemLength=sizeof(KeyboardReportDescriptor);
+      this->_configurationDescriptor.hid.bNumDescriptors=1;
+      this->_configurationDescriptor.hid.wItemLength=sizeof(KeyboardReportDescriptor);
 
       // set up the IN endpoint descriptor
 
-      _keyboardDescriptor.inEndpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
-      _keyboardDescriptor.inEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      _keyboardDescriptor.inEndpoint.wMaxPacketSize=KEYBOARD_HID_KEYS_REPORT_SIZE;    // key reports are 8 bytes
-      _keyboardDescriptor.inEndpoint.bInterval=params.hid_keyboard_in_poll_interval;  // default is 10ms
+      this->_configurationDescriptor.inEndpoint.bEndpointAddress=EndpointDescriptor::IN | 1;
+      this->_configurationDescriptor.inEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
+      this->_configurationDescriptor.inEndpoint.wMaxPacketSize=KEYBOARD_HID_KEYS_REPORT_SIZE;    // key reports are 8 bytes
+      this->_configurationDescriptor.inEndpoint.bInterval=params.hid_keyboard_in_poll_interval;  // default is 10ms
 
       // set up the OUT endpoint descriptor
 
-      _keyboardDescriptor.outEndpoint.bEndpointAddress=EndpointDescriptor::OUT | 2;
-      _keyboardDescriptor.outEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      _keyboardDescriptor.outEndpoint.wMaxPacketSize=KEYBOARD_HID_LED_REPORT_SIZE;         // LED reports are 1 byte
-      _keyboardDescriptor.outEndpoint.bInterval=params.hid_keyboard_out_poll_interval;     // default is 10ms
+      this->_configurationDescriptor.outEndpoint.bEndpointAddress=EndpointDescriptor::OUT | 2;
+      this->_configurationDescriptor.outEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
+      this->_configurationDescriptor.outEndpoint.wMaxPacketSize=KEYBOARD_HID_LED_REPORT_SIZE;         // LED reports are 1 byte
+      this->_configurationDescriptor.outEndpoint.bInterval=params.hid_keyboard_out_poll_interval;     // default is 10ms
 
       // set up the qualifier descriptor (see constructor for defaults)
 
@@ -306,8 +310,8 @@ namespace stm32plus {
 
         // set up the values in the event
 
-        event.length=sizeof(_keyboardDescriptor);
-        event.descriptor=reinterpret_cast<uint8_t *>(&_keyboardDescriptor);
+        event.length=sizeof(this->_configurationDescriptor);
+        event.descriptor=reinterpret_cast<uint8_t *>(&this->_configurationDescriptor);
       }
     }
 
@@ -386,36 +390,6 @@ namespace stm32plus {
             break;
 
           default:
-            break;
-        }
-      }
-      else if((event.request.bmRequest & USB_REQ_TYPE_MASK)==USB_REQ_TYPE_STANDARD) {
-
-        switch(event.request.bRequest) {
-
-          case USB_REQ_GET_DESCRIPTOR:
-            if(event.request.wValue >> 8 == HidClassDescriptor::HID_REPORT_DESCRIPTOR) {
-
-              USBD_CtlSendData(&this->_deviceHandle,
-                               const_cast<uint8_t *>(KeyboardReportDescriptor),
-                               Min<uint16_t>(sizeof(KeyboardReportDescriptor),event.request.wLength));
-
-            } else if(event.request.wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
-
-              USBD_CtlSendData(&this->_deviceHandle,
-                               reinterpret_cast<uint8_t *>(&_keyboardDescriptor.hid),
-                               Min<uint16_t>(sizeof(_keyboardDescriptor.hid),event.request.wLength));
-
-            }
-
-            break;
-
-          case USB_REQ_GET_INTERFACE:
-            USBD_CtlSendData(&this->_deviceHandle,(uint8_t *)&this->_hidAltSetting,1);
-            break;
-
-          case USB_REQ_SET_INTERFACE:
-            this->_hidAltSetting=event.request.wValue;
             break;
         }
       }

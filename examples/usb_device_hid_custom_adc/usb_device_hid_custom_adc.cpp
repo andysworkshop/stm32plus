@@ -32,7 +32,8 @@ using namespace stm32plus::usb;
  *
  * This descriptor tells the host that we will send reports with an ID of #1 followed by a sequence
  * of 6 (REPORT_COUNT) 8-bit (REPORT_SIZE) data items. Therefore the actual packet sent to the host
- * will be 7 bytes long.
+ * will be 7 bytes long. It would be more true to the data to declare 3x12 bit data items and 4-bits
+ * of padding but keeping it all byte-oriented makes it easier to pack and unpack.
  */
 
 const uint8_t CustomAdcHidReportDescriptor[22] = {
