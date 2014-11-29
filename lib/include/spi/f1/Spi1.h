@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F1
+#error This class can only be used with the STM32F1 series
+#endif
+
 
 namespace stm32plus {
 
@@ -88,6 +93,8 @@ namespace stm32plus {
     Spi1_Remap1(const Parameters& params)
       : SpiPeripheral<Spi1Remap1PinPackage,PERIPHERAL_SPI1>(params),
         Features(static_cast<Spi&>(*this))... {
+
+      GPIO_PinRemapConfig(GPIO_Remap_SPI1,ENABLE);
     }
   };
 }

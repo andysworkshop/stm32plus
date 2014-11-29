@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F1
+#error This class can only be used with the STM32F1 series
+#endif
+
 
 namespace stm32plus {
 
@@ -57,7 +62,7 @@ namespace stm32plus {
     }
   };
 
-#if defined(STM32PLUS_F1_CL) || defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F1_CL)
 
   /**
    * NSS is on PA[15]. The others move to PB
@@ -89,6 +94,8 @@ namespace stm32plus {
     Spi3_Remap1(const Parameters& params)
       : SpiPeripheral<Spi3Remap1PinPackage,PERIPHERAL_SPI3>(params),
         Features(static_cast<Spi&>(*this))... {
+
+      GPIO_PinRemapConfig(GPIO_Remap_SPI3,ENABLE);
     }
   };
 #endif

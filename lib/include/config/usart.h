@@ -51,16 +51,20 @@
 
 // generic peripheral includes
 
-#include "usart/Usart1.h"
-#include "usart/Usart2.h"
-
 #if defined(STM32PLUS_F0)
+  #include "usart/f0/Usart1.h"
+  #include "usart/f0/Usart2.h"
+  #include "usart/f0/Usart3.h"
   #include "usart/f0/Usart2Remap2PinPackage.h"
 #else
-  #include "usart/Usart3.h"
   #include "usart/Uart4.h"
   #include "usart/Uart5.h"
+#endif
 
+#if defined(STM32PLUS_F1)
+  #include "usart/f1/Usart1.h"
+  #include "usart/f1/Usart2.h"
+  #include "usart/f1/Usart3.h"
 #endif
 
 // enable all interrupt handlers
@@ -85,6 +89,9 @@
 
   #define USE_USART6_INTERRUPT
 
+  #include "usart/f4/Usart1.h"
+  #include "usart/f4/Usart2.h"
+  #include "usart/f4/Usart3.h"
   #include "usart/f4/Usart6.h"
 
   #include "usart/features/f4/UsartInterruptFeature.h"
