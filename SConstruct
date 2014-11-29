@@ -144,6 +144,8 @@ if mcu=="f1hd":
   setFlags("m3","F1_HD")
 elif mcu=="f1cle":
   setFlags("m3","F1_CL_E")
+elif mcu=="f1md":
+  setFlags("m3","F1_MD")
 elif mcu=="f1mdvl":
   setFlags("m3","F1_MD_VL")
 elif mcu=="f4" or mcu=="f407":
@@ -205,8 +207,8 @@ libstm32plus=SConscript("lib/SConscript",
 env.Append(LIBS=[libstm32plus])
 
 # launch SConscript for the examples
-
-SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
+if mcu!="f1md":
+  SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
 
 # build the CMake helper
 
