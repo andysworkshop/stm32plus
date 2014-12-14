@@ -23,7 +23,8 @@ namespace stm32plus {
       IMAGE = 0x6,
       PRINTER = 0x7,
       MASS_STORAGE = 0x8,
-      HUB = 0x9
+      HUB = 0x9,
+      CDC_DATA
     };
   }
 }

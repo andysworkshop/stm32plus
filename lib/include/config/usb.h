@@ -49,6 +49,8 @@
   #include "usb/phy/InternalFsPhy.h"
   #include "usb/core/Core.h"
 
+  // device-level includes
+
   #include "usb/device/DescriptorHeader.h"
   #include "usb/device/ConfigurationDescriptor.h"
   #include "usb/device/InterfaceDescriptor.h"
@@ -57,6 +59,8 @@
   #include "usb/device/DeviceQualifierDescriptor.h"
   #include "usb/device/LanguageDescriptor.h"
   #include "usb/device/EndpointType.h"
+
+  // device event includes
 
   #include "usb/device/events/DeviceSdkNotifyEvent.h"
   #include "usb/device/events/DeviceSdkEndpointEvent.h"
@@ -87,6 +91,8 @@
   #include "usb/device/events/class/DeviceClassSdkSetupEvent.h"
   #include "usb/device/events/class/DeviceClassSdkSofEvent.h"
 
+  // device features
+
   #include "usb/device/Device.h"
   #include "usb/device/DeviceClass.h"
 
@@ -96,12 +102,16 @@
   #include "usb/device/features/endpoints/OutEndpointFeatureBase.h"
   #include "usb/device/features/endpoints/InterruptInEndpointFeature.h"
   #include "usb/device/features/endpoints/InterruptOutEndpointFeature.h"
+  #include "usb/device/features/endpoints/BulkInEndpointFeature.h"
+  #include "usb/device/features/endpoints/BulkOutEndpointFeature.h"
   #include "usb/device/features/StringFeatureBase.h"
   #include "usb/device/features/ManufacturerTextFeature.h"
   #include "usb/device/features/ProductTextFeature.h"
   #include "usb/device/features/SerialNumberTextFeature.h"
   #include "usb/device/features/ConfigurationTextFeature.h"
   #include "usb/device/features/InterfaceTextFeature.h"
+
+  // HID device includes
 
   #include "usb/device/hid/HidClassRequestType.h"
   #include "usb/device/hid/HidClassDescriptor.h"
@@ -115,6 +125,19 @@
   #include "usb/device/hid/KeyboardReportDescriptor.h"
   #include "usb/device/hid/MouseHidDevice.h"
   #include "usb/device/hid/KeyboardHidDevice.h"
+
+  // CDC device includes
+
+  #include "usb/device/cdc/CdcProtocol.h"
+  #include "usb/device/cdc/CdcSubClass.h"
+  #include "usb/device/cdc/CdcFunctionalDescriptor.h"
+  #include "usb/device/cdc/CdcHeaderFunctionalDescriptor.h"
+  #include "usb/device/cdc/CdcOneSlaveUnionFunctionalDescriptor.h"
+  #include "usb/device/cdc/CdcCallManagementFunctionalDescriptor.h"
+  #include "usb/device/cdc/CdcAbstractControlManagementFunctionalDescriptor.h"
+
+  #include "usb/device/cdc/CdcDevice.h"
+  #include "usb/device/cdc/ComPortCdcDevice.h"
 
 #endif
 

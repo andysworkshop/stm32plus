@@ -13,6 +13,7 @@ namespace stm32plus {
     /**
      * Template class for USB HID devices
      * @tparam TPhy the PHY implementation
+     * @tparam TConfigurationDescriptor A structure that holds the complete config descriptor
      * @tparam Features... The device feature classes
      */
 
@@ -88,7 +89,7 @@ namespace stm32plus {
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
     inline HidDevice<TPhy,TConfigurationDescriptor,Features...>::~HidDevice() {
 
-      // subscribe to USB events
+      // unsubscribe from USB events
 
       this->UsbEventSender.removeSubscriber(
           UsbEventSourceSlot::bind(this,&HidDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent)

@@ -77,6 +77,8 @@ namespace stm32plus {
         : header(sizeof(EndpointDescriptor),USB_DESC_TYPE_ENDPOINT) {
 
         static_assert(sizeof(EndpointDescriptor)==7,"Compiler error: sizeof(EndpointDescriptor)!=7");
+
+        bInterval=0;
       }
     } __attribute__((packed));
   }
