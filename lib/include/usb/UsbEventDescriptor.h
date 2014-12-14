@@ -58,6 +58,9 @@ namespace stm32plus {
 
         HID_KEYBOARD_LED_STATE,
 
+        CDC_DATA_RECEIVED,
+        CDC_CONTROL,
+
         USB_ERROR
       };
 

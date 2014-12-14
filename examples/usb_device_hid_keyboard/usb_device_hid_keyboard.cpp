@@ -5,7 +5,7 @@
  */
 
 #include "config/stm32plus.h"
-#include "config/usb.h"
+#include "config/usb/device/hid.h"
 #include "config/button.h"
 
 

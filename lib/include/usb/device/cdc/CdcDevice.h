@@ -36,9 +36,16 @@ namespace stm32plus {
 
       protected:
         TConfigurationDescriptor  _configurationDescriptor;
+        bool _txBusy;
+        uint8_t _opCode;
+        uint8_t _commandSize;
+
+      protected:
+        void onEvent(UsbEventDescriptor& event);
 
       public:
         CdcDevice();
+        ~CdcDevice();
 
         bool initialise(Parameters& params);
     };
@@ -52,6 +59,32 @@ namespace stm32plus {
     inline CdcDevice<TPhy,TConfigurationDescriptor,Features...>::CdcDevice()
       : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
         Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
+
+      // reset state
+
+      _txBusy=false;
+      _opCode=0;
+
+      // subscribe to USB events
+
+      this->UsbEventSender.insertSubscriber(
+          UsbEventSourceSlot::bind(this,&CdcDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent)
+        );
+    }
+
+
+    /**
+     * Destructor
+     */
+
+    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
+    inline CdcDevice<TPhy,TConfigurationDescriptor,Features...>::~CdcDevice() {
+
+      // unsubscribe from USB events
+
+      this->UsbEventSender.removeSubscriber(
+          UsbEventSourceSlot::bind(this,&CdcDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent)
+        );
     }
 
 
@@ -75,6 +108,32 @@ namespace stm32plus {
 
       USBD_RegisterClass(&this->_deviceHandle,static_cast<UsbEventSource *>(this));
       return true;
+    }
+
+
+    /**
+     * Event handler for device events
+     * @param event The event descriptor
+     */
+
+    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
+    __attribute__((noinline)) inline void CdcDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
+
+      // check for handled events
+
+      switch(event.eventType) {
+
+        case UsbEventDescriptor::EventType::CLASS_INIT:
+          _txBusy=false;
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_DATA_IN:
+          _txBusy=false;
+          break;
+
+        default:
+          break;
+      }
     }
   }
 }

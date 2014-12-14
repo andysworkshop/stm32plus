@@ -112,6 +112,7 @@ namespace stm32plus {
          uint16_t _maxOutPacketSize;
          scoped_array<uint8_t> _rxBuffer;
          scoped_array<uint8_t> _txBuffer;
+         uint8_t _cmdBuffer[MAX_COMMAND_EP_PACKET_SIZE];
          uint16_t _rxBufferSize;
 
       protected:
@@ -121,8 +122,7 @@ namespace stm32plus {
         void onCdcDeInit();
         void onCdcSetup(DeviceClassSdkSetupEvent& event);
         void onCdcGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event);
-        void onCdcDataOut();
-        void onCdcDataIn();
+        void onCdcDataOut(DeviceClassSdkDataOutEvent& event);
         void onCdcEp0RxReady();
 
       public:
@@ -294,11 +294,7 @@ namespace stm32plus {
           break;
 
         case UsbEventDescriptor::EventType::CLASS_DATA_OUT:
-          onCdcDataOut();
-          break;
-
-        case UsbEventDescriptor::EventType::CLASS_DATA_IN:
-          onCdcDataIn();
+          onCdcDataOut(static_cast<DeviceClassSdkDataOutEvent&>(event));
           break;
 
         case UsbEventDescriptor::EventType::CLASS_EP0_READY:
@@ -384,16 +380,17 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void ComPortCdcDevice<TPhy,Features...>::onCdcDataOut() {
-    }
+    inline void ComPortCdcDevice<TPhy,Features...>::onCdcDataOut(DeviceClassSdkDataOutEvent& event) {
 
+      uint32_t size;
 
-    /**
-     * Data in event
-     */
+      // get the received size
 
-    template<class TPhy,template <class> class... Features>
-    inline void ComPortCdcDevice<TPhy,Features...>::onCdcDataIn() {
+      size=USBD_LL_GetRxDataSize(&this->_deviceHandle,event.endpointNumber);
+
+      // notify the application code
+
+      this->UsbEventSender.raiseEvent(CdcDataReceivedEvent(_rxBuffer.get(),size));
     }
 
 
@@ -403,6 +400,14 @@ namespace stm32plus {
 
     template<class TPhy,template <class> class... Features>
     inline void ComPortCdcDevice<TPhy,Features...>::onCdcEp0RxReady() {
+
+      if(this->_opCode!=0xff) {
+
+        // notify the application
+
+        this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,_cmdBuffer,this->_commandSize));
+        this->_opCode=0xff;
+      }
     }
 
 

@@ -5,7 +5,7 @@
  */
 
 #include "config/stm32plus.h"
-#include "config/usb.h"
+#include "config/usb/device/cdc.h"
 
 
 using namespace stm32plus;

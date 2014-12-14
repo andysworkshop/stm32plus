@@ -8,9 +8,9 @@
 
 #if defined(STM32PLUS_F4)
 
-  /**
-   * @file
-   * Include this config file to get access to the USB peripheral.
+  /*
+   * Don't include this file directly in application code, instead you should include the correct
+   * device class (config/usb/device/cdc.h, config/usb/device/hid.h etc...)
    */
 
   #define USE_OTG_FS_INTERRUPT
@@ -110,34 +110,6 @@
   #include "usb/device/features/SerialNumberTextFeature.h"
   #include "usb/device/features/ConfigurationTextFeature.h"
   #include "usb/device/features/InterfaceTextFeature.h"
-
-  // HID device includes
-
-  #include "usb/device/hid/HidClassRequestType.h"
-  #include "usb/device/hid/HidClassDescriptor.h"
-  #include "usb/device/hid/HidSubClass.h"
-  #include "usb/device/hid/HidProtocol.h"
-
-  #include "usb/device/hid/events/HidKeyboardLedStateEvent.h"
-
-  #include "usb/device/hid/HidDevice.h"
-  #include "usb/device/hid/MouseReportDescriptor.h"
-  #include "usb/device/hid/KeyboardReportDescriptor.h"
-  #include "usb/device/hid/MouseHidDevice.h"
-  #include "usb/device/hid/KeyboardHidDevice.h"
-
-  // CDC device includes
-
-  #include "usb/device/cdc/CdcProtocol.h"
-  #include "usb/device/cdc/CdcSubClass.h"
-  #include "usb/device/cdc/CdcFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcHeaderFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcOneSlaveUnionFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcCallManagementFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcAbstractControlManagementFunctionalDescriptor.h"
-
-  #include "usb/device/cdc/CdcDevice.h"
-  #include "usb/device/cdc/ComPortCdcDevice.h"
 
 #endif
 

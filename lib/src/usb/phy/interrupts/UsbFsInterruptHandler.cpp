@@ -8,7 +8,7 @@
 
 #if defined(STM32PLUS_F4)
 
-#include "config/usb.h"
+#include "config/usb/device/device.h"
 
 using namespace stm32plus::usb;
 

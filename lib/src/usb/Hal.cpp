@@ -5,10 +5,10 @@
  */
 
 #include "config/stm32plus.h"
+#include "config/timing.h"
+
 
 #if defined(STM32PLUS_F4)
-
-#include "config/usb.h"
 
 
 using namespace stm32plus;
