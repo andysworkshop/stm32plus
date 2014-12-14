@@ -80,6 +80,7 @@ namespace stm32plus {
       protected:
         void onEvent(UsbEventDescriptor& event);
         void onResetIrqEvent();
+        void onGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event);
 
       public:
         Device();
@@ -409,9 +410,26 @@ namespace stm32plus {
           }
           break;
 
+        case UsbEventDescriptor::EventType::CLASS_GET_DEVICE_QUALIFIER_DESCRIPTOR:
+          onGetDeviceQualifierDescriptor(static_cast<DeviceClassSdkGetDeviceQualifierDescriptorEvent&>(event));
+          break;
+
         default:
           break;
       }
+    }
+
+
+    /**
+     * Get the device qualifier descriptor
+     * @param event The event class to receive the descriptor pointer
+     */
+
+    template<class TPhy>
+    inline void Device<TPhy>::onGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event) {
+
+      event.descriptor=&_qualifierDescriptor;
+      event.length=sizeof(_qualifierDescriptor);
     }
 
 

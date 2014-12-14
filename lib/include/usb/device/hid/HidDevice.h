@@ -47,7 +47,6 @@ namespace stm32plus {
       protected:
         void onEvent(UsbEventDescriptor& event);
         void onHidSetupEvent(DeviceClassSdkSetupEvent& event);
-        void onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event);
 
       public:
         HidDevice(const uint8_t *reportDescriptor,uint16_t reportDescriptorLength);
@@ -144,10 +143,6 @@ namespace stm32plus {
           _busy=false;
           break;
 
-        case UsbEventDescriptor::EventType::CLASS_GET_DEVICE_QUALIFIER_DESCRIPTOR:
-          onHidGetDeviceQualifierDescriptor(static_cast<DeviceClassSdkGetDeviceQualifierDescriptorEvent&>(event));
-          break;
-
         default:
           break;
       }
@@ -222,19 +217,6 @@ namespace stm32plus {
             break;
         }
       }
-    }
-
-
-    /**
-     * Get the device qualifier descriptor
-     * @param event The event class to receive the descriptor pointer
-     */
-
-    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    inline void HidDevice<TPhy,TConfigurationDescriptor,Features...>::onHidGetDeviceQualifierDescriptor(DeviceClassSdkGetDeviceQualifierDescriptorEvent& event) {
-
-      event.descriptor=&this->_qualifierDescriptor;
-      event.length=sizeof(this->_qualifierDescriptor);
     }
 
 
