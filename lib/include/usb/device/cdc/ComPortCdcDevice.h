@@ -94,9 +94,9 @@ namespace stm32plus {
 
            uint16_t cdc_com_port_in_max_packet_size;       // default is 64 bytes
            uint16_t cdc_com_port_out_max_packet_size;      // default is 64 bytes
+           uint16_t cdc_com_port_rx_buffer_size;           // default is 1024
+           uint16_t cdc_com_port_tx_buffer_size;           // default is 1024
            uint8_t cdc_com_port_cmd_poll_interval;         // default is 16ms
-           uint8_t cdc_com_port_rx_buffer_size;            // default is 1024
-           uint8_t cdc_com_port_tx_buffer_size;            // default is 1024
 
            Parameters() {
              cdc_com_port_cmd_poll_interval=16;
@@ -225,7 +225,7 @@ namespace stm32plus {
       // set up the union functional descriptor
 
       this->_configurationDescriptor.cdcUnion.bMasterInterface=0;
-      this->_configurationDescriptor.cdcUnion.bSlaveInterface0=1;
+      this->_configurationDescriptor.cdcUnion.bSlaveInterface=1;
 
       // set up the command endpoint descriptor
 
@@ -337,7 +337,7 @@ namespace stm32plus {
 
       // prepare OUT endpoint to receive the first packet
 
-      USBD_LL_PrepareReceive(&this->_deviceHandle,DATA_OUT_EP_ADDRESS,_rxBuffer,_rxBufferSize);
+      USBD_LL_PrepareReceive(&this->_deviceHandle,DATA_OUT_EP_ADDRESS,_rxBuffer.get(),_rxBufferSize);
     }
 
 
@@ -381,12 +381,19 @@ namespace stm32plus {
 
     /**
      * Data out event
-     * @param epnum endpoint number
-     * @return
      */
 
     template<class TPhy,template <class> class... Features>
     inline void ComPortCdcDevice<TPhy,Features...>::onCdcDataOut() {
+    }
+
+
+    /**
+     * Data in event
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline void ComPortCdcDevice<TPhy,Features...>::onCdcDataIn() {
     }
 
 
@@ -405,7 +412,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void ComPortCdcDevice<TPhy,Features...>::onCdcSetup(DeviceClassSdkSetupEvent& event) {
+    inline void ComPortCdcDevice<TPhy,Features...>::onCdcSetup(DeviceClassSdkSetupEvent& /* event */) {
     }
   }
 }

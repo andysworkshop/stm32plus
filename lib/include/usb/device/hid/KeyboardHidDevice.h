@@ -318,8 +318,6 @@ namespace stm32plus {
 
     /**
      * Data out event
-     * @param epnum endpoint number
-     * @return
      */
 
     template<class TPhy,template <class> class... Features>
