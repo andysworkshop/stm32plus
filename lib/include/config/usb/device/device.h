@@ -54,6 +54,7 @@
   #include "usb/device/DescriptorHeader.h"
   #include "usb/device/ConfigurationDescriptor.h"
   #include "usb/device/InterfaceDescriptor.h"
+  #include "usb/device/InterfaceAssociationDescriptor.h"
   #include "usb/device/EndpointDescriptor.h"
   #include "usb/device/DeviceDescriptor.h"
   #include "usb/device/DeviceQualifierDescriptor.h"

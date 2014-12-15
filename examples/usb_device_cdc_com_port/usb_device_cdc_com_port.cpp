@@ -55,7 +55,7 @@ class UsbDeviceCdcComPortTest {
       usbParams.device_pid=0x0010;           // demo product ID
 
       usbParams.device_manufacturer_text="Andy's Workshop";   // see params.device_language_[ids/count] to change the languages
-      usbParams.device_product_text="stm32plus one-key keyboard";
+      usbParams.device_product_text="stm32plus virtual COM port";
       usbParams.device_serial_text="0123456789";
       usbParams.device_configuration_text="My configuration";
 

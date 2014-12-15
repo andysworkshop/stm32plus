@@ -25,6 +25,7 @@ namespace stm32plus {
 
     struct ComPortCdcConfigurationDescriptor {
       ConfigurationDescriptor configuration;
+      InterfaceAssociationDescriptor assoc;
 
       InterfaceDescriptor itf0;
       CdcHeaderFunctionalDescriptor cdcHeader;
@@ -174,11 +175,21 @@ namespace stm32plus {
 
       this->_configurationDescriptor.configuration.wTotalLength=sizeof(this->_configurationDescriptor);
       this->_configurationDescriptor.configuration.bNumInterfaces=2;
+      this->_configurationDescriptor.configuration.bmAttributes=0x80 | ConfigurationDescriptor::SELF_POWERED;
 
       // if ConfigurationTextFeature is in the hierarchy then we've got a configuration string (compile-time check)
 
       if(std::is_base_of<ConfigurationTextFeature<Device<TPhy>>,ComPortCdcDevice<TPhy,Features...>>::value)
         this->_configurationDescriptor.configuration.iConfiguration=USBD_IDX_CONFIG_STR;
+
+      // set up the interface association descriptor
+
+      this->_configurationDescriptor.assoc.bFirstInterface=0;
+      this->_configurationDescriptor.assoc.bInterfaceCount=2;
+      this->_configurationDescriptor.assoc.bFunctionClass=2;
+      this->_configurationDescriptor.assoc.bFunctionSubClass=2;
+      this->_configurationDescriptor.assoc.bFunctionProtocol=1;
+      this->_configurationDescriptor.assoc.iFunction=0;
 
       // set up interface descriptor 0 (see constructor for defaults)
 
