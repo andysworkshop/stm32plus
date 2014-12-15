@@ -10,8 +10,13 @@
 namespace stm32plus {
   namespace usb {
 
+
     /**
-     * Template base class for USB CDC devices
+     * Template base class for USB CDC devices. The usual control endpoint 0 is inherited
+     * as is the mandatory IN interrupt endpoint for notifications to the host at address 1.
+     * Subclasses should provide the endpoints they require in the features list. e.g. bulk
+     * IN/OUT endpoints.
+     *
      * @tparam TPhy the PHY implementation
      * @tparam TConfigurationDescriptor A structure that holds the complete config descriptor
      * @tparam Features... The device feature classes
@@ -20,6 +25,7 @@ namespace stm32plus {
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
     class CdcDevice : public Device<TPhy>,
                       public ControlEndpointFeature<Device<TPhy>>,
+                      public InterruptInEndpointFeature<1,Device<TPhy>>,
                       public Features<Device<TPhy>>... {
 
 
@@ -31,17 +37,35 @@ namespace stm32plus {
 
         struct Parameters : Device<TPhy>::Parameters,
                             ControlEndpointFeature<Device<TPhy>>::Parameters,
+                            InterruptInEndpointFeature<1,Device<TPhy>>::Parameters,
                             Features<Device<TPhy>>::Parameters... {
+
+          uint8_t cdc_cmd_poll_interval;         // default is 16ms
+
+          Parameters() {
+            cdc_cmd_poll_interval=16;
+          }
         };
 
       protected:
+
+        enum {
+          COMMAND_EP_ADDRESS = EndpointDescriptor::IN | 1     // command endpoint address
+        };
+
+        enum {
+          MAX_COMMAND_EP_PACKET_SIZE = 16,                    // command max packet size
+        };
+
         TConfigurationDescriptor  _configurationDescriptor;
         bool _txBusy;
         uint8_t _opCode;
         uint8_t _commandSize;
+        uint8_t _commandBuffer[MAX_COMMAND_EP_PACKET_SIZE];
 
       protected:
         void onEvent(UsbEventDescriptor& event);
+        void onCdcSetup(DeviceClassSdkSetupEvent& event);
 
       public:
         CdcDevice();
@@ -58,6 +82,7 @@ namespace stm32plus {
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
     inline CdcDevice<TPhy,TConfigurationDescriptor,Features...>::CdcDevice()
       : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
+        InterruptInEndpointFeature<1,Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
         Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
 
       // reset state
@@ -104,6 +129,13 @@ namespace stm32plus {
          !RecursiveBoolInitWithParams<CdcDevice,Features<Device<TPhy>>...>::tinit(this,params))
         return false;
 
+      // set up the command endpoint descriptor
+
+      _configurationDescriptor.commandEndpoint.bEndpointAddress=COMMAND_EP_ADDRESS;
+      _configurationDescriptor.commandEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
+      _configurationDescriptor.commandEndpoint.wMaxPacketSize=MAX_COMMAND_EP_PACKET_SIZE;     // max packet size
+      _configurationDescriptor.commandEndpoint.bInterval=params.cdc_cmd_poll_interval;        // default is 16ms
+
       // link UsbEventSource class into the SDK structure
 
       USBD_RegisterClass(&this->_deviceHandle,static_cast<UsbEventSource *>(this));
@@ -125,14 +157,68 @@ namespace stm32plus {
 
         case UsbEventDescriptor::EventType::CLASS_INIT:
           _txBusy=false;
+          USBD_LL_OpenEP(&this->_deviceHandle,COMMAND_EP_ADDRESS,EndpointDescriptor::INTERRUPT,MAX_COMMAND_EP_PACKET_SIZE);
+          break;
+
+        case UsbEventDescriptor::EventType::CLASS_DEINIT:
+          USBD_LL_CloseEP(&this->_deviceHandle,COMMAND_EP_ADDRESS);
+          _txBusy=false;
           break;
 
         case UsbEventDescriptor::EventType::CLASS_DATA_IN:
           _txBusy=false;
           break;
 
+        case UsbEventDescriptor::EventType::CLASS_SETUP:
+          onCdcSetup(static_cast<DeviceClassSdkSetupEvent&>(event));
+          break;
+
         default:
           break;
+      }
+    }
+
+
+    /**
+     * Handle the CDC setup requests
+     * @param event the event containg value being requested
+     */
+
+    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
+    inline void CdcDevice<TPhy,TConfigurationDescriptor,Features...>::onCdcSetup(DeviceClassSdkSetupEvent& event) {
+
+      // interested in class requests
+
+      if((event.request.bmRequest & USB_REQ_TYPE_MASK)!=USB_REQ_TYPE_CLASS)
+        return;
+
+      if(event.request.wLength) {
+
+        if((event.request.bmRequest & 0x80)!=0) {
+
+          // raise the control event
+
+          this->UsbEventSender.raiseEvent(
+              CdcControlEvent(event.request.bRequest,_commandBuffer,event.request.wLength)
+            );
+
+          // send the message on the control endpoint
+
+          USBD_CtlSendData(&this->_deviceHandle,_commandBuffer,event.request.wLength);
+        }
+        else {
+
+          _opCode=event.request.bRequest;
+          _commandSize=event.request.wLength;
+
+          USBD_CtlPrepareRx(&this->_deviceHandle,_commandBuffer,event.request.wLength);
+        }
+      }
+      else {
+
+        // raise the control event
+
+        this->UsbEventSender.raiseEvent(CdcControlEvent(event.request.bRequest,nullptr,0));
       }
     }
   }

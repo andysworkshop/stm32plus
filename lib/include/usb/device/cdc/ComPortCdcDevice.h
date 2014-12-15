@@ -11,10 +11,10 @@ namespace stm32plus {
   namespace usb {
 
     /**
-     * Endpoints used by this device
+     * Endpoints used by this device. The interrupt IN endpoint for notifying the host
+     * is supplied by the parent class
      */
 
-    template<class TDevice> using ComPortCdcDeviceCommandEndpoint=InterruptInEndpointFeature<1,TDevice>;
     template<class TDevice> using ComPortCdcDeviceDataInEndpoint=BulkInEndpointFeature<2,TDevice>;
     template<class TDevice> using ComPortCdcDeviceDataOutEndpoint=BulkOutEndpointFeature<3,TDevice>;
 
@@ -52,7 +52,6 @@ namespace stm32plus {
      template<class TPhy,template <class> class... Features>
      class ComPortCdcDevice : public CdcDevice<TPhy,
                                                ComPortCdcConfigurationDescriptor,
-                                               ComPortCdcDeviceCommandEndpoint,
                                                ComPortCdcDeviceDataInEndpoint,
                                                ComPortCdcDeviceDataOutEndpoint,
                                                Features...> {
@@ -61,30 +60,9 @@ namespace stm32plus {
 
          typedef CdcDevice<TPhy,
                            ComPortCdcConfigurationDescriptor,
-                           ComPortCdcDeviceCommandEndpoint,
                            ComPortCdcDeviceDataInEndpoint,
                            ComPortCdcDeviceDataOutEndpoint,
                            Features...> CdcDeviceBase;
-
-         /**
-          * Constants
-          */
-
-         enum {
-           MAX_COMMAND_EP_PACKET_SIZE = 8,
-         };
-
-
-         /**
-          * Endpoint addresses
-          */
-
-         enum {
-           DATA_IN_EP_ADDRESS = EndpointDescriptor::IN | 1,
-           DATA_OUT_EP_ADDRESS = EndpointDescriptor::OUT | 1,
-           COMMAND_EP_ADDRESS = EndpointDescriptor::IN | 2
-         };
-
 
          /**
           * Customisable parameters for this CDC device
@@ -96,10 +74,8 @@ namespace stm32plus {
            uint16_t cdc_com_port_out_max_packet_size;      // default is 64 bytes
            uint16_t cdc_com_port_rx_buffer_size;           // default is 1024
            uint16_t cdc_com_port_tx_buffer_size;           // default is 1024
-           uint8_t cdc_com_port_cmd_poll_interval;         // default is 16ms
 
            Parameters() {
-             cdc_com_port_cmd_poll_interval=16;
              cdc_com_port_in_max_packet_size=64;
              cdc_com_port_out_max_packet_size=64;
              cdc_com_port_rx_buffer_size=1024;
@@ -108,11 +84,16 @@ namespace stm32plus {
          };
 
        protected:
+
+         enum {
+           DATA_IN_EP_ADDRESS = EndpointDescriptor::IN | 2,     // data in endpoint address
+           DATA_OUT_EP_ADDRESS = EndpointDescriptor::OUT | 3,   // data out endpoint address
+         };
+
          uint16_t _maxInPacketSize;
          uint16_t _maxOutPacketSize;
          scoped_array<uint8_t> _rxBuffer;
          scoped_array<uint8_t> _txBuffer;
-         uint8_t _cmdBuffer[MAX_COMMAND_EP_PACKET_SIZE];
          uint16_t _rxBufferSize;
 
       protected:
@@ -120,7 +101,6 @@ namespace stm32plus {
 
         void onCdcInit();
         void onCdcDeInit();
-        void onCdcSetup(DeviceClassSdkSetupEvent& event);
         void onCdcGetConfigurationDescriptor(DeviceClassSdkGetConfigurationDescriptorEvent& event);
         void onCdcDataOut(DeviceClassSdkDataOutEvent& event);
         void onCdcEp0RxReady();
@@ -227,13 +207,6 @@ namespace stm32plus {
       this->_configurationDescriptor.cdcUnion.bMasterInterface=0;
       this->_configurationDescriptor.cdcUnion.bSlaveInterface=1;
 
-      // set up the command endpoint descriptor
-
-      this->_configurationDescriptor.commandEndpoint.bEndpointAddress=COMMAND_EP_ADDRESS;
-      this->_configurationDescriptor.commandEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      this->_configurationDescriptor.inEndpoint.wMaxPacketSize=MAX_COMMAND_EP_PACKET_SIZE;                       // max packet size is 8 bytes
-      this->_configurationDescriptor.inEndpoint.bInterval=params.cdc_com_port_cmd_poll_interval;  // default is 16ms
-
       // set up interface descriptor 1 (see constructor for defaults)
 
       this->_configurationDescriptor.itf1.bInterfaceNumber=1;
@@ -305,10 +278,6 @@ namespace stm32plus {
           onCdcGetConfigurationDescriptor(static_cast<DeviceClassSdkGetConfigurationDescriptorEvent&>(event));
           break;
 
-        case UsbEventDescriptor::EventType::CLASS_SETUP:
-          onCdcSetup(static_cast<DeviceClassSdkSetupEvent&>(event));
-          break;
-
         default:
           break;
       }
@@ -327,10 +296,6 @@ namespace stm32plus {
       USBD_LL_OpenEP(&this->_deviceHandle,DATA_IN_EP_ADDRESS,EndpointDescriptor::BULK,_maxInPacketSize);
       USBD_LL_OpenEP(&this->_deviceHandle,DATA_OUT_EP_ADDRESS,EndpointDescriptor::BULK,_maxOutPacketSize);
 
-      // open command endpoint
-
-      USBD_LL_OpenEP(&this->_deviceHandle,COMMAND_EP_ADDRESS,EndpointDescriptor::INTERRUPT,MAX_COMMAND_EP_PACKET_SIZE);
-
       // prepare OUT endpoint to receive the first packet
 
       USBD_LL_PrepareReceive(&this->_deviceHandle,DATA_OUT_EP_ADDRESS,_rxBuffer.get(),_rxBufferSize);
@@ -348,10 +313,6 @@ namespace stm32plus {
 
       USBD_LL_CloseEP(&this->_deviceHandle,DATA_IN_EP_ADDRESS);
       USBD_LL_CloseEP(&this->_deviceHandle,DATA_OUT_EP_ADDRESS);
-
-      // close command endpoint
-
-      USBD_LL_CloseEP(&this->_deviceHandle,COMMAND_EP_ADDRESS);
     }
 
 
@@ -405,19 +366,9 @@ namespace stm32plus {
 
         // notify the application
 
-        this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,_cmdBuffer,this->_commandSize));
+        this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,this->_commandBuffer,this->_commandSize));
         this->_opCode=0xff;
       }
-    }
-
-
-    /**
-     * Handle the CDC setup requests
-     * @param event the event containg value being requested
-     */
-
-    template<class TPhy,template <class> class... Features>
-    inline void ComPortCdcDevice<TPhy,Features...>::onCdcSetup(DeviceClassSdkSetupEvent& /* event */) {
     }
   }
 }
