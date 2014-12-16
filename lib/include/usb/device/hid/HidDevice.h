@@ -245,7 +245,11 @@ namespace stm32plus {
       // OK (XXX: check this for state mgmt if USBD_LL_Transmit fails)
 
       _busy=true;
-      return endpoint.endpointTransmit(data,len);
+      if(endpoint.endpointTransmit(data,len))
+        return true;
+
+      _busy=false;
+      return false;
     }
 
 

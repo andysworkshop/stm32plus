@@ -58,7 +58,7 @@ namespace stm32plus {
         };
 
         TConfigurationDescriptor  _configurationDescriptor;
-        bool _txBusy;
+        volatile bool _txBusy;
         uint8_t _opCode;
         uint8_t _commandSize;
         uint8_t _commandBuffer[MAX_COMMAND_EP_PACKET_SIZE];
@@ -72,6 +72,9 @@ namespace stm32plus {
         ~CdcDevice();
 
         bool initialise(Parameters& params);
+
+        bool isTransmitting() const;
+        bool cdcTransmit(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len);
     };
 
 
@@ -220,6 +223,47 @@ namespace stm32plus {
 
         this->UsbEventSender.raiseEvent(CdcControlEvent(event.request.bRequest,nullptr,0));
       }
+    }
+
+
+    /**
+     * Check if a transmit has been requested but is not yet complete
+     * @return true if a transmit is in progress
+     */
+
+    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
+    inline bool CdcDevice<TPhy,TConfigurationDescriptor,Features...>::isTransmitting() const {
+      return _txBusy;
+    }
+
+
+    /**
+     * Start a transmit. Will not block. If a transmit is in progress then it will fail and
+     * set an E_BUSY error code.
+     * @return true if it worked.
+     */
+
+    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
+    inline bool CdcDevice<TPhy,TConfigurationDescriptor,Features...>::cdcTransmit(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) {
+
+      // must be configured
+
+      if(this->_deviceHandle.dev_state!=USBD_STATE_CONFIGURED)
+        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_UNCONFIGURED);
+
+      // must be idle
+
+      if(_txBusy)
+        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_BUSY);
+
+      // mark as busy and transmit
+
+      _txBusy=true;
+      if(endpoint.endpointTransmit(data,len))
+        return true;
+
+      _txBusy=false;
+      return false;
     }
   }
 }

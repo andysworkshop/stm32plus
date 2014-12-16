@@ -18,6 +18,7 @@ namespace stm32plus {
     template<class TDevice> using ComPortCdcDeviceDataInEndpoint=BulkInEndpointFeature<2,TDevice>;
     template<class TDevice> using ComPortCdcDeviceDataOutEndpoint=BulkOutEndpointFeature<3,TDevice>;
 
+
     /**
      * Declare the structure that gets sent back when the host asks for the whole
      * configuration descriptor
@@ -39,6 +40,7 @@ namespace stm32plus {
       EndpointDescriptor inEndpoint;
 
     } __attribute__((packed));
+
 
     /**
      * Derivation of CdcDevice to provide a CDC virtual COM port device.
@@ -74,13 +76,11 @@ namespace stm32plus {
            uint16_t cdc_com_port_in_max_packet_size;       // default is 64 bytes
            uint16_t cdc_com_port_out_max_packet_size;      // default is 64 bytes
            uint16_t cdc_com_port_rx_buffer_size;           // default is 1024
-           uint16_t cdc_com_port_tx_buffer_size;           // default is 1024
 
            Parameters() {
              cdc_com_port_in_max_packet_size=64;
              cdc_com_port_out_max_packet_size=64;
              cdc_com_port_rx_buffer_size=1024;
-             cdc_com_port_tx_buffer_size=1024;
            }
          };
 
@@ -94,7 +94,6 @@ namespace stm32plus {
          uint16_t _maxInPacketSize;
          uint16_t _maxOutPacketSize;
          scoped_array<uint8_t> _rxBuffer;
-         scoped_array<uint8_t> _txBuffer;
          uint16_t _rxBufferSize;
 
       protected:
@@ -111,6 +110,9 @@ namespace stm32plus {
         ~ComPortCdcDevice();
 
         bool initialise(Parameters& params);
+
+        bool cdcTransmit(const void *data,uint16_t len);
+        void cdcBeginReceive();
     };
 
 
@@ -163,7 +165,6 @@ namespace stm32plus {
       // create TX/RX buffers
 
       _rxBuffer.reset(new uint8_t[params.cdc_com_port_rx_buffer_size]);
-      _txBuffer.reset(new uint8_t[params.cdc_com_port_tx_buffer_size]);
 
       // remember some params
 
@@ -296,7 +297,7 @@ namespace stm32plus {
 
 
     /**
-     * CDC initialisation
+     * CDC initialisation. Opens the data endpoints and initiates the first beginReceive() call.
      */
 
     template<class TPhy,template <class> class... Features>
@@ -309,7 +310,7 @@ namespace stm32plus {
 
       // prepare OUT endpoint to receive the first packet
 
-      USBD_LL_PrepareReceive(&this->_deviceHandle,DATA_OUT_EP_ADDRESS,_rxBuffer.get(),_rxBufferSize);
+      cdcBeginReceive();
     }
 
 
@@ -380,6 +381,47 @@ namespace stm32plus {
         this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,this->_commandBuffer,this->_commandSize));
         this->_opCode=0xff;
       }
+    }
+
+
+    /**
+     * Transmit some data. This is a blocking call. It will wait until any previous
+     * transmission is complete before sending the data. 'data' must remain in scope
+     * until the transmission has completed.
+     * @param data The data buffer to send
+     * @param len The size of the data buffer
+     * @return true if it worked
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool ComPortCdcDevice<TPhy,Features...>::cdcTransmit(const void *data,uint16_t len) {
+
+      // wait for previous send to complete
+
+      while(this->isTransmitting());
+
+      // send this data
+
+      return this->cdcTransmit(
+          static_cast<const ComPortCdcDeviceDataInEndpoint<Device<TPhy>>&>(*this),
+          data,
+          len);
+    }
+
+
+    /**
+     * Prepare to receive the next packet. This must be called after each packet has been
+     * received and processed to initiate the reception of the next packet.
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline void ComPortCdcDevice<TPhy,Features...>::cdcBeginReceive() {
+
+      USBD_LL_PrepareReceive(
+          &this->_deviceHandle,
+          DATA_OUT_EP_ADDRESS,
+          _rxBuffer.get(),
+          _rxBufferSize);
     }
   }
 }
