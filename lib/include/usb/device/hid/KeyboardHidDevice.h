@@ -323,17 +323,17 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline void KeyboardHidDevice<TPhy,Features...>::onHidDataOut() {
 
-      // call the prepare-receive callback
+      // fire the LED state event
+
+      this->UsbEventSender.raiseEvent(HidKeyboardLedStateEvent(_outReportBuffer[0]));
+
+      // call the prepare-receive method to initiate the next read
 
       USBD_LL_PrepareReceive(
           &this->_deviceHandle,
           EndpointDescriptor::OUT | 2,
           _outReportBuffer,
           sizeof(_outReportBuffer));
-
-      // fire the LED state event
-
-      this->UsbEventSender.raiseEvent(HidKeyboardLedStateEvent(_outReportBuffer[0]));
     }
 
 

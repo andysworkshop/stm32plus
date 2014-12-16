@@ -111,8 +111,8 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool cdcTransmit(const void *data,uint16_t len);
-        void cdcBeginReceive();
+        bool transmit(const void *data,uint16_t len);
+        void beginReceive();
     };
 
 
@@ -310,7 +310,7 @@ namespace stm32plus {
 
       // prepare OUT endpoint to receive the first packet
 
-      cdcBeginReceive();
+      beginReceive();
     }
 
 
@@ -394,7 +394,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool ComPortCdcDevice<TPhy,Features...>::cdcTransmit(const void *data,uint16_t len) {
+    inline bool ComPortCdcDevice<TPhy,Features...>::transmit(const void *data,uint16_t len) {
 
       // wait for previous send to complete
 
@@ -415,7 +415,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void ComPortCdcDevice<TPhy,Features...>::cdcBeginReceive() {
+    inline void ComPortCdcDevice<TPhy,Features...>::beginReceive() {
 
       USBD_LL_PrepareReceive(
           &this->_deviceHandle,

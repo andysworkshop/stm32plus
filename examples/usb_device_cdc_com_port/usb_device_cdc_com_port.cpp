@@ -38,10 +38,23 @@ class UsbDeviceCdcComPortTest {
 
 
     /*
+     * Flag to communicate between IRQ and non-IRQ code and the message to send back
+     */
+
+    volatile bool _responseReady;
+    char _message[16];
+
+
+    /*
      * Run the example
      */
 
     void run() {
+
+      // initialise
+
+      _responseReady=false;
+      strcpy(_message,"You pressed: X\r\n");
 
       /*
        * set up the parameters for the USB CDC device. Do not attempt to reuse vid/pid combinations unless
@@ -59,6 +72,8 @@ class UsbDeviceCdcComPortTest {
       usbParams.device_serial_text="0123456789";
       usbParams.device_configuration_text="My configuration";
 
+      usbParams.cdc_com_port_rx_buffer_size=16;  // default of 1Kb is far too big for this app
+
       /*
        * Declare the USB object - this will initialise internal variables but will not
        * start the peripheral
@@ -73,6 +88,13 @@ class UsbDeviceCdcComPortTest {
       usb.UsbErrorEventSender.insertSubscriber(UsbErrorEventSourceSlot::bind(this,&UsbDeviceCdcComPortTest::onError));
 
       /*
+       * Subscribe to USB events - data received from the host will be notified to us
+       * asynchronously.
+       */
+
+      usb.UsbEventSender.insertSubscriber(UsbEventSourceSlot::bind(this,&UsbDeviceCdcComPortTest::onEvent));
+
+      /*
        * Start the USB peripheral. It will run asynchronously. There is no requirement
        * for the parameters to remain in scope after the initialise call
        */
@@ -80,8 +102,65 @@ class UsbDeviceCdcComPortTest {
       if(!usb.initialise(usbParams))
         for(;;);      // onError() has already locked up
 
+      // loop forever, or until an error interrupts us
+
       for(;;) {
+
+        // block until a response is ready to send
+
+        while(!_responseReady);
+        _responseReady=false;
+
+        // send it and wait until done
+
+        usb.transmit(_message,sizeof(_message));
+        while(usb.isTransmitting());
+
+        // we're ready to receive the next packet from the host
+
+        usb.beginReceive();
       }
+    }
+
+
+    /**
+     * Event callback from the USB stack. Lots of stuff will come through here but
+     * we're only interested in data arriving from the host and control messages
+     */
+
+    void onEvent(UsbEventDescriptor& ued) {
+
+      // reject all events that we don't care about
+
+      if(ued.eventType==UsbEventDescriptor::EventType::CDC_DATA_RECEIVED)
+        onData(static_cast<CdcDataReceivedEvent&>(ued));
+      else if(ued.eventType==UsbEventDescriptor::EventType::CDC_CONTROL)
+        onControl(static_cast<CdcControlEvent&>(ued));
+    }
+
+
+    /**
+     * Control event received from the host
+     */
+
+    void onControl(CdcControlEvent& event) {
+      //XXX: move txBusy to inEndpointFeatureBase
+    }
+
+
+    /**
+     * Data received from the host
+     */
+
+    void onData(CdcDataReceivedEvent& event) {
+
+      // add character to the message to send
+
+      _message[13]=event.data[0];
+
+      // signal to the main loop that a response is ready
+
+      _responseReady=true;
     }
 
 
