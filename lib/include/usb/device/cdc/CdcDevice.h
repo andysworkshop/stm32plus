@@ -184,7 +184,7 @@ namespace stm32plus {
 
         if((event.request.bmRequest & 0x80)!=0) {
 
-          // raise the control event
+          // raise the control event - this one requires a response
 
           this->UsbEventSender.raiseEvent(
               CdcControlEvent(static_cast<CdcControlCommand>(event.request.bRequest),
@@ -192,11 +192,13 @@ namespace stm32plus {
                               event.request.wLength)
             );
 
-          // send the message on the control endpoint
+          // send the response message on the control endpoint
 
           USBD_CtlSendData(&this->_deviceHandle,_commandBuffer,event.request.wLength);
         }
         else {
+
+          // there is incoming data associated with this
 
           _opCode=static_cast<CdcControlCommand>(event.request.bRequest);
           _commandSize=event.request.wLength;
@@ -206,7 +208,7 @@ namespace stm32plus {
       }
       else {
 
-        // raise the control event
+        // raise the control event - no response is expected
 
         this->UsbEventSender.raiseEvent(
             CdcControlEvent(
