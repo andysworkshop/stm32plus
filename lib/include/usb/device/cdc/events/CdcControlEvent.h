@@ -18,11 +18,11 @@ namespace stm32plus {
 
     struct CdcControlEvent : UsbEventDescriptor {
 
-      uint8_t opcode;
+      CdcControlCommand opcode;
       const uint8_t *data;
       uint8_t size;
 
-      CdcControlEvent(uint8_t op,const uint8_t *d,uint8_t s)
+      CdcControlEvent(CdcControlCommand op,const uint8_t *d,uint8_t s)
         : UsbEventDescriptor(EventType::CDC_CONTROL),
           opcode(op),
           data(d),

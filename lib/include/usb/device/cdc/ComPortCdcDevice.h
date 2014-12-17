@@ -303,6 +303,10 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline void ComPortCdcDevice<TPhy,Features...>::onCdcInit() {
 
+      // reset state
+
+      this->_opCode=CdcControlCommand::NONE;
+
       // open data endpoints
 
       USBD_LL_OpenEP(&this->_deviceHandle,DATA_IN_EP_ADDRESS,EndpointDescriptor::BULK,_maxInPacketSize);
@@ -374,12 +378,12 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline void ComPortCdcDevice<TPhy,Features...>::onCdcEp0RxReady() {
 
-      if(this->_opCode!=0xff) {
+      if(this->_opCode!=CdcControlCommand::NONE) {
 
         // notify the application
 
         this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,this->_commandBuffer,this->_commandSize));
-        this->_opCode=0xff;
+        this->_opCode=CdcControlCommand::NONE;
       }
     }
 

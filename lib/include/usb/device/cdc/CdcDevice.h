@@ -58,7 +58,7 @@ namespace stm32plus {
         };
 
         TConfigurationDescriptor  _configurationDescriptor;
-        uint8_t _opCode;
+        CdcControlCommand _opCode;
         uint8_t _commandSize;
         uint8_t _commandBuffer[MAX_COMMAND_EP_PACKET_SIZE];
 
@@ -83,10 +83,6 @@ namespace stm32plus {
       : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
         InterruptInEndpointFeature<1,Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
         Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
-
-      // reset state
-
-      _opCode=0;
 
       // subscribe to USB events
 
@@ -191,7 +187,9 @@ namespace stm32plus {
           // raise the control event
 
           this->UsbEventSender.raiseEvent(
-              CdcControlEvent(event.request.bRequest,_commandBuffer,event.request.wLength)
+              CdcControlEvent(static_cast<CdcControlCommand>(event.request.bRequest),
+                              _commandBuffer,
+                              event.request.wLength)
             );
 
           // send the message on the control endpoint
@@ -200,7 +198,7 @@ namespace stm32plus {
         }
         else {
 
-          _opCode=event.request.bRequest;
+          _opCode=static_cast<CdcControlCommand>(event.request.bRequest);
           _commandSize=event.request.wLength;
 
           USBD_CtlPrepareRx(&this->_deviceHandle,_commandBuffer,event.request.wLength);
@@ -210,7 +208,11 @@ namespace stm32plus {
 
         // raise the control event
 
-        this->UsbEventSender.raiseEvent(CdcControlEvent(event.request.bRequest,nullptr,0));
+        this->UsbEventSender.raiseEvent(
+            CdcControlEvent(
+                static_cast<CdcControlCommand>(event.request.bRequest),
+                nullptr,
+                0));
       }
     }
   }

@@ -143,7 +143,32 @@ class UsbDeviceCdcComPortTest {
      */
 
     void onControl(CdcControlEvent& event) {
-      //XXX: move txBusy to inEndpointFeatureBase
+
+      switch(event.opcode) {
+
+        /*
+         * We don't process these. They're enumerated here so you can
+         * see what's available.
+         */
+
+        case CdcControlCommand::SEND_ENCAPSULATED_COMMAND:
+        case CdcControlCommand::GET_ENCAPSULATED_RESPONSE:
+        case CdcControlCommand::SET_COMM_FEATURE:
+        case CdcControlCommand::GET_COMM_FEATURE:
+        case CdcControlCommand::CLEAR_COMM_FEATURE:
+        case CdcControlCommand::SET_CONTROL_LINE_STATE:
+        case CdcControlCommand::SEND_BREAK:
+          break;
+
+        case CdcControlCommand::SET_LINE_CODING:
+          break;
+
+        case CdcControlCommand::GET_LINE_CODING:
+          break;
+
+        default:
+          break;
+      }
     }
 
 
