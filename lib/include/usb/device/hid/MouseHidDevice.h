@@ -92,7 +92,8 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool mouseSendReport(uint8_t buttons,int8_t x,int8_t y);
+        bool sendMouseReport(uint8_t buttons,int8_t x,int8_t y);
+        bool isTransmitting() const;
     };
 
 
@@ -273,7 +274,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool MouseHidDevice<TPhy,Features...>::mouseSendReport(uint8_t buttons,int8_t x,int8_t y) {
+    inline bool MouseHidDevice<TPhy,Features...>::sendMouseReport(uint8_t buttons,int8_t x,int8_t y) {
 
       // data must remain in scope until IRQ indicates transmission complete
 
@@ -283,10 +284,24 @@ namespace stm32plus {
       data[1]=x;
       data[2]=y;
 
-      return HidDeviceBase::hidSendReport(
-          static_cast<const MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this),
-          data,
-          MOUSE_HID_REPORT_SIZE);
+      // wait for any previous send to complete
+
+      while(isTransmitting());
+
+      // send the report
+
+      return static_cast<MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this).transmit(data,MOUSE_HID_REPORT_SIZE);
+    }
+
+
+    /**
+     * Check if is transmitting
+     * @return true if is transmitting
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool MouseHidDevice<TPhy,Features...>::isTransmitting() const {
+      return static_cast<const MouseHidDeviceEndpoint1<Device<TPhy>>&>(*this).isTransmitting();
     }
   }
 }

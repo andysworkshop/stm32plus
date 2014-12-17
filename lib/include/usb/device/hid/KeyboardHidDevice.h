@@ -98,7 +98,6 @@ namespace stm32plus {
          };
 
       protected:
-
         uint8_t _outReportBuffer[KEYBOARD_HID_LED_REPORT_SIZE];
 
       protected:
@@ -117,7 +116,8 @@ namespace stm32plus {
 
         bool initialise(Parameters& params);
 
-        bool keyboardSendKeyReport(uint8_t key,uint8_t modifiers=0);
+        bool sendKeyboardReport(uint8_t key,uint8_t modifiers=0);
+        bool isTransmitting() const;
     };
 
 
@@ -404,7 +404,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool KeyboardHidDevice<TPhy,Features...>::keyboardSendKeyReport(uint8_t key,uint8_t modifiers) {
+    inline bool KeyboardHidDevice<TPhy,Features...>::sendKeyboardReport(uint8_t key,uint8_t modifiers) {
 
       // data must remain in scope until IRQ indicates transmission complete
 
@@ -414,12 +414,15 @@ namespace stm32plus {
       report[0]=modifiers;
       report[2]=key;
 
+      KeyboardHidDeviceKeysEndpoint<Device<TPhy>>& endpoint=static_cast<KeyboardHidDeviceKeysEndpoint<Device<TPhy>>&>(*this);
+
+      // wait for previous send to complete by IRQ notification
+
+      while(isTransmitting());
+
       // send the actual report
 
-      if(!HidDeviceBase::hidSendReport(
-          static_cast<const KeyboardHidDeviceKeysEndpoint<Device<TPhy>>&>(*this),
-          report,
-          KEYBOARD_HID_KEYS_REPORT_SIZE))
+      if(!endpoint.transmit(report,KEYBOARD_HID_KEYS_REPORT_SIZE))
         return false;
 
       // send the zero report
@@ -428,12 +431,22 @@ namespace stm32plus {
 
       // wait for the IRQ to reset the busy flag
 
-      while(this->_busy);
+      while(isTransmitting());
 
-      return HidDeviceBase::hidSendReport(
-          static_cast<const KeyboardHidDeviceKeysEndpoint<Device<TPhy>>&>(*this),
-          report,
-          KEYBOARD_HID_KEYS_REPORT_SIZE);
+      // send the zero report (key up)
+
+      return endpoint.transmit(report,KEYBOARD_HID_KEYS_REPORT_SIZE);
+    }
+
+
+    /**
+     * Check if is transmitting
+     * @return true if is transmitting
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool KeyboardHidDevice<TPhy,Features...>::isTransmitting() const {
+      return static_cast<const KeyboardHidDeviceKeysEndpoint<Device<TPhy>>&>(*this).isTransmitting();
     }
   }
 }

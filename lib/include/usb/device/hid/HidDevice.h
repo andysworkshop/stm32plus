@@ -38,7 +38,6 @@ namespace stm32plus {
         volatile uint8_t _hidProtocol;
         volatile uint8_t _hidIdleState;
         volatile uint8_t _hidAltSetting;
-        volatile bool _busy;
         volatile bool _isReportAvailable;
 
         TConfigurationDescriptor  _configurationDescriptor;
@@ -54,9 +53,6 @@ namespace stm32plus {
         ~HidDevice();
 
         bool initialise(Parameters& params);
-
-        bool isBusy() const;
-        bool hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len);
     };
 
 
@@ -71,7 +67,6 @@ namespace stm32plus {
         _reportDescriptor(reportDescriptor),
         _reportDescriptorLength(reportDescriptorLength) {
 
-      _busy=false;
       _isReportAvailable=false;
 
       // subscribe to USB events
@@ -128,25 +123,10 @@ namespace stm32plus {
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
     __attribute__((noinline)) inline void HidDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
 
-      // check for handled events
+      // handle the setup event
 
-      switch(event.eventType) {
-
-        case UsbEventDescriptor::EventType::CLASS_SETUP:
-          onHidSetupEvent(static_cast<DeviceClassSdkSetupEvent&>(event));
-          break;
-
-        case UsbEventDescriptor::EventType::CLASS_INIT:
-          _busy=false;
-          break;
-
-        case UsbEventDescriptor::EventType::CLASS_DATA_IN:
-          _busy=false;
-          break;
-
-        default:
-          break;
-      }
+      if(event.eventType==UsbEventDescriptor::EventType::CLASS_SETUP)
+        onHidSetupEvent(static_cast<DeviceClassSdkSetupEvent&>(event));
     }
 
 
@@ -218,48 +198,6 @@ namespace stm32plus {
             break;
         }
       }
-    }
-
-
-    /**
-     * Send a HID 'report' to an IN endpoint
-     * @param endpoint The endpoint to send to
-     * @param data The data to send
-     * @param len The size of the data
-     * @return true if it worked
-     */
-
-    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    inline bool HidDevice<TPhy,TConfigurationDescriptor,Features...>::hidSendReport(const InEndpointFeatureBase<Device<TPhy>>& endpoint,const void *data,uint16_t len) {
-
-      // must be configured
-
-      if(this->_deviceHandle.dev_state!=USBD_STATE_CONFIGURED)
-        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_UNCONFIGURED);
-
-      // must be idle
-
-      if(_busy)
-        return this->setError(ErrorProvider::ERROR_PROVIDER_USB_DEVICE,this->E_BUSY);
-
-      // OK (XXX: check this for state mgmt if USBD_LL_Transmit fails)
-
-      _busy=true;
-      if(endpoint.endpointTransmit(data,len))
-        return true;
-
-      _busy=false;
-      return false;
-    }
-
-
-    /**
-     * Check if we're busy (data IN to host in progress)
-     */
-
-    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    inline bool HidDevice<TPhy,TConfigurationDescriptor,Features...>::isBusy() const {
-      return _busy;
     }
   }
 }

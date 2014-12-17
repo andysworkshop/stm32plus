@@ -148,7 +148,7 @@ class UsbDeviceHidKeyboardTest {
 
           // send the key to the host
 
-          usb.keyboardSendKeyReport(keycode);
+          usb.sendKeyboardReport(keycode);
 
           // loop through the alphabet until code 29 is sent (code 29 = USB 'z')
 

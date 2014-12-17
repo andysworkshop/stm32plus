@@ -98,9 +98,7 @@ class UsbDeviceCustomAdcTest {
     typedef Adc1<
       AdcClockPrescalerFeature<2>,                // prescaler of 2
       AdcResolutionFeature<12>,                   // 12 bit resolution
-      Adc1Cycle144RegularChannelFeature<0,1>,     // using channels 0,1 on ADC1 with 144-cycle latency
-      Adc1Cycle480RegularChannelFeature<2>,       // using channel 2 on ADC1 with 480-cycle latency
-      Adc1Cycle480TemperatureSensorFeature,       // using the temperature sensor channel
+      Adc1Cycle144RegularChannelFeature<0,1,2>,   // using channels 0,1,2 on ADC1 with 144-cycle latency
       AdcScanModeFeature<>                        // scan mode with EOC after each group
     > MyAdc;
 
@@ -194,7 +192,7 @@ class UsbDeviceCustomAdcTest {
        * start the DMA (i.e. make it ready to receive requests from the ADC peripheral)
        */
 
-      dma.beginRead(_values,4);
+      dma.beginRead(_values,3);
 
       /*
        * Go into an infinite loop converting

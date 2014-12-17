@@ -111,10 +111,9 @@ class UsbDeviceCdcComPortTest {
         while(!_responseReady);
         _responseReady=false;
 
-        // send it and wait until done
+        // send it
 
         usb.transmit(_message,sizeof(_message));
-        while(usb.isTransmitting());
 
         // we're ready to receive the next packet from the host
 

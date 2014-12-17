@@ -396,16 +396,15 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline bool ComPortCdcDevice<TPhy,Features...>::transmit(const void *data,uint16_t len) {
 
-      // wait for previous send to complete
+      ComPortCdcDeviceDataInEndpoint<Device<TPhy>>& endpoint=static_cast<ComPortCdcDeviceDataInEndpoint<Device<TPhy>>&>(*this);
 
-      while(this->isTransmitting());
+      // wait for previous send to complete by IRQ notification
+
+      while(endpoint.isTransmitting());
 
       // send this data
 
-      return this->cdcTransmit(
-          static_cast<const ComPortCdcDeviceDataInEndpoint<Device<TPhy>>&>(*this),
-          data,
-          len);
+      return endpoint.transmit(data,len);
     }
 
 

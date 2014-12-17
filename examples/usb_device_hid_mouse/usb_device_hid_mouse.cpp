@@ -216,7 +216,7 @@ class UsbDeviceHidMouseTest {
 
         // send the report to the USB host (your PC)
 
-        usb.mouseSendReport(0,x,y);
+        usb.sendMouseReport(0,x,y);
 
         // give visual feedback via the LEDs, brighter means faster
 

@@ -286,6 +286,8 @@ namespace stm32plus {
     template<class TPhy,template <class> class... Features>
     inline bool CustomAdcHidDevice<TPhy,Features...>::sendAdcReport(uint16_t channel1,uint16_t channel2,uint16_t channel3) {
 
+      CustomAdcHidDeviceEndpoint<Device<TPhy>>& endpoint=static_cast<CustomAdcHidDeviceEndpoint<Device<TPhy>>&>(*this);
+
       // data must remain in scope until IRQ indicates transmission complete
 
       static uint8_t report[7];
@@ -300,10 +302,13 @@ namespace stm32plus {
       *ptr++=channel2;
       *ptr=channel3;
 
-      return HidDeviceBase::hidSendReport(
-          static_cast<const CustomAdcHidDeviceEndpoint<Device<TPhy>>&>(*this),
-          report,
-          CUSTOM_ADC_HID_REPORT_SIZE);
+      // wait for previous send to complete by IRQ notification
+
+      while(endpoint.isTransmitting());
+
+      // send the report
+
+      return endpoint.transmit(report,CUSTOM_ADC_HID_REPORT_SIZE);
     }
   }
 }
