@@ -112,6 +112,7 @@ namespace stm32plus {
         bool initialise(Parameters& params);
 
         bool transmit(const void *data,uint16_t len);
+        bool isTransmittingData() const;
         void beginReceive();
     };
 
@@ -409,6 +410,17 @@ namespace stm32plus {
       // send this data
 
       return endpoint.transmit(data,len);
+    }
+
+
+    /**
+     * Check if the bulk IN endpoint is transmitting
+     * @return true if the endpoint is transmitting
+     */
+
+    template<class TPhy,template <class> class... Features>
+    inline bool ComPortCdcDevice<TPhy,Features...>::isTransmittingData() const {
+      return static_cast<const ComPortCdcDeviceDataInEndpoint<Device<TPhy>>&>(*this).isTransmitting();
     }
 
 

@@ -92,8 +92,8 @@ ServiceBinary=%12%\%DRIVERFILENAME%.sys
 [Strings]
 MFGFILENAME="CDC"
 DRIVERFILENAME ="usbser"
-MFGNAME="Andys Workshop"
-INSTDISK="Andys Workshop CDC Driver Installer"
+MFGNAME="Andy's Workshop"
+INSTDISK="Andy's Workshop CDC Driver Installer"
 DESCRIPTION="Virtual COM Port"
-SERVICE="Andys Workshop Virtual COM Driver"
+SERVICE="Andy's Workshop Virtual COM Driver"
 

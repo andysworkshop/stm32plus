@@ -13,6 +13,21 @@ using namespace stm32plus::usb;
 
 
 /**
+ * This example demonstrates the USB Communications Device Class (CDC) in the form of
+ * a virtual COM port. Virtual COM ports allow you to use software on your PC that was designed
+ * to talk to a serial port to communicate over USB to your STM32.
+ *
+ * This example is compatible with the STM32F4 Discovery board. Flash the example code to your
+ * board and connect the micro-USB socket to your PC. Now open up your PC's Device Manager
+ * and locate "Other Devices -> stm32plus virtual COM port". Right-click, "Update Driver Software..."
+ * and use the browse option to go to the "usb_device_cdc_com_port" example directory. Windows
+ * should find the .INF file and use it to install the driver for this example. When it's completed
+ * you should have a new "Virtual COM Port" entry under the "Ports (COM & LPT)" category.
+ *
+ * To test, launch a terminal application (I use the free RealTerm program) and connect to the
+ * virtual COM port. Go ahead and type something. Each character that you type will be echo'd back
+ * to the terminal with the message "You pressed: X" where X is the key that you pressed.
+ *
  * Compatible MCU:
  *   STM32F4
  *
@@ -41,7 +56,12 @@ class UsbDeviceCdcComPortTest {
      * Flag to communicate between IRQ and non-IRQ code and the message to send back
      */
 
-    volatile bool _responseReady;
+    enum class LoopState {
+      WAITING,
+      REPORT_KEYPRESS
+    };
+
+    volatile LoopState _loopState;
     char _message[16];
 
 
@@ -58,9 +78,11 @@ class UsbDeviceCdcComPortTest {
 
     void run() {
 
+      LoopState state;
+
       // initialise
 
-      _responseReady=false;
+      _loopState=LoopState::WAITING;
       strcpy(_message,"You pressed: X\r\n");
 
       /*
@@ -115,16 +137,19 @@ class UsbDeviceCdcComPortTest {
 
         // block until a response is ready to send
 
-        while(!_responseReady);
-        _responseReady=false;
+        while((state=_loopState)==LoopState::WAITING);
+        _loopState=LoopState::WAITING;
 
-        // send it
+        if(state==LoopState::REPORT_KEYPRESS) {
 
-        usb.transmit(_message,sizeof(_message));
+          // transmit the reponse
 
-        // we're ready to receive the next packet from the host
+          usb.transmit(_message,sizeof(_message));
 
-        usb.beginReceive();
+          // we're ready to receive the next packet from the host
+
+          usb.beginReceive();
+        }
       }
     }
 
@@ -173,7 +198,6 @@ class UsbDeviceCdcComPortTest {
 
         case CdcControlCommand::GET_LINE_CODING:      // return the current line encoding
           event.data=reinterpret_cast<uint8_t *>(&_lineCoding);
-          event.size=sizeof(_lineCoding);
           break;
 
         default:
@@ -194,7 +218,7 @@ class UsbDeviceCdcComPortTest {
 
       // signal to the main loop that a response is ready
 
-      _responseReady=true;
+      _loopState=LoopState::REPORT_KEYPRESS;
     }
 
 

@@ -24,8 +24,8 @@ namespace stm32plus {
 
       enum {
         CHARFORMAT_1_STOP_BIT = 0,
-        CHARFORMAT_1_5_STOP_BITs = 1,
-        CHARFORMAT_2_STOP_BITs = 2
+        CHARFORMAT_1_5_STOP_BITS = 1,
+        CHARFORMAT_2_STOP_BITS = 2
       };
 
       enum {
