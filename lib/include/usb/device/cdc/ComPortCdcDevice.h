@@ -382,7 +382,7 @@ namespace stm32plus {
 
         // notify the application
 
-        this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,this->_commandBuffer,this->_commandSize));
+        this->UsbEventSender.raiseEvent(CdcControlEvent(this->_opCode,this->_commandBuffer.get(),this->_commandSize));
         this->_opCode=CdcControlCommand::NONE;
       }
     }

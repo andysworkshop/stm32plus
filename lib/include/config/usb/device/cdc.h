@@ -16,6 +16,7 @@
   // CDC device includes
 
   #include "usb/device/cdc/CdcControlCommand.h"
+  #include "usb/device/cdc/CdcLineCoding.h"
 
   #include "usb/device/cdc/events/CdcDataReceivedEvent.h"
   #include "usb/device/cdc/events/CdcControlEvent.h"

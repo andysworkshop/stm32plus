@@ -46,6 +46,13 @@ class UsbDeviceCdcComPortTest {
 
 
     /*
+     * The current line coding (baud rate, parity etc)
+     */
+
+    CdcLineCoding _lineCoding;
+
+
+    /*
      * Run the example
      */
 
@@ -160,10 +167,13 @@ class UsbDeviceCdcComPortTest {
         case CdcControlCommand::SEND_BREAK:
           break;
 
-        case CdcControlCommand::SET_LINE_CODING:
+        case CdcControlCommand::SET_LINE_CODING:      // set a new line encoding
+          memcpy(&_lineCoding,event.data,sizeof(_lineCoding));
           break;
 
-        case CdcControlCommand::GET_LINE_CODING:
+        case CdcControlCommand::GET_LINE_CODING:      // return the current line encoding
+          event.data=reinterpret_cast<uint8_t *>(&_lineCoding);
+          event.size=sizeof(_lineCoding);
           break;
 
         default:

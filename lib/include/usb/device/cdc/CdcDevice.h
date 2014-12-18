@@ -40,10 +40,14 @@ namespace stm32plus {
                             InterruptInEndpointFeature<1,Device<TPhy>>::Parameters,
                             Features<Device<TPhy>>::Parameters... {
 
-          uint8_t cdc_cmd_poll_interval;         // default is 16ms
+          uint8_t cdc_cmd_poll_interval;        // default is 16ms
+          uint8_t cdc_cmd_buffer_size;          // default is 16 bytes
+          uint8_t cdc_cmd_max_ep_packet_size;   // default is 16 bytes
 
           Parameters() {
             cdc_cmd_poll_interval=16;
+            cdc_cmd_buffer_size=16;
+            cdc_cmd_max_ep_packet_size=16;
           }
         };
 
@@ -53,14 +57,10 @@ namespace stm32plus {
           COMMAND_EP_ADDRESS = EndpointDescriptor::IN | 1     // command endpoint address
         };
 
-        enum {
-          MAX_COMMAND_EP_PACKET_SIZE = 16,                    // command max packet size
-        };
-
         TConfigurationDescriptor  _configurationDescriptor;
         CdcControlCommand _opCode;
         uint8_t _commandSize;
-        uint8_t _commandBuffer[MAX_COMMAND_EP_PACKET_SIZE];
+        scoped_array<uint8_t> _commandBuffer;
 
       protected:
         void onEvent(UsbEventDescriptor& event);
@@ -123,11 +123,15 @@ namespace stm32plus {
          !RecursiveBoolInitWithParams<CdcDevice,Features<Device<TPhy>>...>::tinit(this,params))
         return false;
 
+      // create the command buffer
+
+      _commandBuffer.reset(new uint8_t[params.cdc_cmd_buffer_size]);
+
       // set up the command endpoint descriptor
 
       _configurationDescriptor.commandEndpoint.bEndpointAddress=COMMAND_EP_ADDRESS;
       _configurationDescriptor.commandEndpoint.bmAttributes=EndpointDescriptor::INTERRUPT;
-      _configurationDescriptor.commandEndpoint.wMaxPacketSize=MAX_COMMAND_EP_PACKET_SIZE;     // max packet size
+      _configurationDescriptor.commandEndpoint.wMaxPacketSize=params.cdc_cmd_max_ep_packet_size;
       _configurationDescriptor.commandEndpoint.bInterval=params.cdc_cmd_poll_interval;        // default is 16ms
 
       // link UsbEventSource class into the SDK structure
@@ -150,7 +154,7 @@ namespace stm32plus {
       switch(event.eventType) {
 
         case UsbEventDescriptor::EventType::CLASS_INIT:
-          USBD_LL_OpenEP(&this->_deviceHandle,COMMAND_EP_ADDRESS,EndpointDescriptor::INTERRUPT,MAX_COMMAND_EP_PACKET_SIZE);
+          USBD_LL_OpenEP(&this->_deviceHandle,COMMAND_EP_ADDRESS,EndpointDescriptor::INTERRUPT,_configurationDescriptor.commandEndpoint.wMaxPacketSize);
           break;
 
         case UsbEventDescriptor::EventType::CLASS_DEINIT:
@@ -188,13 +192,13 @@ namespace stm32plus {
 
           this->UsbEventSender.raiseEvent(
               CdcControlEvent(static_cast<CdcControlCommand>(event.request.bRequest),
-                              _commandBuffer,
+                              _commandBuffer.get(),
                               event.request.wLength)
             );
 
           // send the response message on the control endpoint
 
-          USBD_CtlSendData(&this->_deviceHandle,_commandBuffer,event.request.wLength);
+          USBD_CtlSendData(&this->_deviceHandle,_commandBuffer.get(),event.request.wLength);
         }
         else {
 
@@ -203,7 +207,7 @@ namespace stm32plus {
           _opCode=static_cast<CdcControlCommand>(event.request.bRequest);
           _commandSize=event.request.wLength;
 
-          USBD_CtlPrepareRx(&this->_deviceHandle,_commandBuffer,event.request.wLength);
+          USBD_CtlPrepareRx(&this->_deviceHandle,_commandBuffer.get(),_commandSize);
         }
       }
       else {
