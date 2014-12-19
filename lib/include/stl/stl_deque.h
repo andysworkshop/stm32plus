@@ -402,8 +402,8 @@ _Deque_base<_Tp,_Alloc>::_M_initialize_map(size_t __num_elements)
   __STL_TRY {
     _M_create_nodes(__nstart, __nfinish);
   }
-  __STL_UNWIND((_M_deallocate_map(_M_map, _M_map_size), 
-                _M_map = 0, _M_map_size = 0));
+  __STL_UNWIND((this->_M_deallocate_map(_Base::_M_map, _Base::_M_map_size), 
+                _Base::_M_map = 0, _Base::_M_map_size = 0));
   _M_start._M_set_node(__nstart);
   _M_finish._M_set_node(__nfinish - 1);
   _M_start._M_cur = _M_start._M_first;
