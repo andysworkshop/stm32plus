@@ -120,6 +120,7 @@ namespace stm32plus {
 
       if(!Device<TPhy>::initialise(params) ||
          !ControlEndpointFeature<Device<TPhy>>::initialise(params) ||
+         !InterruptInEndpointFeature<1,Device<TPhy>>::initialise(params) ||
          !RecursiveBoolInitWithParams<CdcDevice,Features<Device<TPhy>>...>::tinit(this,params))
         return false;
 
