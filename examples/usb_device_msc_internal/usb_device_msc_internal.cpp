@@ -99,6 +99,26 @@ class UsbDeviceMscInternalTest {
      */
 
     void onEvent(UsbEventDescriptor& ued) {
+
+      switch(ued.eventType) {
+
+        case UsbEventDescriptor::EventType::MSC_BOT_IS_READY:
+         onIsReady(static_cast<MscBotIsReadyEvent&>(ued));
+         break;
+
+         default:   // warning suppression
+           break;
+      }
+    }
+
+
+    /**
+     * Handle the onReady event: this device is always ready
+     * @param event The event structure
+     */
+
+    void onIsReady(MscBotIsReadyEvent& event) {
+      event.isReady=true;
     }
 
 

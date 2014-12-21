@@ -40,12 +40,8 @@ namespace stm32plus {
       protected:
         TConfigurationDescriptor  _configurationDescriptor;
 
-      protected:
-        void onEvent(UsbEventDescriptor& event);
-
       public:
         MscDevice();
-        ~MscDevice();
 
         bool initialise(Parameters& params);
     };
@@ -59,27 +55,6 @@ namespace stm32plus {
     inline MscDevice<TPhy,TConfigurationDescriptor,Features...>::MscDevice()
       : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
         Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
-
-      // subscribe to USB events
-
-      this->UsbEventSender.insertSubscriber(
-          UsbEventSourceSlot::bind(this,&MscDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent)
-        );
-    }
-
-
-    /**
-     * Destructor
-     */
-
-    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    inline MscDevice<TPhy,TConfigurationDescriptor,Features...>::~MscDevice() {
-
-      // unsubscribe from USB events
-
-      this->UsbEventSender.removeSubscriber(
-          UsbEventSourceSlot::bind(this,&MscDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent)
-        );
     }
 
 
@@ -103,16 +78,6 @@ namespace stm32plus {
 
       USBD_RegisterClass(&this->_deviceHandle,static_cast<UsbEventSource *>(this));
       return true;
-    }
-
-
-    /**
-     * Event handler for device events
-     * @param event The event descriptor
-     */
-
-    template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    __attribute__((noinline)) inline void MscDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
     }
   }
 }

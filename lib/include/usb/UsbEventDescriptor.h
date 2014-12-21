@@ -61,6 +61,10 @@ namespace stm32plus {
         CDC_DATA_RECEIVED,
         CDC_CONTROL,
 
+        MSC_BOT_GET_MAX_LUN,
+        MSC_BOT_RESET,
+        MSC_BOT_IS_READY,
+
         USB_ERROR
       };
 
