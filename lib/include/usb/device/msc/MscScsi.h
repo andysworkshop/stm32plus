@@ -88,7 +88,7 @@ namespace stm32plus {
         bool requestSense(uint8_t *params);
         bool inquiry(uint8_t lun,uint8_t *params);
         bool startStopUnit();
-        bool modeSense6();
+        bool modeSense6(uint8_t lun);
         bool modeSense10();
         bool readFormatCapacity(uint8_t lun);
         bool readCapacity10(uint8_t lun);
@@ -169,7 +169,7 @@ namespace stm32plus {
           return startStopUnit();
 
         case MscScsiCommand::MODE_SENSE6:
-          return modeSense6();
+          return modeSense6(lun);
 
         case MscScsiCommand::MODE_SENSE10:
           return modeSense10();
@@ -286,7 +286,7 @@ namespace stm32plus {
     template<uint8_t TInEndpointAddress,uint8_t TOutEndpointAddress>
     inline bool MscScsi<TInEndpointAddress,TOutEndpointAddress>::inquiry(uint8_t lun,uint8_t *params) {
 
-      static const uint8_t page00[7] ={ 0,0,0,3,0,0x80,0x83 };
+      static const uint8_t page00[7] = { 0,0,0,3,0,0x80,0x83 };
 
       if(params[1] & 0x01) {
 
@@ -341,12 +341,23 @@ namespace stm32plus {
      */
 
     template<uint8_t TInEndpointAddress,uint8_t TOutEndpointAddress>
-    inline bool MscScsi<TInEndpointAddress,TOutEndpointAddress>::modeSense6() {
+    inline bool MscScsi<TInEndpointAddress,TOutEndpointAddress>::modeSense6(uint8_t lun) {
 
-      // response is 8 zeros
+      uint8_t *ptr;
 
-      memset(_packetData.get(),'\0',8);
-      _packetSize=8;
+      // get the write-protection status
+
+      MscBotIsWriteProtectedEvent writeProtectedEvent(lun);
+      _eventSource.UsbEventSender.raiseEvent(writeProtectedEvent);
+
+      ptr=_packetData.get();
+
+      ptr[0]=3;     // bytes to follow
+      ptr[1]=0;     // 00h for SBC devices
+      ptr[2]=writeProtectedEvent.isWriteProtected ? 0x80 : 0;
+      ptr[3]=0;     // no block descriptors
+
+      _packetSize=4;
       return true;
     }
 
@@ -394,18 +405,22 @@ namespace stm32plus {
         ptr[0]=0;
         ptr[1]=0;
         ptr[2]=0;
-        ptr[3]=8;
-        ptr[4]=(_blkNbr-1) >> 24;
-        ptr[5]=(_blkNbr-1) >> 16;
-        ptr[6]=(_blkNbr-1) >> 8;
-        ptr[7]=_blkNbr-1;
 
-        ptr[8]=2;
-        ptr[9]=_blkSize >> 16;
-        ptr[10]=_blkSize >> 8;
-        ptr[11]=_blkSize;
+        ptr[3]=16;                  // 2 descriptors
 
-        _packetSize=12;
+        ptr[4]=ptr[12]=_blkNbr >> 24;       // number of blocks
+        ptr[5]=ptr[13]=_blkNbr >> 16;
+        ptr[6]=ptr[14]=_blkNbr >> 8;
+        ptr[7]=ptr[15]=_blkNbr;
+
+        ptr[8]=2;                   // formatted media
+        ptr[9]=ptr[17]=_blkSize >> 16;
+        ptr[10]=ptr[18]=_blkSize >> 8;
+        ptr[11]=ptr[19]=_blkSize;
+
+        ptr[16]=0;                  // addressable blocks
+
+        _packetSize=20;
         return true;
       }
       else {
