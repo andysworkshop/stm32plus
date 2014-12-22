@@ -27,8 +27,8 @@ namespace stm32plus {
     struct BotMscDeviceConfigurationDescriptor {
       ConfigurationDescriptor configuration;
       InterfaceDescriptor itf;
-      EndpointDescriptor outEndpoint;
       EndpointDescriptor inEndpoint;
+      EndpointDescriptor outEndpoint;
     } __attribute__((packed));
 
 
@@ -56,23 +56,6 @@ namespace stm32plus {
                            BotMscDeviceOutEndpoint,
                            Features...> MscDeviceBase;
 
-         /**
-          * Customisable parameters for this MSC BOT device
-          */
-
-         struct Parameters : MscDeviceBase::Parameters {
-
-           uint16_t msc_bot_max_packet_size;        // default is 64 bytes
-           uint16_t msc_bot_media_packet_size;      // default is 8192 bytes
-
-           Parameters() {
-             msc_bot_max_packet_size=0x40;
-             msc_bot_media_packet_size=8192;
-           }
-         };
-
-       protected:
-
          /*
           * Endpoint addresses
           */
@@ -82,27 +65,29 @@ namespace stm32plus {
            OUT_EP_ADDRESS = EndpointDescriptor::OUT | 2,   // OUT endpoint address
          };
 
-         /*
-          * Response packet sizes
+
+         /**
+          * Customisable parameters for this MSC BOT device
           */
 
-         enum {
-           READ_FORMAT_CAPACITY_DATA_LEN = 0x0C,
-           READ_CAPACITY10_DATA_LEN      = 0x08,
-           MODE_SENSE10_DATA_LEN         = 0x08,
-           MODE_SENSE6_DATA_LEN          = 0x04,
-           REQUEST_SENSE_DATA_LEN        = 0x12,
-           STANDARD_INQUIRY_DATA_LEN     = 0x24
+         struct Parameters : MscDeviceBase::Parameters, MscScsi<IN_EP_ADDRESS,OUT_EP_ADDRESS>::Parameters {
+
+           uint16_t msc_bot_max_packet_size;        // default is 64 bytes
+
+           Parameters() {
+             msc_bot_max_packet_size=0x40;
+           }
          };
 
+       protected:
+
          uint8_t _interface;
+         uint8_t _maxLun;
          MscBotState _state;
          MscBotStatus _status;
          MscBotCommandBlockWrapper _cbw;
          MscBotCommandStatusWrapper _csw;
-         MscScsi _scsi;
-         uint16_t _packetLength;
-         scoped_array<uint8_t> _packetData;
+         MscScsi<IN_EP_ADDRESS,OUT_EP_ADDRESS> _scsi;
 
       protected:
         void onEvent(UsbEventDescriptor& event);
@@ -115,22 +100,12 @@ namespace stm32plus {
         void onGetMaxLun(DeviceClassSdkSetupEvent& event);
         void onBotReset(DeviceClassSdkSetupEvent& event);
         void onClearFeature(DeviceClassSdkSetupEvent& event);
-        void sendCsw(MscBotCswStatus status);
         void onDataIn();
+        void onDataOut();
 
-        bool processScsiCmd(uint8_t lun,uint8_t *params);
-        bool scsiTestUnitReady(uint8_t lun);
-        bool scsiRequestSense(uint8_t *params);
-        bool scsiInquiry(uint8_t lun,uint8_t *params);
-        bool scsiStartStopUnit(uint8_t lun,uint8_t *params);
-        bool scsiModeSense6(uint8_t lun,uint8_t *params);
-        bool scsiModeSense10(uint8_t lun,uint8_t *params);
-        bool scsiReadFormatCapacity(uint8_t lun,uint8_t *params);
-        bool scsiReadCapacity10(uint8_t lun,uint8_t *params);
-        bool scsiRead10(uint8_t lun,uint8_t *params);
-        bool scsiWrite10(uint8_t lun,uint8_t *params);
-        bool scsiVerify10(uint8_t lun,uint8_t *params);
-        void scsiSenseCode(uint8_t lun,uint8_t sKey,uint8_t ASC);
+        void decodeCbw();
+        void abortTransfer();
+        void sendData(uint8_t *buf,uint16_t len);
 
       public:
         BotMscDevice();
@@ -145,7 +120,8 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    inline BotMscDevice<TPhy,Features...>::BotMscDevice() {
+    inline BotMscDevice<TPhy,Features...>::BotMscDevice()
+      : _scsi(_state,static_cast<UsbEventSource&>(*this),this->_deviceHandle) {
 
       // subscribe to USB events
 
@@ -183,12 +159,8 @@ namespace stm32plus {
 
       // initialise upwards
 
-      if(!MscDeviceBase::initialise(params))
+      if(!MscDeviceBase::initialise(params) || !_scsi.initialise(params))
         return false;
-
-      // create the media packet
-
-      _packetData.reset(new uint8_t[params.msc_bot_media_packet_size]);
 
       // set up the configuration descriptor (see constructor for defaults)
 
@@ -269,6 +241,9 @@ namespace stm32plus {
           onDataIn();
           break;
 
+        case UsbEventDescriptor::EventType::CLASS_DATA_OUT:
+          onDataOut();
+          break;
 
         default:    // warning supression
           break;
@@ -287,7 +262,10 @@ namespace stm32plus {
 
       _state=MscBotState::IDLE;
       _status=MscBotStatus::NORMAL;
-      _scsi.senseHead=_scsi.senseTail=0;
+
+      // reset SCSI state
+
+      _scsi.onInit();
 
       // open the two endpoints
 
@@ -310,8 +288,13 @@ namespace stm32plus {
 
       // prepare EP to receive first BOT command
 
-      static_assert(sizeof(_cbw)==31,"Compiler error: sizeof(MscBotCommandBlockWrapper)!=31");
-      USBD_LL_PrepareReceive(&this->_deviceHandle,OUT_EP_ADDRESS,reinterpret_cast<uint8_t *>(&_cbw),sizeof(_cbw));
+      static_assert(sizeof(_cbw)==32,"Compiler error: sizeof(MscBotCommandBlockWrapper)!=32");
+
+      USBD_LL_PrepareReceive(
+          &this->_deviceHandle,
+          OUT_EP_ADDRESS,
+          reinterpret_cast<uint8_t *>(&_cbw),
+          MscBotCommandBlockWrapper::RECEIVE_SIZE);
     }
 
 
@@ -393,7 +376,11 @@ namespace stm32plus {
         // send the event that the user may respond to
 
         this->UsbEventSender.raiseEvent(event);
-        USBD_CtlSendData(&this->_deviceHandle,&event.maxLun,1);
+
+        // copy out the response
+
+        _maxLun=event.maxLun;
+        USBD_CtlSendData(&this->_deviceHandle,&_maxLun,1);
       }
       else
         USBD_CtlError(&this->_deviceHandle,&event.request);
@@ -462,7 +449,6 @@ namespace stm32plus {
       USBD_LL_FlushEP(&this->_deviceHandle,event.request.wIndex);     // flush the FIFO and clear the stall status
       USBD_LL_CloseEP(&this->_deviceHandle,event.request.wIndex);     // re-activate the EP
 
-
       if((event.request.wIndex & 0x80)==0x80) {
         USBD_LL_OpenEP(
                 &this->_deviceHandle,
@@ -486,28 +472,7 @@ namespace stm32plus {
         _status=MscBotStatus::NORMAL;
       }
       else if(((event.request.wIndex & 0x80)==0x80) && _status!=MscBotStatus::RECOVERY)
-        sendCsw(MscBotCswStatus::CMD_FAILED);
-    }
-
-
-    /**
-     * Send the command status wrapper
-     * @param status The status to send
-     */
-
-    template<class TPhy,template <class> class... Features>
-    inline void BotMscDevice<TPhy,Features...>::sendCsw(MscBotCswStatus status) {
-
-      _csw.bStatus=status;
-      _state=MscBotState::IDLE;
-
-      // send the status
-
-      USBD_LL_Transmit(&this->_deviceHandle,IN_EP_ADDRESS,reinterpret_cast<uint8_t *>(&_csw),sizeof(_csw));
-
-      // prepare EP to receive next command
-
-      USBD_LL_PrepareReceive(&this->_deviceHandle,OUT_EP_ADDRESS,reinterpret_cast<uint8_t *>(&_cbw),sizeof(_cbw));
+        _csw.send<IN_EP_ADDRESS,OUT_EP_ADDRESS>(MscBotCswStatus::CMD_FAILED,_state,this->_deviceHandle,_cbw);
     }
 
 
@@ -522,13 +487,13 @@ namespace stm32plus {
       switch(_state) {
 
         case MscBotState::DATA_IN:
-          if(!processScsiCmd(_cbw.bLUN,&_cbw.CB[0]))
-            sendCsw(MscBotCswStatus::CMD_FAILED);
+          if(!_scsi.processCmd(_cbw.bLUN,_cbw.CB,_cbw,_csw))
+            _csw.send<IN_EP_ADDRESS,OUT_EP_ADDRESS>(MscBotCswStatus::CMD_FAILED,_state,this->_deviceHandle,_cbw);
           break;
 
         case MscBotState::SEND_DATA:
         case MscBotState::LAST_DATA_IN:
-          sendCsw(MscBotCswStatus::CMD_PASSED);
+          _csw.send<IN_EP_ADDRESS,OUT_EP_ADDRESS>(MscBotCswStatus::CMD_PASSED,_state,this->_deviceHandle,_cbw);
           break;
 
         default:
@@ -538,158 +503,119 @@ namespace stm32plus {
 
 
     /**
-     * Process the SCSI command
-     * @param lun logical unit number
-     * @param params command and parameters
-     * @return true if it worked
+     * Proccess MSC OUT data
+     * @param epnum: endpoint index
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool BotMscDevice<TPhy,Features...>::processScsiCmd(uint8_t lun,uint8_t *params) {
+    inline void BotMscDevice<TPhy,Features...>::onDataOut() {
 
-      switch(static_cast<MscScsiCommand>(params[0])) {
+      switch(_state) {
 
-        case MscScsiCommand::TEST_UNIT_READY:
-          return scsiTestUnitReady(lun);
+        case MscBotState::IDLE:
+          decodeCbw();
+          break;
 
-        case MscScsiCommand::REQUEST_SENSE:
-          return scsiRequestSense(params);
+        case MscBotState::DATA_OUT:
+          if(!_scsi.processCmd(_cbw.bLUN,_cbw.CB,_cbw,_csw))
+            _csw.send<IN_EP_ADDRESS,OUT_EP_ADDRESS>(MscBotCswStatus::CMD_FAILED,_state,this->_deviceHandle,_cbw);
+          break;
 
-        case MscScsiCommand::INQUIRY:
-          return scsiInquiry(lun,params);
-
-        case MscScsiCommand::START_STOP_UNIT:
-          return scsiStartStopUnit(lun,params);
-
-        case MscScsiCommand::ALLOW_MEDIUM_REMOVAL:
-          return scsiStartStopUnit(lun,params);
-
-        case MscScsiCommand::MODE_SENSE6:
-          return scsiModeSense6(lun,params);
-
-        case MscScsiCommand::MODE_SENSE10:
-          return scsiModeSense10(lun,params);
-
-        case MscScsiCommand::READ_FORMAT_CAPACITIES:
-          return scsiReadFormatCapacity(lun,params);
-
-        case MscScsiCommand::READ_CAPACITY10:
-          return scsiReadCapacity10(lun,params);
-
-        case MscScsiCommand::READ10:
-          return scsiRead10(lun,params);
-
-        case MscScsiCommand::WRITE10:
-          return scsiWrite10(lun,params);
-
-        case MscScsiCommand::VERIFY10:
-          return scsiVerify10(lun,params);
-
-        default:
-          scsiSenseCode(lun,MscScsiSense::ILLEGAL_REQUEST,MscScsiSense::INVALID_CDB);
-          return false;
+        default:      // warning supression
+          break;
       }
     }
 
 
     /**
-     * Process SCSI Test Unit Ready Command
-     * @param  lun: Logical unit number
-     * @param  params: Command parameters
-     * @retval true if it worked
+     * Decode the CBW command and set the BOT state machine
      */
 
     template<class TPhy,template <class> class... Features>
-    inline bool BotMscDevice<TPhy,Features...>::scsiTestUnitReady(uint8_t lun) {
+    inline void BotMscDevice<TPhy,Features...>::decodeCbw() {
 
-      // case 9 : Hi > D0
+      // update the CSW for the response
 
-      if(_cbw.dDataLength) {
+      _csw.dTag=_cbw.dTag;
+      _csw.dDataResidue=_cbw.dDataLength;
 
-        scsiSenseCode(_cbw.bLUN,MscScsiSense::ILLEGAL_REQUEST,MscScsiSense::INVALID_CDB);
-        return false;
-      }
+      if(USBD_LL_GetRxDataSize(&this->_deviceHandle,OUT_EP_ADDRESS)!=MscBotCommandBlockWrapper::RECEIVE_SIZE ||
+         _cbw.dSignature!=MscBotCommandBlockWrapper::SIGNATURE ||
+         _cbw.bLUN>1 ||
+         _cbw.bCBLength<1 ||
+         _cbw.bCBLength>16) {
 
-      // send the 'is ready' event
+        _scsi.senseCode(_cbw.bLUN,MscScsiSense::ILLEGAL_REQUEST,MscScsiSense::INVALID_CDB);
+        _status=MscBotStatus::ERROR;
 
-      MscBotIsReadyEvent event(lun);
-      this->UsbEventSender.raiseEvent(event);
+        abortTransfer();
 
-      if(event.isReady) {
-        _packetLength=0;
-        return true;
-      }
-      else {
+      } else {
 
-        scsiSenseCode(lun,MscScsiSense::NOT_READY,MscScsiSense::MEDIUM_NOT_PRESENT);
+        if(!_scsi.processCmd(_cbw.bLUN,_cbw.CB,_cbw,_csw)) {
 
-        _state=MscBotState::NO_DATA;
-        return false;
+          if(_state==MscBotState::NO_DATA)
+            _csw.send<IN_EP_ADDRESS,OUT_EP_ADDRESS>(MscBotCswStatus::CMD_FAILED,_state,this->_deviceHandle,_cbw);
+          else
+            abortTransfer();
+        }
+        else if(_state!=MscBotState::DATA_IN && _state!=MscBotState::DATA_OUT && _state!=MscBotState::LAST_DATA_IN) {
+
+          // burst xfer handled internally
+
+          if(_scsi.getDataSize())
+            sendData(_scsi.getData(),_scsi.getDataSize());
+          else
+            _csw.send<IN_EP_ADDRESS,OUT_EP_ADDRESS>(MscBotCswStatus::CMD_PASSED,_state,this->_deviceHandle,_cbw);
+        }
       }
     }
 
 
     /**
-     * @brief  Process Request Sense command
-     * @param  lun: Logical unit number
-     * @param  params: Command parameters
-     * @retval true if it worked
+     * @brief  Abort the current transfer
      */
 
-    template<class TPhy,template<class > class... Features>
-    inline bool BotMscDevice<TPhy,Features...>::scsiRequestSense(uint8_t *params) {
+    template<class TPhy,template <class> class... Features>
+    inline void BotMscDevice<TPhy,Features...>::abortTransfer() {
 
-      uint8_t *ptr;
+      // stall endpoints
 
-      // clear out the data
+      if(_cbw.bmFlags==0 && _cbw.dDataLength!=0 && _status==MscBotStatus::NORMAL)
+        USBD_LL_StallEP(&this->_deviceHandle,OUT_EP_ADDRESS);
 
-      ptr=_packetData.get();
-      memset(ptr,'\0',REQUEST_SENSE_DATA_LEN);
+      USBD_LL_StallEP(&this->_deviceHandle,IN_EP_ADDRESS);
 
-      // create the packet
+      // prepare to receive next command
 
-      ptr[0]=0x70;
-      ptr[7]=REQUEST_SENSE_DATA_LEN-6;
-
-      if(_scsi.senseHead!=_scsi.senseTail) {
-
-        ptr[2]=_scsi.sense[_scsi.senseHead].Skey;
-        ptr[12]=_scsi.sense[_scsi.senseHead].w.b.ASCQ;
-        ptr[13]=_scsi.sense[_scsi.senseHead].w.b.ASC;
-
-        _scsi.senseHead++;
-
-        if(_scsi.senseHead==MscScsi::SENSE_LIST_DEPTH)
-          _scsi.senseHead=0;
-      }
-
-      _packetLength=REQUEST_SENSE_DATA_LEN;
-
-      if(params[4]<=REQUEST_SENSE_DATA_LEN)
-        _packetLength=params[4];
-
-      return true;
+      if(_status==MscBotStatus::ERROR)
+        USBD_LL_PrepareReceive(
+            &this->_deviceHandle,
+            OUT_EP_ADDRESS,
+            reinterpret_cast<uint8_t *>(&_cbw),
+            MscBotCommandBlockWrapper::RECEIVE_SIZE);
     }
 
 
     /**
-     * @brief  Load the last error code in the error list
-     * @param  lun: Logical unit number
-     * @param  sKey: Sense Key
-     * @param  ASC: Additional Sense Key
-     * @retval none
+     * Send the requested data
+     * @param buf pointer to data buffer
+     * @param len Data Length
      */
 
     template<class TPhy,template <class> class... Features>
-    inline void BotMscDevice<TPhy,Features...>::scsiSenseCode(uint8_t /* lun */,uint8_t sKey,uint8_t ASC) {
+    inline void BotMscDevice<TPhy,Features...>::sendData(uint8_t *buf,uint16_t len) {
 
-      _scsi.sense[_scsi.senseTail].Skey=sKey;
-      _scsi.sense[_scsi.senseTail].w.ASC=ASC << 8;
+      // validate length
 
-      _scsi.senseTail++;
+      if(len>_cbw.dDataLength)
+        len=_cbw.dDataLength;
 
-      if(_scsi.senseTail==MscScsi::SENSE_LIST_DEPTH)
-        _scsi.senseTail=0;
+      _csw.dDataResidue-=len;
+      _csw.bStatus=MscBotCswStatus::CMD_PASSED;
+      _state=MscBotState::SEND_DATA;
+
+      USBD_LL_Transmit(&this->_deviceHandle,IN_EP_ADDRESS,buf,len);
     }
   }
 }

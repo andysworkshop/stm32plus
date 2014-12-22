@@ -64,6 +64,11 @@ namespace stm32plus {
         MSC_BOT_GET_MAX_LUN,
         MSC_BOT_RESET,
         MSC_BOT_IS_READY,
+        MSC_BOT_IS_WRITE_PROTECTED,
+        MSC_BOT_READ,
+        MSC_BOT_WRITE,
+        MSC_BOT_GET_ENQUIRY_PAGE,
+        MSC_BOT_GET_CAPACITY,
 
         USB_ERROR
       };

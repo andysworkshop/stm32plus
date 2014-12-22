@@ -12,6 +12,10 @@ using namespace stm32plus;
 using namespace stm32plus::usb;
 
 
+extern uint32_t FloppyImageSize;
+extern uint32_t FloppyImage;
+
+
 /**
  * Compatible MCU:
  *   STM32F4
@@ -56,7 +60,7 @@ class UsbDeviceMscInternalTest {
 
       usbParams.device_manufacturer_text="Andy's Workshop";   // see params.device_language_[ids/count] to change the languages
       usbParams.device_product_text="stm32plus flash drive";
-      usbParams.device_serial_text="0123456789";
+      usbParams.device_serial_text="002020141222";
       usbParams.device_configuration_text="My configuration";
 
       /*
@@ -103,12 +107,45 @@ class UsbDeviceMscInternalTest {
       switch(ued.eventType) {
 
         case UsbEventDescriptor::EventType::MSC_BOT_IS_READY:
-         onIsReady(static_cast<MscBotIsReadyEvent&>(ued));
-         break;
+          onIsReady(static_cast<MscBotIsReadyEvent&>(ued));
+          break;
 
-         default:   // warning suppression
-           break;
+        case UsbEventDescriptor::EventType::MSC_BOT_GET_ENQUIRY_PAGE:
+          onGetEnquiryPage(static_cast<MscBotGetEnquiryPageEvent&>(ued));
+          break;
+
+        case UsbEventDescriptor::EventType::MSC_BOT_GET_CAPACITY:
+          onGetCapacity(static_cast<MscBotGetCapacityEvent&>(ued));
+          break;
+
+        case UsbEventDescriptor::EventType::MSC_BOT_READ:
+          onRead(static_cast<MscBotReadEvent&>(ued));
+          break;
+
+        case UsbEventDescriptor::EventType::MSC_BOT_IS_WRITE_PROTECTED:
+          onIsWriteProtected(static_cast<MscBotIsWriteProtectedEvent&>(ued));
+          break;
+
+        default:   // warning suppression
+          break;
       }
+    }
+
+
+    /**
+     * Read a number of blocks from the disk
+     * @param event
+     */
+
+    void onRead(MscBotReadEvent& event) {
+
+      uint8_t *start;
+
+      // copy the data to the buffer. assumes that the caller won't ask us to overrun
+
+      start=reinterpret_cast<uint8_t *>(&FloppyImage)+(event.blockAddress*512);
+      memcpy(event.buffer,start,static_cast<uint32_t>(event.blockCount)*512);
+      event.success=true;
     }
 
 
@@ -119,6 +156,55 @@ class UsbDeviceMscInternalTest {
 
     void onIsReady(MscBotIsReadyEvent& event) {
       event.isReady=true;
+    }
+
+
+    /**
+     * Handle the is-write-protected event: this device is always write protected because
+     * the data is a virtual disk stored in flash.
+     * @param event The event structure
+     */
+
+    void onIsWriteProtected(MscBotIsWriteProtectedEvent& event) {
+      event.isWriteProtected=true;
+    }
+
+
+    /**
+     * Get the capacity for this disk. The LUN index is in the event which will be zero
+     * for us. We need to set the block size and count as well as the ready flag that says
+     * we have a disk online.
+     * @param event event data
+     */
+
+    void onGetCapacity(MscBotGetCapacityEvent& event) {
+
+      // fill in this disks parameters
+
+      event.blockSize=512;
+      event.blockCount=reinterpret_cast<uint32_t >(&FloppyImageSize)/512;
+      event.ready=true;
+    }
+
+
+    /**
+     * Get the enquiry page for a LUN. Returns some basic stuff about the manufacturer, product
+     * and version.
+     * @param event event data
+     */
+
+    void onGetEnquiryPage(MscBotGetEnquiryPageEvent& event) {
+
+      // we only support a single LUN
+
+      static const uint8_t data[0x24]={
+        0,0x80,2,2,0x24-5,0,0,0,
+       'A', 'n', 'd', 'y', 'W', 'k', 's', 'p',    // 8 byte manufacturer
+       's', 't', 'm', '3', '2', 'p', 'l', 'u','s', ' ', 'U', 'S', 'B', ' ', ' ', ' ',   // 16 byte product
+       '4', '.', '0','0',                         // 4 byte version
+      };
+
+      event.enquiryPage=data;
     }
 
 

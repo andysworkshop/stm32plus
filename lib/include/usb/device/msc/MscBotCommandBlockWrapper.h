@@ -17,6 +17,12 @@ namespace stm32plus {
      */
 
     struct MscBotCommandBlockWrapper {
+
+      enum {
+        SIGNATURE = 0x43425355,
+        RECEIVE_SIZE = 31
+      };
+
       uint32_t dSignature;
       uint32_t dTag;
       uint32_t dDataLength;
@@ -24,6 +30,7 @@ namespace stm32plus {
       uint8_t bLUN;
       uint8_t bCBLength;
       uint8_t CB[16];
+      uint8_t reservedAlign;
     } __attribute__((packed));
   }
 }

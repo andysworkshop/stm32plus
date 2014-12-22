@@ -18,9 +18,9 @@ namespace stm32plus {
 
     enum class MscBotCswStatus : uint8_t {
 
-      CMD_PASSED = 0, //!< CMD_PASSED
-      CMD_FAILED = 1, //!< CMD_FAILED
-      PHASE_ERROR =2  //!< PHASE_ERROR
+      CMD_PASSED = 0,   //!< CMD_PASSED
+      CMD_FAILED = 1,   //!< CMD_FAILED
+      PHASE_ERROR = 2   //!< PHASE_ERROR
     };
   }
 }
