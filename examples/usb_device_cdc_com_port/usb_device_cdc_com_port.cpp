@@ -229,7 +229,7 @@ class UsbDeviceCdcComPortTest {
 
     void onError(UsbErrorEvent& uee) {
 
-      // ignore unconfigured errors from the HID device
+      // ignore unconfigured errors from the CDC device
 
       if(uee.provider==ErrorProvider::ERROR_PROVIDER_USB_DEVICE && uee.code==MyUsb::E_UNCONFIGURED)
         return;
