@@ -30,9 +30,9 @@ using namespace stm32plus::usb;
  *
  * This example assumes that an SDCard is inserted and ready when the device is plugged into
  * the host. The card should remain inserted while the device is plugged in. You can unplug
- * the device from the host, change cards, then re-insert the cable to the host. If there is
+ * the device from the host, change cards, then re-insert the cable to the host. If there's
  * a problem during card initialisation then the red LED on the discovery board (PD5) will
- * light up.
+ * light up (that's the one in the middle near the accelerometer).
  *
  * Compatible MCU:
  *   STM32F4

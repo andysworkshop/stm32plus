@@ -17,6 +17,20 @@ extern uint32_t FloppyImage;
 
 
 /**
+ * This is a self-contained example of the 'mass storage' USB device class. In this mode your
+ * device appears as an external disk and can present a file system to the computer without actually
+ * having to implement the file system. All the device needs to do is to be able to read and write
+ * blocks as well as present some basic meta data and live status information about itself.
+ *
+ * The stm32plus driver implemnts the popular Bulk Only Transport (BOT) standard that provides
+ * one IN and one OUT bulk endpoint. A SCSI command set is used to transfer data, commands, and
+ * responses from and to the host.
+ *
+ * This example compiles in a 360Kb floppy disk image into the MCU flash and makes it available
+ * as a read-only USB mass storage device. To use, simply compile and flash this example to the
+ * F4 discovery board and then hook up the micro USB port to a computer. The 'flash disk' should
+ * be automatically discovered and the files made available for browsing.
+ *
  * Compatible MCU:
  *   STM32F4
  *
@@ -48,9 +62,9 @@ class UsbDeviceMscInternalTest {
     void run() {
 
       /*
-       * set up the parameters for the USB CDC device. Do not attempt to reuse vid/pid combinations unless
-       * you know how to flush your PC's USB driver cache because Windows caches the characteristics of each
-       * device and will suspend your device if it suddenly re-appears as a different device type.
+       * set up the parameters for the USB mass storage device. The default MscScsi template
+       * constructor sets up a media packet size of 8192 bytes. This is the the largest size
+       * that the host will send/receive in read/write operations.
        */
 
       MyUsb::Parameters usbParams;
@@ -60,8 +74,14 @@ class UsbDeviceMscInternalTest {
 
       usbParams.device_manufacturer_text="Andy's Workshop";   // see params.device_language_[ids/count] to change the languages
       usbParams.device_product_text="stm32plus flash drive";
-      usbParams.device_serial_text="002020141222";
       usbParams.device_configuration_text="My configuration";
+
+      /*
+       * The serial number length and format matters for the mass storage device class. Search online
+       * for the rules that you have to follow.
+       */
+
+      usbParams.device_serial_text="002020141222";
 
       /*
        * Declare the USB object - this will initialise internal variables but will not
@@ -99,28 +119,53 @@ class UsbDeviceMscInternalTest {
 
     /**
      * Event callback from the USB stack. Lots of stuff will come through here but
-     * we're only interested in data arriving from the host and control messages
+     * we're only interested in the events that allow us to provide our device data
+     * and information.
      */
 
     void onEvent(UsbEventDescriptor& ued) {
 
       switch(ued.eventType) {
 
+        /*
+         * MSC_BOT_IS_READY is used to test if the device is ready for IO. The Windows host
+         * tends to poll this at least once per second.
+         */
+
         case UsbEventDescriptor::EventType::MSC_BOT_IS_READY:
           onIsReady(static_cast<MscBotIsReadyEvent&>(ued));
           break;
+
+        /*
+         * MSC_BOT_GET_ENQUIRY_PAGE returns some basic control and metadata about the whole
+         * device.
+         */
 
         case UsbEventDescriptor::EventType::MSC_BOT_GET_ENQUIRY_PAGE:
           onGetEnquiryPage(static_cast<MscBotGetEnquiryPageEvent&>(ued));
           break;
 
+        /*
+         * MSC_BOT_GET_CAPACITY is used to return the number of blocks on your device and
+         * the size of each block
+         */
+
         case UsbEventDescriptor::EventType::MSC_BOT_GET_CAPACITY:
           onGetCapacity(static_cast<MscBotGetCapacityEvent&>(ued));
           break;
 
+        /*
+         * BOT_READ is the read operation. A block address and block count is provided.
+         */
+
         case UsbEventDescriptor::EventType::MSC_BOT_READ:
           onRead(static_cast<MscBotReadEvent&>(ued));
           break;
+
+        /*
+         * BOT_IS_WRITE_PROTECTED tests if the media is write protected. This example is
+         * always write protected
+         */
 
         case UsbEventDescriptor::EventType::MSC_BOT_IS_WRITE_PROTECTED:
           onIsWriteProtected(static_cast<MscBotIsWriteProtectedEvent&>(ued));
@@ -134,7 +179,7 @@ class UsbDeviceMscInternalTest {
 
     /**
      * Read a number of blocks from the disk
-     * @param event
+     * @param event The read event parameters.
      */
 
     void onRead(MscBotReadEvent& event) {
@@ -190,6 +235,7 @@ class UsbDeviceMscInternalTest {
     /**
      * Get the enquiry page for a LUN. Returns some basic stuff about the manufacturer, product
      * and version.
+     * @see MscBotGetEnquiryPageEvent
      * @param event event data
      */
 
