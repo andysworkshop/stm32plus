@@ -697,7 +697,11 @@ namespace stm32plus {
 
         // prepare to receive the next packet
 
-        USBD_LL_PrepareReceive(&_deviceHandle,TOutEndpointAddress,_packetData.get(),len);
+        USBD_LL_PrepareReceive(
+            &_deviceHandle,
+            TOutEndpointAddress,
+            _packetData.get(),
+            _blkLen<_maxPacketSize ? _blkLen : _maxPacketSize);
       }
 
       return true;
