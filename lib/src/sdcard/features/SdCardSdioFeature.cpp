@@ -428,7 +428,7 @@ namespace stm32plus {
       /*!< Byte 10 */
       tmp=(uint8_t)((_csdTab[2] & 0x0000FF00) >> 8);
 
-      _cardInfo.CardCapacity=(_cardInfo.SD_csd.DeviceSize + 1) * 512 * 1024;
+      _cardInfo.CardCapacity=(_cardInfo.SD_csd.DeviceSize + 1) * 512ULL * 1024ULL;
       _cardInfo.CardBlockSize=512;
     }
 
