@@ -153,7 +153,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<5>::enable();
+        ExtiInterruptEnabler<6>::enable();
     }
   };
 
@@ -164,7 +164,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<5>::enable();
+        ExtiInterruptEnabler<7>::enable();
     }
   };
 
@@ -175,7 +175,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<5>::enable();
+        ExtiInterruptEnabler<8>::enable();
     }
   };
 
@@ -186,7 +186,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<5>::enable();
+        ExtiInterruptEnabler<9>::enable();
     }
   };
 
@@ -208,7 +208,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<10>::enable();     // shared interrupt 10..15
+        ExtiInterruptEnabler<11>::enable();     // shared interrupt 10..15
     }
   };
 
@@ -219,7 +219,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<10>::enable();     // shared interrupt 10..15
+        ExtiInterruptEnabler<12>::enable();     // shared interrupt 10..15
     }
   };
 
@@ -230,7 +230,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<10>::enable();     // shared interrupt 10..15
+        ExtiInterruptEnabler<13>::enable();     // shared interrupt 10..15
     }
   };
 
@@ -241,7 +241,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<10>::enable();     // shared interrupt 10..15
+        ExtiInterruptEnabler<14>::enable();     // shared interrupt 10..15
     }
   };
 
@@ -252,7 +252,7 @@ namespace stm32plus {
       pin.enableExti();
 
       if(mode==EXTI_Mode_Interrupt)
-        ExtiInterruptEnabler<10>::enable();     // shared interrupt 10..15
+        ExtiInterruptEnabler<15>::enable();     // shared interrupt 10..15
     }
   };
 

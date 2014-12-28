@@ -22,10 +22,13 @@ namespace stm32plus {
   extern "C" void EXTI2_3_IRQHandler();
   extern "C" void EXTI4_15_IRQHandler();
   extern "C" void EXTI15_10_IRQHandler();
+#if defined(STM32PLUS_F0_51)
   extern "C" void PVD_IRQHandler();
+#endif
   extern "C" void RTC_IRQHandler();
+#if defined(STM32PLUS_F0_51)
   extern "C" void TS_IRQHandler();
-
+#endif
 
   /**
    * Helper class to enable only the desired interrupts in the NVIC. This will
@@ -167,22 +170,24 @@ namespace stm32plus {
   /**
    * Non-GPIO EXTI lines
    */
-
+#if defined(STM32PLUS_F0_51)
   template<>
   inline void ExtiInterruptEnabler<16>::enable() {
     _forceLinkage=&PVD_IRQHandler;
     Nvic::configureIrq(PVD_IRQn);
   }
-
+#endif
   template<>
   inline void ExtiInterruptEnabler<17>::enable() {
     _forceLinkage=&RTC_IRQHandler;
     Nvic::configureIrq(RTC_IRQn);
   }
 
+#if defined(STM32PLUS_F0_51)
   template<>
   inline void ExtiInterruptEnabler<19>::enable() {
     _forceLinkage=&TS_IRQHandler;
     Nvic::configureIrq(TS_IRQn);
   }
+#endif
 }
