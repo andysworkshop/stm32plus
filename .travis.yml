@@ -3,6 +3,7 @@ compiler: gcc
 cache: apt
 env:
   - MODE=small MCU=f1mdvl HSE=8000000
+  - MODE=small MCU=f1md HSE=8000000
   - MODE=small MCU=f1hd HSE=8000000
   - MODE=small MCU=f1cle HSE=25000000
   - MODE=small MCU=f051 HSE=8000000

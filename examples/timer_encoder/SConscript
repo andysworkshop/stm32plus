@@ -55,6 +55,11 @@ if supported:
     matches.append("system/f1cle/System.c")
     linkerscript="examples/"+example+"/system/f1cle/Linker.ld"
 
+  elif mcu=="f1md":
+    matches.append("system/f1md/Startup.asm")
+    matches.append("system/f1md/System.c")
+    linkerscript="examples/"+example+"/system/f1md/Linker.ld"
+
   elif mcu=="f1mdvl":
     matches.append("system/f1mdvl/Startup.asm")
     matches.append("system/f1mdvl/System.c")

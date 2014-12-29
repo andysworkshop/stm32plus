@@ -11,7 +11,8 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     f051   = STM32F051 series.
     f1hd   = STM32F103HD series.
     f1cle  = STM32F107 series.
-    f1mdvl = STM32100 Medium Density Value Line series.
+    f1md   = STM32100 medium density series.
+    f1mdvl = STM32100 medium density value line series.
     f4     = STM32F407/f417 series (maintained for backwards compatibility)
     f401   = STM32F401
     f407   = STM32F407
@@ -146,6 +147,8 @@ elif mcu=="f1cle":
   setFlags("m3","F1_CL_E")
 elif mcu=="f1mdvl":
   setFlags("m3","F1_MD_VL")
+elif mcu=="f1md":
+  setFlags("m3","F1_MD")
 elif mcu=="f4" or mcu=="f407":
   setFlags("m4","F407")
   floatOpt()
