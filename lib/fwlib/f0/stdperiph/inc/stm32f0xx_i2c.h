@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0_51)
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_i2c.h
