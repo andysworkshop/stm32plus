@@ -51,7 +51,7 @@ namespace stm32plus {
   typename ExtiInterruptEnabler<TExtiNumber>::FPTR ExtiInterruptEnabler<TExtiNumber>::_forceLinkage=nullptr;
 
   /**
-   * Enabler specialisations for F1 and F4
+   * Enabler specialisations for lines 0 to 3
    */
 
   template<>
@@ -177,6 +177,7 @@ namespace stm32plus {
     Nvic::configureIrq(PVD_IRQn);
   }
 #endif
+
   template<>
   inline void ExtiInterruptEnabler<17>::enable() {
     _forceLinkage=&RTC_IRQHandler;
