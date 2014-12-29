@@ -1,3 +1,4 @@
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_rcc.h
@@ -606,3 +607,4 @@ void RCC_ClearITPendingBit(uint8_t RCC_IT);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

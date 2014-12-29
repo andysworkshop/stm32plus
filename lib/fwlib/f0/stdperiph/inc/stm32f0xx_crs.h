@@ -1,3 +1,4 @@
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_crs.h
@@ -181,3 +182,4 @@ void CRS_ClearITPendingBit(uint32_t CRS_IT);
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

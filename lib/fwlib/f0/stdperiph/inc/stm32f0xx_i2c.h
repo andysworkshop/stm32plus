@@ -1,3 +1,4 @@
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_i2c.h
@@ -476,3 +477,4 @@ void I2C_ClearITPendingBit(I2C_TypeDef* I2Cx, uint32_t I2C_IT);
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

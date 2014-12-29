@@ -1,3 +1,4 @@
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_iwdg.h
@@ -138,3 +139,4 @@ FlagStatus IWDG_GetFlagStatus(uint16_t IWDG_FLAG);
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

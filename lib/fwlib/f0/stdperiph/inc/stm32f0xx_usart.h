@@ -1,3 +1,4 @@
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_usart.h
@@ -597,3 +598,4 @@ void USART_ClearITPendingBit(USART_TypeDef* USARTx, uint32_t USART_IT);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

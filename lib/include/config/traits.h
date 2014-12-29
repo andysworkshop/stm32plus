@@ -24,7 +24,7 @@
   #include "traits/f1/mdvl/traits.h"
 #elif defined(STM32PLUS_F4)
   #include "traits/f4/traits.h"
-#elif defined(STM32PLUS_F0_51)
+#elif defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30) 
   #include "traits/f0/traits.h"
 #endif
 

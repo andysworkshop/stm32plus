@@ -1,3 +1,4 @@
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
 /**
   ******************************************************************************
   * @file    stm32f0xx_flash.h
@@ -428,3 +429,4 @@ FLASH_Status FLASH_WaitForLastOperation(uint32_t Timeout);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif
