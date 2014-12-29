@@ -55,6 +55,7 @@ You can build all of the above combinations side-by-side if you so wish by execu
 		    f1mdvl = STM32100 Medium Density Value Line series.
 		    f4     = STM32F4xx series.
 		    f051   = STM32F051 series.
+			f030   = STM32F030 series.
 		
 		  <HSE>:
 		    Your external oscillator speed in Hz. Some of the ST standard peripheral
