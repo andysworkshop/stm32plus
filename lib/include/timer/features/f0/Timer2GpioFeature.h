@@ -9,8 +9,8 @@
 #pragma once
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F0
-#error This class can only be used with the STM32F0 series
+#if !defined (STM32PLUS_F0) && !defined (STM32PLUS_F0_51)
+#error This class can only be used with the STM32F0_51 series
 #endif
 
 namespace stm32plus {

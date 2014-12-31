@@ -34,7 +34,7 @@ template<> ExtiPeripheral<EXTI_Line15> *ExtiPeripheral<EXTI_Line15>::_extiInstan
 
 extern "C" {
 
-  void __attribute__ ((interrupt("IRQ"))) EXTI0_1_IRQHandler(void) {
+  void __attribute__ ((interrupt("IRQ"))) EXTI4_15_IRQHandler(void) {
 
     if(EXTI_GetITStatus(EXTI_Line4)!=RESET) {
         Exti4::_extiInstance->ExtiInterruptEventSender.raiseEvent(4);

@@ -1,4 +1,4 @@
-#if !defined (STM32PLUS_F0_51)
+#if !defined (STM32PLUS_F0_51) && !defined (STM32PLUS_F0_30)
 #error This source file is only applicable to the F0 series
 #endif
 /**

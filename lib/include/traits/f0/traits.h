@@ -32,6 +32,8 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
 
+#if defined(STM32PLUS_F0_51)
+
   template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
     enum {
@@ -40,7 +42,9 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_DAC1> Dac1PeripheralTraits;
 
-  template<>
+#endif
+ 
+ template<>
   struct PeripheralTraits<PERIPHERAL_GPIO> {
     enum {
       GPIO_SPEED = GPIO_Speed_Level_3
