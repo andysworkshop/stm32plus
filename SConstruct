@@ -7,7 +7,7 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     fast  = -O3
     small = -Os
 
-  <MCU>: f1hd/f1cle/f1mdvl/f051/f4.
+  <MCU>: f1hd/f1cle/f1mdvl/f051/f030/f4.
     f030   = STM32F030 series.
     f051   = STM32F051 series.
     f1hd   = STM32F103HD series.
