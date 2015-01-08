@@ -26,7 +26,13 @@ namespace stm32plus {
       uint32_t _currentTick;
 
     protected:
+    #if defined(STM32PLUS_F4)
       void onTick(uint8_t extiNumber);
+    #elif defined(STM32PLUS_F1)
+      void onTick(void);
+    #else
+      #error Unsupported MCU
+    #endif
 
     public:
       HeapMonitor();
@@ -77,7 +83,7 @@ namespace stm32plus {
     #if defined(STM32PLUS_F4)
       rtc.ExtiInterruptEventSender.insertSubscriber(ExtiInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
     #elif defined(STM32PLUS_F1)
-      rtc.insertSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
+      rtc.RtcSecondInterruptEventSender.insertSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
     #else
       #error Unsupported MCU
     #endif
@@ -95,7 +101,7 @@ namespace stm32plus {
     #if defined(STM32PLUS_F4)
       _rtc->ExtiInterruptEventSender.removeSubscriber(ExtiInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
     #elif defined(STM32PLUS_F1)
-      _rtc->removeSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
+      _rtc->RtcSecondInterruptEventSender.removeSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
     #else
       #error Unsupported MCU
     #endif
@@ -105,6 +111,8 @@ namespace stm32plus {
   /**
    * We ticked.
    */
+
+#if defined(STM32PLUS_F4)
 
   __attribute__((noinline)) inline void HeapMonitor::onTick(uint8_t /* extiNumber */) {
 
@@ -127,4 +135,33 @@ namespace stm32plus {
          << (uint32_t)minfo.fordblks << ","
          << (uint32_t)minfo.keepcost << "\r\n";
   }
+
+#elif defined(STM32PLUS_F1)
+
+   __attribute__((noinline)) inline void HeapMonitor::onTick(void) {
+
+    // check frequency
+
+    if(++_currentTick<_frequency)
+      return;
+
+    // get statistics
+
+    struct mallinfo minfo=mallinfo();
+
+    // send to the output stream
+
+    *_os << (uint32_t)minfo.arena << ","
+         << (uint32_t)minfo.ordblks << ","
+         << (uint32_t)minfo.hblks << ","
+         << (uint32_t)minfo.hblkhd << ","
+         << (uint32_t)minfo.uordblks << ","
+         << (uint32_t)minfo.fordblks << ","
+         << (uint32_t)minfo.keepcost << "\r\n";
+  }
+
+#else
+    #error Unsupported MCU
+#endif
+
 }
