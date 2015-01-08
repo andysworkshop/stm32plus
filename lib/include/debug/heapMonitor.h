@@ -76,7 +76,7 @@ namespace stm32plus {
 
     #if defined(STM32PLUS_F4)
       rtc.ExtiInterruptEventSender.insertSubscriber(ExtiInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
-    #elif defined(STM32PUS_F1)
+    #elif defined(STM32PLUS_F1)
       rtc.insertSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
     #else
       #error Unsupported MCU
@@ -94,7 +94,7 @@ namespace stm32plus {
 
     #if defined(STM32PLUS_F4)
       _rtc->ExtiInterruptEventSender.removeSubscriber(ExtiInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
-    #elif defined(STM32PUS_F1)
+    #elif defined(STM32PLUS_F1)
       _rtc->removeSubscriber(RtcSecondInterruptEventSourceSlot::bind(this,&HeapMonitor::onTick));
     #else
       #error Unsupported MCU
