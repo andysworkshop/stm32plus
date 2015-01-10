@@ -1,6 +1,6 @@
 Introduction
 ============
-Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F051, F100, F103, F107 and F4 devices.
+Firstly, welcome to stm32plus, the C++ library that eases the burden of programming the STM32F030, F051, F100, F103, F107 and F4 devices.
 
 The main introduction and getting started guide can be found at [my website](http://www.andybrown.me.uk).
 
@@ -42,6 +42,7 @@ The examples are configured to run out-of-the-box on the following MCUs:
 | F107 | 256Kb | 64Kb | 72 MHz | 25 MHz |
 | F100 MD VL | 128Kb | 8Kb | 24 MHz | 8 MHz |
 | F051 | 64Kb | 8Kb | 48 MHz | none (uses 8MHz internal) |
+| F030 | 64Kb | 8Kb | 48 MHz | none (uses 8MHz internal) |
 
 If your device is listed but your board has a different oscillator or core clock speed then you may need to adjust `System.c` in the `system` subdirectory
 of the example that you are looking at. If your memory configuration is different then you will need to adjust `Linker.ld` in the `system` subdirectory. 
