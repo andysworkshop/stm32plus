@@ -24,10 +24,16 @@
 // include the features
 
 //If the MCU is supported (on the F4 and F1)
+
 #if defined(STM32PLUS_F4) || defined(STM32PLUS_F1)
-    #include "debug/heapMonitor.h"
-    #include "debug/usartHeapMonitor.h"
+  #include "debug/heapMonitor.h"
+  #include "debug/usartHeapMonitor.h"
 #endif
 
-//SemiHosting is always possible
+// SemiHosting is always possible
+
 #include "debug/SemiHosting.h"
+
+namespace stm32plus {
+  extern SemiHosting shost;
+}
