@@ -74,7 +74,7 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_wwdg.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_syscfg.h"
 
-#elif defined(STM32PLUS_F0)
+#elif defined(STM32PLUS_F0_51)
 
 #include "fwlib/f0/stdperiph/inc/stm32f0xx_misc.h"
 #include "fwlib/f0/stdperiph/inc/stm32f0xx_adc.h"
