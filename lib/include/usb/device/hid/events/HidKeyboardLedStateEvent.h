@@ -12,8 +12,9 @@ namespace stm32plus {
   namespace usb {
 
     /**
-     * Sent when connected and device descriptor is being asked for. Subscriber
-     * can modify descriptor if required.
+     * Sent by the device to the application to notify it that the state of the LEDs
+     * on the HID keyboard has changed. Methods are provided to test the bits that
+     * map to the individual LEDs
      */
 
     struct HidKeyboardLedStateEvent : UsbEventDescriptor {

@@ -11,7 +11,9 @@ namespace stm32plus {
   namespace usb {
 
     /*
-     * Internal full-speed PHY implementation, inherits from the PHY base functionality
+     * Internal full-speed PHY implementation. Inherits from the event source class and the
+     * PHY optional features. The PHY interrupt feature is always inherited because the FS
+     * PHY always operates in interrupt mode.
      */
 
     template<class... Features>

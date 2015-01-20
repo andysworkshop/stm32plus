@@ -33,7 +33,9 @@ namespace stm32plus {
 
 
     /**
-     * Derivation of MscDevice to provide support for the Bulk Only Transport (BOT)
+     * Derivation of MscDevice to provide support for the Bulk Only Transport (BOT). BOT
+     * is the most common transport used in USB sticks and USB hard disks. The protocol
+     * implements a limited SCSI command subset.
      *
      *   1x Configuration descriptor
      *   2x Interfaces

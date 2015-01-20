@@ -11,7 +11,9 @@ namespace stm32plus {
   namespace usb {
 
     /**
-     * USB low power feature for the OTG FS PHY
+     * USB low power feature for the OTG FS PHY. This feature subscribes to the
+     * EXTI line 18 (USB FS wakeup) event and wakes up the MCU when it happens. This relies
+     * on you having a SetSysClock() "C" method in your system startup file.
      */
 
     class FsLowPowerFeature : public PhyFeatureBase {

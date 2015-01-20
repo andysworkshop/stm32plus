@@ -12,8 +12,8 @@ namespace stm32plus {
   namespace usb {
 
     /**
-     * Sent when connected and device descriptor is being asked for. Subscriber
-     * can modify descriptor if required.
+     * Sent by the device code to notify the application that some data has been
+     * received by the CDC device.
      */
 
     struct CdcDataReceivedEvent : UsbEventDescriptor {

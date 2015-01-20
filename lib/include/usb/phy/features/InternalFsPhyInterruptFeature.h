@@ -22,6 +22,7 @@ namespace stm32plus {
      * Interrupt feature for the OTG FS PHY. This is automatically included by the FS PHY
      * implementation. There's no need to include it in the PHY feature list yourself.
      */
+
     class InternalFsPhyInterruptFeature {
 
       public:

@@ -12,7 +12,8 @@ namespace stm32plus {
 
 
     /**
-     * Simple base class for PHY features
+     * Simple base class for PHY features. Enables access to the events
+     * raised by the stack.
      */
 
     class PhyFeatureBase {

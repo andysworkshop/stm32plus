@@ -11,7 +11,9 @@ namespace stm32plus {
   namespace usb {
 
     /*
-     * USB core template, inherits from the PHY implementation
+     * USB core template, inherits from the PHY implementation and is inherited by the
+     * role (device/host) class. Any common functionality between devices and hosts will
+     * be placed here.
      */
 
     template<class TPhy>
@@ -34,6 +36,9 @@ namespace stm32plus {
 
     template<class TPhy>
     bool Core<TPhy>::initialise(Parameters& params) {
+
+      // no specific implementation, just call upwards
+
       return TPhy::initialise(params);
     }
   }

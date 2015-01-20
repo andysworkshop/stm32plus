@@ -12,6 +12,9 @@ namespace stm32plus {
 
 
     /**
+     * Intermediate base class for mass storage device implementations. Provides common
+     * functionality for all mass storage device types.
+     *
      * @tparam TPhy the PHY implementation
      * @tparam TConfigurationDescriptor A structure that holds the complete config descriptor
      * @tparam Features... The device feature classes
