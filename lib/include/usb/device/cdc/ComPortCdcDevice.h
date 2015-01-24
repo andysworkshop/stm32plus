@@ -15,8 +15,8 @@ namespace stm32plus {
      * is supplied by the parent class
      */
 
-    template<class TDevice> using ComPortCdcDeviceDataInEndpoint=BulkInEndpointFeature<2,TDevice>;
-    template<class TDevice> using ComPortCdcDeviceDataOutEndpoint=BulkOutEndpointFeature<3,TDevice>;
+    template<class TDevice> using ComPortCdcDeviceDataInEndpoint=BulkInEndpointFeature<1,TDevice>;
+    template<class TDevice> using ComPortCdcDeviceDataOutEndpoint=BulkOutEndpointFeature<1,TDevice>;
 
 
     /**
@@ -87,8 +87,8 @@ namespace stm32plus {
        protected:
 
          enum {
-           DATA_IN_EP_ADDRESS = EndpointDescriptor::IN | 2,     // data in endpoint address
-           DATA_OUT_EP_ADDRESS = EndpointDescriptor::OUT | 3,   // data out endpoint address
+           DATA_IN_EP_ADDRESS = EndpointDescriptor::IN | 1,     // data in endpoint address
+           DATA_OUT_EP_ADDRESS = EndpointDescriptor::OUT | 1,   // data out endpoint address
          };
 
          uint16_t _maxInPacketSize;

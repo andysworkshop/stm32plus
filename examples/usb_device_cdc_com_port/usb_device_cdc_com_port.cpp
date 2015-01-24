@@ -25,8 +25,9 @@ using namespace stm32plus::usb;
  * you should have a new "Virtual COM Port" entry under the "Ports (COM & LPT)" category.
  *
  * To test, launch a terminal application (I use the free RealTerm program) and connect to the
- * virtual COM port. Go ahead and type something. Each character that you type will be echo'd back
- * to the terminal with the message "You pressed: X" where X is the key that you pressed.
+ * virtual COM port. Set the protocol to 9600/8/N/1. Go ahead and type something. Each character
+ * that you type will be echo'd back to the terminal with the message "You pressed: X" where X is
+ * the key that you pressed.
  *
  * Compatible MCU:
  *   STM32F4
@@ -67,6 +68,7 @@ class UsbDeviceCdcComPortTest {
 
     /*
      * The current line coding (baud rate, parity etc)
+     * The CdcLineCoding constructor sets a default of 9600/8/N/1
      */
 
     CdcLineCoding _lineCoding;

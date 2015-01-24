@@ -22,10 +22,12 @@ namespace stm32plus {
      * @tparam Features... The device feature classes
      */
 
+    template<class TPhy> using CdcDeviceInterruptInEndpoint=InterruptInEndpointFeature<2,Device<TPhy>>;
+
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
     class CdcDevice : public Device<TPhy>,
                       public ControlEndpointFeature<Device<TPhy>>,
-                      public InterruptInEndpointFeature<1,Device<TPhy>>,
+                      public CdcDeviceInterruptInEndpoint<TPhy>,
                       public Features<Device<TPhy>>... {
 
 
@@ -37,7 +39,7 @@ namespace stm32plus {
 
         struct Parameters : Device<TPhy>::Parameters,
                             ControlEndpointFeature<Device<TPhy>>::Parameters,
-                            InterruptInEndpointFeature<1,Device<TPhy>>::Parameters,
+                            CdcDeviceInterruptInEndpoint<TPhy>::Parameters,
                             Features<Device<TPhy>>::Parameters... {
 
           uint8_t cdc_cmd_poll_interval;        // default is 16ms
@@ -54,7 +56,7 @@ namespace stm32plus {
       protected:
 
         enum {
-          COMMAND_EP_ADDRESS = EndpointDescriptor::IN | 1     // command endpoint address
+          COMMAND_EP_ADDRESS = EndpointDescriptor::IN | 2     // command endpoint address
         };
 
         TConfigurationDescriptor  _configurationDescriptor;
@@ -81,7 +83,7 @@ namespace stm32plus {
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
     inline CdcDevice<TPhy,TConfigurationDescriptor,Features...>::CdcDevice()
       : ControlEndpointFeature<Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
-        InterruptInEndpointFeature<1,Device<TPhy>>(static_cast<Device<TPhy>&>(*this)),
+        CdcDeviceInterruptInEndpoint<TPhy>(static_cast<Device<TPhy>&>(*this)),
         Features<Device<TPhy>>(static_cast<Device<TPhy>&>(*this))... {
 
       // subscribe to USB events
@@ -120,7 +122,7 @@ namespace stm32plus {
 
       if(!Device<TPhy>::initialise(params) ||
          !ControlEndpointFeature<Device<TPhy>>::initialise(params) ||
-         !InterruptInEndpointFeature<1,Device<TPhy>>::initialise(params) ||
+         !CdcDeviceInterruptInEndpoint<TPhy>::initialise(params) ||
          !RecursiveBoolInitWithParams<CdcDevice,Features<Device<TPhy>>...>::tinit(this,params))
         return false;
 

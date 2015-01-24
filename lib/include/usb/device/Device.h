@@ -440,7 +440,7 @@ namespace stm32plus {
     template<class TPhy>
     inline void Device<TPhy>::onResetIrqEvent() {
 
-      USBD_SpeedTypeDef speed=USBD_SPEED_FULL;
+      USBD_SpeedTypeDef speed;
 
       switch(_pcdHandle.Init.speed) {
 
