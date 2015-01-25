@@ -47,7 +47,9 @@ namespace stm32plus {
       bool receive(uint16_t *data,uint32_t numHalfWords);
 
       bool readyToSend() const;
+      bool send(uint8_t dataToSend) const;
       bool send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived=nullptr) const;
+      bool send(uint16_t dataToSend) const;
       bool send(const uint16_t *dataToSend,uint32_t numHalfWords,uint16_t *dataReceived=nullptr) const;
 
       void setNss(bool value) const;
@@ -264,6 +266,22 @@ namespace stm32plus {
     return !!SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_TXE);
   }
 
+  /**
+   * Send a single byte.
+   * @param dataToSend The byte to send
+   */
+  inline bool Spi::send(uint8_t dataToSend) const {
+    // wait for ready to send
+
+    while(!readyToSend())
+      if(hasError())
+        return false;
+
+    // send the byte
+    sendData8(_peripheralAddress,dataToSend);
+
+    return true;
+  }
 
   /**
    * Send a block of bytes, blocking. Optionally receive data at the same time
@@ -274,17 +292,9 @@ namespace stm32plus {
 
   inline bool Spi::send(const uint8_t *dataToSend,uint32_t numBytes,uint8_t *dataReceived) const {
 
-    // wait for ready to send
-
     while(numBytes--) {
 
-      while(!readyToSend())
-        if(hasError())
-          return false;
-
-      // send the byte
-
-      sendData8(_peripheralAddress,*dataToSend++);
+      send(*dataToSend++);
 
       if(_direction==SPI_Direction_2Lines_FullDuplex) {
 
@@ -306,6 +316,24 @@ namespace stm32plus {
     return true;
   }
 
+  /**
+   * Send a single half-word.
+   * @param dataToSend The hald-word to send
+   */
+  inline bool Spi::send(uint16_t dataToSend) const
+  {
+      // wait for ready to send
+
+      while(!readyToSend())
+        if(hasError())
+          return false;
+
+      // send the half-word
+
+      sendData16(_peripheralAddress,dataToSend);
+
+      return true;
+  }
 
   /**
    * Send a block of half-words, blocking. Optionally receive data at the same time
@@ -318,15 +346,7 @@ namespace stm32plus {
 
     while(numHalfWords--) {
 
-      // wait for ready to send
-
-      while(!readyToSend())
-        if(hasError())
-          return false;
-
-      // send the half-word
-
-      sendData16(_peripheralAddress,*dataToSend++);
+      send(*dataToSend++);
 
       if(_direction==SPI_Direction_2Lines_FullDuplex) {
 
