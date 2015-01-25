@@ -266,11 +266,15 @@ namespace stm32plus {
     return !!SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_TXE);
   }
 
+
   /**
    * Send a single byte.
    * @param dataToSend The byte to send
+   * @return true if it worked, false on error
    */
+
   inline bool Spi::send(uint8_t dataToSend) const {
+
     // wait for ready to send
 
     while(!readyToSend())
@@ -278,10 +282,11 @@ namespace stm32plus {
         return false;
 
     // send the byte
-    sendData8(_peripheralAddress,dataToSend);
 
+    sendData8(_peripheralAddress,dataToSend);
     return true;
   }
+
 
   /**
    * Send a block of bytes, blocking. Optionally receive data at the same time
@@ -316,10 +321,13 @@ namespace stm32plus {
     return true;
   }
 
+
   /**
    * Send a single half-word.
    * @param dataToSend The hald-word to send
+   * @return true if it worked, false on error
    */
+
   inline bool Spi::send(uint16_t dataToSend) const
   {
       // wait for ready to send
@@ -331,9 +339,9 @@ namespace stm32plus {
       // send the half-word
 
       sendData16(_peripheralAddress,dataToSend);
-
       return true;
   }
+
 
   /**
    * Send a block of half-words, blocking. Optionally receive data at the same time
