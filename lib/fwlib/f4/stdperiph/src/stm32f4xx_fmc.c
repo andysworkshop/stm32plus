@@ -32,7 +32,7 @@
   ******************************************************************************
   */
 
-#if defined (STM32F427_437xx) || defined (STM32F429_439xx)
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_fmc.h"
