@@ -78,7 +78,7 @@ namespace stm32plus {
         _first=false;
       }
       else {
-        _rttvar=((3*_rttvar)+Abs((int32_t)_srtt-(int32_t)r))/4;
+        _rttvar=((3*_rttvar)+std::abs((int32_t)_srtt-(int32_t)r))/4;
         _srtt=((7*_srtt)+r)/8;
       }
     }
