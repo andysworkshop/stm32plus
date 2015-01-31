@@ -15,7 +15,6 @@
 
 #include "config/i2c.h"
 #include "config/stream.h"
-#include "util/MinMax.h"
 
 // general includes
 

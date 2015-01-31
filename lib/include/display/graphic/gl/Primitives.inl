@@ -46,9 +46,9 @@ namespace stm32plus {
       // optimisation for straight lines. filling rectangles is much more efficient than plotting points
 
       if(p1.X==p2.X)
-        fillRectangle(Rectangle(p1.X,Min<int16_t>(p1.Y,p2.Y),1,Abs<int16_t>(p2.Y-p1.Y)+1));
+        fillRectangle(Rectangle(p1.X,std::min<int16_t>(p1.Y,p2.Y),1,std::abs(p2.Y-p1.Y)+1));
       else if(p1.Y==p2.Y)
-        fillRectangle(Rectangle(Min<int16_t>(p1.X,p2.X),p1.Y,Abs<int16_t>(p2.X-p1.X)+1,1));
+        fillRectangle(Rectangle(std::min<int16_t>(p1.X,p2.X),p1.Y,std::abs(p2.X-p1.X)+1,1));
       else {
         int16_t x0,x1,y0,y1;
 
@@ -76,7 +76,7 @@ namespace stm32plus {
         // calculate constants up-front
 
         int16_t dx=x1-x0;
-        int16_t dy=Abs(y1-y0);
+        int16_t dy=std::abs(y1-y0);
         int16_t sy=y0<y1 ? 1 : -1;
         int16_t mdy=-dy;
         int16_t err=dx-dy;
