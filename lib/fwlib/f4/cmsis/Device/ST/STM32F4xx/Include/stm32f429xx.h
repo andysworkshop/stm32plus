@@ -550,15 +550,21 @@ typedef struct
   __IO uint32_t PATT2;      /*!< NAND Flash Attribute memory space timing register 2, Address offset: 0x6C */
   uint32_t      RESERVED0;  /*!< Reserved, 0x70                                                            */
   __IO uint32_t ECCR2;      /*!< NAND Flash ECC result registers 2,                   Address offset: 0x74 */
-  uint32_t      RESERVED1;  /*!< Reserved, 0x78                                                            */
-  uint32_t      RESERVED2;  /*!< Reserved, 0x7C                                                            */
+} FMC_Bank2_TypeDef;
+
+/** 
+  * @brief Flexible Memory Controller Bank3
+  */
+  
+typedef struct
+{
   __IO uint32_t PCR3;       /*!< NAND Flash control register 3,                       Address offset: 0x80 */
   __IO uint32_t SR3;        /*!< NAND Flash FIFO status and interrupt register 3,     Address offset: 0x84 */
   __IO uint32_t PMEM3;      /*!< NAND Flash Common memory space timing register 3,    Address offset: 0x88 */
   __IO uint32_t PATT3;      /*!< NAND Flash Attribute memory space timing register 3, Address offset: 0x8C */
-  uint32_t      RESERVED3;  /*!< Reserved, 0x90                                                            */
+  uint32_t      RESERVED0;  /*!< Reserved, 0x90                                                            */
   __IO uint32_t ECCR3;      /*!< NAND Flash ECC result registers 3,                   Address offset: 0x94 */
-} FMC_Bank2_3_TypeDef;
+} FMC_Bank3_TypeDef;
 
 /** 
   * @brief Flexible Memory Controller Bank4
@@ -1185,7 +1191,8 @@ USB_OTG_HostChannelTypeDef;
 /*!< FMC Bankx registers base address */
 #define FMC_Bank1_R_BASE      (FMC_R_BASE + 0x0000)
 #define FMC_Bank1E_R_BASE     (FMC_R_BASE + 0x0104)
-#define FMC_Bank2_3_R_BASE    (FMC_R_BASE + 0x0060)
+#define FMC_Bank2_R_BASE      (FMC_R_BASE + 0x0060)
+#define FMC_Bank3_R_BASE      (FMC_R_BASE + 0x0080)
 #define FMC_Bank4_R_BASE      (FMC_R_BASE + 0x00A0)
 #define FMC_Bank5_6_R_BASE    (FMC_R_BASE + 0x0140)
 
@@ -1308,7 +1315,8 @@ USB_OTG_HostChannelTypeDef;
 #define RNG                 ((RNG_TypeDef *) RNG_BASE)
 #define FMC_Bank1           ((FMC_Bank1_TypeDef *) FMC_Bank1_R_BASE)
 #define FMC_Bank1E          ((FMC_Bank1E_TypeDef *) FMC_Bank1E_R_BASE)
-#define FMC_Bank2_3         ((FMC_Bank2_3_TypeDef *) FMC_Bank2_3_R_BASE)
+#define FMC_Bank2           ((FMC_Bank2_TypeDef *) FMC_Bank2_R_BASE)
+#define FMC_Bank3           ((FMC_Bank3_TypeDef *) FMC_Bank3_R_BASE)
 #define FMC_Bank4           ((FMC_Bank4_TypeDef *) FMC_Bank4_R_BASE)
 #define FMC_Bank5_6         ((FMC_Bank5_6_TypeDef *) FMC_Bank5_6_R_BASE)
 
