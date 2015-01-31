@@ -152,7 +152,7 @@ namespace stm32plus {
           // copy the incoming data and release the waiting code
 
           _awaitingDatagramSize=NetUtil::ntohs(datagram->udp_length)-UdpDatagram::getHeaderSize();
-          *_awaitingBufferSize=Min<uint16_t>((uint16_t)_awaitingDatagramSize,(uint16_t)*_awaitingBufferSize);
+          *_awaitingBufferSize=std::min<uint16_t>((uint16_t)_awaitingDatagramSize,(uint16_t)*_awaitingBufferSize);
           memcpy(const_cast<void *>(_awaitingBuffer),datagram->udp_data,*_awaitingBufferSize);
           const_cast<IpPacketHeader&>(_ipPacketHeader)=*(ipe.ipPacket.header);     // struct copy
 

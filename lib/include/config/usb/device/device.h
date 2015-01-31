@@ -38,7 +38,6 @@
   #include "config/exti.h"
   #include "util/Meta.h"
   #include "util/StdExt.h"
-  #include "util/MinMax.h"
 
   #include "usb/device/HalUsbdStatus.h"
 

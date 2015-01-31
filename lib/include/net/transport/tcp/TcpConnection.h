@@ -322,7 +322,7 @@ namespace stm32plus {
      */
 
     inline bool TcpConnection::receiveWindowCanBeOpened() const {
-      return _state.rxWindow.receiveWindow>=Min(_params.tcp_receiveBufferSize/2,(int)_segmentSizeLimit);
+      return _state.rxWindow.receiveWindow>=std::min(_params.tcp_receiveBufferSize/2,(int)_segmentSizeLimit);
     }
 
 

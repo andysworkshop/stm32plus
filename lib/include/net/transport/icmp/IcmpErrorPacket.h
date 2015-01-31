@@ -27,7 +27,7 @@ namespace stm32plus {
 
       // up to 8 bytes of the payload go back in an error packet
 
-      dataSize=Min(static_cast<uint16_t>(8),ipPacket.payloadLength);
+      dataSize=std::min(static_cast<uint16_t>(8),ipPacket.payloadLength);
 
       // allocate space for it
 

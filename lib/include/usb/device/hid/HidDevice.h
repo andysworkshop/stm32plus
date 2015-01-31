@@ -175,13 +175,13 @@ namespace stm32plus {
 
               USBD_CtlSendData(&this->_deviceHandle,
                                const_cast<uint8_t *>(_reportDescriptor),
-                               Min<uint16_t>(_reportDescriptorLength,event.request.wLength));
+                               std::min<uint16_t>(_reportDescriptorLength,event.request.wLength));
 
             } else if(event.request.wValue >> 8 == HidClassDescriptor::HID_DESCRIPTOR_TYPE) {
 
               USBD_CtlSendData(&this->_deviceHandle,
                                reinterpret_cast<uint8_t *>(&_configurationDescriptor.hid),
-                               Min<uint16_t>(sizeof(_configurationDescriptor.hid),event.request.wLength));
+                               std::min<uint16_t>(sizeof(_configurationDescriptor.hid),event.request.wLength));
             }
 
             break;
