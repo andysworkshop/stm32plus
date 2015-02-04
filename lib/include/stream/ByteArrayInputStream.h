@@ -81,7 +81,7 @@ namespace stm32plus {
 
   inline bool ByteArrayInputStream::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
 
-    actuallyRead=Min(size,static_cast<uint32_t>(_size-_pos));
+    actuallyRead=std::min(size,static_cast<uint32_t>(_size-_pos));
 
     if(actuallyRead) {
       memcpy(buffer,_data+_pos,actuallyRead);

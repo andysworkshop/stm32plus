@@ -113,7 +113,7 @@ namespace stm32plus {
           return true;
       }
 
-      count=Min(_bufferSize-_pos,size);
+      count=std::min(_bufferSize-_pos,size);
       memcpy(ptr,_buffer+_pos,count);
       _pos+=count;
 

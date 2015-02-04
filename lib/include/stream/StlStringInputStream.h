@@ -89,7 +89,7 @@ namespace stm32plus {
 
   inline bool StlStringInputStream::read(void *buffer,uint32_t size,uint32_t& actuallyRead) {
 
-    actuallyRead=Min(size,static_cast<uint32_t>(_string->length()-_pos));
+    actuallyRead=std::min(size,static_cast<uint32_t>(_string->length()-_pos));
 
     if(actuallyRead) {
       memcpy(buffer,_string->c_str()+_pos,actuallyRead);

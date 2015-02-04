@@ -115,7 +115,7 @@ namespace stm32plus {
 
     for(ptr=buffer;count;count-=toWrite) {
 
-      toWrite=Min<uint8_t>(count,0x20-(this->_position & 0x1f));
+      toWrite=std::min<uint8_t>(count,0x20-(this->_position & 0x1f));
       if(!TI2C::writeBytes(this->_position,ptr,toWrite))
         return false;
 
@@ -162,7 +162,7 @@ namespace stm32plus {
 
     for(ptr=buffer;count;count-=toRead) {
 
-      toRead=Min<uint8_t>(count,0x20-(this->_position & 0x1f));
+      toRead=std::min<uint8_t>(count,0x20-(this->_position & 0x1f));
       if(!TI2C::readBytes(this->_position,ptr,toRead))
         return false;
 
