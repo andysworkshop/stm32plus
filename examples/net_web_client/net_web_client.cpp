@@ -184,7 +184,7 @@ class NetHttpClientTest {
 
           // read a chunk
 
-          if(!conn->receive(buffer,Min(contentLength,100L),actuallyRead,60000)) {
+          if(!conn->receive(buffer,std::min(contentLength,100L),actuallyRead,60000)) {
             *_outputStream << "Timed out waiting for data from the server\r\n";
             error();
           }

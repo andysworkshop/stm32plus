@@ -12,7 +12,7 @@
  * associated graphics library.
  */
 
-// tft depends on gpio, fsmc, timing, dma, stream, minmax, memblock, string, font
+// tft depends on gpio, fsmc, timing, dma, stream, memblock, string, font
 
 #include "config/gpio.h"
 
@@ -25,7 +25,6 @@
 #include "config/stream.h"
 #include "config/string.h"
 #include "config/display/font.h"
-#include "util/MinMax.h"
 #include "util/DoublePrecision.h"
 #include "memory/Memblock.h"
 

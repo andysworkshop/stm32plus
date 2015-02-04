@@ -203,16 +203,16 @@ class UsbDeviceHidMouseTest {
 
         // only consider movements >2 pixels
 
-        if(Abs<int8_t>(x)<=2)
+        if(std::abs(x)<=2)
           x=0;
 
-        if(Abs<int8_t>(y)<=2)
+        if(std::abs(y)<=2)
           y=0;
 
         // cap x,y at (-127 .. +127)
 
-        x=Min<int8_t>(127,Max<int8_t>(-127,x));
-        y=Min<int8_t>(127,Max<int8_t>(-127,y));
+        x=std::min<int8_t>(127,std::max<int8_t>(-127,x));
+        y=std::min<int8_t>(127,std::max<int8_t>(-127,y));
 
         // send the report to the USB host (your PC)
 

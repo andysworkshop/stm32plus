@@ -244,7 +244,7 @@ namespace stm32plus {
 
         // read a chunk
 
-        size=Min((uint32_t)sizeof(buf),_contentLength);
+        size=std::min((uint32_t)sizeof(buf),_contentLength);
 
         if(!receive(buf,size,actuallyReceived,0))
           return;

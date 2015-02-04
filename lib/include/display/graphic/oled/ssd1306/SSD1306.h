@@ -11,7 +11,6 @@
 #include "display/graphic/PanelConfiguration.h"
 #include "display/graphic/FrameBuffer.h"
 #include "display/graphic/oled/ssd1306/SSD1306Orientation.h"
-#include "util/MinMax.h"
 #include "timing/MillisecondTimer.h"
 
 
@@ -372,7 +371,7 @@ namespace stm32plus {
 
       uint8_t brightness;
 
-      brightness=Max<uint8_t>(red,Max<uint8_t>(green,blue));
+      brightness=std::max<uint8_t>(red,std::max<uint8_t>(green,blue));
       dest.value=brightness>127;
     }
 

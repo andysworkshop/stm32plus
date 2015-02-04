@@ -17,7 +17,6 @@
 
 #include "config/timing.h"
 #include "util/DoublePrecision.h"
-#include "util/MinMax.h"
 #include "memory/Memblock.h"
 #include "string"
 
