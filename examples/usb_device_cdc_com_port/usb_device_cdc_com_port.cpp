@@ -85,7 +85,7 @@ class UsbDeviceCdcComPortTest {
       // initialise
 
       _loopState=LoopState::WAITING;
-      strcpy(_message,"You pressed: X\r\n");
+      strncpy(_message,"You pressed: X\r\n",sizeof(_message));
 
       /*
        * set up the parameters for the USB CDC device. Do not attempt to reuse vid/pid combinations unless
