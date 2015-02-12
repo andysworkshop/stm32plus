@@ -124,7 +124,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="hidreader|system/f051|system/f1mdvl|system/f1cle|system/f1hd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="hidreader|system/f051|system/f1mdvl|system/f107_72_8|system/f1hd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -153,7 +153,7 @@
 			<resource resourceType="PROJECT" workspacePath="/r61523"/>
 		</configuration>
 		<configuration configurationName="Debug_hd_72"/>
-		<configuration configurationName="Debug_cle_72"/>
+		<configuration configurationName="Debug_f107_72_8"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
 </cproject>
