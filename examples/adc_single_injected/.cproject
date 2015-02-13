@@ -124,14 +124,14 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="system/f1mdvl|system/flmdvl|system/f107_72_8|system/f1hd" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="system/f1mdvl|system/flmdvl|system/f107_72_8|system/f1hd_72_8" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 		</cconfiguration>
 		<cconfiguration id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764.1065208543">
-			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764.1065208543" moduleId="org.eclipse.cdt.core.settings" name="Debug_hd_72">
+			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764.1065208543" moduleId="org.eclipse.cdt.core.settings" name="Debug_f1hd_72_8">
 				<externalSettings/>
 				<extensions>
 					<extension id="org.eclipse.cdt.core.GCCErrorParser" point="org.eclipse.cdt.core.ErrorParser"/>
@@ -143,7 +143,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="${cross_rm} -rf" description="F103 HD" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764.1065208543" name="Debug_hd_72" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug">
+				<configuration artifactName="${ProjName}" buildArtefactType="org.eclipse.cdt.build.core.buildArtefactType.exe" buildProperties="org.eclipse.cdt.build.core.buildType=org.eclipse.cdt.build.core.buildType.debug,org.eclipse.cdt.build.core.buildArtefactType=org.eclipse.cdt.build.core.buildArtefactType.exe" cleanCommand="${cross_rm} -rf" description="F103HD, 72MHz core, 8MHz oscillator" id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764.1065208543" name="Debug_f1hd_72_8" parent="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug">
 					<folderInfo id="ilg.gnuarmeclipse.managedbuild.cross.config.elf.debug.963595764.1065208543." name="/" resourcePath="">
 						<toolChain id="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug.666420499" name="Cross ARM GCC" nonInternalBuilderId="ilg.gnuarmeclipse.managedbuild.cross.builder" superClass="ilg.gnuarmeclipse.managedbuild.cross.toolchain.elf.debug">
 							<option id="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.715836977" name="Optimization Level" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level" value="ilg.gnuarmeclipse.managedbuild.cross.option.optimization.level.none" valueType="enumerated"/>
@@ -223,11 +223,11 @@
 							<tool id="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.linker.897973589" name="Cross ARM C++ Linker" superClass="ilg.gnuarmeclipse.managedbuild.cross.tool.cpp.linker">
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.gcsections.1350391112" name="Remove unused sections (-Xlinker --gc-sections)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.gcsections" value="true" valueType="boolean"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.scriptfile.149771407" name="Script files (-T)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.scriptfile" valueType="stringList">
-									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/system/f1hd/Linker.ld"/>
+									<listOptionValue builtIn="false" value="${workspace_loc:/${ProjName}}/system/f1hd_72_8/Linker.ld"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.other.329413931" name="Other linker flags" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.other" value="-Wl,-wrap,__aeabi_unwind_cpp_pr0 -Wl,-wrap,__aeabi_unwind_cpp_pr1 -Wl,-wrap,__aeabi_unwind_cpp_pr2" valueType="string"/>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.paths.1481941185" name="Library search path (-L)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/Debug_hd_72}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/stm32plus/Debug_f1hd_72_8}&quot;"/>
 								</option>
 								<option id="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.libs.531322687" name="Libraries (-l)" superClass="ilg.gnuarmeclipse.managedbuild.cross.option.cpp.linker.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="stm32plus"/>
@@ -382,7 +382,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="system/f1mdvl|system/flmdvl|system/f1hd|system/f407_168_8" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="system/f1mdvl|system/flmdvl|system/f1hd_72_8|system/f407_168_8" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -511,7 +511,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="system/f1hd|system/f107_72_8|system/f407_168_8" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="system/f1hd_72_8|system/f107_72_8|system/f407_168_8" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -539,7 +539,7 @@
 		<configuration configurationName="Debug">
 			<resource resourceType="PROJECT" workspacePath="/r61523"/>
 		</configuration>
-		<configuration configurationName="Debug_hd_72"/>
+		<configuration configurationName="Debug_f1hd_72_8"/>
 		<configuration configurationName="Debug_f107_72_8"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
