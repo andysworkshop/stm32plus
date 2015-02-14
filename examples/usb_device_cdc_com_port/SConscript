@@ -41,29 +41,34 @@ if supported:
   # handle MCU differences
 
   if mcu.startswith("f4"):
-    matches.append("system/f4/Startup.asm")
-    matches.append("system/f4/System.c")
-    linkerscript="examples/"+example+"/system/f4/Linker.ld"
+    matches.append("system/f407_168_8/Startup.asm")
+    matches.append("system/f407_168_8/System.c")
+    linkerscript="examples/"+example+"/system/f407_168_8/Linker.ld"
 
   elif mcu=="f1hd":
-    matches.append("system/f1hd/Startup.asm")
-    matches.append("system/f1hd/System.c")
-    linkerscript="examples/"+example+"/system/f1hd/Linker.ld"
+    matches.append("system/f1hd_72_8/Startup.asm")
+    matches.append("system/f1hd_72_8/System.c")
+    linkerscript="examples/"+example+"/system/f1hd_72_8/Linker.ld"
 
   elif mcu=="f1cle":
-    matches.append("system/f1cle/Startup.asm")
-    matches.append("system/f1cle/System.c")
-    linkerscript="examples/"+example+"/system/f1cle/Linker.ld"
+    matches.append("system/f107_72_8/Startup.asm")
+    matches.append("system/f107_72_8/System.c")
+    linkerscript="examples/"+example+"/system/f107_72_8/Linker.ld"
 
   elif mcu=="f1mdvl":
-    matches.append("system/f1mdvl/Startup.asm")
-    matches.append("system/f1mdvl/System.c")
-    linkerscript="examples/"+example+"/system/f1mdvl/Linker.ld"
+    matches.append("system/f1mdvl_24_8/Startup.asm")
+    matches.append("system/f1mdvl_24_8/System.c")
+    linkerscript="examples/"+example+"/system/f1mdvl_24_8/Linker.ld"
 
   elif mcu=="f051":
-    matches.append("system/f051/Startup.asm")
-    matches.append("system/f051/System.c")
-    linkerscript="examples/"+example+"/system/f051/Linker.ld"
+    matches.append("system/f051_48_8/Startup.asm")
+    matches.append("system/f051_48_8/System.c")
+    linkerscript="examples/"+example+"/system/f051_48_8/Linker.ld"
+
+  elif mcu=="f030":
+    matches.append("system/f030_48_8/Startup.asm")
+    matches.append("system/f030_48_8/System.c")
+    linkerscript="examples/"+example+"/system/f030_48_8/Linker.ld"
 
   buildoutdir="examples/"+example+"/build/"+systemprefix
 
