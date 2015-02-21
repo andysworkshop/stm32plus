@@ -56,8 +56,8 @@ namespace stm32plus {
        * @param[in] size The size of the caller supplied buffer
        */
 
-      BufferedInputOutputStream(uint8_t *buffer,uint32_t size) {
-        _readPtr=_writePtr=_buffer=buffer;
+      BufferedInputOutputStream(void *buffer,uint32_t size) {
+        _readPtr=_writePtr=_buffer=static_cast<uint8_t*>(buffer);
         _bufferSize=size;
         _needToFree=false;
       }
