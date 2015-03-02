@@ -81,7 +81,7 @@ def setFlags(cpu,libdef):
 #
 
 def floatOpt():
-
+  global float
   float=ARGUMENTS.get('float')
   if float=="hard":
     env.Append(CCFLAGS=["-mfloat-abi=hard"])
