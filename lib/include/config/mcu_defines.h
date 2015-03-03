@@ -34,7 +34,6 @@
 
 #elif defined(STM32PLUS_F1_MD)
   #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32PLUS_F1_MD             // enable features common to all MD devices
   #define STM32F10X_MD                // for the std peripheral library
 
 #elif defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
