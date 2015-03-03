@@ -32,6 +32,11 @@
   #define STM32PLUS_F1_VL             // enable features common to all VL devices
   #define STM32F10X_MD_VL             // for the std peripheral library
 
+#elif defined(STM32PLUS_F1_MD)
+  #define STM32PLUS_F1                // enable features common to all F1
+  #define STM32PLUS_F1_MD             // enable features common to all MD devices
+  #define STM32F10X_MD                // for the std peripheral library
+
 #elif defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
   #define STM32PLUS_F0                // enable features common to all F0
   #define STM32F0XX_MD                // these are medium density devices
