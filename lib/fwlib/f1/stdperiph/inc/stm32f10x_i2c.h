@@ -1,4 +1,3 @@
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD) || defined(STM32PLUS_F1_MD_VL)
 /**
   ******************************************************************************
   * @file    stm32f10x_i2c.h
@@ -683,4 +682,3 @@ void I2C_ClearITPendingBit(I2C_TypeDef* I2Cx, uint32_t I2C_IT);
   */ 
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
-#endif

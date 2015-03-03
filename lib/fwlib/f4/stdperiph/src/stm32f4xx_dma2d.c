@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_DMA2D)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_dma2d.c
@@ -782,3 +784,4 @@ void DMA2D_ClearITPendingBit(uint32_t DMA2D_IT)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

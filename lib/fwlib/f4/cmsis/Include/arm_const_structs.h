@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /* ----------------------------------------------------------------------
 * Copyright (C) 2010-2013 ARM Limited. All rights reserved.
 *
@@ -44,8 +43,8 @@
 #ifndef _ARM_CONST_STRUCTS_H
 #define _ARM_CONST_STRUCTS_H
 
-#include "fwlib/f4/cmsis/Include/arm_math.h"
-#include "fwlib/f4/cmsis/Include/arm_common_tables.h"
+#include "arm_math.h"
+#include "arm_common_tables.h"
 
    const arm_cfft_instance_f32 arm_cfft_sR_f32_len16 = {
       16, twiddleCoef_16, armBitRevIndexTable16, ARMBITREVINDEXTABLE__16_TABLE_LENGTH
@@ -83,5 +82,4 @@
       4096, twiddleCoef_4096, armBitRevIndexTable4096, ARMBITREVINDEXTABLE4096_TABLE_LENGTH
    };
 
-#endif
 #endif

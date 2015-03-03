@@ -37,6 +37,13 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_fsmc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
 
+/*
+ * stm32plus compatibility addition
+ */
+
+#define FSMC_Bank2 FSMC_Bank2_3
+#define FSMC_Bank3 FSMC_Bank2_3
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */

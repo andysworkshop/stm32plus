@@ -7,13 +7,22 @@
 
 #pragma once
 
+
+// include the file that sets up all the MCU #defines
+
+#include "config/mcu_defines.h"
+
+// include the standard integer definitions
+
+#include <stdint.h>
+
 /**
  * @file
  * This internal include file is included for you by the top-level stm32plus.h config file. Its purpose is to
  * include everything that's required from the ST Microelectronics Standard Peripheral Library.
  */
 
-#if defined (STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD) || defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1)
 
 #include "fwlib/f1/stdperiph/inc/misc.h"
 #include "fwlib/f1/stdperiph/inc/stm32f10x_dac.h"
@@ -39,7 +48,7 @@
 #include "fwlib/f1/stdperiph/inc/stm32f10x_cec.h"
 #include "fwlib/f1/stdperiph/inc/stm32f10x_wwdg.h"
 
-#elif defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+#elif defined(STM32PLUS_F4)
 
 #include "fwlib/f4/stdperiph/inc/misc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_adc.h"

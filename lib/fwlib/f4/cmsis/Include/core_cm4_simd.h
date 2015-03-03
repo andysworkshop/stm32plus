@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**************************************************************************//**
  * @file     core_cm4_simd.h
  * @brief    CMSIS Cortex-M4 SIMD Header File
@@ -671,5 +670,4 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMMLA (int32_t op1
 
 #ifdef __cplusplus
 }
-#endif
 #endif

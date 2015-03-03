@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp_des.c
@@ -306,3 +308,4 @@ ErrorStatus CRYP_DES_CBC(uint8_t Mode, uint8_t Key[8], uint8_t InitVectors[8],
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

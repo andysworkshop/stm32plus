@@ -258,10 +258,18 @@ namespace stm32plus {
       case GPIOC_BASE: portSource=EXTI_PortSourceGPIOC; break;
       case GPIOD_BASE: portSource=EXTI_PortSourceGPIOD; break;
       case GPIOE_BASE: portSource=EXTI_PortSourceGPIOE; break;
+      case GPIOH_BASE: portSource=EXTI_PortSourceGPIOH; break;
+
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
       case GPIOF_BASE: portSource=EXTI_PortSourceGPIOF; break;
       case GPIOG_BASE: portSource=EXTI_PortSourceGPIOG; break;
-      case GPIOH_BASE: portSource=EXTI_PortSourceGPIOH; break;
       case GPIOI_BASE: portSource=EXTI_PortSourceGPIOI; break;
+#endif
+
+#if defined(STM32PLUS_F4_HAS_GPIOJ_K)
+      case GPIOJ_BASE: portSource=EXTI_PortSourceGPIOJ; break;
+      case GPIOK_BASE: portSource=EXTI_PortSourceGPIOK; break;
+#endif
       default: portSource=0; break;
     }
 

@@ -14,7 +14,7 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     f1cle  = STM32F107 series.
     f1mdvl = STM32100 Medium Density Value Line series.
     f4     = STM32F407/f417 series (maintained for backwards compatibility)
-    f401   = STM32F401
+    f405   = STM32F405
     f407   = STM32F407
     f415   = STM32F417
     f417   = STM32F417
@@ -81,7 +81,7 @@ def setFlags(cpu,libdef):
 #
 
 def floatOpt():
-
+  global float
   float=ARGUMENTS.get('float')
   if float=="hard":
     env.Append(CCFLAGS=["-mfloat-abi=hard"])
@@ -152,14 +152,14 @@ elif mcu=="f1mdvl":
 elif mcu=="f4" or mcu=="f407":
   setFlags("m4","F407")
   floatOpt()
+elif mcu=="f405":
+  setFlags("m4","F405")
+  floatOpt()
 elif mcu=="f415":
   setFlags("m4","F415")
   floatOpt()
 elif mcu=="f417":
   setFlags("m4","F417")
-  floatOpt()
-elif mcu=="f401":
-  setFlags("m4","F401")
   floatOpt()
 elif mcu=="f427":
   setFlags("m4","F427")

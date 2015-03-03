@@ -88,7 +88,7 @@ namespace stm32plus {
 
             for(int y=0;y<_imageInfo.m_MCUHeight;y+=8) {
 
-              int by_limit=Min<int>(8,_imageInfo.m_height-(mcu_y*_imageInfo.m_MCUHeight+y));
+              int by_limit=std::min<int>(8,_imageInfo.m_height-(mcu_y*_imageInfo.m_MCUHeight+y));
 
               for(int x=0;x<_imageInfo.m_MCUWidth;x+=8) {
 
@@ -98,7 +98,7 @@ namespace stm32plus {
                 uint8_t *pSrcG=_imageInfo.m_pMCUBufG+src_ofs;
                 uint8_t *pSrcB=_imageInfo.m_pMCUBufB+src_ofs;
 
-                int bx_limit=Min(8,_imageInfo.m_width-(mcu_x*_imageInfo.m_MCUWidth+x));
+                int bx_limit=std::min(8,_imageInfo.m_width-(mcu_x*_imageInfo.m_MCUWidth+x));
 
                 gl.moveTo(Rectangle(pt.X+mcu_x*_imageInfo.m_MCUWidth+x,pt.Y+mcu_y*_imageInfo.m_MCUHeight+y,bx_limit,by_limit));
                 gl.beginWriting();

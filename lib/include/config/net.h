@@ -15,7 +15,7 @@
 #if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL_E)
 
 
-// net depends on GPIO, RCC, traits, timing, event, smart pointers, meta, stl slist, concurrent, rtc, string, minmax, rng, stream
+// net depends on GPIO, RCC, traits, timing, event, smart pointers, meta, stl slist, concurrent, rtc, string, rng, stream
 
 #include "config/gpio.h"
 #include "config/rcc.h"
@@ -32,7 +32,6 @@
 #include "memory/scoped_ptr.h"
 #include "memory/linked_ptr.h"
 #include "util/Meta.h"
-#include "util/MinMax.h"
 #include "iterator"
 #include "slist"
 #include "vector"

@@ -1,6 +1,3 @@
-#if !defined (STM32PLUS_F1_HD) && !defined(STM32PLUS_F1_CL_E) && !defined(STM32PLUS_F1_MD)  && !defined(STM32PLUS_F1_MD_VL)
-#error This source file is only applicable to the F1 series
-#endif
 /**
   ******************************************************************************
   * @file    stm32f10x_i2c.c
@@ -1277,7 +1274,7 @@ ITStatus I2C_GetITStatus(I2C_TypeDef* I2Cx, uint32_t I2C_IT)
 }
 
 /**
-  * @brief  Clears the I2Cxï¿½s interrupt pending bits.
+  * @brief  Clears the I2Cx’s interrupt pending bits.
   * @param  I2Cx: where x can be 1 or 2 to select the I2C peripheral.
   * @param  I2C_IT: specifies the interrupt pending bit to clear. 
   *   This parameter can be any combination of the following values:
