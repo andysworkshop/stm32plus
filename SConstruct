@@ -211,8 +211,8 @@ libstm32plus=SConscript("lib/SConscript",
 env.Append(LIBS=[libstm32plus])
 
 # launch SConscript for the examples
-
-SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
+if mcu!="f1md":
+  SConscript("examples/SConscript",exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
 
 # build the CMake helper
 
