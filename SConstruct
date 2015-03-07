@@ -7,14 +7,15 @@ Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
     fast  = -O3
     small = -Os
 
-  <MCU>: f1hd/f1cle/f1mdvl/f051/f4.
+  <MCU>: f1hd/f1cle/f1mdvl/f051/f030/f4.
+    f030   = STM32F030 series.
     f051   = STM32F051 series.
     f1hd   = STM32F103HD series.
     f1cle  = STM32F107 series.
     f1md   = STM32100 medium density series.
     f1mdvl = STM32100 medium density value line series.
     f4     = STM32F407/f417 series (maintained for backwards compatibility)
-    f401   = STM32F401
+    f405   = STM32F405
     f407   = STM32F407
     f415   = STM32F417
     f417   = STM32F417
@@ -81,7 +82,7 @@ def setFlags(cpu,libdef):
 #
 
 def floatOpt():
-
+  global float
   float=ARGUMENTS.get('float')
   if float=="hard":
     env.Append(CCFLAGS=["-mfloat-abi=hard"])
@@ -152,14 +153,14 @@ elif mcu=="f1md":
 elif mcu=="f4" or mcu=="f407":
   setFlags("m4","F407")
   floatOpt()
+elif mcu=="f405":
+  setFlags("m4","F405")
+  floatOpt()
 elif mcu=="f415":
   setFlags("m4","F415")
   floatOpt()
 elif mcu=="f417":
   setFlags("m4","F417")
-  floatOpt()
-elif mcu=="f401":
-  setFlags("m4","F401")
   floatOpt()
 elif mcu=="f427":
   setFlags("m4","F427")
@@ -176,6 +177,8 @@ elif mcu=="f439":
   floatOpt()
 elif mcu=="f051":
   setFlags("m0","F0_51")
+elif mcu=="f030":
+  setFlags("m0","F0_30")
 else:
   print __doc__
   Exit(1)

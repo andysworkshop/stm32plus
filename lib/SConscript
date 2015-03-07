@@ -50,6 +50,7 @@ def RecursiveGlob(directory,patterns):
 matches=[]
 matches.append(RecursiveGlob("src", ("*.c", "*.cpp", "*.asm")))
 matches.append(RecursiveGlob("fwlib", ("*.c", "*.cpp", "*.asm")))
+matches.append(RecursiveGlob("usblib", ("*.c", "*.cpp", "*.asm")))
 
 # trigger a build with the correct library name
 
@@ -65,5 +66,6 @@ env.Alias("install",INSTALLDIR)
 InstallFiles.InstallExclude(env,"*.c","*.o","*.xml","*.csv","*.xlsx")
 InstallFiles.InstallFiles(env,INSTALLDIR+"/include/"+INSTALLDIR_PREFIX,"#lib/include")
 InstallFiles.InstallFiles(env,INSTALLDIR+"/include/"+INSTALLDIR_PREFIX+"/fwlib","#lib/fwlib",glob="*.h")
+InstallFiles.InstallFiles(env,INSTALLDIR+"/include/"+INSTALLDIR_PREFIX+"/usblib","#lib/usblib",glob="*.h")
 
 Return("libstm32plus")

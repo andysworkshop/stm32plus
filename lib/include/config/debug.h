@@ -14,11 +14,26 @@
 
 // debug depends on usart,stream,malloc.h
 
+#include "config/stm32plus.h"
+
 #include <malloc.h>
 #include "config/usart.h"
 #include "config/stream.h"
 
+
 // include the features
 
-#include "include/debug/heapMonitor.h"
-#include "include/debug/usartHeapMonitor.h"
+//If the MCU is supported (on the F4 and F1)
+
+#if defined(STM32PLUS_F4) || defined(STM32PLUS_F1)
+  #include "debug/heapMonitor.h"
+  #include "debug/usartHeapMonitor.h"
+#endif
+
+// SemiHosting is always possible
+
+#include "debug/SemiHosting.h"
+
+namespace stm32plus {
+  extern SemiHosting shost;
+}

@@ -179,7 +179,10 @@
 #define PLLCFGR_PPLR_MASK         ((uint32_t)0x70000000)
 #define PLLCFGR_PPLN_MASK         ((uint32_t)0x00007FC0)
 
+#if 0   // it's in CMSIS for the F4
 #define SPI_CR2_FRF               ((uint16_t)0x0010)
+#endif
+
 #define SPI_SR_TIFRFE             ((uint16_t)0x0100)
 
 /* Private macro -------------------------------------------------------------*/
@@ -247,13 +250,17 @@ void SPI_I2S_DeInit(SPI_TypeDef* SPIx)
     /* Release SPI3 from reset state */
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_SPI3, DISABLE);
   }
-  else if (SPIx == SPI4)
+
+#if defined(STM32PLUS_F401) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
+  if (SPIx == SPI4)
   {
     /* Enable SPI4 reset state */
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI4, ENABLE);
     /* Release SPI4 from reset state */
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI4, DISABLE);
   }
+
+#if defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
   else if (SPIx == SPI5)
   {
     /* Enable SPI5 reset state */
@@ -271,6 +278,9 @@ void SPI_I2S_DeInit(SPI_TypeDef* SPIx)
       RCC_APB2PeriphResetCmd(RCC_APB2Periph_SPI6, DISABLE);
     }
   }
+#endif
+#endif
+
 }
 
 /**

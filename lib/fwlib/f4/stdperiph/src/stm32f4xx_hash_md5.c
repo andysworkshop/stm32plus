@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash_md5.c
@@ -318,3 +320,5 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
+
+#endif

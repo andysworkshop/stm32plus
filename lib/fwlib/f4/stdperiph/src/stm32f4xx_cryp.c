@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp.c
@@ -932,3 +934,5 @@ FlagStatus CRYP_GetFlagStatus(uint8_t CRYP_FLAG)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

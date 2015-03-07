@@ -18,7 +18,9 @@
 
 extern "C" void TIM1_BRK_UP_TRG_COM_IRQHandler();
 extern "C" void TIM1_CC_IRQHandler();
+#ifdef STM32PLUS_F0_51
 extern "C" void TIM2_IRQHandler();
+#endif
 extern "C" void TIM3_IRQHandler();
 extern "C" void TIM6_DAC_IRQHandler();
 extern "C" void TIM14_IRQHandler();
@@ -63,9 +65,13 @@ namespace stm32plus {
    */
 
   typedef TimerInterruptFeature<1> Timer1InterruptFeature;
+  #ifdef STM32PLUS_F0_51
   typedef TimerInterruptFeature<2> Timer2InterruptFeature;
+  #endif
   typedef TimerInterruptFeature<3> Timer3InterruptFeature;
+  #ifdef STM32PLUS_F0_51
   typedef TimerInterruptFeature<6> Timer6InterruptFeature;
+  #endif
   typedef TimerInterruptFeature<14> Timer14InterruptFeature;
   typedef TimerInterruptFeature<15> Timer15InterruptFeature;
   typedef TimerInterruptFeature<16> Timer16InterruptFeature;
@@ -173,6 +179,7 @@ namespace stm32plus {
     }
   }
 
+#ifdef STM32PLUS_F0_51
 
   /**
    * Enabler specialisation, timer 2
@@ -187,6 +194,7 @@ namespace stm32plus {
     }
   }
 
+#endif
 
   /**
    * Enabler specialisation, timer 3
@@ -201,7 +209,7 @@ namespace stm32plus {
     }
   }
 
-
+#ifdef STM32PLUS_F0_51
   /**
    * Enabler specialisation, timer 6
    * @param interruptMask TIM_* interrupts to be enabled
@@ -214,7 +222,7 @@ namespace stm32plus {
       Nvic::configureIrq(TIM6_DAC_IRQn,ENABLE,priority);
     }
   }
-
+#endif
 
   /**
    * Enabler specialisation, timer 14

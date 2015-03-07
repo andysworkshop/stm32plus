@@ -460,6 +460,9 @@ void PWR_OverDriveSWCmd(FunctionalState NewState)
   *          This parameter can be: ENABLE or DISABLE.
   * @retval None
   */
+
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 void PWR_UnderDriveCmd(FunctionalState NewState)
 {
   /* Check the parameters */
@@ -476,6 +479,7 @@ void PWR_UnderDriveCmd(FunctionalState NewState)
     PWR->CR &= (uint32_t)(~PWR_CR_UDEN);
   }
 }
+#endif
 
 /**
   * @brief Enables or disables the Main Regulator low voltage mode.

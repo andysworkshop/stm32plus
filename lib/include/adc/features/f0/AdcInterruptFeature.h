@@ -100,8 +100,11 @@ namespace stm32plus {
 
     _interruptMask|=interruptMask;
     _forceLinkage=&ADC1_COMP_IRQHandler;
-
+#ifdef STM32PLUS_F0_51
     Nvic::configureIrq(ADC1_COMP_IRQn);
+#else
+    Nvic::configureIrq(ADC1_IRQn);
+#endif
 
     if((interruptMask & END_OF_CONVERSION)!=0)
       ADC_ITConfig(_adc,ADC_IT_EOC,ENABLE);

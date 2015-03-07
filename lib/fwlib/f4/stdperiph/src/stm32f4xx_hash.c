@@ -1,3 +1,5 @@
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash.c
@@ -724,3 +726,5 @@ void HASH_ClearITPendingBit(uint32_t HASH_IT)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

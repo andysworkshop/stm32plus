@@ -232,8 +232,8 @@ typedef struct  {
 
 
 typedef struct{
-  u32 length;
-  u32 buffer;
+  uint32_t length;
+  uint32_t buffer;
   __IO ETH_DMADESCTypeDef *descriptor;
 }FrameTypeDef;
 
@@ -1791,7 +1791,7 @@ void ETH_MACAddressMaskBytesFilterConfig(uint32_t MacAddr, uint32_t MaskByte);
 void ETH_DMARxDescChainInit(ETH_DMADESCTypeDef *DMARxDescTab, uint8_t *RxBuff, uint32_t RxBuffCount);
 void ETH_DMATxDescChainInit(ETH_DMADESCTypeDef *DMATxDescTab, uint8_t* TxBuff, uint32_t TxBuffCount);
 uint32_t ETH_CheckFrameReceived(void);
-uint32_t ETH_Prepare_Transmit_Descriptors(u16 FrameLength);
+uint32_t ETH_Prepare_Transmit_Descriptors(uint16_t FrameLength);
 FrameTypeDef ETH_Get_Received_Frame(void);
 FlagStatus ETH_GetDMATxDescFlagStatus(ETH_DMADESCTypeDef *DMATxDesc, uint32_t ETH_DMATxDescFlag);
 uint32_t ETH_GetDMATxDescCollisionCount(ETH_DMADESCTypeDef *DMATxDesc);

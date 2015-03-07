@@ -7,7 +7,7 @@
 
 #include "config/stm32plus.h"
 
-#if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F4_HAS_MAC) || defined(STM32PLUS_F1_CL_E)
 
 #include "config/net_ftp.h"
 #include "net/application/ftp/FtpServerConnectionBase.h"

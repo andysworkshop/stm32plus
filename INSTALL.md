@@ -43,54 +43,63 @@ You can build all of the above combinations side-by-side if you so wish by execu
 * Execute `scons` with the parameters that define the build:
 
 		Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
-		
+
 		  <MODE>: debug/fast/small.
-		    debug = -O0
-		    fast  = -O3
-		    small = -Os
-		
-		  <MCU>: f1hd/f1cle/f1mdvl/f051/f4.
-		    f1hd   = STM32F103HD series.
-		    f1cle  = STM32F107 series.
-		    f1mdvl = STM32100 Medium Density Value Line series.
-		    f4     = STM32F4xx series.
-		    f051   = STM32F051 series.
-		
-		  <HSE>:
-		    Your external oscillator speed in Hz. Some of the ST standard peripheral
-		    library code uses the HSE_VALUE #define that we set here. If you're using
-		    the HSI and don't have an HSE connected then just supply a default
-		    of 8000000.
-		
-		  [float=hard]:
-		        Optional flag for an F4 build that will cause the hardware FPU to be
-		        used for floating point operations. Requires the "GNU Tools for ARM Embedded
-		        Processors" toolchain. Will not work with Code Sourcery Lite.
-		
-		  Examples:
-		    scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
-		    scons mode=debug mcu=f1cle hse=25000000                     // debug / f1cle / 25MHz
-		    scons mode=debug mcu=f1mdvl hse=8000000                     // debug / f1mdvl / 8MHz
-		    scons mode=fast mcu=f1hd hse=8000000 install                // fast / f1hd / 8MHz
-		    scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f4 / 8Mhz
-		    scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f4 / 8Mhz
-		    scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
-		
-		  Additional Notes:
-		    The -j<N> option can be passed to scons to do a parallel build. On a multicore
-		    CPU this can greatly accelerate the build. Set <N> to approximately the number
-		    of cores that you have.
-		
-		    The built library will be placed in the stm32plus/build subdirectory.
-		
-		    If you specify the install command-line option then that library will be installed
-		    into the location given by INSTALLDIR, which defaults to /usr/local/arm-none-eabi.
-		    The library, headers, and examples will be installed respectively, to the lib,
-		    include, and bin subdirectories of INSTALLDIR.
-		
-		    It is safe to compile multiple combinations of mode/mcu/hse as the compiled object
-		    code and library are placed in a unique directory name underneath stm32plus/build.
-		    It is likewise safe to install multiple versions of the library and examples.
+    		debug = -O0
+    		fast  = -O3
+    		small = -Os
+
+  		<MCU>: f1hd/f1cle/f1mdvl/f051/f030/f4.
+    		f030   = STM32F030 series.
+    		f051   = STM32F051 series.
+    		f1hd   = STM32F103HD series.
+    		f1cle  = STM32F107 series.
+    		f1mdvl = STM32100 Medium Density Value Line series.
+    		f4     = STM32F407/f417 series (maintained for backwards compatibility)
+    		f401   = STM32F401
+    		f407   = STM32F407
+    		f415   = STM32F417
+    		f417   = STM32F417
+    		f427   = STM32F427
+    		f437   = STM32F437
+    		f429   = STM32F429
+    		f439   = STM32F439
+
+  		<HSE>:
+    		Your external oscillator speed in Hz. Some of the ST standard peripheral
+    		library code uses the HSE_VALUE #define that we set here. If you're using
+    		the HSI and don't have an HSE connected then just supply a default
+    		of 8000000.
+
+  		[float=hard]:
+    		Optional flag for an F4 build that will cause the hardware FPU to be
+    		used for floating point operations. Requires the "GNU Tools for ARM Embedded
+    		Processors" toolchain. Will not work with Code Sourcery Lite.
+
+  		Examples:
+    		scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
+    		scons mode=debug mcu=f1cle hse=25000000                     // debug / f1cle / 25MHz
+    		scons mode=debug mcu=f1mdvl hse=8000000                     // debug / f1mdvl / 8MHz
+    		scons mode=fast mcu=f1hd hse=8000000 install                // fast / f1hd / 8MHz
+    		scons mode=small mcu=f4 hse=8000000 -j4 float=hard install  // small / f407 or f417 / 8Mhz
+    		scons mode=debug mcu=f4 hse=8000000 -j4 install             // debug / f407 or f417 / 8Mhz
+    		scons mode=debug mcu=f051 hse=8000000 -j4 install           // debug / f051 / 8Mhz
+
+  		Additional Notes:
+    		The -j<N> option can be passed to scons to do a parallel build. On a multicore
+    		CPU this can greatly accelerate the build. Set <N> to approximately the number
+    		of cores that you have.
+
+    		The built library will be placed in the stm32plus/build subdirectory.
+
+    		If you specify the install command-line option then that library will be installed
+    		into the location given by INSTALLDIR, which defaults to /usr/local/arm-none-eabi.
+    		The library, headers, and examples will be installed respectively, to the lib,
+    		include, and bin subdirectories of INSTALLDIR.
+
+    		It is safe to compile multiple combinations of mode/mcu/hse as the compiled object
+    		code and library are placed in a unique directory name underneath stm32plus/build.
+    		It is likewise safe to install multiple versions of the library and examples.
 
 The `-j<N>` option can be passed to scons to do a parallel build. On a multicore CPU this can greatly accelerate the build. Set <N> to approximately the number of cores that you have.
 

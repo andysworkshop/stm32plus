@@ -593,6 +593,8 @@ FLASH_Status FLASH_EraseAllSectors(uint8_t VoltageRange)
   return status;
 }
 
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   * @brief  Erases all FLASH Sectors in Bank 1.
   *
@@ -725,6 +727,8 @@ FLASH_Status FLASH_EraseAllBank2Sectors(uint8_t VoltageRange)
   /* Return the Erase Status */
   return status;
 }
+#endif
+
 
 /**
   * @brief  Programs a double word (64-bit) at a specified address.
@@ -1260,6 +1264,9 @@ void FLASH_OB_UserConfig(uint8_t OB_IWDG, uint8_t OB_STOP, uint8_t OB_STDBY)
   }  
 }
 
+
+#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
+
 /**
   * @brief  Configure the Dual Bank Boot.
   *   
@@ -1281,6 +1288,8 @@ void FLASH_OB_BootConfig(uint8_t OB_BOOT)
   *(__IO uint8_t *)OPTCR_BYTE0_ADDRESS |= OB_BOOT;
 
 }
+
+#endif
 
 /**
   * @brief  Sets the BOR Level. 

@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /* ----------------------------------------------------------------------
 * Copyright (C) 2010-2013 ARM Limited. All rights reserved.
 *
@@ -268,14 +267,14 @@
 #define __CMSIS_GENERIC         /* disable NVIC and Systick functions */
 
 #if defined (ARM_MATH_CM4)
-#include "fwlib/f4/cmsis/Include/core_cm4.h"
+#include "core_cm4.h"
 #elif defined (ARM_MATH_CM3)
-#include "fwlib/f4/cmsis/Include/core_cm3.h"
+#include "core_cm3.h"
 #elif defined (ARM_MATH_CM0)
-#include "fwlib/f4/cmsis/Include/core_cm0.h"
+#include "core_cm0.h"
 #define ARM_MATH_CM0_FAMILY
 #elif defined (ARM_MATH_CM0PLUS)
-#include "fwlib/f4/cmsis/Include/core_cm0plus.h"
+#include "core_cm0plus.h"
 #define ARM_MATH_CM0_FAMILY
 #else
 #include "ARMCM4.h"
@@ -7305,4 +7304,3 @@ void arm_rfft_fast_f32(
  *
  * End of file.
  */
-#endif

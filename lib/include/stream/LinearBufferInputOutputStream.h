@@ -22,7 +22,7 @@ namespace stm32plus {
 
       // constructors
 
-      LinearBufferInputOutputStream(uint8_t *buffer,uint32_t size);
+      LinearBufferInputOutputStream(void *buffer,uint32_t size);
       LinearBufferInputOutputStream(uint32_t initialSize);
 
       void resetOutput();

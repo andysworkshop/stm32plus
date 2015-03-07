@@ -78,7 +78,7 @@ namespace stm32plus {
         _first=false;
       }
       else {
-        _rttvar=((3*_rttvar)+Abs((int32_t)_srtt-(int32_t)r))/4;
+        _rttvar=((3*_rttvar)+std::abs((int32_t)_srtt-(int32_t)r))/4;
         _srtt=((7*_srtt)+r)/8;
       }
     }
@@ -94,7 +94,7 @@ namespace stm32plus {
       if(_first)
         return _initialDelay;
 
-      return Min((uint32_t)_maxDelay,(_srtt+Max(1ul,4*_rttvar))/1000);
+      return std::min((uint32_t)_maxDelay,(_srtt+std::max(1ul,4*_rttvar))/1000);
     }
   }
 }
