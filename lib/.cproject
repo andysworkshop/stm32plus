@@ -1206,6 +1206,7 @@
 		</configuration>
 		<configuration configurationName="Debug_f407_168_8_hard_float"/>
 		<configuration configurationName="Debug_f051_48_8"/>
+		<configuration configurationName="Debug_f030_48_8"/>
 		<configuration configurationName="Debug_f1mdvl_24_8"/>
 		<configuration configurationName="Debug_f429_180"/>
 		<configuration configurationName="Debug_mdvl_24">

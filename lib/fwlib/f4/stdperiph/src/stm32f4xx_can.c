@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_CAN)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_can.c
@@ -85,6 +83,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_can.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
+
+#if defined(STM32PLUS_F4_HAS_CAN)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

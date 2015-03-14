@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_CAN)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_can.h
@@ -29,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_CAN_H
-#define __STM32F4xx_CAN_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -38,6 +35,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_CAN)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -629,11 +628,11 @@ void CAN_ClearFlag(CAN_TypeDef* CANx, uint32_t CAN_FLAG);
 ITStatus CAN_GetITStatus(CAN_TypeDef* CANx, uint32_t CAN_IT);
 void CAN_ClearITPendingBit(CAN_TypeDef* CANx, uint32_t CAN_IT);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __STM32F4xx_CAN_H */
 
 /**
   * @}
@@ -645,4 +644,3 @@ void CAN_ClearITPendingBit(CAN_TypeDef* CANx, uint32_t CAN_IT);
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
-#endif

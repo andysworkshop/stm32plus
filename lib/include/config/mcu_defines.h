@@ -51,6 +51,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FSMC
 
 #elif defined(STM32PLUS_F407)
   #define STM32PLUS_F4
@@ -58,7 +59,6 @@
   #define STM32F40_41xxx
   #define STM32PLUS_F4_HAS_MAC
   #define STM32PLUS_F4_HAS_DCMI
-  #define STM32PLUS_F4_HAS_SAI
   #define STM32PLUS_F4_HAS_CAN
   #define STM32PLUS_F4_HAS_ADC2_3
   #define STM32PLUS_F4_HAS_USART3_4_5
@@ -66,6 +66,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FSMC
 
 #elif defined(STM32PLUS_F415)
   #define STM32PLUS_F4
@@ -79,6 +80,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FSMC
 
 #elif defined(STM32PLUS_F417)
   #define STM32PLUS_F4
@@ -86,7 +88,6 @@
   #define STM32F40_41xxx
   #define STM32PLUS_F4_HAS_MAC
   #define STM32PLUS_F4_HAS_DCMI
-  #define STM32PLUS_F4_HAS_SAI
   #define STM32PLUS_F4_HAS_CRYPTO
   #define STM32PLUS_F4_HAS_CAN
   #define STM32PLUS_F4_HAS_ADC2_3
@@ -95,6 +96,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FSMC
 
 #elif defined(STM32PLUS_F427)
   #define STM32PLUS_F4
@@ -112,6 +114,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FMC
 
 #elif defined(STM32PLUS_F429)
   #define STM32PLUS_F4
@@ -130,6 +133,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FMC
 
 #elif defined(STM32PLUS_F437)
   #define STM32PLUS_F4
@@ -148,6 +152,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FMC
 
 #elif defined(STM32PLUS_F439)
   #define STM32PLUS_F4
@@ -167,6 +172,7 @@
   #define STM32PLUS_F4_HAS_TIM6_7_8_12_13_14
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
+  #define STM32PLUS_F4_HAS_FMC
 
 #else
   #error "You must define an MCU type. See config/stm32plus.h"
