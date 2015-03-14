@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_LTDC)
 /**
   ******************************************************************************
   * @file    stm32f4xx_ltdc.c
@@ -77,6 +76,8 @@
 
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_ltdc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
+
+#if defined(STM32PLUS_F4_HAS_LTDC)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

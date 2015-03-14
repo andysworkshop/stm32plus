@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_SAI)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_sai.h
@@ -29,8 +27,7 @@
   */ 
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_SAI_H
-#define __STM32F4xx_SAI_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -38,6 +35,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_SAI)
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -596,11 +596,11 @@ void SAI_ClearITPendingBit(SAI_Block_TypeDef* SAI_Block_x, uint32_t SAI_IT);
 FunctionalState SAI_GetCmdStatus(SAI_Block_TypeDef* SAI_Block_x);
 uint32_t SAI_GetFIFOStatus(SAI_Block_TypeDef* SAI_Block_x);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /*__STM32F4xx_SAI_H */
 
 /**
   * @}
@@ -612,4 +612,3 @@ uint32_t SAI_GetFIFOStatus(SAI_Block_TypeDef* SAI_Block_x);
 
 /******************* (C) COPYRIGHT 2011 STMicroelectronics *****END OF FILE****/
 
-#endif

@@ -32,11 +32,11 @@
   ******************************************************************************
   */
 
-#if defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
-
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_fmc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
+
+#if defined(STM32PLUS_F4_HAS_FMC)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
