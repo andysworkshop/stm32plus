@@ -38,6 +38,17 @@
 
 #if defined(STM32PLUS_F4_HAS_FMC)
 
+#if defined(STM32PLUS_F427) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
+
+// solve a compatibility issue with this version of the peripheral headers
+// and the newer version of CMSIS that uses Bank2_3 for these MCUs
+
+#define FMC_Bank2           ((FMC_Bank2_3_TypeDef *) FMC_Bank2_3_R_BASE)
+#define FMC_Bank3           ((FMC_Bank2_3_TypeDef *) FMC_Bank2_3_R_BASE)
+
+#endif
+
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
