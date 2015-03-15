@@ -10,6 +10,8 @@
 namespace stm32plus {
 
 
+#error The use of Min, Max and Abs from this file is now deprecated. Please migrate to std::min, std::max and std::abs. This file will be deleted in a future release.
+
 
   /**
    * Max implementation with templates

@@ -7,7 +7,7 @@
 
 #include "config/stm32plus.h"
 
-#if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F4_HAS_MAC) || defined(STM32PLUS_F1_CL_E)
 
 #include "config/net.h"
 
@@ -258,7 +258,7 @@ namespace stm32plus {
 
       // When Rx Buffer unavailable flag is set: clear it and resume reception
 
-      if((ETH->DMASR & ETH_DMASR_RBUS)!=(u32)RESET) {
+      if((ETH->DMASR & ETH_DMASR_RBUS)!=(uint32_t)RESET) {
 
         // clear RBUS ETHERNET DMA flag
 

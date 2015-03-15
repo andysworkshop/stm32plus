@@ -46,6 +46,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_hash.h"
 
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -321,3 +324,5 @@ ErrorStatus HMAC_SHA1(uint8_t *Key, uint32_t Keylen, uint8_t *Input,
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

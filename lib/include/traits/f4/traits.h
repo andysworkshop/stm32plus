@@ -32,6 +32,7 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_ADC1> Adc1PeripheralTraits;
 
+#if defined(STM32PLUS_F4_HAS_ADC2_3)
   template<>
   struct PeripheralTraits<PERIPHERAL_ADC2> {
     enum {
@@ -47,6 +48,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_ADC3> Adc3PeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
@@ -210,6 +212,8 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER5> Timer5PeripheralTraits;
 
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER6> {
     enum {
@@ -239,6 +243,8 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER8> Timer8PeripheralTraits;
+
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER9> {
@@ -270,6 +276,8 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER11> Timer11PeripheralTraits;
 
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+
   template<>
   struct PeripheralTraits<PERIPHERAL_TIMER12> {
     enum {
@@ -300,6 +308,8 @@ namespace stm32plus {
   };
   typedef PeripheralTraits<PERIPHERAL_TIMER14> Timer14PeripheralTraits;
 
+#endif
+  
   template<>
   struct PeripheralTraits<PERIPHERAL_USART1> {
     enum {
@@ -317,6 +327,8 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_USART2> Usart2PeripheralTraits;
+
+#if defined(STM32PLUS_F4_HAS_USART3_4_5)
 
   template<>
   struct PeripheralTraits<PERIPHERAL_USART3> {
@@ -344,6 +356,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_UART5> Uart5PeripheralTraits;
+#endif
+
+#if defined(STM32PLUS_F4_HAS_MAC)
 
   template<>
   struct PeripheralTraits<PERIPHERAL_MAC> {
@@ -353,6 +368,15 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_MAC> MacPeripheralTraits;
+#endif
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_OTG_FS> {
+    enum {
+      GPIO_SPEED = GPIO_Speed_50MHz
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_OTG_FS> OtgFsPeripheralTraits;
 
   template<>
   struct PeripheralTraits<PERIPHERAL_USART6> {

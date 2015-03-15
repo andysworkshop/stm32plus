@@ -215,40 +215,6 @@ namespace stm32plus {
   };
 
   /**
-   * SPI1_REMAP
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_SPI1_REMAP> {
-
-    static void On() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1 | RCC_APB2Periph_AFIO,ENABLE);
-      GPIO_PinRemapConfig(GPIO_Remap_SPI1,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_SPI1,DISABLE);
-    }
-  };
-
-  /**
-   * SPI3_REMAP
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_SPI3_REMAP> {
-
-    static void On() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,ENABLE);
-      GPIO_PinRemapConfig(GPIO_Remap_SPI3,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_SPI3,DISABLE);
-    }
-  };
-
-  /**
    * SPI3
    */
 
@@ -425,23 +391,6 @@ namespace stm32plus {
   };
 
   /**
-   * USART1
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_USART1_REMAP> {
-
-    static void On() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1 | RCC_APB2Periph_AFIO,ENABLE);
-      GPIO_PinRemapConfig(GPIO_Remap_USART1,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB2PeriphClockCmd(RCC_APB2Periph_USART1,DISABLE);
-    }
-  };
-
-  /**
    * USART2
    */
 
@@ -458,23 +407,6 @@ namespace stm32plus {
   };
 
   /**
-   * USART2
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_USART2_REMAP> {
-
-    static void On() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,ENABLE);
-      GPIO_PinRemapConfig(GPIO_Remap_USART2,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART2,DISABLE);
-    }
-  };
-
-  /**
    * USART3
    */
 
@@ -483,40 +415,6 @@ namespace stm32plus {
 
     static void On() {
       RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
-    }
-  };
-
-  /**
-   * USART3 full remap
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_USART3_FULL_REMAP> {
-
-    static void On() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
-      GPIO_PinRemapConfig(GPIO_FullRemap_USART3,ENABLE);
-    }
-
-    static void Off() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,DISABLE);
-    }
-  };
-
-  /**
-   * USART3 partial remap
-   */
-
-  template<>
-  struct ClockControl<PERIPHERAL_USART3_PARTIAL_REMAP> {
-
-    static void On() {
-      RCC_APB1PeriphClockCmd(RCC_APB1Periph_USART3,ENABLE);
-      GPIO_PinRemapConfig(GPIO_PartialRemap_USART3,ENABLE);
     }
 
     static void Off() {

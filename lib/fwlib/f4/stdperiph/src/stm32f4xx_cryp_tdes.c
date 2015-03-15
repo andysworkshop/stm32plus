@@ -47,6 +47,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_cryp.h"
 
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -323,3 +325,5 @@ ErrorStatus CRYP_TDES_CBC(uint8_t Mode, uint8_t Key[24], uint8_t InitVectors[8],
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

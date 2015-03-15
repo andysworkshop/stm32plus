@@ -252,6 +252,7 @@ namespace stm32plus {
     }
   }
 
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
 
   /**
    * Enabler specialisation, timer 6
@@ -310,6 +311,7 @@ namespace stm32plus {
     }
   }
 
+#endif
 
   /**
    * Enabler specialisation, timer 9
@@ -352,6 +354,7 @@ namespace stm32plus {
     }
   }
 
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
 
   /**
    * Enabler specialisation, timer 12
@@ -393,4 +396,7 @@ namespace stm32plus {
       Nvic::configureIrq(TIM8_TRG_COM_TIM14_IRQn,ENABLE,priority,subPriority);
     }
   }
+
+#endif
+
 }

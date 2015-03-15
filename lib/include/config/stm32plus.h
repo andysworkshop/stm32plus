@@ -17,48 +17,17 @@
  *  STM32PLUS_F1_CL
  *  STM32PLUS_F1_MDVL
  *  STM32PLUS_F0_51
- *  STM32PLUS_F4
+ *  STM32PLUS_F401
+ *  ... and all the others (see SConstruct for all)
  *
  *  Also ensure that HSE_VALUE has been set to the speed of your external oscillator in hertz. The scons
  *  build procedure takes care of all these definitions.
  */
 
-/*
- * Verify that an MCU has been selected
- */
 
-#if defined(STM32PLUS_F1_HD)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32F10X_HD                // for the std peripheral library
-#elif defined(STM32PLUS_F1_CL_E)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32PLUS_F1_CL             // enable features common to F105 and F107
-  #define STM32F10X_CL                // for the std peripheral library
-#elif defined(STM32PLUS_F1_MD)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32F10X_MD                // for the std peripheral library
-#elif defined(STM32PLUS_F1_MD_VL)
-  #define STM32PLUS_F1                // enable features common to all F1
-  #define STM32PLUS_F1_VL             // enable features common to all VL devices
-  #define STM32F10X_MD_VL             // for the std peripheral library
-#elif defined(STM32PLUS_F0_51)
-  #define STM32PLUS_F0                // enable features common to all F0
-  #define STM32F0XX_MD                // this is a medium density device
-#elif defined(STM32PLUS_F401)
-  #define STM32PLUS_F4
-  #define STM32F401xx
-#elif defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
-  #define STM32PLUS_F4
-  #define STM32F40_41xxx
-#elif defined(STM32PLUS_F437) || defined(STM32PLUS_F427)
-  #define STM32PLUS_F4
-  #define STM32F427_437xx
-#elif defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
-  #define STM32PLUS_F4
-  #define STM32F429_439xx
-#else
-  #error "You must define an MCU type. See config/stm32plus.h"
-#endif
+// include the standard peripheral library
+
+#include "config/stdperiph.h"
 
 
 /*
@@ -75,15 +44,7 @@
  */
 
 #undef STM32PLUS_BUILD
-#define STM32PLUS_BUILD 0x030600
-
-
-/**
- * Define this if you have hardware crypto support and want to use the hash functionality.
- * Crypto is export restricted - your device may not have it even if the datasheet indicates otherwise.
- */
-
-#undef STM32PLUS_F4_HARDWARE_CRYPTO
+#define STM32PLUS_BUILD 0x040100
 
 
 /**
@@ -130,6 +91,8 @@ namespace stm32plus {
     PERIPHERAL_I2S3,                //!< PERIPHERAL_I2S3
     PERIPHERAL_MAC,                 //!< PERIPHERAL_MAC
     PERIPHERAL_MAC_REMAP,           //!< PERIPHERAL_MAC_REMAP
+    PERIPHERAL_OTG_FS,              //!< internal OTG FS PHY
+    PERIPHERAL_OTG_HS,              //!< internal OTG HS PHY
     PERIPHERAL_POWER,               //!< PERIPHERAL_POWER
     PERIPHERAL_RNG,                 //!< PERIPHERAL_RNG
     PERIPHERAL_SDIO,                //!< PERIPHERAL_SDIO
@@ -181,15 +144,10 @@ namespace stm32plus {
 
 // include standard libraries
 
-#include <stdint.h>
 #include <cstdlib>
 #include <cstring>
 #include <ctime>
 #include <cctype>
-
-// include the ST library
-
-#include "config/stdperiph.h"
 
 // error provider is common to everyone
 

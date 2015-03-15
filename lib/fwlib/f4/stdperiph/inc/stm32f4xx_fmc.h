@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_fmc.h
@@ -28,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_FMC_H
-#define __STM32F4xx_FMC_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -37,6 +35,19 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_FMC)
+
+#if defined(STM32PLUS_F427) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
+
+// solve a compatibility issue with this version of the peripheral headers
+// and the newer version of CMSIS that uses Bank2_3 for these MCUs
+
+#define FMC_Bank2           ((FMC_Bank2_3_TypeDef *) FMC_Bank2_3_R_BASE)
+#define FMC_Bank3           ((FMC_Bank2_3_TypeDef *) FMC_Bank2_3_R_BASE)
+
+#endif
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -1128,11 +1139,12 @@ void       FMC_ClearFlag(uint32_t FMC_Bank, uint32_t FMC_FLAG);
 ITStatus   FMC_GetITStatus(uint32_t FMC_Bank, uint32_t FMC_IT);
 void       FMC_ClearITPendingBit(uint32_t FMC_Bank, uint32_t FMC_IT);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /*__STM32F4xx_FMC_H */
 /**
   * @}
   */
@@ -1142,4 +1154,3 @@ void       FMC_ClearITPendingBit(uint32_t FMC_Bank, uint32_t FMC_IT);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

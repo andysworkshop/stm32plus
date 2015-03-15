@@ -6,7 +6,7 @@
 
 #include "config/stm32plus.h"
 
-#if defined(STM32PLUS_F4) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F4_HAS_MAC) || defined(STM32PLUS_F1_CL_E)
 
 #include "config/net.h"
 
@@ -565,7 +565,7 @@ namespace stm32plus {
             return true;                    // this is not an error, zero bytes were sent because the window is closed
           else {
             _lastZeroWindowPollTime=now;    // we can try again now
-            _zeroWindowPollDelay=Min(_params.tcp_maxResendDelay,_zeroWindowPollDelay*2);
+            _zeroWindowPollDelay=std::min(_params.tcp_maxResendDelay,_zeroWindowPollDelay*2);
           }
         }
       }
@@ -604,7 +604,7 @@ namespace stm32plus {
         // window is closed, this effectively polls the sender for window updates if they've been advertising
         // a zero window to us.
 
-        batchsize=Max(1UL,Min(datasize,static_cast<uint32_t>(batchwin)));
+        batchsize=std::max(1UL,std::min(datasize,static_cast<uint32_t>(batchwin)));
         batchremaining=batchsize;
         batchpos=_state.txWindow.sendNext;
         batchbufpos=bufpos;
@@ -621,7 +621,7 @@ namespace stm32plus {
 
           // send up to the remote MSS in one segment
 
-          tosend=Min(Min(batchsendcap,batchremaining),_remoteMss);
+          tosend=std::min(std::min(batchsendcap,batchremaining),_remoteMss);
 
           // send this segment if it's not been ACK'd already (can happen if this is a resend)
 
@@ -683,7 +683,7 @@ namespace stm32plus {
 
           if(MillisecondTimer::hasTimedOut(startwait,resendtimeout)) {
             resend=true;
-            resendtimeout=Min(_params.tcp_maxResendDelay,resendtimeout*2);
+            resendtimeout=std::min(_params.tcp_maxResendDelay,resendtimeout*2);
             break;
           }
         }
@@ -751,7 +751,7 @@ namespace stm32plus {
 
           // copy in as much as we can
 
-          received=Min(dataSize,_receiveBuffer->availableToRead());
+          received=std::min(dataSize,_receiveBuffer->availableToRead());
           _receiveBuffer->read(ptr,received);
 
           // update counters

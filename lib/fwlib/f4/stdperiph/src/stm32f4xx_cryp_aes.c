@@ -54,6 +54,9 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_cryp.h"
 
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -1705,3 +1708,4 @@ ErrorStatus CRYP_AES_CCM(uint8_t Mode,
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
+#endif

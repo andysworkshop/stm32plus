@@ -93,6 +93,8 @@
   * @{
   */
 
+
+#if defined(STM32PLUS_F411)
 /**
   * @brief Start/Stop the flash interface while System Run
   * @note  This mode is only available for STM32F411xx devices. 
@@ -138,6 +140,7 @@ __RAM_FUNC FLASH_FlashSleepModeCmd(FunctionalState NewState)
     CLEAR_BIT(PWR->CR, PWR_CR_FMSSR);
   }
 }
+#endif
 
 /**
   * @}

@@ -18,7 +18,7 @@ namespace stm32plus {
    * @param size
    */
 
-  LinearBufferInputOutputStream::LinearBufferInputOutputStream(uint8_t *buffer,uint32_t size)
+  LinearBufferInputOutputStream::LinearBufferInputOutputStream(void *buffer,uint32_t size)
     : BufferedInputOutputStream(buffer,size) {
   }
 

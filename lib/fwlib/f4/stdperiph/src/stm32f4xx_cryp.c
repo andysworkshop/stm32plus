@@ -164,6 +164,9 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_cryp.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
 
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -932,3 +935,5 @@ FlagStatus CRYP_GetFlagStatus(uint8_t CRYP_FLAG)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

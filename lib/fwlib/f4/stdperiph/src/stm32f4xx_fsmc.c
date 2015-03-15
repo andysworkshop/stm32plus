@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_fsmc.c
@@ -36,6 +34,15 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_fsmc.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
+
+#if defined(STM32PLUS_F4_HAS_FSMC)
+
+/*
+ * stm32plus compatibility addition
+ */
+
+#define FSMC_Bank2 FSMC_Bank2_3
+#define FSMC_Bank3 FSMC_Bank2_3
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

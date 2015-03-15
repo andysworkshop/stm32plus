@@ -120,7 +120,7 @@ namespace stm32plus {
       // 10 seconds or msl/4, whichever is the greater. the lower limit prevents us taking up too much CPU checking
       // whether closed connections should be cleaned up.
 
-      tickSeconds=Max(10,params.tcp_msl/4);
+      tickSeconds=std::max(10,params.tcp_msl/4);
       this->subscribeIntervalTicks(tickSeconds,NetworkIntervalTicker::TickIntervalSlotType::bind(this,&Tcp<TNetworkLayer>::onTick));
 
       return true;

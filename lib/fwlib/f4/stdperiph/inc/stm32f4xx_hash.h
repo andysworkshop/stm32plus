@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash.h
@@ -28,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_HASH_H
-#define __STM32F4xx_HASH_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -37,6 +35,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -241,11 +242,12 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen,
                      uint8_t *Input, uint32_t Ilen,
                      uint8_t Output[16]);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /*__STM32F4xx_HASH_H */
 
 /**
   * @}
@@ -256,4 +258,4 @@ ErrorStatus HMAC_MD5(uint8_t *Key, uint32_t Keylen,
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif
+

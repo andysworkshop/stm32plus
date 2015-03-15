@@ -17,7 +17,8 @@ examples/.settings/
 
 # eclipse output
 
-Debug_*/
+lib/Debug_*/
+examples/*/Debug_*/
 
 # release builder output
 
@@ -51,5 +52,5 @@ dist/
 *.opensdf
 ipch/
 obj/
-[dD]ebug_*/
-[Rr]elease_*/
+Debug_*/
+Release_*/

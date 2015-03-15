@@ -249,6 +249,38 @@ namespace stm32plus {
   };
 
   /**
+   * USB OTG FS
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_OTG_FS> {
+
+    static void On() {
+      RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS,ENABLE);
+    }
+
+    static void Off() {
+      RCC_AHB2PeriphClockCmd(RCC_AHB2Periph_OTG_FS,DISABLE);
+    }
+  };
+
+  /**
+   * USB OTG HS
+   */
+
+  template<>
+  struct ClockControl<PERIPHERAL_OTG_HS> {
+
+    static void On() {
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_OTG_HS,ENABLE);
+    }
+
+    static void Off() {
+      RCC_AHB1PeriphClockCmd(RCC_AHB1Periph_OTG_HS,DISABLE);
+    }
+  };
+
+  /**
    * POWER
    */
 

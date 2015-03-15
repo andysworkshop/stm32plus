@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F401) || defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417) || defined(STM32PLUS_F437) || defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F439)
 /**
   ******************************************************************************
   * @file    stm32f4xx_cryp.h
@@ -28,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_CRYP_H
-#define __STM32F4xx_CRYP_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -37,6 +35,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -368,11 +369,11 @@ ErrorStatus CRYP_DES_CBC(uint8_t Mode,
                          uint8_t *Input,uint32_t Ilength,
                          uint8_t *Output);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /*__STM32F4xx_CRYP_H */
 
 /**
   * @}
@@ -383,4 +384,4 @@ ErrorStatus CRYP_DES_CBC(uint8_t Mode,
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif
+

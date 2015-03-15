@@ -1,4 +1,3 @@
-#if defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
 /**
   ******************************************************************************
   * @file    stm32f4xx_fsmc.h
@@ -28,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_FSMC_H
-#define __STM32F4xx_FSMC_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -37,6 +35,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_FSMC)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -660,11 +660,12 @@ void FSMC_ClearFlag(uint32_t FSMC_Bank, uint32_t FSMC_FLAG);
 ITStatus FSMC_GetITStatus(uint32_t FSMC_Bank, uint32_t FSMC_IT);
 void FSMC_ClearITPendingBit(uint32_t FSMC_Bank, uint32_t FSMC_IT);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /*__STM32F4xx_FSMC_H */
 /**
   * @}
   */
@@ -674,4 +675,3 @@ void FSMC_ClearITPendingBit(uint32_t FSMC_Bank, uint32_t FSMC_IT);
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
-#endif

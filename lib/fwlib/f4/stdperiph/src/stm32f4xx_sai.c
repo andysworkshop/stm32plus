@@ -126,6 +126,8 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_sai.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
 
+#if defined(STM32PLUS_F4_HAS_SAI)
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -1077,3 +1079,4 @@ uint32_t SAI_GetFIFOStatus(SAI_Block_TypeDef* SAI_Block_x)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+#endif

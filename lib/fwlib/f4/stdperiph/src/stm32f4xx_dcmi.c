@@ -86,6 +86,9 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_dcmi.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
 
+#if defined(STM32PLUS_F4_HAS_DCMI)
+
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -536,3 +539,5 @@ void DCMI_ClearITPendingBit(uint16_t DCMI_IT)
   */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif
