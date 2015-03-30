@@ -3,8 +3,8 @@ set(CMAKE_PREFIX_PATH /usr/local/arm-none-eabi /usr/arm-none-eabi
   CACHE STRING "Library search paths")
 
 set(MCU_FAMILY f4)
-set(STM32PLUS_CONFIGURATION small-${MCU_FAMILY}-8000000-hard)
-find_package(stm32plus 030300 REQUIRED)
+set(STM32PLUS_CONFIGURATION small-${MCU_FAMILY}-8000000)
+find_package(stm32plus REQUIRED)
 include_directories(${STM32PLUS_INCLUDE_DIRS})
 
 project(blink C CXX ASM)
@@ -17,6 +17,6 @@ add_executable(${PROJECT_NAME}
 )
 target_link_libraries(${PROJECT_NAME} ${STM32PLUS_LIBS})
 set_target_properties(${PROJECT_NAME} PROPERTIES
-  LINK_FLAGS "-T${PROJECT_SOURCE_DIR}/system/f4/Linker.ld")
+  LINK_FLAGS "-T${PROJECT_SOURCE_DIR}/system/${MCU_FAMILY}/Linker.ld")
 
 add_bin_target(${PROJECT_NAME})
