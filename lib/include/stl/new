@@ -9,8 +9,8 @@
 #define __1F3E89E5_F35D_4f8d_A849_9A3416814905
 
 
-void *operator new(size_t size_);
-void* operator new(size_t size_,void *ptr_);
+void *operator new(std::size_t size_);
+void* operator new(std::size_t size_,void *ptr_);
 void operator delete(void *ptr_);
 
 
