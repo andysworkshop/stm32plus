@@ -52,6 +52,8 @@ namespace stm32plus {
       bool send(uint16_t dataToSend) const;
       bool send(const uint16_t *dataToSend,uint32_t numHalfWords,uint16_t *dataReceived=nullptr) const;
 
+      void waitForIdle() const;
+
       void setNss(bool value) const;
       operator SPI_TypeDef *() const;
       bool hasError() const;
@@ -328,8 +330,7 @@ namespace stm32plus {
    * @return true if it worked, false on error
    */
 
-  inline bool Spi::send(uint16_t dataToSend) const
-  {
+  inline bool Spi::send(uint16_t dataToSend) const {
       // wait for ready to send
 
       while(!readyToSend())
@@ -374,5 +375,15 @@ namespace stm32plus {
     }
 
     return true;
+  }
+
+
+  /**
+   * Wait for the peripheral to become idle. If transmitting then the peripheral becomes
+   * idle when the last word written to the TX register has been shifted out to the bus.
+   */
+
+  inline void Spi::waitForIdle() const {
+    while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_BSY)==SET);
   }
 }

@@ -113,9 +113,10 @@ class SpiSendSyncTest {
         }
 
         /*
-         * The session is complete, deactivate NSS.
+         * The session is complete, wait for the last transmission to complete and deactivate NSS.
          */
 
+        sender.waitForIdle();
         sender.setNss(true);
 
         /*
