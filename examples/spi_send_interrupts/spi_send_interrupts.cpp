@@ -157,9 +157,10 @@ class SpiSendInterruptsTest {
         while(_receiveIndex!=12);
 
         /*
-         * De-select NSS
+         * Wait for idle and de-select NSS
          */
 
+        _sender->waitForIdle();
         _sender->setNss(true);
 
         /*

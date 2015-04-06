@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_CRYPTO)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_hash_sha1.c
@@ -47,6 +45,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_hash.h"
+
+#if defined(STM32PLUS_F4_HAS_CRYPTO)
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{

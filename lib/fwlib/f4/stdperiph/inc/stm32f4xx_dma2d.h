@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_DMA2D)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_dma2d.h
@@ -29,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_DMA2D_H
-#define __STM32F4xx_DMA2D_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -38,6 +35,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_DMA2D)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -460,11 +459,11 @@ void DMA2D_ClearFlag(uint32_t DMA2D_FLAG);
 ITStatus DMA2D_GetITStatus(uint32_t DMA2D_IT);
 void DMA2D_ClearITPendingBit(uint32_t DMA2D_IT);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /* __STM32F4xx_DMA2D_H */
 
 /**
   * @}
@@ -476,4 +475,3 @@ void DMA2D_ClearITPendingBit(uint32_t DMA2D_IT);
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
-#endif

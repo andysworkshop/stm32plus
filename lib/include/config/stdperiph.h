@@ -12,9 +12,6 @@
 
 #include "config/mcu_defines.h"
 
-// include the standard integer definitions
-
-#include <stdint.h>
 
 /**
  * @file

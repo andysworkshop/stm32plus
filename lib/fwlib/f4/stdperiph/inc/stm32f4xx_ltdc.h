@@ -27,8 +27,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_LTDC_H
-#define __STM32F4xx_LTDC_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -36,6 +35,8 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_LTDC)
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -514,11 +515,12 @@ void LTDC_ClearFlag(uint32_t LTDC_FLAG);
 ITStatus LTDC_GetITStatus(uint32_t LTDC_IT);
 void LTDC_ClearITPendingBit(uint32_t LTDC_IT);
 
+#endif
+
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __STM32F4xx_LTDC_H */
 
 /**
   * @}

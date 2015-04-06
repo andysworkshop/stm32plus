@@ -1,5 +1,3 @@
-#if defined(STM32PLUS_F4_HAS_DCMI)
-
 /**
   ******************************************************************************
   * @file    stm32f4xx_dcmi.h
@@ -28,8 +26,7 @@
   */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
-#ifndef __STM32F4xx_DCMI_H
-#define __STM32F4xx_DCMI_H
+#pragma once
 
 #ifdef __cplusplus
  extern "C" {
@@ -37,6 +34,9 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
+
+#if defined(STM32PLUS_F4_HAS_DCMI)
+
 
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
@@ -297,11 +297,12 @@ void DCMI_ClearFlag(uint16_t DCMI_FLAG);
 ITStatus DCMI_GetITStatus(uint16_t DCMI_IT);
 void DCMI_ClearITPendingBit(uint16_t DCMI_IT);
 
+#endif
+
+
 #ifdef __cplusplus
 }
 #endif
-
-#endif /*__STM32F4xx_DCMI_H */
 
 /**
   * @}
@@ -313,4 +314,3 @@ void DCMI_ClearITPendingBit(uint16_t DCMI_IT);
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 
-#endif
