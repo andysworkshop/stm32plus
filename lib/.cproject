@@ -8,6 +8,7 @@
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_hd_72"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f1hd_72_8"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -108,7 +109,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="include/usb|fwlib/f0|fwlib/f4|usblib" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="include/usb|usblib|fwlib/f0|fwlib/f4" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -120,6 +121,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_cle_72"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f107_72_8"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -220,7 +222,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="include/usb|fwlib/f0|fwlib/f4|usblib" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="include/usb|usblib|fwlib/f0|fwlib/f4" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -232,6 +234,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f4_168"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f407_168_8"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -335,7 +338,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="fwlib/f0|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="fwlib/f1|fwlib/f0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -347,6 +350,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_mdvl_24"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f1mdvl_24_8"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -447,7 +451,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="include/usb|fwlib/f0|fwlib/f4|usblib" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="include/usb|usblib|fwlib/f0|fwlib/f4" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -459,6 +463,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f051_48"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f051_48_8"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -560,7 +565,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="include/usb|fwlib/f4|usblib|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="include/usb|fwlib/f1|usblib|fwlib/f4" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -572,6 +577,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f4_168_hard_float"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f407_168_8_hard_float"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -676,7 +682,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="fwlib/f0|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="fwlib/f1|fwlib/f0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -688,6 +694,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f429_180"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f429_180_16"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -790,7 +797,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="fwlib/f0|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="fwlib/f1|fwlib/f0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -802,6 +809,7 @@
 					<externalSetting>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="includePath" name="/stm32plus"/>
 						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f439_180"/>
+						<entry flags="VALUE_WORKSPACE_PATH" kind="libraryPath" name="/stm32plus/Debug_f439_180_16"/>
 						<entry flags="RESOLVED" kind="libraryFile" name="stm32plus" srcPrefixMapping="" srcRootPath=""/>
 					</externalSetting>
 				</externalSettings>
@@ -904,7 +912,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="fwlib/f0|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="fwlib/f1|fwlib/f0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -1019,7 +1027,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="fwlib/f0|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="fwlib/f1|fwlib/f0" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -1132,7 +1140,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="include/usb|fwlib/f4|usblib|fwlib/f1" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="include/usb|fwlib/f1|usblib|fwlib/f4" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
