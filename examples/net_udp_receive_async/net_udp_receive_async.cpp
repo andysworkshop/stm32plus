@@ -208,7 +208,7 @@ class NetUdpReceiveAsyncTest {
 
       // the datagram length includes the UDP network header (8 bytes)
 
-      _datagramDataSize=NetUtil::htons(event.udpDatagram.udp_length)-UdpDatagram::getHeaderSize();
+      _datagramDataSize=NetUtil::ntohs(event.udpDatagram.udp_length)-UdpDatagram::getHeaderSize();
 
       // cut it down to a max of 10 bytes
 
