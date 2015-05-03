@@ -98,6 +98,7 @@
 #include "display/graphic/tft/hx8352a/HX8352A.h"
 #include "display/graphic/tft/r61523/R61523.h"
 #include "display/graphic/tft/hx8352a/panelTraits/LG_KF700.h"
+#include "display/graphic/tft/hx8352a/panelTraits/TM032LDH05.h"
 
 #if !defined(STM32PLUS_F0)        // there's an FSMC dependency in here
   #include "display/graphic/tft/ssd1963/SSD1963.h"

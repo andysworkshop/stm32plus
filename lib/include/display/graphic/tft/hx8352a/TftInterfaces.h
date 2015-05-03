@@ -50,6 +50,20 @@ namespace stm32plus {
     template<class TDevice> using LG_KF700_Terminal_Landscape = GraphicTerminal<TDevice,false>;
 
 
+    /**
+     * Specialisations for the TM032LDH05 400x240 panel
+     */
+
+    template<class TAccessMode> using TM032LDH05_Portrait_64K = HX8352A_Portrait_64K<TAccessMode,TM032LDH05>;
+    template<class TAccessMode> using TM032LDH05_Landscape_64K = HX8352A_Landscape_64K<TAccessMode,TM032LDH05>;
+
+    template<class TAccessMode> using TM032LDH05_Portrait_262K = HX8352A_Portrait_262K<TAccessMode,TM032LDH05>;
+    template<class TAccessMode> using TM032LDH05_Landscape_262K = HX8352A_Landscape_262K<TAccessMode,TM032LDH05>;
+
+    template<class TDevice> using TM032LDH05_Terminal_Portrait = GraphicTerminal<TDevice,true>;
+    template<class TDevice> using TM032LDH05_Terminal_Landscape = GraphicTerminal<TDevice,false>;
+
+
 #if defined(STM32PLUS_F1)
 
     /**
