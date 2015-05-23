@@ -133,6 +133,25 @@ namespace stm32plus {
         netutils.NetworkSendEventSender.raiseEvent(iptre);
         return iptre.succeeded;
       }
+
+
+      /**
+       * Change the state of this connection and notify subscribers
+       * @param netutils The network utility objects
+       * @param newState The new state
+       */
+
+      void changeState(NetworkUtilityObjects& netutils,TcpState newState) {
+
+        TcpState oldState;
+
+        oldState=state;
+        state=newState;
+
+        netutils.NetworkNotificationEventSender.raiseEvent(
+            TcpConnectionStateChangedEvent(remoteAddress,remotePort,oldState,newState)
+          );
+      }
     };
   }
 }

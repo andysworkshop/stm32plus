@@ -334,7 +334,7 @@ namespace stm32plus {
 
       // the connection has gone bad
 
-      _state.state=TcpState::CLOSED;
+      _state.changeState(*_networkUtilityObjects,TcpState::CLOSED);
 
       // notify
 

@@ -163,6 +163,7 @@
 #include "net/transport/tcp/TcpSegmentEvent.h"
 #include "net/transport/tcp/TcpTransmitWindow.h"
 #include "net/transport/tcp/TcpReceiveWindow.h"
+#include "net/transport/tcp/TcpConnectionStateChangedEvent.h"
 #include "net/transport/tcp/TcpConnectionState.h"
 #include "net/transport/tcp/TcpClosingConnectionState.h"
 #include "net/transport/tcp/TcpEvents.h"

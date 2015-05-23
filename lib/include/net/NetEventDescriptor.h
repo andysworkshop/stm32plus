@@ -50,7 +50,8 @@ namespace stm32plus {
           TCP_SEGMENT,                  ///< TCP segment arrived
           TCP_FIND_CONNECTION,          ///< TCP connection finder
           TCP_CONNECTION_CLOSED,        ///< TCP remote end has closed
-          TCP_CONNECTION_DATA_READY,    ///< We have buffered some data from the remote end
+          TCP_CONNECTION_DATA_READY,    ///< we have buffered some data from the remote end
+          TCP_CONNECTION_STATE_CHANGED, ///< the state of a TCP connection has changed
           DEBUG_MESSAGE                 ///< message for debugging
         };
 

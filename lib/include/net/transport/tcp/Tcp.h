@@ -87,6 +87,17 @@ namespace stm32plus {
                         uint16_t remotePort,
                         TConnection *& connection);
 
+        template<class TConnection>
+        bool tcpConnectAsync(const IpAddress& remoteAddress,
+                        uint16_t remotePort,
+                        TConnection *& connection);
+
+        template<class TConnection>
+        bool tcpConnectAsync(const IpAddress& remoteAddress,
+                        uint16_t localPort,
+                        uint16_t remotePort,
+                        TConnection *& connection);
+
         bool initialise(const Parameters& params);
         bool startup();
     };
@@ -418,13 +429,13 @@ namespace stm32plus {
 
         case TcpState::SYN_RCVD:          // we are the active closer in these cases
         case TcpState::ESTABLISHED:
-          it->state=TcpState::FIN_WAIT_1;
+          it->changeState(*this,TcpState::FIN_WAIT_1);
           it->sendFinAck(*this,0);
           it->txWindow.sendNext++;
           break;
 
         case TcpState::CLOSE_WAIT:        // we are the passive closer in these cases
-          it->state=TcpState::LAST_ACK;
+          it->changeState(*this,TcpState::LAST_ACK);
           it->sendFinAck(*this,0);
           it->txWindow.sendNext++;
           break;
@@ -454,7 +465,7 @@ namespace stm32plus {
 
       // new state is FIN_WAIT_2
 
-      rstate.state=TcpState::FIN_WAIT_2;
+      rstate.changeState(*this,TcpState::FIN_WAIT_2);
     }
 
 
@@ -480,7 +491,7 @@ namespace stm32plus {
 
       // new state is TIME_WAIT
 
-      rstate.state=TcpState::TIME_WAIT;
+      rstate.changeState(*this,TcpState::TIME_WAIT);
     }
 
 
@@ -502,7 +513,7 @@ namespace stm32plus {
 
       // we're done
 
-      rstate.state=TcpState::CLOSED;
+      rstate.changeState(*this,TcpState::CLOSED);
       return true;
     }
 
@@ -659,6 +670,95 @@ namespace stm32plus {
       // retries exhausted
 
       return this->setError(ErrorProvider::ERROR_PROVIDER_NET_TCP,E_TIMEOUT);
+    }
+
+
+    /**
+     * Connect to a remote endpoint and port. The interval between retries and the number of retries that are
+     * attempted can be configured in the Parameters class. A random local port from the ephemeral range will
+     * be selected. This asynchronous method requires you to subscribe to the TcpConnectionStateChangedEvent
+     * This is not IRQ safe.
+     * @param remoteAddress The remote IP address to connect to
+     * @param remotePort The remote server port to connect to
+     * @param connection The new connection object. Delete when you're done.
+     * @tparam TConnection Your most-derived subclass of TcpConnection that you're using to handle the connection.
+     * @return true if it works, false if not
+     */
+
+    template<class TNetworkLayer>
+    template<class TConnection>
+    bool Tcp<TNetworkLayer>::tcpConnectAsync(const IpAddress& remoteAddress,
+                                        uint16_t remotePort,
+                                        TConnection *&connection) {
+
+      uint16_t localPort;
+
+      // get a port from the ephemeral range
+
+      if(!this->ip_acquireEphemeralPort(localPort))
+        return false;
+
+      // connect with all parameters
+
+      if(!tcpConnectAsync(remoteAddress,localPort,remotePort,connection)) {
+
+        // didn't work, release the local port
+
+        this->ip_releaseEphemeralPort(localPort);
+        return false;
+      }
+
+      // worked
+
+      return true;
+    }
+
+
+    /**
+     * Connect to a remote endpoint and port. The interval between retries and the number of retries that are
+     * attempted can be configured in the Parameters class. You specify the local port number, which must be from
+     * the ephemeral range. This asynchronous method requires you to subscribe to the TcpConnectionStateChangedEvent
+     * and look out for a move away from SYN_SENT to ESTABLISHED in the successful case or anything else in
+     * the case of an error. You must handle timeout and retry logic yourself by calling sendSyn() when you want
+     * to retry.
+     * This is not IRQ safe.
+     * @param remoteAddress The remote IP address to connect to
+     * @param remotePort The remote server port to connect to
+     * @param connection The new connection object. Delete when you're done.
+     * @tparam TConnection Your most-derived subclass of TcpConnection that you're using to handle the connection.
+     * @return true if it works, false if not
+     */
+
+    template<class TNetworkLayer>
+    template<class TConnection>
+    bool Tcp<TNetworkLayer>::tcpConnectAsync(const IpAddress& remoteAddress,
+                                        uint16_t localPort,
+                                        uint16_t remotePort,
+                                        TConnection *&connection) {
+      uint16_t retry;
+
+      // create and initialise the new connection. this will send the first SYN
+
+      connection=nullptr;
+      connection=new TConnection;
+
+      if(!connection->initialise(
+                        *this,
+                        *this,
+                        remoteAddress,
+                        localPort,
+                        remotePort,
+                        this->getDatalinkMtuSize()-IpPacketHeader::getNoOptionsHeaderSize()-TcpHeader::getNoOptionsHeaderSize(),
+                        this->getDatalinkTransmitHeaderSize()+this->getIpTransmitHeaderSize())) {
+
+        // failed, clean up
+
+        delete connection;
+        connection=nullptr;
+        return false;
+      }
+
+      return true;
     }
   }
 }
