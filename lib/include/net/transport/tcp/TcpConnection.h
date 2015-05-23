@@ -46,7 +46,6 @@ namespace stm32plus {
         uint32_t tcp_maxResendDelay;        ///< the resend delay exponential backoff is capped at this value. default is 60 (1 minute)
         bool tcp_push;                      ///< if true, set the PSH flag in sent segments. Default is false.
         bool tcp_nagleAvoidance;            ///< if true, single packet sends are broken into 2 to force the receiver's Nagle algorithm to generate an ACK without delay. Default is true.
-        bool tcp_delayedDataAck;            ///< if true, delay ack-ing data until the application has consumed all the receive buffer. Default is true.
 
         /**
          * Constructor
