@@ -100,6 +100,8 @@ namespace stm32plus {
 
         bool initialise(const Parameters& params);
         bool startup();
+
+        Parameters& tcpGetParameters();
     };
 
 
@@ -735,7 +737,6 @@ namespace stm32plus {
                                         uint16_t localPort,
                                         uint16_t remotePort,
                                         TConnection *&connection) {
-      uint16_t retry;
 
       // create and initialise the new connection. this will send the first SYN
 
@@ -759,6 +760,17 @@ namespace stm32plus {
       }
 
       return true;
+    }
+
+
+    /**
+     * Get a reference to the TCP parameters object
+     * @return A reference to the parameters
+     */
+
+    template<class TNetworkLayer>
+    typename Tcp<TNetworkLayer>::Parameters& Tcp<TNetworkLayer>::tcpGetParameters() {
+      return _params;
     }
   }
 }
