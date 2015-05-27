@@ -65,7 +65,7 @@ namespace stm32plus {
       // this is an incoming client connection to our server. we need to send a SYN-ACK
 
       _state.localPortIsEphemeral=false;
-      _state.state=TcpState::SYN_RCVD;
+      _state.changeState(*_networkUtilityObjects,TcpState::SYN_RCVD);
 
       return sendSynAck();
     }
@@ -111,7 +111,7 @@ namespace stm32plus {
       // this is an incoming client connection to our server. we need to send a SYN-ACK
 
       _state.localPortIsEphemeral=true;
-      _state.state=TcpState::SYN_SENT;
+      _state.changeState(*_networkUtilityObjects,TcpState::SYN_SENT);
 
       return sendSyn();
     }
@@ -151,7 +151,7 @@ namespace stm32plus {
 
     void TcpConnection::initialise(const IpAddress& remoteAddress,uint16_t remotePort,uint16_t localPort) {
 
-      _state.state=TcpState::CLOSED;
+      _state.changeState(*_networkUtilityObjects,TcpState::CLOSED);
       _state.additionalHeaderSize=_additionalHeaderSize;
 
       _state.localPort=localPort;
@@ -264,7 +264,7 @@ namespace stm32plus {
 
       // change our state
 
-      _state.state=TcpState::CLOSE_WAIT;
+      _state.changeState(*_networkUtilityObjects,TcpState::CLOSE_WAIT);
 
       // ACK the FIN so the connection is now half-closed
 
@@ -340,7 +340,7 @@ namespace stm32plus {
       // if the current state is SYN_RCVD then we can move to established
 
       if(_state.state==TcpState::SYN_RCVD)
-        _state.state=TcpState::ESTABLISHED;
+        _state.changeState(*_networkUtilityObjects,TcpState::ESTABLISHED);
 
       // the gotcha here is to cater for 32-bit overflow while checking that the new s.una
       // is greater than the old which is necessary to avoid winding back the window by
@@ -394,7 +394,7 @@ namespace stm32plus {
 
       // we're established, as far as we know
 
-      _state.state=TcpState::ESTABLISHED;
+      _state.changeState(*_networkUtilityObjects,TcpState::ESTABLISHED);
 
       // ACK their SYN-ACK
 

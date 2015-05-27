@@ -133,7 +133,7 @@ class NetTcpClientTest {
 
         // connect to the remote end using a random local ephemeral port
 
-        if(_net->tcpConnect<TcpClientConnection>("192.168.1.9",12345,ptr)) {
+        if(_net->tcpConnect<TcpClientConnection>("192.168.1.3",12345,ptr)) {
 
           // manage the connection pointer in a scoped_ptr so it's automatically deleted (and closed)
           // when it goes out of scope

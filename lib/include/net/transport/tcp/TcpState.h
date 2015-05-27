@@ -17,6 +17,7 @@ namespace stm32plus {
      */
 
     enum class TcpState : uint8_t {
+      NONE,
       CLOSED,
       SYN_RCVD,
       SYN_SENT,

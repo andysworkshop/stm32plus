@@ -138,17 +138,18 @@ class NetTcpClientAsyncTest {
 
       *_outputStream << "The TCP client is ready to run\r\n";
 
+      TcpClientConnection *ptr;
       uint32_t actuallyReceived,actuallySent;
       char buffer[100];
 
       for(;;) {
 
-        // manage the connection pointer in a scoped_ptr so it's automatically deleted (and closed)
-        // when it goes out of scope
+        if(connectToServer(ptr)) {
 
-        scoped_ptr<TcpClientConnection> conn;
+          // manage the connection pointer in a scoped_ptr so it's automatically deleted (and closed)
+          // when it goes out of scope
 
-        if(connectToServer(conn.address())) {
+          scoped_ptr<TcpClientConnection> conn(ptr);
 
           // send 11 bytes of text and a newline to the other end (blocking). We have to copy the data to
           // a sram buffer before sending because the STM32 Ethernet DMA peripheral cannot transmit from
@@ -201,7 +202,7 @@ class NetTcpClientAsyncTest {
 
           // start connecting to the remote end using a random local ephemeral port
 
-          if(!_net->tcpConnectAsync<TcpClientConnection>("192.168.1.9",12345,conn))
+          if(!_net->tcpConnectAsync<TcpClientConnection>("192.168.1.3",12345,conn))
             return false;
         }
         else
