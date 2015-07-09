@@ -5,8 +5,8 @@
   ******************************************************************************
   * @file    stm32f0xx_i2c.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Inter-Integrated circuit (I2C):
   *           + Initialization and Configuration
@@ -1141,12 +1141,12 @@ void I2C_PECRequestCmd(I2C_TypeDef* I2Cx, FunctionalState NewState)
   if (NewState != DISABLE)
   {
     /* Enable PEC transmission/reception request */
-    I2Cx->CR1 |= I2C_CR2_PECBYTE;   
+    I2Cx->CR2 |= I2C_CR2_PECBYTE;   
   }
   else
   {
     /* Disable PEC transmission/reception request */    
-    I2Cx->CR1 &= (uint32_t)~((uint32_t)I2C_CR2_PECBYTE); 
+    I2Cx->CR2 &= (uint32_t)~((uint32_t)I2C_CR2_PECBYTE); 
   }
 }
 

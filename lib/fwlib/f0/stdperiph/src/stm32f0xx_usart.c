@@ -5,8 +5,8 @@
   ******************************************************************************
   * @file    stm32f0xx_usart.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Universal synchronous asynchronous receiver
   *          transmitter (USART):
@@ -169,8 +169,9 @@
   
 /**
   * @brief  Deinitializes the USARTx peripheral registers to their default reset values.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices.  
   * @note   USART2 is not available for STM32F031 devices.
   * @retval None
   */
@@ -194,12 +195,32 @@ void USART_DeInit(USART_TypeDef* USARTx)
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART3, ENABLE);
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART3, DISABLE);
   }
+    else if (USARTx == USART4)
+  {
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART4, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART4, DISABLE);
+  }
+  else if (USARTx == USART5)
+  {
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART5, ENABLE);
+    RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART5, DISABLE);
+  }
+    else if (USARTx == USART6)
+  {
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART6, ENABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART6, DISABLE);
+  }
+  else if (USARTx == USART7)
+  {
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART7, ENABLE);
+    RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART7, DISABLE);
+  }
   else 
   {
-    if  (USARTx == USART4)
+    if  (USARTx == USART8)
     {
-      RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART4, ENABLE);
-      RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART4, DISABLE);
+      RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART8, ENABLE);
+      RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART8, DISABLE);
     }
   }
 }
@@ -207,8 +228,9 @@ void USART_DeInit(USART_TypeDef* USARTx)
 /**
   * @brief  Initializes the USARTx peripheral according to the specified
   *         parameters in the USART_InitStruct .
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.    
   * @param  USART_InitStruct: pointer to a USART_InitTypeDef structure that contains
   *         the configuration information for the specified USART peripheral.
@@ -282,6 +304,10 @@ void USART_Init(USART_TypeDef* USARTx, USART_InitTypeDef* USART_InitStruct)
   {
     apbclock = RCC_ClocksStatus.USART2CLK_Frequency;
   }
+   else if (USARTx == USART3)
+  {
+    apbclock = RCC_ClocksStatus.USART3CLK_Frequency;
+  }
   else
   {
     apbclock = RCC_ClocksStatus.PCLK_Frequency;
@@ -341,8 +367,9 @@ void USART_StructInit(USART_InitTypeDef* USART_InitStruct)
 /**
   * @brief  Initializes the USARTx peripheral Clock according to the 
   *         specified parameters in the USART_ClockInitStruct.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.   
   * @param  USART_ClockInitStruct: pointer to a USART_ClockInitTypeDef
   *         structure that contains the configuration information for the specified 
@@ -390,8 +417,9 @@ void USART_ClockStructInit(USART_ClockInitTypeDef* USART_ClockInitStruct)
 
 /**
   * @brief  Enables or disables the specified USART peripheral.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.    
   * @param  NewState: new state of the USARTx peripheral.
   *          This parameter can be: ENABLE or DISABLE.
@@ -417,8 +445,9 @@ void USART_Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the USART's transmitter or receiver.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_Direction: specifies the USART direction.
   *          This parameter can be any combination of the following values:
@@ -451,8 +480,9 @@ void USART_DirectionModeCmd(USART_TypeDef* USARTx, uint32_t USART_DirectionMode,
 
 /**
   * @brief  Enables or disables the USART's 8x oversampling mode.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new state of the USART 8x oversampling mode.
   *          This parameter can be: ENABLE or DISABLE.
@@ -480,8 +510,9 @@ void USART_OverSampling8Cmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the USART's one bit sampling method.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new state of the USART one bit sampling method.
   *          This parameter can be: ENABLE or DISABLE.
@@ -509,8 +540,9 @@ void USART_OneBitMethodCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 /**
   * @brief  Enables or disables the USART's most significant bit first 
   *         transmitted/received following the start bit.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new state of the USART most significant bit first
   *         transmitted/received following the start bit.
@@ -540,8 +572,9 @@ void USART_MSBFirstCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the binary data inversion.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new defined levels for the USART data.
   *          This parameter can be:
@@ -574,8 +607,9 @@ void USART_DataInvCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the Pin(s) active level inversion.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_InvPin: specifies the USART pin(s) to invert.
   *          This parameter can be any combination of the following values:
@@ -611,8 +645,9 @@ void USART_InvPinCmd(USART_TypeDef* USARTx, uint32_t USART_InvPin, FunctionalSta
 
 /**
   * @brief  Enables or disables the swap Tx/Rx pins.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new state of the USARTx TX/RX pins pinout.
   *          This parameter can be:
@@ -641,7 +676,9 @@ void USART_SWAPPinCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the receiver Time Out feature.
-  * @param  USARTx: where x can be 1 to select the USART peripheral.
+  * @param  USARTx: where x can be 1, 2 or 3 to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.  
   * @param  NewState: new state of the USARTx receiver Time Out.
   *          This parameter can be: ENABLE or DISABLE.
   * @retval None
@@ -649,7 +686,7 @@ void USART_SWAPPinCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 void USART_ReceiverTimeOutCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
   if (NewState != DISABLE)
@@ -668,15 +705,16 @@ void USART_ReceiverTimeOutCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Sets the receiver Time Out value.
-  * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.  
+  * @param  USARTx: where x can be 1, 2 or 3 to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.   
   * @param  USART_ReceiverTimeOut: specifies the Receiver Time Out value.
   * @retval None
   */
 void USART_SetReceiverTimeOut(USART_TypeDef* USARTx, uint32_t USART_ReceiverTimeOut)
 {    
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_USART_TIMEOUT(USART_ReceiverTimeOut));
 
   /* Clear the receiver Time Out value by clearing the RTO[23:0] bits in the RTOR
@@ -690,8 +728,9 @@ void USART_SetReceiverTimeOut(USART_TypeDef* USARTx, uint32_t USART_ReceiverTime
 /**
   * @brief  Sets the system clock prescaler.
   * @note   This function is not available for STM32F030 devices.    
-  * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices. 
+  * @param  USARTx: where x can be 1, 2 or 3 to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices. 
   * @param  USART_Prescaler: specifies the prescaler clock.
   * @note   This function has to be called before calling USART_Cmd() function.    
   * @retval None
@@ -699,7 +738,7 @@ void USART_SetReceiverTimeOut(USART_TypeDef* USARTx, uint32_t USART_ReceiverTime
 void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 { 
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   
   /* Clear the USART prescaler */
   USARTx->GTPR &= USART_GTPR_GT;
@@ -737,8 +776,9 @@ void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 
 /**
   * @brief  Enables or disables the specified USART peripheral in STOP Mode.
-  * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.  
+  * @param  USARTx: where x can be 1 or 2 or 3  to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices.  
+  * @note   USART3 is available only for STM32F091 devices.   
   * @param  NewState: new state of the USARTx peripheral state in stop mode.
   *          This parameter can be: ENABLE or DISABLE.
   * @note   This function has to be called when USART clock is set to HSI or LSE. 
@@ -747,7 +787,7 @@ void USART_SetPrescaler(USART_TypeDef* USARTx, uint8_t USART_Prescaler)
 void USART_STOPModeCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   
   if (NewState != DISABLE)
@@ -767,8 +807,9 @@ void USART_STOPModeCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 /**
   * @brief  Selects the USART WakeUp method form stop mode.
   * @note   This function is not available for STM32F030 devices.   
-  * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.  
+  * @param  USARTx: where x can be 1 or 2 or 3 to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.     
   * @param  USART_WakeUp: specifies the selected USART wakeup method.
   *          This parameter can be one of the following values:
   *            @arg USART_WakeUpSource_AddressMatch: WUF active on address match.
@@ -780,7 +821,7 @@ void USART_STOPModeCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 void USART_StopModeWakeUpSourceConfig(USART_TypeDef* USARTx, uint32_t USART_WakeUpSource)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_USART_STOPMODE_WAKEUPSOURCE(USART_WakeUpSource));
 
   USARTx->CR3 &= (uint32_t)~((uint32_t)USART_CR3_WUS);
@@ -823,7 +864,8 @@ void USART_StopModeWakeUpSourceConfig(USART_TypeDef* USARTx, uint32_t USART_Wake
 /**
   * @brief  Enables or disables the Auto Baud Rate.
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.   
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.  
   * @param  NewState: new state of the USARTx auto baud rate.
   *          This parameter can be: ENABLE or DISABLE.
   * @retval None
@@ -831,7 +873,7 @@ void USART_StopModeWakeUpSourceConfig(USART_TypeDef* USARTx, uint32_t USART_Wake
 void USART_AutoBaudRateCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
   if (NewState != DISABLE)
@@ -851,7 +893,8 @@ void USART_AutoBaudRateCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 /**
   * @brief  Selects the USART auto baud rate method.
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.   
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.  
   * @param  USART_AutoBaudRate: specifies the selected USART auto baud rate method.
   *          This parameter can be one of the following values:
   *            @arg USART_AutoBaudRate_StartBit: Start Bit duration measurement.
@@ -862,7 +905,7 @@ void USART_AutoBaudRateCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 void USART_AutoBaudRateConfig(USART_TypeDef* USARTx, uint32_t USART_AutoBaudRate)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_USART_AUTOBAUDRATE_MODE(USART_AutoBaudRate));
 
   USARTx->CR2 &= (uint32_t)~((uint32_t)USART_CR2_ABRMODE);
@@ -897,8 +940,9 @@ void USART_AutoBaudRateConfig(USART_TypeDef* USARTx, uint32_t USART_AutoBaudRate
 
 /**
   * @brief  Transmits single data through the USARTx peripheral.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  Data: the data to transmit.
   * @retval None
@@ -915,8 +959,9 @@ void USART_SendData(USART_TypeDef* USARTx, uint16_t Data)
 
 /**
   * @brief  Returns the most recent received data by the USARTx peripheral.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.   
   * @retval The received data.
   */
@@ -965,8 +1010,9 @@ uint16_t USART_ReceiveData(USART_TypeDef* USARTx)
 
 /**
   * @brief  Sets the address of the USART node.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.   
   * @param  USART_Address: Indicates the address of the USART node.
   * @retval None
@@ -984,8 +1030,9 @@ void USART_SetAddress(USART_TypeDef* USARTx, uint8_t USART_Address)
 
 /**
   * @brief  Enables or disables the USART's mute mode.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new state of the USART mute mode.
   *          This parameter can be: ENABLE or DISABLE.
@@ -1011,8 +1058,9 @@ void USART_MuteModeCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Selects the USART WakeUp method from mute mode.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral. 
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.   
   * @param  USART_WakeUp: specifies the USART wakeup method.
   *          This parameter can be one of the following values:
@@ -1032,8 +1080,9 @@ void USART_MuteModeWakeUpConfig(USART_TypeDef* USARTx, uint32_t USART_WakeUp)
 
 /**
   * @brief  Configure the the USART Address detection length.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_AddressLength: specifies the USART address length detection.
   *          This parameter can be one of the following values:
@@ -1099,7 +1148,8 @@ void USART_AddressDetectionConfig(USART_TypeDef* USARTx, uint32_t USART_AddressL
   * @brief  Sets the USART LIN Break detection length.
   * @note   This function is not available for STM32F030 devices.  
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.  
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.
   * @param  USART_LINBreakDetectLength: specifies the LIN break detection length.
   *          This parameter can be one of the following values:
   *            @arg USART_LINBreakDetectLength_10b: 10-bit break detection
@@ -1109,7 +1159,7 @@ void USART_AddressDetectionConfig(USART_TypeDef* USARTx, uint32_t USART_AddressL
 void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint32_t USART_LINBreakDetectLength)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_USART_LIN_BREAK_DETECT_LENGTH(USART_LINBreakDetectLength));
 
   USARTx->CR2 &= (uint32_t)~((uint32_t)USART_CR2_LBDL);
@@ -1120,7 +1170,8 @@ void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint32_t USART_LINB
   * @brief  Enables or disables the USART's LIN mode.
   * @note   This function is not available for STM32F030 devices.
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is available only for STM32F072 devices.  
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.  
   * @param  NewState: new state of the USART LIN mode.
   *          This parameter can be: ENABLE or DISABLE.
   * @retval None
@@ -1128,7 +1179,7 @@ void USART_LINBreakDetectLengthConfig(USART_TypeDef* USARTx, uint32_t USART_LINB
 void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
   if (NewState != DISABLE)
@@ -1176,8 +1227,9 @@ void USART_LINCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the USART's Half Duplex communication.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.    
   * @param  NewState: new state of the USART Communication.
   *          This parameter can be: ENABLE or DISABLE.
@@ -1261,14 +1313,15 @@ void USART_HalfDuplexCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @brief  Sets the specified USART guard time.
   * @note   This function is not available for STM32F030 devices.  
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices.  
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices. 
   * @param  USART_GuardTime: specifies the guard time.
   * @retval None
   */
 void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
 {    
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
 
   /* Clear the USART Guard time */
   USARTx->GTPR &= USART_GTPR_PSC;
@@ -1280,7 +1333,8 @@ void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
   * @brief  Enables or disables the USART's Smart Card mode.
   * @note   This function is not available for STM32F030 devices.  
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices. 
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices. 
   * @param  NewState: new state of the Smart Card mode.
   *          This parameter can be: ENABLE or DISABLE.      
   * @retval None
@@ -1288,7 +1342,7 @@ void USART_SetGuardTime(USART_TypeDef* USARTx, uint8_t USART_GuardTime)
 void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   if (NewState != DISABLE)
   {
@@ -1306,7 +1360,8 @@ void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState)
   * @brief  Enables or disables NACK transmission.
   * @note   This function is not available for STM32F030 devices.  
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices. 
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.
   * @param  NewState: new state of the NACK transmission.
   *          This parameter can be: ENABLE or DISABLE.  
   * @retval None
@@ -1314,7 +1369,7 @@ void USART_SmartCardCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx)); 
+  assert_param(IS_USART_123_PERIPH(USARTx)); 
   assert_param(IS_FUNCTIONAL_STATE(NewState));
   if (NewState != DISABLE)
   {
@@ -1331,15 +1386,16 @@ void USART_SmartCardNACKCmd(USART_TypeDef* USARTx, FunctionalState NewState)
 /**
   * @brief  Sets the Smart Card number of retries in transmit and receive.
   * @note   This function is not available for STM32F030 devices.  
-  * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices. 
+  * @param  USARTx: where x can be 1or 3  to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.
   * @param  USART_AutoCount: specifies the Smart Card auto retry count.
   * @retval None
   */
 void USART_SetAutoRetryCount(USART_TypeDef* USARTx, uint8_t USART_AutoCount)
 {    
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_USART_AUTO_RETRY_COUNTER(USART_AutoCount));
   /* Clear the USART auto retry count */
   USARTx->CR3 &= (uint32_t)~((uint32_t)USART_CR3_SCARCNT);
@@ -1350,15 +1406,16 @@ void USART_SetAutoRetryCount(USART_TypeDef* USARTx, uint8_t USART_AutoCount)
 /**
   * @brief  Sets the Smart Card Block length.
   * @note   This function is not available for STM32F030 devices.  
-  * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices. 
+  * @param  USARTx: where x can be 1or 3  to select the USART peripheral.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.
   * @param  USART_BlockLength: specifies the Smart Card block length.
   * @retval None
   */
 void USART_SetBlockLength(USART_TypeDef* USARTx, uint8_t USART_BlockLength)
 {    
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
 
   /* Clear the Smart card block length */
   USARTx->RTOR &= (uint32_t)~((uint32_t)USART_RTOR_BLEN);
@@ -1412,7 +1469,8 @@ void USART_SetBlockLength(USART_TypeDef* USARTx, uint8_t USART_BlockLength)
   * @brief  Configures the USART's IrDA interface.
   * @note   This function is not available for STM32F030 devices.  
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices.
   * @param  USART_IrDAMode: specifies the IrDA mode.
   *          This parameter can be one of the following values:
   *            @arg USART_IrDAMode_LowPower
@@ -1422,7 +1480,7 @@ void USART_SetBlockLength(USART_TypeDef* USARTx, uint8_t USART_BlockLength)
 void USART_IrDAConfig(USART_TypeDef* USARTx, uint32_t USART_IrDAMode)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_USART_IRDA_MODE(USART_IrDAMode));
 
   USARTx->CR3 &= (uint32_t)~((uint32_t)USART_CR3_IRLP);
@@ -1433,7 +1491,8 @@ void USART_IrDAConfig(USART_TypeDef* USARTx, uint32_t USART_IrDAMode)
   * @brief  Enables or disables the USART's IrDA interface.
   * @note   This function is not available for STM32F030 devices.  
   * @param  USARTx: where x can be 1or 2  to select the USART peripheral.
-  * @note   USART2 is applicable only for STM32F072 devices.
+  * @note   USART2 is available only for STM32F072 and STM32F091 devices. 
+  * @note   USART3 is available only for STM32F091 devices. 
   * @param  NewState: new state of the IrDA mode.
   *          This parameter can be: ENABLE or DISABLE.
   * @retval None
@@ -1441,7 +1500,7 @@ void USART_IrDAConfig(USART_TypeDef* USARTx, uint32_t USART_IrDAMode)
 void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
 {
   /* Check the parameters */
-  assert_param(IS_USART_12_PERIPH(USARTx));
+  assert_param(IS_USART_123_PERIPH(USARTx));
   assert_param(IS_FUNCTIONAL_STATE(NewState));
 
   if (NewState != DISABLE)
@@ -1490,8 +1549,9 @@ void USART_IrDACmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Enables or disables the USART's DE functionality.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  NewState: new state of the driver enable mode.
   *          This parameter can be: ENABLE or DISABLE.      
@@ -1516,8 +1576,9 @@ void USART_DECmd(USART_TypeDef* USARTx, FunctionalState NewState)
 
 /**
   * @brief  Configures the USART's DE polarity
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_DEPolarity: specifies the DE polarity.
   *          This parameter can be one of the following values:
@@ -1537,8 +1598,9 @@ void USART_DEPolarityConfig(USART_TypeDef* USARTx, uint32_t USART_DEPolarity)
 
 /**
   * @brief  Sets the specified RS485 DE assertion time
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_DEAssertionTime: specifies the time between the activation of
   *         the DE signal and the beginning of the start bit
@@ -1558,8 +1620,9 @@ void USART_SetDEAssertionTime(USART_TypeDef* USARTx, uint32_t USART_DEAssertionT
 
 /**
   * @brief  Sets the specified RS485 DE deassertion time
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_DeassertionTime: specifies the time between the middle of the last 
   *         stop bit in a transmitted message and the de-activation of the DE signal
@@ -1602,8 +1665,9 @@ void USART_SetDEDeassertionTime(USART_TypeDef* USARTx, uint32_t USART_DEDeassert
 
 /**
   * @brief  Enables or disables the USART's DMA interface.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_DMAReq: specifies the DMA request.
   *          This parameter can be any combination of the following values:
@@ -1636,8 +1700,9 @@ void USART_DMACmd(USART_TypeDef* USARTx, uint32_t USART_DMAReq, FunctionalState 
 
 /**
   * @brief  Enables or disables the USART's DMA interface when reception error occurs.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_DMAOnError: specifies the DMA status in case of reception error.
   *          This parameter can be any combination of the following values:
@@ -1760,8 +1825,9 @@ void USART_DMAReceptionErrorConfig(USART_TypeDef* USARTx, uint32_t USART_DMAOnEr
 
 /**
   * @brief  Enables or disables the specified USART interrupts.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_IT: specifies the USART interrupt sources to be enabled or disabled.
   *          This parameter can be one of the following values:
@@ -1822,8 +1888,9 @@ void USART_ITConfig(USART_TypeDef* USARTx, uint32_t USART_IT, FunctionalState Ne
 
 /**
   * @brief  Enables the specified USART's Request.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_Request: specifies the USART request.
   *          This parameter can be any combination of the following values:
@@ -1859,8 +1926,9 @@ void USART_RequestCmd(USART_TypeDef* USARTx, uint32_t USART_Request, FunctionalS
 
 /**
   * @brief  Enables or disables the USART's Overrun detection.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_OVRDetection: specifies the OVR detection status in case of OVR error.
   *          This parameter can be any combination of the following values:
@@ -1884,8 +1952,9 @@ void USART_OverrunDetectionConfig(USART_TypeDef* USARTx, uint32_t USART_OVRDetec
 
 /**
   * @brief  Checks whether the specified USART flag is set or not.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_FLAG: specifies the flag to check.
   *          This parameter can be one of the following values:
@@ -1933,8 +2002,9 @@ FlagStatus USART_GetFlagStatus(USART_TypeDef* USARTx, uint32_t USART_FLAG)
 
 /**
   * @brief  Clears the USARTx's pending flags.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_FLAG: specifies the flag to clear.
   *          This parameter can be any combination of the following values:
@@ -1974,8 +2044,9 @@ void USART_ClearFlag(USART_TypeDef* USARTx, uint32_t USART_FLAG)
 
 /**
   * @brief  Checks whether the specified USART interrupt has occurred or not.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_IT: specifies the USART interrupt source to check.
   *          This parameter can be one of the following values:
@@ -2039,8 +2110,9 @@ ITStatus USART_GetITStatus(USART_TypeDef* USARTx, uint32_t USART_IT)
 
 /**
   * @brief  Clears the USARTx's interrupt pending bits.
-  * @param  USARTx: where x can be 1, 2, 3 or 4 to select the USART peripheral.
-  * @note   USART3 and USART4 are available only for STM32F072 devices.
+  * @param  USARTx: where x can be from 1 to 8 to select the USART peripheral.
+  * @note   USART3 and USART4 are available only for STM32F072 and STM32F091 devices.
+  * @note   USART5, USART6, USART7 and USART8 are available only for STM32F091 devices. 
   * @note   USART2 is not available for STM32F031 devices.  
   * @param  USART_IT: specifies the interrupt pending bit to clear.
   *          This parameter can be one of the following values:

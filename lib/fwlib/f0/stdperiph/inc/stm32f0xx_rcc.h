@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_rcc.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file contains all the functions prototypes for the RCC 
   *          firmware library.
   ******************************************************************************
@@ -57,8 +57,9 @@ typedef struct
   uint32_t CECCLK_Frequency;
   uint32_t I2C1CLK_Frequency;
   uint32_t USART1CLK_Frequency;
-  uint32_t USART2CLK_Frequency; /*!< Only applicable for STM32F072 devices */
-  uint32_t USBCLK_Frequency; /*!< Only applicable for STM32F072 devices */
+  uint32_t USART2CLK_Frequency; /*!< Only applicable for STM32F072 and STM32F091 devices */
+  uint32_t USART3CLK_Frequency; /*!< Only applicable for STM32F091 devices */
+  uint32_t USBCLK_Frequency;    /*!< Only applicable for STM32F072 devices */
 }RCC_ClocksTypeDef;
 
 /* Exported constants --------------------------------------------------------*/
@@ -283,10 +284,16 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
 #define RCC_USART1CLK_LSE                   ((uint32_t)0x10000002)
 #define RCC_USART1CLK_HSI                   ((uint32_t)0x10000003)
 
-#define RCC_USART2CLK_PCLK                  ((uint32_t)0x20000000) /*!< Only applicable for STM32F072 devices */
-#define RCC_USART2CLK_SYSCLK                ((uint32_t)0x20010000) /*!< Only applicable for STM32F072 devices */
-#define RCC_USART2CLK_LSE                   ((uint32_t)0x20020000) /*!< Only applicable for STM32F072 devices */
-#define RCC_USART2CLK_HSI                   ((uint32_t)0x20030000) /*!< Only applicable for STM32F072 devices */
+#define RCC_USART2CLK_PCLK                  ((uint32_t)0x20000000) /*!< Only applicable for STM32F072 and STM32F091 devices */
+#define RCC_USART2CLK_SYSCLK                ((uint32_t)0x20010000) /*!< Only applicable for STM32F072 and STM32F091 devices */
+#define RCC_USART2CLK_LSE                   ((uint32_t)0x20020000) /*!< Only applicable for STM32F072 and STM32F091 devices */
+#define RCC_USART2CLK_HSI                   ((uint32_t)0x20030000) /*!< Only applicable for STM32F072 and STM32F091 devices */
+
+#define RCC_USART3CLK_PCLK                  ((uint32_t)0x30000000) /*!< Only applicable for STM32F091 devices */
+#define RCC_USART3CLK_SYSCLK                ((uint32_t)0x30040000) /*!< Only applicable for STM32F091 devices */
+#define RCC_USART3CLK_LSE                   ((uint32_t)0x30080000) /*!< Only applicable for STM32F091 devices */
+#define RCC_USART3CLK_HSI                   ((uint32_t)0x300C0000) /*!< Only applicable for STM32F091 devices */
+
 
 #define IS_RCC_USARTCLK(USARTCLK) (((USARTCLK) == RCC_USART1CLK_PCLK)   || \
                                    ((USARTCLK) == RCC_USART1CLK_SYSCLK) || \
@@ -295,7 +302,11 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
                                    ((USARTCLK) == RCC_USART2CLK_PCLK)   || \
                                    ((USARTCLK) == RCC_USART2CLK_SYSCLK) || \
                                    ((USARTCLK) == RCC_USART2CLK_LSE)    || \
-                                   ((USARTCLK) == RCC_USART2CLK_HSI))
+                                   ((USARTCLK) == RCC_USART2CLK_HSI)|| \
+                                   ((USARTCLK) == RCC_USART3CLK_PCLK)   || \
+                                   ((USARTCLK) == RCC_USART3CLK_SYSCLK) || \
+                                   ((USARTCLK) == RCC_USART3CLK_LSE)    || \
+                                   ((USARTCLK) == RCC_USART3CLK_HSI))
 
 /**
   * @}
@@ -377,16 +388,17 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
 #define RCC_AHBPeriph_GPIOB               RCC_AHBENR_GPIOBEN
 #define RCC_AHBPeriph_GPIOC               RCC_AHBENR_GPIOCEN
 #define RCC_AHBPeriph_GPIOD               RCC_AHBENR_GPIODEN
-#define RCC_AHBPeriph_GPIOE               RCC_AHBENR_GPIOEEN /*!< Only applicable for STM32F072 devices */
+#define RCC_AHBPeriph_GPIOE               RCC_AHBENR_GPIOEEN /*!< Only applicable for STM32F072 and STM32F091 devices */
 #define RCC_AHBPeriph_GPIOF               RCC_AHBENR_GPIOFEN
 #define RCC_AHBPeriph_TS                  RCC_AHBENR_TSEN
 #define RCC_AHBPeriph_CRC                 RCC_AHBENR_CRCEN
 #define RCC_AHBPeriph_FLITF               RCC_AHBENR_FLITFEN
 #define RCC_AHBPeriph_SRAM                RCC_AHBENR_SRAMEN
 #define RCC_AHBPeriph_DMA1                RCC_AHBENR_DMA1EN
+#define RCC_AHBPeriph_DMA2                RCC_AHBENR_DMA2EN
 
-#define IS_RCC_AHB_PERIPH(PERIPH) ((((PERIPH) & 0xFE81FFAA) == 0x00) && ((PERIPH) != 0x00))
-#define IS_RCC_AHB_RST_PERIPH(PERIPH) ((((PERIPH) & 0xFE81FFFF) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_AHB_PERIPH(PERIPH) ((((PERIPH) & 0xFE81FFA8) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_AHB_RST_PERIPH(PERIPH) ((((PERIPH) & 0xFE81FFA8) == 0x00) && ((PERIPH) != 0x00))
 
 /**
   * @}
@@ -397,6 +409,9 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
   */
 
 #define RCC_APB2Periph_SYSCFG            RCC_APB2ENR_SYSCFGEN
+#define RCC_APB2Periph_USART6            RCC_APB2ENR_USART6EN
+#define RCC_APB2Periph_USART7            RCC_APB2ENR_USART7EN
+#define RCC_APB2Periph_USART8            RCC_APB2ENR_USART8EN
 #define RCC_APB2Periph_ADC1              RCC_APB2ENR_ADC1EN
 #define RCC_APB2Periph_TIM1              RCC_APB2ENR_TIM1EN
 #define RCC_APB2Periph_SPI1              RCC_APB2ENR_SPI1EN
@@ -406,7 +421,7 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
 #define RCC_APB2Periph_TIM17             RCC_APB2ENR_TIM17EN
 #define RCC_APB2Periph_DBGMCU            RCC_APB2ENR_DBGMCUEN
 
-#define IS_RCC_APB2_PERIPH(PERIPH) ((((PERIPH) & 0xFFB8A5FE) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_APB2_PERIPH(PERIPH) ((((PERIPH) & 0xFFB8A51E) == 0x00) && ((PERIPH) != 0x00))
 
 /**
   * @}
@@ -416,7 +431,7 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
   * @{
   */
 
-#define RCC_APB1Periph_TIM2              RCC_APB1ENR_TIM2EN    /*!< Only applicable for STM32F051 and STM32F072 devices */
+#define RCC_APB1Periph_TIM2              RCC_APB1ENR_TIM2EN    /*!< Only applicable for STM32F051, STM32F072 and STM32F091 devices */
 #define RCC_APB1Periph_TIM3              RCC_APB1ENR_TIM3EN
 #define RCC_APB1Periph_TIM6              RCC_APB1ENR_TIM6EN
 #define RCC_APB1Periph_TIM7              RCC_APB1ENR_TIM7EN    /*!< Only applicable for STM32F072 devices */
@@ -424,18 +439,19 @@ Proper ADC clock selection is done within ADC driver by mean of the ADC_ClockMod
 #define RCC_APB1Periph_WWDG              RCC_APB1ENR_WWDGEN
 #define RCC_APB1Periph_SPI2              RCC_APB1ENR_SPI2EN
 #define RCC_APB1Periph_USART2            RCC_APB1ENR_USART2EN
-#define RCC_APB1Periph_USART3            RCC_APB1ENR_USART3EN  /*!< Only applicable for STM32F072 devices */
-#define RCC_APB1Periph_USART4            RCC_APB1ENR_USART4EN  /*!< Only applicable for STM32F072 devices */
+#define RCC_APB1Periph_USART3            RCC_APB1ENR_USART3EN  /*!< Only applicable for STM32F072 and STM32F091 devices */
+#define RCC_APB1Periph_USART4            RCC_APB1ENR_USART4EN  /*!< Only applicable for STM32F072 and STM32F091 devices */
+#define RCC_APB1Periph_USART5            RCC_APB1ENR_USART5EN  /*!< Only applicable for STM32F091 devices */
 #define RCC_APB1Periph_I2C1              RCC_APB1ENR_I2C1EN
 #define RCC_APB1Periph_I2C2              RCC_APB1ENR_I2C2EN
 #define RCC_APB1Periph_USB               RCC_APB1ENR_USBEN     /*!< Only applicable for STM32F072 and STM32F042 devices */
-#define RCC_APB1Periph_CAN               RCC_APB1ENR_CANEN    /*!< Only applicable for STM32F072 and STM32F042 devices */
-#define RCC_APB1Periph_CRS               RCC_APB1ENR_CRSEN     /*!< Only applicable for STM32F072 and STM32F042 devices*/
+#define RCC_APB1Periph_CAN               RCC_APB1ENR_CANEN     /*!< Only applicable for STM32F072, STM32F042 and STM32F091 devices */
+#define RCC_APB1Periph_CRS               RCC_APB1ENR_CRSEN     /*!< Only applicable for STM32F072, STM32F042 and STM32F091 devices */
 #define RCC_APB1Periph_PWR               RCC_APB1ENR_PWREN
-#define RCC_APB1Periph_DAC               RCC_APB1ENR_DACEN     /*!< Only applicable for STM32F051 and STM32F072 devices */
-#define RCC_APB1Periph_CEC               RCC_APB1ENR_CECEN     /*!< Only applicable for STM32F051, STM32F042 and STM32F072 devices */
+#define RCC_APB1Periph_DAC               RCC_APB1ENR_DACEN     /*!< Only applicable for STM32F051, STM32F072 and STM32F091 devices */
+#define RCC_APB1Periph_CEC               RCC_APB1ENR_CECEN     /*!< Only applicable for STM32F051, STM32F042, STM32F072 and STM32F091 devices */
 
-#define IS_RCC_APB1_PERIPH(PERIPH) ((((PERIPH) & 0x8511B6CC) == 0x00) && ((PERIPH) != 0x00))
+#define IS_RCC_APB1_PERIPH(PERIPH) ((((PERIPH) & 0x8581B6CC) == 0x00) && ((PERIPH) != 0x00))
 /**
   * @}
   */

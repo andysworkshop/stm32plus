@@ -5,8 +5,8 @@
   ******************************************************************************
   * @file    stm32f0xx_gpio.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the GPIO peripheral:
   *           + Initialization and Configuration functions
@@ -484,7 +484,7 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal)
 /**
   * @brief  Writes data to the specified GPIO data port.
   * @param  GPIOx: where x can be (A, B, C, D, E or F) to select the GPIO peripheral.
-  * @note   GPIOC, GPIOD, GPIOE and GPIOF  are available only for STM32F072. 
+  * @note   GPIOC, GPIOD, GPIOE and GPIOF  are available only for STM32F072 and STM32F091. 
   * @param  GPIO_PinSource: specifies the pin for the Alternate function.
   *          This parameter can be GPIO_PinSourcex where x can be (0..15) for GPIOA, GPIOB, GPIOD, GPIOE
   *          and (0..12) for GPIOC and (0, 2..5, 9..10) for GPIOF.    
@@ -492,13 +492,15 @@ void GPIO_Write(GPIO_TypeDef* GPIOx, uint16_t PortVal)
   *          This parameter can be one of the following value:
   *            @arg GPIO_AF_0:  WKUP, EVENTOUT, TIM15, SPI1, TIM17, MCO, SWDAT, SWCLK,
   *                             TIM14, BOOT, USART1, CEC, IR_OUT, SPI2, TIM3, USART4,
-  *                             CAN, USART2, CRS, TIM16, TIM1, TS 
+  *                             CAN, USART2, CRS, TIM16, TIM1, TS, USART8 
   *            @arg GPIO_AF_1: USART2, CEC, TIM3, USART1, USART2, EVENTOUT, I2C1,
-  *                            I2C2, TIM15, SPI2, USART3, TS, SPI1 
-  *            @arg GPIO_AF_2: TIM2, TIM1, EVENTOUT, TIM16, TIM17, USB
+  *                            I2C2, TIM15, SPI2, USART3, TS, SPI1, USART7, USART8
+  *                            USART5, USART4, USART6, I2C1   
+  *            @arg GPIO_AF_2: TIM2, TIM1, EVENTOUT, TIM16, TIM17, USB, USART6, USART5,
+  *                            USART8, USART7, USART6  
   *            @arg GPIO_AF_3: TS, I2C1, TIM15, EVENTOUT 
-  *            @arg GPIO_AF_4: TIM14, USART4, USART3, CRS, CAN
-  *            @arg GPIO_AF_5: TIM16, TIM17, TIM15, SPI2, I2C2
+  *            @arg GPIO_AF_4: TIM14, USART4, USART3, CRS, CAN, I2C1, USART5
+  *            @arg GPIO_AF_5: TIM16, TIM17, TIM15, SPI2, I2C2, USART6, MCO
   *            @arg GPIO_AF_6: EVENTOUT
   *            @arg GPIO_AF_7: COMP1 OUT, COMP2 OUT 
   * @note   The pin should already been configured in Alternate Function mode(AF)

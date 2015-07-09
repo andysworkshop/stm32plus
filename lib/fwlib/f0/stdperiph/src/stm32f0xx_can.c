@@ -5,8 +5,8 @@
   ******************************************************************************
   * @file    stm32f0xx_can.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Controller area network (CAN) peripheral and 
   *          applicable only for STM32F072 devices :           
@@ -153,7 +153,7 @@ static ITStatus CheckITStatus(uint32_t CAN_Reg, uint32_t It_Bit);
   * @param  CANx: where x can be 1 to select the CAN peripheral.
   * @retval None.
   */
-void CAN_DeInit(CAN_TypeDef* CANx __attribute__((unused)))
+void CAN_DeInit(CAN_TypeDef* CANx)
 {
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));

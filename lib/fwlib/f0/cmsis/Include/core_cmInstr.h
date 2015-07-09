@@ -688,3 +688,4 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint8_t __CLZ(uint32_t value)
 
 #endif /* __CORE_CMINSTR_H */
 #endif
+ 

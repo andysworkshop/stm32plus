@@ -1,13 +1,12 @@
 #if !defined (STM32PLUS_F0_51) && !defined (STM32PLUS_F0_30)
 #error This source file is only applicable to the F0 series
 #endif
-
 /**
   ******************************************************************************
   * @file    stm32f0xx_adc.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Analog to Digital Convertor (ADC) peripheral:
   *           + Initialization and Configuration

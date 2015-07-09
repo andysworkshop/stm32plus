@@ -3,9 +3,9 @@
   ******************************************************************************
   * @file    stm32f0xx_dac.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
-  * @brief   This file contains all the functions prototypes for the DAC firmware
+  * @version V1.5.0
+  * @date    05-December-2014
+  * @brief   This file contains all the functions prototypes for the DAC firmware 
   *          library, applicable only for STM32F051 and STM32F072 devices.
   ******************************************************************************
   * @attention
@@ -18,8 +18,8 @@
   *
   *        http://www.st.com/software_license_agreement_liberty_v2
   *
-  * Unless required by applicable law or agreed to in writing, software
-  * distributed under the License is distributed on an "AS IS" BASIS,
+  * Unless required by applicable law or agreed to in writing, software 
+  * distributed under the License is distributed on an "AS IS" BASIS, 
   * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
   * See the License for the specific language governing permissions and
   * limitations under the License.
@@ -37,7 +37,7 @@
 
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f0/cmsis/ST/STM32F0xx/Include/stm32f0xx.h"
-
+ 
 /** @addtogroup STM32F0xx_StdPeriph_Driver
   * @{
   */
@@ -48,10 +48,10 @@
 
 /* Exported types ------------------------------------------------------------*/
 
-/**
+/** 
   * @brief  DAC Init structure definition
   */
-
+  
 typedef struct
 {
   uint32_t DAC_Trigger;                      /*!< Specifies the external trigger for the selected DAC channel.
@@ -63,8 +63,8 @@ typedef struct
                                                   This parameter is only applicable for STM32F072 devices */
 
   uint32_t DAC_LFSRUnmask_TriangleAmplitude; /*!< Specifies the LFSR mask for noise wave generation or
-                                                  the maximum amplitude triangle generation for the DAC channel.
-                                                  This parameter can be a value of @ref DAC_lfsrunmask_triangleamplitude
+                                                  the maximum amplitude triangle generation for the DAC channel. 
+                                                  This parameter can be a value of @ref DAC_lfsrunmask_triangleamplitude 
                                                   This parameter is only applicable for STM32F072 devices */
 
   uint32_t DAC_OutputBuffer;                 /*!< Specifies whether the DAC channel output buffer is enabled or disabled.
@@ -77,15 +77,15 @@ typedef struct
   * @{
   */
 
-/** @defgroup DAC_Trigger
+/** @defgroup DAC_Trigger 
   * @{
   */
-
-#define DAC_Trigger_None                   ((uint32_t)0x00000000) /*!< Conversion is automatic once the DAC1_DHRxxxx register
+  
+#define DAC_Trigger_None                   ((uint32_t)0x00000000) /*!< Conversion is automatic once the DAC1_DHRxxxx register 
                                                                        has been loaded, and not by external trigger */
 #define DAC_Trigger_T6_TRGO                ((uint32_t)0x00000004) /*!< TIM6 TRGO selected as external conversion trigger for DAC channel1 */
 #define DAC_Trigger_T3_TRGO                ((uint32_t)0x0000000C) /*!< TIM3 TRGO selected as external conversion trigger for DAC channel1 */
-#define DAC_Trigger_T7_TRGO                ((uint32_t)0x00000014) /*!< TIM7 TRGO selected as external conversion trigger for DAC channel1,
+#define DAC_Trigger_T7_TRGO                ((uint32_t)0x00000014) /*!< TIM7 TRGO selected as external conversion trigger for DAC channel1, 
                                                                        applicable only for STM32F072 devices */
 #define DAC_Trigger_T15_TRGO               ((uint32_t)0x0000001C) /*!< TIM15 TRGO selected as external conversion trigger for DAC channel1 */
 #define DAC_Trigger_T2_TRGO                ((uint32_t)0x00000024) /*!< TIM2 TRGO selected as external conversion trigger for DAC channel1 */
@@ -100,12 +100,12 @@ typedef struct
                                  ((TRIGGER) == DAC_Trigger_T2_TRGO)  || \
                                  ((TRIGGER) == DAC_Trigger_Ext_IT9)  || \
                                  ((TRIGGER) == DAC_Trigger_Software))
-
+                                 
 /**
   * @}
   */
 
-/** @defgroup DAC_wave_generation
+/** @defgroup DAC_wave_generation 
   * @brief    This parameters are only applicable for STM32F072 devices.
   * @{
   */
@@ -120,7 +120,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_lfsrunmask_triangleamplitude
+/** @defgroup DAC_lfsrunmask_triangleamplitude   
   * @brief    These parameters are only applicable for STM32F072 devices.
   * @{
   */
@@ -176,9 +176,9 @@ typedef struct
                                                       ((VALUE) == DAC_TriangleAmplitude_4095))
 /**
   * @}
-  */
+  */                                      
 
-/** @defgroup DAC_OutputBuffer
+/** @defgroup DAC_OutputBuffer 
   * @{
   */
 
@@ -189,8 +189,8 @@ typedef struct
 /**
   * @}
   */
-
-/** @defgroup DAC_Channel_selection
+  
+/** @defgroup DAC_Channel_selection 
   * @{
   */
 
@@ -217,7 +217,7 @@ typedef struct
   * @}
   */
 
-/** @defgroup DAC_wave_generation
+/** @defgroup DAC_wave_generation 
   * @brief    These parameters are only applicable for STM32F072 devices.
   * @{
   */
@@ -229,44 +229,44 @@ typedef struct
 /**
   * @}
   */
-
-/** @defgroup DAC_data
+  
+/** @defgroup DAC_data 
   * @{
   */
 
-#define IS_DAC_DATA(DATA) ((DATA) <= 0xFFF0)
+#define IS_DAC_DATA(DATA) ((DATA) <= 0xFFF0) 
 
 /**
   * @}
   */
 
-/** @defgroup DAC_interrupts_definition
+/** @defgroup DAC_interrupts_definition 
   * @{
-  */
-
+  */ 
+  
 #define DAC_IT_DMAUDR                      DAC_SR_DMAUDR1
-#define IS_DAC_IT(IT) (((IT) == DAC_IT_DMAUDR))
+#define IS_DAC_IT(IT) (((IT) == DAC_IT_DMAUDR)) 
 
 /**
   * @}
-  */
+  */ 
 
 
-/** @defgroup DAC_flags_definition
+/** @defgroup DAC_flags_definition 
   * @{
-  */
-
+  */ 
+  
 #define DAC_FLAG_DMAUDR                    DAC_SR_DMAUDR1
-
+  
 #define IS_DAC_FLAG(FLAG) (((FLAG) == DAC_FLAG_DMAUDR))
 
 /**
   * @}
-  */
+  */ 
 
 /**
   * @}
-  */
+  */ 
 
 /* Exported macro ------------------------------------------------------------*/
 /* Exported functions ------------------------------------------------------- */
@@ -280,7 +280,7 @@ void DAC_StructInit(DAC_InitTypeDef* DAC_InitStruct);
 void DAC_Cmd(uint32_t DAC_Channel, FunctionalState NewState);
 void DAC_SoftwareTriggerCmd(uint32_t DAC_Channel, FunctionalState NewState);
 void DAC_DualSoftwareTriggerCmd(FunctionalState NewState); /*!< Only applicable for STM32F072 devices */
-void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalState NewState); /*!< Only applicable for STM32F072 devices */
+void DAC_WaveGenerationCmd(uint32_t DAC_Channel, uint32_t DAC_Wave, FunctionalState NewState); /*!< Only applicable for STM32F072 devices */ 
 void DAC_SetChannel1Data(uint32_t DAC_Align, uint16_t Data);
 void DAC_SetChannel2Data(uint32_t DAC_Align, uint16_t Data); /*!< Only applicable for STM32F072 devices */
 void DAC_SetDualChannelData(uint32_t DAC_Align, uint16_t Data2, uint16_t Data1); /*!< Only applicable for STM32F072 devices */
@@ -304,11 +304,11 @@ void DAC_ClearITPendingBit(uint32_t DAC_Channel, uint32_t DAC_IT);
 
 /**
   * @}
-  */
+  */ 
 
 /**
   * @}
-  */
+  */ 
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
 #endif

@@ -5,8 +5,8 @@
   ******************************************************************************
   * @file    stm32f0xx_rtc.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the Real-Time Clock (RTC) peripheral:
   *           + Initialization
@@ -1047,7 +1047,7 @@ void RTC_GetDate(uint32_t RTC_Format, RTC_DateTypeDef* RTC_DateStruct)
   *                          contains the alarm configuration parameters.
   * @retval None
   */
-void RTC_SetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm __attribute__((unused)), RTC_AlarmTypeDef* RTC_AlarmStruct)
+void RTC_SetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm, RTC_AlarmTypeDef* RTC_AlarmStruct)
 {
   uint32_t tmpreg = 0;
   
@@ -1180,7 +1180,7 @@ void RTC_AlarmStructInit(RTC_AlarmTypeDef* RTC_AlarmStruct)
   *                          contains the output alarm configuration values.
   * @retval None
   */
-void RTC_GetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm __attribute__((unused)), RTC_AlarmTypeDef* RTC_AlarmStruct)
+void RTC_GetAlarm(uint32_t RTC_Format, uint32_t RTC_Alarm, RTC_AlarmTypeDef* RTC_AlarmStruct)
 {
   uint32_t tmpreg = 0;
 
@@ -1318,7 +1318,7 @@ ErrorStatus RTC_AlarmCmd(uint32_t RTC_Alarm, FunctionalState NewState)
   *            @arg RTC_AlarmSubSecondMask_None: SS[14:0] are compared and must match to activate alarm
   * @retval None
   */
-void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm __attribute__((unused)), uint32_t RTC_AlarmSubSecondValue, uint8_t RTC_AlarmSubSecondMask)
+void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm, uint32_t RTC_AlarmSubSecondValue, uint8_t RTC_AlarmSubSecondMask)
 {
   uint32_t tmpreg = 0;
 
@@ -1350,7 +1350,7 @@ void RTC_AlarmSubSecondConfig(uint32_t RTC_Alarm __attribute__((unused)), uint32
   * @param  None
   * @retval RTC Alarm Subseconds value.
   */
-uint32_t RTC_GetAlarmSubSecond(uint32_t RTC_Alarm __attribute__((unused)))
+uint32_t RTC_GetAlarmSubSecond(uint32_t RTC_Alarm)
 {
   uint32_t tmpreg = 0;
   
