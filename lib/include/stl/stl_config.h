@@ -162,7 +162,10 @@
 #define __STL_USE_NAMESPACES
 #define __STL_MEMBER_TEMPLATE_KEYWORD
 #define _NOTHREADS
+
+#if !defined(__STRICT_ANSI__)
 #define __STRICT_ANSI__
+#endif
 
 #undef __STL_USE_CONCEPT_CHECKS
 
