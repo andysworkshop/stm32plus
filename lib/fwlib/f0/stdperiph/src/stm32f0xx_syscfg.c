@@ -368,7 +368,7 @@ void SYSCFG_BreakConfig(uint32_t SYSCFG_Break)
   *            @arg SYSCFG_FLAG_PE: SRAM parity error flag.
   * @retval The new state of SYSCFG_Flag (SET or RESET).
   */
-FlagStatus SYSCFG_GetFlagStatus(uint32_t SYSCFG_Flag)
+FlagStatus SYSCFG_GetFlagStatus(uint32_t SYSCFG_Flag __attribute__((unused)))
 {
   FlagStatus bitstatus = RESET;
 

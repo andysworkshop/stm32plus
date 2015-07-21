@@ -153,7 +153,7 @@ static ITStatus CheckITStatus(uint32_t CAN_Reg, uint32_t It_Bit);
   * @param  CANx: where x can be 1 to select the CAN peripheral.
   * @retval None.
   */
-void CAN_DeInit(CAN_TypeDef* CANx)
+void CAN_DeInit(CAN_TypeDef* CANx __attribute__((unused)))
 {
   /* Check the parameters */
   assert_param(IS_CAN_ALL_PERIPH(CANx));
