@@ -102,7 +102,7 @@ namespace stm32plus {
     template<class TImpl>
     void CharacterLcd<TImpl>::writeString(const char *str) {
       while(*str)
-        this->write(*str++);
+        static_cast<TImpl *>(this)->write(*str++);
     }
   }
 }
