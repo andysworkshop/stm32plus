@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_usart.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file contains all the functions prototypes for the USART 
   *          firmware library.
   ******************************************************************************
@@ -111,10 +111,15 @@ typedef struct
 #define IS_USART_ALL_PERIPH(PERIPH) (((PERIPH) == USART1) || \
                                      ((PERIPH) == USART2) || \
                                      ((PERIPH) == USART3) || \
-                                     ((PERIPH) == USART4))
+                                     ((PERIPH) == USART4) || \
+                                     ((PERIPH) == USART5) || \
+                                     ((PERIPH) == USART6) || \
+                                     ((PERIPH) == USART7) || \
+                                     ((PERIPH) == USART8))
 
-#define IS_USART_12_PERIPH(PERIPH) (((PERIPH) == USART1) || \
-                                    ((PERIPH) == USART2))
+#define IS_USART_123_PERIPH(PERIPH) (((PERIPH) == USART1) || \
+                                     ((PERIPH) == USART2) || \
+                                     ((PERIPH) == USART3))
 
 /** @defgroup USART_Word_Length 
   * @{

@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_dbgmcu.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file contains all the functions prototypes for the DBGMCU firmware 
   *          library.
   ******************************************************************************

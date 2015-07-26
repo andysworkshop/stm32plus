@@ -5,8 +5,8 @@
   ******************************************************************************
   * @file    stm32f0xx_syscfg.c
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file provides firmware functions to manage the following 
   *          functionalities of the SYSCFG peripheral:
   *           + Remapping the memory mapped at 0x00000000  
@@ -152,6 +152,7 @@ void SYSCFG_MemoryRemapConfig(uint32_t SYSCFG_MemoryRemap)
   *         TIM17 DMA requests to channel 2 and use
   *         SYSCFG_DMAChannelRemapConfig(SYSCFG_DMARemap_TIM17, Disable) to map
   *         TIM17 DMA requests to channel 1 (default mapping)
+  * @note   This function is only used for STM32F030, STM32F031, STM32F042, STM32F072 and STM32F051 devices.   
   * @retval None
   */
 void SYSCFG_DMAChannelRemapConfig(uint32_t SYSCFG_DMARemap, FunctionalState NewState)
@@ -192,7 +193,7 @@ void SYSCFG_DMAChannelRemapConfig(uint32_t SYSCFG_DMARemap, FunctionalState NewS
   * @note  For I2C1, fast mode plus driving capability can be enabled on all selected
   *        I2C1 pins using SYSCFG_I2CFastModePlus_I2C1 parameter or independently
   *        on each one of the following pins PB6, PB7, PB8 and PB9.
-  * @note  For remaing I2C1 pins (PA14, PA15...) fast mode plus driving capability
+  * @note  For remaining I2C1 pins (PA14, PA15...) fast mode plus driving capability
   *        can be enabled only by using SYSCFG_I2CFastModePlus_I2C1 parameter.
   * @note  For all I2C2 pins fast mode plus driving capability can be enabled
   *        only by using SYSCFG_I2CFastModePlus_I2C2 parameter.
@@ -214,6 +215,23 @@ void SYSCFG_I2CFastModePlusConfig(uint32_t SYSCFG_I2CFastModePlus, FunctionalSta
     /* Disable fast mode plus driving capability for selected pin */
     SYSCFG->CFGR1 &= (uint32_t)(~SYSCFG_I2CFastModePlus);
   }
+}
+
+/** @brief  select the modulation envelope source 
+  * @param SYSCFG_IRDAEnv: select the envelope source. 
+  *        This parameter can be a value 
+  *            @arg SYSCFG_IRDA_ENV_SEL_TIM16
+  *            @arg SYSCFG_IRDA_ENV_SEL_USART1
+  *            @arg SYSCFG_IRDA_ENV_SEL_USART4
+  * @retval None      
+  */
+void SYSCFG_IRDAEnvSelection(uint32_t SYSCFG_IRDAEnv)
+{
+  /* Check the parameters */
+  assert_param(IS_SYSCFG_IRDA_ENV(SYSCFG_IRDAEnv));
+  
+  SYSCFG->CFGR1 &= ~(SYSCFG_CFGR1_IRDA_ENV_SEL);
+  SYSCFG->CFGR1 |= (SYSCFG_IRDAEnv);
 }
 
 /**
@@ -243,12 +261,94 @@ void SYSCFG_EXTILineConfig(uint8_t EXTI_PortSourceGPIOx, uint8_t EXTI_PinSourcex
 }
 
 /**
+  * @brief  check ISR wrapper: Allow to determine interrupt source per line .
+  * @param  IT_Source: specifies the interrupt source to check.
+  *          This parameter can be one of the following values:
+  *            @arg ITLINE_EWDG                       EWDG has expired 
+  *            @arg ITLINE_PVDOUT                     Power voltage detection Interrupt 
+  *            @arg ITLINE_VDDIO2                     VDDIO2 Interrupt
+  *            @arg ITLINE_RTC_WAKEUP                 RTC WAKEUP -> exti[20] Interrupt 
+  *            @arg ITLINE_RTC_TSTAMP                 RTC Time Stamp -> exti[19] interrupt 
+  *            @arg ITLINE_RTC_ALRA                   RTC Alarm -> exti[17] interrupt
+  *            @arg ITLINE_FLASH_ITF                  Flash ITF Interrupt
+  *            @arg ITLINE_CRS                        CRS Interrupt 
+  *            @arg ITLINE_CLK_CTRL                   CLK Control Interrupt 
+  *            @arg ITLINE_EXTI0                      External Interrupt 0 
+  *            @arg ITLINE_EXTI1                      External Interrupt 1 
+  *            @arg ITLINE_EXTI2                      External Interrupt 2 
+  *            @arg ITLINE_EXTI3                      External Interrupt 3 
+  *            @arg ITLINE_EXTI4                      External Interrupt 4 
+  *            @arg ITLINE_EXTI5                      External Interrupt 5 
+  *            @arg ITLINE_EXTI6                      External Interrupt 6 
+  *            @arg ITLINE_EXTI7                      External Interrupt 7 
+  *            @arg ITLINE_EXTI8                      External Interrupt 8 
+  *            @arg ITLINE_EXTI9                      External Interrupt 9 
+  *            @arg ITLINE_EXTI10                     External Interrupt 10 
+  *            @arg ITLINE_EXTI11                     External Interrupt 11 
+  *            @arg ITLINE_EXTI12                     External Interrupt 12 
+  *            @arg ITLINE_EXTI13                     External Interrupt 13 
+  *            @arg ITLINE_EXTI14                     External Interrupt 14 
+  *            @arg ITLINE_EXTI15                     External Interrupt 15 
+  *            @arg ITLINE_TSC_EOA                    Touch control EOA Interrupt 
+  *            @arg ITLINE_TSC_MCE                    Touch control MCE Interrupt 
+  *            @arg ITLINE_DMA1_CH1                   DMA1 Channel 1 Interrupt 
+  *            @arg ITLINE_DMA1_CH2                   DMA1 Channel 2 Interrupt 
+  *            @arg ITLINE_DMA1_CH3                   DMA1 Channel 3 Interrupt 
+  *            @arg ITLINE_DMA2_CH1                   DMA2 Channel 1 Interrupt 
+  *            @arg ITLINE_DMA2_CH2                   DMA2 Channel 2 Interrupt 
+  *            @arg ITLINE_DMA1_CH4                   DMA1 Channel 4 Interrupt  
+  *            @arg ITLINE_DMA1_CH5                   DMA1 Channel 5 Interrupt 
+  *            @arg ITLINE_DMA1_CH6                   DMA1 Channel 6 Interrupt 
+  *            @arg ITLINE_DMA1_CH7                   DMA1 Channel 7 Interrupt 
+  *            @arg ITLINE_DMA2_CH3                   DMA2 Channel 3 Interrupt 
+  *            @arg ITLINE_DMA2_CH4                   DMA2 Channel 4 Interrupt 
+  *            @arg ITLINE_DMA2_CH5                   DMA2 Channel 5 Interrupt 
+  *            @arg ITLINE_ADC                        ADC Interrupt 
+  *            @arg ITLINE_COMP1                      COMP1 Interrupt -> exti[21] 
+  *            @arg ITLINE_COMP2                      COMP2 Interrupt -> exti[21] 
+  *            @arg ITLINE_TIM1_BRK                   TIM1 BRK Interrupt 
+  *            @arg ITLINE_TIM1_UPD                   TIM1 UPD Interrupt 
+  *            @arg ITLINE_TIM1_TRG                   TIM1 TRG Interrupt 
+  *            @arg ITLINE_TIM1_CCU                   TIM1 CCU Interrupt 
+  *            @arg ITLINE_TIM1_CC                    TIM1 CC Interrupt 
+  *            @arg ITLINE_TIM2                       TIM2 Interrupt 
+  *            @arg ITLINE_TIM3                       TIM3 Interrupt 
+  *            @arg ITLINE_DAC                        DAC Interrupt 
+  *            @arg ITLINE_TIM6                       TIM6 Interrupt 
+  *            @arg ITLINE_TIM7                       TIM7 Interrupt 
+  *            @arg ITLINE_TIM14                      TIM14 Interrupt 
+  *            @arg ITLINE_TIM15                      TIM15 Interrupt 
+  *            @arg ITLINE_TIM16                      TIM16 Interrupt 
+  *            @arg ITLINE_TIM17                      TIM17 Interrupt 
+  *            @arg ITLINE_I2C1                       I2C1 Interrupt -> exti[23] 
+  *            @arg ITLINE_I2C2                       I2C2 Interrupt 
+  *            @arg ITLINE_SPI1                       I2C1 Interrupt -> exti[23] 
+  *            @arg ITLINE_SPI2                       SPI1 Interrupt 
+  *            @arg ITLINE_USART1                     USART1 GLB Interrupt -> exti[25] 
+  *            @arg ITLINE_USART2                     USART2 GLB Interrupt -> exti[26] 
+  *            @arg ITLINE_USART3                     USART3 Interrupt 
+  *            @arg ITLINE_USART4                     USART4 Interrupt 
+  *            @arg ITLINE_USART5                     USART5 Interrupt 
+  *            @arg ITLINE_USART6                     USART6 Interrupt 
+  *            @arg ITLINE_USART7                     USART7 Interrupt 
+  *            @arg ITLINE_USART8                     USART8 Interrupt 
+  *            @arg ITLINE_CAN                        CAN Interrupt 
+  *            @arg ITLINE_CEC                        CEC Interrupt 
+  * @retval The new state of IT_LINE_SR.
+  */
+uint32_t  SYSCFG_GetPendingIT(uint32_t ITSourceLine)
+{
+   assert_param(IS_SYSCFG_ITLINE(ITSourceLine));
+   return(SYSCFG->IT_LINE_SR[(ITSourceLine >> 0x18)] & (ITSourceLine & 0x00FFFFFF));
+}
+
+/**
   * @brief  Connect the selected parameter to the break input of TIM1.
   * @note   The selected configuration is locked and can be unlocked by system reset
   * @param  SYSCFG_Break: selects the configuration to be connected to break
   *         input of TIM1
   *          This parameter can be any combination of the following values:
-  *            @arg SYSCFG_Break_PVD: Connects the PVD event to the Break Input of TIM1,, not avaailable for  STM32F030 devices.
+  *            @arg SYSCFG_Break_PVD: Connects the PVD event to the Break Input of TIM1,, not available for  STM32F030 devices.
   *            @arg SYSCFG_Break_SRAMParity: Connects the SRAM_PARITY error signal to the Break Input of TIM1 .
   *            @arg SYSCFG_Break_Lockup: Connects Lockup output of CortexM0 to the break input of TIM1.
   * @retval None

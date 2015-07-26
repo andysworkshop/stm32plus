@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_crs.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file contains all the functions prototypes for the CRS firmware 
   *          library, applicable only for STM32F042 and STM32F072 devices.
   ******************************************************************************

@@ -3,8 +3,8 @@
   ******************************************************************************
   * @file    stm32f0xx_flash.h
   * @author  MCD Application Team
-  * @version V1.3.0
-  * @date    16-January-2014
+  * @version V1.5.0
+  * @date    05-December-2014
   * @brief   This file contains all the functions prototypes for the FLASH 
   *          firmware library.
   ******************************************************************************
@@ -92,11 +92,15 @@ typedef enum
 /** @defgroup FLASH_Address 
   * @{
   */
-#ifndef STM32F072
+#if defined(STM32F042) || defined(STM32F031) || defined(STM32F070x6)      /*32K devices */
+ #define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x08007FFF))
+#elif defined(STM32F030) || defined(STM32F051)                            /*64K devices */
  #define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x0800FFFF))
-#else
+#elif defined(STM32F072) || defined(STM32F070xB)                          /*128K devices */
  #define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x0801FFFF))
-#endif /* STM32F072 */
+#else /* STM32F091 || STM32F030 || STM32F030xC  */                        /*256K Flash devices */
+ #define IS_FLASH_PROGRAM_ADDRESS(ADDRESS) (((ADDRESS) >= 0x08000000) && ((ADDRESS) <= 0x0800FFFF))
+#endif /* STM32F042 || STM32F031 || STM32F070x6 */
 /**
   * @}
   */
@@ -114,8 +118,7 @@ typedef enum
   * @{
   */
   
-#ifndef STM32F072
-
+#if !defined (STM32F072) && !defined (STM32F070xB) && !defined (STM32F091) && !defined (STM32F030) && !defined (STM32F030xC)  /* 32K and 64K Flash devices */  
 #define OB_WRP_Pages0to3               ((uint32_t)0x00000001) /* Write protection of page 0 to 3 */
 #define OB_WRP_Pages4to7               ((uint32_t)0x00000002) /* Write protection of page 4 to 7 */
 #define OB_WRP_Pages8to11              ((uint32_t)0x00000004) /* Write protection of page 8 to 11 */
@@ -137,7 +140,7 @@ typedef enum
 
 #define IS_OB_WRP(PAGE) (((PAGE) != 0x0000000))
 
-#else
+#else  /* 128K and 256K Flash devices */
 
 #define OB_WRP_Pages0to1               ((uint32_t)0x00000001) /* Write protection of page 0 to 1 */
 #define OB_WRP_Pages2to3               ((uint32_t)0x00000002) /* Write protection of page 2 to 3 */
@@ -170,14 +173,16 @@ typedef enum
 #define OB_WRP_Pages56to57             ((uint32_t)0x10000000) /* Write protection of page 56 to 57 */
 #define OB_WRP_Pages58to59             ((uint32_t)0x20000000) /* Write protection of page 58 to 59 */
 #define OB_WRP_Pages60to61             ((uint32_t)0x40000000) /* Write protection of page 60 to 61 */
+
+#if defined(STM32F091) || defined(STM32F030xC)  /* 256K Flash devices */
+#define OB_WRP_Pages62to127            ((uint32_t)0x80000000) /* Write protection of page 62 to 127 */
+#else    /* 128K Flash devices */
 #define OB_WRP_Pages62to63             ((uint32_t)0x80000000) /* Write protection of page 62 to 63 */
-
+#endif /* STM32F091 || STM32F030xC */
 #define OB_WRP_AllPages                ((uint32_t)0xFFFFFFFF) /*!< Write protection of all Sectors */
-
 #define IS_OB_WRP(PAGE) (((PAGE) != 0x0000000))
 
-#endif /* STM32F072 */
-
+#endif /* STM32F072 || STM32F070xB || STM32F091 || STM32F030 || STM32F030xC */
 /**
   * @}
   */
