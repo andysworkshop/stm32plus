@@ -14,6 +14,7 @@ namespace stm32plus {
    */
 
   template<class... Features>
-  struct InternalFlashDevice : InternalFlashPeripheral,Features... {
-  }
+  struct InternalFlashDevice : InternalFlashPeripheral,
+                               Features... {
+  };
 }

@@ -12,6 +12,9 @@
  * on all STM32 models is rated for 10000 erase/program operations on each page.
  */
 
+// internal flash depends on CRC
+
+#include "config/crc.h"
 
 // device specific implementation
 
@@ -28,3 +31,7 @@
 #if defined(STM32PLUS_F0)
   #include "flash/internal/f0/features/InternalFlashWriteFeature.h"
 #endif
+
+// general utilities
+
+#include "flash/internal/InternalFlashSettingsStorage.h"

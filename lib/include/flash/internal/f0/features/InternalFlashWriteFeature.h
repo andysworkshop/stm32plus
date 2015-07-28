@@ -6,6 +6,10 @@
 
 #pragma once
 
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
+
 
 namespace stm32plus {
 
@@ -20,6 +24,7 @@ namespace stm32plus {
       InternalFlashWriteFeature();
 
       void lock() const;
+      void unlock() const;
   };
 
 
@@ -28,7 +33,7 @@ namespace stm32plus {
    */
 
   inline InternalFlashWriteFeature::InternalFlashWriteFeature() {
-    FLASH_Unlock();
+    unlock();
   }
 
 
@@ -38,5 +43,14 @@ namespace stm32plus {
 
   inline void InternalFlashWriteFeature::lock() const {
     FLASH_Lock();
+  }
+
+
+  /**
+   * Unlock the flash memory
+   */
+
+  inline void InternalFlashWriteFeature::unlock() const {
+    FLASH_Unlock();
   }
 }

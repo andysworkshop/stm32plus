@@ -7,6 +7,11 @@
 #pragma once
 
 
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
+
+
 namespace stm32plus {
 
 
@@ -30,7 +35,7 @@ namespace stm32plus {
       bool pageErase(uint32_t flashAddress) const;
 
       bool wordProgram(uint32_t flashAddress,uint32_t data) const;
-      bool halfWordProgram(uint32_t flashAddress,uint32_t data) const;
+      bool halfWordProgram(uint32_t flashAddress,uint16_t data) const;
   };
 
 
@@ -48,7 +53,7 @@ namespace stm32plus {
     if((err=FLASH_EraseAllPages())==FLASH_COMPLETE)
       return true;
 
-    return errorProvider.set(ErrorProvider::INTERNAL_FLASH,E_ERASE_FAILED,err);
+    return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_ERASE_FAILED,err);
   }
 
 
@@ -65,7 +70,7 @@ namespace stm32plus {
     if((err=FLASH_ErasePage(flashAddress))==FLASH_COMPLETE)
       return true;
 
-    return errorProvider.set(ErrorProvider::INTERNAL_FLASH,E_ERASE_FAILED,err);
+    return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_ERASE_FAILED,err);
   }
 
 
@@ -83,7 +88,7 @@ namespace stm32plus {
     if((err=FLASH_ProgramWord(flashAddress,data))==FLASH_COMPLETE)
       return true;
 
-    return errorProvider.set(ErrorProvider::INTERNAL_FLASH,E_PROGRAM_FAILED,err);
+    return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_PROGRAM_FAILED,err);
   }
 
 
@@ -101,7 +106,7 @@ namespace stm32plus {
     if((err=FLASH_ProgramHalfWord(flashAddress,data))==FLASH_COMPLETE)
       return true;
 
-    return errorProvider.set(ErrorProvider::INTERNAL_FLASH,E_PROGRAM_FAILED,err);
+    return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_PROGRAM_FAILED,err);
   }
 
 

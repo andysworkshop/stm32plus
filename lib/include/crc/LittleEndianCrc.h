@@ -40,6 +40,7 @@ namespace stm32plus {
     public:
       CrcPeripheral(const Parameters& params);
       uint32_t addNewData(uint8_t nextByte);
+      uint32_t calculateWordBuffer(uint32_t *buffer,uint32_t count) const;
 
       uint32_t finish() const;
       uint32_t currentCrc() const;
@@ -89,6 +90,18 @@ namespace stm32plus {
     }
 
     return currentCrc();
+  }
+
+
+  /**
+   * Calculate the CRC of an whole buffer of 32-bit words
+   * @param buffer The start of the buffer
+   * @param count The number of words
+   * @return The CRC
+   */
+
+  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::calculateWordBuffer(uint32_t *buffer,uint32_t count) const {
+    return CRC_CalcBlockCRC(buffer,count);
   }
 
 
