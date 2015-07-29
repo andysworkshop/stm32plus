@@ -21,20 +21,28 @@ namespace stm32plus {
   class InternalFlashWriteFeature {
 
     public:
-      InternalFlashWriteFeature();
 
+      /**
+       * LockManager class can be declared on the stack to guard an area of code
+       * where the flash is to be written and to ensure that it gets locked regardless
+       * of the exit point of the guarded code.
+       */
+
+      struct LockManager {
+
+        LockManager() {
+          FLASH_Lock();
+        }
+
+        ~LockManager() {
+          FLASH_Unlock();
+        }
+      };
+
+    public:
       void lock() const;
       void unlock() const;
   };
-
-
-  /**
-   * Constructor: unlock the flash memory
-   */
-
-  inline InternalFlashWriteFeature::InternalFlashWriteFeature() {
-    unlock();
-  }
 
 
   /**
@@ -51,6 +59,6 @@ namespace stm32plus {
    */
 
   inline void InternalFlashWriteFeature::unlock() const {
-    FLASH_Unlock();
+
   }
 }
