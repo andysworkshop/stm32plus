@@ -26,12 +26,7 @@
 
 #include "flash/internal/InternalFlashDevice.h"
 
-// device specific features
+// general features and utilities
 
-#if defined(STM32PLUS_F0)
-  #include "flash/internal/f0/features/InternalFlashWriteFeature.h"
-#endif
-
-// general utilities
-
+#include "flash/internal/features/InternalFlashWriteFeature.h"
 #include "flash/internal/InternalFlashSettingsStorage.h"
