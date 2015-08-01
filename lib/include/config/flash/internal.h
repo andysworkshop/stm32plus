@@ -34,4 +34,5 @@
 
 // general utilities
 
+#include "flash/internal/InternalFlashWordWriter.h"
 #include "flash/internal/InternalFlashSettingsStorage.h"

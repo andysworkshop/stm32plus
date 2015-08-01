@@ -31,11 +31,11 @@ namespace stm32plus {
       struct LockManager {
 
         LockManager() {
-          FLASH_Lock();
+          FLASH_Unlock();
         }
 
         ~LockManager() {
-          FLASH_Unlock();
+          FLASH_Lock();
         }
       };
 

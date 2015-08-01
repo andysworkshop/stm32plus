@@ -16,8 +16,8 @@ namespace stm32plus {
 
 
   /**
-   * Implementation of the basic flash operations. Note that InternalFlashWriteFeature must be in the
-   * hierarchy if any of the program/erase operations are called
+   * Implementation of the basic flash operations. Note that the flash must be write enabled
+   * for any of these methods to work.
    */
 
   class InternalFlashPeripheral {

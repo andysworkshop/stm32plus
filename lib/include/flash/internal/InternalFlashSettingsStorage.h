@@ -105,6 +105,8 @@ namespace stm32plus {
       _parameters(params) {
 
     static_assert(sizeof(TSettings) % 4==0,"Settings class must be multiple of 4 bytes. Please pad it out with some dummy fields to make it so");
+
+    ClockControl<PERIPHERAL_CRC>::On();
     reset();
   }
 
@@ -129,14 +131,23 @@ namespace stm32plus {
   template<class TSettings,class TFlash>
   inline bool InternalFlashSettingsStorage<TSettings,TFlash>::read(TSettings& settings) {
 
+    uint32_t i,*src,*dest;
+
     // if this is the first time then the settings need to be found
 
     if(_lastLocation==0xFFFFFFFF && !findSettings())
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH_SETTINGS,E_NOT_FOUND);
 
-    // copy out the settings and return OK
+    // copy out the settings. these need to come out as words to maintain the endian-ness of
+    // the data that programmed word-by-word. In short, don't memcpy them out because it
+    // won't work
 
-    memcpy(&settings,reinterpret_cast<const void *>(_lastLocation+1),sizeof(TSettings));
+    src=reinterpret_cast<uint32_t *>(_lastLocation)+1;
+    dest=reinterpret_cast<uint32_t *>(&settings);
+
+    for(i=0;i<sizeof(TSettings)/4;i++)
+      *dest++=*src++;
+
     return true;
   }
 
@@ -150,7 +161,7 @@ namespace stm32plus {
   template<class TSettings,class TFlash>
   inline bool InternalFlashSettingsStorage<TSettings,TFlash>::write(const TSettings& settings) {
 
-    uint32_t newVersion,newLocation,newPtr,settingsWords,i,r,randomWords;
+    uint32_t newVersion,newLocation,settingsWords,i,r,randomWords;
     const uint32_t *srcPtr;
 
     // if this is the first time then the settings need to be found
@@ -176,6 +187,10 @@ namespace stm32plus {
     if(newLocation>=_parameters.firstLocation+(_parameters.pageCount*_flashPeripheral.getPageSize()))
       newLocation=_parameters.firstLocation;
 
+    // declare a lock manager to keep the flash write-enabled while we work on it
+
+    InternalFlashWriteFeature::LockManager lm;
+
     // is this new location the beginning of a page?
 
     if(newLocation % _flashPeripheral.getPageSize()==0) {
@@ -186,20 +201,14 @@ namespace stm32plus {
         return false;
     }
 
-    // declare a lock manager to keep the flash write-enabled while we work on it
-
-    InternalFlashWriteFeature::LockManager lm;
-    newPtr=newLocation;
+    InternalFlashWordWriter<TFlash> writer(_flashPeripheral,newLocation);
     CRC_ResetDR();
 
     // write the version number
 
-    if(!_flashPeripheral.wordProgram(newPtr,newVersion | 0xBE000000))
-      return false;
-
+    *writer++=newVersion | 0xBE000000;
     CRC_CalcCRC(newVersion | 0xBE000000);
 
-    newPtr++;
     srcPtr=reinterpret_cast<const uint32_t *>(&settings);
 
     // write the settings
@@ -208,14 +217,11 @@ namespace stm32plus {
 
       // program the word
 
-      if(!_flashPeripheral.wordProgram(newPtr,*srcPtr))
-        return false;
+      *writer++=*srcPtr;
 
       // update CRC, src and dest
 
       CRC_CalcCRC(*srcPtr);
-
-      newPtr++;
       srcPtr++;
     }
 
@@ -231,18 +237,18 @@ namespace stm32plus {
 
       // program it
 
-      if(!_flashPeripheral.wordProgram(newPtr,r))
-        return false;
+      *writer++=r;
 
       // update CRC and position
 
       CRC_CalcCRC(r);
-      newPtr++;
     }
 
     // write the CRC into the last location - only after this is this settings block valid
 
-    if(!_flashPeripheral.wordProgram(newPtr,CRC_GetCRC()))
+    *writer=CRC_GetCRC();
+
+    if(writer.hasError())
       return false;
 
     // update internal state

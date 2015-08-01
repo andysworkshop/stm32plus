@@ -15,6 +15,22 @@ using namespace stm32plus;
 
 
 /**
+ * This example demonstrates saving your application configuration settings to the internal
+ * flash pages of the MCU with a wear levelling strategy to ensure that your flash memory
+ * does not wear out prematurely. See the comments in the InternalFlashSettingsStorage
+ * template for a detailed explanation of how this works.
+ *
+ * Unfortunately ST have chosen to implement the internal flash with differing page sizes
+ * even within the same MCU family so this example will contain preprocessor ugliness to select
+ * the correct page size and flash location for each device.
+ *
+ * IMPORTANT: CHECK THAT THE FLASH START ADDRESS IS CORRECT FOR YOUR MCU. THE INTENTION IS
+ * TO USE THE LAST PAGES IN THE DEVICES MEMORY.
+ *
+ * This example will exercise the code by writing the settings enough times that it will
+ * wrap around back to the first page. If it works then the LED on PC8 will light solid. If there's
+ * a problem then the LED will flash a number of times to indicate a numeric error code that
+ * you can cross reference with the code.
  *
  * Compatible MCU:
  *   STM32F0
@@ -56,6 +72,21 @@ class InternalFlashSettings {
 
 
     /*
+     * Get the first location based on the device
+     */
+
+    constexpr uint32_t getFirstLocation() const {
+
+#if defined(STM32PLUS_F0_51)
+      return FLASH_BASE+65536-2048;      // 2Kb at the top of the 64Kb flash
+#else
+#error Unsupported MCU
+#endif
+
+    }
+
+
+    /*
      * Run the test
      */
 
@@ -78,10 +109,11 @@ class InternalFlashSettings {
 
       settingsOut.intValue=12345678;
 
-      // 32 bytes per setting = 128 settings in two 1024 byte pages. To test we will write out
-      // 130 times so we see a page boundary crossing and a reset back to the beginning
+      // 32 bytes per setting = 64 settings in two 1024 byte pages. To test we will write out
+      // 67 times so we see a page boundary crossing and a reset back to the beginning where
+      // we'll write out a few more times
 
-      for(i=0;i<130;i++) {
+      for(i=0;i<67;i++) {
 
         // increment the setting
 
@@ -103,7 +135,7 @@ class InternalFlashSettings {
 
         // check that the values match
 
-        if(settingsOut.intValue!=settingsIn.intValue || !strcmp(settingsOut.stringValue,settingsIn.stringValue))
+        if(settingsOut.intValue!=settingsIn.intValue || strcmp(settingsOut.stringValue,settingsIn.stringValue))
           error(4);
       }
 
@@ -119,27 +151,12 @@ class InternalFlashSettings {
 
       // check values
 
-      if(settingsOut.intValue!=settingsIn.intValue || !strcmp(settingsOut.stringValue,settingsIn.stringValue))
+      if(settingsOut.intValue!=settingsIn.intValue || strcmp(settingsOut.stringValue,settingsIn.stringValue))
         error(6);
 
       // finished OK
 
       error(0);
-    }
-
-
-    /*
-     * Get the first location based on the device
-     */
-
-    constexpr uint32_t getFirstLocation() const {
-
-#if defined(STM32PLUS_F0_51)
-      return FLASH_BASE+65536-2048;      // 2Kb at the top of the 64Kb flash
-#else
-#error Unsupported MCU
-#endif
-
     }
 
 
