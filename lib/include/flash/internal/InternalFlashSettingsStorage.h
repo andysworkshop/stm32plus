@@ -155,19 +155,21 @@ namespace stm32plus {
 
     // if this is the first time then the settings need to be found
 
+    settingsWords=getSettingsSize()/4;
+
     if(_lastLocation==0xFFFFFFFF && !findSettings()) {
 
       // if this is the first time then try to find the last version
 
-      _lastLocation=_parameters.firstLocation;
+      _lastLocation=newLocation=_parameters.firstLocation;
       _lastVersion=0;     // invalid version, will be incremented in next instruction
     }
+    else
+      newLocation=_lastLocation+settingsWords*4;
 
     // get the new location and new version
 
-    settingsWords=getSettingsSize()/4;
     newVersion=_lastVersion+1;
-    newLocation=_lastLocation+settingsWords*4;
 
     // if reached the end of all pages then wrap back to the start
 
@@ -323,6 +325,10 @@ namespace stm32plus {
   inline bool InternalFlashSettingsStorage<TSettings,TFlash>::erase() const {
 
     uint32_t i,address;
+
+    // the flash device needs to be unlocked
+
+    InternalFlashWriteFeature::LockManager lm;
 
     address=_parameters.firstLocation;
     for(i=0;i<_parameters.pageCount;i++) {
