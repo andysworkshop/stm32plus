@@ -57,8 +57,15 @@
 
 // generic peripheral includes
 
-#include "i2c/I2C1.h"
 #include "i2c/I2C2.h"
+
+#if defined(STM32PLUS_F0)
+  #include "i2c/f0/I2C1.h"
+#elif defined(STM32PLUS_F1)
+  #include "i2c/f1/I2C1.h"
+#elif defined(STM32PLUS_F4)
+  #include "i2c/f4/I2C1.h"
+#endif
 
 // enable all interrupts
 
