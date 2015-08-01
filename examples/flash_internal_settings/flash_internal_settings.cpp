@@ -77,7 +77,7 @@ class InternalFlashSettings {
 
     constexpr uint32_t getFirstLocation() const {
 
-#if defined(STM32PLUS_F0_51)
+#if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
       return FLASH_BASE+65536-2048;      // 2Kb at the top of the 64Kb flash
 #else
 #error Unsupported MCU
