@@ -91,7 +91,7 @@ namespace stm32plus {
   template<class TFlash>
   inline InternalFlashWordWriter<TFlash> InternalFlashWordWriter<TFlash>::operator[](uint32_t idx) {
 
-    InternalFlashWordWriter<TFlash> t;
+    InternalFlashWordWriter<TFlash> t(*this);
 
     t+=idx;
     return t;
@@ -107,7 +107,7 @@ namespace stm32plus {
   template<class TFlash>
   inline const InternalFlashWordWriter<TFlash> InternalFlashWordWriter<TFlash>::operator[](uint32_t idx) const {
 
-    InternalFlashWordWriter<TFlash> t;
+    InternalFlashWordWriter<TFlash> t(*this);
 
     t+=idx;
     return t;
