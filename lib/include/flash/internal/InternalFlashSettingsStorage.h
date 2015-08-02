@@ -189,7 +189,7 @@ namespace stm32plus {
 
     // declare a lock manager to keep the flash write-enabled while we work on it
 
-    InternalFlashWriteFeature::LockManager lm;
+    InternalFlashLockFeature::LockManager lm;
 
     // is this new location the beginning of a page?
 
@@ -334,7 +334,7 @@ namespace stm32plus {
 
     // the flash device needs to be unlocked
 
-    InternalFlashWriteFeature::LockManager lm;
+    InternalFlashLockFeature::LockManager lm;
 
     address=_parameters.firstLocation;
     for(i=0;i<_parameters.pageCount;i++) {

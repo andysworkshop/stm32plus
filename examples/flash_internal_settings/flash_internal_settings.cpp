@@ -67,7 +67,7 @@ class InternalFlashSettings {
 
     // set up the types needed for the storage
 
-    typedef InternalFlashDevice<InternalFlashWriteFeature> MyFlash;
+    typedef InternalFlashDevice<> MyFlash;
     typedef InternalFlashSettingsStorage<Settings,MyFlash> MySettingsStorage;
 
 
@@ -99,6 +99,8 @@ class InternalFlashSettings {
       MySettingsStorage storage(flash,params);
       Settings settingsOut,settingsIn;
       uint8_t i;
+
+      InternalFlashWordWriter<MyFlash> w(flash,0);
 
       // erase the settings pages
 
