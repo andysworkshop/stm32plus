@@ -19,14 +19,26 @@
 // device specific implementation
 
 #if defined(STM32PLUS_F0)
-  #include "flash/internal/f0/InternalFlashPeripheral.h"
+
+  #include "flash/internal/f0/features/InternalFlashWriteFeature.h"
+
+#elif defined(STM32PLUS_F4)
+
+  #include "flash/internal/f4/InternalFlashVoltageRange.h"
+  #include "flash/internal/f4/InternalFlashSectorMap.h"
+  #include "flash/internal/f4/features/InternalFlashWriteFeature.h"
+
 #endif
 
-// the main classes
+// main classes
 
 #include "flash/internal/InternalFlashDevice.h"
 
-// general features and utilities
+// generic features
 
-#include "flash/internal/features/InternalFlashWriteFeature.h"
+#include "flash/internal/features/InternalFlashLockFeature.h"
+
+// general utilities
+
+#include "flash/internal/InternalFlashWordWriter.h"
 #include "flash/internal/InternalFlashSettingsStorage.h"

@@ -16,11 +16,11 @@ namespace stm32plus {
 
 
   /**
-   * Implementation of the basic flash operations. Note that InternalFlashWriteFeature must be in the
-   * hierarchy if any of the program/erase operations are called
+   * Implementation of the basic flash operations. Note that the flash must be write enabled
+   * for any of these methods to work.
    */
 
-  class InternalFlashPeripheral {
+  class InternalFlashWriteFeature {
 
     public:
       enum {
@@ -44,7 +44,7 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  inline bool InternalFlashPeripheral::chipErase() const {
+  inline bool InternalFlashWriteFeature::chipErase() const {
 
     uint32_t err;
 
@@ -63,7 +63,7 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  inline bool InternalFlashPeripheral::pageErase(uint32_t flashAddress) const {
+  inline bool InternalFlashWriteFeature::pageErase(uint32_t flashAddress) const {
 
     uint32_t err;
 
@@ -81,7 +81,7 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  inline bool InternalFlashPeripheral::wordProgram(uint32_t flashAddress,uint32_t data) const {
+  inline bool InternalFlashWriteFeature::wordProgram(uint32_t flashAddress,uint32_t data) const {
 
     uint32_t err;
 
@@ -99,7 +99,7 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  inline bool InternalFlashPeripheral::halfWordProgram(uint32_t flashAddress,uint16_t data) const {
+  inline bool InternalFlashWriteFeature::halfWordProgram(uint32_t flashAddress,uint16_t data) const {
 
     uint32_t err;
 
@@ -115,7 +115,7 @@ namespace stm32plus {
    * @return The page size
    */
 
-  inline constexpr uint32_t InternalFlashPeripheral::getPageSize() const {
+  inline constexpr uint32_t InternalFlashWriteFeature::getPageSize() const {
 
     #if defined(STM32F072) || defined(STM32F091)
       return 0x800;     // 2Kb

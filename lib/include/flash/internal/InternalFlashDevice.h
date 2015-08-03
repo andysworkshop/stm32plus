@@ -9,12 +9,12 @@
 
 namespace stm32plus {
 
-  /*
-   * Internal flash device features class
+  /**
+   * Internal flash device features class. This is the class that user
+   * code should instantiate
    */
 
   template<class... Features>
-  struct InternalFlashDevice : InternalFlashPeripheral,
-                               Features... {
+  struct InternalFlashDevice : Features... {
   };
 }
