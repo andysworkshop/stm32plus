@@ -21,8 +21,8 @@ namespace stm32plus {
    * @tparam TVoltageRange a value from the VoltageRange
    */
 
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  class InternalFlashWriteFeature {
+  template<InternalFlashVoltageRange TVoltageRange>
+  class InternalFlashWriteFeature  : public InternalFlashFeatureBase {
 
     public:
       enum {
@@ -31,8 +31,7 @@ namespace stm32plus {
       };
 
     public:
-      uint32_t getPageSize(uint32_t flashAddress) const;
-      uint8_t getPageFromAddress(uint32_t flashAddress) const;
+      InternalFlashWriteFeature(InternalFlashPeripheral& flashPeripheral);
 
       bool chipErase() const;
       bool pageErase(uint32_t flashAddress) const;
@@ -46,7 +45,18 @@ namespace stm32plus {
    * Some typedefs for common MCU configurations
    */
 
-  typedef InternalFlashWriteFeature<InternalFlashVoltageRange::VR_2_7_TO_3_6,InternalFlashSectorMapF40xF41x> DefaultF407InternalFlashWriteFeature;
+  typedef InternalFlashWriteFeature<InternalFlashVoltageRange::VR_2_7_TO_3_6> DefaultF407InternalFlashWriteFeature;
+
+
+  /**
+   * Constructor
+   * @param flashPeripheral reference to the peripheral class
+   */
+
+  template<InternalFlashVoltageRange TVoltageRange>
+  inline InternalFlashWriteFeature<TVoltageRange>::InternalFlashWriteFeature(InternalFlashPeripheral& flashPeripheral)
+    : InternalFlashFeatureBase(flashPeripheral) {
+  }
 
 
   /**
@@ -54,8 +64,8 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  inline bool InternalFlashWriteFeature<TVoltageRange,TSectorMap>::chipErase() const {
+  template<InternalFlashVoltageRange TVoltageRange>
+  inline bool InternalFlashWriteFeature<TVoltageRange>::chipErase() const {
 
     uint32_t err;
 
@@ -74,12 +84,12 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  inline bool InternalFlashWriteFeature<TVoltageRange,TSectorMap>::pageErase(uint32_t flashAddress) const {
+  template<InternalFlashVoltageRange TVoltageRange>
+  inline bool InternalFlashWriteFeature<TVoltageRange>::pageErase(uint32_t flashAddress) const {
 
     uint32_t err;
 
-    if((err=FLASH_EraseSector(getPageFromAddress(flashAddress),static_cast<uint8_t>(TVoltageRange)))==FLASH_COMPLETE)
+    if((err=FLASH_EraseSector(_flashPeripheral.getPageFromAddress(flashAddress),static_cast<uint8_t>(TVoltageRange)))==FLASH_COMPLETE)
       return true;
 
     return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_ERASE_FAILED,err);
@@ -93,8 +103,8 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  inline bool InternalFlashWriteFeature<TVoltageRange,TSectorMap>::wordProgram(uint32_t flashAddress,uint32_t data) const {
+  template<InternalFlashVoltageRange TVoltageRange>
+  inline bool InternalFlashWriteFeature<TVoltageRange>::wordProgram(uint32_t flashAddress,uint32_t data) const {
 
     uint32_t err;
 
@@ -112,8 +122,8 @@ namespace stm32plus {
    * @return true if it worked and the operation has completed.
    */
 
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  inline bool InternalFlashWriteFeature<TVoltageRange,TSectorMap>::halfWordProgram(uint32_t flashAddress,uint16_t data) const {
+  template<InternalFlashVoltageRange TVoltageRange>
+  inline bool InternalFlashWriteFeature<TVoltageRange>::halfWordProgram(uint32_t flashAddress,uint16_t data) const {
 
     uint32_t err;
 
@@ -121,44 +131,5 @@ namespace stm32plus {
       return true;
 
     return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_PROGRAM_FAILED,err);
-  }
-
-
-  /**
-   * Get the page number from the flash address
-   * @param flashAddress
-   * @return the zero-based page number
-   */
-
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  uint8_t InternalFlashWriteFeature<TVoltageRange,TSectorMap>::getPageFromAddress(uint32_t flashAddress) const {
-
-    uint8_t pageNumber;
-    uint32_t address,pageSize;
-
-    address=FLASH_BASE;
-    pageNumber=0;
-
-    for(;;) {
-
-      pageSize=getPageSize(flashAddress);
-
-      if(flashAddress<address+pageSize)
-        return pageNumber;
-
-      pageNumber++;
-      address+=pageSize;
-    }
-  }
-
-
-  /**
-   * Get the page size of this device
-   * @return The page size
-   */
-
-  template<InternalFlashVoltageRange TVoltageRange,class TSectorMap>
-  inline uint32_t InternalFlashWriteFeature<TVoltageRange,TSectorMap>::getPageSize(uint32_t flashAddress) const {
-    return TSectorMap::sectorMap[getPageFromAddress(flashAddress)]*1024;
   }
 }

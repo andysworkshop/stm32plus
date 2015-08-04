@@ -50,18 +50,18 @@ namespace stm32plus {
 
       struct Parameters {
 
-        uint32_t firstLocation;
-        uint32_t pageCount;
+        uint32_t firstLocation;   ///< The first location to use in flash. Must be on a page boundary.
+        uint32_t memorySize;      ///< The amount of memory to use. Must be a multiple of the page sizes you want to use.
 
         /**
          * Constructor
          * @param location The first location in flash (must be a multiple of the page size)
-         * @param count The number of pages to dedicate to settings storage
+         * @param size The total amount of flash memory that you want to use
          */
 
-        Parameters(uint32_t location,uint32_t count)
+        Parameters(uint32_t location,uint32_t size)
           : firstLocation(location),
-            pageCount(count) {
+            memorySize(size) {
         }
       };
 
@@ -184,7 +184,7 @@ namespace stm32plus {
 
     // if reached the end of all pages then wrap back to the start
 
-    if(newLocation>=_parameters.firstLocation+(_parameters.pageCount*_flashPeripheral.getPageSize()))
+    if(newLocation>=_parameters.firstLocation+_parameters.memorySize)
       newLocation=_parameters.firstLocation;
 
     // declare a lock manager to keep the flash write-enabled while we work on it
@@ -193,7 +193,7 @@ namespace stm32plus {
 
     // is this new location the beginning of a page?
 
-    if(newLocation % _flashPeripheral.getPageSize()==0) {
+    if(_flashPeripheral.isStartOfPage(newLocation)) {
 
       // erase the page that we are about to occupy
 
@@ -274,7 +274,7 @@ namespace stm32plus {
     maxVersion=0;
     location=reinterpret_cast<uint32_t *>(_parameters.firstLocation);
     settingsSize=getSettingsSize();
-    entryCount=(_flashPeripheral.getPageSize()*_parameters.pageCount)/settingsSize;
+    entryCount=_parameters.memorySize/settingsSize;
     settingsSize/=4;
 
     // all possible locations must be checked
@@ -330,23 +330,18 @@ namespace stm32plus {
   template<class TSettings,class TFlash>
   inline bool InternalFlashSettingsStorage<TSettings,TFlash>::erase() const {
 
-    uint32_t i,address;
+    uint32_t address;
 
     // the flash device needs to be unlocked
 
     InternalFlashLockFeature::LockManager lm;
 
-    address=_parameters.firstLocation;
-    for(i=0;i<_parameters.pageCount;i++) {
+    for(address=_parameters.firstLocation;address<_parameters.firstLocation+_parameters.memorySize;address+=_flashPeripheral.getPageSize(address)) {
 
       // erase this page
 
       if(!_flashPeripheral.pageErase(address))
         return false;
-
-      // update the current page address
-
-      address+=_flashPeripheral.getPageSize();
     }
 
     return true;

@@ -14,7 +14,7 @@ namespace stm32plus {
    * Feature class to provide lock/unlock capability
    */
 
-  class InternalFlashLockFeature {
+  class InternalFlashLockFeature : public InternalFlashFeatureBase {
 
     public:
 
@@ -36,9 +36,22 @@ namespace stm32plus {
       };
 
     public:
+      InternalFlashLockFeature(InternalFlashPeripheral& flashPeripheral);
+
+    public:
       void lock() const;
       void unlock() const;
   };
+
+
+  /**
+   * Constructor
+   * @param flashPeripheral reference to the peripheral class
+   */
+
+  inline InternalFlashLockFeature::InternalFlashLockFeature(InternalFlashPeripheral& flashPeripheral)
+    : InternalFlashFeatureBase(flashPeripheral) {
+  }
 
 
   /**

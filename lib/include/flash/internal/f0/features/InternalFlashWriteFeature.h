@@ -20,7 +20,7 @@ namespace stm32plus {
    * for any of these methods to work.
    */
 
-  class InternalFlashWriteFeature {
+  class InternalFlashWriteFeature : public InternalFlashFeatureBase {
 
     public:
       enum {
@@ -29,7 +29,7 @@ namespace stm32plus {
       };
 
     public:
-      constexpr uint32_t getPageSize() const;
+      InternalFlashWriteFeature(InternalFlashPeripheral& flashPeripheral);
 
       bool chipErase() const;
       bool pageErase(uint32_t flashAddress) const;
@@ -37,6 +37,16 @@ namespace stm32plus {
       bool wordProgram(uint32_t flashAddress,uint32_t data) const;
       bool halfWordProgram(uint32_t flashAddress,uint16_t data) const;
   };
+
+
+  /**
+   * Constructor
+   * @param flashPeripheral reference to the peripheral class
+   */
+
+  inline InternalFlashWriteFeature::InternalFlashWriteFeature(InternalFlashPeripheral& flashPeripheral)
+    : InternalFlashFeatureBase(flashPeripheral) {
+  }
 
 
   /**
@@ -107,20 +117,5 @@ namespace stm32plus {
       return true;
 
     return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_PROGRAM_FAILED,err);
-  }
-
-
-  /**
-   * Get the page size of this device
-   * @return The page size
-   */
-
-  inline constexpr uint32_t InternalFlashWriteFeature::getPageSize() const {
-
-    #if defined(STM32F072) || defined(STM32F091)
-      return 0x800;     // 2Kb
-    #else
-      return 0x400;     // 1Kb
-    #endif
   }
 }

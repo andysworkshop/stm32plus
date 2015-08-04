@@ -16,7 +16,28 @@
 
 #include "config/crc.h"
 
-// device specific implementation
+// device specific includes
+
+#if defined(STM32PLUS_F0)
+
+  #include "flash/internal/f0/InternalFlashPeripheral.h"
+  #include "flash/internal/f0/InternalFlashDevice.h"
+
+#elif defined(STM32PLUS_F4)
+
+  #include "flash/internal/f4/InternalFlashVoltageRange.h"
+  #include "flash/internal/f4/InternalFlashSectorMap.h"
+  #include "flash/internal/f4/InternalFlashPeripheral.h"
+  #include "flash/internal/f4/InternalFlashDevice.h"
+
+#endif
+
+// generic feature includes
+
+#include "flash/internal/features/InternalFlashFeatureBase.h"
+#include "flash/internal/features/InternalFlashLockFeature.h"
+
+// device specific features
 
 #if defined(STM32PLUS_F0)
 
@@ -24,19 +45,9 @@
 
 #elif defined(STM32PLUS_F4)
 
-  #include "flash/internal/f4/InternalFlashVoltageRange.h"
-  #include "flash/internal/f4/InternalFlashSectorMap.h"
   #include "flash/internal/f4/features/InternalFlashWriteFeature.h"
 
 #endif
-
-// main classes
-
-#include "flash/internal/InternalFlashDevice.h"
-
-// generic features
-
-#include "flash/internal/features/InternalFlashLockFeature.h"
 
 // general utilities
 
