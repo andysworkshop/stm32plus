@@ -23,6 +23,11 @@
   #include "flash/internal/f0/InternalFlashPeripheral.h"
   #include "flash/internal/f0/InternalFlashDevice.h"
 
+#elif defined(STM32PLUS_F1)
+
+  #include "flash/internal/f1/InternalFlashPeripheral.h"
+  #include "flash/internal/f1/InternalFlashDevice.h"
+
 #elif defined(STM32PLUS_F4)
 
   #include "flash/internal/f4/InternalFlashVoltageRange.h"
@@ -42,6 +47,10 @@
 #if defined(STM32PLUS_F0)
 
   #include "flash/internal/f0/features/InternalFlashWriteFeature.h"
+
+#elif defined(STM32PLUS_F1)
+
+  #include "flash/internal/f1/features/InternalFlashWriteFeature.h"
 
 #elif defined(STM32PLUS_F4)
 

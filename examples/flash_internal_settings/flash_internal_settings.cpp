@@ -67,7 +67,7 @@ class InternalFlashSettings {
 
     // set up the types needed for the storage
 
-#if defined(STM32PLUS_F0)
+#if defined(STM32PLUS_F0) || defined(STM32PLUS_F1)
     typedef InternalFlashDevice<InternalFlashWriteFeature> MyFlash;
 #elif defined(STM32PLUS_F4)
     typedef InternalFlashDevice<InternalFlashSectorMapF40xF41x,DefaultF407InternalFlashWriteFeature> MyFlash;
@@ -84,11 +84,15 @@ class InternalFlashSettings {
 
 #if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
 
-      return FLASH_BASE+65536-2048;      // 2Kb at the top of the 64Kb flash
+      return FLASH_BASE+65536-2048;           // 2Kb at the top of the 64Kb flash
 
 #elif defined(STM32PLUS_F407)
 
-      return FLASH_BASE+100000-(128*1024);   // 128Kb (last page) at the top of the flash
+      return FLASH_BASE+1048576-(128*1024);   // 128Kb (last page) at the top of the 1Mb flash
+
+#elif defined(STM32PLUS_F1_HD)
+
+      return FLASH_BASE+524288-(4096);        // 4Kb (2x2Kb pages) at the top of 512Kb flash
 
 #else
 #error Unsupported MCU
