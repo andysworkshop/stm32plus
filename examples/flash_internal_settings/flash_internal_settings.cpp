@@ -97,7 +97,6 @@ class InternalFlashSettings {
 #else
 #error Unsupported MCU
 #endif
-
     }
 
 
@@ -113,9 +112,8 @@ class InternalFlashSettings {
       MyFlash flash;
       MySettingsStorage storage(flash,params);
       Settings settingsOut,settingsIn;
-      uint8_t i;
-
       InternalFlashWordWriter<MyFlash> w(flash,0);
+      uint8_t i;
 
       // erase the settings pages
 

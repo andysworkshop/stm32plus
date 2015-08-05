@@ -24,6 +24,8 @@ namespace stm32plus {
     public:
       constexpr uint32_t getPageSize(uint32_t address) const;
       constexpr bool isStartOfPage(uint32_t address) const;
+
+      uint32_t getFlashSizeInBytes() const;
   };
 
 
@@ -52,5 +54,15 @@ namespace stm32plus {
 
   constexpr bool InternalFlashPeripheral::isStartOfPage(uint32_t address) const {
     return address % getPageSize(address)==0;
+  }
+
+
+  /**
+   * Read the total flash size in bytes
+   * @return The total flash size
+   */
+
+  inline uint32_t InternalFlashPeripheral::getFlashSizeInBytes() const {
+    return *reinterpret_cast<volatile uint16_t *>(0x1FFFF7E0)*1024;
   }
 }
