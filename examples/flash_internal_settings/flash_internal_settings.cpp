@@ -112,7 +112,6 @@ class InternalFlashSettings {
       MyFlash flash;
       MySettingsStorage storage(flash,params);
       Settings settingsOut,settingsIn;
-      InternalFlashWordWriter<MyFlash> w(flash,0);
       uint8_t i;
 
       // erase the settings pages
