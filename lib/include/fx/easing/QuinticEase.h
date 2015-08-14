@@ -17,21 +17,69 @@ namespace stm32plus {
      * or Quart easing equation.
      */
 
-    class QuinticEase : public EasingBase {
+    template<typename TDataType>
+    class QuinticEaseT : public EasingBaseT<TDataType> {
 
       public:
-        /// starts motion from a zero velocity, and then accelerates
-        /// motion as it executes.
-        virtual float easeIn(float time) const override;
+        virtual ~QuinticEaseT() {}
 
-        /// starts motion fast, and then decelerates motion to
-        /// a zero velocity as it executes
-        virtual float easeOut(float time) const override;
-
-        /// Combines the motion of the easeIn and easeOut methods to
-        /// to start the motion from a zero velocity, accelerate motion,
-        /// then decelerate to a zero velocity
-        virtual float easeInOut(float time) const override;
+        virtual TDataType easeIn(TDataType time) const override;
+        virtual TDataType easeOut(TDataType time) const override;
+        virtual TDataType easeInOut(TDataType time) const override;
     };
+
+
+    /**
+     * Compatibility typedef
+     */
+
+    typedef QuinticEaseT<float> QuinticEase;
+
+
+    /**
+     * starts motion from a zero velocity, and then accelerates motion as it executes.
+     * @param time the current animation time
+     * @return the position at the time;
+     */
+
+    template<typename TDataType>
+    inline TDataType QuinticEaseT<TDataType>::easeIn(TDataType time) const {
+      time/=this->_duration;
+      return this->_change * time * time * time * time * time;
+    }
+
+
+    /**
+     * starts motion fast, and then decelerates motion to
+     * a zero velocity as it executes
+     * @param time the current animation time
+     * @return the position at the time;
+     */
+
+    template<typename TDataType>
+    inline TDataType QuinticEaseT<TDataType>::easeOut(TDataType time) const {
+      time=time / this->_duration - 1;
+      return this->_change * (time * time * time * time * time + 1);
+    }
+
+
+    /**
+     * Combines the motion of the easeIn and easeOut methods to
+     * to start the motion from a zero velocity, accelerate motion,
+     * then decelerate to a zero velocity
+     * @param time the current animation time
+     * @return the position at the time;
+     */
+
+    template<typename TDataType>
+    inline TDataType QuinticEaseT<TDataType>::easeInOut(TDataType time) const {
+      time/=this->_duration / 2;
+
+      if(time < 1)
+        return this->_change / 2 * time * time * time * time * time;
+
+      time-=2;
+      return this->_change / 2 * (time * time * time * time * time + 2);
+    }
   }
 }

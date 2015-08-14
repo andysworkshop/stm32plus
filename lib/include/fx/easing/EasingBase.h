@@ -14,40 +14,103 @@ namespace stm32plus {
      * Base class for easing functions
      */
 
-    class EasingBase {
+    template<typename TDataType>
+    class EasingBaseT {
 
       protected:
-        float _change;
-        float _duration;
+        TDataType _change;
+        TDataType _duration;
 
       public:
-        /// default constructor
-        EasingBase();
-        virtual ~EasingBase() {}
+        EasingBaseT();
+        virtual ~EasingBaseT() {}
 
         /**
          * Ease a transition in
          * @param[in] time The time to do the transition.
          */
 
-        virtual float easeIn(float time) const=0;
+        virtual TDataType easeIn(TDataType time) const=0;
 
         /**
          * Ease a transition out.
          * @param[in] time The time to do the transition.
          */
 
-        virtual float easeOut(float time) const=0;
+        virtual TDataType easeOut(TDataType time) const=0;
 
         /**
          * Ease a transition in and out.
          * @param[in] time The time to do the transition.
          */
 
-        virtual float easeInOut(float time) const=0;
+        virtual TDataType easeInOut(TDataType time) const=0;
 
-        void setDuration(float duration);
-        void setTotalChangeInPosition(float totalChangeInPosition);
+        void setDuration(TDataType duration);
+        void setTotalChangeInPosition(TDataType totalChangeInPosition);
+
+        TDataType getTotalChangeInPosition() const;
+        TDataType getDuration() const;
     };
+
+    /**
+     * Compatibility typedef
+     */
+
+    typedef EasingBaseT<float> EasingBase;
+
+
+    /**
+     * Default constructor
+     */
+
+    template<typename TDataType>
+    inline EasingBaseT<TDataType>::EasingBaseT() {
+      _change=0;
+    }
+
+
+    /**
+     * Set the duration
+     * @param[in] duration The duration
+     */
+
+    template<typename TDataType>
+    inline void EasingBaseT<TDataType>::setDuration(TDataType duration) {
+      _duration=duration;
+    }
+
+
+    /**
+     * Set the total change in position
+     * @param[in] totalChangeInPosition The total change in position.
+     */
+
+    template<typename TDataType>
+    inline void EasingBaseT<TDataType>::setTotalChangeInPosition(TDataType totalChangeInPosition) {
+      _change=totalChangeInPosition;
+    }
+
+
+    /**
+     * Get the total change in position
+     * @return the total change in position
+     */
+
+    template<typename TDataType>
+    inline TDataType EasingBaseT<TDataType>::getTotalChangeInPosition() const {
+      return _change;
+    }
+
+
+    /**
+     * Get the duration
+     * @return the duration
+     */
+
+    template<typename TDataType>
+    inline TDataType EasingBaseT<TDataType>::getDuration() const {
+      return _duration;
+    }
   }
 }

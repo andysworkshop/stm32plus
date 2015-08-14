@@ -14,17 +14,58 @@ namespace stm32plus {
      * @brief Linear ease. Really a dummy as it doesn't ease at all.
      */
 
-    class LinearEase : public EasingBase {
+    template<class TDataType>
+    class LinearEaseT : public EasingBaseT<TDataType> {
 
       public:
-        /// no acceleration
-        virtual float easeIn(float time) const override;
+        virtual ~LinearEaseT() {}
 
-        /// no acceleration
-        virtual float easeOut(float time) const override;
-
-        /// no acceleration
-        virtual float easeInOut(float time) const override;
+        virtual TDataType easeIn(TDataType time) const override;
+        virtual TDataType easeOut(TDataType time) const override;
+        virtual TDataType easeInOut(TDataType time) const override;
     };
+
+
+    /**
+     * Compatibility typedef
+     */
+
+    typedef LinearEaseT<float> LinearEase;
+
+
+    /**
+     * no acceleration
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<class TDataType>
+    inline TDataType LinearEaseT<TDataType>::easeIn(TDataType time) const {
+      return this->_change * time / this->_duration;
+    }
+
+
+    /**
+     * no acceleration
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<class TDataType>
+    inline TDataType LinearEaseT<TDataType>::easeOut(TDataType time) const {
+      return easeIn(time);
+    }
+
+
+    /**
+     * no acceleration
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<class TDataType>
+    inline TDataType LinearEaseT<TDataType>::easeInOut(TDataType time) const {
+      return easeIn(time);
+    }
   }
 }
