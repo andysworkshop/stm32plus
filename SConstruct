@@ -1,6 +1,6 @@
 # Top level SConstruct file for stm32plus and all the examples.
 """
-Usage: scons mode=<MODE> mcu=<MCU> (hse=<HSE> / hsi=<HSI>) [float=hard]
+Usage: scons mode=<MODE> mcu=<MCU> (hse=<HSE> / hsi=<HSI>) [float=hard] [examples=no]
 
   <MODE>: debug/fast/small.
     debug = -O0
@@ -32,6 +32,10 @@ Usage: scons mode=<MODE> mcu=<MCU> (hse=<HSE> / hsi=<HSI>) [float=hard]
     Optional flag for an F4 build that will cause the hardware FPU to be
     used for floating point operations. Requires the "GNU Tools for ARM Embedded
     Processors" toolchain. Will not work with Code Sourcery Lite.
+
+  [examples=no]:
+    Optional flag that allows you to build just the library without the examples. The
+    default is to build the library and the examples.
 
   Examples:
     scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
@@ -128,6 +132,10 @@ if not osc.isdigit():
   print __doc__
   Exit(1)
 
+# examples off?
+
+build_examples = ARGUMENTS.get('examples')
+
 float = None
 
 # set up build environment and pull in OS environment variables
@@ -223,7 +231,8 @@ env.Append(LIBS=[libstm32plus])
 
 # launch SConscript for the examples
 
-SConscript("examples/SConscript",exports=["mode","mcu","osc","osc_type","osc_def","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
+if build_examples!="no":
+  SConscript("examples/SConscript",exports=["mode","mcu","osc","osc_type","osc_def","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
 
 # build the CMake helper
 
