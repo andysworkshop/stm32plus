@@ -11,6 +11,7 @@ env:
   - MODE=small MCU=f4 HSE=8000000 FLOAT=hard
   - MODE=small MCU=f429 HSE=8000000
   - MODE=small MCU=f429 HSE=8000000 FLOAT=hard
+  - MODE=small MCU=f407 HSI=16000000
 before_install:
   - sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded -y
   - sudo apt-get update
