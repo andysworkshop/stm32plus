@@ -14,18 +14,71 @@ namespace stm32plus {
      * @brief The motion is defined by an exponentially decaying sine wave
      */
 
-    class ExponentialEase : public EasingBase {
+    template<class TDataType>
+    class ExponentialEaseT : public EasingBaseT<TDataType> {
 
       public:
-        /// starts motion slowly, and then accelerates motion as it executes
-        virtual float easeIn(float time) const override;
+        virtual ~ExponentialEaseT() {}
 
-        /// starts motion fast, and then decelerates motion as it executes
-        virtual float easeOut(float time) const override;
-
-        /// combines the motion of the easeIn and easeOut methods to start the
-        /// motion slowly, accelerate motion, then decelerate
-        virtual float easeInOut(float time) const override;
+        virtual TDataType easeIn(TDataType time) const override;
+        virtual TDataType easeOut(TDataType time) const override;
+        virtual TDataType easeInOut(TDataType time) const override;
     };
+
+
+    /**
+     * Compatibility typedef
+     */
+
+    typedef ExponentialEaseT<float> ExponentialEase;
+
+
+    /**
+     * starts motion slowly, and then accelerates motion as it executes
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<class TDataType>
+    inline TDataType ExponentialEaseT<TDataType>::easeIn(TDataType time) const {
+      return time == 0 ? 0 : this->_change * pow(2,10 * (time / this->_duration - 1));
+    }
+
+
+    /**
+     * starts motion fast, and then decelerates motion as it executes
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<class TDataType>
+    inline TDataType ExponentialEaseT<TDataType>::easeOut(TDataType time) const {
+      return time == this->_duration ? this->_change : this->_change * (-pow(2,-10 * time / this->_duration) + 1);
+    }
+
+
+    /**
+     * combines the motion of the easeIn and easeOut methods to start the
+     * motion slowly, accelerate motion, then decelerate
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<class TDataType>
+    inline TDataType ExponentialEaseT<TDataType>::easeInOut(TDataType time) const {
+      if(time == 0)
+        return 0;
+
+      if(time == this->_duration)
+        return this->_change;
+
+      time/=this->_duration / 2;
+
+      if(time < 1)
+        return this->_change / 2 * pow(2,10 * (time - 1));
+
+      time--;
+      return this->_change / 2 * (-pow(2,-10 * time) + 2);
+    }
   }
 }

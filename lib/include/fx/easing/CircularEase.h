@@ -9,25 +9,76 @@
 
 namespace stm32plus {
   namespace fx {
+
+
     /**
      * Circular easing
      */
 
-    class CircularEase : public EasingBase {
+    template<typename TDataType>
+    class CircularEaseT : public EasingBaseT<TDataType> {
 
       public:
-        /// starts motion slowly, and then accelerates
-        /// motion as it executes
-        virtual float easeIn(float time) const override;
+        virtual ~CircularEaseT() {}
 
-        /// starts motion fast, and then decelerates
-        /// motion as it executes.
-        virtual float easeOut(float time) const override;
-
-        /// combines the motion of the easeIn and easeOut
-        /// methods to start the motion slowly, accelerate
-        /// motion, then decelerate.
-        virtual float easeInOut(float time) const override;
+        virtual TDataType easeIn(TDataType time) const override;
+        virtual TDataType easeOut(TDataType time) const override;
+        virtual TDataType easeInOut(TDataType time) const override;
     };
+
+
+    /**
+     * Compatibility typedef
+     */
+
+    typedef CircularEaseT<float> CircularEase;
+
+
+    /**
+     * starts motion slowly, and then accelerates motion as it executes
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<typename TDataType>
+    inline TDataType CircularEaseT<TDataType>::easeIn(TDataType time) const {
+
+      time/=this->_duration;
+      return -this->_change * (sqrt(1 - time * time) - 1);
+    }
+
+
+    /**
+     * starts motion fast, and then decelerates motion as it executes.
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<typename TDataType>
+    inline TDataType CircularEaseT<TDataType>::easeOut(TDataType time) const {
+
+      time=time / this->_duration - 1;
+      return this->_change * sqrt(1 - time * time);
+    }
+
+
+    /**
+     * combines the motion of the easeIn and easeOut methods to start the motion slowly, accelerate
+     * motion, then decelerate.
+     * @param time the current animation time
+     * @return the position at the time
+     */
+
+    template<typename TDataType>
+    inline TDataType CircularEaseT<TDataType>::easeInOut(TDataType time) const {
+
+      time/=this->_duration / 2;
+
+      if(time < 1)
+        return -this->_change / 2 * (sqrt(1 - time * time) - 1);
+
+      time-=2;
+      return this->_change / 2 * (sqrt(1 - time * time) + 1);
+    }
   }
 }

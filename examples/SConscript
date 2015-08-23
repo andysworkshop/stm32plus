@@ -15,6 +15,6 @@ INSTALLDIR=INSTALLDIR+"/bin/"+INSTALLDIR_PREFIX
 for example in Glob("*",strings=True):
   if os.path.isdir(example):
     SConscript(example+"/SConscript",
-               exports=["mode","mcu","hse","env","systemprefix","INSTALLDIR","VERSION","example"],
+               exports=["mode","mcu","osc","osc_type","osc_def","env","systemprefix","INSTALLDIR","VERSION","example"],
                variant_dir=example+"/build/"+systemprefix,
                duplicate=0)
