@@ -35,10 +35,12 @@ using namespace stm32plus;
  * Compatible MCU:
  *   STM32F051
  *   STM32F407
+ *   STM32F103
  *
  * Tested on devices:
  *   STM32F051R8T6
  *   STM32F407VGT6
+ *   STM32F103ZET6
  */
 
 class InternalFlashSettings {
@@ -130,11 +132,9 @@ class InternalFlashSettings {
 
       settingsOut.intValue=12345678;
 
-      // 32 bytes per setting = 64 settings in two 1024 byte pages. To test we will write out
-      // 67 times so we see a page boundary crossing and a reset back to the beginning where
-      // we'll write out a few more times
+      // 130 writes will cause a wrap-around on the F0 and F1.
 
-      for(i=0;i<67;i++) {
+      for(i=0;i<130;i++) {
 
         // increment the setting
 
