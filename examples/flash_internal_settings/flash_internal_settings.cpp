@@ -33,10 +33,12 @@ using namespace stm32plus;
  * you can cross reference with the code.
  *
  * Compatible MCU:
- *   STM32F0
+ *   STM32F051
+ *   STM32F407
  *
  * Tested on devices:
  *   STM32F051R8T6
+ *   STM32F407VGT6
  */
 
 class InternalFlashSettings {
@@ -80,19 +82,22 @@ class InternalFlashSettings {
      * Get the first location based on the device
      */
 
-    constexpr uint32_t getFirstLocation() const {
+    void getFlashParameters(uint32_t& firstLocation,uint32_t& memorySize) const {
 
 #if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
 
-      return FLASH_BASE+65536-2048;           // 2Kb at the top of the 64Kb flash
+      firstLocation=FLASH_BASE+65536-2048;           // 2Kb at the top of the 64Kb flash
+      memorySize=2048;
 
 #elif defined(STM32PLUS_F407)
 
-      return FLASH_BASE+1048576-(128*1024);   // 128Kb (last page) at the top of the 1Mb flash
+      firstLocation=FLASH_BASE+1048576-(128*1024);   // 128Kb (last page) at the top of the 1Mb flash
+      memorySize=128*1024;
 
 #elif defined(STM32PLUS_F1_HD)
 
-      return FLASH_BASE+524288-(4096);        // 4Kb (2x2Kb pages) at the top of 512Kb flash
+      firstLocation=FLASH_BASE+524288-4096;          // 4Kb (2x2Kb pages) at the top of 512Kb flash
+      memorySize=4096;
 
 #else
 #error Unsupported MCU
@@ -108,7 +113,9 @@ class InternalFlashSettings {
 
       // create the objects. We'll use 2 pages for the settings storage
 
-      MySettingsStorage::Parameters params(getFirstLocation(),2);
+      MySettingsStorage::Parameters params;
+      getFlashParameters(params.firstLocation,params.memorySize);
+
       MyFlash flash;
       MySettingsStorage storage(flash,params);
       Settings settingsOut,settingsIn;

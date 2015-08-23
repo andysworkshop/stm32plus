@@ -70,7 +70,7 @@ namespace stm32plus {
 
     for(;;) {
 
-      pageSize=getPageSize(address);
+      pageSize=_sizeMap[pageNumber]*1024;
 
       if(flashAddress<address+pageSize)
         return pageNumber;
@@ -93,7 +93,7 @@ namespace stm32plus {
 
     address=FLASH_BASE;
 
-    while(addressToCheck>=address)
+    while(addressToCheck>address)
       address+=getPageSize(address);
 
     return address==addressToCheck;

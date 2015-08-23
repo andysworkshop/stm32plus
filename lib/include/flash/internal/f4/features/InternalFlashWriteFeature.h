@@ -88,8 +88,17 @@ namespace stm32plus {
   inline bool InternalFlashWriteFeature<TVoltageRange>::pageErase(uint32_t flashAddress) const {
 
     uint32_t err;
+    uint8_t pageNumber;
 
-    if((err=FLASH_EraseSector(_flashPeripheral.getPageFromAddress(flashAddress),static_cast<uint8_t>(TVoltageRange)))==FLASH_COMPLETE)
+    // FLASH_EraseSector takes a coded sector number
+
+    pageNumber=_flashPeripheral.getPageFromAddress(flashAddress);
+    if(pageNumber<12)
+      pageNumber*=8;                        // the low range (1Mb devices)
+    else
+      pageNumber=0x80+((pageNumber-12)*8);  // the high rage (2Mb devices)
+
+    if((err=FLASH_EraseSector(pageNumber,static_cast<uint8_t>(TVoltageRange)))==FLASH_COMPLETE)
       return true;
 
     return errorProvider.set(ErrorProvider::ERROR_PROVIDER_INTERNAL_FLASH,E_ERASE_FAILED,err);

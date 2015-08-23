@@ -63,10 +63,19 @@ namespace stm32plus {
           : firstLocation(location),
             memorySize(size) {
         }
+
+
+        /**
+         * Default constructor. Parameters must be set later.
+         */
+
+        Parameters() {
+        }
       };
 
+
       /**
-       * Errors
+       * Error codes
        */
 
       enum {
