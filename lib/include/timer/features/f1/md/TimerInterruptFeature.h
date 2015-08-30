@@ -77,7 +77,6 @@ namespace stm32plus {
   template<uint8_t TTimerNumber>
   TimerEventSource *TimerInterruptFeature<TTimerNumber> ::_timerInstance;
 
-
   /**
    * Constructor, initialises the interrupt mask for this class to zero.
    */

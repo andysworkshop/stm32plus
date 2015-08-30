@@ -8,7 +8,7 @@
 #include "config/adc.h"
 
 
-#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD)
 
 using namespace stm32plus;
 

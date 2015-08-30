@@ -235,7 +235,6 @@ env.Append(LIBS=[libstm32plus])
 # launch SConscript for the examples
 
 if build_examples!="no":
-  if mcu!="f1md":
     SConscript("examples/SConscript",exports=["mode","mcu","osc","osc_type","osc_def","env","systemprefix","INSTALLDIR","INSTALLDIR_PREFIX","VERSION"])
 
 # build the CMake helper

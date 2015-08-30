@@ -1,5 +1,17 @@
 # This example is not compatible with all STM32 MCUs
 # The compatible MCUs are listed below, one per line.
 
+f4
+f401
+f407
+f415
+f417
+f427
+f437
+f429
+f439
+f1cle
+f1hd
 f1mdvl
-#f1md # only for 128k
+#f1md
+
