@@ -11,7 +11,7 @@
  */
 
 // ensure the MCU series is correct
-#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD)
   extern "C" void ADC1_2_IRQHandler();
 #elif defined(STM32PLUS_F1_MD_VL)
   extern "C" void ADC1_IRQHandler();
@@ -35,10 +35,10 @@ namespace stm32plus {
 
     private:
       typedef void (*FPTR)();            // this trick will force the linker to include the ISR
-      static FPTR _forceLinkage;
-
+      
     protected:
       uint16_t _interruptMask;
+      static FPTR _forceLinkage;
 
     public:
       enum {
@@ -101,13 +101,14 @@ namespace stm32plus {
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
 
     _interruptMask|=interruptMask;
-
-#if defined(STM32PLUS_F1_MD_VL)
+#if defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_CL_E) || defined(STM32PLUS_F1_MD)
+	Nvic::configureIrq(ADC1_2_IRQn);
+	_forceLinkage=ADC1_2_IRQHandler;
+#elif defined(STM32PLUS_F1_MD_VL)
     Nvic::configureIrq(ADC1_IRQn);
     _forceLinkage=ADC1_IRQHandler;
 #else
-    Nvic::configureIrq(ADC1_2_IRQn);
-    _forceLinkage=ADC1_2_IRQHandler;
+  #error Unsupported MCU
 #endif
 
     if((interruptMask & END_OF_CONVERSION)!=0)

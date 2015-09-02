@@ -65,6 +65,8 @@
     #include "dma/features/f1/xl_hd/DmaInterruptFeature.h"
   #elif defined(STM32PLUS_F1_CL)
     #include "dma/features/f1/cl/DmaInterruptFeature.h"
+#elif defined(STM32PLUS_F1_MD)
+#include "dma/features/f1/md/DmaInterruptFeature.h"
   #elif defined(STM32PLUS_F1_MD_VL)
     #include "dma/features/f1/mdvl/DmaInterruptFeature.h"
   #endif

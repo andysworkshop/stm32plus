@@ -8,7 +8,6 @@
 
 
 namespace stm32plus {
-
   /**
    * Helper class to enable only the desired interrupts in the NVIC. This will
    * be fully specialised for each timer
@@ -17,11 +16,13 @@ namespace stm32plus {
 
   template<uint8_t TTimerNumber>
   class TimerInterruptFeatureEnabler {
+
     private:
-      typedef void (*FPTR)();         // this trick will force the linker to include the ISR
+      typedef void (*FPTR)();         // this trick will force the linker to include the ISR 
       static FPTR _forceLinkage;
 
     public:
       static void enable(uint16_t interruptMask,uint8_t priority,uint8_t subPriority=0);
   };
+  
 }
