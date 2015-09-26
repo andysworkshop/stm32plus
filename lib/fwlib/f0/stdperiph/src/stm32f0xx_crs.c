@@ -199,7 +199,7 @@ void CRS_FrequencyErrorLimitConfig(uint8_t CRS_ErrorLimitValue)
   CRS->CFGR &= ~CRS_CFGR_FELIM;
   
   /* Set the FELIM[7:0] bits according to CRS_ErrorLimitValue value */
-  CRS->CFGR |= (uint32_t)CRS_ErrorLimitValue;
+  CRS->CFGR |= ((uint32_t)CRS_ErrorLimitValue) << 16;
 }
 
 /**
