@@ -60,6 +60,8 @@ namespace stm32plus {
       void enablePeripheral() const;
       void disablePeripheral() const;
 
+      void reset(bool enterReset) const;
+
       uint8_t getAddressSize() const;
       void setAddressSize(uint8_t addressSize);
 
@@ -92,6 +94,16 @@ namespace stm32plus {
 
   inline void I2C::disablePeripheral() const {
     I2C_Cmd(_peripheralAddress,DISABLE);
+  }
+
+
+  /**
+   * Enter/exit the reset condition.
+   * @param enterReset true to enter the software reset state, false to exit from it
+   */
+
+  inline void I2C::reset(bool enterReset) const {
+    I2C_SoftwareResetCmd(_peripheralAddress,enterReset ? ENABLE : DISABLE);
   }
 
 

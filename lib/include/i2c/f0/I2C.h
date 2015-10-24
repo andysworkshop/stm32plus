@@ -62,6 +62,8 @@ namespace stm32plus {
       void enablePeripheral() const;
       void disablePeripheral() const;
 
+      void reset() const;
+
       uint8_t getAddressSize() const;
       void setAddressSize(uint8_t addressSize);
 
@@ -94,6 +96,15 @@ namespace stm32plus {
 
   inline void I2C::disablePeripheral() const {
     I2C_Cmd(_peripheralAddress,DISABLE);
+  }
+
+
+  /**
+   * Do a software reset. The peripheral library actually does a peripheral enable/disable on the F0.
+   */
+
+  inline void I2C::reset() const {
+    I2C_SoftwareResetCmd(_peripheralAddress);
   }
 
 
