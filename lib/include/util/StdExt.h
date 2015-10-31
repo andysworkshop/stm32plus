@@ -14,6 +14,7 @@
 
 namespace std {
 
+
   typedef char (&_is_base_of_yes)[1];
   typedef char (&_is_base_of_no)[2];
 
@@ -32,4 +33,44 @@ namespace std {
 
     static const bool value=sizeof(check(_is_base_of_host<B,D>(),int()))==sizeof(_is_base_of_yes);
   };
+
+
+  template<class InputIterator, class UnaryPredicate>
+  bool all_of (InputIterator first, InputIterator last, UnaryPredicate pred) {
+    while (first!=last) {
+      if (!pred(*first)) return false;
+      ++first;
+    }
+    return true;
+  }
+
+
+  template<class InputIterator, class UnaryPredicate>
+  bool any_of (InputIterator first, InputIterator last, UnaryPredicate pred) {
+    while (first!=last) {
+      if (pred(*first)) return true;
+      ++first;
+    }
+    return false;
+  }
+
+
+  template<class InputIterator, class UnaryPredicate>
+  bool none_of (InputIterator first, InputIterator last, UnaryPredicate pred) {
+    while (first!=last) {
+      if (pred(*first)) return false;
+      ++first;
+    }
+    return true;
+  }
+
+
+  template<class InputIterator, class UnaryPredicate>
+  InputIterator find_if_not (InputIterator first, InputIterator last, UnaryPredicate pred) {
+    while (first!=last) {
+      if (!pred(*first)) return first;
+      ++first;
+    }
+    return last;
+  }
 }
