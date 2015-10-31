@@ -22,6 +22,7 @@ namespace stm32plus {
     public:
       Gpio *_pinHandlers[16];
       GPIO_TypeDef *_peripheralAddress;
+      uint8_t _low;
 
     public:
       GpioPortBase(GPIO_TypeDef *peripheralAddress);
@@ -38,6 +39,8 @@ namespace stm32plus {
 
   inline GpioPortBase::GpioPortBase(GPIO_TypeDef *peripheralAddress)
     : _peripheralAddress(peripheralAddress) {
+    memset(_pinHandlers,'\0',sizeof(_pinHandlers));
+    _low=15;
   }
 
 
@@ -48,7 +51,11 @@ namespace stm32plus {
    */
 
   inline void GpioPortBase::setPinHandler(uint8_t index,Gpio *pinHandler) {
+
     _pinHandlers[index]=pinHandler;
+
+    if(index<_low)
+      _low=index;
   }
 
 

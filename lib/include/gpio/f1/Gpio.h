@@ -85,6 +85,9 @@ namespace stm32plus {
       uint16_t getSelectedPin() const;
 
       GPIO_TypeDef *getPeripheralAddress() const;
+
+      static GpioModeType getMode(GPIO_TypeDef *peripheralAddress,uint16_t pin);
+      GpioModeType getMode() const;
   };
 
 
@@ -309,5 +312,43 @@ namespace stm32plus {
 
   inline volatile uint32_t *Gpio::getOutputRegister() const {
     return reinterpret_cast<volatile uint32_t *>(&_peripheralAddress->ODR);
+  }
+
+
+  /**
+   * Get the pin mode type (input,output,analog,alternate function)
+   * @param peripheralAddress the peripheral register address
+   * @param pin the pin bitmask
+   * @return The mode type
+   */
+
+  inline Gpio::GpioModeType Gpio::getMode(GPIO_TypeDef *peripheralAddress,uint16_t pin) {
+
+    uint8_t pinIndex;
+    uint32_t regval;
+
+    // two registers on the F1. CRL for pins 0..7 and CRH for pins 8..15
+
+    if((pinIndex=bithacks::firstSetBit(pin))<8)
+      regval=(peripheralAddress->CRL >> (pinIndex*4)) & 0xF;
+    else
+      regval=(peripheralAddress->CRH >> ((pinIndex-8)*4)) & 0xF;
+
+    // MODE bits differentiate input/output, CNF bits differentiate subtypes
+
+    if((regval & 0x3)==0)
+      return (regval & 0xC)==0 ? Gpio::ANALOG : Gpio::INPUT;
+    else
+      return (regval & 0xC)==0 || (regval & 0xC)==4 ? Gpio::OUTPUT : Gpio::ALTERNATE_FUNCTION;
+  }
+
+
+  /**
+   * Get the pin mode type (input,output,analog,alternate function)
+   * @return the mode type
+   */
+
+  inline Gpio::GpioModeType Gpio::getMode() const {
+    return getMode(_peripheralAddress,_selectedPin);
   }
 }

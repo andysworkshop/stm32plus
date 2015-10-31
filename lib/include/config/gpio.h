@@ -12,6 +12,10 @@
  * external interface includes this as a dependency so there's little chance that you'll need to include it directly.
  */
 
+// dependencies
+
+#include "util/BitHacks.h"
+
 // generic peripheral includes
 
 #include "gpio/GpioPortBase.h"
@@ -23,6 +27,8 @@
 
   #include "gpio/f1/GpioPinMap.h"
   #include "gpio/f1/Gpio.h"
+  #include "gpio/GpioPinRef.h"
+  #include "gpio/GpioIterator.h"
   #include "gpio/f1/GpioPort.h"
   #include "gpio/f1/features/DigitalOutputFeature.h"
   #include "gpio/f1/features/DigitalInputFeature.h"
@@ -35,6 +41,8 @@
 
   #include "gpio/f4/GpioPinMap.h"
   #include "gpio/f4/Gpio.h"
+  #include "gpio/GpioPinRef.h"
+  #include "gpio/GpioIterator.h"
   #include "gpio/f4/GpioPort.h"
   #include "gpio/f4/features/DigitalOutputFeature.h"
   #include "gpio/f4/features/DigitalInputFeature.h"
@@ -47,6 +55,8 @@
 
   #include "gpio/f0/GpioPinMap.h"
   #include "gpio/f0/Gpio.h"
+  #include "gpio/GpioPinRef.h"
+  #include "gpio/GpioIterator.h"
   #include "gpio/f0/GpioPort.h"
   #include "gpio/f0/features/DigitalOutputFeature.h"
   #include "gpio/f0/features/DigitalInputFeature.h"
@@ -59,4 +69,3 @@
 // generic utility includes
 
 #include "gpio/GpioPinInitialiser.h"
-#include "gpio/GpioPinRef.h"

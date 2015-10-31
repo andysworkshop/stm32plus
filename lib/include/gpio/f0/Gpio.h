@@ -91,6 +91,9 @@ namespace stm32plus {
       uint16_t getSelectedPin() const;
 
       GPIO_TypeDef *getPeripheralAddress() const;
+
+      static GpioModeType getMode(GPIO_TypeDef *peripheralAddress,uint16_t pin);
+      GpioModeType getMode() const;
   };
 
 
@@ -352,5 +355,46 @@ namespace stm32plus {
         _portBase.setPinHandler(source,this);
       }
     }
+  }
+
+
+  /**
+   * Get the pin mode type (input,output,analog,alternate function)
+   * @param peripheralAddress the peripheral register address
+   * @param pin the pin bitmask
+   * @return The mode type
+   */
+
+  inline Gpio::GpioModeType Gpio::getMode(GPIO_TypeDef *peripheralAddress,uint16_t pin) {
+
+    uint8_t pinIndex;
+
+    pinIndex=bithacks::firstSetBit(pin);
+
+    switch((peripheralAddress->MODER >> (pinIndex*2)) & 0x3) {
+
+      case 0:
+        return Gpio::INPUT;
+
+      case 1:
+        return Gpio::OUTPUT;
+
+      case 2:
+        return Gpio::ALTERNATE_FUNCTION;
+
+      case 3:
+      default:
+        return Gpio::ANALOG;
+    }
+  }
+
+
+  /**
+   * Get the pin mode type (input,output,analog,alternate function)
+   * @return the mode type
+   */
+
+  inline Gpio::GpioModeType Gpio::getMode() const {
+    return getMode(_peripheralAddress,_selectedPin);
   }
 }

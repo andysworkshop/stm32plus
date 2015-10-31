@@ -37,6 +37,15 @@ namespace stm32plus {
 
       GPIO_TypeDef *getPeripheralAddress() const;
       uint16_t getPin() const;
+      uint8_t getPinIndex() const;
+
+      GpioPinRef& operator=(const GpioPinRef& src);
+      GpioPinRef& operator=(const Gpio& src);
+
+      bool operator==(const GpioPinRef& src) const;
+      bool operator!=(const GpioPinRef& src) const;
+
+      Gpio::GpioModeType getMode() const;
   };
 
 
@@ -65,6 +74,7 @@ namespace stm32plus {
 
   /**
    * Return the port
+   * @return The GPIO_TypeDef port address
    */
 
   inline GPIO_TypeDef* GpioPinRef::getPeripheralAddress() const {
@@ -73,7 +83,8 @@ namespace stm32plus {
 
 
   /**
-   * Return the pin
+   * Return the pin. This is the pin bit mask (1,2,4,8,16...)
+   * @return The pin bit mask.
    */
 
   inline uint16_t GpioPinRef::getPin() const {
@@ -82,7 +93,7 @@ namespace stm32plus {
 
 
   /**
-   * Set the pin
+   * Set the pin to HIGH
    */
 
   inline void GpioPinRef::set() const {
@@ -115,5 +126,74 @@ namespace stm32plus {
 
   inline bool GpioPinRef::read() const {
     return GPIO_ReadInputDataBit(_peripheralAddress,_pin);
+  }
+
+
+  /**
+   * Assignment operator from GpioPinRef
+   * @param src the object to copy from
+   * @return self
+   */
+
+  inline GpioPinRef& GpioPinRef::operator=(const GpioPinRef& src) {
+    _peripheralAddress=src.getPeripheralAddress();
+    _pin=src.getPin();
+    return *this;
+  }
+
+
+
+  /**
+   * Assignment operator from Gpio
+   * @param src the object to copy from
+   * @return self
+   */
+
+  inline GpioPinRef& GpioPinRef::operator=(const Gpio& src) {
+    _peripheralAddress=src.getPeripheralAddress();
+    _pin=src.getSelectedPin();
+    return *this;
+  }
+
+
+  /**
+   * Equality comparison operator
+   * @param src the object to compare to
+   * @return true if equal
+   */
+
+  inline bool GpioPinRef::operator==(const GpioPinRef& src) const {
+    return _peripheralAddress==src._peripheralAddress && _pin==src._pin;
+  }
+
+
+  /**
+   * Inequality comparison operator
+   * @param src the object to compare to
+   * @return true if not equal
+   */
+
+  inline bool GpioPinRef::operator!=(const GpioPinRef& src) const {
+    return _peripheralAddress!=src._peripheralAddress || _pin!=src._pin;
+  }
+
+
+  /**
+   * Get the pin index (0..15)
+   * @return the pin index in the port
+   */
+
+  inline uint8_t GpioPinRef::getPinIndex() const {
+    return bithacks::firstSetBit(_pin);
+  }
+
+
+  /**
+   * Get the pin mode type (input,output,analog,alternate function)
+   * @return the mode type
+   */
+
+  inline Gpio::GpioModeType GpioPinRef::getMode() const {
+    return Gpio::getMode(_peripheralAddress,_pin);
   }
 }
