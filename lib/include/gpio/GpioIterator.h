@@ -11,9 +11,23 @@
 namespace stm32plus {
 
 
-  /*
+  /**
    * STL compatible forward iterator that can be used to iterate over GpioPinRef
-   * instances in a port
+   * instances in a port. Instances of this iterator should be obtained from the
+   * GpioPort object using the begin() and end() methods. Basic usage example:
+   *
+   *   GpioC<DefaultDigitalInputFeature<1,7,13>,DefaultDigitalOutputFeature<8,9,15>> pc;
+   *
+   *    for(auto it=pc.begin();it!=pc.end();it++) {
+   *      if(it->getMode()==Gpio::OUTPUT) {
+   *        // do something
+   *      }
+   *    }
+   *
+   *  This iterator is compatible with algorithms in the <algorithm> and <util/StdExt.h> header
+   *  that take a forward iterator. In common with the STL iterators you are expected to
+   *  be digilent in checking the start and end position using begin() and end() because
+   *  the increment and decrement operators will not check for you.
    */
 
   struct GpioIterator {
@@ -59,7 +73,7 @@ namespace stm32plus {
 
     /**
      * Dereference operator
-     * @return reference to Gpio object at position
+     * @return reference to GpioPinRef object at position
      */
 
     GpioPinRef& operator*() {
@@ -72,17 +86,29 @@ namespace stm32plus {
 
     /**
      * Pointer operator
-     * @return
+     * @return address of the current object at the index
      */
 
     GpioPinRef *operator->() {
       return &(operator*());
     }
 
+
+    /**
+     * Increment the iterator
+     * @return self reference
+     */
+
     GpioIterator& operator++() {
       increment();
       return *this;
     }
+
+
+    /**
+     * Increment the iterator
+     * @return self reference
+     */
 
     GpioIterator& operator++(int) {
       GpioIterator& tmp=*this;
@@ -90,10 +116,22 @@ namespace stm32plus {
       return tmp;
     }
 
+
+    /**
+     * Decrement the iterator
+     * @return self reference
+     */
+
     GpioIterator& operator--() {
       decrement();
       return *this;
     }
+
+
+    /**
+     * Decrement the iterator
+     * @return self reference
+     */
 
     GpioIterator& operator--(int) {
       GpioIterator& tmp=*this;
@@ -102,20 +140,42 @@ namespace stm32plus {
     }
 
 
+    /**
+     * Equality comparison
+     * @param rhs the other iterator
+     * @return true if the iterators are logically equivalent
+     */
+
     bool operator==(const GpioIterator& rhs) const {
       return _peripheralAddress==rhs._peripheralAddress && _index==rhs._index;
     }
+
+
+    /**
+     * Inequality comparison
+     * @param rhs the other iterator
+     * @return true if the iterators are not logically equivalent
+     */
 
     bool operator!=(const GpioIterator& rhs) const {
       return _peripheralAddress!=rhs._peripheralAddress || _index!=rhs._index;
     }
 
 
+    /**
+     * Increment the iterator to the next active pin
+     */
+
     void increment() {
       do {
         _index++;
       } while(_pinHandlers[_index]==nullptr && _index!=16);
     }
+
+
+    /**
+     * Decrement the iterator to the next active pin
+     */
 
     void decrement() {
       do {
