@@ -19,7 +19,7 @@ namespace stm32plus {
      * @return 0..31
      */
 
-    uint8_t firstSetBit(uint32_t word) {
+    inline uint8_t firstSetBit(uint32_t word) {
 
       static const uint8_t MultiplyDeBruijnBitPosition[32] = {
         0, 1, 28, 2, 29, 14, 24, 3, 30, 22, 20, 15, 25, 17, 4, 8,
