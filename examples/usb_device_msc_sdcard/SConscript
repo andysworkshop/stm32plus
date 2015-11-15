@@ -55,10 +55,20 @@ if supported:
     matches.append("system/f107_72_8/System.c")
     linkerscript="examples/"+example+"/system/f107_72_8/Linker.ld"
 
+  elif mcu=="f1md":
+    matches.append("system/f1md/Startup.asm")
+    matches.append("system/f1md/System.c")
+    linkerscript="examples/"+example+"/system/f1md/Linker.ld"
+
   elif mcu=="f1mdvl":
     matches.append("system/f1mdvl_24_8/Startup.asm")
     matches.append("system/f1mdvl_24_8/System.c")
     linkerscript="examples/"+example+"/system/f1mdvl_24_8/Linker.ld"
+
+  elif mcu=="f042":
+    matches.append("system/f042_48_8/Startup.asm")
+    matches.append("system/f042_48_8/System.c")
+    linkerscript="examples/"+example+"/system/f042_48_8/Linker.ld"
 
   elif mcu=="f051":
     matches.append("system/f051_48_8/Startup.asm")
