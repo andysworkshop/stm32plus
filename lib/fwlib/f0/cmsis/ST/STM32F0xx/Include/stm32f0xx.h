@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30) || defined (STM32PLUS_F0_42)
 /**
   ******************************************************************************
   * @file    stm32f0xx.h
@@ -62,6 +62,8 @@
 
 #if (defined(STM32PLUS_F0_51) || defined (STM32PLUS_F0_30) ) && !defined(STM32F0XX_MD)
   #define STM32F0XX_MD
+#elif defined(STM32PLUS_F0_42) && !defined(STM32F0XX)
+  #define STM32F0XX
 #endif
 
 #define assert_param(expr) ((void)0)
@@ -97,8 +99,11 @@
 #if defined(STM32F0XX) || defined(STM32F0XX_MD) 
   #if defined(STM32PLUS_F0_51)
   #define STM32F051
-  #elif defined (STM32PLUS_F0_30)
+  #elif defined(STM32PLUS_F0_30)
   #define STM32F030
+  #elif defined(STM32PLUS_F0_42)
+  #define STM32F042
+  #else
   //#pragma message "STM32F030"
   #endif
 #endif /* STM32F0XX */
@@ -5569,8 +5574,8 @@ typedef struct
 #define TS_IRQn                           TSC_IRQn
 #define DMA1_Ch1_IRQn                     DMA1_Channel1_IRQn
 #define DMA1_Ch2_3_DMA2_Ch1_2_IRQn        DMA1_Channel2_3_IRQn           
-#define DMA1_Channel4_5_IRQn              DMA1_Channel4_5_6_7_IRQn
-#define DMA1_Ch4_7_DMA2_Ch3_5_IRQn        DMA1_Channel4_5_6_7_IRQn          
+#define DMA1_Channel4_5_IRQn              11 //DMA1_Channel4_5_6_7_IRQn
+#define DMA1_Ch4_7_DMA2_Ch3_5_IRQn        11 //DMA1_Channel4_5_6_7_IRQn
 #define ADC1_COMP_IRQn                    ADC1_IRQn                         
 #define CEC_IRQn                          CEC_CAN_IRQn
 

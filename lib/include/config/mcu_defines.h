@@ -39,7 +39,9 @@
 #elif defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
   #define STM32PLUS_F0                // enable features common to all F0
   #define STM32F0XX_MD                // these are medium density devices
-
+#elif defined(STM32PLUS_F0_42)
+  #define STM32PLUS_F0
+  #define STM32F0XX
 #elif defined(STM32PLUS_F405)
   #define STM32PLUS_F4
   #define STM32F405xx

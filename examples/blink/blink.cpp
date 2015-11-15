@@ -31,6 +31,7 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F042F6P6
  *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F103ZET6
@@ -46,17 +47,17 @@ class Blink {
 
       // initialise the pin for output
 
-      GpioC<DefaultDigitalOutputFeature<8> > pc;
+      GpioB<DefaultDigitalOutputFeature<1> > pb;
 
       // loop forever switching it on and off with a 1 second
       // delay in between each cycle
 
       for(;;) {
 
-        pc[8].set();
+        pb[1].set();
         MillisecondTimer::delay(1000);
 
-        pc[8].reset();
+        pb[1].reset();
         MillisecondTimer::delay(1000);
       }
     }

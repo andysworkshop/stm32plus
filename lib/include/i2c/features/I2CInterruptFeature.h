@@ -14,7 +14,10 @@
 extern "C" void I2C1_EV_IRQHandler();
 extern "C" void I2C2_EV_IRQHandler();
 extern "C" void I2C1_IRQHandler();        // F0
+
+#if !defined(STM32PLUS_F0_42)
 extern "C" void I2C2_IRQHandler();        // F0
+#endif
 
 
 namespace stm32plus {
@@ -72,8 +75,10 @@ namespace stm32plus {
    */
 
   typedef I2CInterruptFeature<1> I2C1InterruptFeature;
-  typedef I2CInterruptFeature<2> I2C2InterruptFeature;
 
+#if !defined(STM32PLUS_F0_42)
+  typedef I2CInterruptFeature<2> I2C2InterruptFeature;
+#endif
 
   /**
    * Template static data member initialisation
@@ -196,6 +201,7 @@ namespace stm32plus {
   }
 
 
+#if !defined(STM32PLUS_F0_42)
   /**
    * Enabler specialisation, I2C 2
    */
@@ -205,6 +211,7 @@ namespace stm32plus {
     _forceLinkage=&I2C2_IRQHandler;
     Nvic::configureIrq(I2C2_IRQn,ENABLE,priority);
   }
+#endif
 
 #endif
 }

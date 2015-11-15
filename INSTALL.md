@@ -44,13 +44,14 @@ You can build all of the above combinations side-by-side if you so wish by execu
 
 		Usage: scons mode=<MODE> mcu=<MCU> hse=<HSE> [float=hard]
 
-		  <MODE>: debug/fast/small.
+		<MODE>: debug/fast/small.
     		debug = -O0
     		fast  = -O3
     		small = -Os
 
-  		<MCU>: f1hd/f1cle/f1mdvl/f051/f030/f4.
+  		<MCU>: f1hd/f1cle/f1mdvl/f051/f030/f042/f4.
     		f030   = STM32F030 series.
+            f042   = STM32F042 series.
     		f051   = STM32F051 series.
     		f1hd   = STM32F103HD series.
     		f1cle  = STM32F107 series.
@@ -65,16 +66,19 @@ You can build all of the above combinations side-by-side if you so wish by execu
     		f429   = STM32F429
     		f439   = STM32F439
 
-  		<HSE>:
-    		Your external oscillator speed in Hz. Some of the ST standard peripheral
-    		library code uses the HSE_VALUE #define that we set here. If you're using
-    		the HSI and don't have an HSE connected then just supply a default
-    		of 8000000.
+        <HSE or HSI>:
+            Your external (HSE) or internal (HSI) oscillator speed in Hz. Some of the ST standard
+            peripheral library code uses the HSE_VALUE / HSI_VALUE #define that we set here. Select
+            either the 'hse' or 'hsi' option, not both.
 
   		[float=hard]:
     		Optional flag for an F4 build that will cause the hardware FPU to be
     		used for floating point operations. Requires the "GNU Tools for ARM Embedded
     		Processors" toolchain. Will not work with Code Sourcery Lite.
+
+        [examples=no]:
+            Optional flag that allows you to build just the library without the examples. The
+            default is to build the library and the examples.
 
   		Examples:
     		scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz

@@ -1,4 +1,4 @@
-#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30)
+#if defined (STM32PLUS_F0_51) || defined (STM32PLUS_F0_30) || defined (STM32PLUS_F0_42)
 /**************************************************************************//**
  * @file     core_cm0plus.h
  * @brief    CMSIS Cortex-M0+ Core Peripheral Access Layer Header File

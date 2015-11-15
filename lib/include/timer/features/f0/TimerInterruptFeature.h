@@ -18,13 +18,23 @@
 
 extern "C" void TIM1_BRK_UP_TRG_COM_IRQHandler();
 extern "C" void TIM1_CC_IRQHandler();
-#ifdef STM32PLUS_F0_51
+
+#if defined (STM32PLUS_F0_51) || defined(STM32PLUS_F0_42)
 extern "C" void TIM2_IRQHandler();
 #endif
+
 extern "C" void TIM3_IRQHandler();
+
+#if defined (STM32PLUS_F0_51)
 extern "C" void TIM6_DAC_IRQHandler();
+#endif
+
 extern "C" void TIM14_IRQHandler();
+
+#if defined (STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
 extern "C" void TIM15_IRQHandler();
+#endif
+
 extern "C" void TIM16_IRQHandler();
 extern "C" void TIM17_IRQHandler();
 
@@ -65,15 +75,23 @@ namespace stm32plus {
    */
 
   typedef TimerInterruptFeature<1> Timer1InterruptFeature;
-  #ifdef STM32PLUS_F0_51
+
+#if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_42)
   typedef TimerInterruptFeature<2> Timer2InterruptFeature;
-  #endif
+#endif
+
   typedef TimerInterruptFeature<3> Timer3InterruptFeature;
-  #ifdef STM32PLUS_F0_51
+
+#if defined(STM32PLUS_F0_51)
   typedef TimerInterruptFeature<6> Timer6InterruptFeature;
-  #endif
+#endif
+
   typedef TimerInterruptFeature<14> Timer14InterruptFeature;
+
+#if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
   typedef TimerInterruptFeature<15> Timer15InterruptFeature;
+#endif
+
   typedef TimerInterruptFeature<16> Timer16InterruptFeature;
   typedef TimerInterruptFeature<17> Timer17InterruptFeature;
 
@@ -179,7 +197,7 @@ namespace stm32plus {
     }
   }
 
-#ifdef STM32PLUS_F0_51
+#if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_42)
 
   /**
    * Enabler specialisation, timer 2
@@ -209,7 +227,7 @@ namespace stm32plus {
     }
   }
 
-#ifdef STM32PLUS_F0_51
+#if defined(STM32PLUS_F0_51)
   /**
    * Enabler specialisation, timer 6
    * @param interruptMask TIM_* interrupts to be enabled
@@ -237,6 +255,7 @@ namespace stm32plus {
     }
   }
 
+#if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
 
   /**
    * Enabler specialisation, timer 15
@@ -250,7 +269,7 @@ namespace stm32plus {
       Nvic::configureIrq(TIM15_IRQn,ENABLE,priority);
     }
   }
-
+#endif
 
   /**
    * Enabler specialisation, timer 16

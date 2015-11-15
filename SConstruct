@@ -7,8 +7,9 @@ Usage: scons mode=<MODE> mcu=<MCU> (hse=<HSE> / hsi=<HSI>) [float=hard] [example
     fast  = -O3
     small = -Os
 
-  <MCU>: f1hd/f1cle/f1mdvl/f051/f030/f4.
+  <MCU>: f1hd/f1cle/f1mdvl/f042/f051/f030/f4.
     f030   = STM32F030 series.
+    f042   = STM32F042 series.
     f051   = STM32F051 series.
     f1hd   = STM32F103HD series.
     f1cle  = STM32F107 series.
@@ -201,6 +202,8 @@ elif mcu=="f051":
   setFlags("m0","F0_51")
 elif mcu=="f030":
   setFlags("m0","F0_30")
+elif mcu=="f042":
+  setFlags("m0","F0_42")
 else:
   print __doc__
   Exit(1)
