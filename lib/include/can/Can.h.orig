@@ -24,8 +24,8 @@ namespace stm32plus {
 
 		  void enablePeripheral() const;
 		  void disablePeripheral() const;
-		  bool send(const uint32_t ID, const uint8_t IDE, const uint8_t RTR, const uint8_t DLC, uint8_t* data  );
-		  bool send(CanTxMsg& Msg);
+		  bool Can::send(const uint32_t ID, const uint8_t IDE, const uint8_t RTR, const uint8_t DLC, const uint8_t& Data  ) const;
+		  bool Can::send(CanTxMsg& Msg) const;
 
 
 		  operator CAN_TypeDef *();
@@ -61,16 +61,16 @@ namespace stm32plus {
 
 
 
-	inline bool Can::send(const uint32_t ID, const uint8_t IDE, const uint8_t RTR, const uint8_t DLC, uint8_t* data  ) {
+	inline bool Can::send(const uint32_t ID, const uint8_t IDE, const uint8_t RTR, const uint8_t DLC, const uint8_t& Data  ) const {
 		CanTxMsg Msg;
 		Msg.IDE=IDE;
 		Msg.RTR = RTR;
 		Msg.DLC = DLC;
 		Msg.ExtId = ID;
-
-		for(uint8_t i=0; i<DLC;i++)
-			Msg.Data[i]=data[i];
-
+		for (uint8_t i=0; i++; i<DLC)
+		{
+			Msg.Data[i]= Data[i];
+		}
 
 
 		if (CAN_TxStatus_NoMailBox != CAN_Transmit(_peripheralAddress,&Msg))
@@ -81,7 +81,7 @@ namespace stm32plus {
 
 
 
-	inline bool Can::send(CanTxMsg& Msg) {
+	inline bool Can::send(CanTxMsg& Msg) const {
 
 		if (CAN_TxStatus_NoMailBox != CAN_Transmit(_peripheralAddress,&Msg))
 			return true;
