@@ -31,6 +31,7 @@ using namespace stm32plus;
  *   STM32F4
  *
  * Tested on devices:
+ *   STM32F042F6P6
  *   STM32F051R8T6
  *   STM32F103ZET6
  *   STM32F100RBT6
@@ -95,7 +96,7 @@ class DmaCopyTest {
 
 #endif
 
-      // set ourselves up to observe the completion of the DMA transfer
+      // subscribe to the completion of the DMA transfer
 
       dma.DmaInterruptEventSender.insertSubscriber(
           DmaInterruptEventSourceSlot::bind(this,&DmaCopyTest::onComplete)
@@ -138,7 +139,7 @@ class DmaCopyTest {
 
 
     /*
-     * Observer callback is fired when the DMA transfer is complete
+     * Subscriber callback is fired when the DMA transfer is complete
      */
 
     void onComplete(DmaEventType det) {

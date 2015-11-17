@@ -29,6 +29,7 @@ using namespace stm32plus;
  *   STM32F0
  *
  * Tested devices:
+ *   STM32F042F6P6
  *   STM32F051R8T6
  */
 

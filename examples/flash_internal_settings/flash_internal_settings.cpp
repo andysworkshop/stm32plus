@@ -38,6 +38,7 @@ using namespace stm32plus;
  *   STM32F103
  *
  * Tested on devices:
+ *   STM32F042F6P6
  *   STM32F051R8T6
  *   STM32F407VGT6
  *   STM32F103ZET6
@@ -89,6 +90,11 @@ class InternalFlashSettings {
 #if defined(STM32PLUS_F0_51) || defined(STM32PLUS_F0_30)
 
       firstLocation=FLASH_BASE+65536-2048;           // 2Kb at the top of the 64Kb flash
+      memorySize=2048;
+
+#elif defined(STM32PLUS_F0_42)
+
+      firstLocation=FLASH_BASE+32768-2048;           // 2Kb at the top of the 32Kb flash
       memorySize=2048;
 
 #elif defined(STM32PLUS_F407)

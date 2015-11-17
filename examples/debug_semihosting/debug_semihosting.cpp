@@ -53,6 +53,7 @@ using namespace stm32plus;
  *
  * Tested on devices:
  *   STM32F030R8T6
+ *   STM32F042F6P6
  *   STM32F051R8T6
  *   STM32F100RBT6
  *   STM32F407VGT6
