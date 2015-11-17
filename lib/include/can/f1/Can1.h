@@ -1,18 +1,17 @@
 /*
- * Can1.h
- *
- *  Created on: 2015. nov. 10.
- *      Author: elektroman
+ * This file is a part of the open source stm32plus library.
+ * Copyright (c) 2011,2012,2013 Andy Brown <www.andybrown.me.uk>
+ * Please see website for licensing terms.
  */
+
+
 #pragma once
-#include "fwlib/f1/stdperiph/inc/stm32f10x_gpio.h"
+
 
 namespace stm32plus {
 
-
-
-template<class TPinPackage, class... Features>
-struct Can1_Custom : CanPeripheral<TPinPackage,PERIPHERAL_CAN1>,
+  template<class TPinPackage, class... Features>
+  struct Can1_Custom : CanPeripheral<TPinPackage,PERIPHERAL_CAN1>,
 					Features...{
 
    /**
@@ -100,6 +99,5 @@ struct Can1DefaultPinPackage {
 		  GPIO_PinRemapConfig(GPIO_Remap1_CAN1,ENABLE);
 		  	  }
   };
+}
 
-
-}  // namespace stm32plus

@@ -10,7 +10,7 @@
 namespace stm32plus {
 
   /**
-   * ADC event types
+   * CAN event types
    */
 
   enum class CanEventType : uint8_t {
@@ -21,18 +21,18 @@ namespace stm32plus {
     EVENT_BUS_OFF,
     EVENT_ERROR_PASSIVE,
     EVENT_ERROR_WARNING,
-	EVENT_FIFO1_OVR,
-	EVENT_FIFO1_FULL,
-	EVENT_FIFO1_MESSAGE_PENDING,
-	EVENT_FIFO0_OVR,
-	EVENT_FIFO0_FULL,
-	EVENT_FIFO0_MESSAGE_PENDING,
-	EVENT_TRANSMIT_MAILBOX_EMPTY
+    EVENT_FIFO1_OVR,
+    EVENT_FIFO1_FULL,
+    EVENT_FIFO1_MESSAGE_PENDING,
+    EVENT_FIFO0_OVR,
+    EVENT_FIFO0_FULL,
+    EVENT_FIFO0_MESSAGE_PENDING,
+    EVENT_TRANSMIT_MAILBOX_EMPTY
   };
 
 
   /**
-   * The signature for ADC events: void myHandler(UsartEventType uet,uint8_t adcNumber);
+   * The signature for CAN events: void myHandler(CanEventType cet,uint8_t canNumber);
    */
 
   DECLARE_EVENT_SIGNATURE(CanInterrupt,void(CanEventType));

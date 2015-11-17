@@ -13,8 +13,10 @@ namespace stm32plus {
   /**
    * Base class for CAN features
    */
-	class CanFeatureBase {
-		protected:
+
+  class CanFeatureBase {
+
+    protected:
 			Can& _can;
 
 		public:
@@ -22,13 +24,22 @@ namespace stm32plus {
 			operator Can&();
 	};
 
+
+  /**
+   * Constructor
+   * @param can reference to the CAN peripheral
+   */
+
 	inline CanFeatureBase::CanFeatureBase(Can& can)
 		: _can(can){
-
 	}
 
-	inline CanFeatureBase::operator stm32plus::Can &(){
-	return _can;
-	}
 
-} // namespace stm32plus
+	/**
+	 * operator to return the CAN peripheral reference
+	 */
+
+	inline CanFeatureBase::operator stm32plus::Can &() {
+	  return _can;
+	}
+}

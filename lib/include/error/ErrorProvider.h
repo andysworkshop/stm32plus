@@ -109,7 +109,8 @@ namespace stm32plus {
         ERROR_PROVIDER_USB_DEVICE                                 = 70,
         ERROR_PROVIDER_USB_IN_ENDPOINT                            = 71,
         ERROR_PROVIDER_INTERNAL_FLASH                             = 72,
-        ERROR_PROVIDER_INTERNAL_FLASH_SETTINGS                    = 73
+        ERROR_PROVIDER_INTERNAL_FLASH_SETTINGS                    = 73,
+        ERROR_PROVIDER_CAN                                        = 74
       };
 
     public:
