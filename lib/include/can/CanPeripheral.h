@@ -125,7 +125,6 @@ namespace stm32plus {
 	  // clocks on first before any features get initialised
 
 	  ClockControl<TPeripheralName>::On();
-
 	  CanPinInitialiser<TPinPackage,TPeripheralName>::initialise();
 
 	  // initialise the peripheral

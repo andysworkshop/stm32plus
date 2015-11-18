@@ -32,6 +32,10 @@ namespace stm32plus {
 
   class Can1InterruptFeature : public CanEventSource,
                                public CanFeatureBase {
+    private:
+      typedef void (*FPTR)();         // this trick will force the linker to include the ISR
+      static FPTR _forceLinkage;
+
     protected:
       uint16_t _interruptMask;
       uint8_t _nvicPriority;
@@ -58,7 +62,7 @@ namespace stm32plus {
    * Constructor
    */
 
-  inline Can1InterruptFeature::CanInterruptFeature(Can& can) :
+  inline Can1InterruptFeature::Can1InterruptFeature(Can& can) :
       CanFeatureBase(can) {
 
     _interruptMask=0;
@@ -98,12 +102,12 @@ namespace stm32plus {
   inline void Can1InterruptFeature::enableInterrupts(uint16_t interruptMask) {
 
     _interruptMask|=interruptMask;
-
     _forceLinkage=&USB_HP_CAN1_TX_IRQHandler;
-    Nvic::configureIrq(USB_HP_CAN1_TX_IRQn,ENABLE,priority,subPriority);
-    Nvic::configureIrq(USB_LP_CAN1_RX0_IRQn,ENABLE,priority,subPriority);
-    Nvic::configureIrq(CAN1_RX1_IRQn,ENABLE,priority,subPriority);
-    Nvic::configureIrq(CAN1_SCE_IRQn,ENABLE,priority,subPriority);
+
+    Nvic::configureIrq(USB_HP_CAN1_TX_IRQn,ENABLE,_nvicPriority,_nvicSubPriority);
+    Nvic::configureIrq(USB_LP_CAN1_RX0_IRQn,ENABLE,_nvicPriority,_nvicSubPriority);
+    Nvic::configureIrq(CAN1_RX1_IRQn,ENABLE,_nvicPriority,_nvicSubPriority);
+    Nvic::configureIrq(CAN1_SCE_IRQn,ENABLE,_nvicPriority,_nvicSubPriority);
 
     CAN_ITConfig(_can,interruptMask,ENABLE);
   }

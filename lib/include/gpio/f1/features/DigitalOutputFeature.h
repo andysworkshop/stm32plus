@@ -29,8 +29,6 @@ namespace stm32plus {
            Gpio::GpioOutputType TOutputType=Gpio::PUSH_PULL,
            Gpio::GpioPullUpDownType TPullUpDownType=Gpio::PUPD_NONE,              // not applicable to the F1
            uint8_t... TPins>
-
-
   class DigitalOutputFeature : public Gpio {
 
     public:

@@ -17,13 +17,14 @@ namespace stm32plus {
 
 	  /**
 	   * Constructor
-	   * @param can
+	   * @param can reference to the CAN peripheral
 	   */
 
     CanLoopbackModeFeature(Can& can)
 	    : CanFeatureBase(can) {
-	    ((CAN_InitTypeDef *)can)->CAN_Mode |= CAN_Mode_LoopBack;
+	    ((CAN_InitTypeDef *)can)->CAN_Mode|=CAN_Mode_LoopBack;
 	  }
+
 
 	  /**
 	   * Post CAN_Init() initialisation

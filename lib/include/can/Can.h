@@ -29,11 +29,11 @@ namespace stm32plus {
       Can(CAN_TypeDef *peripheralAddress);
 
     public:
-      void sleep();
-      void wakeup();
+      void sleep() const;
+      void wakeup() const;
 
-      bool send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t *data);
-      bool send(CanTxMsg& Msg);
+      bool send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t *data) const;
+      bool send(CanTxMsg& msg) const;
 
       operator CAN_TypeDef *();
       operator CAN_InitTypeDef *();
@@ -54,7 +54,7 @@ namespace stm32plus {
    * Go to sleep
    */
 
-  inline void Can::enablePeripheral() const {
+  inline void Can::sleep() const {
     CAN_Sleep(_peripheralAddress);
   }
 
@@ -98,7 +98,7 @@ namespace stm32plus {
    * @return true if it worked
    */
 
-  inline bool Can::send(const uint32_t ID,const uint8_t IDE,const uint8_t RTR,const uint8_t DLC,uint8_t* data) {
+  inline bool Can::send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t* data) const {
 
     CanTxMsg msg;
     uint8_t i;
@@ -121,7 +121,7 @@ namespace stm32plus {
    * @return true if it worked
    */
 
-  inline bool Can::send(CanTxMsg& Msg) {
+  inline bool Can::send(CanTxMsg& msg) const {
 
     if(CAN_Transmit(_peripheralAddress,&msg)==CAN_TxStatus_NoMailBox)
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_CAN,E_TX_NO_MAILBOX,CAN_TxStatus_NoMailBox);

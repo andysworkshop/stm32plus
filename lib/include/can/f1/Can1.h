@@ -8,64 +8,52 @@
 #pragma once
 
 
+// ensure the MCU series is correct
+#if !defined(STM32PLUS_F1)
+#error This class can only be used with the STM32F1 series
+#endif
+
+
 namespace stm32plus {
 
-  template<class TPinPackage, class... Features>
-  struct Can1_Custom : CanPeripheral<TPinPackage,PERIPHERAL_CAN1>,
-					Features...{
 
-   /**
-	 * Constructor
-	 * @param params Initialisation parameters
-	 */
-	Can1_Custom(const typename CanPeripheral<TPinPackage,PERIPHERAL_CAN1>::Parameters& params)
-			: CanPeripheral<TPinPackage,PERIPHERAL_CAN1>(params),
-			  Features(static_cast<Can&>(*this))...{
-		}
-	};
+  /**
+   * Default pin package:
+   * (TX,RX) = (PA12,PA11)
+   */
+
+  struct Can1DefaultPinPackage {
+    enum{
+      Port_TX=GPIOA_BASE,
+      Port_RX=GPIOA_BASE,
+
+      Pin_TX=GPIO_Pin_12,
+      Pin_RX=GPIO_Pin_11
+    };
+  };
 
 
-
-/**
- * Default pin package:
- * (TX,RX) = (PA12,PA11)
- */
-
-struct Can1DefaultPinPackage {
-	enum{
-		Port_TX = GPIOA_BASE,
-		Port_RX=GPIOA_BASE,
-
-		Pin_TX=GPIO_Pin_12,
-		Pin_RX=GPIO_Pin_11
-	};
-};
-
-/**
-   * Convenience class to match the F1 pin for pin.
+  /**
+   * The default, non-remapped pin package
    */
 
   template<class... Features>
   struct Can1 : CanPeripheral<Can1DefaultPinPackage,PERIPHERAL_CAN1>,
   	  	  	  	  Features... {
-	   /**
-	     * Constructor
-	     * @param params Initialisation parameters
-	     */
+    /**
+     * Constructor
+     * @param params Initialisation parameters
+     */
 
 	  Can1(const Parameters& params)
-			  : CanPeripheral<Can1DefaultPinPackage,PERIPHERAL_CAN1>(params),
-				Features(static_cast<Can&>(*this))... {
+	    : CanPeripheral<Can1DefaultPinPackage,PERIPHERAL_CAN1>(params),
+	      Features(static_cast<Can&>(*this))... {
 
-		     initialisePeripheral();
-
-		      RecursiveVoidInit<Can1,Features...>::tinit(this);
-		  	  }
-
-
-
-
+	    initialisePeripheral();
+      RecursiveVoidInit<Can1,Features...>::tinit(this);
+	  }
   };
+
 
   /**
    * Remap #1:
@@ -82,22 +70,28 @@ struct Can1DefaultPinPackage {
   	};
   };
 
+
   /**
-   * Convenience class to match the F1 pin for pin.
+   * The remapped version of CAN1
    */
+
   template<class... Features>
   struct Can1_Remap1 : CanPeripheral<Can1Remap1PinPackage,PERIPHERAL_CAN1>,
   	  	  	  	  Features...{
-	   /**
-	     * Constructor
-	     * @param params Initialisation parameters
-	     */
+    /**
+     * Constructor
+     * @param params Initialisation parameters
+     */
 
 	  Can1_Remap1(const Parameters& params)
-			  : CanPeripheral<Can1Remap1PinPackage,PERIPHERAL_CAN1>(params),
-				Features(static_cast<Can&>(*this))...{
-		  GPIO_PinRemapConfig(GPIO_Remap1_CAN1,ENABLE);
-		  	  }
+	      : CanPeripheral<Can1Remap1PinPackage,PERIPHERAL_CAN1>(params),
+	        Features(static_cast<Can&>(*this))...{
+
+	    GPIO_PinRemapConfig(GPIO_Remap1_CAN1,ENABLE);
+
+	    initialisePeripheral();
+      RecursiveVoidInit<Can1_Remap1,Features...>::tinit(this);
+		}
   };
 }
 
