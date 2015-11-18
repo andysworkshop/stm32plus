@@ -53,17 +53,6 @@ namespace stm32plus {
         return (GPIO_TypeDef *)TPortAddress;
       }
 
-
-      /**
-       * Release PA15,PB3,PB4
-       */
-
-      void releaseJtagPinsForGpio() {
-        RCC_APB2PeriphClockCmd(RCC_APB2ENR_AFIOEN,ENABLE);
-        GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
-      }
-
-
     public:
 
       /**
