@@ -13,16 +13,18 @@ namespace stm32plus {
    * Feature class to enable silent mode
    */
 
-  struct CanLoopbackModeFeature : public CanFeatureBase {
+  struct CanLoopbackModeFeature : CanFeatureBase {
 
 	  /**
 	   * Constructor
-	   * @param can
+	   * @param can reference to the CAN peripheral
 	   */
-	  CanLoopbackModeFeature(Can& can)
-	  : CanFeatureBase(can) {
-			   ((CAN_InitTypeDef *)can)->CAN_Mode |= CAN_Mode_LoopBack;
+
+    CanLoopbackModeFeature(Can& can)
+	    : CanFeatureBase(can) {
+	    ((CAN_InitTypeDef *)can)->CAN_Mode|=CAN_Mode_LoopBack;
 	  }
+
 
 	  /**
 	   * Post CAN_Init() initialisation
@@ -30,6 +32,5 @@ namespace stm32plus {
 
 	  void initialise() {
 	  }
-
   };
 }

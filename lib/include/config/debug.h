@@ -20,16 +20,14 @@
 #include "config/usart.h"
 #include "config/stream.h"
 
-
 // include the features
 
-//If the MCU is supported (on the F4 and F1)
+// If the MCU is supported (on the F4 and F1)
 
 #if defined(STM32PLUS_F4) || defined(STM32PLUS_F1)
   #include "debug/heapMonitor.h"
   #include "debug/usartHeapMonitor.h"
 #endif
-
 
 
 // SemiHosting is always possible

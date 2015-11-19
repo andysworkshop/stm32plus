@@ -29,6 +29,7 @@ namespace stm32plus {
 
       void setPinHandler(uint8_t index,Gpio *pinHandler);
       GPIO_TypeDef *getPeripheralAddress() const;
+      static void releaseJtagPinsForGpio();
   };
 
 
@@ -65,5 +66,15 @@ namespace stm32plus {
 
   inline GPIO_TypeDef *GpioPortBase::getPeripheralAddress() const {
     return _peripheralAddress;
+  }
+
+
+  /**
+   * Release PA15,PB3,PB4
+   */
+
+  inline void GpioPortBase::releaseJtagPinsForGpio() {
+    RCC_APB2PeriphClockCmd(RCC_APB2ENR_AFIOEN,ENABLE);
+    GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
   }
 }

@@ -49,13 +49,9 @@ namespace stm32plus {
        */
 
       GPIO_TypeDef *initClock() {
-
         RCC_APB2PeriphClockCmd(gpioHelper::getPeripheral<TPortAddress>(),ENABLE);
-        RCC_APB2PeriphClockCmd(RCC_APB2ENR_AFIOEN,ENABLE);  // Need for some pins on PortB
-	GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable, ENABLE);  // Need for some pins on PortB
         return (GPIO_TypeDef *)TPortAddress;
       }
-
 
     public:
 

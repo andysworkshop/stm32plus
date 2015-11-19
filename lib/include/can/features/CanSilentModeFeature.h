@@ -9,27 +9,29 @@
 
 namespace stm32plus {
 
+
   /**
    * Feature class to enable silent mode
    */
 
-  struct CanSilentModeFeature : public CanFeatureBase {
+  struct CanSilentModeFeature : CanFeatureBase {
 
-	  /**
+    /**
 	   * Constructor
-	   * @param can
+	   * @param can reference to the CAN peripheral
 	   */
-	  CanSilentModeFeature(Can& can)
-	  : CanFeatureBase(can) {
-			   ((CAN_InitTypeDef *)can)->CAN_Mode |= CAN_Mode_Silent;
+
+    CanSilentModeFeature(Can& can)
+	    : CanFeatureBase(can) {
+      ((CAN_InitTypeDef *)can)->CAN_Mode |= CAN_Mode_Silent;
 	  }
 
-	  /**
+
+    /**
 	   * Post CAN_Init() initialisation
 	   */
 
 	  void initialise() {
 	  }
-
   };
 }
