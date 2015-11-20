@@ -6,6 +6,11 @@
 
 #pragma once
 
+// ensure the MCU series is correct
+#ifndef STM32PLUS_F0
+#error This class can only be used with the STM32F0 series
+#endif
+
 
 namespace stm32plus {
 
@@ -52,6 +57,9 @@ namespace stm32plus {
     protected:
       SpiPeripheral(const Parameters& params);
       ~SpiPeripheral();
+
+    public:
+      void drainFifo() const;
   };
 
 
@@ -75,7 +83,7 @@ namespace stm32plus {
 
     // and next the GPIO pins, also before any features get initialised
 
-    SpiPinInitialiser<TPinPackage,TPeripheralName>::initialise(params.spi_mode);
+    SpiPinInitialiser<TPinPackage,TPeripheralName>::initialise(params.spi_mode,params.spi_direction);
 
     // initialise the peripheral
 
@@ -97,6 +105,11 @@ namespace stm32plus {
 
     setNss(true);
 
+    // set a default quarter-full threshold for the FIFO to be compatible with the
+    // other families - override with the SpiFifoNotifyFeature.
+
+    SPI_RxFIFOThresholdConfig(_peripheralAddress,SPI_RxFIFOThreshold_QF);
+
     // enable SPI
 
     enablePeripheral();
@@ -117,5 +130,16 @@ namespace stm32plus {
     // clocks off
 
     ClockControl<TPeripheralName>::Off();
+  }
+
+
+  /**
+   * Drain any pending data from the FIFO
+   */
+
+  template<class TPinPackage,PeripheralName TPeripheralName>
+  inline void SpiPeripheral<TPinPackage,TPeripheralName>::drainFifo() const {
+    while(SPI_GetReceptionFIFOStatus(_peripheralAddress)!=SPI_ReceptionFIFOStatus_Empty)
+      SPI_ReceiveData8(_peripheralAddress);
   }
 }
