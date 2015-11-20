@@ -10,73 +10,105 @@
 
 #include "config/can.h"
 
-
 using namespace stm32plus;
-
 
 // static initialisers for the hack that forces the IRQ handlers to be linked
 
-Can1InterruptFeature::FPTR Can1InterruptFeature::_forceLinkage=nullptr;
-CanEventSource *Can1InterruptFeature:: _canInstance=nullptr;
+Can1InterruptFeature::FPTR Can1InterruptFeature::_forceLinkage = nullptr;
+CanEventSource *Can1InterruptFeature::_canInstance = nullptr;
 
-
-extern "C" {
+extern "C"
+{
 
 #if defined(USE_CAN1_INTERRUPT)
 
+void __attribute__ ((interrupt("IRQ"))) USB_HP_CAN1_TX_IRQHandler(void)
+{
 
-  void __attribute__ ((interrupt("IRQ"))) USB_HP_CAN1_TX_IRQHandler(void) {
+    if (CAN_GetITStatus(CAN1, CAN_IT_TME) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_TRANSMIT_MAILBOX_EMPTY);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_TME);
+        __DSB(); // prevent erroneous recall of this handler due to delayed memory write
+    }
+}
 
-		if(CAN_GetITStatus(CAN1,CAN_IT_TME)!= RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_TRANSMIT_MAILBOX_EMPTY);
+void __attribute__ ((interrupt("IRQ"))) USB_LP_CAN1_RX0_IRQHandler(void)
+{
 
-		__DSB();      // prevent erroneous recall of this handler due to delayed memory write
-	}
+    if (CAN_GetITStatus(CAN1, CAN_IT_FMP0) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO0_MESSAGE_PENDING);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_FF0) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO0_FULL);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FF0);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_FOV0) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO0_OVR);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FOV0);
+    }
+    __DSB(); // prevent erroneous recall of this handler due to delayed memory write
+}
 
+void __attribute__ ((interrupt("IRQ"))) CAN1_RX1_IRQHandler(void)
+{
 
-	void __attribute__ ((interrupt("IRQ"))) USB_LP_CAN1_RX0_IRQHandler(void) {
+    if (CAN_GetITStatus(CAN1, CAN_IT_FMP1) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO1_MESSAGE_PENDING);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_FF1) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO1_FULL);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FF1);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_FOV1) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO1_OVR);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_FOV1);
+    }
+    __DSB(); // prevent erroneous recall of this handler due to delayed memory write
+}
 
-	  if(CAN_GetITStatus(CAN1,CAN_IT_FMP0)!=RESET)
-	    Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO0_MESSAGE_PENDING);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_FF0)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO0_FULL);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_FOV0)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO0_OVR);
+void __attribute__ ((interrupt("IRQ"))) CAN1_SCE_IRQHandler(void)
+{
 
-	  __DSB();      // prevent erroneous recall of this handler due to delayed memory write
-	}
+    if (CAN_GetITStatus(CAN1, CAN_IT_EWG) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_ERROR_WARNING);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_EWG);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_EPV) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_ERROR_PASSIVE);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_EPV);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_BOF) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_BUS_OFF);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_BOF);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_LEC) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_LAST_ERROR_CODE);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_LEC);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_WKU) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_WAKEUP);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_WKU);
+    }
+    else if (CAN_GetITStatus(CAN1, CAN_IT_SLK) != RESET)
+    {
+        Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_SLEEP);
+        CAN_ClearITPendingBit(CAN1, CAN_IT_SLK);
+    }
 
-
-	void __attribute__ ((interrupt("IRQ"))) CAN1_RX1_IRQHandler(void) {
-
-	  if(CAN_GetITStatus(CAN1,CAN_IT_FMP1)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO1_MESSAGE_PENDING);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_FF1)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO1_FULL);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_FOV1)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_FIFO1_OVR);
-
-	  __DSB();      // prevent erroneous recall of this handler due to delayed memory write
-	}
-
-
-	void __attribute__ ((interrupt("IRQ"))) CAN1_SCE_IRQHandler(void) {
-
-	  if(CAN_GetITStatus(CAN1,CAN_IT_EWG)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_ERROR_WARNING);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_EPV)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_ERROR_PASSIVE);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_BOF)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_BUS_OFF);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_LEC)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_LAST_ERROR_CODE);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_WKU)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_WAKEUP);
-		else if(CAN_GetITStatus(CAN1,CAN_IT_SLK)!=RESET)
-			Can1InterruptFeature::_canInstance->CanInterruptEventSender.raiseEvent(CanEventType::EVENT_SLEEP);
-
-	  __DSB();      // prevent erroneous recall of this handler due to delayed memory write
-	}
+    __DSB(); // prevent erroneous recall of this handler due to delayed memory write
+}
 
 #endif
 }
