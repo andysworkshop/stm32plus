@@ -7,8 +7,8 @@
 #pragma once
 
 // ensure the MCU series is correct
-#if !defined(STM32PLUS_F1_HD)
-#error This class can only be used with the STM32F1 HD series
+#if !defined(STM32PLUS_F1_HD) || defined(STM32PLUS_F1_MD)
+#error This class can only be used with the STM32F1 HD and MD series
 #endif
 
 
