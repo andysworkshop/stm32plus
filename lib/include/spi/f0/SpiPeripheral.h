@@ -110,9 +110,10 @@ namespace stm32plus {
 
     SPI_RxFIFOThresholdConfig(_peripheralAddress,SPI_RxFIFOThreshold_QF);
 
-    // enable SPI
+    // enable SPI if we're doing 4-wire full duplex in 3-wire mode enable/disable is manual
 
-    enablePeripheral();
+    if(params.spi_direction==SPI_Direction_2Lines_FullDuplex)
+      enablePeripheral();
   }
 
 
