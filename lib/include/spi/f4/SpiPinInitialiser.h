@@ -21,7 +21,7 @@ namespace stm32plus {
   template<class TPinPackage,PeripheralName TPeripheralName>
   class SpiPinInitialiser {
     public:
-      static void initialise(uint16_t mode);
+      static void initialise(uint16_t mode,uint16_t direction);
   };
 
 
@@ -30,7 +30,7 @@ namespace stm32plus {
    */
 
   template<class TPinPackage,PeripheralName TPeripheralName>
-  inline void SpiPinInitialiser<TPinPackage,TPeripheralName>::initialise(uint16_t mode) {
+  inline void SpiPinInitialiser<TPinPackage,TPeripheralName>::initialise(uint16_t mode,uint16_t direction) {
 
     GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_SCK,
                                    TPinPackage::Pin_SCK,
@@ -40,21 +40,27 @@ namespace stm32plus {
                                    Gpio::PUSH_PULL,
                                    GpioAlternateFunctionMapper<TPeripheralName,TPinPackage::Port_SCK,TPinPackage::Pin_SCK>::GPIO_AF);
 
-    GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_MOSI,
-                                   TPinPackage::Pin_MOSI,
-                                   Gpio::ALTERNATE_FUNCTION,
-                                   (GPIOSpeed_TypeDef)PeripheralTraits<TPeripheralName>::GPIO_SPEED,
-                                   Gpio::PUPD_DOWN,
-                                   Gpio::PUSH_PULL,
-                                   GpioAlternateFunctionMapper<TPeripheralName,TPinPackage::Port_MOSI,TPinPackage::Pin_MOSI>::GPIO_AF);
+    // in uni-directional mode slave MOSI is free
 
-    GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_MISO,
-                                   TPinPackage::Pin_MISO,
-                                   Gpio::ALTERNATE_FUNCTION,
-                                   (GPIOSpeed_TypeDef)PeripheralTraits<TPeripheralName>::GPIO_SPEED,
-                                   Gpio::PUPD_DOWN,
-                                   Gpio::PUSH_PULL,
-                                   GpioAlternateFunctionMapper<TPeripheralName,TPinPackage::Port_MISO,TPinPackage::Pin_MISO>::GPIO_AF);
+    if(mode==SPI_Mode_Master || direction==SPI_Direction_2Lines_FullDuplex)
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_MOSI,
+                                     TPinPackage::Pin_MOSI,
+                                     Gpio::ALTERNATE_FUNCTION,
+                                     (GPIOSpeed_TypeDef)PeripheralTraits<TPeripheralName>::GPIO_SPEED,
+                                     Gpio::PUPD_DOWN,
+                                     Gpio::PUSH_PULL,
+                                     GpioAlternateFunctionMapper<TPeripheralName,TPinPackage::Port_MOSI,TPinPackage::Pin_MOSI>::GPIO_AF);
+
+    // in uni-directional mode master MISO is free
+
+    if(mode==SPI_Mode_Slave || direction==SPI_Direction_2Lines_FullDuplex)
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)TPinPackage::Port_MISO,
+                                     TPinPackage::Pin_MISO,
+                                     Gpio::ALTERNATE_FUNCTION,
+                                     (GPIOSpeed_TypeDef)PeripheralTraits<TPeripheralName>::GPIO_SPEED,
+                                     Gpio::PUPD_DOWN,
+                                     Gpio::PUSH_PULL,
+                                     GpioAlternateFunctionMapper<TPeripheralName,TPinPackage::Port_MISO,TPinPackage::Pin_MISO>::GPIO_AF);
 
     if(mode==SPI_Mode_Master) {
 

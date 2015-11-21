@@ -53,6 +53,8 @@ namespace stm32plus {
       bool send(const uint16_t *dataToSend,uint32_t numHalfWords,uint16_t *dataReceived=nullptr) const;
 
       void waitForIdle() const;
+      void set1WireReadMode() const;
+      void set1WireWriteMode() const;
 
       void setNss(bool value) const;
       operator SPI_TypeDef *() const;
@@ -385,5 +387,23 @@ namespace stm32plus {
 
   inline void Spi::waitForIdle() const {
     while(SPI_I2S_GetFlagStatus(_peripheralAddress,SPI_I2S_FLAG_BSY)==SET);
+  }
+
+
+  /**
+   * Set read mode when in bi-directional 1-wire mode
+   */
+
+  inline void Spi::set1WireReadMode() const {
+    SPI_BiDirectionalLineConfig(_peripheralAddress,SPI_Direction_Rx);
+  }
+
+
+  /**
+   * Set write mode when in bi-directional 1-wire mode
+   */
+
+  inline void Spi::set1WireWriteMode() const {
+    SPI_BiDirectionalLineConfig(_peripheralAddress,SPI_Direction_Tx);
   }
 }
