@@ -1,0 +1,5 @@
+# This example is not compatible with all STM32 MCUs
+# The compatible MCUs are listed below, one per line.
+
+f1hd
+f1md
