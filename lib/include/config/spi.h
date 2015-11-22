@@ -49,7 +49,16 @@
 
 #include "spi/SpiEventSource.h"
 #include "spi/Spi.h"
-#include "spi/SpiPeripheral.h"
+
+// device-specific includes for the peripheral
+
+#if defined(STM32PLUS_F0)
+  #include "spi/f0/SpiPeripheral.h"
+#elif defined(STM32PLUS_F1)
+  #include "spi/f1/SpiPeripheral.h"
+#elif defined(STM32PLUS_F4)
+  #include "spi/f4/SpiPeripheral.h"
+#endif
 
 // generic feature includes
 
