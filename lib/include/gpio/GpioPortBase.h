@@ -74,6 +74,7 @@ namespace stm32plus {
    */
 
   inline void GpioPortBase::releaseJtagPinsForGpio() {
+    RCC_APB2PeriphClockCmd(RCC_APB2Periph_GPIOB,ENABLE); // First, power up the port
     RCC_APB2PeriphClockCmd(RCC_APB2ENR_AFIOEN,ENABLE);
     GPIO_PinRemapConfig(GPIO_Remap_SWJ_JTAGDisable,ENABLE);
   }
