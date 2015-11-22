@@ -16,13 +16,13 @@ using namespace stm32plus;
  * Timer demo that illustrates how to use a DMA channel to automatically reload
  * the PWM duty cycle.
  *
- * In this example timer 1 is configured to output a PWM signal on channel 1.
+ * In this example timer 1 is configured to output a PWM signal on channel 2.
  * The timer's DMA channel for update events is used to automatically reload the
  * PWM duty cycle from a sequence that we supply each time the timer gets an
  * update event.
  *
- * The PWM signal is output on PA[8]. Connect this to a LED to see the fade feature.
- * On the F1VL and F4 discovery boards this means connecting PA8 to PC8
+ * The PWM signal is output on PA[9]. Connect this to a LED to see the fade feature.
+ * On the F1VL and F4 discovery boards this means connecting PA9 to PC8
  * or PD13, respectively. The F0 discovery board is also PC8.
  *
  * Compatible MCU:
@@ -53,23 +53,23 @@ class TimerDmaPwmTest {
 
       Timer1<
         Timer1InternalClockFeature,       // the timer bus is APB2
-        TimerChannel1Feature<>,           // we're going to use channel 1
+        TimerChannel2Feature<>,           // we're going to use channel 2
         Timer1GpioFeature<                // we want to output something to GPIO
           TIMER_REMAP_NONE,               // the GPIO output will not be remapped
-          TIM1_CH1_OUT                    // we will output channel 1 to GPIO
+          TIM1_CH2_OUT                    // we will output channel 2 to GPIO
         >
       > timer;
 
       /*
        * Create an instance of the DMA channel that is connected to
        * Timer1's update event and add in a PWM fader feature for
-       * Timer1's channel 1. This will be a circular DMA configuration, i.e.
+       * Timer1's channel 2. This will be a circular DMA configuration, i.e.
        * it will automatically run itself over and over again until we
        * stop it.
        */
 
       Timer1UpdateDmaChannel<
-        Timer1Channel1UpdatePwmFadeTimerDmaFeature<DMA_Priority_High,DMA_Mode_Circular>
+        Timer1Channel2UpdatePwmFadeTimerDmaFeature<DMA_Priority_High,DMA_Mode_Circular>
       > dma;
 
       // create a sequence of 0..100 (101 values)
