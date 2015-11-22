@@ -62,13 +62,15 @@ namespace stm32plus {
     uint8_t getTemperature(uint16_t vsense) const {
 
       uint32_t value;
+      uint32_t v25= TV25*SCALER;
 
-      value=(vsense*3300) & 0xfff;
+      uint16_t slope =TAvgSlope;
+      value=(vsense*3300) / 0xfff;
 
       // scale up the sensed value by 1000
 
       value=value*SCALER;
-      value=((value-TV25)/TAvgSlope)+(25*SCALER);
+      value=((v25-value)/slope)*SCALER+(25*SCALER);
 
       return value/SCALER;
     }

@@ -53,7 +53,6 @@ namespace stm32plus {
         return (GPIO_TypeDef *)TPortAddress;
       }
 
-
     public:
 
       /**

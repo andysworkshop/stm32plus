@@ -88,6 +88,9 @@ namespace stm32plus {
 
       static GpioModeType getMode(GPIO_TypeDef *peripheralAddress,uint16_t pin);
       GpioModeType getMode() const;
+
+      static void setMode(GPIO_TypeDef *peripheralAddress,uint16_t pin, Gpio::GpioModeType mode, Gpio::GpioOutputType outputtype, Gpio::GpioPullUpDownType pullupdown);
+      void setMode(Gpio::GpioModeType mode, Gpio::GpioOutputType outputtype, Gpio::GpioPullUpDownType pullupdown);
   };
 
 
@@ -351,4 +354,65 @@ namespace stm32plus {
   inline Gpio::GpioModeType Gpio::getMode() const {
     return getMode(_peripheralAddress,_selectedPin);
   }
+
+
+  inline void Gpio::setMode(GPIO_TypeDef *peripheralAddress,uint16_t pin, Gpio::GpioModeType mode=Gpio::INPUT, Gpio::GpioOutputType outputtype=Gpio::PUSH_PULL, Gpio::GpioPullUpDownType pullupdown=Gpio::PUPD_UP)
+  {
+//TODO
+      uint8_t pinIndex;
+
+      uint8_t modebits;
+
+      pinIndex=bithacks::firstSetBit(pin);
+      // two registers on the F1. CRL for pins 0..7 and CRH for pins 8..15
+      if(mode == Gpio::OUTPUT)
+      {
+          if(outputtype == Gpio::PUSH_PULL)
+              modebits = 0x03;
+          else
+              modebits = 0x07;
+      }
+      else if (mode == Gpio::INPUT)
+      {
+            if(pullupdown == Gpio::PUPD_NONE)
+               modebits = 0x04;
+            else if (pullupdown == Gpio::PUPD_UP)
+               modebits = 0x18;
+            else if (pullupdown == Gpio::PUPD_DOWN)
+               modebits = 0x08;
+      }
+      else if(mode == Gpio::ANALOG)
+      {
+              modebits = 0x00;
+      }
+      else if(mode == Gpio::ALTERNATE_FUNCTION)
+      {
+          if(outputtype == Gpio::PUSH_PULL)
+             modebits = 0x0B;
+          else
+             modebits = 0x0F;
+      }
+
+      if((pinIndex)<8)
+      {
+        peripheralAddress->CRL &= ~(0x0F<<(pinIndex*4));
+        peripheralAddress->CRL |= (modebits & 0x0F) << (pinIndex*4);
+      }
+      else
+      {
+        peripheralAddress->CRL &= ~(0x0F<<((pinIndex-8)*4));
+        peripheralAddress->CRH |= (modebits & 0x0F) << ((pinIndex-8)*4);
+      }
+      if (modebits & 0x10)
+          peripheralAddress->ODR |= (1 << pinIndex);
+      else
+          peripheralAddress->ODR &= ~(1 << pinIndex);
+     }
+
+  inline void Gpio::setMode( Gpio::GpioModeType mode=Gpio::INPUT, Gpio::GpioOutputType outputtype=Gpio::OPEN_DRAIN, Gpio::GpioPullUpDownType pullupdown=Gpio::PUPD_UP)
+  {
+    setMode(_peripheralAddress,_selectedPin,mode,outputtype,pullupdown);
+  }
+
+
 }

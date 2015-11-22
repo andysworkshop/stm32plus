@@ -323,4 +323,13 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_MAC> MacPeripheralTraits;
+
+  template<>
+      struct PeripheralTraits<PERIPHERAL_CAN1> {
+        enum {
+          GPIO_SPEED = GPIO_Speed_50MHz,
+          PERIPHERAL_BASE = CAN1_BASE,
+        };
+      };
+      typedef PeripheralTraits<PERIPHERAL_CAN1> Can1PeripheralTraits;
 }
