@@ -32,7 +32,14 @@ namespace stm32plus {
       void sleep() const;
       void wakeup() const;
 
-      bool send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t *data) const;
+      //Send remote frame
+      bool send(uint16_t StdId,uint8_t DLC) const;
+      bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC) const;
+
+      //Send data frame
+      bool send(uint16_t StdId,uint8_t DLC,const uint8_t *data) const;
+      bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const uint8_t *data) const;
+
       bool send(CanTxMsg& msg) const;
 
       bool readyToReceive(uint8_t fifo) const;
@@ -93,23 +100,91 @@ namespace stm32plus {
 
   /**
    * Send a message
-   * @param ID
-   * @param IDE
-   * @param RTR
+   * @param StdId
+   * @param DLC
+   * @return true if it worked
+   */
+
+  inline bool Can::send(uint16_t StdId,uint8_t DLC) const {
+
+    CanTxMsg msg;
+
+    msg.IDE=CAN_Id_Standard;
+    msg.RTR=CAN_RTR_Remote;
+    msg.DLC=DLC;
+    msg.StdId=StdId;
+
+    return send(msg);
+  }
+
+  /**
+   * Send a message
+   * @param StdId
+   * @param ExtId
+   * @param DLC
+   * @return true if it worked
+   */
+
+  inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC) const {
+
+    CanTxMsg msg;
+
+    msg.IDE=CAN_Id_Extended;
+    msg.RTR=CAN_RTR_Remote;
+    msg.DLC=DLC;
+
+    msg.StdId=StdId;
+    msg.ExtId=ExtId;
+
+    return send(msg);
+  }
+
+
+  /**
+   * Send a message
+   * @param StdId
    * @param DLC
    * @param data
    * @return true if it worked
    */
 
-  inline bool Can::send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t* data) const {
+  inline bool Can::send(uint16_t StdId,uint8_t DLC,const uint8_t *data) const {
 
     CanTxMsg msg;
     uint8_t i;
 
-    msg.IDE=IDE;
-    msg.RTR=RTR;
+    msg.IDE=CAN_Id_Standard;
+    msg.RTR=CAN_RTR_Data;
     msg.DLC=DLC;
-    msg.ExtId=ID;
+    msg.StdId=StdId;
+
+    for(i=0;i<DLC;i++)
+      msg.Data[i]=data[i];
+
+    return send(msg);
+  }
+
+
+  /**
+   * Send a message
+   * @param StdId
+   * @param ExtId
+   * @param DLC
+   * @param data
+   * @return true if it worked
+   */
+
+  inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const uint8_t *data) const {
+
+    CanTxMsg msg;
+    uint8_t i;
+
+    msg.IDE=CAN_Id_Extended;
+    msg.RTR=CAN_RTR_Data;
+    msg.DLC=DLC;
+
+    msg.StdId=StdId;
+    msg.ExtId=ExtId;
 
     for(i=0;i<DLC;i++)
       msg.Data[i]=data[i];

@@ -90,7 +90,7 @@ class CanMasterSendReceive {
 
         // send the message
 
-        can.send(0x100,CAN_Id_Extended,CAN_RTR_Data,sizeof(sendData),sendData);
+        can.send(0x100,sizeof(sendData),sendData);
 
         // wait for it to arrive for a maximum of 5 seconds
 
