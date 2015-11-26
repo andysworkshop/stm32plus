@@ -33,12 +33,12 @@ namespace stm32plus {
       void wakeup() const;
 
       //Send remote frame
-      bool send(uint16_t StdId,uint8_t DLC) const;
-      bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC) const;
+      bool sendRemoteFrame(uint16_t StdId,uint8_t DLC) const;
+      bool sendRemoteFrame(uint16_t StdId,int32_t ExtId,uint8_t DLC) const;
 
       //Send data frame
-      bool send(uint16_t StdId,uint8_t DLC,const uint8_t *data) const;
-      bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const uint8_t *data) const;
+      bool send(uint16_t StdId,uint8_t DLC,const void *data) const;
+      bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const void *data) const;
 
       bool send(CanTxMsg& msg) const;
 
@@ -105,7 +105,7 @@ namespace stm32plus {
    * @return true if it worked
    */
 
-  inline bool Can::send(uint16_t StdId,uint8_t DLC) const {
+  inline bool Can::sendRemoteFrame(uint16_t StdId,uint8_t DLC) const {
 
     CanTxMsg msg;
 
@@ -125,7 +125,7 @@ namespace stm32plus {
    * @return true if it worked
    */
 
-  inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC) const {
+  inline bool Can::sendRemoteFrame(uint16_t StdId,int32_t ExtId,uint8_t DLC) const {
 
     CanTxMsg msg;
 
@@ -148,7 +148,7 @@ namespace stm32plus {
    * @return true if it worked
    */
 
-  inline bool Can::send(uint16_t StdId,uint8_t DLC,const uint8_t *data) const {
+  inline bool Can::send(uint16_t StdId,uint8_t DLC,const void *data) const {
 
     CanTxMsg msg;
     uint8_t i;
@@ -158,8 +158,7 @@ namespace stm32plus {
     msg.DLC=DLC;
     msg.StdId=StdId;
 
-    for(i=0;i<DLC;i++)
-      msg.Data[i]=data[i];
+    memcpy(msg.Data,data,DLC);
 
     return send(msg);
   }
@@ -174,7 +173,7 @@ namespace stm32plus {
    * @return true if it worked
    */
 
-  inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const uint8_t *data) const {
+  inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const void *data) const {
 
     CanTxMsg msg;
     uint8_t i;
@@ -186,8 +185,7 @@ namespace stm32plus {
     msg.StdId=StdId;
     msg.ExtId=ExtId;
 
-    for(i=0;i<DLC;i++)
-      msg.Data[i]=data[i];
+    memcpy(msg.Data,data,DLC);
 
     return send(msg);
   }
@@ -231,4 +229,5 @@ namespace stm32plus {
     return true;
   }
 }
+
 
