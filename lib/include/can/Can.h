@@ -35,6 +35,9 @@ namespace stm32plus {
       bool send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t *data) const;
       bool send(CanTxMsg& msg) const;
 
+      bool readyToReceive(uint8_t fifo) const;
+      bool receive(uint8_t fifo, CanRxMsg* msg) const;
+
       operator CAN_TypeDef *();
       operator CAN_InitTypeDef *();
   };
@@ -126,6 +129,30 @@ namespace stm32plus {
     if(CAN_Transmit(_peripheralAddress,&msg)==CAN_TxStatus_NoMailBox)
       return errorProvider.set(ErrorProvider::ERROR_PROVIDER_CAN,E_TX_NO_MAILBOX,CAN_TxStatus_NoMailBox);
 
+    return true;
+  }
+
+
+  /**
+   * Check if the peripheral is ready to receive
+   * @return true if it's ready
+   */
+
+  inline bool Can::readyToReceive(uint8_t fifo) const {
+    return !!CAN_MessagePending(_peripheralAddress, fifo);
+  }
+
+
+  /**
+   * Read a byte from the peripheral
+   */
+
+  inline bool Can::receive(uint8_t fifo, CanRxMsg* msg) const {
+
+    while(!readyToReceive(fifo))
+      return false;
+
+    CAN_Receive(_peripheralAddress, fifo, msg);
     return true;
   }
 }

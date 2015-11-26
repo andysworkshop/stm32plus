@@ -38,12 +38,27 @@ using namespace stm32plus;
 class CanMasterSendReceive {
 
   private:
+
+    // declare the CAN1 master instance
+    Can1<
+      Can1InterruptFeature,           // interrupt driven reception
+      CanLoopbackModeFeature,         // running in loopback mode
+      CanFilterBypassFeature
+    > can;
+
     volatile bool _ready;
     volatile uint8_t _receiveData[8];
 
     enum { LED_PIN = 6 };
 
   public:
+
+    CanMasterSendReceive() : can( { 500000,875 } ){
+      // subscribe to receive interrupts and enable FMP0
+      can.CanInterruptEventSender.insertSubscriber(CanInterruptEventSourceSlot::bind(this,&CanMasterSendReceive::onCanInterrupt));
+      can.enableInterrupts(CAN_IT_FMP0);
+    };
+
     void run() {
 
       uint32_t now;
@@ -54,19 +69,6 @@ class CanMasterSendReceive {
       // set up the LED on PF6
 
       GpioF<DefaultDigitalOutputFeature<LED_PIN>> pf;
-
-      // declare the CAN1 master instance
-
-    	Can1<
-    	  Can1InterruptFeature,           // interrupt driven reception
-    	  CanLoopbackModeFeature,         // running in loopback mode
-    	  CanFilterBypassFeature
-    	> can( { 400000,875 } );
-
-    	// subscribe to receive interrupts and enable FMP0
-
-      can.CanInterruptEventSender.insertSubscriber(CanInterruptEventSourceSlot::bind(this,&CanMasterSendReceive::onCanInterrupt));
-      can.enableInterrupts(CAN_IT_FMP0);
 
       /*
        * Go into an infinite loop sending a message per second
@@ -125,12 +127,12 @@ class CanMasterSendReceive {
 
     	if(cet == CanEventType::EVENT_FIFO0_MESSAGE_PENDING) {
 
-    	  CAN_Receive(CAN1,CAN_FIFO0,&msg);
+    	  can.receive(CAN_FIFO0, &msg);
 
-    		for(i=0;i<sizeof(_receiveData);i++)
-    		  _receiveData[i]=msg.Data[i];
+    	  for(i=0;i<sizeof(_receiveData);i++)
+    	    _receiveData[i]=msg.Data[i];
 
-    		_ready=true;
+    	  _ready=true;
       }
     }
 
