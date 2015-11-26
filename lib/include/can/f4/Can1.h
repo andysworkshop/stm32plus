@@ -39,19 +39,19 @@ namespace stm32plus {
 
   template<class... Features>
   struct Can1 : CanPeripheral<Can1DefaultPinPackage,PERIPHERAL_CAN1>,
-  	  	  	  	  Features... {
+                  Features... {
     /**
      * Constructor
      * @param params Initialisation parameters
      */
 
-	  Can1(const Parameters& params)
-	    : CanPeripheral<Can1DefaultPinPackage,PERIPHERAL_CAN1>(params),
-	      Features(static_cast<Can&>(*this))... {
+    Can1(const Parameters& params)
+      : CanPeripheral<Can1DefaultPinPackage,PERIPHERAL_CAN1>(params),
+        Features(static_cast<Can&>(*this))... {
 
-	    initialisePeripheral();
+      initialisePeripheral();
       RecursiveVoidInit<Can1,Features...>::tinit(this);
-	  }
+    }
   };
 
 
@@ -61,13 +61,13 @@ namespace stm32plus {
    */
 
   struct Can1Remap1PinPackage {
-  	enum{
-  		Port_TX=GPIOB_BASE,
-  		Port_RX=GPIOB_BASE,
+    enum{
+      Port_TX=GPIOB_BASE,
+      Port_RX=GPIOB_BASE,
 
-  		Pin_TX=GPIO_Pin_9,
-  		Pin_RX=GPIO_Pin_8
-  	};
+      Pin_TX=GPIO_Pin_9,
+      Pin_RX=GPIO_Pin_8
+    };
   };
 
 
@@ -77,19 +77,57 @@ namespace stm32plus {
 
   template<class... Features>
   struct Can1_Remap1 : CanPeripheral<Can1Remap1PinPackage,PERIPHERAL_CAN1>,
-  	  	  	  	  Features...{
+                  Features...{
     /**
      * Constructor
      * @param params Initialisation parameters
      */
 
-	  Can1_Remap1(const Parameters& params)
-	      : CanPeripheral<Can1Remap1PinPackage,PERIPHERAL_CAN1>(params),
-	        Features(static_cast<Can&>(*this))...{
+    Can1_Remap1(const Parameters& params)
+        : CanPeripheral<Can1Remap1PinPackage,PERIPHERAL_CAN1>(params),
+          Features(static_cast<Can&>(*this))...{
 
-	    initialisePeripheral();
+      initialisePeripheral();
       RecursiveVoidInit<Can1_Remap1,Features...>::tinit(this);
-		}
+    }
+  };
+
+
+  /**
+   * Remap #2:
+   * (TX,RX) = (PD1,PD0)
+   */
+
+  struct Can1Remap2PinPackage {
+    enum{
+      Port_TX=GPIOD_BASE,
+      Port_RX=GPIOD_BASE,
+
+      Pin_TX=GPIO_Pin_1,
+      Pin_RX=GPIO_Pin_0
+    };
+  };
+
+
+  /**
+   * The remapped version of CAN1
+   */
+
+  template<class... Features>
+  struct Can1_Remap2 : CanPeripheral<Can1Remap2PinPackage,PERIPHERAL_CAN1>,
+                  Features...{
+    /**
+     * Constructor
+     * @param params Initialisation parameters
+     */
+
+    Can1_Remap2(const Parameters& params)
+        : CanPeripheral<Can1Remap2PinPackage,PERIPHERAL_CAN1>(params),
+          Features(static_cast<Can&>(*this))...{
+
+      initialisePeripheral();
+      RecursiveVoidInit<Can1_Remap2,Features...>::tinit(this);
+    }
   };
     
 }
