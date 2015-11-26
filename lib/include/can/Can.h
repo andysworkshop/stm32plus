@@ -151,7 +151,6 @@ namespace stm32plus {
   inline bool Can::send(uint16_t StdId,uint8_t DLC,const void *data) const {
 
     CanTxMsg msg;
-    uint8_t i;
 
     msg.IDE=CAN_Id_Standard;
     msg.RTR=CAN_RTR_Data;
@@ -176,7 +175,6 @@ namespace stm32plus {
   inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const void *data) const {
 
     CanTxMsg msg;
-    uint8_t i;
 
     msg.IDE=CAN_Id_Extended;
     msg.RTR=CAN_RTR_Data;
