@@ -45,5 +45,5 @@
 // device-specific features
 
 #if defined(STM32PLUS_F1)
-  #include "can/features/f1/hd,md/CanInterruptFeature.h"
+  #include "can/features/f1/hd,md/Can1InterruptFeature.h"
 #endif
