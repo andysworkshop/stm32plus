@@ -21,14 +21,14 @@ namespace stm32plus {
   template<uint32_t TPort,uint16_t TPin>
   struct GpioAlternateFunctionMapper<PERIPHERAL_CAN1,TPort,TPin> {
     enum {
-      GPIO_AF = GPIO_AF_CAN1
+      GPIO_AF=GPIO_AF_CAN1
     };
   };
 
   template<uint32_t TPort,uint16_t TPin>
   struct GpioAlternateFunctionMapper<PERIPHERAL_CAN2,TPort,TPin> {
     enum {
-      GPIO_AF = GPIO_AF_CAN2
+      GPIO_AF=GPIO_AF_CAN2
     };
   };
 }

@@ -62,7 +62,6 @@ namespace stm32plus {
     }
   };
 
-
   /*
    * CAN2
    */

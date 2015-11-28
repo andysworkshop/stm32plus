@@ -32,11 +32,13 @@ namespace stm32plus {
       void sleep() const;
       void wakeup() const;
 
-      //Send remote frame
+      // send remote frame
+
       bool sendRemoteFrame(uint16_t StdId,uint8_t DLC) const;
       bool sendRemoteFrame(uint16_t StdId,int32_t ExtId,uint8_t DLC) const;
 
-      //Send data frame
+      // send data frame
+
       bool send(uint16_t StdId,uint8_t DLC,const void *data) const;
       bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const void *data) const;
 
@@ -55,8 +57,8 @@ namespace stm32plus {
    * @param peripheralAddress the CAN base address
    */
 
-  inline Can::Can(CAN_TypeDef *peripheralAddress) :
-    _peripheralAddress(peripheralAddress) {
+  inline Can::Can(CAN_TypeDef *peripheralAddress)
+    : _peripheralAddress(peripheralAddress) {
   }
 
 
@@ -116,6 +118,7 @@ namespace stm32plus {
 
     return send(msg);
   }
+
 
   /**
    * Send a message
@@ -218,12 +221,12 @@ namespace stm32plus {
    * Read a byte from the peripheral
    */
 
-  inline bool Can::receive(uint8_t fifo, CanRxMsg* msg) const {
+  inline bool Can::receive(uint8_t fifo,CanRxMsg* msg) const {
 
     while(!readyToReceive(fifo))
       return false;
 
-    CAN_Receive(_peripheralAddress, fifo, msg);
+    CAN_Receive(_peripheralAddress,fifo,msg);
     return true;
   }
 }

@@ -24,11 +24,11 @@ namespace stm32plus {
 
   struct Can2DefaultPinPackage {
     enum{
-      Port_RX = GPIOB_BASE,
-      Port_TX = GPIOB_BASE,
+      Port_RX=GPIOB_BASE,
+      Port_TX=GPIOB_BASE,
 
-      Pin_RX  = GPIO_Pin_12,
-      Pin_TX  = GPIO_Pin_13
+      Pin_RX=GPIO_Pin_12,
+      Pin_TX=GPIO_Pin_13
     };
   };
 
@@ -62,11 +62,11 @@ namespace stm32plus {
 
   struct Can2RemapPinPackage {
   	enum{
-      Port_RX = GPIOB_BASE,
-      Port_TX = GPIOB_BASE,
+      Port_RX=GPIOB_BASE,
+      Port_TX=GPIOB_BASE,
 
-      Pin_RX  = GPIO_Pin_5,
-      Pin_TX  = GPIO_Pin_6
+      Pin_RX=GPIO_Pin_5,
+      Pin_TX=GPIO_Pin_6
   	};
   };
 
