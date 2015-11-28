@@ -13,7 +13,7 @@ using namespace stm32plus;
 
 
 /**
- * This example initialize the CAN peripheral at 400 kBits/s with 87.5% sampling point.
+ * This example initialize the CAN peripheral at 500 kBits/s with 87.5% sampling point.
  * To get incoming messages needed to bypass the CAN filtering.
  * With the bypassing we get all messages to FIFO 0, so we need to enable the FMP0
  * interrupt.
@@ -28,22 +28,37 @@ using namespace stm32plus;
  *
  * Compatible MCU:
  *   STM32F1
+ *   STM32F4
  *
  * Tested on devices:
  *   STM32F103C8T6
  *   STM32F103ZET6
+ *   STM32F407VGT6
  */
 
 
 class CanMasterSendReceive {
 
   private:
+
+    // declare the CAN1 master instance
+
+    Can1<
+      Can1InterruptFeature,           // interrupt driven reception
+      CanLoopbackModeFeature,         // running in loopback mode
+      CanFilterBypassFeature
+    > _can;
+
     volatile bool _ready;
     volatile uint8_t _receiveData[8];
 
     enum { LED_PIN = 6 };
 
   public:
+
+    CanMasterSendReceive() : _can( { 500000,875 } ) {
+    }
+
     void run() {
 
       uint32_t now;
@@ -51,22 +66,18 @@ class CanMasterSendReceive {
       uint8_t nextByte,i;
       uint8_t sendData[8];
 
-      // set up the LED on PF6
+      /*
+       * subscribe to receive interrupts and enable FMP0
+       */
+
+      _can.CanInterruptEventSender.insertSubscriber(CanInterruptEventSourceSlot::bind(this,&CanMasterSendReceive::onCanInterrupt));
+      _can.enableInterrupts(CAN_IT_FMP0);
+
+      /*
+       * set up the LED on PF6
+       */
 
       GpioF<DefaultDigitalOutputFeature<LED_PIN>> pf;
-
-      // declare the CAN1 master instance
-
-    	Can1<
-    	  Can1InterruptFeature,           // interrupt driven reception
-    	  CanLoopbackModeFeature,         // running in loopback mode
-    	  CanFilterBypassFeature
-    	> can( { 400000,875 } );
-
-    	// subscribe to receive interrupts and enable FMP0
-
-      can.CanInterruptEventSender.insertSubscriber(CanInterruptEventSourceSlot::bind(this,&CanMasterSendReceive::onCanInterrupt));
-      can.enableInterrupts(CAN_IT_FMP0);
 
       /*
        * Go into an infinite loop sending a message per second
@@ -88,7 +99,7 @@ class CanMasterSendReceive {
 
         // send the message
 
-        can.send(0x100,CAN_Id_Extended,CAN_RTR_Data,sizeof(sendData),sendData);
+        _can.send(0x100,sizeof(sendData),sendData);
 
         // wait for it to arrive for a maximum of 5 seconds
 
@@ -125,12 +136,12 @@ class CanMasterSendReceive {
 
     	if(cet == CanEventType::EVENT_FIFO0_MESSAGE_PENDING) {
 
-    	  CAN_Receive(CAN1,CAN_FIFO0,&msg);
+    	  _can.receive(CAN_FIFO0, &msg);
 
-    		for(i=0;i<sizeof(_receiveData);i++)
-    		  _receiveData[i]=msg.Data[i];
+    	  for(i=0;i<sizeof(_receiveData);i++)
+    	    _receiveData[i]=msg.Data[i];
 
-    		_ready=true;
+    	  _ready=true;
       }
     }
 

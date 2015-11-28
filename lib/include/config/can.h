@@ -19,6 +19,9 @@
 
 #if defined(STM32PLUS_F1)
   #include "can/f1/CanPinInitialiser.h"
+#elif defined(STM32PLUS_F4)
+  #include "can/f4/CanAlternateFunctionMapper.h"
+  #include "can/f4/CanPinInitialiser.h"
 #endif
 
 // generic peripheral includes
@@ -32,9 +35,13 @@
 
 #if defined(STM32PLUS_F1)
   #include "can/f1/Can1.h"
+#elif defined(STM32PLUS_F4)
+  #include "can/f4/Can1.h"
+  #include "can/f4/Can2.h"
 #endif
 
 #define USE_CAN1_INTERRUPT
+#define USE_CAN2_INTERRUPT
 
 // generic features
 
@@ -45,5 +52,8 @@
 // device-specific features
 
 #if defined(STM32PLUS_F1)
-  #include "can/features/f1/hd,md/CanInterruptFeature.h"
+  #include "can/features/f1/hd,md/Can1InterruptFeature.h"
+#elif defined(STM32PLUS_F4)
+  #include "can/features/f4/Can1InterruptFeature.h"
+  #include "can/features/f4/Can2InterruptFeature.h"
 #endif

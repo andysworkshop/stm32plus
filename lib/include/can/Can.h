@@ -32,8 +32,20 @@ namespace stm32plus {
       void sleep() const;
       void wakeup() const;
 
-      bool send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t *data) const;
+      // send remote frame
+
+      bool sendRemoteFrame(uint16_t StdId,uint8_t DLC) const;
+      bool sendRemoteFrame(uint16_t StdId,int32_t ExtId,uint8_t DLC) const;
+
+      // send data frame
+
+      bool send(uint16_t StdId,uint8_t DLC,const void *data) const;
+      bool send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const void *data) const;
+
       bool send(CanTxMsg& msg) const;
+
+      bool readyToReceive(uint8_t fifo) const;
+      bool receive(uint8_t fifo, CanRxMsg* msg) const;
 
       operator CAN_TypeDef *();
       operator CAN_InitTypeDef *();
@@ -45,8 +57,8 @@ namespace stm32plus {
    * @param peripheralAddress the CAN base address
    */
 
-  inline Can::Can(CAN_TypeDef *peripheralAddress) :
-    _peripheralAddress(peripheralAddress) {
+  inline Can::Can(CAN_TypeDef *peripheralAddress)
+    : _peripheralAddress(peripheralAddress) {
   }
 
 
@@ -90,26 +102,91 @@ namespace stm32plus {
 
   /**
    * Send a message
-   * @param ID
-   * @param IDE
-   * @param RTR
+   * @param StdId
+   * @param DLC
+   * @return true if it worked
+   */
+
+  inline bool Can::sendRemoteFrame(uint16_t StdId,uint8_t DLC) const {
+
+    CanTxMsg msg;
+
+    msg.IDE=CAN_Id_Standard;
+    msg.RTR=CAN_RTR_Remote;
+    msg.DLC=DLC;
+    msg.StdId=StdId;
+
+    return send(msg);
+  }
+
+
+  /**
+   * Send a message
+   * @param StdId
+   * @param ExtId
+   * @param DLC
+   * @return true if it worked
+   */
+
+  inline bool Can::sendRemoteFrame(uint16_t StdId,int32_t ExtId,uint8_t DLC) const {
+
+    CanTxMsg msg;
+
+    msg.IDE=CAN_Id_Extended;
+    msg.RTR=CAN_RTR_Remote;
+    msg.DLC=DLC;
+
+    msg.StdId=StdId;
+    msg.ExtId=ExtId;
+
+    return send(msg);
+  }
+
+
+  /**
+   * Send a message
+   * @param StdId
    * @param DLC
    * @param data
    * @return true if it worked
    */
 
-  inline bool Can::send(uint32_t ID,uint8_t IDE,uint8_t RTR,uint8_t DLC,const uint8_t* data) const {
+  inline bool Can::send(uint16_t StdId,uint8_t DLC,const void *data) const {
 
     CanTxMsg msg;
-    uint8_t i;
 
-    msg.IDE=IDE;
-    msg.RTR=RTR;
+    msg.IDE=CAN_Id_Standard;
+    msg.RTR=CAN_RTR_Data;
     msg.DLC=DLC;
-    msg.ExtId=ID;
+    msg.StdId=StdId;
 
-    for(i=0;i<DLC;i++)
-      msg.Data[i]=data[i];
+    memcpy(msg.Data,data,DLC);
+
+    return send(msg);
+  }
+
+
+  /**
+   * Send a message
+   * @param StdId
+   * @param ExtId
+   * @param DLC
+   * @param data
+   * @return true if it worked
+   */
+
+  inline bool Can::send(uint16_t StdId,int32_t ExtId,uint8_t DLC,const void *data) const {
+
+    CanTxMsg msg;
+
+    msg.IDE=CAN_Id_Extended;
+    msg.RTR=CAN_RTR_Data;
+    msg.DLC=DLC;
+
+    msg.StdId=StdId;
+    msg.ExtId=ExtId;
+
+    memcpy(msg.Data,data,DLC);
 
     return send(msg);
   }
@@ -128,5 +205,30 @@ namespace stm32plus {
 
     return true;
   }
+
+
+  /**
+   * Check if the peripheral is ready to receive
+   * @return true if it's ready
+   */
+
+  inline bool Can::readyToReceive(uint8_t fifo) const {
+    return !!CAN_MessagePending(_peripheralAddress, fifo);
+  }
+
+
+  /**
+   * Read a byte from the peripheral
+   */
+
+  inline bool Can::receive(uint8_t fifo,CanRxMsg* msg) const {
+
+    while(!readyToReceive(fifo))
+      return false;
+
+    CAN_Receive(_peripheralAddress,fifo,msg);
+    return true;
+  }
 }
+
 
