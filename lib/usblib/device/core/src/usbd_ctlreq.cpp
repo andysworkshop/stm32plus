@@ -28,16 +28,16 @@
 /* Includes ------------------------------------------------------------------*/
 #include "config/stm32plus.h"
 #include "config/event.h"
-#include "usb/UsbEventDescriptor.h"
-#include "usb/UsbErrorEvent.h"
-#include "usb/UsbEventSource.h"
+#include "usb/f4/UsbEventDescriptor.h"
+#include "usb/f4/UsbErrorEvent.h"
+#include "usb/f4/UsbEventSource.h"
 #include "usblib/device/core/inc/usbd_ctlreq.h"
 #include "usblib/device/core/inc/usbd_ioreq.h"
-#include "usb/device/events/class/DeviceClassSdkSetupEvent.h"
-#include "usb/device/events/class/DeviceClassSdkGetConfigurationDescriptorEvent.h"
-#include "usb/device/DescriptorHeader.h"
-#include "usb/device/DeviceQualifierDescriptor.h"
-#include "usb/device/events/class/DeviceClassSdkGetDeviceQualifierDescriptorEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkSetupEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkGetConfigurationDescriptorEvent.h"
+#include "usb/f4/device/DescriptorHeader.h"
+#include "usb/f4/device/DeviceQualifierDescriptor.h"
+#include "usb/f4/device/events/class/DeviceClassSdkGetDeviceQualifierDescriptorEvent.h"
 
 
 /** @addtogroup STM32_USBD_STATE_DEVICE_LIBRARY

@@ -15,18 +15,18 @@
 
   // HID device includes
 
-  #include "usb/device/hid/HidClassRequestType.h"
-  #include "usb/device/hid/HidClassDescriptor.h"
-  #include "usb/device/hid/HidSubClass.h"
-  #include "usb/device/hid/HidProtocol.h"
+  #include "usb/f4/device/hid/HidClassRequestType.h"
+  #include "usb/f4/device/hid/HidClassDescriptor.h"
+  #include "usb/f4/device/hid/HidSubClass.h"
+  #include "usb/f4/device/hid/HidProtocol.h"
 
-  #include "usb/device/hid/events/HidKeyboardLedStateEvent.h"
+  #include "usb/f4/device/hid/events/HidKeyboardLedStateEvent.h"
 
-  #include "usb/device/hid/HidDevice.h"
-  #include "usb/device/hid/MouseReportDescriptor.h"
-  #include "usb/device/hid/KeyboardReportDescriptor.h"
-  #include "usb/device/hid/MouseHidDevice.h"
-  #include "usb/device/hid/KeyboardHidDevice.h"
+  #include "usb/f4/device/hid/HidDevice.h"
+  #include "usb/f4/device/hid/MouseReportDescriptor.h"
+  #include "usb/f4/device/hid/KeyboardReportDescriptor.h"
+  #include "usb/f4/device/hid/MouseHidDevice.h"
+  #include "usb/f4/device/hid/KeyboardHidDevice.h"
 
 #endif
 

@@ -15,22 +15,22 @@
 
   // CDC device includes
 
-  #include "usb/device/cdc/CdcControlCommand.h"
-  #include "usb/device/cdc/CdcLineCoding.h"
+  #include "usb/f4/device/cdc/CdcControlCommand.h"
+  #include "usb/f4/device/cdc/CdcLineCoding.h"
 
-  #include "usb/device/cdc/events/CdcDataReceivedEvent.h"
-  #include "usb/device/cdc/events/CdcControlEvent.h"
+  #include "usb/f4/device/cdc/events/CdcDataReceivedEvent.h"
+  #include "usb/f4/device/cdc/events/CdcControlEvent.h"
 
-  #include "usb/device/cdc/CdcProtocol.h"
-  #include "usb/device/cdc/CdcSubClass.h"
-  #include "usb/device/cdc/CdcFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcHeaderFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcOneSlaveUnionFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcCallManagementFunctionalDescriptor.h"
-  #include "usb/device/cdc/CdcAbstractControlManagementFunctionalDescriptor.h"
+  #include "usb/f4/device/cdc/CdcProtocol.h"
+  #include "usb/f4/device/cdc/CdcSubClass.h"
+  #include "usb/f4/device/cdc/CdcFunctionalDescriptor.h"
+  #include "usb/f4/device/cdc/CdcHeaderFunctionalDescriptor.h"
+  #include "usb/f4/device/cdc/CdcOneSlaveUnionFunctionalDescriptor.h"
+  #include "usb/f4/device/cdc/CdcCallManagementFunctionalDescriptor.h"
+  #include "usb/f4/device/cdc/CdcAbstractControlManagementFunctionalDescriptor.h"
 
-  #include "usb/device/cdc/CdcDevice.h"
-  #include "usb/device/cdc/ComPortCdcDevice.h"
+  #include "usb/f4/device/cdc/CdcDevice.h"
+  #include "usb/f4/device/cdc/ComPortCdcDevice.h"
 
 #endif
 

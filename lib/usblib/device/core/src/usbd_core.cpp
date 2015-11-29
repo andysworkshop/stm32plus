@@ -28,17 +28,17 @@
 /* Includes ------------------------------------------------------------------*/
 #include "config/stm32plus.h"
 #include "config/event.h"
-#include "usb/UsbEventDescriptor.h"
-#include "usb/UsbErrorEvent.h"
-#include "usb/UsbEventSource.h"
+#include "usb/f4/UsbEventDescriptor.h"
+#include "usb/f4/UsbErrorEvent.h"
+#include "usb/f4/UsbEventSource.h"
 #include "usblib/device/core/inc/usbd_core.h"
-#include "usb/device/events/class/DeviceClassSdkInitEvent.h"
-#include "usb/device/events/class/DeviceClassSdkDeInitEvent.h"
-#include "usb/device/events/class/DeviceClassSdkEp0ReadyEvent.h"
-#include "usb/device/events/class/DeviceClassSdkEp0TxSentEvent.h"
-#include "usb/device/events/class/DeviceClassSdkDataInEvent.h"
-#include "usb/device/events/class/DeviceClassSdkDataOutEvent.h"
-#include "usb/device/events/class/DeviceClassSdkSofEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkInitEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkDeInitEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkEp0ReadyEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkEp0TxSentEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkDataInEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkDataOutEvent.h"
+#include "usb/f4/device/events/class/DeviceClassSdkSofEvent.h"
 
 
 /**
