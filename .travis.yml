@@ -3,9 +3,9 @@ compiler: gcc
 cache: apt
 sudo: false
 addons:
-	apt:
-		packages:
-			- gcc-arm-none-eabi
+  apt:
+    packages:
+      - gcc-arm-none-eabi
 env:
   - MODE=small MCU=f1mdvl HSE=8000000
   - MODE=small MCU=f1md HSE=8000000
