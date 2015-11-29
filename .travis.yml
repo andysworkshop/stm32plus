@@ -1,12 +1,6 @@
 language: cpp
 compiler: gcc
 cache: apt
-sudo: required
-dist: trusty
-addons:
-  apt:
-    packages:
-      - gcc-arm-none-eabi
 env:
   - MODE=small MCU=f1mdvl HSE=8000000
   - MODE=small MCU=f1md HSE=8000000
@@ -19,7 +13,11 @@ env:
   - MODE=small MCU=f4 HSE=8000000 FLOAT=hard
   - MODE=small MCU=f429 HSE=8000000
   - MODE=small MCU=f429 HSE=8000000 FLOAT=hard
-
+before_install:
+  - sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded -y
+  - sudo apt-get update
+install:
+  - sudo apt-get install gcc-arm-none-eabi
 script:
-  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT install INSTALLDIR=~/usr -j4
+  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT install INSTALLDIR=~/usr
   - cd ~/usr && find . | sort
