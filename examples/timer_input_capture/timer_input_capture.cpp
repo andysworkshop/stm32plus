@@ -27,10 +27,10 @@ using namespace stm32plus;
  * The USART protocol is 57600/8/N/1
  *
  * Timer2 channel 2 is used to generate a 10kHz PWM signal. This signal is fed to Timer3
- * channel 3. Each rising edge of the signal causes an interrupt to fire. When two
+ * channel 4. Each rising edge of the signal causes an interrupt to fire. When two
  * successive edges have been captured we calculate and display the result.
  *
- * You will need to wire PA1 (TIM2_CH2) to PB0 (TIM3_CH3) to test this demo.
+ * You will need to wire PA1 (TIM2_CH2) to PB1 (TIM3_CH4) to test this demo.
  *
  * Compatible MCU:
  *   STM32F0
@@ -55,7 +55,7 @@ class TimerInputCaptureTest {
 
     typedef Timer3<
         Timer3InternalClockFeature,         // we'll need this for the frequency calculation
-        TimerChannel3Feature<               // we're going to use channel 3
+        TimerChannel4Feature<               // we're going to use channel 4
           TimerChannelICRisingEdgeFeature,  // rising edge trigger
           TimerChannelICDirectTiFeature,    // direct connection
           TimerChannelICPreScaler1Feature,  // prescaler of 1
@@ -64,7 +64,7 @@ class TimerInputCaptureTest {
         Timer3InterruptFeature,           // we want to use interrupts
         Timer3GpioFeature<                // we want to read something from GPIO
           TIMER_REMAP_NONE,               // the GPIO input will not be remapped
-          TIM3_CH3_IN                     // we will read channel 3 from GPIO PB0
+          TIM3_CH4_IN                     // we will read channel 4 from GPIO PB0
         >
       > MyInputTimer;
 
@@ -150,10 +150,10 @@ class TimerInputCaptureTest {
       _capturingNextFrequency=true;
 
       /*
-       * Enable channel 3 interrupts on Timer 3.
+       * Enable channel 4 interrupts on Timer 3.
        */
 
-      _myInputTimer->enableInterrupts(TIM_IT_CC3);
+      _myInputTimer->enableInterrupts(TIM_IT_CC4);
 
       /*
        * Enable both timers to start the action
@@ -200,7 +200,7 @@ class TimerInputCaptureTest {
 
     void onInterrupt(TimerEventType tet,uint8_t /* timerNumber */) {
 
-      if(tet==TimerEventType::EVENT_COMPARE3) {
+      if(tet==TimerEventType::EVENT_COMPARE4) {
 
         // store the current capture time
 
