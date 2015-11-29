@@ -1,6 +1,7 @@
 language: cpp
 compiler: gcc
 cache: apt
+sudo: false
 env:
   - MODE=small MCU=f1mdvl HSE=8000000
   - MODE=small MCU=f1md HSE=8000000
