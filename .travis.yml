@@ -19,5 +19,5 @@ before_install:
 install:
   - sudo apt-get install gcc-arm-none-eabi
 script:
-  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT install INSTALLDIR=~/usr
+  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT install INSTALLDIR=~/usr -j4
   - cd ~/usr && find . | sort
