@@ -28,5 +28,20 @@ namespace stm32plus {
 
       return MultiplyDeBruijnBitPosition[((uint32_t)((word & -word) * 0x077CB531U)) >> 27];
     }
+
+
+    /**
+     * Reverse the ordering of bytes in a 16-bit word
+     * @param data The word to swap
+     * @return The word with byte ordering swapped
+     */
+
+    inline uint16_t swapBytes(uint16_t data) {
+
+      uint16_t result;
+
+      asm volatile( "rev16 %0, %1" : "=&r" (result) : "r" (data) );
+      return result;
+    }
   }
 }

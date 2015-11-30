@@ -6,7 +6,33 @@
 
 #pragma once
 
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F0_42)
+
+  #define USE_USB_INTERRUPT
+
+  // USB depends on gpio, event, nvic, bit hacks
+
+  #include "config/gpio.h"
+  #include "config/event.h"
+  #include "config/nvic.h"
+  #include "util/BitHacks.h"
+  #include "util/StdExt.h"
+
+  // core includes
+
+  #include "usb/f0/UsbInterruptHandler.h"
+  #include "usb/f0/UsbSelfPoweredFeature.h"
+  #include "usb/f0/UsbDefs.h"
+  #include "usb/f0/UsbStatusType.h"
+  #include "usb/f0/UsbBufferDescriptionTableEntry.h"
+  #include "usb/f0/UsbSetupHeader.h"
+  #include "usb/f0/UsbInEndpointData.h"
+
+  // device type includes
+
+  #include "usb/f0/hid/UsbCustomHid.h"
+
+#elif defined(STM32PLUS_F4)
 
   /*
    * Don't include this file directly in application code, instead you should include the correct
