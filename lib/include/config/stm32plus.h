@@ -128,7 +128,9 @@ namespace stm32plus {
     PERIPHERAL_USART3_FULL_REMAP,   //!< PERIPHERAL_USART3_FULL_REMAP
     PERIPHERAL_UART4,               //!< PERIPHERAL_UART4
     PERIPHERAL_UART5,               //!< PERIPHERAL_UART5
-    PERIPHERAL_USART6               //!< PERIPHERAL_USART6
+    PERIPHERAL_USART6,              //!< PERIPHERAL_USART6
+    PERIPHERAL_CAN1,				        //!< PERIPHERAL_CAN1
+    PERIPHERAL_CAN2					        //!< PERIPHERAL_CAN2
   };
 
 
@@ -152,6 +154,7 @@ namespace stm32plus {
 // error provider is common to everyone
 
 #include "error/ErrorProvider.h"
+
 
 // include the customisable peripheral traits
 
