@@ -51,6 +51,24 @@ namespace stm32plus {
 #endif
 
   template<>
+  struct PeripheralTraits<PERIPHERAL_CAN1> {
+    enum {
+      GPIO_SPEED = GPIO_Speed_50MHz,
+      PERIPHERAL_BASE = CAN1_BASE,
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_CAN1> Can1PeripheralTraits;
+
+  template<>
+  struct PeripheralTraits<PERIPHERAL_CAN2> {
+    enum {
+      GPIO_SPEED = GPIO_Speed_50MHz,
+      PERIPHERAL_BASE = CAN2_BASE,
+    };
+  };
+  typedef PeripheralTraits<PERIPHERAL_CAN2> Can2PeripheralTraits;
+
+  template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
     enum {
       CHANNEL_NUMBER = DAC_Channel_1
