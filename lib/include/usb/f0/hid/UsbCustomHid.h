@@ -49,6 +49,10 @@ namespace stm32plus {
    * Once declared and constructed you must call start() to initiate host enumeration. You can call stop()
    * or use the class destructor to disconnect from the host and release resources.
    *
+   * Two reports are declared, id #1 is for reports TO the host (IN direction) and report id #2 is for
+   * reports FROM the host (OUT direction). A report is nothing more than USB's way of identifying a data
+   * packet that's transferred to/from the host.
+   *
    * @tparam TConfiguration The name of a type (usually a struct) that contains the configuration constants.
    * @tparam Features The variadic list of feature type names, if any
    */
