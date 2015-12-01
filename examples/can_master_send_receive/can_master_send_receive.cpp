@@ -56,7 +56,7 @@ class CanMasterSendReceive {
 
   public:
 
-    CanMasterSendReceive() : _can( { 500000,875 } ) {
+    CanMasterSendReceive() : _can( { 500000,0.875 } ) {
     }
 
     void run() {
