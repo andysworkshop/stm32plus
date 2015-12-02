@@ -46,7 +46,7 @@ class CanMasterSendReceive {
     Can1<
       Can1InterruptFeature,           // interrupt driven reception
       CanLoopbackModeFeature,         // running in loopback mode
-      CanFilterBypassFeature
+      Can1FilterBypassFeature
     > _can;
 
     volatile bool _ready;
