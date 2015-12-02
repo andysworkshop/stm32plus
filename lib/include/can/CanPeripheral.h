@@ -72,20 +72,31 @@ namespace stm32plus {
           RCC_ClocksTypeDef Clocks;
           RCC_GetClocksFreq(&Clocks);
 
+          if( Clocks.PCLK1_Frequency%baudrate != 0 ){
+        	//Configuration failed
+        	return;
+          }
+
           Tsum = Clocks.PCLK1_Frequency/baudrate;
 
-          while( Tsum > 24 ){
+          while( Tsum > 20 ){
             if( Tsum % 11 == 0 ) Tsum/=11;
             else if( Tsum % 7 == 0 ) Tsum/=7;
             else if( Tsum % 5 == 0 ) Tsum/=5;
             else if( Tsum % 3 == 0 ) Tsum/=3;
             else if( Tsum % 2 == 0 ) Tsum/=2;
             else{
+              if( Tsum == 23 ) break;
+              //Configuration failed
               return;
             }
           }
 
-          Tsum -=1;
+          while( Tsum <= 6 ){
+            Tsum *= 2;
+          }
+
+          Tsum -= 1;
 
           T1 = (uint32_t)(Tsum*samplepoint+0.49);
           T2 = Tsum - T1;
