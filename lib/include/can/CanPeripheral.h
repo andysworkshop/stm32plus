@@ -92,10 +92,6 @@ namespace stm32plus {
             }
           }
 
-          while( Tsum <= 6 ){
-            Tsum *= 2;
-          }
-
           Tsum -= 1;
 
           T1 = (uint32_t)(Tsum*samplepoint+0.49);
