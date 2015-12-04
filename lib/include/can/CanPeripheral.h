@@ -63,7 +63,7 @@ namespace stm32plus {
                                           This parameter can be set either to ENABLE
                                                 or DISABLE. */
 
-        Parameters(uint32_t baudrate=100000,float samplepoint=0.875) {
+        Parameters(uint32_t baudrate=100000,uint32_t samplepoint=500) {
 
           uint32_t T1;
           uint32_t T2;
@@ -94,7 +94,7 @@ namespace stm32plus {
 
           Tsum -= 1;
 
-          T1 = (uint32_t)(Tsum*samplepoint+0.49);
+          T1 = (uint32_t)(Tsum*samplepoint+499)/1000;
           T2 = Tsum - T1;
 
           if( T1 == 0 ){
