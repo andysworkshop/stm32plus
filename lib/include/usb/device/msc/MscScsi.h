@@ -509,7 +509,7 @@ namespace stm32plus {
         _blkAddr=(params[2] << 24) | (params[3] << 16) | (params[4] << 8) | params[5];
         _blkLen=(params[7] << 8) | params[8];
 
-        if(!checkAddressRange(lun,_blkAddr,_blkLen)<0)
+        if(!checkAddressRange(lun,_blkAddr,_blkLen))
           return false;
 
         // set the data-in state
