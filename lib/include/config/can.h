@@ -45,7 +45,8 @@
 
 // generic features
 
-#include "can/features/CanFilterBypassFeature.h"
+#include "can/features/Can1FilterBypassFeature.h"
+#include "can/features/Can2FilterBypassFeature.h"
 #include "can/features/CanSilentModeFeature.h"
 #include "can/features/CanLoopbackModeFeature.h"
 

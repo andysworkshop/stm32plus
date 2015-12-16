@@ -14,14 +14,14 @@ namespace stm32plus {
    * Feature class for bypass CAN filter
    */
 
-  struct CanFilterBypassFeature : public CanFeatureBase {
+  struct Can1FilterBypassFeature : public CanFeatureBase {
 
 	  /**
 	   * Constructor
 	   * @param can reference to the can peripheral
 	   */
 
-	  CanFilterBypassFeature(Can& can)
+	  Can1FilterBypassFeature(Can& can)
 	    : CanFeatureBase(can) {
 	  }
 
