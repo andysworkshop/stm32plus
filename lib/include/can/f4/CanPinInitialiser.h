@@ -46,7 +46,7 @@ namespace stm32plus {
     GpioPinInitialiser::initialise(
         (GPIO_TypeDef *)TPinPackage::Port_RX,
         TPinPackage::Pin_RX,
-				Gpio::INPUT,
+				Gpio::ALTERNATE_FUNCTION,
 				(GPIOSpeed_TypeDef)PeripheralTraits<TPeripheralName>::GPIO_SPEED,
 				Gpio::PUPD_UP,
 				GpioAlternateFunctionMapper<TPeripheralName,TPinPackage::Port_RX,TPinPackage::Pin_RX>::GPIO_AF);
