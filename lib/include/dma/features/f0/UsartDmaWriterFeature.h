@@ -19,7 +19,7 @@ namespace stm32plus {
    * @tparam TUsart The type of the usart peripheral (Usart1<...>, Usart2<...>)
    */
 
-  template<class TUsart,uint32_t TPriority=DMA_Priority_High>
+  template<class TUsart,uint32_t TPriority=DMA_Priority_High,uint32_t TMode=DMA_Mode_Normal>
   class UsartDmaWriterFeature  : public DmaFeatureBase {
 
     public:
@@ -33,8 +33,8 @@ namespace stm32plus {
    * @param dma the base class reference
    */
 
-  template<class TUsart,uint32_t TPriority>
-  inline UsartDmaWriterFeature<TUsart,TPriority>::UsartDmaWriterFeature(Dma& dma)
+  template<class TUsart,uint32_t TPriority,uint32_t TMode>
+  inline UsartDmaWriterFeature<TUsart,TPriority,TMode>::UsartDmaWriterFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     USART_TypeDef *usart;
@@ -47,7 +47,7 @@ namespace stm32plus {
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
     _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Byte; // transferring bytes
     _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Byte;         // user defined word size
-    _init.DMA_Mode=DMA_Mode_Normal;                           // not a circular buffer
+    _init.DMA_Mode=TMode;                                     // DMA_Mode_Normal/DMA_Mode_Circular
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_M2M=DMA_M2M_Disable;                            // memory->peripheral configuration
 
@@ -62,8 +62,8 @@ namespace stm32plus {
    * @param[in] count The number of bytes to transfer.
    */
 
-  template<class TUsart,uint32_t TPriority>
-  inline void UsartDmaWriterFeature<TUsart,TPriority>::beginWrite(const void *source,uint32_t count) {
+  template<class TUsart,uint32_t TPriority,uint32_t TMode>
+  inline void UsartDmaWriterFeature<TUsart,TPriority,TMode>::beginWrite(const void *source,uint32_t count) {
 
     DMA_Channel_TypeDef *peripheralAddress;
 

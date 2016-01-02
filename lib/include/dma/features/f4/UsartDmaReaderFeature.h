@@ -19,7 +19,7 @@ namespace stm32plus {
    * @tparam TUsart The type of the usart peripheral (Usart1<...>, Usart2<...> ... )
    */
 
-  template<class TUsart,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Enable>
+  template<class TUsart,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Enable,uint32_t TMode=DMA_Mode_Normal>
   class UsartDmaReaderFeature : public DmaFeatureBase {
 
     public:
@@ -33,8 +33,8 @@ namespace stm32plus {
    * @param dma the base class reference
    */
 
-  template<class TUsart,uint32_t TPriority,uint32_t TFifoMode>
-  inline UsartDmaReaderFeature<TUsart,TPriority,TFifoMode>::UsartDmaReaderFeature(Dma& dma)
+  template<class TUsart,uint32_t TPriority,uint32_t TFifoMode,uint32_t TMode>
+  inline UsartDmaReaderFeature<TUsart,TPriority,TFifoMode,TMode>::UsartDmaReaderFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     USART_TypeDef *usart;
@@ -48,7 +48,7 @@ namespace stm32plus {
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
     _init.DMA_PeripheralDataSize=DMA_PeripheralDataSize_Byte; // transferring bytes
     _init.DMA_MemoryDataSize=DMA_MemoryDataSize_Byte;         // transferring bytes
-    _init.DMA_Mode=DMA_Mode_Normal;                           // not a circular buffer
+    _init.DMA_Mode=TMode;                                     // DMA_Mode_Normal/DMA_Mode_Circular
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_MemoryBurst=DMA_MemoryBurst_Single;             // burst size
     _init.DMA_PeripheralBurst=DMA_PeripheralBurst_Single;     // burst size
@@ -68,8 +68,8 @@ namespace stm32plus {
    * @param[in] count The number of bytes to transfer.
    */
 
-  template<class TUsart,uint32_t TPriority,uint32_t TFifoMode>
-  inline void UsartDmaReaderFeature<TUsart,TPriority,TFifoMode>::beginRead(void *dest,uint32_t count) {
+  template<class TUsart,uint32_t TPriority,uint32_t TFifoMode,uint32_t TMode>
+  inline void UsartDmaReaderFeature<TUsart,TPriority,TFifoMode,TMode>::beginRead(void *dest,uint32_t count) {
 
     DMA_Stream_TypeDef *peripheralAddress;
 
