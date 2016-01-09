@@ -27,6 +27,7 @@
   #include "usb/f0/UsbBufferDescriptionTableEntry.h"
   #include "usb/f0/UsbSetupHeader.h"
   #include "usb/f0/UsbInEndpointData.h"
+  #include "usb/f0/UsbConfigurationFlags.h"
 
   // device type includes
 

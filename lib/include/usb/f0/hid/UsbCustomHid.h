@@ -310,8 +310,8 @@ namespace stm32plus {
     0x01,                           // bNumInterfaces
     0x01,                           // bConfigurationValue
     0x00,                           // iConfiguration
-    0xC0,                           // bmAttributes: bus powered
-    0x32,                           // MaxPower 100 mA: this current is used for detecting Vbus
+    0x80 | TConfiguration::CONFIGURATION_FLAGS,  // bmAttributes: bus powered
+    TConfiguration::MILLIAMPS/2,    // MaxPower 100 mA: this current is used for detecting Vbus
 
     // interface descriptor
 
