@@ -198,6 +198,7 @@
   #include "dma/features/f0/I2CDmaReaderFeature.h"
   #include "dma/features/f0/I2CDmaWriterFeature.h"
   #include "dma/features/f0/AdcDmaFeature.h"
+  #include "dma/features/f0/DacDmaWriterFeature.h"
 
   #include "dma/features/f0/DmaPeripheralInfo.h"
 

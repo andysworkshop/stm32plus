@@ -130,7 +130,7 @@ namespace stm32plus {
    */
 
   template<class TDacAlignmentFeature,uint32_t TPriority>
-  inline void DacDmaWriterFeature<TTDacAlignmentFeature,TPriority>::beginWrite(const void *source,uint32_t count) {
+  inline void DacDmaWriterFeature<TDacAlignmentFeature,TPriority>::beginWrite(const void *source,uint32_t count) {
 
     DMA_Channel_TypeDef *peripheralAddress;
 
