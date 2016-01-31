@@ -116,4 +116,88 @@ namespace stm32plus {
         Features(static_cast<Usart&>(*this))... {
     }
   };
+    
+#if defined(STM32PLUS_F0_30)
+  /**
+   * Remap #2:
+   * (TX,RX,RTS,CTS,CK) = (PA2,PA3,PA1,PA0,PA4)
+   */
+
+  struct Usart1Remap2PinPackage {
+    enum {
+      Port_TX=GPIOA_BASE,
+      Port_RX=GPIOA_BASE,
+      Port_RTS=GPIOA_BASE,
+      Port_CTS=GPIOA_BASE,
+      Port_CK=GPIOA_BASE,
+
+      Pin_TX=GPIO_Pin_2,
+      Pin_RX=GPIO_Pin_3,
+      Pin_RTS=GPIO_Pin_1,
+      Pin_CTS=GPIO_Pin_0,
+      Pin_CK=GPIO_Pin_4
+    };
+  };
+
+
+  /**
+   * Convenience class to match the F1 pin for pin.
+   */
+
+  template<class... Features>
+  struct Usart1_Remap2 : UsartPeripheral<Usart1Remap2PinPackage,PERIPHERAL_USART1>,
+                         Features... {
+
+    /**
+     * Constructor
+     * @param params Initialisation parameters
+     */
+
+    Usart1_Remap2(const Parameters& params)
+      : UsartPeripheral<Usart1Remap2PinPackage,PERIPHERAL_USART1>(params),
+        Features(static_cast<Usart&>(*this))... {
+    }
+  };
+    
+  /**
+   * Remap #3:
+   * (TX,RX,RTS,CTS,CK) = (PA14,PA15,PA1,PA0,PA4)
+   */
+
+  struct Usart1Remap3PinPackage {
+    enum {
+      Port_TX=GPIOA_BASE,
+      Port_RX=GPIOA_BASE,
+      Port_RTS=GPIOA_BASE,
+      Port_CTS=GPIOA_BASE,
+      Port_CK=GPIOA_BASE,
+
+      Pin_TX=GPIO_Pin_2,
+      Pin_RX=GPIO_Pin_3,
+      Pin_RTS=GPIO_Pin_1,
+      Pin_CTS=GPIO_Pin_0,
+      Pin_CK=GPIO_Pin_4
+    };
+  };
+
+
+  /**
+   * Convenience class to match the F1 pin for pin.
+   */
+
+  template<class... Features>
+  struct Usart1_Remap3 : UsartPeripheral<Usart1Remap3PinPackage,PERIPHERAL_USART1>,
+                         Features... {
+
+    /**
+     * Constructor
+     * @param params Initialisation parameters
+     */
+
+    Usart1_Remap3(const Parameters& params)
+      : UsartPeripheral<Usart1Remap3PinPackage,PERIPHERAL_USART1>(params),
+        Features(static_cast<Usart&>(*this))... {
+    }
+  };
+#endif
 }
