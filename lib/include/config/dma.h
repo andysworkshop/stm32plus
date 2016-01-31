@@ -198,7 +198,10 @@
   #include "dma/features/f0/I2CDmaReaderFeature.h"
   #include "dma/features/f0/I2CDmaWriterFeature.h"
   #include "dma/features/f0/AdcDmaFeature.h"
+
+#if !defined(STM32PLUS_F0_30)
   #include "dma/features/f0/DacDmaWriterFeature.h"
+#endif
 
   #include "dma/features/f0/DmaPeripheralInfo.h"
 
