@@ -27,7 +27,7 @@ namespace stm32plus {
    * @tparam TPriority One of the DMA priority constants. The default is |DMA_Priority_High|
    */
 
-  template<class TDacAlignmentFeature,uint32_t TPriority=DMA_Priority_High>
+  template<class TDacAlignmentFeature,uint32_t TPriority=DMA_Priority_High, uint32_t TMode=DMA_Mode_Normal>
   class DacDmaWriterFeature  : public DmaFeatureBase {
 
     public:
@@ -41,8 +41,8 @@ namespace stm32plus {
    * @param dma the base class reference
    */
 
-  template<class TDacAlignmentFeature,uint32_t TPriority>
-  inline DacDmaWriterFeature<TDacAlignmentFeature,TPriority>::DacDmaWriterFeature(Dma& dma)
+  template<class TDacAlignmentFeature,uint32_t TPriority,uint32_t TMode>
+  inline DacDmaWriterFeature<TDacAlignmentFeature,TPriority,TMode>::DacDmaWriterFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     /*
@@ -116,7 +116,7 @@ namespace stm32plus {
     _init.DMA_DIR=DMA_DIR_PeripheralDST;                      // 'peripheral' is destination
     _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;        // 'peripheral' does not increment
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
-    _init.DMA_Mode=DMA_Mode_Normal;                           // not a circular buffer
+    _init.DMA_Mode=TMode;                           // not a circular buffer
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_M2M=DMA_M2M_Disable;                            // memory->peripheral configuration
   }
@@ -129,8 +129,8 @@ namespace stm32plus {
    * @param[in] count The number of bytes to transfer.
    */
 
-  template<class TDacAlignmentFeature,uint32_t TPriority>
-  inline void DacDmaWriterFeature<TDacAlignmentFeature,TPriority>::beginWrite(const void *source,uint32_t count) {
+  template<class TDacAlignmentFeature,uint32_t TPriority,uint32_t TMode>
+  inline void DacDmaWriterFeature<TDacAlignmentFeature,TPriority,TMode>::beginWrite(const void *source,uint32_t count) {
 
     DMA_Channel_TypeDef *peripheralAddress;
 
