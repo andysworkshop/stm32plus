@@ -34,6 +34,8 @@ namespace stm32plus {
   inline RtcLseClockFeature::RtcLseClockFeature(RtcBase& rtc)
     : RtcFeatureBase(rtc) {
 
+    if(rtc.survived()) { return; }  // already configured from earlier boot
+
     RTC_InitTypeDef init;
 
     // on with the LSE

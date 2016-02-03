@@ -19,6 +19,11 @@ namespace stm32plus {
    */
 
   class RtcBase {
+    enum {
+      BKP_VALUE = 0x70323373,         // To check if we have already initialised the RTC
+      SURVIVED_FLAG = 0x1000000,      // Stored in _hourFormat
+      HOUR_FORMAT_MASK = 0x0000ffff   // Values are 0 and 64
+    };
 
     protected:
       uint32_t _hourFormat;
@@ -36,6 +41,7 @@ namespace stm32plus {
       void setTick(uint32_t tick) const;
 
       uint32_t getHourFormat() const;
+      bool survived() const;  // true if RTC configuration survived reboot
   };
 
   /**
@@ -48,10 +54,14 @@ namespace stm32plus {
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR,ENABLE);
     PWR_BackupAccessCmd(ENABLE);          // allow backup domain access
 
-    // reset the backup domain
+    if (RTC_ReadBackupRegister(RTC_BKP_DR0) != BKP_VALUE) {
+      // reset the backup domain
+      RCC_BackupResetCmd(ENABLE);
+      RCC_BackupResetCmd(DISABLE);
 
-    RCC_BackupResetCmd(ENABLE);
-    RCC_BackupResetCmd(DISABLE);
+      RTC_WriteBackupRegister(RTC_BKP_DR0, BKP_VALUE);
+      _hourFormat |= SURVIVED_FLAG;
+    }
   }
 
 
@@ -146,7 +156,16 @@ namespace stm32plus {
    */
 
   inline uint32_t RtcBase::getHourFormat() const {
-    return _hourFormat;
+    return _hourFormat & HOUR_FORMAT_MASK;
+  }
+
+  /**
+   * Return whether the RTC configuration survived reset, used to decide
+   * whether we need to reset the backup domain or not.
+   */
+
+  inline bool RtcBase::survived() const {
+    return _hourFormat & SURVIVED_FLAG;
   }
 
 
