@@ -30,7 +30,7 @@ namespace stm32plus {
       uint32_t _hourFormat;
 
     public:
-      RtcBase(uint32_t hourFormat=RTC_HourFormat_24,uint32_t backupValue=BKP_MAGIC_VALUE);
+      RtcBase(uint32_t hourFormat=RTC_HourFormat_24,uint32_t backupValue=BKP_ALWAYS_RESET);
 
       void setTime(uint8_t hours,uint8_t minutes,uint8_t seconds,uint8_t am_pm=RTC_H12_AM) const;
       void getTime(uint8_t& hours,uint8_t& minutes,uint8_t& seconds,uint8_t& am_pm) const;

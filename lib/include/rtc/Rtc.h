@@ -18,7 +18,7 @@ namespace stm32plus {
               public Features... {
 
     public:
-      Rtc(uint32_t hourFormat=RTC_HourFormat_24,uint32_t backupValue=BKP_MAGIC_VALUE) :
+      Rtc(uint32_t hourFormat=RTC_HourFormat_24,uint32_t backupValue=0) :
         RtcBase(hourFormat, backupValue),
         Features(static_cast<RtcBase&>(*this))... {
       }
