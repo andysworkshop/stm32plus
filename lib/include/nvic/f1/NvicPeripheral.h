@@ -29,6 +29,7 @@ namespace stm32plus {
       static void disableAllInterrupts();
       static void enableAllInterrupts();
       static bool isAnyIrqActive();
+      static void systemReset();
   };
 
 
@@ -93,5 +94,14 @@ namespace stm32plus {
            NVIC->IABR[5]!=0 ||
            NVIC->IABR[6]!=0 ||
            NVIC->IABR[7]!=0;
+  }
+
+
+  /**
+   * Trigger a soft reset of the MCU.
+   */
+
+  inline void Nvic::systemReset() {
+    NVIC_SystemReset();
   }
 }

@@ -28,6 +28,7 @@ namespace stm32plus {
       static void configureIrq(uint8_t interrupt,FunctionalState state=ENABLE,uint8_t preemptionPriority=0,uint8_t subPriority=0);
       static void disableAllInterrupts();
       static void enableAllInterrupts();
+      static void systemReset();
   };
 
 
@@ -75,5 +76,14 @@ namespace stm32plus {
 
   inline void Nvic::enableAllInterrupts() {
     __enable_irq();
+  }
+
+
+  /**
+   * Trigger a soft reset of the MCU.
+   */
+
+  inline void Nvic::systemReset() {
+    NVIC_SystemReset();
   }
 }
