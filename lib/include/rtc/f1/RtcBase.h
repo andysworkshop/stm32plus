@@ -19,12 +19,21 @@ namespace stm32plus {
    */
 
   class RtcBase {
+    enum {
+       BKP_ALWAYS_RESET = 0,           // Old stm32plus behavior
+       NOT_SURVIVED_FLAG = 0x1000000,  // Stored in _hourFormat
+       HOUR_FORMAT_MASK = 0x0000ffff   // Hour format values are 0 and 64
+     };
+
+    private:
+      bool _survived;
 
     public:
-      RtcBase();
+      RtcBase(uint32_t ignored=0,uint32_t backupValue=BKP_ALWAYS_RESET);
 
       void setTick(uint32_t tick) const;
       uint32_t getTick() const;
+      bool survived() const;  // true if RTC configuration survived reboot
   };
 
 
@@ -32,13 +41,19 @@ namespace stm32plus {
    * Constructor
    */
 
-  inline RtcBase::RtcBase() {
+  inline RtcBase::RtcBase(uint32_t ignored, uint32_t backupValue) : _survived(true) {
+    ignored++;
 
     ClockControl<PERIPHERAL_POWER>::On();
     ClockControl<PERIPHERAL_BACKUP>::On();
 
     PWR_BackupAccessCmd(ENABLE);          // allow backup domain access
-    BKP_DeInit();                         // reset backup domain
+
+    // Derived class should set the backup value after configuring the LSE
+    if (backupValue == BKP_ALWAYS_RESET || BKP_ReadBackupRegister(BKP_DR1) != backupValue) {
+      BKP_DeInit();                       // reset backup domain
+      _survived = false;
+    }
   }
 
 
@@ -63,4 +78,15 @@ namespace stm32plus {
     RTC_WaitForLastTask();
     return ::RTC_GetCounter();
   }
+
+
+  /**
+     * Return whether the RTC configuration survived reset, indicating
+     * whether the backup domain was reset or not.
+     * @return true if the RTC retained its configuration from a prior boot
+     */
+
+    inline bool RtcBase::survived() const {
+      return _survived;
+    }
 }

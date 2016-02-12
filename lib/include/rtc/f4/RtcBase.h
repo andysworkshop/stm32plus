@@ -19,12 +19,17 @@ namespace stm32plus {
    */
 
   class RtcBase {
+    enum {
+      BKP_ALWAYS_RESET = 0,           // Old stm32plus behavior
+      NOT_SURVIVED_FLAG = 0x1000000,  // Stored in _hourFormat
+      HOUR_FORMAT_MASK = 0x0000ffff   // Hour format values are 0 and 64
+    };
 
     protected:
       uint32_t _hourFormat;
 
     public:
-      RtcBase(uint32_t hourFormat=RTC_HourFormat_24);
+      RtcBase(uint32_t hourFormat=RTC_HourFormat_24,uint32_t backupValue=BKP_ALWAYS_RESET);
 
       void setTime(uint8_t hours,uint8_t minutes,uint8_t seconds,uint8_t am_pm=RTC_H12_AM) const;
       void getTime(uint8_t& hours,uint8_t& minutes,uint8_t& seconds,uint8_t& am_pm) const;
@@ -36,22 +41,27 @@ namespace stm32plus {
       void setTick(uint32_t tick) const;
 
       uint32_t getHourFormat() const;
+      bool survived() const;  // true if RTC configuration survived reboot
   };
 
   /**
    * Constructor
    */
 
-  inline RtcBase::RtcBase(uint32_t hourFormat)
+  inline RtcBase::RtcBase(uint32_t hourFormat,uint32_t backupValue)
     : _hourFormat(hourFormat) {
 
     RCC_APB1PeriphClockCmd(RCC_APB1Periph_PWR,ENABLE);
     PWR_BackupAccessCmd(ENABLE);          // allow backup domain access
 
-    // reset the backup domain
+    // Derived class should set the backup value after configuring the LSE
+    if (backupValue == BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0) != backupValue) {
+      // reset the backup domain
+      RCC_BackupResetCmd(ENABLE);
+      RCC_BackupResetCmd(DISABLE);
 
-    RCC_BackupResetCmd(ENABLE);
-    RCC_BackupResetCmd(DISABLE);
+      _hourFormat |= NOT_SURVIVED_FLAG;
+    }
   }
 
 
@@ -147,6 +157,17 @@ namespace stm32plus {
 
   inline uint32_t RtcBase::getHourFormat() const {
     return _hourFormat;
+  }
+
+
+  /**
+   * Return whether the RTC configuration survived reset, indicating
+   * whether the backup domain was reset or not.
+   * @return true if the RTC retained its configuration from a prior boot
+   */
+
+  inline bool RtcBase::survived() const {
+    return !(_hourFormat & NOT_SURVIVED_FLAG);
   }
 
 

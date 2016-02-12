@@ -21,7 +21,6 @@ namespace stm32plus {
   class RtcBase {
     enum {
       BKP_ALWAYS_RESET = 0,           // Old stm32plus behavior
-      BKP_MAGIC_VALUE = 0x70323373,   // To check if we have already initialised the RTC
       NOT_SURVIVED_FLAG = 0x1000000,  // Stored in _hourFormat
       HOUR_FORMAT_MASK = 0x0000ffff   // Hour format values are 0 and 64
     };
@@ -47,8 +46,9 @@ namespace stm32plus {
 
   /**
    * Constructor.
-   * If backupValue is non-zero, it is saved to RTC_BKP_DR0; the RTC will
-   * only be re-initialized if RTC_BKP_DR0 != backupValue.
+   * If backupValue == 0, the RTC and backup domain will be reset.
+   * If backupValue is non-zero, the RTC and backup domain will only be reset
+   * if RTC_BKP_DR0 != backupValue.
    */
 
   inline RtcBase::RtcBase(uint32_t hourFormat, uint32_t backupValue)
@@ -65,7 +65,6 @@ namespace stm32plus {
       RCC_BackupResetCmd(ENABLE);
       RCC_BackupResetCmd(DISABLE);
 
-      RTC_WriteBackupRegister(RTC_BKP_DR0, backupValue);
       _hourFormat |= NOT_SURVIVED_FLAG;
     }
   }
@@ -164,6 +163,7 @@ namespace stm32plus {
   inline uint32_t RtcBase::getHourFormat() const {
     return _hourFormat & HOUR_FORMAT_MASK;
   }
+
 
   /**
    * Return whether the RTC configuration survived reset, indicating

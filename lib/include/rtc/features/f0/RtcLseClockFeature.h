@@ -43,7 +43,7 @@ namespace stm32plus {
     RCC_LSEConfig(RCC_LSE_ON);
 
     // wait till LSE is ready
-
+		// can hang if LSE is not working
     while(RCC_GetFlagStatus(RCC_FLAG_LSERDY)==RESET);
     RCC_RTCCLKConfig(RCC_RTCCLKSource_LSE);
 
