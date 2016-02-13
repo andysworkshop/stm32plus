@@ -18,8 +18,19 @@ namespace stm32plus {
               public Features... {
 
     public:
-      Rtc() :
+      Rtc(uint32_t hourFormat=0,uint32_t backupValue=0) :
+        RtcBase(hourFormat, backupValue),
         Features(static_cast<RtcBase&>(*this))... {
+
+        // remember successful RTC initialization after features have run
+        // only useful with LSE which is part of the backup domain
+        if(backupValue != 0) {
+#ifdef STM32PLUS_F1
+          BKP_WriteBackupRegister(BKP_DR1, backupValue);
+#else
+          RTC_WriteBackupRegister(RTC_BKP_DR0, backupValue);
+#endif
+        }
       }
     };
 }
