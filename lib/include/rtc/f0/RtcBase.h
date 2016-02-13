@@ -41,8 +41,9 @@ namespace stm32plus {
       void setTick(uint32_t tick) const;
 
       uint32_t getHourFormat() const;
-      bool survived() const;  // true if RTC configuration survived reboot
+      bool survived() const;        // true if RTC configuration survived reboot
   };
+
 
   /**
    * Constructor.
@@ -60,12 +61,15 @@ namespace stm32plus {
     // Ideally we would only set the backup value after configuring the LSE,
     // and the number would depend on the chosen oscillator & settings.
     // Otherwise re-flashing the firmware may not behave as expected.
-    if (backupValue == BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0) != backupValue) {
+
+    if(backupValue==BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0)!=backupValue) {
+
       // reset the backup domain
+
       RCC_BackupResetCmd(ENABLE);
       RCC_BackupResetCmd(DISABLE);
 
-      _hourFormat |= NOT_SURVIVED_FLAG;
+      _hourFormat|=NOT_SURVIVED_FLAG;
     }
   }
 

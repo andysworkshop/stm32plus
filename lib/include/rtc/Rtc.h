@@ -24,11 +24,12 @@ namespace stm32plus {
 
         // remember successful RTC initialization after features have run
         // only useful with LSE which is part of the backup domain
-        if(backupValue != 0) {
-#ifdef STM32PLUS_F1
-          BKP_WriteBackupRegister(BKP_DR1, backupValue);
+
+        if(backupValue) {
+#if defined(STM32PLUS_F1)
+          BKP_WriteBackupRegister(BKP_DR1,backupValue);
 #else
-          RTC_WriteBackupRegister(RTC_BKP_DR0, backupValue);
+          RTC_WriteBackupRegister(RTC_BKP_DR0,backupValue);
 #endif
         }
       }
