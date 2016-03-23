@@ -23,6 +23,20 @@ namespace stm32plus {
     _counter=0;
     SysTick_Config(SystemCoreClock / 1000);
   }
+
+
+  /**
+   * Delay for given time. Waits for the current value of the systick counter to reach a target.
+   * @param millis The amount of time to wait.
+   */
+
+  inline void MillisecondTimer::delay(uint32_t millis) {
+
+    uint32_t target;
+
+    target=_counter+millis;
+    while(_counter<target);
+  }
 }
 
 
