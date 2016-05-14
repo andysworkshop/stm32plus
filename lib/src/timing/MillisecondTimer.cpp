@@ -30,7 +30,7 @@ namespace stm32plus {
    * @param millis The amount of time to wait.
    */
 
-  inline void MillisecondTimer::delay(uint32_t millis) {
+  void MillisecondTimer::delay(uint32_t millis) {
 
     uint32_t target;
 
