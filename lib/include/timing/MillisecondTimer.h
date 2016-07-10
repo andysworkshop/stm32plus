@@ -86,7 +86,7 @@ namespace stm32plus {
 
     uint32_t now=millis();
 
-    if(now>start)
+    if(now>=start)
       return now-start;
     else
       return now+(UINT32_MAX-start+1);
