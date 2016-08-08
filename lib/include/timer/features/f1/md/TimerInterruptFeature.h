@@ -7,8 +7,8 @@
 #pragma once
 
 // ensure the MCU series is correct
-#ifndef STM32PLUS_F1_MD
-#error This class can only be used with the STM32F1 MD series
+#if !defined(STM32PLUS_F1_MD)
+#error This class can only be used with the STM32F1_MD series
 #endif
 
 
@@ -65,10 +65,6 @@ namespace stm32plus {
   typedef TimerInterruptFeature<2> Timer2InterruptFeature;
   typedef TimerInterruptFeature<3> Timer3InterruptFeature;
   typedef TimerInterruptFeature<4> Timer4InterruptFeature;
-  typedef TimerInterruptFeature<5> Timer5InterruptFeature;
-  typedef TimerInterruptFeature<6> Timer6InterruptFeature;
-  typedef TimerInterruptFeature<7> Timer7InterruptFeature;
-
 
   /**
    * Template static data member initialisation
@@ -167,7 +163,7 @@ namespace stm32plus {
     }
 
     if((interruptMask & TIM_IT_Break)!=0) {
-      _forceLinkage=&TIM1_UP_IRQHandler;
+      _forceLinkage=&TIM1_BRK_IRQHandler;
       Nvic::configureIrq(TIM1_BRK_IRQn,ENABLE,priority,subPriority);
     }
 
