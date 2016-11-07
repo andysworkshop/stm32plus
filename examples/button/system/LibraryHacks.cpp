@@ -92,4 +92,8 @@ extern "C" {
 
     return (caddr_t) prev_heap;
   }
+
+  int __wrap_atexit (void (*)(void)) {
+         return 0;
+  }
 }
