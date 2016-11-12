@@ -69,6 +69,7 @@ Usage: scons mode=<MODE> mcu=<MCU> (hse=<HSE> / hsi=<HSI>) [float=hard] [example
 """
 
 import os
+import platform
 
 
 #
@@ -230,8 +231,14 @@ else:
 # modify build flags and plugin location for using LTO
 
 if lto=="yes":
+
+    if "cygwin" in platform.system().lower():
+        lto_plugin="liblto_plugin-0.dll"
+    else:
+        lto_plugin="liblto_plugin.so"
+
     import subprocess
-    opts=subprocess.check_output("arm-none-eabi-gcc --print-file-name=liblto_plugin.so",shell=True).strip()
+    opts=subprocess.check_output("arm-none-eabi-gcc --print-file-name="+lto_plugin,shell=True).strip()
     env.Append(CFLAGS=["-flto"])
     env.Append(CXXFLAGS=["-flto"])
     env.Append(CPPFLAGS=["-flto"])
