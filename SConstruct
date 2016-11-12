@@ -39,6 +39,9 @@ Usage: scons mode=<MODE> mcu=<MCU> (hse=<HSE> / hsi=<HSI>) [float=hard] [example
     Optional flag that allows you to build just the library without the examples. The
     default is to build the library and the examples.
 
+  [lto=yes]:
+    Use link-time optimization, GCC feature that can substantially reduce binary size
+
   Examples:
     scons mode=debug mcu=f1hd hse=8000000                       // debug / f1hd / 8MHz
     scons mode=debug mcu=f1cle hse=25000000                     // debug / f1cle / 25MHz
@@ -138,6 +141,10 @@ if not osc.isdigit():
 
 build_examples = ARGUMENTS.get('examples')
 
+# use LTO ?
+
+lto = ARGUMENTS.get('lto')
+
 float = None
 
 # set up build environment and pull in OS environment variables
@@ -219,6 +226,18 @@ elif mode=="small":
 else:
   print __doc__
   Exit(1)
+
+# modify build flags and plugin location for using LTO
+
+if lto=="yes":
+    import subprocess
+    opts=subprocess.check_output("arm-none-eabi-gcc --print-file-name=liblto_plugin.so",shell=True).strip()
+    env.Append(CFLAGS=["-flto"])
+    env.Append(CXXFLAGS=["-flto"])
+    env.Append(CPPFLAGS=["-flto"])
+    env.Append(LINKFLAGS=["-flto"])
+    env.Append(ARFLAGS=["--plugin="+opts])
+    env.Append(RANLIBFLAGS=["--plugin="+opts])
 
 print "stm32plus build version is "+VERSION
 
