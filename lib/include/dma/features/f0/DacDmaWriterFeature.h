@@ -25,6 +25,7 @@ namespace stm32plus {
    * modes implies that you have packed your data accordingly for transfer. See comments below regarding the
    * packed data format or the register description in RM0008 / RM0090.
    * @tparam TPriority One of the DMA priority constants. The default is |DMA_Priority_High|
+   * @tparam TMode One of the DMA mode constants (|DMA_Mode_Normal| or |DMA_Mode_Circular|)
    */
 
   template<class TDacAlignmentFeature,uint32_t TPriority=DMA_Priority_High, uint32_t TMode=DMA_Mode_Normal>
@@ -116,7 +117,7 @@ namespace stm32plus {
     _init.DMA_DIR=DMA_DIR_PeripheralDST;                      // 'peripheral' is destination
     _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;        // 'peripheral' does not increment
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
-    _init.DMA_Mode=TMode;                           // not a circular buffer
+    _init.DMA_Mode=TMode;                                     // circular/normal
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_M2M=DMA_M2M_Disable;                            // memory->peripheral configuration
   }

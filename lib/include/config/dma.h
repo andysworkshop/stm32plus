@@ -99,6 +99,7 @@
   #include "dma/features/f1/DmaFsmcLcdMemoryCopyFeature.h"
   #include "dma/features/f1/AdcDmaFeature.h"
   #include "dma/features/f1/AdcMultiDmaFeature.h"
+  #include "dma/features/f1/DacDmaWriterFeature.h"
 
   #include "dma/features/f1/DmaPeripheralInfo.h"
 
