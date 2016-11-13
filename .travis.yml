@@ -13,17 +13,20 @@ cache:
     - $HOME/gcc-arm-none-eabi-5_2-2015q4
 
 env:
-  - MODE=small MCU=f1mdvl HSE=8000000
-  - MODE=small MCU=f1md HSE=8000000
-  - MODE=small MCU=f1hd HSE=8000000
-  - MODE=small MCU=f1cle HSE=25000000
-  - MODE=small MCU=f051 HSE=8000000
-  - MODE=small MCU=f030 HSE=8000000
-  - MODE=small MCU=f042 HSE=8000000
-  - MODE=small MCU=f4 HSE=8000000
-  - MODE=small MCU=f4 HSE=8000000 FLOAT=hard
-  - MODE=small MCU=f429 HSE=8000000
-  - MODE=small MCU=f429 HSE=8000000 FLOAT=hard
+  - MODE=small MCU=f1mdvl HSE=8000000 LTO=no
+  - MODE=small MCU=f1md HSE=8000000 LTO=no
+  - MODE=small MCU=f1hd HSE=8000000 LTO=no
+  - MODE=small MCU=f1cle HSE=25000000 LTO=no
+  - MODE=small MCU=f051 HSE=8000000 LTO=no
+  - MODE=small MCU=f030 HSE=8000000 LTO=no
+  - MODE=small MCU=f042 HSE=8000000 LTO=no
+  - MODE=small MCU=f4 HSE=8000000 LTO=no
+  - MODE=small MCU=f4 HSE=8000000 FLOAT=hard LTO=no
+  - MODE=small MCU=f429 HSE=8000000 LTO=no
+  - MODE=small MCU=f429 HSE=8000000 FLOAT=hard LTO=no
+  - MODE=small MCU=f4 HSE=8000000 LTO=yes
+  - MODE=small MCU=f051 HSE=8000000 LTO=yes
+  - MODE=small MCU=f1hd HSE=8000000 LTO=yes
 
 install:
   - export GCC_DIR=$HOME/gcc-arm-none-eabi-5_2-2015q4
@@ -33,5 +36,5 @@ install:
   - export PATH=$PATH:$GCC_DIR/bin
 
 script:
-  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT install INSTALLDIR=~/usr -j4
+  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT lto=$LTO install INSTALLDIR=~/usr -j4
   - cd ~/usr && find . | sort
