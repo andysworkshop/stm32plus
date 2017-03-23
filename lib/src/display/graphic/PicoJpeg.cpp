@@ -281,35 +281,35 @@ namespace stm32plus {
         case 0:
           return 0;
         case 1:
-          return ((-1) << 1) + 1;
+          return (int16_t)(0x7FFF << 1) + 1;
         case 2:
-          return ((-1) << 2) + 1;
+          return (int16_t)(0xFFFF << 2) + 1;
         case 3:
-          return ((-1) << 3) + 1;
+          return (int16_t)(0xFFFF << 3) + 1;
         case 4:
-          return ((-1) << 4) + 1;
+          return (int16_t)(0xFFFF << 4) + 1;
         case 5:
-          return ((-1) << 5) + 1;
+          return (int16_t)(0xFFFF << 5) + 1;
         case 6:
-          return ((-1) << 6) + 1;
+          return (int16_t)(0xFFFF << 6) + 1;
         case 7:
-          return ((-1) << 7) + 1;
+          return (int16_t)(0xFFFF << 7) + 1;
         case 8:
-          return ((-1) << 8) + 1;
+          return (int16_t)(0xFFFF << 8) + 1;
         case 9:
-          return ((-1) << 9) + 1;
+          return (int16_t)(0xFFFF << 9) + 1;
         case 10:
-          return ((-1) << 10) + 1;
+          return (int16_t)(0xFFFF << 10) + 1;
         case 11:
-          return ((-1) << 11) + 1;
+          return (int16_t)(0xFFFF << 11) + 1;
         case 12:
-          return ((-1) << 12) + 1;
+          return (int16_t)(0xFFFF << 12) + 1;
         case 13:
-          return ((-1) << 13) + 1;
+          return (int16_t)(0xFFFF << 13) + 1;
         case 14:
-          return ((-1) << 14) + 1;
+          return (int16_t)(0xFFFF << 14) + 1;
         case 15:
-          return ((-1) << 15) + 1;
+          return (int16_t)(0xFFFF << 15) + 1;
         default:
           return 0;
       }
