@@ -281,7 +281,7 @@ namespace stm32plus {
         case 0:
           return 0;
         case 1:
-          return (int16_t)(0x7FFF << 1) + 1;
+          return (int16_t)(0xFFFF << 1) + 1;
         case 2:
           return (int16_t)(0xFFFF << 2) + 1;
         case 3:
