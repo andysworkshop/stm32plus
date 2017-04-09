@@ -66,7 +66,7 @@ namespace stm32plus {
     this->getDate(year, month, dayOfMonth, dayOfWeek);
     this->getTime(hours, minutes, seconds, am_pm);
     if(backupValue==BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0)!=backupValue ||
-      (year|month|dayOfMonth|dayOfWeek|hours|minutes|seconds|am_pm==0)) {
+      (year|month|dayOfMonth|dayOfWeek|hours|minutes|seconds|am_pm)==0) {
       // reset the backup domain
 
       RCC_BackupResetCmd(ENABLE);
