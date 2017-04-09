@@ -24,7 +24,7 @@ namespace stm32plus {
 
     public:
       static void initialise();
-      static void delay(uint32_t millis_);
+      static void __attribute__ ((weak)) delay(uint32_t millis_);
       static uint32_t millis();
       static void reset();
       static bool hasTimedOut(uint32_t start,uint32_t timeout);
@@ -39,20 +39,6 @@ namespace stm32plus {
 
   inline uint32_t MillisecondTimer::millis() {
     return _counter;
-  }
-
-
-  /**
-   * Delay for given time. Waits for the current value of the systick counter to reach a target.
-   * @param millis The amount of time to wait.
-   */
-
-  inline void MillisecondTimer::delay(uint32_t millis) {
-
-    uint32_t target;
-
-    target=_counter+millis;
-    while(_counter<target);
   }
 
 
@@ -86,7 +72,7 @@ namespace stm32plus {
 
     uint32_t now=millis();
 
-    if(now>start)
+    if(now>=start)
       return now-start;
     else
       return now+(UINT32_MAX-start+1);

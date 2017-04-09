@@ -21,7 +21,6 @@ namespace stm32plus {
   class RtcBase {
     enum {
       BKP_ALWAYS_RESET = 0,           // Old stm32plus behavior
-      BKP_MAGIC_VALUE = 0x70323373,   // To check if we have already initialised the RTC
       NOT_SURVIVED_FLAG = 0x1000000,  // Stored in _hourFormat
       HOUR_FORMAT_MASK = 0x0000ffff   // Hour format values are 0 and 64
     };
@@ -42,13 +41,15 @@ namespace stm32plus {
       void setTick(uint32_t tick) const;
 
       uint32_t getHourFormat() const;
-      bool survived() const;  // true if RTC configuration survived reboot
+      bool survived() const;        // true if RTC configuration survived reboot
   };
+
 
   /**
    * Constructor.
-   * If backupValue is non-zero, it is saved to RTC_BKP_DR0; the RTC will
-   * only be re-initialized if RTC_BKP_DR0 != backupValue.
+   * If backupValue == 0, the RTC and backup domain will be reset.
+   * If backupValue is non-zero, the RTC and backup domain will only be reset
+   * if RTC_BKP_DR0 != backupValue.
    */
 
   inline RtcBase::RtcBase(uint32_t hourFormat, uint32_t backupValue)
@@ -60,20 +61,18 @@ namespace stm32plus {
     // Ideally we would only set the backup value after configuring the LSE,
     // and the number would depend on the chosen oscillator & settings.
     // Otherwise re-flashing the firmware may not behave as expected.
-    // If the LSE is not connected properly, the backup register can be set
-    // without being able to set the time. Also reset clock if the
-    // date and time are all zeros.
+    // Also reset clock if the date and time are all zeros.
     uint8_t year, month, dayOfMonth, dayOfWeek, hours, minutes, seconds, am_pm;
     this->getDate(year, month, dayOfMonth, dayOfWeek);
     this->getTime(hours, minutes, seconds, am_pm);
-    if (backupValue == BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0) != backupValue || 
+    if(backupValue==BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0)!=backupValue ||
       (year|month|dayOfMonth|dayOfWeek|hours|minutes|seconds|am_pm==0)) {
       // reset the backup domain
+
       RCC_BackupResetCmd(ENABLE);
       RCC_BackupResetCmd(DISABLE);
 
-      RTC_WriteBackupRegister(RTC_BKP_DR0, backupValue);
-      _hourFormat |= NOT_SURVIVED_FLAG;
+      _hourFormat|=NOT_SURVIVED_FLAG;
     }
   }
 
@@ -171,6 +170,7 @@ namespace stm32plus {
   inline uint32_t RtcBase::getHourFormat() const {
     return _hourFormat & HOUR_FORMAT_MASK;
   }
+
 
   /**
    * Return whether the RTC configuration survived reset, indicating

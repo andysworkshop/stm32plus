@@ -32,10 +32,12 @@ using namespace stm32plus;
  * a problem then the LED will flash a number of times to indicate a numeric error code that
  * you can cross reference with the code.
  *
- * Compatible MCU:
- *   STM32F051
- *   STM32F407
- *   STM32F103
+ * Compatible MCU (without modifying this example):
+ *   STM32F051 (64Kb)
+ *   STM32F407 (1Mb)
+ *   STM32F415 (1Mb)
+ *   STM32F417 (1Mb)
+ *   STM32F103 (512Kb)
  *
  * Tested on devices:
  *   STM32F042F6P6
@@ -97,7 +99,7 @@ class InternalFlashSettings {
       firstLocation=FLASH_BASE+32768-2048;           // 2Kb at the top of the 32Kb flash
       memorySize=2048;
 
-#elif defined(STM32PLUS_F407)
+#elif defined(STM32PLUS_F407) || defined(STM32PLUS_F415) || defined(STM32PLUS_F417)
 
       firstLocation=FLASH_BASE+1048576-(128*1024);   // 128Kb (last page) at the top of the 1Mb flash
       memorySize=128*1024;

@@ -72,7 +72,7 @@ namespace stm32plus {
 
   template<typename T>
   inline circular_buffer<T>::~circular_buffer() {
-    delete _buffer;
+    delete[] _buffer;
   }
 
 

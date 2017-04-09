@@ -1,23 +1,40 @@
+# travis build configuration for stm32plus
+
 language: cpp
-compiler: gcc
-cache: apt
+sudo: false
+
+addons:
+  apt:
+    packages:
+      libc6-i386
+
+cache:
+  directories:
+    - $HOME/gcc-arm-none-eabi-5_2-2015q4
+
 env:
-  - MODE=small MCU=f1mdvl HSE=8000000
-  - MODE=small MCU=f1md HSE=8000000
-  - MODE=small MCU=f1hd HSE=8000000
-  - MODE=small MCU=f1cle HSE=25000000
-  - MODE=small MCU=f051 HSE=8000000
-  - MODE=small MCU=f030 HSE=8000000
-  - MODE=small MCU=f042 HSE=8000000
-  - MODE=small MCU=f4 HSE=8000000
-  - MODE=small MCU=f4 HSE=8000000 FLOAT=hard
-  - MODE=small MCU=f429 HSE=8000000
-  - MODE=small MCU=f429 HSE=8000000 FLOAT=hard
-before_install:
-  - sudo add-apt-repository ppa:terry.guo/gcc-arm-embedded -y
-  - sudo apt-get update
+  - MODE=small MCU=f1mdvl HSE=8000000 LTO=no
+  - MODE=small MCU=f1md HSE=8000000 LTO=no
+  - MODE=small MCU=f1hd HSE=8000000 LTO=no
+  - MODE=small MCU=f1cle HSE=25000000 LTO=no
+  - MODE=small MCU=f051 HSE=8000000 LTO=no
+  - MODE=small MCU=f030 HSE=8000000 LTO=no
+  - MODE=small MCU=f042 HSE=8000000 LTO=no
+  - MODE=small MCU=f4 HSE=8000000 LTO=no
+  - MODE=small MCU=f4 HSE=8000000 FLOAT=hard LTO=no
+  - MODE=small MCU=f429 HSE=8000000 LTO=no
+  - MODE=small MCU=f429 HSE=8000000 FLOAT=hard LTO=no
+  - MODE=small MCU=f4 HSE=8000000 LTO=yes
+  - MODE=small MCU=f051 HSE=8000000 LTO=yes
+  - MODE=small MCU=f1hd HSE=8000000 LTO=yes
+
 install:
-  - sudo apt-get install gcc-arm-none-eabi
+  - export GCC_DIR=$HOME/gcc-arm-none-eabi-5_2-2015q4
+  - export GCC_ARCHIVE=$HOME/gcc-arm-none-eabi-5_2-2015q4-20151219-linux.tar.bz2
+  - export GCC_URL=https://launchpad.net/gcc-arm-embedded/5.0/5-2015-q4-major/+download/gcc-arm-none-eabi-5_2-2015q4-20151219-linux.tar.bz2
+  - if [ ! -e $GCC_DIR/bin/arm-none-eabi-g++ ]; then wget $GCC_URL -O $GCC_ARCHIVE; tar xfj $GCC_ARCHIVE -C $HOME; fi
+  - export PATH=$PATH:$GCC_DIR/bin
+
 script:
-  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT install INSTALLDIR=~/usr -j4
+  - scons mode=$MODE mcu=$MCU hse=$HSE float=$FLOAT lto=$LTO install INSTALLDIR=~/usr -j4
   - cd ~/usr && find . | sort

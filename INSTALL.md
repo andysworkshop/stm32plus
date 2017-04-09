@@ -15,7 +15,7 @@ If you're happy with building from the `master` branch then you can just go righ
 Prerequisites
 -------------
 
-* A compatible arm-none-eabi toolchain. I prefer the [ARM launchpad](https://launchpad.net/gcc-arm-embedded) toolchain because it supports the hardware FPU in the F4 series. I can also confirm that the Mentor Graphics (formerly CodeSourcery) _Sourcery G++ Lite_ toolchain preferred in previous stm32plus releases still works as long as you don't require the hardware FPU. Download the most recent EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
+* A compatible arm-none-eabi toolchain. I prefer the [ARM launchpad](https://launchpad.net/gcc-arm-embedded) toolchain because it supports the hardware FPU in the F4 series. Download the a compatible EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
 
 		$ arm-none-eabi-g++
 		arm-none-eabi-g++.exe: no input files
@@ -24,7 +24,6 @@ Prerequisites
 
 ### Additional prerequisites for Windows systems ###
    
-
 * cygwin, msys or any other system that makes your build environment look like Unix. I use cygwin. Attempting to build out of something as lobotomised as a Windows _cmd_ shell is not supported.
 
 * Windows builds under cygwin _must_ use the cygwin supplied python and the source build of scons. Get python from the official cygwin update site. Get scons from [http://www.scons.org/download.php](http://www.scons.org/download.php) and select _Zip file_ or _Gzip tar file_ and install it using `setup.py` from the cygwin bash prompt.
