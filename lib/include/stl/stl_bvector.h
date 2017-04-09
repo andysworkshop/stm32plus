@@ -808,7 +808,7 @@ public:
   iterator erase(iterator __position) {
     if (__position + 1 != end())
       copy(__position + 1, end(), __position);
-      --_M_finish;
+    --_M_finish;
     return __position;
   }
   iterator erase(iterator __first, iterator __last) {
