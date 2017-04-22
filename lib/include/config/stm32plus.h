@@ -44,7 +44,7 @@
  */
 
 #undef STM32PLUS_BUILD
-#define STM32PLUS_BUILD 0x040006
+#define STM32PLUS_BUILD 0x040100
 
 
 /**
