@@ -10,7 +10,7 @@ addons:
 
 cache:
   directories:
-    - $HOME/gcc-arm-none-eabi-5_2-2015q4
+    - $HOME/gcc-arm-none-eabi-6-2017-q1-update
 
 env:
   - MODE=small MCU=f1mdvl HSE=8000000 LTO=no
@@ -29,7 +29,7 @@ env:
   - MODE=small MCU=f1hd HSE=8000000 LTO=yes
 
 install:
-  - export GCC_DIR=$HOME/gcc-arm-none-eabi
+  - export GCC_DIR=$HOME/gcc-arm-none-eabi-6-2017-q1-update
   - export GCC_ARCHIVE=$HOME/gcc-arm-none-eabi-6-2017-q1-update-linux.tar.bz2
   - export GCC_URL=https://developer.arm.com/-/media/Files/downloads/gnu-rm/6_1-2017q1/gcc-arm-none-eabi-6-2017-q1-update-linux.tar.bz2?product=GNU%20ARM%20Embedded%20Toolchain,64-bit,,Linux,6-2017-q1-update
   - if [ ! -e $GCC_DIR/bin/arm-none-eabi-g++ ]; then wget $GCC_URL -O $GCC_ARCHIVE; tar xfj $GCC_ARCHIVE -C $HOME; fi
