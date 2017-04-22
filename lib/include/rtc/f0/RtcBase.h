@@ -61,9 +61,12 @@ namespace stm32plus {
     // Ideally we would only set the backup value after configuring the LSE,
     // and the number would depend on the chosen oscillator & settings.
     // Otherwise re-flashing the firmware may not behave as expected.
-
-    if(backupValue==BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0)!=backupValue) {
-
+    // Also reset clock if the date and time are all zeros.
+    uint8_t year, month, dayOfMonth, dayOfWeek, hours, minutes, seconds, am_pm;
+    this->getDate(year, month, dayOfMonth, dayOfWeek);
+    this->getTime(hours, minutes, seconds, am_pm);
+    if(backupValue==BKP_ALWAYS_RESET || RTC_ReadBackupRegister(RTC_BKP_DR0)!=backupValue ||
+      (year|month|dayOfMonth|dayOfWeek|hours|minutes|seconds|am_pm)==0) {
       // reset the backup domain
 
       RCC_BackupResetCmd(ENABLE);
