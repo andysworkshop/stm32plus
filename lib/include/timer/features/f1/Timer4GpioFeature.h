@@ -25,10 +25,10 @@ namespace stm32plus {
  
     TIM4_ETR() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOE,nullptr,nullptr,nullptr };
+      static constexpr const uint32_t ports[4]={ GPIOE_BASE,0,0,0 };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_0,0,0,0 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
     }
   };
 
@@ -42,10 +42,10 @@ namespace stm32plus {
  
     TIM4_CH1_IN() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_6,0,0,GPIO_Pin_12 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
     }
   };
 
@@ -59,10 +59,10 @@ namespace stm32plus {
  
     TIM4_CH1_OUT() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_6,0,0,GPIO_Pin_12 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
     }
   };
 
@@ -76,10 +76,10 @@ namespace stm32plus {
  
     TIM4_CH2_IN() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,0,GPIO_Pin_13 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
     }
   };
 
@@ -93,10 +93,10 @@ namespace stm32plus {
  
     TIM4_CH2_OUT() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,0,GPIO_Pin_13 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
     }
   };
 
@@ -110,10 +110,10 @@ namespace stm32plus {
  
     TIM4_CH3_IN() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_8,0,0,GPIO_Pin_14 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
     }
   };
 
@@ -127,10 +127,10 @@ namespace stm32plus {
  
     TIM4_CH3_OUT() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_8,0,0,GPIO_Pin_14 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
     }
   };
 
@@ -144,10 +144,10 @@ namespace stm32plus {
  
     TIM4_CH4_IN() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_9,0,0,GPIO_Pin_15 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::INPUT,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE); 
     }
   };
 
@@ -161,10 +161,10 @@ namespace stm32plus {
  
     TIM4_CH4_OUT() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOB,nullptr,nullptr,GPIOD };
+      static constexpr const uint32_t ports[4]={ GPIOB_BASE,0,0,GPIOD_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_9,0,0,GPIO_Pin_15 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER4>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER4,ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF); 
     }
   };
 
