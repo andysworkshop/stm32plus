@@ -79,7 +79,7 @@ namespace stm32plus {
 
   template<class TTimer,PeripheralName TPeripheralName>
   inline void TimerPeripheral<TTimer,TPeripheralName>::setPrescalerImmediately(uint16_t value) {
-    TIM_PrescalerConfig(*this,0,TIM_PSCReloadMode_Immediate);
+    TIM_PrescalerConfig(*this,value,TIM_PSCReloadMode_Immediate);
   }
 
 
@@ -90,6 +90,6 @@ namespace stm32plus {
 
   template<class TTimer,PeripheralName TPeripheralName>
   inline void TimerPeripheral<TTimer,TPeripheralName>::setPrescalerAtUpdate(uint16_t value) {
-    TIM_PrescalerConfig(*this,0,TIM_PSCReloadMode_Update);
+    TIM_PrescalerConfig(*this,value,TIM_PSCReloadMode_Update);
   }
 }
