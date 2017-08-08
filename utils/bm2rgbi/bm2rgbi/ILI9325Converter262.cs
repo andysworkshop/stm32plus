@@ -14,7 +14,7 @@ namespace bm2rgbi {
     /// Do the conversion. 
     /// </summary>
 
-    public void convert(Bitmap bm,FileStream fs) {
+    public void convert(Bitmap bm,FileStream fs, bool ByteOrder) {
 
       int x,y,r,g,b,value;
       Color c;

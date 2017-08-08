@@ -19,8 +19,8 @@ namespace bm2rgbi {
     /// Do the conversion
     /// </summary>
 
-    public void convert(Bitmap bm,FileStream fs) {
-      _converter.convertBGR(bm,fs);
+    public void convert(Bitmap bm,FileStream fs, bool ByteOrder) {
+      _converter.convertBGR(bm,fs,ByteOrder);
     }
   }
 }

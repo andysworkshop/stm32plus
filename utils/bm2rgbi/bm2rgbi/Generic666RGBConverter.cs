@@ -14,7 +14,7 @@ namespace bm2rgbi {
     /// Convert to 666 format
     /// </summary>
 
-    public void convert(Bitmap bm,FileStream fs) {
+    public void convert(Bitmap bm,FileStream fs, bool ByteOrder) {
 
       int x,y,r,g,b;
       Color c;

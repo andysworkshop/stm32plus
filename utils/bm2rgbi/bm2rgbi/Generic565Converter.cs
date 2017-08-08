@@ -2,77 +2,103 @@
 using System.IO;
 using System;
 
-namespace bm2rgbi {
-  
-  /// <summary>
-  /// generic converter for 565 format 64K colours
-  /// Format: RRRRRGGGGGGBBBBB (RGB)
-  /// Format: BBBBBGGGGGGRRRRR (BGR)
-  /// </summary>
-  
-  public class Generic565Converter {
+namespace bm2rgbi
+{
 
     /// <summary>
-    /// Convert to 565 format RGB
+    /// generic converter for 565 format 64K colours
+    /// Format: RRRRRGGGGGGBBBBB (RGB)
+    /// Format: BBBBBGGGGGGRRRRR (BGR)
     /// </summary>
 
-    public void convertRGB(Bitmap bm,FileStream fs) {
+    public class Generic565Converter
+    {
 
-      int x,y,value,r,g,b;
-      Color c;
+        /// <summary>
+        /// Convert to 565 format RGB
+        /// </summary>
 
-      for(y=0;y<bm.Height;y++) {
+        public void convertRGB(Bitmap bm, FileStream fs, bool ByteOrder)
+        {
 
-        for(x=0;x<bm.Width;x++) {
+            int x, y, value, r, g, b;
+            Color c;
 
-          c=bm.GetPixel(x,y);
+            for (y = 0; y < bm.Height; y++)
+            {
 
-          // convert to 565
+                for (x = 0; x < bm.Width; x++)
+                {
 
-          r=c.R>>3;
-          g=c.G>>2;
-          b=c.B>>3;
-  
-          value=r<<11 | g<<5 | b;
+                    c = bm.GetPixel(x, y);
 
-          // little-endian output
+                    // convert to 565
 
-          fs.WriteByte(Convert.ToByte(value & 0xFF));
-          fs.WriteByte(Convert.ToByte(value >> 8));
+                    r = c.R >> 3;
+                    g = c.G >> 2;
+                    b = c.B >> 3;
+
+                    value = r << 11 | g << 5 | b;
+
+
+
+                    if (ByteOrder)
+                    {
+                        // big-endian output
+                        fs.WriteByte(Convert.ToByte(value >> 8));
+                        fs.WriteByte(Convert.ToByte(value & 0xFF));
+                    }
+                    else
+                    {
+                        // little-endian output
+                        fs.WriteByte(Convert.ToByte(value & 0xFF));
+                        fs.WriteByte(Convert.ToByte(value >> 8));
+                    }                    
+                }
+            }
         }
-      }
-    }
 
 
-    /// <summary>
-    /// Convert to 565 format BGR
-    /// </summary>
+        /// <summary>
+        /// Convert to 565 format BGR
+        /// </summary>
 
-    public void convertBGR(Bitmap bm,FileStream fs) {
+        public void convertBGR(Bitmap bm, FileStream fs, bool ByteOrder)
+        {
 
-      int x,y,value,r,g,b;
-      Color c;
+            int x, y, value, r, g, b;
+            Color c;
 
-      for(y=0;y<bm.Height;y++) {
+            for (y = 0; y < bm.Height; y++)
+            {
 
-        for(x=0;x<bm.Width;x++) {
+                for (x = 0; x < bm.Width; x++)
+                {
 
-          c=bm.GetPixel(x,y);
+                    c = bm.GetPixel(x, y);
 
-          // convert to 565
+                    // convert to 565
 
-          r=c.R>>3;
-          g=c.G>>2;
-          b=c.B>>3;
-  
-          value=b<<11 | g<<5 | r;
+                    r = c.R >> 3;
+                    g = c.G >> 2;
+                    b = c.B >> 3;
 
-          // little-endian output
+                    value = b << 11 | g << 5 | r;
 
-          fs.WriteByte(Convert.ToByte(value & 0xFF));
-          fs.WriteByte(Convert.ToByte(value >> 8));
+                    if (ByteOrder)
+                    {
+                        // big-endian output
+                        fs.WriteByte(Convert.ToByte(value >> 8));
+                        fs.WriteByte(Convert.ToByte(value & 0xFF));
+                    }
+                    else
+                    {
+                        // little-endian output
+                        fs.WriteByte(Convert.ToByte(value & 0xFF));
+                        fs.WriteByte(Convert.ToByte(value >> 8));
+                    }
+                }
+            }
         }
-      }
     }
-  }
 }

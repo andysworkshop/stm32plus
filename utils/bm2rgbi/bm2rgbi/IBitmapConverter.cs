@@ -6,6 +6,6 @@ namespace bm2rgbi {
   
   public interface IBitmapConverter {
 
-    void convert(Bitmap bm,FileStream fs);
+    void convert(Bitmap bm,FileStream fs, bool ByteOrder);
   }
 }
