@@ -14,7 +14,7 @@ namespace bm2rgbi {
     /// Do the conversion. 
     /// </summary>
 
-    public void convert(Bitmap bm,FileStream fs, bool ByteOrder) {
+    public void convert(Bitmap bm,FileStream fs, Endianness ByteOrder) {
 
       int x,y;
       byte r,g,b,b1,b2;
@@ -35,8 +35,18 @@ namespace bm2rgbi {
       	  b1=(byte)(r | (g >> 5));
       	  b2=(byte)((g << 3) | (b >> 3));
 
-          fs.WriteByte(b1);
-          fs.WriteByte(b2);
+          if (ByteOrder == Endianness.BigEndian)
+          {
+            // big-endian output
+            fs.WriteByte(b2);
+            fs.WriteByte(b1);
+          }
+          else
+          {
+            // little-endian output
+            fs.WriteByte(b1);
+            fs.WriteByte(b2);
+          }
         }
       }
     }

@@ -15,7 +15,7 @@ namespace bm2rgbi {
     /// Do the conversion
     /// </summary>
 
-    public void convert(Bitmap bm,FileStream fs, bool ByteOrder) {
+    public void convert(Bitmap bm,FileStream fs, Endianness ByteOrder) {
       _converter.convert(bm,fs, ByteOrder);
     }
   }

@@ -19,7 +19,7 @@ namespace bm2rgbi
         public string OutputBitmapFilename { get; private set; }
         public IBitmapConverter TargetDevice { get; private set; }
         public bool Compress { get; private set; }
-        public bool ByteOrder { get; private set; }
+        public Endianness ByteOrder { get; private set; }
         public RotateFlipType Flip { get; private set; }
 
 
@@ -41,7 +41,7 @@ namespace bm2rgbi
             device = args[2];
             depth = int.Parse(args[3]);
             this.Compress = false;
-            this.ByteOrder = false;
+            this.ByteOrder = Endianness.LittleEndian; 
             this.Flip = RotateFlipType.RotateNoneFlipNone;
 
             for (int i = 4; i < args.Length; i++)
@@ -49,7 +49,7 @@ namespace bm2rgbi
                 if (args[i].Equals("-c"))
                     this.Compress = true;
                 else if (args[i].Equals("-b"))
-                    this.ByteOrder = true;
+                    this.ByteOrder = Endianness.BigEndian;
                 else if (args[i].Equals("-fx"))
                     this.Flip = RotateFlipType.RotateNoneFlipX;
                 else if (args[i].Equals("-fy"))
