@@ -38,10 +38,6 @@ namespace bm2rgbi
 
           // the conversion is a tidy stream of bytes
 
-          fs.WriteByte(Convert.ToByte(r));
-          fs.WriteByte(0);
-          fs.WriteByte(Convert.ToByte(b));
-          fs.WriteByte(Convert.ToByte(g));
           if (ByteOrder == Endianness.BigEndian)
           {
             // big-endian output
