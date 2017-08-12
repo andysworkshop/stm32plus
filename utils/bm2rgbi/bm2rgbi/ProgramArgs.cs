@@ -21,6 +21,7 @@ namespace bm2rgbi
         public bool Compress { get; private set; }
         public Endianness ByteOrder { get; private set; }
         public RotateFlipType Flip { get; private set; }
+        public RotateFlipType Rotate { get; private set; }
 
 
         /// <summary>
@@ -33,7 +34,7 @@ namespace bm2rgbi
             int depth;
             string device;
 
-            if (args.Length < 4 || args.Length > 7)
+            if (args.Length < 4 || args.Length > 8)
                 usage();
 
             InputBitmapFilename = args[0];
@@ -56,6 +57,12 @@ namespace bm2rgbi
                     this.Flip = RotateFlipType.RotateNoneFlipY;
                 else if (args[i].Equals("-fxy"))
                     this.Flip = RotateFlipType.RotateNoneFlipXY;
+                else if (args[i].Equals("-r90"))
+                    this.Rotate = RotateFlipType.Rotate90FlipNone;
+                else if (args[i].Equals("-r180"))
+                    this.Rotate = RotateFlipType.Rotate180FlipNone;
+                else if (args[i].Equals("-r270"))
+                    this.Rotate = RotateFlipType.Rotate270FlipNone;
             }
 
 
@@ -116,10 +123,11 @@ namespace bm2rgbi
         private void usage()
         {
 
-            Console.WriteLine("Usage: bm2rgbi input-image-file output-image-file target-device target-colour-depth [-c] [-b]\n");
-            Console.WriteLine("-c         : compress the output in LZG format");
-            Console.WriteLine("-b         : changes the byte order");
-            Console.WriteLine("-f[x/y/xy] : flips the image by x / y / xy axis/axes");
+            Console.WriteLine("Usage: bm2rgbi input-image-file output-image-file target-device target-colour-depth [-c] [-b] [-f] [-r]\n");
+            Console.WriteLine("-c             : compress the output in LZG format");
+            Console.WriteLine("-b             : changes the byte order");
+            Console.WriteLine("-f[x/y/xy]     : flips the image by x / y / xy axis/axes");
+            Console.WriteLine("-r[90/180/270] : rotate the image clockwise by 90°/180°/270°");
             Console.WriteLine("Supported devices and colours:");
             Console.WriteLine("  ili9325 64");
             Console.WriteLine("  ili9325 262");

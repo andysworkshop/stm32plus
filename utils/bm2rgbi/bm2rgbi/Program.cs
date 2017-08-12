@@ -36,6 +36,7 @@ namespace bm2rgbi
 
                 bm = new Bitmap(new FileStream(args.InputBitmapFilename, FileMode.Open, FileAccess.Read, FileShare.Read));
                 printBitmapInfo(bm);
+                bm.RotateFlip(args.Rotate);
                 bm.RotateFlip(args.Flip);
 
                 Console.WriteLine("Writing converted bitmap");
