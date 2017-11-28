@@ -77,6 +77,7 @@ extern "C" void __wrap___aeabi_unwind_cpp_pr2() {}
 extern int  _end;
 
 extern "C" {
+  caddr_t _sbrk ( int incr ) __attribute__((used));
   caddr_t _sbrk ( int incr ) {
 
     static unsigned char *heap = NULL;
@@ -91,5 +92,9 @@ extern "C" {
     heap += incr;
 
     return (caddr_t) prev_heap;
+  }
+
+  int __wrap_atexit (void (*)(void)) {
+         return 0;
   }
 }

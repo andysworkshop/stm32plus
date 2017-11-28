@@ -43,8 +43,11 @@ namespace wink {
       typedef Slot slot_type;
 
       slot_type _firstSlot;
+#ifdef EXT_SLIST     
+      __gnu_cxx::slist<slot_type> _slots;
+#else
       std::slist<slot_type> _slots;
-
+#endif
     public:
 
       /// Connects a slot to the signal

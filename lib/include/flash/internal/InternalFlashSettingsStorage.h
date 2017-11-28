@@ -281,6 +281,7 @@ namespace stm32plus {
     uint32_t *location,*maxLocation;
 
     maxVersion=0;
+    maxLocation=nullptr;
     location=reinterpret_cast<uint32_t *>(_parameters.firstLocation);
     settingsSize=getSettingsSize();
     entryCount=_parameters.memorySize/settingsSize;

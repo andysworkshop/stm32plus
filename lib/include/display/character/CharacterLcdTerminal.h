@@ -286,7 +286,7 @@ namespace stm32plus {
     template<class TImpl>
     CharacterLcdTerminal<TImpl>& CharacterLcdTerminal<TImpl>::operator<<(double val) {
 
-      return operator<<(DoublePrecision(DoublePrecision::MAX_DOUBLE_FRACTION_DIGITS));
+      return operator<<(DoublePrecision(val, DoublePrecision::MAX_DOUBLE_FRACTION_DIGITS));
     }
 
     /**

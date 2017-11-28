@@ -26,7 +26,7 @@ namespace stm32plus {
    */
 
   template<>
-  class CrcPeripheral<LITTLE_ENDIAN> : public CrcBase {
+  class CrcPeripheral<Endian::LITTLE_ENDIAN_MCU> : public CrcBase {
 
     public:
       struct Parameters {
@@ -51,7 +51,7 @@ namespace stm32plus {
    * typedefs for easy use
    */
 
-  typedef CrcPeripheral<LITTLE_ENDIAN> CrcLittleEndian;
+  typedef CrcPeripheral<Endian::LITTLE_ENDIAN_MCU> CrcLittleEndian;
 
 
   /**
@@ -59,7 +59,7 @@ namespace stm32plus {
    * @param padding The byte to pad the final word with when your input stream size is not a multiple of 32 bits.
    */
 
-  inline CrcPeripheral<LITTLE_ENDIAN>::CrcPeripheral(const Parameters& params)
+  inline CrcPeripheral<Endian::LITTLE_ENDIAN_MCU>::CrcPeripheral(const Parameters& params)
     : CrcBase(params.crc_padding) {
   }
 
@@ -71,7 +71,7 @@ namespace stm32plus {
    * @return The current value of the CRC.
    */
 
-  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::addNewData(uint8_t nextByte) {
+  inline uint32_t CrcPeripheral<Endian::LITTLE_ENDIAN_MCU>::addNewData(uint8_t nextByte) {
 
     // shift down the current word to make space for the new data and OR it in
 
@@ -100,7 +100,7 @@ namespace stm32plus {
    * @return The CRC
    */
 
-  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::calculateWordBuffer(uint32_t *buffer,uint32_t count) const {
+  inline uint32_t CrcPeripheral<Endian::LITTLE_ENDIAN_MCU>::calculateWordBuffer(uint32_t *buffer,uint32_t count) const {
     return CRC_CalcBlockCRC(buffer,count);
   }
 
@@ -110,7 +110,7 @@ namespace stm32plus {
    * @return The final CRC value
    */
 
-  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::finish() const {
+  inline uint32_t CrcPeripheral<Endian::LITTLE_ENDIAN_MCU>::finish() const {
 
     // if there are no pending bytes then return the current CRC value
     // otherwise add the pending word and return the updated CRC
@@ -127,7 +127,7 @@ namespace stm32plus {
    * @return The current CRC
    */
 
-  inline uint32_t CrcPeripheral<LITTLE_ENDIAN>::currentCrc() const {
+  inline uint32_t CrcPeripheral<Endian::LITTLE_ENDIAN_MCU>::currentCrc() const {
     return CRC_GetCRC();
   }
 }

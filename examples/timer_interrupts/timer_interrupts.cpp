@@ -72,7 +72,7 @@ class TimerInterruptsTest  {
       _ledState=false;
 
       /*
-       * Set ourselves up as an observer for interrupts raised by the timer class.
+       * Set ourselves up as a subscriber for interrupts raised by the timer class.
        */
 
       timer.TimerInterruptEventSender.insertSubscriber(
@@ -113,7 +113,7 @@ class TimerInterruptsTest  {
     }
 
     /*
-     * Observer callback function. This is called when the update interrupt that we've
+     * Subscriber callback function. This is called when the update interrupt that we've
      * enabled is fired.
      */
 

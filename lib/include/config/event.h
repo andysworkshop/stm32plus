@@ -15,9 +15,13 @@
  */
 
 // event depends on stl slist
-
+// some implementation contain slist in ext/slist
 #include "iterator"
-#include "slist"
+#ifdef EXT_SLIST
+    #include "ext/slist"
+#else
+    #include "slist"
+#endif
 
 // include the event/slot signal classes
 

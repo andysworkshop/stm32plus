@@ -47,7 +47,7 @@ class Blink {
 
       // initialise the pin for output
 
-      GpioC<DefaultDigitalOutputFeature<1> > pc;
+      GpioC<DefaultDigitalOutputFeature<8> > pc;
 
       // loop forever switching it on and off with a 1 second
       // delay in between each cycle

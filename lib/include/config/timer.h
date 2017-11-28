@@ -62,6 +62,7 @@
 #include "timer/features/TimerMasterFeature.h"
 #include "timer/features/TimerSlaveFeature.h"
 #include "timer/features/TimerEncoderFeature.h"
+#include "timer/features/TimerBreakFeature.h"
 
 // generic peripheral includes
 

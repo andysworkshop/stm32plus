@@ -78,6 +78,24 @@ class UsbDeviceCustomHid {
         IN_ENDPOINT_MAX_PACKET_SIZE = 12,   // 1 byte report id + 11-byte report
         OUT_ENDPOINT_MAX_PACKET_SIZE = 10,  // 1 byte report id + 9-byte report
 
+        /*
+         * The number of milliamps that our device will use. The maximum you can specify is 510.
+         */
+
+        MILLIAMPS = 100,
+
+        /*
+         * Additional configuration flags for the device. The available options that can be
+         * or'd together are UsbConfigurationFlags::SELF_POWERED and
+         * UsbConfigurationFlags::REMOTE_WAKEUP.
+         */
+
+        CONFIGURATION_FLAGS = 0,      // we want power from the bus
+
+        /*
+         * The language identifier for our strings
+         */
+
         LANGUAGE_ID = 0x0809    // United Kingdom English.
       };
 
@@ -220,8 +238,8 @@ class UsbDeviceCustomHid {
 
         default:
           break;
+      }
     }
-  }
 };
 
 

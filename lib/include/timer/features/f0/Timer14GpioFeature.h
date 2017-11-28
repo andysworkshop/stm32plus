@@ -26,10 +26,10 @@ namespace stm32plus {
 
     TIM14_CH1_IN() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,NULL,GPIOB,GPIOA };
+      static constexpr const uint32_t ports[4]={ GPIOA_BASE,0,GPIOB_BASE,GPIOA_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,GPIO_Pin_1,GPIO_Pin_4 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER14>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER14,(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER14>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER14,ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
     }
   };
 
@@ -44,10 +44,10 @@ namespace stm32plus {
 
     TIM14_CH1_OUT() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ GPIOA,NULL,GPIOB,GPIOA };
+      static constexpr const uint32_t ports[4]={ GPIOA_BASE,0,GPIOB_BASE,GPIOA_BASE };
       static constexpr const uint16_t pins[4]={ GPIO_Pin_7,0,GPIO_Pin_1,GPIO_Pin_4 };
 
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER14>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER14,(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER14>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER14,ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
     }
   };
 

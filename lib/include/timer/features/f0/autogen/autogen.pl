@@ -106,10 +106,10 @@ sub writeFeature {
 		my ($outfile,$feature,$noremap,$remap1,$remap2,$remapf,$timerNumber)=@_;
 		my ($portNone,$port1,$port2,$portf,$pinNone,$pin1,$pin2,$pinf,$mode);
 
-		if(length($noremap)>0) { $portNone="GPIO" . substr($noremap,1,1); } else { $portNone="NULL"; }
-		if(length($remap1)>0) { $port1="GPIO" . substr($remap1,1,1); } else { $port1="NULL"; }
-		if(length($remap2)>0) { $port2="GPIO" . substr($remap2,1,1); } else { $port2="NULL"; }
-		if(length($remapf)>0) { $portf="GPIO" . substr($remapf,1,1); } else { $portf="NULL"; }
+		if(length($noremap)>0) { $portNone="GPIO" . substr($noremap,1,1) . "_BASE"; } else { $portNone="0"; }
+		if(length($remap1)>0) { $port1="GPIO" . substr($remap1,1,1) . "_BASE"; } else { $port1="0"; }
+		if(length($remap2)>0) { $port2="GPIO" . substr($remap2,1,1) . "_BASE"; } else { $port2="0"; }
+		if(length($remapf)>0) { $portf="GPIO" . substr($remapf,1,1) . "_BASE"; } else { $portf="0"; }
 
 		if(length($noremap)>0) { $pinNone="GPIO_Pin_" . substr($noremap,2); } else { $pinNone="0"; }
 		if(length($remap1)>0) { $pin1="GPIO_Pin_" . substr($remap1,2); } else { $pin1="0"; }
@@ -146,12 +146,12 @@ sub writeFeatureStruct {
 
     ${feature}() {
 
-      static constexpr GPIO_TypeDef *const ports[4]={ ${portNone},${port1},${port2},${portf} };
+      static constexpr const uint32_t ports[4]={ ${portNone},${port1},${port2},${portf} };
       static constexpr const uint16_t pins[4]={ ${pinNone},${pin1},${pin2},${pinf} };
 ~;
 
 		print {$outfile} qq/
-      GpioPinInitialiser::initialise(ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER${timerNumber}>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER${timerNumber},(uint32_t)ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
+      GpioPinInitialiser::initialise((GPIO_TypeDef *)ports[TRemapLevel],pins[TRemapLevel],Gpio::ALTERNATE_FUNCTION,(GPIOSpeed_TypeDef)PeripheralTraits<PERIPHERAL_TIMER${timerNumber}>::GPIO_SPEED,Gpio::PUPD_NONE,Gpio::PUSH_PULL,GpioAlternateFunctionMapper<PERIPHERAL_TIMER${timerNumber},ports[TRemapLevel],pins[TRemapLevel]>::GPIO_AF);
     }
   };
 /;

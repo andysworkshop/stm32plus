@@ -10,10 +10,6 @@
 namespace stm32plus {
   namespace net {
 
-    class IpPacketHeader;
-    class UdpDatagram;
-
-
     /**
      * Utility class to do the IP checksum algorithm
      */

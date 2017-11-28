@@ -27,9 +27,10 @@ namespace stm32plus {
    * packed data format or the register description in RM0008 / RM0090.
    * @tparam TPriority One of the DMA priority constants. The default is |DMA_Priority_High|
    * @tparam TFifoMode Whether the DMA FIFO is enabled. The default is disabled for this peripheral
+   * @tparam TMode One of the DMA mode constants (|DMA_Mode_Normal| or |DMA_Mode_Circular|)
    */
 
-  template<class TDacAlignmentFeature,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable>
+  template<class TDacAlignmentFeature,uint32_t TPriority=DMA_Priority_High,uint32_t TFifoMode=DMA_FIFOMode_Disable,uint32_t TMode=DMA_Mode_Normal>
   class DacDmaWriterFeature  : public DmaFeatureBase {
 
     public:
@@ -43,8 +44,8 @@ namespace stm32plus {
    * @param dma the base class reference
    */
 
-  template<class TDacAlignmentFeature,uint32_t TPriority,uint32_t TFifoMode>
-  inline DacDmaWriterFeature<TDacAlignmentFeature,TPriority,TFifoMode>::DacDmaWriterFeature(Dma& dma)
+  template<class TDacAlignmentFeature,uint32_t TPriority,uint32_t TFifoMode,uint32_t TMode>
+  inline DacDmaWriterFeature<TDacAlignmentFeature,TPriority,TFifoMode,TMode>::DacDmaWriterFeature(Dma& dma)
     : DmaFeatureBase(dma) {
 
     /*
@@ -129,7 +130,7 @@ namespace stm32plus {
     _init.DMA_DIR=DMA_DIR_MemoryToPeripheral;                 // 'peripheral' is destination
     _init.DMA_PeripheralInc=DMA_PeripheralInc_Disable;        // 'peripheral' does not increment
     _init.DMA_MemoryInc=DMA_MemoryInc_Enable;                 // memory is incremented
-    _init.DMA_Mode=DMA_Mode_Normal;                           // not a circular buffer
+    _init.DMA_Mode=TMode;                                     // circular or normal buffer
     _init.DMA_Priority=TPriority;                             // user-configurable priority
     _init.DMA_MemoryBurst=DMA_MemoryBurst_Single;             // burst size
     _init.DMA_PeripheralBurst=DMA_PeripheralBurst_Single;     // burst size
@@ -147,8 +148,8 @@ namespace stm32plus {
    * @param[in] count The number of bytes to transfer.
    */
 
-  template<class TDacAlignmentFeature,uint32_t TPriority,uint32_t TFifoMode>
-  inline void DacDmaWriterFeature<TDacAlignmentFeature,TPriority,TFifoMode>::beginWrite(const void *source,uint32_t count) {
+  template<class TDacAlignmentFeature,uint32_t TPriority,uint32_t TFifoMode,uint32_t TMode>
+  inline void DacDmaWriterFeature<TDacAlignmentFeature,TPriority,TFifoMode,TMode>::beginWrite(const void *source,uint32_t count) {
 
     DMA_Stream_TypeDef *peripheralAddress;
 

@@ -27,7 +27,8 @@ namespace stm32plus {
 
   enum class EncoderPolarity {
     Rising,           ///! Rising edge transition
-    Falling           ///! Falling edge transition
+    Falling,          ///! Falling edge transition
+    Both              ///! Either edge transition
   };
 
 
@@ -68,16 +69,16 @@ namespace stm32plus {
     // static checks
 
     static_assert(TEdge==EncoderCounterEdge::Input1 || TEdge==EncoderCounterEdge::Input2 || TEdge==EncoderCounterEdge::Inputs1And2,"Invalid counter edge");
-    static_assert(TInput1Polarity==EncoderPolarity::Rising || TInput1Polarity==EncoderPolarity::Falling,"Invalid polarity for input 1");
-    static_assert(TInput2Polarity==EncoderPolarity::Rising || TInput2Polarity==EncoderPolarity::Falling,"Invalid polarity for input 2");
+    static_assert(TInput1Polarity==EncoderPolarity::Rising || TInput1Polarity==EncoderPolarity::Falling || TInput1Polarity==EncoderPolarity::Both,"Invalid polarity for input 1");
+    static_assert(TInput2Polarity==EncoderPolarity::Rising || TInput2Polarity==EncoderPolarity::Falling || TInput1Polarity==EncoderPolarity::Both,"Invalid polarity for input 2");
 
     // set the encoder mode based on the constant parameters
 
     TIM_EncoderInterfaceConfig(
         _timer,
         TEdge==EncoderCounterEdge::Input1 ? TIM_EncoderMode_TI1 : TEdge==EncoderCounterEdge::Input2 ? TIM_EncoderMode_TI2 : TIM_EncoderMode_TI12,
-        TInput1Polarity==EncoderPolarity::Rising ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling,
-        TInput2Polarity==EncoderPolarity::Rising ? TIM_ICPolarity_Rising : TIM_ICPolarity_Falling);
+        TInput1Polarity==EncoderPolarity::Rising ? TIM_ICPolarity_Rising : TInput1Polarity==EncoderPolarity::Falling ? TIM_ICPolarity_Falling : TIM_ICPolarity_BothEdge,
+        TInput2Polarity==EncoderPolarity::Rising ? TIM_ICPolarity_Rising : TInput2Polarity==EncoderPolarity::Falling ? TIM_ICPolarity_Falling : TIM_ICPolarity_BothEdge);
   }
 
 

@@ -44,7 +44,7 @@
  */
 
 #undef STM32PLUS_BUILD
-#define STM32PLUS_BUILD 0x040004
+#define STM32PLUS_BUILD 0x040100
 
 
 /**
@@ -135,11 +135,13 @@ namespace stm32plus {
 
 
   /**
-   * Endian-ness values for when we need it
+   * Endian-ness values for when we need it. Careful: BIG_ENDIAN and LITTLE_ENDIAN
+   * are defined as macros.
    */
-  enum Endian {
-    LITTLE_ENDIAN,  //!< LITTLE_ENDIAN
-    BIG_ENDIAN      //!< BIG_ENDIAN
+
+  enum class Endian {
+    LITTLE_ENDIAN_MCU,  //!< little endian
+    BIG_ENDIAN_MCU      //!< big endian
   };
 }
 
