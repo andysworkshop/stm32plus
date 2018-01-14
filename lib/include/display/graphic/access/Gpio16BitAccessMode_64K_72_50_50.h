@@ -36,7 +36,7 @@ namespace stm32plus {
         void writeCommand(uint16_t command,uint16_t parameter) const;
         void writeData(uint16_t value) const;
         void writeDataAgain(uint16_t value) const;
-        void writeMultiData(uint32_t howMuch,uint16_t value) const __attribute__((noinline)) ;
+        void writeMultiData(uint32_t howMuch,uint16_t value) const;
 
         void rawTransfer(const void *buffer,uint32_t numWords) const;
     };
@@ -207,7 +207,7 @@ namespace stm32plus {
    */
 
   template<class TPinPackage>
-  __attribute__((noinline)) inline void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeMultiData(uint32_t howMuch,uint16_t value) const {
+  __attribute__((noinline)) void Gpio16BitAccessMode<TPinPackage,COLOURS_16BIT,72,50,50>::writeMultiData(uint32_t howMuch,uint16_t value) const {
 
     __asm volatile(
         "    str  %[value],   [%[data]]                 \n\t"     // port <= value

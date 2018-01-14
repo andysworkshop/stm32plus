@@ -133,7 +133,7 @@ namespace stm32plus {
      */
 
     template<class TDatalinkLayer>
-    __attribute__((noinline)) inline void Arp<TDatalinkLayer>::onReceive(NetEventDescriptor& ned) {
+    __attribute__((noinline)) void Arp<TDatalinkLayer>::onReceive(NetEventDescriptor& ned) {
 
       // check if it's a datalink frame event
 
@@ -153,7 +153,7 @@ namespace stm32plus {
      */
 
     template<class TDatalinkLayer>
-    __attribute__((noinline)) inline void Arp<TDatalinkLayer>::onNotification(NetEventDescriptor& ned) {
+    __attribute__((noinline)) void Arp<TDatalinkLayer>::onNotification(NetEventDescriptor& ned) {
 
       // if it's a new IP address/mask then we are interested
 

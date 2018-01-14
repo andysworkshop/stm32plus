@@ -121,7 +121,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    __attribute__((noinline)) inline void HidDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
+    __attribute__((noinline)) void HidDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
 
       // handle the setup event
 

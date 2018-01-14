@@ -97,7 +97,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) inline void Icmp<TNetworkLayer>::onSend(NetEventDescriptor& ned) {
+    __attribute__((noinline)) void Icmp<TNetworkLayer>::onSend(NetEventDescriptor& ned) {
 
       NetBuffer *nb;
 
@@ -134,7 +134,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) inline void Icmp<TNetworkLayer>::onReceive(IpPacketEvent& ipe) {
+    __attribute__((noinline)) void Icmp<TNetworkLayer>::onReceive(IpPacketEvent& ipe) {
 
       IpPacket& ipPacket(ipe.ipPacket);
 

@@ -201,7 +201,7 @@ namespace stm32plus {
      */
 
     template<class TConnection>
-    __attribute__((noinline)) inline void TcpConnectionArray<TConnection>::onNotification(NetEventDescriptor& ned) {
+    __attribute__((noinline)) void TcpConnectionArray<TConnection>::onNotification(NetEventDescriptor& ned) {
 
       // only interested in server released events when we are subscribed
 
@@ -233,7 +233,7 @@ namespace stm32plus {
      */
 
     template<class TConnection>
-    __attribute__((noinline)) inline void TcpConnectionArray<TConnection>::onAccept(TcpAcceptEvent& event) {
+    __attribute__((noinline)) void TcpConnectionArray<TConnection>::onAccept(TcpAcceptEvent& event) {
 
       // the accept must be from the server that we are subscribed to
 

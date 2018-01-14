@@ -104,7 +104,7 @@ namespace stm32plus {
 
       extern "C" void SetSysClock();
 
-    __attribute__((noinline)) inline void FsLowPowerFeature::onWakeupEvent(uint8_t /* extiLine */) {
+    __attribute__((noinline)) void FsLowPowerFeature::onWakeupEvent(uint8_t /* extiLine */) {
 
       // reset SLEEPDEEP bit of cortex system control register
 
@@ -123,7 +123,7 @@ namespace stm32plus {
      * @param event The event descriptor
      */
 
-    __attribute__((noinline)) inline void FsLowPowerFeature::onUsbEvent(UsbEventDescriptor& event) {
+    __attribute__((noinline)) void FsLowPowerFeature::onUsbEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 

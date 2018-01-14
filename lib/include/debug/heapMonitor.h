@@ -114,7 +114,7 @@ namespace stm32plus {
 
 #if defined(STM32PLUS_F4)
 
-  __attribute__((noinline)) inline void HeapMonitor::onTick(uint8_t /* extiNumber */) {
+  __attribute__((noinline)) void HeapMonitor::onTick(uint8_t /* extiNumber */) {
 
     // check frequency
 
@@ -138,7 +138,7 @@ namespace stm32plus {
 
 #elif defined(STM32PLUS_F1)
 
-   __attribute__((noinline)) inline void HeapMonitor::onTick(void) {
+   __attribute__((noinline)) void HeapMonitor::onTick(void) {
 
     // check frequency
 

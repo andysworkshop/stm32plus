@@ -128,7 +128,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) inline void Udp<TNetworkLayer>::onReceive(IpPacketEvent& ipe) {
+    __attribute__((noinline)) void Udp<TNetworkLayer>::onReceive(IpPacketEvent& ipe) {
 
       bool handled;
 
@@ -403,7 +403,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) inline void Udp<TNetworkLayer>::onNotification(NetEventDescriptor& ned) {
+    __attribute__((noinline)) void Udp<TNetworkLayer>::onNotification(NetEventDescriptor& ned) {
 
       // we're interested in datalink frames going out when we're in a wait state
 

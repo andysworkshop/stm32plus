@@ -206,7 +206,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline)) inline void CustomAdcHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+    __attribute__((noinline)) void CustomAdcHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 

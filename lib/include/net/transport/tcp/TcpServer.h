@@ -130,7 +130,7 @@ namespace stm32plus {
      */
 
     template<class TConnection,class TUser>
-    __attribute__((noinline)) inline void TcpServer<TConnection,TUser>::onReceive(TcpSegmentEvent& event) {
+    __attribute__((noinline)) void TcpServer<TConnection,TUser>::onReceive(TcpSegmentEvent& event) {
 
       // we are only interested in segments sent to our port
 

@@ -114,7 +114,7 @@ namespace stm32plus {
      */
 
     template<class TDevice>
-    __attribute__((noinline)) inline void InEndpointFeatureBase<TDevice>::onEvent(UsbEventDescriptor& event) {
+    __attribute__((noinline)) void InEndpointFeatureBase<TDevice>::onEvent(UsbEventDescriptor& event) {
 
       // check for handled events
 

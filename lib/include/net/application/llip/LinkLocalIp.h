@@ -194,7 +194,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) inline void LinkLocalIp<TTransportLayer>::onTick(NetworkIntervalTickData& nitd) {
+    __attribute__((noinline)) void LinkLocalIp<TTransportLayer>::onTick(NetworkIntervalTickData& nitd) {
 
       if(_state==State::PROBING) {
 

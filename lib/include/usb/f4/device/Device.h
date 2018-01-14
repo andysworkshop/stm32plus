@@ -119,37 +119,37 @@ namespace stm32plus {
     namespace usb_device_internal {
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetDeviceDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetDeviceDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetDeviceDescriptor(speed,length);
       }
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetLangIdStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetLangIdStrDescriptor(speed,length);
       }
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetManufacturerStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetManufacturerStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_MFC_STR);
       }
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetProductStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetProductStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_PRODUCT_STR);
       }
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetSerialStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetSerialStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_SERIAL_STR);
       }
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetConfigurationStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetConfigurationStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_CONFIG_STR);
       }
 
       template<class TPhy>
-      __attribute__((noinline)) inline uint8_t *GetInterfaceStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
+      __attribute__((noinline)) uint8_t *GetInterfaceStrDescriptor(USBD_SpeedTypeDef speed,uint16_t *length) {
         return Device<TPhy>::_instance->onGetDisplayStrDescriptor(speed,length,USBD_IDX_INTERFACE_STR);
       }
     }
@@ -288,7 +288,7 @@ namespace stm32plus {
      */
 
     template<class TPhy>
-    __attribute__((noinline)) inline void Device<TPhy>::onEvent(UsbEventDescriptor& event) {
+    __attribute__((noinline)) void Device<TPhy>::onEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 
