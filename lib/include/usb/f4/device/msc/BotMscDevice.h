@@ -222,7 +222,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline)) void BotMscDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+    inline void BotMscDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
       // check for handled events
 
       switch(event.eventType) {

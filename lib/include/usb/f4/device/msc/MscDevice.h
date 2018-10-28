@@ -116,7 +116,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,class TConfigurationDescriptor,template <class> class... Features>
-    __attribute__((noinline)) void MscDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
+    inline void MscDevice<TPhy,TConfigurationDescriptor,Features...>::onEvent(UsbEventDescriptor& event) {
 
       // check for handled events
 

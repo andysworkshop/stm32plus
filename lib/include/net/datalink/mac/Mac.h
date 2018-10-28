@@ -179,7 +179,7 @@ namespace stm32plus {
      */
 
     template<class TPhysicalLayer>
-    __attribute__((noinline)) void Mac<TPhysicalLayer>::onNotification(NetEventDescriptor& ned) {
+    inline void Mac<TPhysicalLayer>::onNotification(NetEventDescriptor& ned) {
 
       if(ned.eventType==NetEventDescriptor::NetEventType::PHY_READ_REQUEST) {
 

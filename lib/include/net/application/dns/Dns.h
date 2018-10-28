@@ -150,7 +150,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void Dns<TTransportLayer>::onNotification(NetEventDescriptor& ned) {
+    inline void Dns<TTransportLayer>::onNotification(NetEventDescriptor& ned) {
 
       uint8_t i;
 
@@ -359,7 +359,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void Dns<TTransportLayer>::onReceive(UdpDatagramEvent& upe) {
+    inline void Dns<TTransportLayer>::onReceive(UdpDatagramEvent& upe) {
 
       // must be for our reply port
 

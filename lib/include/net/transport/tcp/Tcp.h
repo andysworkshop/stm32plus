@@ -157,7 +157,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) void Tcp<TNetworkLayer>::onReceive(IpPacketEvent& ipe) {
+    inline void Tcp<TNetworkLayer>::onReceive(IpPacketEvent& ipe) {
 
       // must be a TCP packet
 
@@ -308,7 +308,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) void Tcp<TNetworkLayer>::onNotification(NetEventDescriptor& ned) {
+    inline void Tcp<TNetworkLayer>::onNotification(NetEventDescriptor& ned) {
 
       // handle a TCP server being released by releasing its listening port
 
@@ -336,7 +336,7 @@ namespace stm32plus {
      */
 
     template<class TNetworkLayer>
-    __attribute__((noinline)) void Tcp<TNetworkLayer>::onTick(NetworkIntervalTickData& nitd) {
+    inline void Tcp<TNetworkLayer>::onTick(NetworkIntervalTickData& nitd) {
 
       std::slist<TcpClosingConnectionState>::iterator previt,it;
 

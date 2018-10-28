@@ -645,7 +645,7 @@ namespace stm32plus {
      */
 
     template<class TImpl,class TTcp>
-    __attribute__((noinline)) void FtpServerConnection<TImpl,TTcp>::onAccept(TcpAcceptEvent& event) {
+    inline void FtpServerConnection<TImpl,TTcp>::onAccept(TcpAcceptEvent& event) {
 
       // the accept must be from the server that we are subscribed to
 

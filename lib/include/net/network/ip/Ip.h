@@ -170,7 +170,7 @@ namespace stm32plus {
      */
 
     template<class TDatalinkLayer,class... Features>
-    __attribute__((noinline)) void Ip<TDatalinkLayer,Features...>::onNotification(NetEventDescriptor& ned) {
+    inline void Ip<TDatalinkLayer,Features...>::onNotification(NetEventDescriptor& ned) {
 
       // if it's a new IP address then we are interested
 
@@ -189,7 +189,7 @@ namespace stm32plus {
      */
 
     template<class TDatalinkLayer,class... Features>
-    __attribute__((noinline)) void Ip<TDatalinkLayer,Features...>::onReceive(NetEventDescriptor& ned) {
+    inline void Ip<TDatalinkLayer,Features...>::onReceive(NetEventDescriptor& ned) {
 
       IpPacketHeader *header;
 
@@ -329,7 +329,7 @@ namespace stm32plus {
      */
 
     template<class TDatalinkLayer,class... Features>
-    __attribute__((noinline)) void Ip<TDatalinkLayer,Features...>::onSend(NetEventDescriptor& ned) {
+    inline void Ip<TDatalinkLayer,Features...>::onSend(NetEventDescriptor& ned) {
 
       uint16_t packetSize;
 

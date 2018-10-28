@@ -194,7 +194,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void LinkLocalIp<TTransportLayer>::onTick(NetworkIntervalTickData& nitd) {
+    inline void LinkLocalIp<TTransportLayer>::onTick(NetworkIntervalTickData& nitd) {
 
       if(_state==State::PROBING) {
 
@@ -277,7 +277,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void LinkLocalIp<TTransportLayer>::onReceive(ArpReceiveEvent& are) {
+    inline void LinkLocalIp<TTransportLayer>::onReceive(ArpReceiveEvent& are) {
 
       if(_state==State::PROBING) {
 
@@ -308,7 +308,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void LinkLocalIp<TTransportLayer>::onNotification(NetEventDescriptor& ned) {
+    inline void LinkLocalIp<TTransportLayer>::onNotification(NetEventDescriptor& ned) {
 
       // remember our MAC address when it's notified to us by the link layer
 

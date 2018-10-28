@@ -144,7 +144,7 @@ namespace stm32plus {
      * @param ned The event descriptor
      */
 
-    __attribute__((noinline)) void TcpServerBase::onNotification(NetEventDescriptor& ned) {
+    inline void TcpServerBase::onNotification(NetEventDescriptor& ned) {
 
       if(ned.eventType==NetEventDescriptor::NetEventType::TCP_CONNECTION_RELEASED)
         handleConnectionReleased(static_cast<TcpConnectionReleasedEvent&>(ned));

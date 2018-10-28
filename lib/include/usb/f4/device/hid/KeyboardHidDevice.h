@@ -232,7 +232,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline)) void KeyboardHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+    inline void KeyboardHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 

@@ -201,7 +201,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline)) void MouseHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+    inline void MouseHidDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 

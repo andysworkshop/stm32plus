@@ -267,7 +267,7 @@ namespace stm32plus {
      */
 
     template<class TPhy,template <class> class... Features>
-    __attribute__((noinline)) void ComPortCdcDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
+    inline void ComPortCdcDevice<TPhy,Features...>::onEvent(UsbEventDescriptor& event) {
 
       switch(event.eventType) {
 

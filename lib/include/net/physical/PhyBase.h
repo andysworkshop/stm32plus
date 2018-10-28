@@ -232,7 +232,7 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    __attribute__((noinline)) bool PhyBase::phyWaitForStatusRegisterBit(uint16_t bit,uint16_t timeout) const {
+    inline bool PhyBase::phyWaitForStatusRegisterBit(uint16_t bit,uint16_t timeout) const {
 
       uint16_t value;
       uint32_t start;
@@ -268,7 +268,7 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    __attribute__((noinline)) bool PhyBase::phySetRegisterBits(uint16_t regNumber,uint16_t bits) const {
+    inline bool PhyBase::phySetRegisterBits(uint16_t regNumber,uint16_t bits) const {
 
       uint16_t value;
 
@@ -291,7 +291,7 @@ namespace stm32plus {
      * @return true if it worked
      */
 
-    __attribute__((noinline)) bool PhyBase::phyClearRegisterBits(uint16_t regNumber,uint16_t bits) const {
+    inline bool PhyBase::phyClearRegisterBits(uint16_t regNumber,uint16_t bits) const {
 
       uint16_t value;
 

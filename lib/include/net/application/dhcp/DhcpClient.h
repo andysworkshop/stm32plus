@@ -471,7 +471,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void DhcpClient<TTransportLayer>::onNotification(NetEventDescriptor& ned) {
+    inline void DhcpClient<TTransportLayer>::onNotification(NetEventDescriptor& ned) {
 
       // we're interested in mac address announcements
 
@@ -488,7 +488,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void DhcpClient<TTransportLayer>::onReceive(UdpDatagramEvent& upe) {
+    inline void DhcpClient<TTransportLayer>::onReceive(UdpDatagramEvent& upe) {
 
       // handle UDP packets when we're waiting
 
@@ -542,7 +542,7 @@ namespace stm32plus {
      */
 
     template<class TTransportLayer>
-    __attribute__((noinline)) void DhcpClient<TTransportLayer>::onTick(NetworkIntervalTickData& nitd) {
+    inline void DhcpClient<TTransportLayer>::onTick(NetworkIntervalTickData& nitd) {
 
       if(_state==State::OFFER)
         handleOfferTick(nitd);
