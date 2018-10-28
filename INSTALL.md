@@ -15,7 +15,7 @@ If you're happy with building from the `master` branch then you can just go righ
 Prerequisites
 -------------
 
-* A compatible arm-none-eabi toolchain. I prefer the [ARM launchpad](https://launchpad.net/gcc-arm-embedded) toolchain because it supports the hardware FPU in the F4 series. Download the a compatible EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
+* A compatible g++ arm-none-eabi toolchain that supports C++ 14. I prefer the [ARM launchpad](https://developer.arm.com/open-source/gnu-toolchain/gnu-rm) toolchain because it supports the hardware FPU in the F4 series. Download the a compatible EABI version, install it on your system and ensure that it's in your path by attempting to execute one of the commands:
 
 		$ arm-none-eabi-g++
 		arm-none-eabi-g++.exe: no input files
