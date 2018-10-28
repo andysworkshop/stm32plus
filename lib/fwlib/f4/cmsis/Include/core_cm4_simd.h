@@ -540,7 +540,7 @@ __attribute__( ( always_inline ) ) __STATIC_INLINE uint32_t __SMLADX (uint32_t o
 }
 
 #define __SMLALD(ARG1,ARG2,ARG3) \
-({ \
+ ({ \
   uint32_t __ARG1 = (ARG1), __ARG2 = (ARG2), __ARG3_H = (uint32_t)((uint64_t)(ARG3) >> 32), __ARG3_L = (uint32_t)((uint64_t)(ARG3) & 0xFFFFFFFFUL); \
   __ASM volatile ("smlald %0, %1, %2, %3" : "=r" (__ARG3_L), "=r" (__ARG3_H) : "r" (__ARG1), "r" (__ARG2), "0" (__ARG3_L), "1" (__ARG3_H) ); \
   (uint64_t)(((uint64_t)__ARG3_H << 32) | __ARG3_L); \
