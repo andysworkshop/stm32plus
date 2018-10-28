@@ -24,9 +24,6 @@ env:
   - MODE=small MCU=f4 HSE=8000000 FLOAT=hard LTO=no
   - MODE=small MCU=f429 HSE=8000000 LTO=no
   - MODE=small MCU=f429 HSE=8000000 FLOAT=hard LTO=no
-  - MODE=small MCU=f4 HSE=8000000 LTO=yes
-  - MODE=small MCU=f051 HSE=8000000 LTO=yes
-  - MODE=small MCU=f1hd HSE=8000000 LTO=yes
 
 install:
   - export GCC_DIR=$HOME/gcc-arm-none-eabi-7-2018-q2-update
