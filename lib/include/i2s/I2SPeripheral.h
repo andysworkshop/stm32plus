@@ -79,7 +79,6 @@ namespace stm32plus {
     // initialise the peripheral
 
     I2S_Init(_peripheralAddress,&init);
-    enablePeripheral();
   }
 
 
