@@ -108,7 +108,7 @@ VERSION=os.popen('egrep "#define\s+STM32PLUS_BUILD" lib/include/config/stm32plus
 VERSION=VERSION.rstrip()
 
 if len(VERSION) != 6:
-  print "Unexpected error getting the library version"
+  print("Unexpected error getting the library version")
   Exit(1)
 
 INSTALLDIR=ARGUMENTS.get('INSTALLDIR') or "/usr/local/arm-none-eabi"
@@ -131,11 +131,11 @@ else:
     osc_type = "i"
     osc_def = "HSI_VALUE"
   else:
-    print __doc__
+    print(__doc__)
     Exit(1)
 
 if not osc.isdigit():
-  print __doc__
+  print(__doc__)
   Exit(1)
 
 # examples off?
@@ -213,7 +213,7 @@ elif mcu=="f030":
 elif mcu=="f042":
   setFlags("m0","F0_42")
 else:
-  print __doc__
+  print(__doc__)
   Exit(1)
 
 # add on the mode=specific optimisation definitions
@@ -225,7 +225,7 @@ elif mode=="fast":
 elif mode=="small":
   env.Append(CCFLAGS=["-Os"])
 else:
-  print __doc__
+  print(__doc__)
   Exit(1)
 
 # modify build flags and plugin location for using LTO
@@ -246,7 +246,7 @@ if lto=="yes":
     env.Append(ARFLAGS=["--plugin="+opts])
     env.Append(RANLIBFLAGS=["--plugin="+opts])
 
-print "stm32plus build version is "+VERSION
+print("stm32plus build version is "+VERSION)
 
 systemprefix=mode+"-"+mcu+"-"+osc+osc_type
 if float:

@@ -4,6 +4,7 @@
 lib/build/
 examples/*/build/
 site_scons/*.pyc
+__pycache__
 
 # compiler output
 
