@@ -7,6 +7,8 @@
 
 #pragma once
 
+#include "strings.h"
+
 
 namespace stm32plus {
   namespace net {
