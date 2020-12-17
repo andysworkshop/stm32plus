@@ -1030,7 +1030,7 @@ void ADC_DMARequestModeConfig(ADC_TypeDef* ADCx, uint32_t ADC_DMARequestMode)
     [..]
         (+)Flags :
            (##) ADC_FLAG_AWD: This flag is set by hardware when the converted
-                voltage crosses the values programmed thrsholds
+                voltage crosses the values programmed thresholds
 
         (+)Interrupts :
            (##) ADC_IT_AWD : specifies the interrupt source for Analog watchdog 
