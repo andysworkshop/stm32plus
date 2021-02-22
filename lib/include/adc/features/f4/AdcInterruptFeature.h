@@ -43,7 +43,7 @@ namespace stm32plus {
       enum {
         END_OF_CONVERSION           = 0x01,
         INJECTED_END_OF_CONVERSION  = 0x02,
-        OVERFLOW                    = 0x04,
+        ADC_OVERFLOW                = 0x04,
         ANALOG_WATCHDOG             = 0x08
       };
 
@@ -95,7 +95,7 @@ namespace stm32plus {
 
   /**
    * Enable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | ADC_OVERFLOW
    */
 
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
@@ -111,14 +111,14 @@ namespace stm32plus {
       ADC_ITConfig(_adc,ADC_IT_JEOC,ENABLE);
     if((interruptMask & ANALOG_WATCHDOG)!=0)
       ADC_ITConfig(_adc,ADC_IT_AWD,ENABLE);
-    if((interruptMask & OVERFLOW)!=0)
+    if((interruptMask & ADC_OVERFLOW)!=0)
       ADC_ITConfig(_adc,ADC_IT_OVR,ENABLE);
   }
 
 
   /**
    * Disable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | ADC_OVERFLOW
    */
 
   inline void AdcInterruptFeature::disableInterrupts(uint16_t interruptMask) {
@@ -130,7 +130,7 @@ namespace stm32plus {
       ADC_ITConfig(_adc,ADC_IT_JEOC,DISABLE);
     if((interruptMask & ANALOG_WATCHDOG)!=0)
       ADC_ITConfig(_adc,ADC_IT_AWD,DISABLE);
-    if((interruptMask & OVERFLOW)!=0)
+    if((interruptMask & ADC_OVERFLOW)!=0)
       ADC_ITConfig(_adc,ADC_IT_OVR,DISABLE);
   }
 }
