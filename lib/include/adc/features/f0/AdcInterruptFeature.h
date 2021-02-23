@@ -41,7 +41,7 @@ namespace stm32plus {
     public:
       enum {
         END_OF_CONVERSION = 0x01,
-        OVERFLOW          = 0x02,
+        ADC_OVERFLOW      = 0x02,
         END_OF_SEQUENCE   = 0x04,
         ANALOG_WATCHDOG   = 0x08,
         END_OF_SAMPLING   = 0x10,
@@ -93,7 +93,7 @@ namespace stm32plus {
 
   /**
    * Enable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | ADC_OVERFLOW
    */
 
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
@@ -114,7 +114,7 @@ namespace stm32plus {
       ADC_ITConfig(_adc,ADC_IT_EOSMP,ENABLE);
     if((interruptMask & ANALOG_WATCHDOG)!=0)
       ADC_ITConfig(_adc,ADC_IT_AWD,ENABLE);
-    if((interruptMask & OVERFLOW)!=0)
+    if((interruptMask & ADC_OVERFLOW)!=0)
       ADC_ITConfig(_adc,ADC_IT_OVR,ENABLE);
     if((interruptMask & ADC_READY)!=0)
       ADC_ITConfig(_adc,ADC_IT_ADRDY,ENABLE);
@@ -123,7 +123,7 @@ namespace stm32plus {
 
   /**
    * Disable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | ADC_OVERFLOW
    */
 
   inline void AdcInterruptFeature::disableInterrupts(uint16_t interruptMask) {
@@ -137,7 +137,7 @@ namespace stm32plus {
       ADC_ITConfig(_adc,ADC_IT_EOSMP,DISABLE);
     if((interruptMask & ANALOG_WATCHDOG)!=0)
       ADC_ITConfig(_adc,ADC_IT_AWD,DISABLE);
-    if((interruptMask & OVERFLOW)!=0)
+    if((interruptMask & ADC_OVERFLOW)!=0)
       ADC_ITConfig(_adc,ADC_IT_OVR,DISABLE);
     if((interruptMask & ADC_READY)!=0)
       ADC_ITConfig(_adc,ADC_IT_ADRDY,DISABLE);

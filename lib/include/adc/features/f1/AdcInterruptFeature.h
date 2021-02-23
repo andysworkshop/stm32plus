@@ -95,7 +95,7 @@ namespace stm32plus {
 
   /**
    * Enable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | ADC_OVERFLOW
    */
 
   inline void AdcInterruptFeature::enableInterrupts(uint16_t interruptMask) {
@@ -122,7 +122,7 @@ namespace stm32plus {
 
   /**
    * Disable the interrupts specified in the mask
-   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | OVERFLOW
+   * @param interruptMask The bitmask of interrupts, e.g. END_OF_CONVERSION | ADC_OVERFLOW
    */
 
   inline void AdcInterruptFeature::disableInterrupts(uint16_t interruptMask) {
