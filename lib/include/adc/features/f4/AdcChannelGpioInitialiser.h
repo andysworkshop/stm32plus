@@ -57,6 +57,7 @@ namespace stm32plus {
           case 15: port=GPIOC; pin=GPIO_Pin_5; break;
         }
       }
+#if defined(STM32PLUS_F4_HAS_ADC2_3)
       else if(TAdcNumber==2) {
         switch(TChannelNumber) {
           case 0: port=GPIOA; pin=GPIO_Pin_0; break;
@@ -97,7 +98,7 @@ namespace stm32plus {
           case 15: port=GPIOF; pin=GPIO_Pin_5; break;
         }
       }
-
+#endif
       // initialise the pin
 
       GpioPinInitialiser::initialise(port,pin);   // this minimal overload is for analog input

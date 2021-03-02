@@ -50,6 +50,7 @@ namespace stm32plus {
   typedef PeripheralTraits<PERIPHERAL_ADC3> Adc3PeripheralTraits;
 #endif
 
+#if defined(STM32PLUS_F4_HAS_CAN)
   template<>
   struct PeripheralTraits<PERIPHERAL_CAN1> {
     enum {
@@ -67,7 +68,9 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_CAN2> Can2PeripheralTraits;
+#endif
 
+#if defined(STM32PLUS_F4_HAS_DAC)
   template<>
   struct PeripheralTraits<PERIPHERAL_DAC1> {
     enum {
@@ -83,6 +86,7 @@ namespace stm32plus {
     };
   };
   typedef PeripheralTraits<PERIPHERAL_DAC1> Dac1PeripheralTraits;
+#endif
 
   template<>
   struct PeripheralTraits<PERIPHERAL_GPIO> {

@@ -40,13 +40,13 @@ namespace stm32plus {
       static void delay(uint16_t us);
   };
 
-
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
   /**
    * Use the basic timer TIM6 as a default for doing the microsecond delay.
    */
 
   typedef MicrosecondDelayTemplate<Timer6<Timer6InternalClockFeature> > MicrosecondDelay;
-
+#endif
 
   /**
    * Template static member initialisation

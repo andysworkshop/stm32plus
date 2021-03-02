@@ -8,6 +8,8 @@
 
 #if defined(STM32PLUS_F4)
 
+#if defined(STM32PLUS_F4_HAS_CAN)
+
 #include "config/can.h"
 
 
@@ -80,5 +82,7 @@ extern "C" {
 
 #endif
 }
+
+#endif
 
 #endif

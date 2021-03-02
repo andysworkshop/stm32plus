@@ -327,9 +327,7 @@ typedef struct
 
 #if defined (STM32F40_41xxx)
 #define ADC_Channel_TempSensor                      ((uint8_t)ADC_Channel_16)
-#endif /* STM32F40_41xxx */
-
-#if defined (STM32F427_437xx) || defined (STM32F429_439xx) || defined (STM32F401xx) || defined (STM32F411xE)
+#elif defined (STM32F427_437xx) || defined (STM32F429_439xx) || defined (STM32F401xx) || defined (STM32F411xE)
 #define ADC_Channel_TempSensor                      ((uint8_t)ADC_Channel_18)
 #endif /* STM32F427_437xx || STM32F429_439xx || STM32F401xx || STM32F411xE */
 

@@ -24,11 +24,15 @@
 
 #if defined(STM32PLUS_F4)
 
+#if defined (STM32PLUS_F4_HAS_RNG)
+
 #define USE_RNG_INTERRUPT
 
 #include "rng/f4/Rng.h"
 #include "rng/f4/RngEventSource.h"
 #include "rng/f4/features/RngInterruptFeature.h"
+
+#endif
 
 #elif defined(STM32PLUS_F1)
 

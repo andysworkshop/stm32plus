@@ -51,8 +51,10 @@
   #include "adc/f4/Adc.h"
   #include "adc/f4/AdcPeripheral.h"
   #include "adc/Adc1.h"
+#if defined(STM32PLUS_F4_HAS_ADC2_3)
   #include "adc/Adc2.h"
   #include "adc/Adc3.h"
+#endif
 
 #endif
 

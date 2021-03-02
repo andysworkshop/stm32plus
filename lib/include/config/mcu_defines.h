@@ -42,6 +42,13 @@
 #elif defined(STM32PLUS_F0_42)
   #define STM32PLUS_F0
   #define STM32F0XX
+
+#elif defined(STM32PLUS_F401)
+  #define STM32PLUS_F4
+  #define STM32F401xx
+  #define STM32F401xC
+  #define STM32F401xE
+
 #elif defined(STM32PLUS_F405)
   #define STM32PLUS_F4
   #define STM32F405xx
@@ -54,6 +61,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FSMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #elif defined(STM32PLUS_F407)
   #define STM32PLUS_F4
@@ -69,6 +77,11 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FSMC
+  #define STM32PLUS_F4_HAS_RNG
+
+#elif defined(STM32PLUS_F411)
+  #define STM32PLUS_F4
+  #define STM32F411xE
 
 #elif defined(STM32PLUS_F415)
   #define STM32PLUS_F4
@@ -83,6 +96,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FSMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #elif defined(STM32PLUS_F417)
   #define STM32PLUS_F4
@@ -99,6 +113,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FSMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #elif defined(STM32PLUS_F427)
   #define STM32PLUS_F4
@@ -117,6 +132,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #elif defined(STM32PLUS_F429)
   #define STM32PLUS_F4
@@ -136,6 +152,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #elif defined(STM32PLUS_F437)
   #define STM32PLUS_F4
@@ -155,6 +172,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #elif defined(STM32PLUS_F439)
   #define STM32PLUS_F4
@@ -175,6 +193,7 @@
   #define STM32PLUS_F4_HAS_OTG_HS
   #define STM32PLUS_F4_HAS_DAC
   #define STM32PLUS_F4_HAS_FMC
+  #define STM32PLUS_F4_HAS_RNG
 
 #else
   #error "You must define an MCU type. See config/stm32plus.h"

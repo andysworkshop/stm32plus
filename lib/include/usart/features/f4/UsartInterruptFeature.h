@@ -175,6 +175,7 @@ namespace stm32plus {
     Nvic::configureIrq(USART2_IRQn);
   }
 
+#if defined (STM32PLUS_F4_HAS_USART3_4_5)
   /**
    * Enabler specialisation, Usart 3
    */
@@ -204,7 +205,7 @@ namespace stm32plus {
     _forceLinkage=&UART5_IRQHandler;
     Nvic::configureIrq(UART5_IRQn);
   }
-
+#endif
 
   /**
    * Enabler specialisation, Usart 6

@@ -90,10 +90,12 @@ namespace stm32plus {
                              port==GPIOC ? RCC_AHB1Periph_GPIOC :
                              port==GPIOD ? RCC_AHB1Periph_GPIOD :
                              port==GPIOE ? RCC_AHB1Periph_GPIOE :
+#if defined (STM32PLUS_F4_HAS_GPIOF_G_I)
                              port==GPIOF ? RCC_AHB1Periph_GPIOF :
                              port==GPIOG ? RCC_AHB1Periph_GPIOG :
-                             port==GPIOH ? RCC_AHB1Periph_GPIOH :
-                             RCC_AHB1Periph_GPIOI
+                             port==GPIOI ? RCC_AHB1Periph_GPIOI :
+#endif
+                             RCC_AHB1Periph_GPIOH
                              ,ENABLE);
 
       // initialise

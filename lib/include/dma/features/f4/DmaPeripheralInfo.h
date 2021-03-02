@@ -103,9 +103,11 @@ namespace stm32plus {
 
   struct Usart1TxDmaPeripheralInfo : UsartDmaPeripheralInfo { enum { REGISTER_ADDRESS = USART1_BASE + __builtin_offsetof(USART_TypeDef,DR) }; };
   struct Usart2TxDmaPeripheralInfo : UsartDmaPeripheralInfo { enum { REGISTER_ADDRESS = USART2_BASE + __builtin_offsetof(USART_TypeDef,DR) }; };
+#if defined (STM32PLUS_F4_HAS_USART3_4_5)
   struct Usart3TxDmaPeripheralInfo : UsartDmaPeripheralInfo { enum { REGISTER_ADDRESS = USART3_BASE + __builtin_offsetof(USART_TypeDef,DR) }; };
   struct Uart4TxDmaPeripheralInfo : UsartDmaPeripheralInfo { enum { REGISTER_ADDRESS = UART4_BASE + __builtin_offsetof(USART_TypeDef,DR) }; };
   struct Uart5TxDmaPeripheralInfo : UsartDmaPeripheralInfo { enum { REGISTER_ADDRESS = UART5_BASE + __builtin_offsetof(USART_TypeDef,DR) }; };
+#endif
 
 #if defined(STM32PLUS_F4)
   struct Usart6TxDmaPeripheralInfo : UsartDmaPeripheralInfo { enum { REGISTER_ADDRESS = USART6_BASE + __builtin_offsetof(USART_TypeDef,DR) }; };

@@ -38,14 +38,18 @@ namespace stm32plus {
     enum {
       Port_TX=GPIOC_BASE,
       Port_RX=GPIOC_BASE,
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
       Port_RTS=GPIOG_BASE,
       Port_CTS=GPIOC_BASE,
+#endif
       Port_CK=GPIOC_BASE,
 
       Pin_TX=GPIO_Pin_6,
       Pin_RX=GPIO_Pin_7,
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
       Pin_RTS=GPIO_Pin_8,
       Pin_CTS=GPIO_Pin_13,
+#endif
       Pin_CK=GPIO_Pin_8
     };
   };
@@ -65,6 +69,7 @@ namespace stm32plus {
     }
   };
 
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
 
   /*
    * Remap #1:
@@ -101,4 +106,6 @@ namespace stm32plus {
         Features(static_cast<Usart&>(*this))... {
     }
   };
+#endif
+
 }

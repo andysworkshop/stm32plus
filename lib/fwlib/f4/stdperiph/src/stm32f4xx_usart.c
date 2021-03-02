@@ -199,6 +199,7 @@ void USART_DeInit(USART_TypeDef* USARTx)
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART2, ENABLE);
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART2, DISABLE);
   }
+#if defined(STM32PLUS_F4_HAS_USART3_4_5)
   else if (USARTx == USART3)
   {
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_USART3, ENABLE);
@@ -214,6 +215,7 @@ void USART_DeInit(USART_TypeDef* USARTx)
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_UART5, ENABLE);
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_UART5, DISABLE);
   }  
+#endif
   else if (USARTx == USART6)
   {
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_USART6, ENABLE);
