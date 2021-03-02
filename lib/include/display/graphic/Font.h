@@ -76,7 +76,7 @@ namespace stm32plus {
 
       ptr=nullptr;
 
-      if(character>=_firstCharacter && character<_lastCharacter) {
+      if(character>=_firstCharacter && character<=_lastCharacter) {
 
         // the character is in range and indexable, is it in sequential place?
 
