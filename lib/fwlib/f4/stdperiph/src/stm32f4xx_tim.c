@@ -227,6 +227,7 @@ void TIM_DeInit(TIM_TypeDef* TIMx)
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM5, ENABLE);
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM5, DISABLE);
   }  
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
   else if (TIMx == TIM6)  
   {    
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM6, ENABLE);
@@ -242,6 +243,7 @@ void TIM_DeInit(TIM_TypeDef* TIMx)
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM8, ENABLE);
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM8, DISABLE);  
   }  
+#endif
   else if (TIMx == TIM9)
   {      
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM9, ENABLE);
@@ -257,6 +259,7 @@ void TIM_DeInit(TIM_TypeDef* TIMx)
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM11, ENABLE);
     RCC_APB2PeriphResetCmd(RCC_APB2Periph_TIM11, DISABLE);  
   }  
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
   else if (TIMx == TIM12)
   {      
     RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM12, ENABLE);
@@ -275,6 +278,7 @@ void TIM_DeInit(TIM_TypeDef* TIMx)
       RCC_APB1PeriphResetCmd(RCC_APB1Periph_TIM14, DISABLE); 
     }   
   }
+#endif
 }
 
 /**
@@ -296,21 +300,27 @@ void TIM_TimeBaseInit(TIM_TypeDef* TIMx, TIM_TimeBaseInitTypeDef* TIM_TimeBaseIn
 
   tmpcr1 = TIMx->CR1;  
 
-  if((TIMx == TIM1) || (TIMx == TIM8)||
-     (TIMx == TIM2) || (TIMx == TIM3)||
-     (TIMx == TIM4) || (TIMx == TIM5)) 
+  if((TIMx == TIM1) || (TIMx == TIM2) ||
+     (TIMx == TIM3) || (TIMx == TIM4) ||
+     (TIMx == TIM5) 
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+     || (TIMx == TIM8)
+#endif
+    )
   {
     /* Select the Counter Mode */
     tmpcr1 &= (uint16_t)(~(TIM_CR1_DIR | TIM_CR1_CMS));
     tmpcr1 |= (uint32_t)TIM_TimeBaseInitStruct->TIM_CounterMode;
   }
  
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
   if((TIMx != TIM6) && (TIMx != TIM7))
   {
     /* Set the clock division */
     tmpcr1 &=  (uint16_t)(~TIM_CR1_CKD);
     tmpcr1 |= (uint32_t)TIM_TimeBaseInitStruct->TIM_ClockDivision;
   }
+#endif
 
   TIMx->CR1 = tmpcr1;
 
@@ -320,8 +330,12 @@ void TIM_TimeBaseInit(TIM_TypeDef* TIMx, TIM_TimeBaseInitTypeDef* TIM_TimeBaseIn
   /* Set the Prescaler value */
   TIMx->PSC = TIM_TimeBaseInitStruct->TIM_Prescaler;
     
-  if ((TIMx == TIM1) || (TIMx == TIM8))  
-  {
+  if ((TIMx == TIM1)
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+     || (TIMx == TIM8)
+#endif
+     )
+ {
     /* Set the Repetition Counter value */
     TIMx->RCR = TIM_TimeBaseInitStruct->TIM_RepetitionCounter;
   }
@@ -705,7 +719,11 @@ void TIM_OC1Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct)
   /* Set the Output State */
   tmpccer |= TIM_OCInitStruct->TIM_OutputState;
     
-  if((TIMx == TIM1) || (TIMx == TIM8))
+  if((TIMx == TIM1)
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+     || (TIMx == TIM8)
+#endif
+    )
   {
     assert_param(IS_TIM_OUTPUTN_STATE(TIM_OCInitStruct->TIM_OutputNState));
     assert_param(IS_TIM_OCN_POLARITY(TIM_OCInitStruct->TIM_OCNPolarity));
@@ -787,7 +805,11 @@ void TIM_OC2Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct)
   /* Set the Output State */
   tmpccer |= (uint16_t)(TIM_OCInitStruct->TIM_OutputState << 4);
     
-  if((TIMx == TIM1) || (TIMx == TIM8))
+  if((TIMx == TIM1)
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+     || (TIMx == TIM8)
+#endif
+    )
   {
     assert_param(IS_TIM_OUTPUTN_STATE(TIM_OCInitStruct->TIM_OutputNState));
     assert_param(IS_TIM_OCN_POLARITY(TIM_OCInitStruct->TIM_OCNPolarity));
@@ -867,7 +889,11 @@ void TIM_OC3Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct)
   /* Set the Output State */
   tmpccer |= (uint16_t)(TIM_OCInitStruct->TIM_OutputState << 8);
     
-  if((TIMx == TIM1) || (TIMx == TIM8))
+  if((TIMx == TIM1)
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+     || (TIMx == TIM8)
+#endif
+    )
   {
     assert_param(IS_TIM_OUTPUTN_STATE(TIM_OCInitStruct->TIM_OutputNState));
     assert_param(IS_TIM_OCN_POLARITY(TIM_OCInitStruct->TIM_OCNPolarity));
@@ -948,7 +974,11 @@ void TIM_OC4Init(TIM_TypeDef* TIMx, TIM_OCInitTypeDef* TIM_OCInitStruct)
   /* Set the Output State */
   tmpccer |= (uint16_t)(TIM_OCInitStruct->TIM_OutputState << 12);
   
-  if((TIMx == TIM1) || (TIMx == TIM8))
+  if((TIMx == TIM1)
+#if defined (STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
+     || (TIMx == TIM8)
+#endif
+    )
   {
     assert_param(IS_TIM_OCIDLE_STATE(TIM_OCInitStruct->TIM_OCIdleState));
     /* Reset the Output Compare IDLE State */

@@ -25,15 +25,19 @@ extern "C" {
 
     void __attribute__ ((interrupt("IRQ"))) ADC_IRQHandler(void) {
 
-      uint16_t raised1,raised2,raised3;
+      uint16_t raised1;
 
       // ADC1 interrupts - the more likely to be a source. we'll prioritise these checks so
       // the most likely are checked first and optimise slightly by not repeatedly calling
       // the inefficient ADC_GetITStatus call
 
       raised1=ADC1->SR & (ADC_SR_EOC | ADC_SR_JEOC | ADC_SR_AWD | ADC_SR_OVR);
+
+#if defined(STM32PLUS_F4_HAS_ADC2_3)
+      uint16_t raised2,raised3;
       raised2=ADC2->SR & (ADC_SR_EOC | ADC_SR_JEOC | ADC_SR_AWD | ADC_SR_OVR);
       raised3=ADC3->SR & (ADC_SR_EOC | ADC_SR_JEOC | ADC_SR_AWD | ADC_SR_OVR);
+#endif
 
       if((raised1 & ADC_SR_EOC)!=0 && (ADC1->CR1 & ADC_CR1_EOCIE)!=0) {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_REGULAR_END_OF_CONVERSION,1);
@@ -52,6 +56,7 @@ extern "C" {
         ADC_ClearITPendingBit(ADC1,ADC_IT_OVR);
       }
 
+#if defined(STM32PLUS_F4_HAS_ADC2_3)
       // ADC2 interrupts
 
       else if((raised2 & ADC_SR_EOC)!=0 && (ADC2->CR1 & ADC_CR1_EOCIE)!=0) {
@@ -89,7 +94,7 @@ extern "C" {
         AdcInterruptFeature::_adcInstance->AdcInterruptEventSender.raiseEvent(AdcEventType::EVENT_OVERFLOW,3);
         ADC_ClearITPendingBit(ADC3,ADC_IT_OVR);
       }
-
+#endif
       __DSB();      // prevent erroneous recall of this handler due to delayed memory write
     }
 

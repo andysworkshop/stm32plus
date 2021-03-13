@@ -131,6 +131,8 @@
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_dac.h"
 #include "fwlib/f4/stdperiph/inc/stm32f4xx_rcc.h"
 
+#if defined(STM32PLUS_F4_HAS_DCMI)
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -712,3 +714,5 @@ void DAC_ClearITPendingBit(uint32_t DAC_Channel, uint32_t DAC_IT)
   */
 
 /************************ (C) COPYRIGHT STMicroelectronics *****END OF FILE****/
+
+#endif

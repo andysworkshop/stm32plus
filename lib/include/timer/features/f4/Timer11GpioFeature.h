@@ -19,10 +19,11 @@ namespace stm32plus {
     typedef gpio::PB9 TIM11_CH1_Pin;
   };
 
+#if defined (STM32PLUS_F4_HAS_GPIOF_G_I)
   struct TIM11_PinPackage_Remap_Full {
     typedef gpio::PF7 TIM11_CH1_Pin;
   };
-
+#endif
 
   /**
    * Initialise GPIO pins for this timer GPIO mode
@@ -64,11 +65,13 @@ namespace stm32plus {
     }
   };
 
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
   template<template<typename> class... Features>
   struct Timer11GpioFeature<TIMER_REMAP_FULL,Features...> : TimerFeatureBase,Features<TIM11_PinPackage_Remap_Full>... {
     Timer11GpioFeature(Timer& timer) : TimerFeatureBase(timer) {
     }
   };
+#endif
 
   /**
    * Custom structure to allow any pin mapping.
