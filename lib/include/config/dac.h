@@ -24,9 +24,11 @@
 
 // peripheral includes
 
-#include "dac/Dac.h"
-#include "dac/DacPinInitialiser.h"
-#include "dac/DacPeripheral.h"
+#if defined(STM32PLUS_F4_HAS_DAC)
+  #include "dac/Dac.h"
+  #include "dac/DacPinInitialiser.h"
+  #include "dac/DacPeripheral.h"
+#endif
 
 // feature includes
 

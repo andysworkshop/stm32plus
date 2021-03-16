@@ -37,6 +37,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
 
+#if defined(STM32PLUS_F4_HAS_DCMI)
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -286,6 +288,8 @@ FlagStatus DAC_GetFlagStatus(uint32_t DAC_Channel, uint32_t DAC_FLAG);
 void DAC_ClearFlag(uint32_t DAC_Channel, uint32_t DAC_FLAG);
 ITStatus DAC_GetITStatus(uint32_t DAC_Channel, uint32_t DAC_IT);
 void DAC_ClearITPendingBit(uint32_t DAC_Channel, uint32_t DAC_IT);
+
+#endif
 
 #ifdef __cplusplus
 }

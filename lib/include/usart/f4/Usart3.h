@@ -11,6 +11,7 @@
 #error This class can only be used with the STM32F4 series
 #endif
 
+#if defined (STM32PLUS_F4_HAS_USART3_4_5)
 
 namespace stm32plus {
 
@@ -154,3 +155,5 @@ namespace stm32plus {
     }
   };
 }
+
+#endif

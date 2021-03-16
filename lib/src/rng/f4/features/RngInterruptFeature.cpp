@@ -10,6 +10,7 @@
 
 #include "config/rng.h"
 
+#if defined(STM32PLUS_F4_HAS_RNG)
 
 using namespace stm32plus;
 
@@ -52,5 +53,6 @@ extern "C" {
 }
 
 
+#endif
 #endif
 #endif

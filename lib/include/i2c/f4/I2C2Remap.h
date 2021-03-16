@@ -15,7 +15,7 @@
 
 namespace stm32plus {
 
-
+#if defined(STM32PLUS_F4_HAS_GPIOF_G_I)
   /*
    * Remap #1 pin package:
    * (SCL,SDA) = (PF1,PF0)
@@ -45,7 +45,7 @@ namespace stm32plus {
         Features(static_cast<I2C&>(*this))... {
     }
   };
-
+#endif
 
   /*
    * Remap #2 pin package:

@@ -71,9 +71,11 @@
 
 #define USE_USART1_INTERRUPT
 #define USE_USART2_INTERRUPT
+#if !defined (STM32PLUS_F4) || defined(STM32PLUS_F4_HAS_USART3_4_5)
 #define USE_USART3_INTERRUPT
 #define USE_UART4_INTERRUPT
 #define USE_UART5_INTERRUPT
+#endif
 
 // device specific includes
 

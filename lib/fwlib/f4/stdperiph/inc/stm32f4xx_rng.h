@@ -37,6 +37,8 @@
 /* Includes ------------------------------------------------------------------*/
 #include "fwlib/f4/cmsis/Device/ST/STM32F4xx/Include/stm32f4xx.h"
 
+#if defined(STM32PLUS_F4_HAS_RNG)
+
 /** @addtogroup STM32F4xx_StdPeriph_Driver
   * @{
   */
@@ -102,6 +104,8 @@ FlagStatus RNG_GetFlagStatus(uint8_t RNG_FLAG);
 void RNG_ClearFlag(uint8_t RNG_FLAG);
 ITStatus RNG_GetITStatus(uint8_t RNG_IT);
 void RNG_ClearITPendingBit(uint8_t RNG_IT);
+
+#endif
 
 #ifdef __cplusplus
 }

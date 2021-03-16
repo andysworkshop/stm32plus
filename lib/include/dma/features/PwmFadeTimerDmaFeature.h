@@ -165,6 +165,7 @@ namespace stm32plus {
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
   using Timer5Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer5Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
 
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
   // TIM7
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
@@ -192,9 +193,11 @@ namespace stm32plus {
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
   using Timer8Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer8Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
+#endif
 
 #endif
 
+#if defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
   // TIM6
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
@@ -208,4 +211,5 @@ namespace stm32plus {
 
   template<uint32_t TPriority=DMA_Priority_High,uint32_t TDmaMode=DMA_Mode_Normal>
   using Timer6Channel4UpdatePwmFadeTimerDmaFeature = PwmFadeTimerDmaFeature<Timer6Ccr4DmaPeripheralInfo,TIM_DMA_Update,TPriority,TDmaMode>;
+#endif
 }

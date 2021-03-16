@@ -8,7 +8,7 @@
 #include "config/timer.h"
 
 
-#if defined(STM32PLUS_F4)
+#if defined(STM32PLUS_F4) && defined(STM32PLUS_F4_HAS_TIM6_7_8_12_13_14)
 
 using namespace stm32plus;
 

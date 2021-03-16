@@ -154,6 +154,7 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, ENABLE);
     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOE, DISABLE);
   }
+#if defined (STM32PLUS_F4_HAS_GPIOF_G_I)
   else if (GPIOx == GPIOF)
   {
     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOF, ENABLE);
@@ -175,9 +176,9 @@ void GPIO_DeInit(GPIO_TypeDef* GPIOx)
     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, ENABLE);
     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOI, DISABLE);
   }
+#endif
 
-#if defined(STM32PLUS_F427) || defined(STM32PLUS_F429) || defined(STM32PLUS_F437) || defined(STM32PLUS_F439)
-
+#if defined(STM32PLUS_F4_HAS_GPIOJ_K)
   else if (GPIOx == GPIOJ)
   {
     RCC_AHB1PeriphResetCmd(RCC_AHB1Periph_GPIOJ, ENABLE);
