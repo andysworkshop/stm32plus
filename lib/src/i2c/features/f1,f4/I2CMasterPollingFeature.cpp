@@ -38,11 +38,7 @@ namespace stm32plus {
       // the last byte gets a NACK after it and before the STOP
 
       if(!count) {
-
-        __disable_irq();
         I2C_AcknowledgeConfig(_i2c,DISABLE);
-        I2C_GenerateSTOP(_i2c,ENABLE);
-        __enable_irq();
       }
 
       if(!checkEvent(I2C_EVENT_MASTER_BYTE_RECEIVED))
@@ -53,6 +49,8 @@ namespace stm32plus {
       *output++=I2C_ReceiveData(_i2c);
     }
 
+    I2C_GenerateSTOP(_i2c,ENABLE);
+    while(I2C_GetFlagStatus(_i2c, I2C_FLAG_BUSY));
     return true;
   }
 
@@ -158,6 +156,7 @@ namespace stm32plus {
     // send STOP condition
 
     I2C_GenerateSTOP(_i2c,ENABLE);
+    while(I2C_GetFlagStatus(_i2c, I2C_FLAG_BUSY));
     return true;
   }
 
